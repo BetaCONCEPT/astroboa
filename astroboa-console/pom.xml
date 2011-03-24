@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses />. Authors Gregory Chomatas
+		(gchomatas@betaconcept.com) Savvas Triantafyllou
+		(striantafyllou@betaconcept.com)
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-console</artifactId>
+	<packaging>war</packaging>
+	<name>Astroboa Console</name>
+	<description>
+		This module represents the administrative console of the Astroboa. It implements a rich
+		ajax based web ui for managing content using the facilities
+		provided by astroboa repository
+	</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+	
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>generate-resources</phase>
+						<configuration>
+							<tasks>
+							 <native2ascii encoding="UTF-8" dest="src/main/resources" src="src/main/resources" includes="**/*.UTF8" ext="" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.7.1</version>
+					</dependency>
+				
+					<!-- 
+						<dependency> <groupId>com.sun</groupId>
+						<artifactId>tools</artifactId> <version>1.5.0</version>
+						<scope>system</scope> <systemPath> ${java.home}/../lib/tools.jar
+						</systemPath> </dependency>
+					-->
+				</dependencies>
+			</plugin>
+
+			<plugin>
+        		<artifactId>maven-resources-plugin</artifactId>
+        		<version>2.4</version>
+        		<executions>
+          		<execution>
+            		<id>copy-resources</id>
+            		<!-- here the phase you need -->
+            		<phase>generate-resources</phase>
+            		<goals>
+              			<goal>copy-resources</goal>
+            		</goals>
+            		<configuration>
+              			<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/pageComponents</outputDirectory>
+              			<resources>          
+                			<resource>
+                  				<directory>src/main/webapp/WEB-INF/pageComponents/</directory>
+                  				<includes>
+          							<include>footer.xhtml</include>
+                  				</includes>
+                  				<filtering>true</filtering>
+                			</resource>
+              			</resources>              
+            		</configuration>            
+          </execution>
+        </executions>
+      </plugin>
+
+
+			
+			
+			<plugin>
+				<groupId>org.codehaus.groovy.maven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generateStubs</goal>
+							<goal>compile</goal>
+							<goal>generateTestStubs</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--
+			javassist and el-api are included in jboss and produce a conflict if
+			not excluded
+		-->
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-ui</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-pdf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-remoting</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-debug</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-ioc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-impl</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-java-client</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<exclusions>
+				<!-- If running inside JBoss this jar is already available -->
+				<exclusion>
+					<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-client</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework</groupId>
+			<artifactId>betaconceptframework-commons</artifactId>
+			<version>2.2.0.GA</version>
+			<exclusions>
+				<exclusion>
+					<groupId>poi</groupId>
+					<artifactId>poi</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		
+		<!-- hibernate libs are included in jboss -->
+		<dependency>
+			<groupId>org.betaconceptframework</groupId>
+			<artifactId>betaconceptframework-jsf-commons</artifactId>
+			<version>2.1.1.GA</version>
+		</dependency>
+
+		<!--
+			SLF4J API is an abstraction of various logging systems. This allows
+			the use of any logging framework at the time of deployment
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!--
+			In this module we have chosen to use Log4j under Slf4j therefore this
+			dependency is the bridge from SLF4J to Log4j
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<!--
+			Log4j is the actual logging framework that is used in this module.
+			Log4j is used by SLF4J. If this module runs inside JBOSS which
+			already contains its own log4j.jar then this dependency must be
+			marked as provided
+		-->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.jenia4faces</groupId>
+			<artifactId>jenia4faces</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		
+		<!--  
+		 <dependency>
+			<groupId>org.codehaus.groovy.maven</groupId>
+			<artifactId>gmaven-mojo</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy.maven.runtime</groupId>
+			<artifactId>gmaven-runtime-1.6</artifactId>
+			<version>1.0</version>
+		</dependency>
+		-->
+		
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-console
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-console
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-console
+		</url>
+	</scm>
+
+</project>
+
