@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors
+		
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/presentation/templateLayout"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/presentation/templateLayout"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+
+
+	<xs:element name="templateLayoutObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Template Layout</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Template Layout Objects hold common layouts to be shared among the templates 
+					that present resources (i.e. the Resource Representation Templates).
+					</p>
+					<p> 
+					The layout is the skeleton page that defines a common structure 
+					(e.g. two column layout with a default header and footer) and a set of 
+					place holders into which the template will add content. 
+					</p>
+					<p>
+					Layouts simplify the construction of
+					templates allowing the reuse of page design constructs (e.g. css style sheet), page code (e.g. javascript libraries) 
+					and common page components such as headers and footers.
+					</p>
+					<p>
+					Astroboa installation package provides a set of default "Template Layout" Objects which are utilized by the 
+					default "Presentation Template" Objects.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Διαμόρφωση Πρότυπης Σελίδας</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να προσθέσετε μια κοινή "Διαμόρφωση" (layout) που θέλετε να ακολουθούν 
+					τα "Πρότυπα Σελίδας" που έχετε δημιουργήσει. 
+					</p>
+					<p>
+					Η "Διαμόρφωση" προσδιορίζει το βασικό σκελετό ενός συνόλου "Πρότυπων Σελίδων". 
+					Είναι μια κοινή δομή (π.χ. δίστηλη ή τρίστηλη διαμόρφωση με καθορισμένο header και footer) και ένα σύνολο από λογικές περιοχές 
+					(π.χ. δημοφιλή, τελευταία νέα, διαφημίσεις) μέσα στις οποίες ο κώδικας της "Πρότυπης Σελίδας" θα προσθέσει περιεχόμενο από το Astroboa. 
+					Η χρήση αντικειμένων που καθορίζουν μια κοινή "Διαμόρφωση" για ένα σύνολο "Πρότυπων Σελίδων" απλοποιεί την δημιουργία των "Πρότυπων Σελίδων" 
+					επιτρέποντας την επαναχρησιμοποίηση σχεδιαστικών προδιαγραφών (π.χ. css style sheets), κώδικα (π.χ. javascript libraries), 
+					και κοινών "Τμημάτων Σελίδας" (Page Components) όπως headers και footers.
+					</p>
+					<p>
+					Το πακέτο εγκατάστασης του Astroboa παρέχει ένα σύνολο από "Διαμορφώσεις" 
+					(αντικείμενα τύπου "Διαμόρφωση Πρότυπης Σελίδας") καθώς και τις αντίστοιχες "Πρότυπες Σελίδες" που χρησιμοποιούν τις "Διαμορφώσεις".
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+
+						<xs:element name="layout" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="xs:string"
+							bccmsmodel:stringFormat="Code"
+							bccmsmodel:maxStringLength="-1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Layout Code</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>This property holds the XHTML code that generates the layout.</p> 
+										<p>
+										In  the context of Astroboa web publication infrastructure this field holds a facelet page 
+										which defines the page logical divisions, includes common page components and specifies 
+										the content areas to be used by a page template to dynamically fill in content.
+										</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Κώδικας Διαμόρφωσης</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>
+										Προσθέσθε σε αυτό το πεδίο τον XHTML κώδικα για την διαμόρφωση της Σελίδας.
+										</p>
+										<p> 
+										Ο κώδικας είναι ουσιαστικά μια Facelet/JSF σελίδα που ορίζει τις λογικές περιοχές, 
+										ενσωματώνει τα κοινά τμήματα (π.χ. header, footer, javascript lib calls), και δημιουργεί τις περιοχές 
+										στις οποίες θα προσθέσει δυναμικά περιεχόμενο η "Πρότυπη Σελίδα" που χρησιμοποιεί αυτή την διαμόρφωση. 
+										</p> 
+									</bccmsmodel:description>  
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

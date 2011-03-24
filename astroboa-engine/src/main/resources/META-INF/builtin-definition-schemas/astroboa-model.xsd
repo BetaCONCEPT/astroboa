@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+	Authors
+		 Gregory Chomatas (gchomatas@betaconcept.com) 
+		 Savvas Triantafyllou (striantafyllou@betaconcept.com)
+	-->
+	<!--
+		When elementFormDefault is set to qualified, it implies that in the
+		instance of this grammar all the elements must be explicitly
+		qualified, either by using a prefix or setting a {default namespace}.
+		An unqualified setting means that only the globally declared elements
+		must be explicitly qualified, and the locally declared elements must
+		not be qualified.
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:administrativeMetadataType="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
+	xmlns:accessibilityType="http://www.betaconceptframework.org/schema/astroboa/admin/accessibilityType"
+	elementFormDefault="unqualified" version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
+		schemaLocation="administrativeMetadataType-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/accessibilityType"
+		schemaLocation="accessibilityType-${project.version}.xsd" />
+
+
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+
+	<!--  Localization complex type -->
+
+	<xs:complexType final="#all" name="localizationType">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="label">
+				<xs:complexType>
+					<xs:simpleContent>
+					   <xs:extension base="xs:string">
+							<xs:attribute ref="xml:lang" use="required"/>
+				      </xs:extension>
+    				</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--
+		Simple Type extending xs:ID in order to accept UUID values. xs:ID is
+		needed to ensure value uniqueness within an XML
+	-->
+	<xs:simpleType name="identifierType">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--
+		Base Type containing Astroboa Identifier abstract : Specifies whether
+		the complex type can be used in an instance document. True indicates
+		that an element cannot use this complex type directly but must use a
+		complex type derived from this complex type final : Prevents a
+		specified type of derivation of this complex type element. (See
+		http://www.w3schools.com/Schema/el_complextype.asp)
+	-->
+
+	<xs:complexType abstract="true" name="entityType">
+		
+		<xs:attributeGroup ref="tns:commonEntityAttributes"/>
+		
+		<xs:attribute name="systemBuiltinEntity" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+
+	<xs:complexType abstract="true" name="localizableEntityType">
+		<xs:complexContent>
+			<xs:extension base="tns:entityType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="localization" type="tns:localizationType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="contentObjectType" >
+		<xs:complexContent>
+			<xs:extension base="tns:entityType">
+				<xs:sequence>
+					<xs:element name="owner" type="tns:repositoryUserType"
+						minOccurs="0" maxOccurs="1" />
+	
+					<xs:element name="profile" minOccurs="1"
+						maxOccurs="1"
+						type="administrativeMetadataType:administrativeMetadataType" />
+
+					<xs:element name="accessibility" minOccurs="1"
+							maxOccurs="1" type="accessibilityType:accessibilityType" />
+							
+					<xs:element name="resourceRepresentationTemplateObjectReference" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="tns:contentObjectReferenceType"
+						tns:acceptedContentTypes="resourceRepresentationTemplateObject"
+						tns:description="A reference to a resourceRepresentationTemplateObject instance. Objects of type 'resourceRepresentationTemplateObject' 
+							are used to hold templates for creating views and rendering 
+							content objects to various representation formats (i.e. web pages, pdf documents, etc.). 
+							For example the template code stored inside the 'xhtml' and 'pdf' properties of a resourceRepresentationTemplateObject 
+							could be respectively a 'facelets page' for rendering a web page and an 'xslt' for rendering pdfs. 
+							You may use this property if you require to store resource representation templates inside ASTROBOA.
+							If you want to just provide a sympolic name for the required template and let each content application to decide how to interpret 
+							the sympolic name then you may use the other provided property which follows. It is called 'resourceRepresentationTemplateName' 
+							and is of type 'bccmsmodel:topicType'">
+							
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<tns:displayName>Reference to Presentation Template</tns:displayName>
+									<tns:description>
+									<p>
+									 This field holds a reference to a content object that stores the template to be used 
+									 when presenting instances of this content type.
+									</p>
+									<p> 
+									 There are two options concerning presentation templates: 
+									</p>
+									<ul>
+									<li> 
+									 The first option is to store the template code in Astroboa. 
+									 In this case create a new content object of type "Presentation Template", 
+									 add your template code there and then use this field to add a reference to the 
+									 "Presentation Template" Object you have just created. You may link your template object to as many 
+									 content objects as you wish.
+									 </li>
+									 
+									 <li>
+									 The second option is to store your template in a file outside Astroboa. In this case you should use the field 
+									 that follows and is named "Presentation Template Name", in order to capture the name of the file into which the template code is stored.
+									 Read the information about that field to learn more.
+									 </li>
+									 </ul>
+									 <p>
+									 It is not required to add a presentation template for each content object instance that you create. 
+									 When the Astroboa web publication infrastructure is utilized (i.e. portal-commons library with Facelets+JSF) 
+									 there are rules that automatically determine which presentation template to use per content object type. 
+									 The common case is to use this or the next field when you want to override the default rules and instruct your 
+									 content application to use a specific presentation template for this content object instance. 
+									 Read the information about content objects of type "Presentation Template" to learn more.
+									 </p>  
+									</tns:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<tns:displayName>Πρότυπη Σελίδα</tns:displayName>
+									<tns:description>
+										<p>
+										Σε αυτό το πεδίο μπορείτε να προσθέσετε την "Πρότυπη Σελίδα" μεσω της οποίας θα γίνεται η παρουσίαση
+										αυτού του αντικειμένου. Η προσθήκη γίνεται μέσω αναφοράς σε ένα αντικείμενο τύπου "Πρότυπη Σελίδα" το οποίο 
+										περιέχει τον κώδικα της πρότυπης σελίδας.
+										</p>
+										<p>
+										Γενικά υπάρχουν δύο εκδοχές όσον αφορά στις πρότυπες σελίδες:
+										</p>
+										<ul>
+										<li>
+										Η πρώτη είναι να αποθηκεύσετε την πρότυπη σελίδα στο Astroboa. 
+										Σε αυτή την περίπτωση πρέπει πρώτα να δημιουργήσε ένα αντικείμενο τύπου "Πρότυπο Σελίδας" και 
+										μέσα σε αυτό να προσθέσετε το κώδικα του προτύπου. Κατόπιν σε αυτό το πεδίο που βρίσκεστε τώρα θα προσθέσετε 
+										μια αναφορά στο αντικείμενο που δημιουργήσατε. Φυσικά μπορείτε να χρησιμοποιήσετε την "Πρότυπη Σελίδα" σε όσα αντικείμενα
+										θέλετε.
+										</li>
+										
+										<li>
+										Η δεύτερη εκδοχή είναι να αποθηκεύεται τις πρότυπες σελίδες σε αρχεία εκτός του Astroboa. 
+										Σε αυτή την περίπτωση δεν χρησιμοποιείτε αυτό το πεδίο αλλα το πεδίο που ακολουθεί και ονομάζεται "Όνομα Πρότυπης Σελίδας". 
+										Σε εκείνο το πεδίο θα καταγράψετε το όνομα του αρχείου στο οποίο βρίσκεται ο κώδικας της πρότυπης σελίδας. 
+										Διαβάστε τις οδηγίες του πεδίου που ακολουθεί για να μάθετε περισσότερα. 
+										</li>
+										</ul>
+										<p>
+										Συνήθως δεν απαιτείται να συμπληρώνετε την "Πρότυπη Σελίδα" για κάθε αντικείμενο που φτιάχνετε. 
+										Οι βιβλιοθήκες του Astroboa που φτιάχνουν την Διαδικτυακή πύλη έχουν κανόνες που αυτόματα επιλέγουν 
+										την κατάλληλη "Πρότυπη Σελίδα" για κάθε τύπο αντικειμένου. 
+										Εσείς χρησιμοποιείται αυτο και το επόμενο πεδίο για να παρακάμψεται την αυτόματη επιλογή και να επιλέξετε διαφορετικό "Πρότυπο" 
+										για ένα συγκεκριμένο αντικείμενο. Μπορείτε να διαβάσετε τις οδηγίες που συνοδεύουν τον τύπο αντικειμένου με όνομα "Πρότυπη Σελίδα" 
+										για να μάθετε περισσότερα.
+										</p>
+									</tns:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="resourceRepresentationTemplateName"
+							type="tns:topicType"
+							tns:acceptedTaxonomies="resourceRepresentationTemplateName" 
+							minOccurs="0" 
+							maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<tns:displayName>Presentation Template Name</tns:displayName>
+									<tns:description>
+										<p>
+										This is the symbolic name of a template to be used when presenting instances of this content type. 
+										To allow easy management, the template names are topics provided through an astroboa vocabulary 
+										named after the name of this field
+										The symbolic name can be interpreted and mapped 
+										differently by different content applications.
+										</p>
+										<p>
+										According to the templating engine that the content application utilizes the appropriate template file should be 
+										located by means of the symbolic name. 
+										</p>
+										<p>
+										When the Astroboa web publication infrastructure is utilized (i.e. portal-commons library with Facelets+JSF) 
+										the name corresponds to an XHTML file stored inside the web application. 
+										</p>
+										<p>
+										Another use case is when a content application utilizes Astroboa RESTful API to retrieve content. 
+										In this case the template name may correspond to an XSLT file that should be used by the content application 
+										in order to transform the consumed XML to PDF or HTML."
+										</p>
+										<p>
+										You may choose to store the template inside Astroboa instead of a file in your content application. 
+										In this case you should use the previous field in this form named "Reference to Presentation Template".
+										See the information on that field about its use.
+										</p> 
+									</tns:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<tns:displayName>Όνομα Πρότυπης Σελίδας</tns:displayName>
+									<tns:description>
+										<p>
+										Σε αυτό το πεδίο μπορείτε να προσθέσετε το "Όνομα της Πρότυπης Σελίδας" μεσω της οποίας θα γίνεται η παρουσίαση
+										αυτού του αντικειμένου. 
+										</p>
+										<p>
+										Για την καλύτερη και ευκολότερη διαχείριση των ονομάτων, έχει δημιουργηθεί ένας "Θησαυρός Όρων" 
+										στο οποίο κρατούνται όλα τα ονόματα των πρότυπων σελίδων. Το όνομα του Θησαυρού είναι το ίδιο με το όνομα αυτού 
+										του πεδίου για να μπορείτε να τον εντοπίσετε εύκολα.
+										</p>
+										<p>
+										Αν στον θησαυρό βρείτε μια λίστα από ονόματα πρότυπων σελίδων σημαίνει πως κάποιος προγραμματιστής (σχεδιαστής σελίδων) έχει ήδη 
+										δημιουργήσει αρχεία με πρότυπες σελίδες προς χρήση.
+										</p>
+										<p>
+										Το "Όνομα" της Πρότυπης Σελίδας που θα επιλέξετε αντιστοιχεί σε ένα αρχείο που περιέχει τον κώδικα της "Πρότυπης Σελίδας".
+										Η κονσόλα διαχείρισης του Astroboa παράγει αυτόματα την παρουσίαση των αντικειμένων ακολουθώντας κάποιες συμβάσεις. 
+										Οι πρότυπες σελίδες που επιλέγετε προορίζονται για τις Διαδικτυακές Πύλες που αντούν το περιεχόμενο που εσείς εισάγεται μέσω της κονσόλας και χρειάζονται 
+										κάποιο τρόπο / οδηγίες να το δείξουν στους χρήστες. Οι οδηγίες αυτές μπορούν να υποδειχτούν αν προσθέσετε εδώ την κατάλληλη πρότυπη σελίδα.
+										</p>
+										<p>
+										Μπορείτε να διατηρείτε τον κώδικα των πρότυπων σελίδων μέσα στο Astroboa αντί σε αρχεία της Web Εφαρμογής. 
+										Σε αυτή την περίπτωση πρέπει να χρησιμοποιείσετε το προηγούμε πεδίο της φόρμας με το όνομα "Πρότυπη Σελίδα".
+										Διαβάστε τις πληροφορίες που συνοδεύουν το παραπάνω πεδίο για να μάθετε πως θα το χρησιμοποιήσετε.
+										</p> 
+									</tns:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+							
+				</xs:sequence>
+
+				<!--
+					A human readable system name identifying this content object used
+				-->
+				<xs:attribute name="systemName" use="optional" type="tns:systemNameType" />
+
+				<xs:attribute name="contentObjectTypeName" use="optional"
+					type="xs:string" />
+
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="complexCmsPropertyType" final="restriction">
+		<xs:complexContent>
+			<xs:extension base="tns:entityType">
+
+				<!--
+					This attribute specifies the path of a simple property (xs:string,
+					xs:dateTime, bccmsmodel:topicType, bccmsmodel:repositoryUserType,
+					bccmsmodel:contentObjectType, etc) whose value can be used instead
+					of this complexCmsPropertyType annotation value or system name as a
+					label for this complexCmsPropertyType. This is useful when this
+					complexCmsPropertyType occurs more than once inside an element and
+					we need to identify right away each of the values. For example if
+					there is an element of type 'menuType' (see
+					/META_INF/builtin-definition-schemas/menu-type-${project.version}.xsd and
+					menu-item-type-${project.version}.xsd) which has a complex property named
+					'menuItemType' and can occur more than one times. When displaying
+					the properties of 'menuType' one can choose to display properties
+					system names one can have menuType menuItemType[0] menuItemType[1]
+
+					or if one chooses to display properties annotation for English Menu
+					Menu Item[0] Menu Item[1] This way it is not clear what are the
+					values that each menu item represent. By specifying the value
+					'localizedLabels.{locale}' to this attribute for menu-type and
+					menu-item-type, user can have File (Menu) Save (Menu Item[0]) Edit
+					(Menu Item[1]) Note that value {locale} is a reserved word which is
+					replaced by Astroboa in runtime by the current locale, if any. The
+					only contraint is the the property before {locale} must be a
+					complex property of type multilingualStringPropertyType (see
+					/META_INF/builtin-definition-schemas/multilingual-string-property-type-${project.version}.xsd)
+
+					Another example is if there is an element named 'city' which has
+					one or more complex elements of type 'museumType' which have a
+					simple property named 'description'. By specifying value
+					'description' in complex element 'museumType', when necessary the
+					description of each museum instance will be displayed instead of
+					its system name or annotation value.
+					
+					Value of this attribute can contain more than one paths separated by 
+					comma
+				-->
+				<xs:attribute name="labelElementPath" type="xs:string"
+					use="optional" />
+
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="repositoryUserType" final="#all">
+		<xs:complexContent>
+			<xs:extension base="tns:entityType">
+				<xs:sequence>
+					<xs:element name="taxonomy" type="tns:taxonomyType"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="space" type="tns:spaceType" minOccurs="0"
+						maxOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="externalId" type="xs:string" />
+				<xs:attribute name="label" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="taxonomyType" final="#all">
+		<xs:complexContent>
+			<xs:extension base="tns:localizableEntityType">
+				<xs:sequence>
+					<!--  Root topics -->
+					<xs:element name="rootTopics" minOccurs="0" maxOccurs="1">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="topic" type="tns:topicType"
+									minOccurs="0" maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<!--
+					This attribute can take ant valid
+					string of type NCName with the addition of the two builtin and
+					reserved taxonomy names which are not valid NCNames, thus must be
+					defined explicitly in order for the generated XML to be valid.
+				-->
+				<xs:attribute name="name" use="optional">
+					<xs:simpleType>
+						<xs:union memberTypes="xs:NCName">
+							<xs:simpleType>
+								<xs:restriction base="tns:systemNameType">
+									<xs:enumeration value="bccms:subjectTaxonomy" />
+									<xs:enumeration value="bccms:folksonomy" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:union>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="numberOfChildren" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="topicType" final="#all">
+		<xs:complexContent>
+			<xs:extension base="tns:localizableEntityType">
+				<xs:sequence>
+					<xs:element name="owner" type="tns:repositoryUserType"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="taxonomy" type="tns:taxonomyType"
+						minOccurs="0" maxOccurs="1" />
+
+					<xs:element name="parentTopic" type="tns:topicType"
+						minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="childTopics" minOccurs="0" maxOccurs="1">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="topic" type="tns:topicType" minOccurs="0"
+											maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+
+				<xs:attribute name="name" use="optional" type="tns:systemNameType"/>
+				<xs:attribute name="allowsReferrerContentObjects" type="xs:boolean" />
+				<xs:attribute name="order" type="xs:long" />
+				<xs:attribute name="numberOfChildren" type="xs:int" />
+
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="spaceType" final="#all">
+		<xs:complexContent>
+			<xs:extension base="tns:localizableEntityType">
+				<xs:sequence>
+					<xs:element name="owner" type="tns:repositoryUserType"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="parentSpace" type="tns:spaceType"
+						minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="childSpaces" minOccurs="0" maxOccurs="1">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="space" type="tns:spaceType" minOccurs="0"
+								maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+
+				<xs:attribute name="name" use="optional" type="tns:systemNameType"/>
+				<xs:attribute name="order" type="xs:long" />
+				<xs:attribute name="numberOfChildren" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="binaryChannelType" final="#all">
+		<xs:complexContent>
+			<xs:extension base="tns:entityType">
+				<xs:sequence>
+					<xs:element name="content" type="xs:base64Binary"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="sourceFileName" type="xs:string"
+					use="optional" />
+				<xs:attribute name="mimeType" type="xs:string" use="optional" />
+				<xs:attribute name="encoding" type="xs:string" use="optional" />
+				<xs:attribute name="lastModificationDate" type="xs:dateTime"
+					use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!--
+		This type represents a reference to a content object. A reference to a content object
+		may have reference's identifier, reference's profile, reference's content type name,
+		reference's url which is repsonsible to retrieve all properties for the referenced content object
+		and reference's system name. 
+		
+	-->
+	<xs:complexType name="contentObjectReferenceType">
+			<xs:sequence>
+				<xs:element name="profile" minOccurs="1"
+						maxOccurs="1"
+						type="administrativeMetadataType:administrativeMetadataType" />
+			</xs:sequence>
+			<!--
+				It is not exaclty the same with cmsIdentifier attribute in
+				entityType as this attribute is not extending xs:ID .
+				Nevertheless since it represents the identifier of a content object, 
+				the same name is used
+			-->
+			<xs:attribute name="cmsIdentifier" use="optional">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern
+							value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="contentObjectTypeName" type="xs:string" use="optional" />
+			<xs:attribute name="url" type="xs:anyURI" use="optional" />
+			<xs:attribute name="systemName" type="tns:systemNameType" use="optional" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="contentObjectPropertyAttGroup">
+		<xs:attribute default="100" name="maxStringLength" type="xs:integer" />
+
+		<!-- Same with the definition of maxOccurs -->
+		<xs:attribute name="maxOccursIfAspect" default="1">
+			<xs:simpleType>
+				<xs:union memberTypes="xs:nonNegativeInteger">
+					<xs:simpleType>
+						<xs:restriction base="xs:NMTOKEN">
+							<xs:enumeration value="unbounded" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:union>
+			</xs:simpleType>
+		</xs:attribute>
+		
+		<xs:attribute name="obsolete" type="xs:boolean" default="false" />
+		<xs:attribute name="stringFormat" default="PlainText">
+			<xs:simpleType>
+				<!-- Case sensitive -->
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PlainText" />
+					<xs:enumeration value="RichText" />
+					<xs:enumeration value="Code" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="restrictWriteToRoles" type="xs:string" />
+		<xs:attribute name="restrictReadToRoles" type="xs:string" />
+
+		<!--
+			Used by an element of type 'contentObject' in order to define allowed
+			types of content object values. Accept a comma delimited string.
+			Content Object type names must match exactly the name specified in
+			appropriate element which represent that type
+		-->
+		<xs:attribute name="acceptedContentTypes">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="\w(,\w)*" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<!--
+			Used by an element of type 'topic' in order to define allowed
+			taxonomies which will provide the topic values. Accept a comma
+			delimited string. Taxonomy names must match exactly the taxonomy
+			system name
+		-->
+		<xs:attribute name="acceptedTaxonomies">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="\w(,\w)*" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<!--
+			Used mainly by global elements which describe content object type
+			definitions
+		-->
+		<xs:attribute name="systemType" type="xs:boolean" />
+		
+		<!-- Used only by elements of type binaryChannelType  which correspond to
+		a simple cms property whose value(s) are binary channels which are not managed by Astroboa. 
+		That means that user provide only a path to the resource and it is her responsibility
+		to make sure that content of this resource exists -->
+		<xs:attribute name="unmanagedBinaryChannel" type="xs:boolean" />
+
+        <!-- 
+	        Used only by elements of type String when their values must be saved encoded, like passwords.
+	        Defined class must implement interface org.betaconceptframework.astroboa.api.security.CmsPasswordEncryptor
+	    -->
+		<xs:attribute name="passwordEncryptorClassName" type="xs:string"/>
+		
+	</xs:attributeGroup>
+	
+	<!-- This attribute group contains all attributes a complex type should inherit in order
+	 to be handled as a Astroboa entity -->
+	<xs:attributeGroup name="commonEntityAttributes">
+		<xs:attribute name="cmsIdentifier" type="tns:identifierType" use="optional"/>
+		<xs:attribute name="url" type="xs:anyURI" use="optional"/>
+	</xs:attributeGroup>
+
+	<!-- Special type for simple String properties denoting that
+			this property values must be encrypted. Elements of this value usually 
+			contain attributes  passwordEncryptorClassName which is responsible to
+			encrypt values.If no value for this attribute is specified, then
+			default password encryptor is used (org.betaconceptframework.astroboa.security.AstroboaPasswordEncryptor)
+	 -->
+	<xs:simpleType name="passwordType" >
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	
+	<!-- Pattern expression for system names of content object or taxonomyType.
+	Can be any string which contains only Latin characters, digits, '-' or '_' -->
+	<xs:simpleType name="systemNameType">
+		<xs:union memberTypes="xs:string">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern
+						value="[A-Za-z0-9_\-\.:]+" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+
+	
+	<!-- Elements which are mostly used within xs:documentation element.-->
+	<xs:element name="displayName" type="xs:string" />
+	<xs:element name="description" type="xs:string" />
+	
+	<!-- Global Elements -->
+	<xs:element name="taxonomy" type="tns:taxonomyType" />
+
+	<xs:element name="topic" type="tns:topicType" />
+
+	<xs:element name="space" type="tns:spaceType" />
+
+	<xs:element name="repositoryUser" type="tns:repositoryUserType" />
+
+</xs:schema>

@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+			schemaLocation="astroboa-model-${project.version}.xsd" />
+
+
+		<xs:complexType name="addressType"
+			bccmsmodel:labelElementPath="type,streetAddress,areaNameAsTopic,localityName,country">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Address</bccmsmodel:displayName>
+				<bccmsmodel:description>Holds all the address data for a person or organization</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Διεύθυνση</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτός ο τύπος περιγράφει τα στοιχεία διεύθυνσης για ένα πρόσωπο ή ένα οργανισμό</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="type"
+						minOccurs="0"
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="typeOfAddress">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Type of Addess</bccmsmodel:displayName>
+								<bccmsmodel:description>The address type or label, specified as a string. Examples: work, my favorite store, my house, etc.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Είδος Διεύθυνσης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="streetAddress" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Street
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Οδός
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="streetNumber" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Street Number
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Αριθμός
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="poBox" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								PoBox
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ταχυδρομική Θυρίδα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="localityName" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Locality Name (City/Area/Village)</bccmsmodel:displayName>
+								<bccmsmodel:description>The oasis standard Locality Name eg. Mountain View</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Πόλη/Περιοχή/Χωριό</bccmsmodel:displayName>
+								<bccmsmodel:description>Το oasis standard όνομα γεωγραφικής τοποθεσίας π.χ. Γρίτσα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="subAdministrativeAreaName"
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Sub Administrative Area Name (Municipality)</bccmsmodel:displayName>
+								<bccmsmodel:description>The oasis standard Sub Administrative Area Name eg. Santa Clara</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Δήμος</bccmsmodel:displayName>
+								<bccmsmodel:description>To oasis standard όνομα της Επιμέρους Διοικητικής Περιοχής π.χ. Δήμος Λιτοχώρου</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="administrativeAreaName"
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Administrative Area Name (Region)</bccmsmodel:displayName>
+								<bccmsmodel:description>The oasis standard Administrative Area Name eg. California</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Νομός</bccmsmodel:displayName>
+								<bccmsmodel:description>To oasis standard όνομα της Ευρύτερης Διοικητικής Περιοχής π.χ. Νομός Πιερίας</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="areaNameAsTopic"
+						minOccurs="0" 
+						maxOccurs="1"
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="areaNameTaxonomy">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Area Name (from taxonomy)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Use this field instead of the preceding three fields to take advantage of astroboa taxonomies and with
+									just one field to describe the area of the address within a country. 
+									</p>
+									<p>
+									The field takes topic values from a taxonomy which holds the hierarchy of country administrative areas. 
+									The taxonomy system name should be "areaNameTaxonomy". 
+									Always add into this field topics which are leafs of the "areaNameTaxonomy" taxonomy tree. 
+									The leaf topic is connected to all its predecessors and so all the information of locality, 
+									sub administrative, and administrative area can be represented through a single topic instead of 
+									the three string fields that are provided above. 
+									</p>
+									<p>
+									If you utilize this field DO NOT use the above three fields simultaneously. On the other hand 
+									if you can not fill in the "areaNameTaxonomy" with the administrative area decomposition of your country just ignore this field and utilize 
+									the preceding three fields to supply the address area. 
+									</p>
+									<p>
+									The default installation of astroboa provides the "areaNameTaxonomy" filled in with the administrative
+									area decomposition of Greece.
+									</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιοχή Διεύθυνσης (από θησαυρό)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Χρησιμοποιήστε αυτό το πεδίο ΑΝΤΙ για τα προηγούμενα τρία πεδία για να επωφεληθείτε 
+									από τους θησαυρούς όρων του astroboa και με μόνο ένα πεδίο να περιγράψετε την περιοχή μιας διεύθυνσης.
+									</p>
+									<p>
+									Το πεδίο παίρνει τιμές από ένα θησαυρό όρων που περιέχει την ιεραρχία των διοικητικών περιοχών της χώρας. 
+									Ο θησαυρός πρέπει να ονομάζεται (όνομα συστήματος) "areaNameTaxonomy".
+									</p>
+									<p>
+									Στην αρχική εγκατάσταση του astroboa παρέχεται θησαυρός με την διοικητική / γεωγραφική ιεραρχία που ορίζει ο Καποδίστριας.
+									</p>
+									<p>
+									Πάντοτε να προσθέτετε σε αυτό τον πεδίο τιμές που αποτελούν "φύλλα" του θησαυρού «areaNameTaxonomy". 
+									Τα φύλλα είναι συνδεδεμένα αυτόματα με όλους τους κόμβους που προηγούνται στο θησαυρό (broader terms) 
+									και έτσι όλα τα στοιχεία διοικητικής υποδιαίρεσης είναι διαθέσιμα (π.χ. αν διαλέξετε Ν. Ηράκλειο ως Δήμο, τότε ο Νομός Αττικής και η Περιφέρεια Αττικής 
+									υπονοούνται αυτόματα). ΠΡΟΣΟΧΗ! αν χρησιμοποιήσετε αυτό το πεδίο τότε μην κάνετε ταυτόχρονη χρήση και των ακριβώς παραπάνω τριών πεδίων που ουσιαστικά περιγράφουν
+									την περιοχή της διεύθυνσης με τα παραδοσιακά τρια πεδία κειμένου (Πόλη/Δήμος/Νομός) αντί για έναν όρο από θησαυρό που χρησιμοποιείται εδώ.
+									</p> 
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="postalCode" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Postal Code
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ταχυδρομικός Κώδικας
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="country"
+						type="bccmsmodel:topicType"
+						bccmsmodel:acceptedTaxonomies="country" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Country
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Χώρα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extendedAddress" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Extended Address
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Επιπλέον Στοιχεία Διεύθυνσης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="latitude" type="xs:double"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Latitude
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γεωγραφικό Πλάτος
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="longitude" type="xs:double"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Longitude
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γεωγραφικό Μήκος
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="primary" type="xs:boolean"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Primary Address
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Κύρια Διευθυνση
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="formatted" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Formatted (form to be printed)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The full mailing address, formatted for display or use with a mailing label. 
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Μορφοποιημένη Διεύθυνση (για εκτύπωση)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="500"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfAddressTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Address List</bccmsmodel:displayName>
+				<bccmsmodel:description>Holds a list of addresses data for a person or organization</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Διευθύνσεις</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτός ο τύπος επιτρέπει την διατήρηση μιας λίστας διευθύνσεων για ένα πρόσωπο ή ένα οργανισμό</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="address" type="tns:addressType" minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Address</bccmsmodel:displayName>
+								<bccmsmodel:description>Holds all the address data for a person or organization</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Διεύθυνση</bccmsmodel:displayName>
+								<bccmsmodel:description>Τα στοιχεία διεύθυνσης για ένα πρόσωπο ή ένα οργανισμό</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="phoneType"
+		bccmsmodel:labelElementPath="type,number">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>phone</bccmsmodel:displayName>
+				<bccmsmodel:description>Holds a phone number. Use the field named "Phone Type" to specify the phone type e.g. home, mobile, work</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Τηλέφωνο</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτό το σύνθετο πεδίο κρατάει ένα τηλέφωνο και τον τύπο του. Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Τηλεφώνου" για να προσδιορίσετε αν το τηλέφωνο είναι κινητό, fax, οικίας, εργασίας, κλπ.</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="number" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>phone number</bccmsmodel:displayName>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Αριθμός Τηλεφώνου</bccmsmodel:displayName>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="typeOfPhone">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Phone Type</bccmsmodel:displayName>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Τύπος Τηλεφώνου</bccmsmodel:displayName>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="primary" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Primary</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									A Boolean value indicating whether this phone is the primary or preferred phone to call the person.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Κύριο Τηλέφωνο</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσδιορίζει αν αυτό το τηλέφωνο είναι το κύριο / προτιμώμενο για να καλούμε το πρόσωπο
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfPhoneTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Phone List</bccmsmodel:displayName>
+				<bccmsmodel:description>Use it to hold a list of phone numbers.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Τηλεφώνων</bccmsmodel:displayName>
+				<bccmsmodel:description>Χρησιμοποιείται για να διατηρήσουμε μια λίστα τηλεφώνων. Π.χ. όλα τα τηλέφωνα ενός προσώπου</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="phone" type="tns:phoneType" minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>phone</bccmsmodel:displayName>
+								<bccmsmodel:description>Holds a phone number. Use the field named "Phone Type" to specify the phone type e.g. home, mobile, work</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τηλέφωνο</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Αυτό το σύνθετο πεδίο κρατάει ένα τηλέφωνο και τον τύπο του. 
+									Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Τηλεφώνου" για να προσδιορίσετε αν το τηλέφωνο είναι κινητό, fax, οικίας, εργασίας, κλπ.
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="emailType"
+		bccmsmodel:labelElementPath="emailAddress">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>email</bccmsmodel:displayName>
+				<bccmsmodel:description>Holds an email address and its type. Use the field named "Email Type" to specify the email type e.g. home, work</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>email</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτός ο σύνθετος τύπος κρατάει μια διεύθυνση  ηλεκτρονικού ταχυδρομείου και τον τύπο της. Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Email" για να προσδιορίσετε αν το email αφορά στην οικία, την εργασία κλπ.</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="emailAddress" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Email Address</bccmsmodel:displayName>
+								<bccmsmodel:description>Specify the full email address with username and domain e.g. myname@mydomain.com</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Διευθυνση Ηλεκτρονικού Ταχυδρομείου</bccmsmodel:displayName>
+								<bccmsmodel:description>Δώστε την πλήρη διεύθυνση του Ηλεκτρονικού Ταχυδρομίου με όνομα χρήστη και domain π.χ. myname@mydomain.com</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="typeOfEmail">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Email Type</bccmsmodel:displayName>
+								<bccmsmodel:description>Use this field to specify the email type e.g. home, work, for blogging, etc. 
+								 The field takes values from a vocabulary with system name "typeOfEmail" and localized label equal to the name of this field. 
+								 If this vocabulary is not available at astroboa console or the term you are looking for is not provided by the vocabulary please ask your 
+								 administrator or content manager to add it.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Τύπος Email</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Χρησιμοποιείστε αυτό το πεδίο για να προσδιορίσετε την χρήση του email, π.χ. οικία, εργασία, για εγγραφή σε sites κλπ. 
+									Οι διαθέσιμες τιμές για αυτό το πεδίο παρέχονται από θησαυρό όρων με όνομα συστήματος "typeOfEmail" και όνομα το ίδιο με το όνομα του πεδίου. 
+									Αν δεν εμφανίζεται ο θησαυρός στην κονσόλα διαχείρισης ή η τιμή που σας ενδιαφέρει δεν βρίσκεται στο θησαυρό ζητήστε από τον administrator να κάνει τις απαραίτητες προσθήκες
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="primary" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Primary</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									A Boolean value indicating whether this email address is the primary or preferred address to use for this person.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Κύρια Διέυθυνση Email</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσδιορίζει αν αυτό το email είναι το κύριο / προτιμώμενο για να στέλνουμε email στο πρόσωπο.
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfEmailTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Email List</bccmsmodel:displayName>
+				<bccmsmodel:description>Use it to hold a list of emails.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα με Email</bccmsmodel:displayName>
+				<bccmsmodel:description>Χρησιμοποιείται για να διατηρήσουμε μια λίστα Email. Π.χ. όλα τα  email ενός προσώπου</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="email" type="tns:emailType" minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>email</bccmsmodel:displayName>
+								<bccmsmodel:description>Holds an email address and its type. Use the field named "Email Type" to specify the email type e.g. home, work</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>email</bccmsmodel:displayName>
+								<bccmsmodel:description>Αυτός ο σύνθετος τύπος κρατάει μια διεύθυνση  ηλεκτρονικού ταχυδρομείου και τον τύπο της. Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Email" για να προσδιορίσετε αν το email αφορά στην οικία, την εργασία κλπ.</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="imType"
+		bccmsmodel:labelElementPath="imService,userName">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Instant Messaging Address</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Holds an instant messaging address and its type. Use the field named "Im Type" to specify the Im type e.g. home, work.
+					</p>
+					<p>
+					Use the field "IM Service" to specify, through a vocabulary, the service type / service provider, 
+					eg. AIM, Yahoo! Messenger, MSN Messenger, ICQ, Jabber, Google Talk, Skype, SIP, etc.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Διεύθυνση  Online (Video/Text) Chat</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Αυτός ο σύνθετος τύπος κρατάει μια διεύθυνση για chat και τον τύπο της.
+					</p>
+					<p>
+					Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Διεύθυνσης Chat" για να προσδιορίσετε αν η διεύθυνση αφορά στην οικία, την εργασία κλπ.
+					Χρησιμοποιείστε το πεδίο με το όνομα "Τύπος Υπηρεσίας Chat" για να προσδιορίσετε την υπηρεσία ή τον τύπο της, 
+					π.χ. AIM, Yahoo! Messenger, MSN Messenger, ICQ, Jabber, Google Talk, Skype, SIP,  κλπ.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="userName" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>User Name</bccmsmodel:displayName>
+								<bccmsmodel:description>Specify the User Name of an Instant Messaging Service</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Όνομα Χρήστη</bccmsmodel:displayName>
+								<bccmsmodel:description>Δώστε το όνομα χρήστη για την υπηρεσία online chat</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="imService" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="imService">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>IM Service</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>Use this field to specify the IM service type / service provider, 
+									eg. AIM, Yahoo! Messenger, MSN Messenger, ICQ, Jabber, Google Talk, Skype, SIP, etc.</p>
+									<p>The field takes values from a vocabulary with system name "imService". </p>
+									<p>If this vocabulary is not available at astroboa console or the term you are looking for is not provided by the vocabulary please ask your 
+									administrator or content manager to add it.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Υπηρεσία Chat (AIM, Google)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>Χρησιμοποιείστε αυτό το πεδίο για να προσδιορίσετε την υπηρεσία chat ή τον τύπο της, 
+								 	π.χ. AIM, Yahoo! Messenger, MSN Messenger, ICQ, Jabber, Google Talk, Skype, SIP,  κλπ.</p>
+									<p>Οι διαθέσιμες τιμές για αυτό το πεδίο παρέχονται από θησαυρό όρων με όνομα συστήματος "imService.</p>
+									<p>Ένα δείγμα αυτού του θησαυρού είναι διαθέσιμο στην αρχική εγκατάσταση του astroboa. 
+									Αν δεν εμφανίζεται ο θησαυρός στην κονσόλα διαχείρισης ή η τιμή που σας ενδιαφέρει δεν βρίσκεται στο θησαυρό 
+									ζητήστε από τον administrator να κάνει τις απαραίτητες προσθήκες</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" 
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="typeOfIM">
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Instant Messaging Address Type</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Use this field to specify the IM type e.g. home, work, etc.
+									</p>
+									<p> 
+								 	The field takes values from a vocabulary with system name "typeOfIM" and localized label equal to the name of this field. 
+									</p>
+									<p>
+									If this vocabulary is not available at astroboa console or the term you are looking for is not provided by the vocabulary please ask your 
+								 	administrator or content manager to add it.
+								 	</p>
+								 </bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Τύπος Διεύθυνσης</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Χρησιμοποιείστε αυτό το πεδίο για να προσδιορίσετε την χρήση της διέυθυνσης chat, π.χ. οικία, εργασία, κλπ. 
+									</p>
+									<p>
+									Οι διαθέσιμες τιμές για αυτό το πεδίο παρέχονται από θησαυρό όρων με όνομα συστήματος "typeOfIM" και όνομα το ίδιο με το όνομα του πεδίου. 
+									</p>
+									<p>
+									Αν δεν εμφανίζεται ο θησαυρός στην κονσόλα διαχείρισης ή η τιμή που σας ενδιαφέρει δεν βρίσκεται στο θησαυρό 
+									ζητήστε από τον administrator να κάνει τις απαραίτητες προσθήκες.
+									</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="primary" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en" >
+								<bccmsmodel:displayName>Primary</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									A Boolean value indicating whether this IM Address is the primary or preferred to chat with the person.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el" >
+								<bccmsmodel:displayName>Κύρια Διευθυνση Chat</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσδιορίζει αν αυτή η διεύθυνση chat είναι η κύρια / προτιμώμενη για να καλούμε το πρόσωπο
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfImTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Instant Messaging Address List</bccmsmodel:displayName>
+				<bccmsmodel:description>Use it to hold a list of IM Addresses.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Διευθύνσεων Online Chat</bccmsmodel:displayName>
+				<bccmsmodel:description>Χρησιμοποιείται για να διατηρήσουμε μια λίστα διευθύνσεων για online chating. Π.χ. όλα τις διευθύνσεις chat ενός προσώπου</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="im" type="tns:imType" minOccurs="1" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+</xs:schema>

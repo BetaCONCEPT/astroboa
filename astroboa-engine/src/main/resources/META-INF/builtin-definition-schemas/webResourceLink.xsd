@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+
+	<xs:complexType name="webResourceLinkType"
+						bccmsmodel:labelElementPath="title" >
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Web Resource Link (URL)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this complex type to store a link to a Web Resource.
+					</p>
+					It provides properties for specifing:
+					<ul>
+						<li>
+							The link to the web resource expressed as an absolute or relative URL.
+							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
+							or it may point to external web sites, 
+							e.g. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							The title or legend to be used when presenting the link, e.g. "The official site of ACME ccompany" 
+						</li>
+						<li>
+							A description about the linked resource, 
+							e.g. "This is the official site of ACME Company. It provides info about their products and services"
+						</li>
+						<li>
+							A preview image to be used when presenting the link, e.g. A photo of ACME company headquarters
+						</li>
+						<li>
+							A thumnail to be used when presenting a list of links (e.g. in list view mode).
+						</li>
+					</ul>
+					</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Σύνδεσμος (URL)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτόν το τύπο για να αποθηκεύσετε συνδέσμους προς περιεχόμενο που βρίσκεται στο 
+						Astroboa ή σε εξωτερικούς ιστότοπους
+					</p>
+					Ο τύπος παρέχει πεδία για την αποθήκευση:
+					<ul>
+						<li>
+							Του συνδέσμου υπο μορφή URL.
+							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
+							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
+							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							Ενός τίτλου / λεζάντας που μπορεί να χρησιμοποιηθεί κατά την παρουσίαση του συνδέσμου,
+							π.χ. "Το Επίσημο site του Φεστιβάλ Κανών" 
+						</li>
+						<li>
+							Μιας περιγραφής για το σύνδεσμο, 
+							π.χ. "Ο σύνδεσμος παρουσιάζει τις 10 υποψηφιότητες του Φεστιβάλ και παρέχει πληροφορίες για τις ταινίες"
+						</li>
+						<li>
+							Μιας εικόνας σχετικής με το σύνδεσμο.
+						</li>
+						<li>
+							Ενός thumnail που μπορεί να χρησιμοποιηθεί όταν παρουσιάζονται λίστες συνδέσμων
+						</li>
+					</ul>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="title" minOccurs="1" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Title
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Τίτλος / Λεζάντα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="description" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Description
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Περιγραφή
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="500"/>
+								</xs:restriction>
+							</xs:simpleType>
+						
+					</xs:element>
+
+
+					<xs:element name="url" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>URL</bccmsmodel:displayName>
+								<bccmsmodel:description>An absolute url like http://www.site.com/page or a relative URL to a specific resource in repository. 
+											This url may specify a link to a resource's system name (/resource/contentObject/name/systemName), or to 
+											a resource's id (/resource/contentObject/id/objectId) or correspond to some web site page.
+											The internal URLs that access astroboa repository resources should conform to the restFUL Content API in order to be correctly processed by Astroboa
+											</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								URL
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="previewImage" minOccurs="0"
+						maxOccurs="1" type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Preview Image</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif preview image for the resource.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Εικόνα Προεπισκόπησης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="thumbnail" minOccurs="0"
+						maxOccurs="1" type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif thumbnail (usually up to 128 pixels width) for the resource. 
+							This thumbnail can be generated from the previewImage through an aproprtiate api call (downscale the previewImage).
+							However it is more efficient to provide it rather than continuously generating it.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Εικονίδιο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="arrayOfWebResourceLinkTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Web Resources Links (URLs)</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of Links to Web Resources. The links/references to web resources are expressed through absolute or relative URLs, 
+		i.e. http://www.site.com/page1, ftp://ftp.server.org/path/file, /portal/resource/contentObject/id/ffff-eeee</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Συνδέσμων (URLs)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="webResourceLink" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="tns:webResourceLinkType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="webResourceLinkObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Web Resource Link (URL)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this content object type to store a link to a Web Resource.
+					</p>
+					It provides properties for specifing:
+					<ul>
+						<li>
+							The link to the web resource expressed as an absolute or relative URL.
+							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
+							or it may point to external web sites, 
+							e.g. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							The title or legend to be used when presenting the link, e.g. "The official site of ACME ccompany" 
+						</li>
+						<li>
+							A description about the linked resource, 
+							e.g. "This is the official site of ACME Company. It provides info about their products and services"
+						</li>
+						<li>
+							A preview image to be used when presenting the link, e.g. A photo of ACME company headquarters
+						</li>
+						<li>
+							A thumnail to be used when presenting a list of links (e.g. in list view mode).
+						</li>
+					</ul>
+					</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Σύνδεσμος (URL)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο 
+						Astroboa ή σε εξωτερικούς ιστότοπους
+					</p>
+					Το αντικείμενο παρέχει πεδία για την αποθήκευση:
+					<ul>
+						<li>
+							Του συνδέσμου υπο μορφή URL.
+							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
+							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
+							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							Ενός τίτλου / λεζάντας που μπορεί να χρησιμοποιηθεί κατά την παρουσίαση του συνδέσμου,
+							π.χ. "Το Επίσημο site του Φεστιβάλ Κανών" 
+						</li>
+						<li>
+							Μιας περιγραφής για το σύνδεσμο, 
+							π.χ. "Ο σύνδεσμος παρουσιάζει τις 10 υποψηφιότητες του Φεστιβάλ και παρέχει πληροφορίες για τις ταινίες"
+						</li>
+						<li>
+							Μιας εικόνας σχετικής με το σύνδεσμο.
+						</li>
+						<li>
+							Ενός thumnail που μπορεί να χρησιμοποιηθεί όταν παρουσιάζονται λίστες συνδέσμων
+						</li>
+					</ul>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+					
+						<xs:element name="url" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>URL</bccmsmodel:displayName>
+								<bccmsmodel:description>An absolute url like http://www.site.com/page or a relative URL to a specific resource in repository. 
+											This url may specify a link to a resource's system name (/resource/contentObject/name/systemName), or to 
+											a resource's id (/resource/contentObject/id/objectId) or correspond to some web site page.
+											The internal URLs that access astroboa repository resources should conform to the restFUL Content API in order to be correctly processed by Astroboa</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									URL
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="previewImage" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Preview Image</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif preview image for the resource.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικόνα Προεπισκόπησης
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="thumbnail" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif thumbnail (usually up to 128 pixels width) for the resource. 
+								This thumbnail can be generated from the previewImage through an aproprtiate api call (downscale the previewImage).
+								However it is more efficient to provide it rather than continuously generating it.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικονίδιο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="arrayOfWebResourceLinkObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Web Resource Link Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of REFERENCES to web resource link objects (i.e. Web Resource Link content objects). 
+			This list can be attached to other content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Συνδέσμους
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="webResourceLinkObjectReference"
+						minOccurs="0" maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="webResourceLinkObject">
+						
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Web Resource Link Object</bccmsmodel:displayName>
+								<bccmsmodel:description>Web Resource Link Object Instance referenced by another content object instance</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Αναφορά σε Συνδέσμο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:element name="arrayOfWebResourceLinkTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Web Resource Links (URLs)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this content object type to store a list of links to Web Resources.
+					</p>
+					For each resource in the list you can specify:
+					<ul>
+						<li>
+							The link to the web resource expressed as an absolute or relative URL.
+							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
+							or it may point to external web sites, 
+							e.g. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							The title or legend to be used when presenting the link, e.g. "The official site of ACME ccompany" 
+						</li>
+						<li>
+							A description about the linked resource, 
+							e.g. "This is the official site of ACME Company. It provides info about their products and services"
+						</li>
+						<li>
+							A preview image to be used when presenting the link, e.g. A photo of ACME company headquarters
+						</li>
+						<li>
+							A thumnail
+						</li>
+					</ul>
+			</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Συνδέσμων (URLs)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε μια λίστα απο συνδέσμους προς περιεχόμενο που βρίσκεται στο 
+						Astroboa ή σε εξωτερικούς ιστότοπους
+					</p>
+					Για κάθε σύνδεσμο που προσθέτετε στη λίστα παρέχονται πεδία για το ορισμό:
+					<ul>
+						<li>
+							Του συνδέσμου υπο μορφή URL.
+							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
+							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
+							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
+							/content-api/my-repository/contentObject/my-article (Resource API), 
+							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
+						</li>
+						<li>
+							Ενός τίτλου / λεζάντας που μπορεί να χρησιμοποιηθεί κατά την παρουσίαση του συνδέσμου,
+							π.χ. "Το Επίσημο site του Φεστιβάλ Κανών" 
+						</li>
+						<li>
+							Μιας περιγραφής για το σύνδεσμο, 
+							π.χ. "Ο σύνδεσμος παρουσιάζει τις 10 υποψηφιότητες του Φεστιβάλ και παρέχει πληροφορίες για τις ταινίες"
+						</li>
+						<li>
+							Μιας εικόνας σχετικής με το σύνδεσμο.
+						</li>
+						<li>
+							Ενός thumnail
+						</li>
+					</ul>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+						<xs:element name="webResourceLink" 
+							minOccurs="0"
+							maxOccurs="unbounded" 
+							type="tns:webResourceLinkType"/>
+
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

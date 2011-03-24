@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<personObject:personObject
+	systemName="IDENTITY_STORE_SYSTEM_PERSON"   
+	contentObjectTypeName="personObject" systemBuiltinEntity="true"
+	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/identity/person person-${project.version}.xsd"
+	xmlns:personObject="http://www.betaconceptframework.org/schema/astroboa/identity/person"
+	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<owner externalId="SYSTEM" cmsIdentifier="SYSTEM_USER_ID" />
+	<profile>
+		<title>SYSTEM ACCOUNT</title>
+		<creator>SYSTEM ACCOUNT</creator>
+		<language>el</language>
+	</profile>
+	<accessibility>
+		<canBeReadBy>ALL</canBeReadBy>
+		<canBeTaggedBy>ALL</canBeTaggedBy>
+        <canBeUpdatedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeUpdatedBy>
+        <canBeDeletedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeDeletedBy>
+	</accessibility>
+	<name>
+		<familyName>ACCOUNT</familyName>
+		<givenName>SYSTEM</givenName>
+	</name>
+	<displayName>SYSTEM</displayName>
+	<personAuthentication>
+		<username>SYSTEM</username>
+		<password>ppak/iCPLZw9Z8ocxH0mWMMkrEvYFVi+nBc6LL+WKlw=</password>
+		<authenticationDataEnabled>true</authenticationDataEnabled>
+	</personAuthentication>
+</personObject:personObject>

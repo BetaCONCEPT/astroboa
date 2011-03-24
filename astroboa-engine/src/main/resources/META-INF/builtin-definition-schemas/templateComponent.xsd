@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors
+		
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/presentation/templateComponent"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/presentation/templateComponent"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+
+
+	<xs:element name="templateComponentObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Template Component</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Template Components hold common code fragments to be shared among the templates 
+					that present resources (i.e. the Resource Representation Templates). 
+					</p>
+					
+					<p>
+					Typical components are the headers and footers which can be inserted either inside 
+					a template or inside a "Template Layout" shared by different templates.
+					</p>
+					
+					<p>
+					"Latest News", "Popular", "Tag Cloud" are some more examples of code fragments which can 
+					be defined once as a "Template Component" and reused across different templates.
+					</p>
+					
+					<p>
+					The code of a "Template Component" is an XHTML code fragment with html/facelet/JSF tags that present 
+					content retrieved from Astroboa.
+					</p>
+					
+					<p>
+					Astroboa installation package installs a set of default "Template Components" which are included in the 
+					pre-installed "Presentation Template" or "Template Layout" Objects. 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Τμήμα Πρότυπης Σελίδας</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να προσθέσετε ένα κοινό τμήμα κώδικα που μοιράζονται 
+					διάφορες "Πρότυπες Σελίδες". 
+					</p>
+					
+					<p>
+					Τυπικό παράδειγμα "Τμήματος Πρότυπης Σελίδας" αποτελούν τα header και footers που μπορούν να 
+					εισαχθούν μέσα στην "Πρότυπη Σελίδα" ή στη "Διαμόρφωση" που μοιράζονται διάφορες "Πρότυπες Σελίδες". 
+					</p>
+					
+					<p>
+					"Τα Τελευταία Νέα", "Τα πιο Δημοφιλή", "Η Λίστα Ετικετών" είναι μερικά ακόμη παραδείγματα κοινού κώδικα που 
+					μπορεί να προστεθεί μία φορά σαν "Τμήμα Σελίδας" και να επαναχρησιμοποιείται απο διαφορετικές "Πρότυπες Σελιδες". 
+					</p>
+					
+					<p>
+					Ουσιαστικά ένα "Τμήμα Σελίδας" είναι ένα κομμάτι κώδικα XHTML που περιλαμβάνει html/facelet/JSF tags που 
+					ανακτούν περιεχόμενο από το Astroboa και το παρουσιάζουν.
+					</p>
+					
+					<p>
+					Το πακέτο εγκατάστασης του Astroboa εγκαθιστά ένα σύνολο από "Τμήματα Σελίδας"
+					που χρησιμοποιούνται από τις προεγκατεστημένες "Πρότυπες Σελίδες" και τις προεγκατεστημένες "Διαμορφώσεις Πρότυπων Σελίδων".
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+
+						<xs:element name="component" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="xs:string"
+							bccmsmodel:stringFormat="Code"
+							bccmsmodel:maxStringLength="-1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Component Code</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										This property holds an XHTML code fragment that is reused across "Presentation Templates" 
+										or "Template Layouts".
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Τμήμα Κώδικα Πρότυπης Σελίδας</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Προσθέσθε σε αυτό το πεδίο ένα τμήμα XHTML κώδικα που θέλετε να επαναχρησιμοποιείσετε εντός 
+										των "Πρότυπων Σελίδων" ή εντός των "Διαμορφώσεων Πρότυπων Σελίδων".   
+									</bccmsmodel:description>  
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

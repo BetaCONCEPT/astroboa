@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/cascadingStyleSheet"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/cascadingStyleSheet"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+
+
+	<xs:element name="cascadingStyleSheetObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this object to hold the code of a <em>cascading style sheet</em>.</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα ενός <em>cascading style sheet</em> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:contentObjectType">
+				<xs:sequence>
+					
+					<xs:element name="code" 
+							minOccurs="1"
+							maxOccurs="1" 
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>CSS Code</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Insert here the CSS Code
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κώδικας CSS</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Εισάγετε σε αυτό το πεδίο τον κώδικα του CSS
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					
+					<xs:element name="webPublication" minOccurs="0"
+						maxOccurs="1" type="webPublicationType:webPublicationType" />
+					<xs:element name="workflow" minOccurs="0"
+						maxOccurs="1" type="workflowType:workflowType" />
+					<xs:element name="statistic" minOccurs="0"
+						maxOccurs="1" type="statisticType:statisticType" />
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:complexType name="cascadingStyleSheetType"
+						bccmsmodel:labelElementPath="name">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Attach this complex field to your objects to store the code of a <em>cascading style sheet</em>.</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα ενός <em>cascading style sheet</em>
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					
+					<xs:element name="name" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>CSS Name</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Provide a name for your CSS 
+									(i.e. a short name that reminds you what styling rules this css contains)
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Όνομα CSS</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Δώστε ένα Όνομα για το CSS 
+									(ένα σύντομο όνομα που να σας θυμίζει που χρησιμοποιείται το CSS)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="description" 
+							minOccurs="0"
+							maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>CSS Description</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Provide a description for your CSS 
+									(i.e. add comments for the CSS, what to watch for, how to use it, etc.)
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιγραφή CSS</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Δώστε μια περιγραφή για το CSS 
+									(σχόλια για τη λειτουργία του, πως χρησιμοποιείται, κλπ.)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				
+					<xs:element name="code" 
+							minOccurs="1"
+							maxOccurs="1" 
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>CSS Code</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Insert here the CSS Code
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κώδικας CSS</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Εισάγετε σε αυτό το πεδίο τον κώδικα του CSS
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	
+	<xs:complexType name="arrayOfCascadingStyleSheetTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Attach this complex field to your objects to store a list of CSS.</p> 
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα πολλών CSS</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="css" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:cascadingStyleSheetType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	<xs:element name="arrayOfScriptTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this object to store a list of css</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα πολλών css</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+					<xs:element name="css" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:cascadingStyleSheetType"/>
+	
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+						<xs:element name="statistic" minOccurs="0"
+							maxOccurs="1" type="statisticType:statisticType" />
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+							BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded"
+							processContents="strict" />
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="arrayOfScriptObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Attach this complex field to your objects to store a list of references to "Cascading Style Sheet" objects  
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Αναφορές σε Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Προσθέσθε αυτό το σύνθετο πεδίο στα αντικειμενά σας για να αποθηκεύσετε αναφορές σε αντικείμενα που κρατούν Cascading Style Sheets 
+					(δηλαδή αναφορές σε αντικείμενα τύπου "Cascading Style Sheet" που περιέχουν κώδικα CSS) 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="cssObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="cascadingStyleSheetObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Cascading Style Sheet Object</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									 Add existing content object instances of type "Cascading Style Sheet" (references to them will be actually stored)
+								</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Αναφορά σε Cascading Style Sheet</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσθέσθε αντικείμενα τύπου "Cascading Style Sheet" από τα διαθέσιμα που έχουν καταχωρηθεί στο σύστημα 
+									(για κάθε αντικείμενο που θα προσθέσετε θα αποθηκευτεί απλώς μια αναφορά σε αυτό).
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

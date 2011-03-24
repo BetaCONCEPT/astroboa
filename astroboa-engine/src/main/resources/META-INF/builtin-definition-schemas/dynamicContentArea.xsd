@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/dynamicContentArea"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/dynamicContentArea"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+	
+	<xs:element name="dynamicContentAreaObject">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Dynamic Content Area</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this content object type to define the areas of a web site that dynamically (through a content query) 
+						draw their content from the content repository, e.g. "Latest News", "Most Popular", "Events this week".
+					</p>
+					The object provides fieds for specifing:
+					<ul>
+						<li>
+							An Astroboa portal-api query in the form of an EL Expression. 
+							The query reads a dynamic list of content objects from the content repository.
+							The number of content objects to be displayed is specified by a parameter of the EL Expression.
+						</li>
+						<li>
+							A RESTful URL (see portal api) for presenting more results than those read by the initial EL Expression query 
+						</li>
+						<li>
+							 A RESTful URL (see portal api) for getting the query results as an RSS/ATOM feed and allow users to access
+							 the content from RSS readers instead of visiting the web site.
+						</li>
+						<li>
+							The symbolic name of the web site area into which the queried content should be presented.
+							The symbolic names are stored in a specific Astroboa Taxonomy.
+						</li>
+						<li>
+							The symbolic name of a presentation style to use for the presentation of the queried content. 
+							The symbolic names are stored in a specific Astroboa Taxonomy and correspond to the 
+							style sheet classes used by the page template that implements the dynamic area.
+						</li>
+					</ul>
+					<p>
+						To utilize this content object, your web site application (i.e. your web app war) should 
+						include the "portal-commons" library provided by Astroboa distribution. The library provides URLs and 
+						"EL Expressions" through which you can present the dynamic content inside your web site templates. 
+						You can read more on how to create web sites with the "portal-commons" library and about the portal api in 
+						<a href="http://www.astroboa.org/portal/resource/section/documentation">Astroboa Documenation</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Περιοχή Δυναμικού Περιεχομένου</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να ορίσετε τις περιοχές του διαδικτυακού τόπου που τραβούν δυναμικά  (μέσω queries) 
+						το περιεχόμενό τους από την αποθήκη περιεχομένου, π.χ. "τα τελευταία νέα", "τα πιο δημοφιλή", "οι εκδηλώσεις της εβδομάδας".
+					</p>
+					<p>
+						Το αντικείμενο παρέχει πεδία για την καταχώρηση:
+					</p>
+					<ul>
+						<li>
+							Tου ερωτήματος που τραβάει αντικείμενα από την αποθήκη περιεχομένου (π.χ. τα τελευταία δημοσιευμένα άρθρα). 
+							Το ερώτημα καταχωρείται υπό μορφή "EL Expression" (βλέπε portal api). 
+							Ο αριθμός των αντικειμένων που επιστρέφονται καθορίζεται από παράμετρο του "EL Expression"
+						</li>
+						<li>
+							Του RESTful URL (βλέπε portal api) που παρουσιάζει περισσότερα αποτελέσματα απο αυτά που παράγει το αρχικό
+							ερώτημα.
+						</li>
+						<li>
+							Του RESTful URL (βλέπε portal api) που παράγει τα αποτελέσματα του ερωτήματος σαν RSS/ATOM feed για την 
+							ανάγνωση του περιεχομένου απο RSS Readers χωρίς την ανάγκη επίσκεψης στην ιστοσελίδα.
+						</li>
+						<li>
+							Του συμβολικού ονόματος της περιοχής του ιστότοπου στην οποία πρέπει να εμφανιστεί η λίστα αντικειμένων 
+							που επιστρέφονται από το ερώτημα, π.χ. "περιοχή τελευταίων δημοσιεύσεων".
+							Τα συμβολικά ονόματα των δυναμικών περιοχών του ιστότοπου περιέχονται σε θησαυρό όρων.
+						</li>
+						<li>
+							Του συμβολικού ονόματος του "τρόπου παρουσίασης" της επιλεγμένη λίστας. 
+							Τα συμβολικά ονόματα παρουσίασης περιέχονται σε θησαυρό 
+							όρων και αντιστοιχούν στις κλάσεις απεικόνισης (style sheet classes) των πρότυπων σελίδων που υλοποιούν την παρουσίαση 
+							της επιλεγμένης περιοχή του ιστότοπου.
+						</li>
+					</ul>
+					<p>
+						Η χρήση αυτού του αντικειμένου προϋποθέτει την χρήση της βιβλιοθήκης "portal-commons" που παρέχεται μαζί με την 
+						διανομή του Astroboa. Η εφαρμογή που υλοποιεί τον δικτυακό τόπο (web application war) πρέπει να ενσωματώνει στις 
+						βιβλιοθήκες της και την βιβλιοθήκη "portal-commons". Η βιβλιοθήκη υλοποιεί RESTful URLs και παρέχει "EL Exressions" 
+						μέσω των οποίων μπορείτε να παρουσιάσετε στις πρότυπες σελίδες σας το περιεχόμενο των "δυναμικών περιοχών".
+						Για περισσότερες πληροφορίες σχετικά με το portal api και σχετικά με την κατασκευή ιστότοπων με την βοήθεια 
+						της βιβλιοθήκης "portal-commons" δείτε 
+						την <a href="http://www.astroboa.org/portal/resource/section/documentation">Τεκμηρίωση του Astroboa</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+	
+						<xs:element name="presentationTemplate" minOccurs="0"
+							type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="presentationTemplate">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Presentation Template</bccmsmodel:displayName>
+									<bccmsmodel:description>	
+										It takes values from the taxonomy "Presentation Template" (system name: presentationTemplate) which holds the presentation template names.
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									 Πρότυπο Παρουσίασης περιεχομένου
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element 
+							name="elExpression" 
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en"><bccmsmodel:displayName>Content Query EL Expression</bccmsmodel:displayName>
+								<bccmsmodel:description>An EL Expression that calls a managed bean method in order to query the repository for a list of content objects, topics, etc. Eg. #{contentObjectResource.findResources('event','athens')}}</bccmsmodel:description></xs:documentation>
+								<xs:documentation xml:lang="el">Ερώτηση Δυναμικού Περιεχομένου υπό μορφή EL Expression</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="500"/>
+								</xs:restriction>
+							</xs:simpleType>
+							
+						</xs:element>
+						
+						<xs:element 
+							name="moreResourcesURL" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+								   <bccmsmodel:displayName>URL to more results</bccmsmodel:displayName>
+								   <bccmsmodel:description>A portal resource API URL that shows a page with more resources than those presented in the content area. The portal context should be omitted. For example resource/contentObject/event/topicNames/music</bccmsmodel:description>
+								   </xs:documentation>
+								<xs:documentation xml:lang="el">URL για περισσότερα αποτελέσματα</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="500"/>
+								</xs:restriction>
+							</xs:simpleType>
+							
+						</xs:element>
+						
+						<xs:element 
+							name="rssURL" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									 <bccmsmodel:displayName>URL that delivers content area items as an RSS Feed</bccmsmodel:displayName>
+									 <bccmsmodel:description>A portal resource API URL that delivers the resources presented in the content area through an RSS feed. The portal context should be omitted. For example resource/contentObject/event/topicNames/music/resourceRepresentationType/rss_2.0</bccmsmodel:description>
+								 </xs:documentation>
+								<xs:documentation xml:lang="el">URL για παροχή των αποτελεσμάτων σαν RSS Feed</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="500"/>
+								</xs:restriction>
+							</xs:simpleType>
+							
+						</xs:element>
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+</xs:schema>

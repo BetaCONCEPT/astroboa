@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/common/script"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/common/script"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+
+	<xs:simpleType name="scriptLanguageType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Script Language</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Enumeration of the different languages used for writing scripts. 
+				 </bccmsmodel:description>
+	    	</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Γλώσσα Προγραμματισμού Script</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Ο τύπος ορίζει τη λίστα γλωσσών προγραμματισμού για συγγραφή Scripts
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+	
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="groovy">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">groovy</xs:documentation>
+				<xs:documentation xml:lang="el">groovy</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="javascript">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">javascript</xs:documentation>
+				<xs:documentation xml:lang="el">javascript</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="python">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">python</xs:documentation>
+				<xs:documentation xml:lang="el">python</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="php">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">php</xs:documentation>
+				<xs:documentation xml:lang="el">php</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="perl">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">perl</xs:documentation>
+				<xs:documentation xml:lang="el">perl</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="ruby">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">ruby</xs:documentation>
+				<xs:documentation xml:lang="el">ruby</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="scriptObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Script</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this object to hold the code of a <em>script</em> (i.e. groovy, javascript, python, etc.).</p> 
+					<p>Astroboa provides special facilities for running the code stored in this object</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Script</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα ενός <em>script</em> 
+					(π.χ. groovy, javascript, python, etc.)
+					</p>
+					<p>
+					Το Astroboa παρέχει μηχανισμούς για να τρέξετε τον κώδικα που θα αποθηκεύσετε σε αυτό το αντικείμενο.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:contentObjectType">
+				<xs:sequence>
+					<xs:element name="scriptLanguage" 
+						minOccurs="1"
+						maxOccurs="1" type="tns:scriptLanguageType"
+						default="groovy">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Language</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Select the language of your script
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Γλώσσα Προγραμματισμού</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Επιλέξτε τη Γλώσσα Προγραμματισμού που χρησιμοποιείται στο script
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="code" 
+							minOccurs="1"
+							maxOccurs="1" 
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Code</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Insert here the Script Code
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κώδικας Script</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Εισάγετε σε αυτό το πεδίο τον κώδικα του script
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					
+					<xs:element name="webPublication" minOccurs="0"
+						maxOccurs="1" type="webPublicationType:webPublicationType" />
+					<xs:element name="workflow" minOccurs="0"
+						maxOccurs="1" type="workflowType:workflowType" />
+					<xs:element name="statistic" minOccurs="0"
+						maxOccurs="1" type="statisticType:statisticType" />
+						
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:complexType name="scriptType"
+						bccmsmodel:labelElementPath="name">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Script</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Attach this complex field to your objects to store the code of a script (i.e. groovy, javascript, python, etc.).</p> 
+					<p>Astroboa provides special facilities for running the code stored in this field.</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Script</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα ενός script 
+					(π.χ. groovy, javascript, python, etc.)
+					</p>
+					<p>
+					Το Astroboa παρέχει μηχανισμούς για να τρέξετε τον κώδικα που θα αποθηκεύσετε σε αυτό το σύνθετο πεδίο.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="scriptLanguage" 
+						minOccurs="1"
+						maxOccurs="1" type="tns:scriptLanguageType"
+						default="groovy">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Language</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Select the language of your script
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Γλώσσα Προγραμματισμού</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Επιλέξτε τη Γλώσσα Προγραμματισμού που χρησιμοποιείται στο script
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="name" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Name</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Provide a name for your script 
+									(i.e. a short name that reminds you what this script does)
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Όνομα Script</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Δώστε ένα Όνομα για το script 
+									(ένα σύντομο όνομα που να σας θυμίζει τη λειτουργία του script)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="description" 
+							minOccurs="0"
+							maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Description</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Provide a description for your script 
+									(i.e. describe the script functionality, the parameters it needs to properly work, its outcome, etc.)
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιγραφή Script</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Δώστε μια περιγραφή για το script 
+									(περιγράψτε τη λειτουργία του script, τις παραμέτρους που χρειάζεται, τα αποτελέσματα που παράγει, κλπ.)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				
+					<xs:element name="code" 
+							minOccurs="1"
+							maxOccurs="1"
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Script Code</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Insert here the Script Code
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κώδικας Script</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Εισάγετε σε αυτό το πεδίο τον κώδικα του script
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	
+	<xs:complexType name="arrayOfScriptTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Attach this complex field to your objects to store a list of scripts (i.e. groovy, javascript, python, etc.).</p> 
+					
+					<p>Astroboa provides special facilities for running the code of the stored scripts</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα πολλαπλών scripts (π.χ. groovy, javascript, python, etc.)</p>
+					
+					<p>Το Astroboa παρέχει μηχανισμούς για να τρέξετε τον κώδικα των scripts που θα αποθηκεύσετε σε αυτό το σύνθετο πεδίο.</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="script" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:scriptType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	<xs:element name="arrayOfScriptTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this object to store a list of scripts (i.e. groovy, javascript, python, etc.).</p> 
+					
+					<p>Astroboa provides special facilities for running the code of the stored scripts</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα πολλαπλών scripts (π.χ. groovy, javascript, python, etc.)</p> 
+					
+					<p>Το Astroboa παρέχει μηχανισμούς για να τρέξετε τον κώδικα των scripts που θα αποθηκεύσετε σε αυτό το αντικείμενο.</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+					<xs:element name="script" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:scriptType"/>
+	
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+						<xs:element name="statistic" minOccurs="0"
+							maxOccurs="1" type="statisticType:statisticType" />
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+							BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded"
+							processContents="strict" />
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="arrayOfScriptObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Attach this complex field to your objects to store a list of references to script objects 
+					(i.e. objects of type "Script" which store code written in groovy, javascript, python, etc.). 
+					</p>
+					<p>
+					Astroboa provides special facilities for running the code of the stored scripts.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα από Αναφορές σε Scripts</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Προσθέσθε αυτό το σύνθετο πεδίο στα αντικειμενά σας για να αποθηκεύσετε αναφορές σε αντικείμενα που κρατούν script 
+					(δηλαδή αναφορές σε αντικείμενα τύπου "Script" που περιέχουν κώδικα γραμμένο σε groovy, javascript, python, etc.) 
+					</p>
+					<p>
+					Το Astroboa παρέχει μηχανισμούς για να τρέξετε τον κώδικα των scripts που αποθηκεύεται σε αντικείμενα τύπου "Script".
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="scriptObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="scriptObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Script Object</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									 Add existing content object instances of type "Script" (references to them will be actually stored)
+								</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Αναφορά σε Script</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσθέσθε αντικείμενα τύπου "Script" από τα διαθέσιμα που έχουν καταχωρηθεί στο σύστημα 
+									(για κάθε αντικείμενο που θα προσθέσετε θα αποθηκευτεί απλώς μια αναφορά σε αυτό).
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

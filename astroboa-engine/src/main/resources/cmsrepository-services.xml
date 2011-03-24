@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<aop:aspectj-autoproxy/>
+	
+
+	<!-- Content Service -->
+	<bean id="contentService" class="org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl" autowire="byName"/>
+
+	<!-- RepositoryUser Service -->
+	<bean id="repositoryUserService" class="org.betaconceptframework.astroboa.engine.service.jcr.RepositoryUserServiceImpl" autowire="byName"/>
+
+	
+	<!-- Definition Service -->	
+	<bean id="definitionService" class="org.betaconceptframework.astroboa.engine.service.jcr.DefinitionServiceImpl" autowire="byName"/>
+	
+	<!-- Space Service -->	
+	<bean id="spaceService" class="org.betaconceptframework.astroboa.engine.service.jcr.SpaceServiceImpl" autowire="byName"/>
+
+	<!-- Topic Service -->
+	<bean id="topicService" class="org.betaconceptframework.astroboa.engine.service.jcr.TopicServiceImpl" autowire="byName"/>
+	
+	<!-- Taxonomy Service -->
+	<bean id="taxonomyService" class="org.betaconceptframework.astroboa.engine.service.jcr.TaxonomyServiceImpl" autowire="byName"/>
+	
+	<!-- Aspect that secures Content Service -->
+	<bean id="secureContentServiceAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentServiceAspect" autowire="byName"/>
+	<bean id="secureContentOnjectSaveAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectSaveAspect" autowire="byName"/>
+	<bean id="secureContentOnjectDeleteAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectDeleteAspect" autowire="byName"/>
+	
+	<!-- Repository Service -->
+	<bean id="repositoryService" class="org.betaconceptframework.astroboa.engine.service.jcr.RepositoryServiceImpl" autowire="byName"/>
+
+	<!-- Cache Service -->
+	<bean id="cacheService" class="org.betaconceptframework.astroboa.engine.service.jcr.CacheServiceImpl" autowire="byName"/>
+	
+	<!-- Serialization Service -->
+	<bean id="serializationService" class="org.betaconceptframework.astroboa.engine.service.jcr.SerializationServiceImpl" autowire="byName"/>
+
+	<!-- Import Service -->
+	<bean id="importService" class="org.betaconceptframework.astroboa.engine.service.jcr.ImportServiceImpl" autowire="byName"/>
+		
+	<!--  Lazy loader is instantiated once using implementations of services defined in this module 
+	This class exists in astroboa-model module -->
+	<bean id="lazyLoader" class="org.betaconceptframework.astroboa.model.lazy.LazyLoader">
+	  <constructor-arg ref="spaceService"/>
+	  <constructor-arg ref="topicService"/>
+	  <constructor-arg ref="definitionService"/>
+	  <constructor-arg ref="contentService"/>
+	</bean>
+	
+	<!-- IdentityStore -->
+	<bean id="identityStore" class="org.betaconceptframework.astroboa.engine.service.security.management.IdentityStoreImpl" autowire="byName"/>
+
+	<!-- JcrContext -->
+	<bean id="jcrContext" class="org.betaconceptframework.astroboa.engine.service.jcr.JcrContextImpl" autowire="byName"/>	
+
+</beans>

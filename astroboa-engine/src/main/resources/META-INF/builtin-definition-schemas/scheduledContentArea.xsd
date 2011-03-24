@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/scheduledContentArea"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/scheduledContentArea"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+	<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+			schemaLocation="astroboa-model-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+			schemaLocation="workflowType-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+			schemaLocation="webPublicationType-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+			schemaLocation="statisticType-${project.version}.xsd" />
+
+
+
+	<xs:element name="scheduledContentAreaObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Scheduled Content Area</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this content object type to schedule the presentation of content in certain web site areas. 
+						For example, you may schedule the presentation of different ad banners for different day and time periods, 
+						or schedule content that will be automatically refreshed during the weekend.
+					</p>
+					<p> 
+						This object, in contrast to the "Dynamic Content Area"  allows the manual selection of content to be presented in 
+						the various web site areas and offers the possibility of scheduling the manually selected content.     
+					</p>
+					
+					The object stores: 
+					<ul>
+						<li>an ordered list of references to the content objects that should be presented to the area</li>
+						<li>The time period that the list is valid for presentation</li>
+						<li>
+							A symbolic area name (taken from a taxonomy) designating the area into which 
+							the content list should appear, e.g "ad banner area", "editor picks area".
+						</li>
+						<li>A symbolic name for the presentation style to use. Presentation style names are taken from a taxonomy and 
+						correspond to style classes of the web page template that implements the selected content area</li>
+					</ul>
+					
+					<p>
+						To utilize this content object, your web site application (i.e. your web app war) should 
+						include the "portal-commons" library provided by Astroboa distribution. The library provides REST style URLs and 
+						"EL Expressions" through which you can present the scheduled content inside your web site templates. 
+						You can read more on how to create web sites with the "portal-commons" library in 
+						<a href="http://www.astroboa.org/portal/resource/section/documentation">Astroboa Documenation</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Προγραμματιζόμενη περιοχή περιεχομένου</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο περιεχομένου για να προγραμματίσετε την παρουσίαση περιεχομένου
+						στις διάφορες περιοχές ενός δικτυακού τόπου.
+						Π.χ. μπορείτε να προγραμματίσετε την παρουσίαση διαφορετικών διαφημίσεων σε διαφορετικές μέρες και ώρες ή 
+						να προγραμματίσετε το περιεχόμενο που θα ανανεώνεται αυτόματα κατά την διάρκεια του Σαββατοκύριακου. 
+					</p>
+					<p>
+						Δηλαδή αυτό το αντικείμενο, σε αντιδιαστολή με τη "Δυναμική Περιοχή Περιεχομένου", επιτρέπει την χειροκίνητη επιλογή της 
+						λίστας αντικειμένων προς παρουσίαση και παρέχει τη δυνατότητα χρονοπρογραμματισμού της παρουσίασης των επιλεγμένων αντικειμένων.    
+					</p>
+					
+					Το αντικείμενο παρέχει πεδία για: 
+					<ul>
+						<li>
+							την δημιουργία ταξινομημένης λίστας επιλεγμένων αντικειμένων
+						</li>
+						<li>
+							τον προσδιορισμό του χρονικού διαστήματος για το οποίο η επιλεγμένη λίστα είναι σε ισχύ</li>
+						<li>
+							Το συμβολικό όνομα της περιοχής του ιστότοπου στην οποία πρέπει να εμφανιστεί η επιλεγμένη λίστα,  
+							π.χ. "περιοχή διαφημίσεων", "περιοχή προτάσεων της συντακτικής ομάδας".
+							Τα συμβολικά ονόματα των περιοχών του ιστότοπου περιέχονται σε θησαυρό όρων.
+						</li>
+						<li>
+							Το συμβολικό όνομα του τρόπου παρουσίαση της επιλεγμένη λίστας. Τα συμβολικά ονόματα παρουσίασης περιέχονται σε θησαυρό 
+							όρων και αντιστοιχούν στις κλάσεις απεικόνισης (style sheets) των πρότυπων σελίδων που υλοποιούν την παρουσίαση 
+							της επιλεγμένης περιοχή του ιστότοπου.
+						</li>
+					</ul>
+					<p>
+						Η χρήση αυτού του αντικειμένου προϋποθέτει την χρήση της βιβλιοθήκης "portal-commons" που παρέχεται μαζί με την 
+						διανομή του Astroboa. Η εφαρμογή που υλοποιεί τον δικτυακό τόπο (web application war) πρέπει να ενσωματώνει στις 
+						βιβλιοθήκες της και την βιβλιοθήκη "portal-commons". Η βιβλιοθήκη υλοποιεί RESTful URLs και παρέχει "EL Exressions" 
+						μέσω των οποίων μπορείτε να παρουσιάσετε στις πρότυπες σελίδες σας το περιεχόμενο των "προγραμματιζόμενων περιοχών".
+						Για περισσότερες πληροφορίες σχετικά με την κατασκευή ιστότοπων με την βοήθεια της βιβλιοθήκης "portal-commons" δείτε 
+						την <a href="http://www.astroboa.org/portal/resource/section/documentation">Τεκμηρίωση του Astroboa</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+						<xs:element name="appearanceStartDate" minOccurs="1"
+							maxOccurs="1" 
+							type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Appearance Start Date
+												</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ημερ/νία πρώτης εμφάνισης
+												</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="appearanceEndDate" minOccurs="1"
+							maxOccurs="1" 
+							type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Appearance End Date
+												</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ημερ/νία τελευταίας εμφάνισης
+												</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="scheduledContentAreaName" minOccurs="1"
+							maxOccurs="1"
+							type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="scheduledContentAreaName">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Scheduled Content Area Name</bccmsmodel:displayName>
+								<bccmsmodel:description>Content area name where the related content objects will be displayed</bccmsmodel:description>
+												</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Όνομα Προγραμματιζόμενης Περιοχής
+												</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="presentationTemplate" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="presentationTemplate">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Presentation Template</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										The presentation template to use when rendering the list of content objects. 
+										It takes values from the taxonomy "Presentation Template" (system name: presentationTemplate) which holds the presentation template names.
+									</bccmsmodel:description>
+												</xs:documentation>
+								<xs:documentation xml:lang="el">
+									 Πρότυπο Παρουσίασης περιεχομένου
+												</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element 
+							name="referencedContentObjects" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Objects to be displayed in content area</bccmsmodel:displayName>
+									<bccmsmodel:description>References to content objects that will be displayed in the specified content area</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">Εμφανιζόμενο περιεχόμενο</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+							<xs:element name="webPublication"
+								minOccurs="0" maxOccurs="1"
+								type="webPublicationType:webPublicationType" />
+							<xs:element name="workflow" minOccurs="0"
+								maxOccurs="1" type="workflowType:workflowType" />
+							<xs:element name="statistic" minOccurs="0"
+								maxOccurs="1" type="statisticType:statisticType" />
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+</xs:schema>

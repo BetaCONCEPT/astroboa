@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/portalSection"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/portalSection"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+	
+	<!-- This object has been named "portalSectionObject" to dictate that it represents a section of a "portal" to the content 
+	stored in Astroboa or third party content repositories. However it seems that users are more comfortable and 
+	familiar with the term "web site" and "web page". 
+	Additionally the term portal is usually interpreted as an "application" rather a "content" portal and involves 
+	portlets and other standardized terms that are not related to the intended purpose of this object.
+	So we keep the system name as "portalSectionObject" to preserve compatibility with written code and we choose to 
+	use the term "web page" for the localized labels of the object and thus users will see this object as a "web page" 
+	of a "web site" rather than a "portal section" of a "portal"-->
+	<xs:element name="portalSectionObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Web Page</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						This content object type represents a web page inside a web site hierarchy. 
+					</p>
+					It provides properties for specifing:
+					<ul>
+						<li>
+							The static content of the web page. 
+						</li>
+						<li>
+							A related image 
+						</li>
+						<li>
+							A thumbnail
+						</li>
+						<li>
+							References to child (sub) pages to allow the creation of the web page hierarchy.
+						</li>
+						<li>
+							The "presentation template" (inherited by all content objects) that determines how the content 
+							will be presented and what additional dynamic content may be shown along the static one
+						</li>
+						<li>
+							A RESTful URL (see portal api) for the creation within the site hierarchy of links to resource collections. 
+							(i.e. instead of static content you may add arbitrary content links as part of the site structure)
+						</li>
+						<li>
+							A reference to a query object for the creation within the site hierarch of links to resource collections.  
+							This is an alternative way to RESTful URLs for adding arbitrary links to content as part of the site structure.
+							Query objects can created in Astroboa Console by storing the user generated queries (advanced search function).
+						</li>
+						<li>
+							A reference to a content object instance that you may wish to be linked in the web site structure. 
+						</li>
+						<li>
+							The system name of a content object that you may wish to be linked in the web site structure
+						</li>
+					</ul>
+					<p>
+						To utilize this content object, your web site application (i.e. your web app war) should 
+						include the "portal-commons" library provided by Astroboa distribution. The library provides 
+						the functionality through which you can access and present the site hierarchy captured within the web pages.
+						You can read more on how to create web sites with the "portal-commons" library in 
+						<a href="http://www.astroboa.org/portal/resource/section/documentation">Astroboa Documenation</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Ιστοσελίδα</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Αυτό το αντικείμενο αναπαριστά μια ιστοσελίδα ως μέρος της ιεραρχικής δομής ενός ιστότοπου.
+					</p>
+					Το αντικείμενο παρέχει πεδία για την αποθήκευση:
+					<ul>
+						<li>
+							Του στατικού περιεχομένου της ιστοσελίδας
+						</li>
+						<li>
+							Κάποιας σχετικής φωτογραφίας
+						</li>
+						<li>
+							Ενός Thumnail
+						</li>
+						<li>
+							Των αναφορών στις υποσελίδες που βρίσκονται κάτω από αυτή την σελίδα ώστε να δημιουργείσετε την 
+							ιεραρχική δομή του ιστότοπου
+						</li>
+						<li>
+							Του "προτύπου παρουσίασης" που θα καθορίσει πως θα απεικονιστεί η ιστοσελίδα και τι επιπλέον 
+							δυναμικό περιεχόμενο θα τη συνοδεύει. 
+						</li>
+						<li>
+							Ενός RESTful URL (δείτε το portal api) για την δημιουργία εντός της ιεραρχικής δομής του ιστότοπου συνδέσμων προς οποιοδήποτε 
+							περιεχόμενο βρίσκεται στην αποθήκη. Δηλαδή μπορείτε να δημιουργήσετε εντός της ιεραρχίας του ιστότοπου διαδρομές που 
+							οδηγούν τόσο σε στατικό περιεχόμενο όσο και σε δυναμικό περιεχόμενο που αντλείται μέσω του 
+							RESTful URL (στην περίπτωση αυτή η ιστοσελίδα δρα σαν κόμβος ενός ιεραρχικού μενού). 
+						</li>
+						<li>
+							 Ενός "Ερωτήματος Περιεχομένου" για την δημιουργία εντός της δομής του ιστότοπου συνδέσμων προς οποιοδήποτε 
+							περιεχόμενο βρίσκεται στην αποθήκη. Αυτός είναι ένας εναλλακτικός τρόπος αντί του RESTful URL για να δημιουργήσουμε εντός 
+							της ιεραρχικής δομής διαδρομές προς δυναμικό περιεχόμενο (στην περίπτωση αυτή η ιστοσελίδα δρα σαν κόμβος ενός ιεραρχικού μενού).
+						</li>
+						<li>
+							Μιας αναφοράς σε αντικείμενο περιεχομένου το οποίο επιθυμούμε να εντάξουμε εντός της ιεραρχικής δομής του ιστότοπου 
+							(στην περίπτωση αυτή η ιστοσελίδα δρα σαν κόμβος ενός ιεραρχικού μενού).
+						</li>
+						<li>
+							Του εσωτερικού ονόματος ενός αντικειμένου (system name) το οποίο επιθυμούμε να εντάξουμε εντός της ιεραρχικής δομής του ιστότοπου 
+							(στην περίπτωση αυτή η ιστοσελίδα δρα σαν κόμβος ενός ιεραρχικού μενού).
+						</li>
+					</ul>
+					<p>
+						Η χρήση αυτού του αντικειμένου προϋποθέτει την χρήση της βιβλιοθήκης "portal-commons" που παρέχεται μαζί με την 
+						διανομή του Astroboa. Η εφαρμογή που υλοποιεί τον δικτυακό τόπο (web application war) πρέπει να ενσωματώνει στις 
+						βιβλιοθήκες της και την βιβλιοθήκη "portal-commons". Η βιβλιοθήκη υλοποιεί τη λειτουργικότητα 
+						μέσω της οποίας μπορείτε να αποκτήσετε πρόσβαση και να παρουσιάσετε τις ιστοσελίδες καθώς και 
+						την ιεραρχική δομή που αναπαριστούν (είτε ως διαδρομές στατικού περιεχομένου είτε ως μενού με συνδέσμους προς δυναμικό 
+						περιεχόμενο ή άλλα αντικείμενα περιεχομένου).
+						Για περισσότερες πληροφορίες σχετικά με το portal api και σχετικά με την κατασκευή ιστότοπων με την βοήθεια 
+						της βιβλιοθήκης "portal-commons" δείτε 
+						την <a href="http://www.astroboa.org/portal/resource/section/documentation">Τεκμηρίωση του Astroboa</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+						<xs:element name="body" type="xs:string"
+							minOccurs="0" maxOccurs="1"
+							bccmsmodel:stringFormat="RichText">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Web Page Text</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Here you may add the static content of the web page. 
+										If this page is used just as a wrapper of a web page template that creates dynamically 
+										all the content then you do not need to add any static content
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Κείμενο Ιστοσελίδας</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Σε αυτό το πεδίο μπορείτε να προσθέσετε το στατικό κείμενο της σελίδας.
+										Αν η σελίδα χρησιμοποιείται για να φορτώσετε μια πρότυπη σελίδα που παράγει 
+										δυναμικά όλο το περιεχόμενο τότε δεν είναι απαραίτητο να προσθέσετε στατικό 
+										κείμενο.
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+
+						<xs:element name="subPortalSection"
+							minOccurs="0" maxOccurs="unbounded"
+							type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="portalSectionObject">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Internal Pages</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										This property holds references to internal web site pages, i.e. web pages that
+										appear under this page in the web site hierarchy.
+										You should have already create the internal "web page" objects in order to 
+										add them as values of this property.
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Εσωτερικές Ιστοσελίδες</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Αυτό το πεδίο αποθηκεύει αναφορές σε εσωτερικές ιστοσελίδες, δηλαδη στις σελίδες που εμφανίζονται 
+										κάτω από αυτή τη σελίδα στην ιεραρχία του Ιστότοπου (site map).
+										Θα πρέπει να έχετε ήδη δημιουργήσει τις εσωτερικές ιστοσελίδες για να μπορέσετε να τις 
+										προσθέσετε σε αυτό το πεδίο.
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="thumbnail"
+							type="bccmsmodel:binaryChannelType" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Thumbnail
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Thumbnail
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="image"
+							type="bccmsmodel:binaryChannelType" minOccurs="0"
+							maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Images
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικόνες
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="resourceUrl" minOccurs="0"
+							maxOccurs="1" type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Resource URL
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Resource URL
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="query" minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="queryObject">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Content Query
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ερώτημα Περιεχομένου
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="contentObjectResource"
+							minOccurs="0" maxOccurs="1"
+							type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Object Resource</bccmsmodel:displayName>
+									<bccmsmodel:description>ContentObject resource to be displayed once this portal section is clicked</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εμφανιζόμενο αντικείμενο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="contentObjectSystemName"
+							minOccurs="0" maxOccurs="1"
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Object Resource Name</bccmsmodel:displayName>
+									<bccmsmodel:description>System Name of ContentObject resource to be displayed once this portal section is clicked</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Όνομα εμφανιζόμενου αντικειμένου
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+							
+						<xs:element name="statistic"  minOccurs="0" 
+							maxOccurs="1" type="statisticType:statisticType" />
+
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

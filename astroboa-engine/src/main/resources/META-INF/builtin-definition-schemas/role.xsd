@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/identity/role"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/identity/role"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+
+	<xs:element name="roleObject">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Role</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this Object to specify <strong>security roles</strong>.</p> 
+					<p>
+						Roles are assigned to persons and determine their permissions to Astroboa content or third party 
+						application functions and data.  
+					</p>
+					<p>
+						A role may represent a job function within the context of an organization 
+						with some associated semantics regarding the authority and responsibility conferred on the user 
+						assigned to the role.
+					</p>
+					<p>
+						 Roles are assigned to person through the <strong>"authorization data"</strong> field that is available in the person form.
+					</p>
+					<p>Roles can be hierachical and allow you to specify roles that inherit the permissions of one or more other roles</p>
+					<p>
+						Astroboa defines a basic role hierarchy that determines the basic permissions for Astroboa Console functions and 
+						for access to repository content. You may define new roles and specify their content related permissions by inheriting 
+						the basic Astroboa roles.  
+					</p>
+				</bccmsmodel:description> 
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Ρόλος</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να δημιουργείσετε <strong>ρόλους</strong> που θα αποδώσετε σε 
+						<strong>πρόσωπα</strong> για να καθορίσετε την πρόσβασή τους στο περιεχόμενο της αποθήκης περιεχομένου ή και 
+						σε τρίτες εφαρμογές και δεδομένα (εκτός του Astroboa).
+					</p>
+					<p>
+						Οι ρόλοι συνήθως απεικονίζουν μια θέση εργασίας σε ένα οργανισμό και αντιστοιχούν σε συγκεκριμένα δικαιώματα και ευθύνες που 
+						έχει το πρόσωπο που φέρει το ρόλο 
+					</p>
+					<p>
+						Οι ρόλοι αποδίδονται σε πρόσωπα μέσω των στοιχείων <strong>"Εξουσιοδότησης"</strong> που εμφανίζονται στη φόρμα του προσώπου.
+					</p>
+					<p>
+						Οι ρόλοι είναι ιεραρχικοί και σας επιτρέπουν να ορίσετε ρόλους που κληρονομούν τα δικαιώματα ενός ή περισσότερων άλλων ρόλων.
+					</p>
+					<p>
+						Για ευκολία το Astroboa παρέχει μια βασική ιεραρχία ρόλων που αντιστοιχούν σε βασικά δικαιώματα πρόσβασης στο περιεχόμενο και στις 
+						λειτουργίες της κονσόλας διαχείρισης. Μπορείτε να δημιουργήσετε τους δικούς σας ρόλους και να τους προσθέσετε δικαιώματα σχετικά με  
+						την πρόσβαση στο περιεχόμενο κληρονομώντας τους βασικούς ρόλους του Astroboa.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+					
+					
+						<xs:element name="name"
+							type="xs:string" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Role name
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Όνομα ρόλου
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="isMemberOf"
+							type="bccmsmodel:contentObjectReferenceType" minOccurs="0" maxOccurs="unbounded"
+							bccmsmodel:acceptedContentTypes="roleObject">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Is Member Of</bccmsmodel:displayName>
+								<bccmsmodel:description>Holds all roles which has member this role</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ανήκει στους ρόλους (Μέλος του (των))
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

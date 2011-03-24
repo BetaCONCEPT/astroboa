@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+
+	<xs:simpleType name="fileResourceContentType">
+		<xs:restriction base="xs:string">
+			
+			<xs:enumeration value="text">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Text
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Κείμενο
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="presentation">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Presentation
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Παρουσίαση
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="spreadsheet">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Spreadsheet
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Λογιστικό Φύλλο
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="sourceCode">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Source Code
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Πηγαίος Κώδικας
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="xml">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						XML
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αρχείο XML
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="image">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Image
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Εικόνα
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="photograph">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Photograph
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Φωτογραφία
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="drawing">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Drawing
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Σχεδιάγραμμα
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="video">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Video
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Video
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="audio">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Audio
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ηχητικό Αρχείο
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="music">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Music
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Μουσική
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="fileResourceType"
+				bccmsmodel:labelElementPath="title">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>File Resource</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this complex type to store binary files in Astroboa.</p>
+					<p>
+						This type acts as a wrapper around a binary file and allows to add useful metadata
+						such as the type of content inside the file (e.g. it contains text or a photograph or a drawing, etc.) or 
+						the nature of the file inside your organization (e.g. it is meeting minutes or a balance or an internal report, etc.)
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Αρχείο</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιήστε αυτόν τον σύνθετο τύπο για να αποθηκεύσετε ψηφιακά αρχεία στο Astroboa.</p> 
+					<p>
+						Ουσιαστικά αυτός ο τύπος δρα σαν ένα περιτύλιγμα γύρω από ένα ψηφιακό αρχείο και σας επιτρέπει να
+						προσθέσετε διάφορα μεταδεδομένα για το αρχείο, όπως τον τύπο του περιεχομένου του 
+						(π.χ. αν μέσα στο αρχείο υπάρχει κείμενο ή μια φωτογραφία ή ένα σχεδιάγραμμα, κλπ.) ή την χρήση του αρχείου 
+						στον οργανισμό σας (π.χ. αν το αρχείο είναι ένας ισολογισμός ή μία απόφαση ή πρακτικά μιας συνεδρίασης, κλπ.)
+					</p> 
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="title" minOccurs="1" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Title</bccmsmodel:displayName>
+								<bccmsmodel:description>The title / legend</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Τίτλος / Λεζάντα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="description" minOccurs="0"
+						maxOccurs="1" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Description
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Περιγραφή
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="500"/>
+							</xs:restriction>
+						</xs:simpleType>
+						
+					</xs:element>
+					
+
+					<!-- this property was originally defined with the type tns:fileResourceContentType
+						which is defined in this xsd. However its seems more flexible to define the enumerated values 
+						as a vocabulary inside astroboa (i.e. a taxonomy). Enumerations defined as part of the xsd schema seem to be 
+						flexible in order to directly provide the values in the same definition file but during the day to day use the topics are much more flexible 
+						both for the end user and the developer which search for objects having the enumerated values.
+						Additionally the newer versions of astroboa support xml import and export of taxonomies and thus is possible together with the schemas to supply a 
+						set of default vocabularies for bootstraping of new repositories.
+						IMPORTANT NOTICE: We have restricted the accepted topics to be only from a taxonomy with the system name "fileResourceContentType" 
+						(bccmsmodel:acceptedTaxonomies="fileResourceContentType"). To keep some consistency with the previous definition through the enumeration 
+						the allowed taxonomy system name is the name of the enumerated type defined in this xsd. Due to the restriction in taxonomy name and the fact that this 
+						property is mandatory, the user is required to create with astroboa console or programmatically a taxonomy with the name "fileResourceContentType" in 
+						order to be able to use the elements and types defined in this xsd. It is recommented that the topics created under the taxonomy should have the same system
+						names and same localized names as those defined in the enumeration included in this file (i.e. the fileResourceContentType defined above) -->
+					<xs:element name="contentType" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="bccmsmodel:topicType"
+						bccmsmodel:acceptedTaxonomies="fileResourceContentType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Binary Content Type</bccmsmodel:displayName>
+								<bccmsmodel:description>The type of the binary content</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τύπος Ψηφιακού Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Με το Πεδίο αυτό καθορίζουμε τον τύπο του περιεχομένου του εσωκλειόμενου αρχείου ανεξάρτητα της χρήσης του. 
+									Π.χ. Java File, Κείμενο, Φωτογραφία, Σχεδιάγραμμα.
+									</p>
+									<p>
+									Ο χαρακτηρισμός του αρχείου ως προς την συγγεκριμένη χρήση του στον οργανισμό γίνεται 
+									με το πεδίο "Χαρακτηρισμός Περιεχομένου" που ακολουθεί. 
+									Π.χ. ένα αρχείο μπορεί ως προς τον "τύπο ψηφιακού περιεχομένου" 
+									να είναι "Έγγραφο" και ως προς τον "χαρακτηρισμό περιεχομένου" να είναι "Πρακτικά Συνεδρίασης". 
+									Δηλαδή έχουμε ένα κείμενο που περιγράφει τα πρακτικά μιας συνεδρίασης.
+									</p>
+									<p> 
+									Το πεδίο "Τύπος Ψηφιακού Περιεχομένου" παίρνει τιμές από θησαυρό όρων με την ίδια ονομασία 
+									και όνομα συστήματος "fileResourceContentType"
+									</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property is used to categorize / characterize the content in this object (i.e. the included file content) according to its use or purpose inside the organization 
+								(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+								</p>
+								<p>
+								The property values are restricted from a controlled vocabulary (a taxonomy) 
+								which is named 'contentDesignation'
+								</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου 
+								σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+								(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.).
+								</p> 
+								<p>
+								Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), 
+								η οποία ονομάζεται 'contentDesignation'
+								</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="content" 
+						minOccurs="1"
+						maxOccurs="1" 
+						type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Binary Content</bccmsmodel:displayName>
+								<bccmsmodel:description>The binary content of the file</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ψηφιακό Περιεχόμενο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element name="previewContent" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Preview Content</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif preview image or a lower quality video / audio or a smaller clip from the original content.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Περιεχόμενο Προεπισκόπησης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="thumbnail" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif thumbnail (usually up to 128 pixels width). 
+							If the content or the previewContent is an image (png/jpeg/gif) then you may not provide a thumbnail here but instead generate it dynamically during presentation 
+							through an appropriate call of the astroboa resource api (the api allows to downscale an image before transmitting it to the client).
+							However if you heavily use thumbnails then it is more efficient to provide it here rather than continuously generating it, especially if you have a high load site.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Εικονίδιο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="width" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Width (mainly use for video)</bccmsmodel:displayName>
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								It is relevant for video, image, photo, and drawing types and is may used to properly set the width of the multimedia player</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Πλάτος (κυρίως για χρήση σε video)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="height" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Height (mainly use for video and images)</bccmsmodel:displayName>
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								It is relevant for video, image, photo, and drawing types and is may used to properly set the height of the multimedia player</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ύψος (κυρίως για χρήση σε video και
+								εικόνες)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	
+	
+	<xs:complexType name="arrayOfFileResourceTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of File Resources</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of file resources attached to content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αρχείων
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="fileResource" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:fileResourceType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	
+	<xs:element name="fileResourceObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>File Resource</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Use this content object type to store binary files in Astroboa.</p>
+					<p>
+						This object acts as a wrapper around a binary file and allows to add useful metadata
+						such as the type of content inside the file (e.g. it contains text or a photograph or a drawing, etc.) or 
+						the nature of the file inside your organization (e.g. it is meeting minutes or a balance or an internal report, etc.)
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Αρχείο</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιήστε αυτό το αντικείμενο για να αποθηκεύσετε ψηφιακά αρχεία στο Astroboa.</p> 
+					<p>
+						Ουσιαστικά αυτό το αντικείμενο δρα σαν ένα περιτύλιγμα γύρω από ένα ψηφιακό αρχείο και σας επιτρέπει να
+						προσθέσετε διάφορα μεταδεδομένα για το αρχείο, όπως τον τύπο του περιεχομένου του 
+						(π.χ. αν μέσα στο αρχείο υπάρχει κείμενο ή μια φωτογραφία ή ένα σχεδιάγραμμα, κλπ.) ή την χρήση του αρχείου 
+						στον οργανισμό σας (π.χ. αν το αρχείο είναι ένας ισολογισμός ή μία απόφαση ή πρακτικά μιας συνεδρίασης, κλπ.)
+					</p> 
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+						<xs:element name="contentType" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="fileResourceContentType">
+							<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Binary Content Type</bccmsmodel:displayName>
+								<bccmsmodel:description>The type of the binary content</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τύπος Ψηφιακού Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Με το Πεδίο αυτό καθορίζουμε τον τύπο του περιεχομένου του εσωκλειόμενου αρχείου ανεξάρτητα της χρήσης του. Π.χ. Java File, Κείμενο, Φωτογραφία, Σχεδιάγραμμα. 
+									Ο χαρακτηρισμός του αρχείου ως προς την συγγεκριμένη χρήση του στον οργανισμό γίνεται με το πεδίο "Χαρακτηρισμός Περιεχομένου" που ακολουθεί. 
+									Π.χ. ένα αρχείο μπορεί ως προς τον "τύπο ψηφιακού περιεχομένου" 
+									να είναι "Έγγραφο" και ως προς τον "χαρακτηρισμό περιεχομένου" να είναι "Πρακτικά Συνεδρίασης". 
+									Δηλαδή έχουμε ένα κείμενο που περιγράφει τα πρακτικά μιας συνεδρίασης. 
+									Το πεδίο "Τύπος Ψηφιακού Περιεχομένου" παίρνει τιμές από θησαυρό όρων (taxonomy/vocabulary) με την ίδια ονομασία και όνομα συστήματος "fileResourceContentType"
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						</xs:element>
+
+						
+						<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>This property is used to categorize / characterize the content in this object (i.e. the included file content) according to its use or purpose inside the organization 
+							(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+							The property values are restricted from a controlled vocabulary (a taxonomy) which is named 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+							(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.). 
+							Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), η οποία ονομάζεται 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						
+						<xs:element name="content" 
+							minOccurs="1"
+							maxOccurs="1" 
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Binary Content</bccmsmodel:displayName>
+								<bccmsmodel:description>The binary content of the file</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ψηφιακό Περιεχόμενο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+
+						<xs:element name="previewContent" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Preview Content</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif preview image or a lower quality video / audio or a smaller clip from the original content.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Περιεχόμενο Προεπισκόπησης
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="thumbnail" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif thumbnail (usually up to 128 pixels width). 
+							If the content or the previewContent is an image (png/jpeg/gif) then you may not provide a thumbnail here but instead generate it dynamically during presentation 
+							through an appropriate call of the astroboa resource api (the api allows to downscale an image before transmitting it to the client).
+							However if you heavily use thumbnails then it is more efficient to provide it here rather than continuously generating it, especially if you have a high load site.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικονίδιο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="width" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:int">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Width (mainly use for video)</bccmsmodel:displayName>
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								It is relevant for video, image, photo, and drawing types and is may used to properly set the width of the multimedia player</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Πλάτος (κυρίως για χρήση σε video)
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="height" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:int">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Height (mainly use for video and images)</bccmsmodel:displayName>
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								It is relevant for video, image, photo, and drawing types and is may used to properly set the height of the multimedia player</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ύψος (κυρίως για χρήση σε video και εικόνες)
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+						<xs:element name="statistic" minOccurs="0"
+							maxOccurs="1" type="statisticType:statisticType" />
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+							BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded"
+							processContents="strict" />
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+
+
+	<xs:complexType name="arrayOfFileResourceObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to File Resource Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of REFERENCES to file resource objects (i.e. file resource content objects). This list can be attached to other content objects</bccmsmodel:description> 
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Αρχεία
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="fileResourceObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="fileResourceObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>References to File Resource Object</bccmsmodel:displayName>
+								<bccmsmodel:description>File Resource Object Instance referenced by another content object instance</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Αναφορά σε Αρχείο</bccmsmodel:displayName>
+								<bccmsmodel:description>Επιλέξτε ένα από τα διαθέσιμα αρχεία (αντικείμενα) που έχουν καταχωρηθεί στο σύστημα για να δημιουργηθεί μια αναφορά σε αυτό</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="arrayOfFileResourceTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Files</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This element models a content object that holds a list of binary files (i.e a list of file resources)
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Αρχείων</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε στο Astroboa μια λίστα απο συναφή ψηφιακά αρχεία, 
+					π.χ. τα αρχεία ενός slideshow.</p>
+					<p>
+						Για κάθε αρχείο που προσθέτετε μπορείτε να καταχωρήσετε μεταδεδομένα σχετικά με το τύπο πληροφορίας που περιέχει 
+						(π.χ. φωτογραφία, κείμενο, κλπ.), τη λειτουργία του αρχείου στον οργανισμό (π.χ. απόφαση, ισολογισμός, ομιλία, κλπ.), 
+						τις διαστάσεις του εφόσον πρόκειται για video ή φωτογραφία, κλπ.
+					</p> 
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>This property is used to categorize / characterize the content in this object (i.e. the included file resources) according to its use or purpose inside the organization 
+							(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+							The property values are restricted from a controlled vocabulary (a taxonomy) which is named 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+							(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.). 
+							Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), η οποία ονομάζεται 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="fileResource" 
+							minOccurs="0"
+							maxOccurs="unbounded" 
+							type="tns:fileResourceType"/>
+							
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>	
+</xs:schema>

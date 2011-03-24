@@ -1,0 +1,125 @@
+//Copyright (C) 2005-2011 BetaCONCEPT LP.
+//
+//		  This file is part of Astroboa.
+//		 
+//		  Astroboa is free software: you can redistribute it and/or modify
+//		  it under the terms of the GNU Lesser General Public License as published by
+//		  the Free Software Foundation, either version 3 of the License, or
+//		  (at your option) any later version.
+//		 
+//		  Astroboa is distributed in the hope that it will be useful,
+//		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//		  GNU Lesser General Public License for more details.
+//		 
+//		  You should have received a copy of the GNU Lesser General Public License
+//		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+//		 
+//Authors 
+//		  Gregory Chomatas (gchomatas@betaconcept.com)
+//		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+
+
+//Namespace declarations  
+<nt = "http://www.jcp.org/jcr/nt/1.0">
+<mix = "http://www.jcp.org/jcr/mix/1.0">
+
+<bccms = "http://www.betaconcept.gr/cms">
+<bccmsmix = "http://www.betaconcept.gr/cms/mix">
+
+ [bccmsmix:localizable]
+   + bccms:localization (nt:unstructured) = nt:unstructured 
+    
+//Beta Concept Binary channel
+[bccms:binaryChannel] > nt:unstructured, nt:resource,mix:referenceable
+  - bccms:name (string) mandatory  
+  - bccms:sourceFileName (string) 
+  - bccms:size (long) 
+  - bccms:legend (string) 
+  
+//Taxonomy Node Types
+[bccms:taxonomyNode] > nt:unstructured, mix:referenceable,  bccmsmix:localizable
+
+//Topic
+[bccms:topic] > bccms:taxonomyNode
+
+//Space 
+[bccms:space] > bccms:taxonomyNode
+
+//CMS Repository User
+[bccms:repositoryUser] > nt:unstructured, mix:referenceable
+
+// Structured Content Object
+[bccms:structuredContentObject] > nt:base, mix:versionable, mix:lockable
+  - * (UNDEFINED) 
+  - * (UNDEFINED) multiple 
+  + * = nt:unstructured  multiple
+
+
+// Generic  Second Folder
+[bccms:genericSecondFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:structuredContentObject) = bccms:structuredContentObject multiple
+
+// Generic  Minute Folder
+[bccms:genericMinuteFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericSecondFolder) = bccms:genericSecondFolder
+
+// Generic  Hour Folder
+[bccms:genericHourFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericMinuteFolder) = bccms:genericMinuteFolder
+
+// Generic  Day Folder
+[bccms:genericDayFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericHourFolder) = bccms:genericHourFolder
+
+// Generic  Month Folder
+[bccms:genericMonthFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericDayFolder) = bccms:genericDayFolder 
+
+// Generic Year Folder
+[bccms:genericYearFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericMonthFolder) = bccms:genericMonthFolder 
+
+// Generic Content Type Folder
+[bccms:genericContentTypeFolder] > nt:folder, mix:referenceable
+  orderable
++ * (bccms:genericYearFolder) = bccms:genericYearFolder 
+
+//Content Object Root  
+[bccms:contentObjectRoot] > nt:unstructured
+    + * (bccms:genericContentTypeFolder) = bccms:genericContentTypeFolder
+
+//Repository User Root  
+[bccms:repositoryUserRoot] > nt:unstructured
+    + bccms:repositoryUser (bccms:repositoryUser) = bccms:repositoryUser multiple
+
+//Taxonomy
+[bccms:taxonomy] > nt:unstructured, bccmsmix:localizable, mix:referenceable
+  + * (bccms:taxonomyNode) = bccms:taxonomyNode multiple
+
+//TaxonomyRoot
+[bccms:taxonomyRoot] > nt:unstructured
+  + bccms:subjectTaxonomy (bccms:taxonomy) = bccms:taxonomy mandatory autocreated
+  + * (bccms:taxonomy) = bccms:taxonomy
+
+
+//CMS System Node Type
+[bccms:system] >  nt:unstructured
+  + bccms:repositoryUserRoot (bccms:repositoryUserRoot) = bccms:repositoryUserRoot mandatory autocreated
+  + bccms:contentObjectRoot (bccms:contentObjectRoot) = bccms:contentObjectRoot mandatory autocreated
+  + bccms:taxonomyRoot (bccms:taxonomyRoot) = bccms:taxonomyRoot mandatory autocreated
+  
+  
+  
+  
+  
+  
+  
+  

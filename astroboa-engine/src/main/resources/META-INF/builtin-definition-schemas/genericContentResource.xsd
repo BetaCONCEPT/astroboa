@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors
+		
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/genericContentResource"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+	
+	
+	
+	<xs:element name="genericContentResourceObject">
+	    
+		<xs:annotation>
+		  
+			<xs:documentation xml:lang="en">
+			
+				<bccmsmodel:displayName>Text</bccmsmodel:displayName>
+				<bccmsmodel:description>
+				<p>
+				Use this primary content object type to add generic, non structured content (text) in the repository.
+				This type is equivalent to the the "post", or "article", or "blog entry" 
+				provided by web content management tools like "Wordpress", "Joomla", "Drupal", etc. 
+				It is also equivalent to the "google documents" but much more flexible.
+				</p> 
+				<p>
+				Besides the default administrative metadata shared by all objects(title, description, keywords, author, creation date, etc.), 
+				this type provides: 
+				<ul>
+				<li>
+				A text property (body) for adding unstructured text content as rich text
+				</li>
+				<li>
+				A topic property (named "Content Designation" and getting its values from a taxonomy) for content characterization. 
+				Besides the basic thematic tagging supported by the default "keywords" property (e.g. "Economy", "Politics", "Culture", etc.), 
+				this one allows to characterize the added content according to its purpose or use, e.g. content is an "event", an "interview", 
+				a "speech", a "blog entry", an "article", a "quotation", a "proposal", etc.
+				</li>
+				<li>
+				a binary property for adding a related image
+				</li>
+				<li>
+				a binary property for a thumbnail
+				</li>
+				</ul>
+				</p>
+				<p>
+				In the most common usage scenario, this basic content object type simulates the functionality of web content management 
+				tools and is utilized for adding web content (the added text will appear in a web publication).
+				</p>
+				<p>
+				For many organizations, web content is no more that some text (plain text or rich text with some formatting and links)
+				categorized with tags. No special properties are required as is the case with structured enterprise content 
+				(i.e. when modeling an order, a request form, a person, an infrastructure, etc. a lot of special properties are required).
+				</p>
+				<p>
+				While plain and very simple to start using it, this content object type can support more complex usage scenaria.
+				When combined with tags and dynamic properties (e.g. dynamically add geolocation, or file attachments) it offers 
+				a very powerful and scalable way for compiling more complex documents than simple text. 
+				By the use of tags the generic content can be purposed and semanticallly enhanced. 
+				For example adding the topic/tag 'speech' in the 'Content Designation' property we add the extra info that the filled in text 
+				is a speech. 
+				Also thematic Tags from the Subject Taxonomy can be added to the "subject / keyword" property. 
+				Additionally when slideshows, embedded multimedia objects, 
+				file attachments, geotags, web resource links, etc. are needed, they can be dynamically added in object instances 
+				as dynamic properties.
+				</p>
+				</bccmsmodel:description>
+			
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Κείμενο</bccmsmodel:displayName>
+				<bccmsmodel:description>
+				<p>
+				Χρησιμοποιείστε αυτόν τον πρωτογενή τύπο αντικειμένου για την προσθέσετε ένα απλό κείμενο 
+				(μη δομημένη πληροφορία) στην αποθήκη περιεχομένου.
+				Ο τύπος αυτός παρέχει συναφή λειτουργικότητα με τα αντίστοιχα "posts", "articles", "blog entries" που
+				υποστηρίζουν δημοφιλή εργαλεία "διαχείρισης περιεχομένου ιστού" όπως τα Wordpress, Joomla και Drupal. 
+				Επίσης ο τύπος είναι αντίστοιχος σε λειτουργία (αν και πολύ πιο ευέλικτος) με τα google docs.
+				</p>
+				<p>
+				Εκτός από τα πεδία διαχείρισης που έχουν όλα τα αντικείμενα (Τίτλος, Περιγραφή, Λέξεις Κλειδία, Ημ/νία Δημιουργίας, κλπ.), 
+				ο τύπος παρέχει τα παρακάτω πεδία: 
+				<ul>
+				<li>
+				ένα πεδίο κειμένου στο οποίο προσθέτουμε το κείμενο
+				</li>
+				<li>
+				ένα πεδίο που παίρνει τιμές από θησαυρό όρων και επιτρέπει τον χαρακτηρισμό της χρήσης ή της φύσης του κειμένου, 
+				π.χ. "ομιλία", "είδηση", "καταχώρηση blog", "άρθρο", "συνέντευξη", "εκδήλωση", "πρακτικά συνεδρίασης", κλπ. 
+				</li>
+				<li>
+				ένα πεδίο για καταχώρηση σχετικής εικόνας
+				</li>
+				<li>
+				ένα πεδίο για thumbnail
+				</li>
+				</ul>
+				</p>
+				<p>
+				Στο πιο απλο σενάριο χρήσης, ο τύπος αυτός εξομοιώνει την λειτουργικότητα των εργαλείων που χειρίζονται "περιεχόμενο ιστού" και μπορεί να χρησιμοποιηθεί
+				για δημοσίευση περιεχομένου στο διαδίκτυο (το κείμενο που θα προσθέσουμε θα εμφανιστεί σε κάποια ιστοσελίδα). 
+				</p>
+				<p>
+				Οι περισσότεροι Οργανισμοί αντιλαμβάνονται το περιεχόμενο ιστού σαν ένα απλό κείμενο (συχνά με κάποια βασική μορφοποίηση) κατηγοριοποιημένο 
+				με ετικέτες, χωρίς πρόσθετα πεδία πληροφορίας. Σε αυτή την περίπτωση ο τύπος "Κείμενο" καλύπτει με πολύ ικανοποιητικό τρόπο τις ανάγκες 
+				δημοσίευσης. 
+				</p>
+				<p>
+				Οι Οργανισμοί που διαθέτουν και μπορούν να συντηρούν επιχειρησιακό δομημένο περιεχόμενο μπορούν να δημοσιεύουν την πληροφορία τους 
+				χρησιμοποιώντας πιο σύνθετα αντικείμενα αντί του "Κειμένου", π.χ. μία εκδήλωση μπορεί να περιέχει όλη την πληροφορία μέσα σε ένα κείμενο 
+				αλλά μπορεί να δημιουργηθεί και ένα ξεχωριστό αντικείμενο που καταγράφει το τόπο, την ημ/νία, τις πληροφορίες πρόσβασης, τους οργανωτές, τους 
+				συντελεστές, κλπ. σε ξεχωριστά πεδία παρέχοντας την δυνατότητα πολύ πιο λεπτομερούς και στοχευμένης επεγεργασίας και πρόσβασης στις πληροφορίες.
+				</p>
+				
+				<p>
+				Παρά την απλή δομή του και την ευκολία χρήσης που παρέχει, ο τύπος αυτός μπορεί να καλύψει και πιο πολύπλοκα σενάρια χρήσης 
+				χωρίς την ανάγκη δημιουργίας πιο σύνθετων τύπων. 
+				Αν συνδυαστεί με ετικέτες και δυναμικά πεδία (π.χ. μπορούμε να προσθέσουμε δυναμικά γεωγραφική πληροφορία και επισυναπτόμενα αρχεία) 
+				προσφέρει ένα πολύ ισχυρό και επεκτάσιμο τρόπο για την δημιουργία πολύπλοκων εγγράφων.
+				Για παράδειγμα, προσθέτοντας την ετικέτα 'Ομιλία' στο πεδίο 'Χαρακτηρισμός Περιεχομένου' προσθέσουμε την επιπλέον πληροφορία ότι το συμπληρωμένο κείμενο είναι μια ομιλία.
+				Ετικέτες από την Ταξινομία Θεμάτων μπορούν να προστεθούν στο πεδίο 'Θέμα / Λέξη Κλειδί' για θεματική κατηγοριοποίηση. 
+				Επιπλέον slideshows, αντικείμενα πολυμέσων, επισυναπτόμενα αρχεία, Geotags, σύνδεσμοι, κ.λπ. 
+				μπορούν να προστεθούν δυναμικά κατά την δημιουργία του αντικειμένου (προσφέρονται ως δυναμικά πεδία).
+				</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+
+					<xs:sequence>
+						
+						<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property is used to categorize / characterize the content in this object according to its use or purpose 
+								inside the organization (e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+								</p>
+								<p>
+								The property values are restricted from a controlled vocabulary (a taxonomy) which is named 'Content Designation'
+								</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+									<bccmsmodel:description>
+									<p>
+									Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου σε αυτό το αντικείμενο ανάλογα 
+									με τη χρήση ή το σκοπό του μέσα στον οργανισμό (π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.).
+									</p>
+									<p> 
+									Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), η οποία ονομάζεται "Χαρακτηρισμός Περιεχομένου" (εσωτερικό όνομα 'contentDesignation').
+									</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="body" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="xs:string"
+							bccmsmodel:stringFormat="RichText">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Body</bccmsmodel:displayName>
+								<bccmsmodel:description>Textual content</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Κείμενο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="thumbnail"
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+									<bccmsmodel:description>This property holds a jpeg/png/gif thumbnail relative to the content (usually up to 128 pixels width). 
+								If this thumbnail is provided it can be used as an icon when displaying a list of genericContent objects</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Thumbnail
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="image"
+							minOccurs="0"
+							maxOccurs="1" 
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Image</bccmsmodel:displayName>
+								<bccmsmodel:description>This property holds a jpeg/png/gif image relative to the content</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικόνα Κειμένου
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="arrayOfGenericContentResourceObjectType" 
+				bccmsmodel:labelElementPath="genericContentResourceObjectReference.profile.title" >
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Generic Content Resource Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of REFERENCES to Generic Content Resource objects. This list can be attached to other content objects</bccmsmodel:description> 
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε αντικείμενα Βασικού Περιεχομένου
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="genericContentResourceObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="genericContentResourceObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>References to Generic Content Resource Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>Generic Content Resource Object Instance referenced by another content object instance</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Αναφορά σε αντικείμενο Βασικού Περιεχομένου
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

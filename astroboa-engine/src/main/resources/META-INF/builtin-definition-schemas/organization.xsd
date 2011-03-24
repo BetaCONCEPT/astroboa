@@ -1,0 +1,841 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/organization"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/organization"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:fileResource="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+	xmlns:contactData="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+	xmlns:webResourceLink="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+			schemaLocation="astroboa-model-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+			schemaLocation="workflowType-${project.version}.xsd" />
+			
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+			schemaLocation="fileResource-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+			schemaLocation="webPublicationType-${project.version}.xsd" />
+
+		<xs:import
+			namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+			schemaLocation="statisticType-${project.version}.xsd" />
+
+		<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+		schemaLocation="contactData-${project.version}.xsd" />
+		
+		<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+		schemaLocation="webResourceLink-${project.version}.xsd" />
+
+
+		<xs:complexType name="organizationType"  
+				bccmsmodel:labelElementPath="name">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					<bccmsmodel:displayName>Organization Type</bccmsmodel:displayName>
+					<bccmsmodel:description>
+						<p>
+						A type that captures the attributes of an organization.
+						</p>
+						<p>
+						A content object type based on this type, the "Organization (organizationObject)" is
+						also defined in this schema file.
+						</p>
+						<p>
+						If you require a custom organization object which has more properties then you
+						can extent this type and add your custom properties.
+						</p>
+					</bccmsmodel:description>
+				</xs:documentation>
+				<xs:documentation xml:lang="el">
+					<bccmsmodel:displayName>Τύπος Οργανισμός</bccmsmodel:displayName>
+					<bccmsmodel:description>
+						<p>
+						Αυτός ο τύπος μοντελοποιεί τα στοιχεία οργανισμών. 
+						</p>
+						<p>
+						Περιέχει τον τύπο του οργανισμού βάσει θησαυρού όρων, την διεύθυνσή του, 
+						τα τηλέφωνα και τα email του, καθώς και τα τμήματα που περιλαμβάνει.
+						Το προκαθορισμένο αντικείμενο "Οργανισμός (organizationObject)" βασίζεται σε αυτόν τον 
+						τύπο.  
+						</p>
+						<p>
+						Αν θέλετε να φτιάξετε ένα άλλο αντικείμενο, π.χ. myOrganizationObject που έχει περισσότερα 
+						στοιχεία μπορείτε να χρησιμοποιείστε αυτό τον τύπο σαν βάση (extent this type) 
+						και για να φτιάξετε ένα custom οργανισμό που έχει περισσότερα χαρακτηριστικά.
+						</p> 
+					</bccmsmodel:description>
+				</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+						<xs:element name="name" 
+							minOccurs="1"
+							maxOccurs="1" 
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Name</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										The name of the organization. 
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Όνομα</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Το όνομα του οργανισμού.
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="type" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="typeOfOrganization">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Type</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>The type of organization, e.g. company, goverment, local goverment, school, academic institution.</p>
+										<p>The values are from the "typeOfOrganization" vocabulary.  A sample vocabulary is available in astroboa installation package</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Τύπος Οργανισμού</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>Ο τύπος του οργανισμού (π.χ. Εταιρία, Κυβερνητικός Οργανισμός Α' Βαθμού, Σχολείο, Ακαδημαϊκό Ίδρυμα, Μη Κυβερνητική Οργάνωση).</p>
+										<p>Παίρνει τιμές από το θησαυρό όρων με όνομα συστήματος "typeOfOrganization". Ένα δείγμα αυτού του θησαυρού είναι διαθέσιμο στην αρχική εγκατάσταση του astroboa.</p> 
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="about"
+							minOccurs="0"
+							maxOccurs="1"
+							type="xs:string"
+							bccmsmodel:stringFormat="RichText">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>About</bccmsmodel:displayName>
+									<bccmsmodel:description>A statement about the organization. You may describe goals, activities, products if it is a company, Fields of Interest, Specialties, etc.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Προφίλ</bccmsmodel:displayName>
+									<bccmsmodel:description>Περιγραφή του Οργανισμού. Μπορείτε να περιγράψετε τους στόχους, τις δραστηριότητες, τα προϊόντα αν πρόκειται για εταιρία, τους τομείς ενδιαφέροντος, τους τομείς εξειδίκευσης, κλπ.</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="activity" 
+							minOccurs="0"
+							maxOccurs="unbounded" 
+							type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="organizationActivity">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Activity</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>You may use this property to capture the activities of an organization as values from a controlled vocabulary.</p> 
+										<p>The values are from the "organizationAvtivity" vocabulary.  A sample vocabulary is available in astroboa installation package</p>
+										<p>You may already have information about activities in the "About" property but this property supports a more "structured" way 
+										to handle activities and facilitates a better way for categorizing and searching organizations according to their activities</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Δραστηριότητα Οργανισμού</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>Μπορείτε να χρησιμοποιήσετε αυτό το πεδίο για να καταγράψετε τις δραστηριότητες του Οργανισμού χρησιμοποιώντας τιμές από ένα θησαυρό όρων.</p>
+										<p>Ο θησαυρός πρέπει να έχει όνομα συστήματος "organizationAvtivity". Ένα δείγμα αυτού του θησαυρού είναι διαθέσιμο στην αρχική εγκατάσταση του astroboa.</p>
+										<p>Οι δραστηριότητες μπορούν να καταγράφονται και ως κείμενο στο πεδίο "Προφίλ" αλλά η καταγραφή τους σε αυτό το πεδίο επιτρέπει την εύκολη κατηγοριοποίηση 
+										και αναζήτηση των οργανισμών βάσει των δραστηριοτήτων τους.</p> 
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="address"
+							minOccurs="0"
+							maxOccurs="1"
+							type="contactData:addressType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Address</bccmsmodel:displayName>
+									<bccmsmodel:description>The address of this organization.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Διεύθυνση Οργανισμού</bccmsmodel:displayName>
+									<bccmsmodel:description>Η διεύθυνση του οργανισμού</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="phoneNumbers"
+							minOccurs="0"
+							maxOccurs="1"
+							type="contactData:arrayOfPhoneTypeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Phone Numbers</bccmsmodel:displayName>
+									<bccmsmodel:description>Phone numbers associated with the organization, specified as an Array of Phones.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Τηλέφωνα</bccmsmodel:displayName>
+									<bccmsmodel:description>Η λίστα τηλεφώνων του Οργανισμού</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="emails"
+							minOccurs="0"
+							maxOccurs="1"
+							type="contactData:arrayOfEmailTypeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Emails</bccmsmodel:displayName>
+									<bccmsmodel:description>A list of Email Addresses associated with the organization.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Λίστα  Εmail</bccmsmodel:displayName>
+									<bccmsmodel:description>Η λίστα Ηλεκτρονικών Διευθύνσεων του Οργανισμού</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="urls"
+							minOccurs="0"
+							maxOccurs="1"
+							type="webResourceLink:arrayOfWebResourceLinkTypeType" >
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+										<bccmsmodel:displayName>Urls</bccmsmodel:displayName>
+										<bccmsmodel:description>A list of URLs associated with the organization, eg. The organization Web sites</bccmsmodel:description>
+									</xs:documentation>
+									<xs:documentation xml:lang="el">
+										<bccmsmodel:displayName>Σύνδέσμοι</bccmsmodel:displayName>
+										<bccmsmodel:description>Εδώ μπορείτε να προσθέσετε μια λίστα συνδέσμων σχετικών με τον οργανισμό. Π.χ. Τα Web sites του οργανισμού</bccmsmodel:description>
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="departments" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:arrayOfDepartmentTypeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Departments</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Departments that exist under the organization
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Τμήματα  Οργανισμού</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Τμήματα μέσα στον Οργανισμό
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+				
+						<xs:element name="jobPositions" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:arrayOfOrganizationJobPositionTypeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Job Positions</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										The Job Positions in this οrganization. 
+										It is recommented to capture the job positions using the corresponding field inside departments. 
+										You may use this field in the case that you do not want to create departments or in the case that your 
+										organization has some job positions that do not belong to a specific department. 
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Θέσεις Εργασίας</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Οι θέσεις εργασίας σε αυτό τον οργανισμό. 
+										Προτείνουμε να εισάγετε τις θέσεις εργασίας εντός των τμημάτων του οργανισμού χρησιμοποιώντας το αντίστοιχο πεδίο σε 
+										κάθε τμήμα. 
+										Χρησιμοποιείστε αυτό το πεδίο μόνο στην περίπτωση που δεν θέλετε να δημιουργήσετε τμήματα ή έχετε θέσεις εργασίας που δεν εντάσσονται σε 
+										κάποιο συγκεκριμένο τμήμα. 
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="thumbnail"
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:binaryChannelType" >
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										This property holds a jpeg/png/gif thumbnail for the organization. 
+										If this thumbnail is provided it can be used as an icon when displaying a list of organization objects
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Ένα jpeg/png/gif thumbnail για τον οργανισμό. 
+										Αν υπάρχει μπορεί να χρησιμοποιηθεί στην απεικόνιση λίστας οργανισμών
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="photos"
+							minOccurs="0"
+							maxOccurs="1"
+							type="fileResource:arrayOfFileResourceTypeType" >
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Photos
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Φωτογραφίες
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="logos"
+							minOccurs="0"
+							maxOccurs="1"
+							type="fileResource:arrayOfFileResourceTypeType" >
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Logos</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										This property holds the organization logos.
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Λογότυπα</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Τα λογότυπα του οργανισμού
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:element name="organizationObject">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					<bccmsmodel:displayName>Organization</bccmsmodel:displayName>
+					<bccmsmodel:description>
+						A content object that captures the attributes of an organization.
+						It is defined on the basis of the type "organizationType"
+					</bccmsmodel:description>
+				</xs:documentation>
+				<xs:documentation xml:lang="el">
+					<bccmsmodel:displayName>Οργανισμός</bccmsmodel:displayName>
+					<bccmsmodel:description>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να καταγράψετε τα στοιχεία οργανισμών. 
+						Μπορείτε να καταχωρείσετε τον τύπο του οργανισμού βάσει θησαυρού όρων, την διεύθυνσή του, 
+						τα τηλέφωνα και τα email του, καθώς και τα τμήματα που περιλαμβάνει
+					</bccmsmodel:description>
+				</xs:documentation>
+			</xs:annotation>
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:organizationType">
+						<xs:sequence>
+							<xs:element name="webPublication"
+								minOccurs="0" maxOccurs="1"
+								type="webPublicationType:webPublicationType" />
+							<xs:element name="workflow" minOccurs="0"
+								maxOccurs="1" type="workflowType:workflowType" />
+							<xs:element name="statistic" minOccurs="0"
+								maxOccurs="1" type="statisticType:statisticType" />
+
+							<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+							BE ADDED TO CONTENT OBJECT INSTANCES  -->
+							<xs:any minOccurs="0" maxOccurs="unbounded"
+								processContents="strict" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:element>		
+
+		<xs:complexType name="arrayOfOrganizationObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Organization Objects</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of REFERENCES to Organization objects (i.e. organization content objects). 
+				This list can be attached to other content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Αναφορών σε Οργανισμούς</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθούν λίστες οργανισμών που μπορούν δυναμικά ή στατικά (στον ορισμό του αντικειμένου) 
+				να χρησιμοποιηθούν ως τμήμα κάποιου αντικειμένου, π.χ. μπορούμε να ορίσουμε ένα τύπο αντικειμένου για την αναπαράσταση ενός ομίλου και ένα πεδίο του να περιλαμβάνει την λίστα των 
+				εταιριών του Ομίλου.</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="organizationObjectReference" 
+						minOccurs="1" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="organizationObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Organization Object</bccmsmodel:displayName>
+								<bccmsmodel:description>Organization Object Instance referenced by another content object instance</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Λίστα Αναφορών σε Οργανισμούς
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="organizationJobPositionType" 
+		bccmsmodel:labelElementPath="title,personObjectReference.profile.title,personName">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Job Position In Organization</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type represents a person's job position inside an organization. 
+					It provides fields for the person which occupies the job, the job title, the description of the role of the person,  
+					as well as the dates the person joined and left the position. The type does not hold a field for the organization/department that offers the job 
+					and therefore it should be used in the context of an organization/department entity, 
+					i.e. to define a field inside an organization/department entity that captures the occupied job positions. 
+					A similar type named "personJobPositionType" is defined inside the person schema which allows to capture job positions as part of a person entity. 
+					While it might seem reduntant to have two similar types you should notice that both are required. If you model your organization you would like to define 
+					the departments and the job positions under each one (so you need a job position type implicitly referencing the organization/department). 
+					If at the same time you maintain a social network you would possibly like to also maintain a list of job positions 
+					for each one of your users (in this case the job position type does not need a person field because the job position is defined as part of the person entity).
+					In conclusion you may keep your job position either as part of the organization/departments (use organizationJobPositionType) 
+					or as part of your users (use personJobPositionType), and in certain cases you may choose to have both. 
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Θέση Εργασίας στον Οργανισμό</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να περιγραφή μιας θέσης εργασίας του οργανισμού. 
+					Περιλαμβάνει πεδία για το πρόσωπο που έχει τη θέση, τον τίτλο της θέσης, περιγραφή του ρόλου που αντιστοιχεί στη θέση (π.χ. τις αρμοδιότητες του ρόλου), 
+					καθώς και το χρονικό διάστημα που το πρόσωπο κατείχε τη θέση. 
+					Ο τύπος δεν περιέχει πεδίο για τον οργανισμό/τμήμα που αφορά αυτή η θέση γιατί προορίζεται για χρήση ως μέρος ενός οργανισμού, 
+					δηλαδή για να ορίσουμε ένα πεδίο που κρατάει τις θέσεις εργασίαςσε ένα οργανισμό ή σε ένα τμήμα του.
+					Ένας παρόμοιος σύνθετος τύπος με το όνομα "personJobPositionType"ορίζεται στο σχήμα του προσώπου που επιτρέπει να ορίζουμε τις θέσεις εργασίας ως τμήμα ένος προσώπου.
+					Αυτό συμβαίνει γιατί υπάρχουν περιπτώσεις που μπορεί να θέλουμε οι θέσεις εργασίας να βρίσκονται κάτω από τον οργανισμό και άλλες που θέλουμε να τις ορίζουμε ως κομμάτι της πληροφορίας που διατηρούμε για ένα πρόσωπο. 
+					Π.χ. αν μοντελοποιούμε τον οργανισμό μας σαφώς θέλουμε να κρατάμε και τις θέσεις εργασίας κάτω από κάθε τμήμα του. Σε άλλη περίπτωση ή ταυτόχρονα αν διατηρούμε ένα κοινωνικό δίκτυο είναι επιθυμητό 
+					να κρατάμε για κάθε χρήστη του δικτύου μας πληροφορία σχετικά με το πότε και πού έχει εργαστεί.
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+			<xs:sequence>
+				<xs:element name="title" 
+	      			minOccurs="0"  
+	      			maxOccurs="1"
+	      			type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="jobPositionTitle">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Job Title</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The job title or organizational role, eg. IT Manager, Accountant, etc.
+								It gets values from a vocabulary with system name "jobPositionTitle"
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Τίτλος / Θέση στον Οργανισμό</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Ο Τίτλος της Θέσης, π.χ. Διευθυντής Πληροφορικής. 
+								Παίρνει τιμές από θησαυρό όρων με όνομα συστήματος "jobPositionTitle".
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		<xs:element name="description" 
+	      			minOccurs="0"  
+	      			maxOccurs="1"
+	      			type="xs:string">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Description</bccmsmodel:displayName>
+							<bccmsmodel:description>A textual description of the person's role in relation to this job position</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Περιγραφή Ρόλου</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Περιγραφή με κείμενο του ρόλου (αρμοδιότητες, έργα) του προσώπου σε αυτή τη θέση.
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		
+				<xs:element name="personObjectReference" 
+					minOccurs="0"  
+					maxOccurs="1"
+					type="bccmsmodel:contentObjectReferenceType" bccmsmodel:acceptedContentTypes="personType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Person</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The person which holds the job position. Select from one of the already available person object instances 
+								(the field will hold a reference to the selected person).
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Πρόσωπο</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Το πρόσωπο που έχει ή είχε αυτή η θέση εργασίας. 
+								Επιλέξτε ένα από τα διαθέσιμα πρόσωπα που έχουν καταχωρηθεί στο σύστημα 
+								(στο πεδίο θα καταχωρηθεί αυτόματα μια αναφορά προς το επιλεγμένο πρόσωπο)
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="personName" 
+					minOccurs="0"  
+					maxOccurs="1"
+					type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Person</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The name of the person which holds the job position
+								Use this field instead of the preceding one (personObjectReference) if you do not intent to create objects for each person and you are interested to 
+								just keep the person name.
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Πρόσωπο</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Το όνομα του προσώπου που έχει ή είχε αυτή η θέση εργασίας. 
+								Χρησιμοποιείστε αυτό το πεδίο αντι για το αμέσως προηγούμενο (personObjectReference) αν δεν θέλετε να δημιουργείτε αντικείμενα για τα πρόσωπα  
+								αλλά σας ενδιαφέρει απλώς το όνομά τους.
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+	      		
+	      		<xs:element name="startDate" 
+	      			minOccurs="0" 
+	      			maxOccurs="1"
+	      			type="xs:date">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Start Date</bccmsmodel:displayName>
+							<bccmsmodel:description>The date the Person joined this organization.</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Ημ/νία Έναρξης Εργασίας</bccmsmodel:displayName>
+							<bccmsmodel:description>Η ημερομηνία που το Πρόσωπο ανέλαβε αυτή την θέση εργασίας</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		<xs:element name="endDate" 
+	      			minOccurs="0" 
+	      			maxOccurs="1"
+	      			type="xs:date">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+						 	<bccmsmodel:displayName>End Date</bccmsmodel:displayName>
+							<bccmsmodel:description>The date this Person left this job position</bccmsmodel:description></xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Ημ/νία Λήξης Εργασίας</bccmsmodel:displayName>
+							<bccmsmodel:description>Η ημερομηνία που το Πρόσωπο άφησε αυτή την θέση εργασίας</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+			</xs:sequence>
+		</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfOrganizationJobPositionTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Organization Job Positions</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of job positions under the organization or one of its departments. 
+					There is no field for keeping the organization/departments because this type 
+					should be used in the context of an organization definition, i.e. to define the field that holds all the job positions of the organization or one of its departments.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Θέσεων Εργασίας Οργανισμού</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τις θέσεις εργασίας ενός οργανισμού ή ενός τμήματος του οργανισμού.
+					Ο τύπος έχει χρήση μόνο ως κομμάτι πληροφορίας ενός οργανισμού/τμήματος διότι δεν περιέχει πεδίο για τον οργανισμό/τμήμα που παρέχει την θέση. 
+					Δεδομένου ότι η λίστα θα περιέχεται μέσα σε έναν οργανισμό, ο οργανισμός υπονοείται.   
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="jobPosition" 
+						minOccurs="1" 
+						maxOccurs="unbounded"
+						type="tns:organizationJobPositionType" 
+						/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+
+			
+	<xs:complexType name="departmentType"  
+						bccmsmodel:labelElementPath="name" >
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Organization Department</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This type captures the
+					attributes of an organization's department.
+					You can specify the department name, its address if this differs from the main organization address, 
+					the department phones and e-mails, the relevant job positions as well as the (sub)departments.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Τμήμα Οργανισμού</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Aυτός ο σύνθετος τύπος περιγράφει τα στοιχεία του τμήματος ενός οργανισμού.
+					Μπορείτε να καταχωρείσετε το όνομα του τμήματος, την
+					διεύθυνσή του αν είναι διαφορετική από την κεντρική διεύθυνση του οργανισμού, τα τηλέφωνα και τα email του, 
+					τις θέσεις εργασίας που αντιστοιχούν στο τμήμα, καθώς τα (υπο)τμήματα που περιλαμβάνει
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="name" 
+						minOccurs="1" 
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Name</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The name of the department
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Όνομα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Το όνομα του τμήματος
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="about"
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:string"
+						bccmsmodel:stringFormat="RichText">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>About</bccmsmodel:displayName>
+								<bccmsmodel:description>A statement about the department. You may describe goals, activities, products or services offered, Fields of Interest, Specialties, etc.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Προφίλ</bccmsmodel:displayName>
+								<bccmsmodel:description>Περιγραφή του τμήματος. Μπορείτε να περιγράψετε τους στόχους, τις δραστηριότητες, τα προϊόντα που παράγει ή τις υπηρεσίες που προσφέρει, τους τομείς ενδιαφέροντος, τους τομείς εξειδίκευσης, κλπ.</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="departments" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="tns:arrayOfDepartmentTypeType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Departments</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									(Sub)Departments that exist under a department
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τμήματα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									(Υπο)Τμήματα κάτω από αυτό το τμήμα
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="jobPositions" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="tns:arrayOfOrganizationJobPositionTypeType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Job Positions</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The Job Positions in this department 
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Θέσεις Εργασίας</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Οι θέσεις εργασίας σε αυτό το τμήμα
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="address" 
+						minOccurs="0"
+						maxOccurs="1"  
+						type="contactData:addressType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Address</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The address of this department. 
+									Use this field if the department address is different than the main organization address
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Διεύθυνση 
+								</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Η διεύθυνση του τμήματος.
+									Χρησιμοποιείστε αυτό το πεδίο αν η διεύθυνση του τμήματος είναι διαφορετική από την κύρια διεύθυνση του οργανισμού.
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="phoneNumbers" minOccurs="0" maxOccurs="1"
+						type="contactData:arrayOfPhoneTypeType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Phone Numbers</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Phone numbers associated with the
+									department, specified as an Array of Phones.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τηλέφωνα</bccmsmodel:displayName>
+								<bccmsmodel:description>Η λίστα τηλεφώνων του τμήματος
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="emails" minOccurs="0" maxOccurs="1"
+						type="contactData:arrayOfEmailTypeType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Emails</bccmsmodel:displayName>
+								<bccmsmodel:description>A list of Email Addresses associated with
+									the department.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Λίστα Εmail</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Η λίστα Ηλεκτρονικών Διευθύνσεων του Τμήματος
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="urls"
+						minOccurs="0"
+						maxOccurs="1"
+						type="webResourceLink:arrayOfWebResourceLinkTypeType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Urls</bccmsmodel:displayName>
+								<bccmsmodel:description>A list of URLs associated with the department, eg. The department Web sites or the department web pages inside the organization's site</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Σύνδέσμοι</bccmsmodel:displayName>
+								<bccmsmodel:description>Εδώ μπορείτε να προσθέσετε μια λίστα συνδέσμων σχετικών με το τμήμα. Π.χ. Τα Web sites του τμήματος ή τις σχετικές σελίδες στο site του οργανισμού</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfDepartmentTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Departments</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type represents a list of departments under the organization or under one of its departments.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Τμημάτων Οργανισμού</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τα τμήματα ενός οργανισμού ή ενός τμήματος του οργανισμού.   
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="department" 
+						minOccurs="1" 
+						maxOccurs="unbounded"
+						type="tns:departmentType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+</xs:schema>

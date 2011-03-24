@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/portal"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/portal"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:multilingualStringPropertyType="http://www.betaconceptframework.org/schema/astroboa/utilTypes/multilingualStringPropertyType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/utilTypes/multilingualStringPropertyType"
+		schemaLocation="multilingualStringPropertyType-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+		
+	<!-- This object has been named "portalObject" to dictate that it represents a "portal" to the content 
+	stored in Astroboa or third party content repositories. However it seems that users are more comfortable and 
+	familiar with the term "web site". 
+	Additionally the term portal is usually interpreted as an "application" rather a "content" portal and involves 
+	portlets and other standardized terms that are not related to the intended purpose of this object.
+	So we keep the system name as "portalObject" to preserve compatibility with written code and we choose to 
+	use the term "web site" for the localized labels of the object and thus users will see this object as the top level 
+	object of a "web site" rather than a "portal"-->	
+	<xs:element name="portalObject"
+		bccmsmodel:systemType="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Web Site</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Use this content object type to create a web site.
+						This object is the top level element of a hierarchical web site structure, 
+						i.e. it is the root of the web site map.
+					</p>
+					<p>
+						It stores references to the top level web site pages as well as information about 
+						the site logo, site name and the site theme 
+					</p>
+					<p>
+						To utilize this content object, your web site application (i.e. your web app war) should 
+						include the "portal-commons" library provided by Astroboa distribution. The library provides 
+						the functionality through which you can access and present the site hierarchy captured underneeth this object.
+						You can read more on how to create web sites with the "portal-commons" library in 
+						<a href="http://www.astroboa.org/portal/resource/section/documentation">Astroboa Documenation</a> 
+					</p>	
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Ιστότοπος</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να δημιουργήσετε ένα Ιστότοπο.
+						Αυτό το αντικείμενο είναι η κορυφή της ιεραρχικής δομής ενός Ιστότοπου (η κορυφή του site map).
+					</p>
+					<p>
+						Το αντικείμενο διαθέτει πεδία για να αποθηκεύσεται το λογότυπο και το όνομα του Ιστότοπου, 
+						το θέμα (theme) παρουσίασης του, καθώς και αναφορές στις κύριες (πρώτου επιπέδου) σελίδες του Ιστότοπου. 
+					</p>
+					<p>
+						Η χρήση αυτού του αντικειμένου προϋποθέτει την χρήση της βιβλιοθήκης "portal-commons" που παρέχεται μαζί με την 
+						διανομή του Astroboa. Η εφαρμογή που υλοποιεί τον Ιστότοπο (web application war) πρέπει να ενσωματώνει στις 
+						βιβλιοθήκες της και την βιβλιοθήκη "portal-commons". Η βιβλιοθήκη υλοποιεί τη λειτουργικότητα 
+						μέσω της οποίας μπορείτε να αποκτήσετε πρόσβαση και να παρουσιάσετε την ιεραρχική δομή του ιστότοπου που απεικονίζεται μέσω 
+						αυτού του αντικειμένου.
+						Για περισσότερες πληροφορίες σχετικά με το portal api και σχετικά με την κατασκευή ιστότοπων με την βοήθεια 
+						της βιβλιοθήκης "portal-commons" δείτε 
+						την <a href="http://www.astroboa.org/portal/resource/section/documentation">Τεκμηρίωση του Astroboa</a> 
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+						 
+						<xs:element name="localizedLabels" 
+								minOccurs="1"
+								maxOccurs="1" 
+								type="multilingualStringPropertyType:multilingualStringPropertyType">
+						<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Localized Labels</bccmsmodel:displayName>
+									<bccmsmodel:description>Localized Labels for the web site</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Όνομα Ιστότοπου σε διάφορες γλώσσες</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Καταχωρείστε το όνομα του Ιστότοπου σε διαφορετικές γλώσσες
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="thumbnail"
+							type="bccmsmodel:binaryChannelType" 
+							minOccurs="0" 
+							maxOccurs="1" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en" >Thumbnail</xs:documentation>
+								<xs:documentation xml:lang="el" >Thumbnail</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="logo"
+							type="bccmsmodel:binaryChannelType" 
+							minOccurs="0" 
+							maxOccurs="1" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en" >Logo</xs:documentation>
+								<xs:documentation xml:lang="el" >Λογότυπο</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="headerBanner"
+							type="bccmsmodel:binaryChannelType" 
+							minOccurs="0" 
+							maxOccurs="unbounded" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en" >Header Banner</xs:documentation>
+								<xs:documentation xml:lang="el" >Εικόνα Κορυφής</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="theme" 
+							minOccurs="0"
+							maxOccurs="unbounded"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="webSiteTheme">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Web Site Theme</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+										This property is used to specify the available themes for generating the web site pages.
+									</p>
+									<p>
+										A theme contains the page templates, layouts, page components, stylesheets, javascript libraries, 
+										images and all other resources that the web site uses to generate a specific presentation of the content stored in Astroboa.
+									</p>
+									<p>
+										The values of this property are the symbolic names of the themes and are provided from a controlled vocabulary (a taxonomy) 
+										which is named "Web Site Theme" (system name: webSiteTheme)
+									</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Θέμα Παρουσίασης Ιστότοπου</bccmsmodel:displayName>
+									<bccmsmodel:description>
+									<p>
+										Το πεδίο αυτό χρησιμοποιείται για τον προσδιορισμό των διαθέσιμων επιλογών εμφάνισης των σελίδων 
+										του Ιστότοπου (web site themes)
+									</p>
+									<p>
+										Οι τιμές του πεδίου είναι τα συμβολικά ονόματα των themes και παρέχονται μέσα από θησαυρό όρων  
+										ο οποίος ονομάζεται "Θέμα Παρουσίασης Ιστότοπου" (system name: webSiteTheme)
+									</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					
+						<!-- The prefered localised name for a portal section is the term "web page" as users 
+						seem to be are more familiar with the latter. So this property which holds the references 
+						to the root portal Sections is internaly named portalSection but is translated as Web Page for the 
+						end users.-->
+						<xs:element name="portalSection"
+							minOccurs="0"
+							maxOccurs="unbounded"
+							type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="portalSectionObject">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Top Level Web Pages</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										This property holds references to the top level web site pages.
+										You should use the content object named "web page" to create the top level 
+										pages and then add them as values of this property.
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Ιστοσελίδες Πρώτου Επιπέδου</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Αυτό το πεδίο αποθηκεύει τις αναφορές στις Ιστοσελίδες Πρώτου Επιπέδου του Ιστότοπου.
+										Χρησιμοποιείστε το αντικείμενο "Ιστοσελίδα" για να δημιουργείσετε τις Ιστοσελίδες Πρώτου Επιπέδου 
+										και κατόπιν προσθέστες τις σε αυτό το πεδίο.
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

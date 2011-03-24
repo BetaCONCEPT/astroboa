@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+
+	<!--  Every element that does not define minOccurs and maxOccurs values, the defaults are considered
+		that is minOccurs=1 and maxOccurs=1 as defined by XML Schema -->
+
+	<xs:simpleType name="workflowNameType">
+		<xs:restriction base="xs:string">
+			
+			<xs:enumeration value="webPublishing">
+				<xs:annotation>
+					<xs:documentation xml:lang="el">
+						Web Publishing
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ροή Εργασίας για Δημοσίευση στο Web
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>	
+
+	<xs:complexType name="workflowType" bccmsmodel:labelElementPath="managedThroughWorkflow">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Content Object Workflow
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Στοιχεία Ροής Εργασίας
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="managedThroughWorkflow"
+						minOccurs="0" 
+						maxOccurs="1"
+						type="tns:workflowNameType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Managed Through Workflow
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ενεργή Διεργασία
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

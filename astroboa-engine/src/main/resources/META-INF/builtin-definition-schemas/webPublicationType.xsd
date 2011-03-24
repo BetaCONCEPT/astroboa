@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+
+	<!--  Every element that does not define minOccurs and maxOccurs values, the defaults are considered
+		that is minOccurs=1 and maxOccurs=1 as defined by XML Schema -->
+
+	<xs:complexType name="webPublicationType" bccmsmodel:labelElementPath="webPublicationStartDate,webPublicationEndDate"
+		bccmsmodel:maxOccursIfAspect="1">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Publication Scheduling
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Προγραμματισμός Δημοσίευσης
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="webPublicationStartDate"
+						minOccurs="1" 
+						maxOccurs="1" 
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Web Publication Start Date</bccmsmodel:displayName>
+								<bccmsmodel:description>The date to publish the content object at the web site</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ημ/νια Έναρξης Δημοσίευσης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="webPublicationEndDate"
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Web Publication End Date</bccmsmodel:displayName>
+								<bccmsmodel:description>The date to remove the content object from the web site</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ημ/νια Λήξης Δημοσίευσης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="publishCreatorName" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Publish Creator Name?</bccmsmodel:displayName>
+								<bccmsmodel:description>Whether to show ContentObject Creator name when viewing the content object at the web site</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Δημοσίευση του Ονόματος του Δημιουργού;
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

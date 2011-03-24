@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/utilTypes/multilingualStringPropertyType"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/model/utilTypes/multilingualStringPropertyType"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+	<xs:import namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+	<xs:complexType name="multilingualStringPropertyType"
+		bccmsmodel:systemType="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>MultiLingual String	Property</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a multilingual string property type</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Πολυγλωσσικό 	αλφαριθμητικό
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="en" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>English</bccmsmodel:displayName>
+								<bccmsmodel:description>English Language</bccmsmodel:description>
+								</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Αγγλικά
+								</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="sq" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Albanian
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Αλβανικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="bg" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Bulgarian
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Βουλγαρικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="fr" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>French</bccmsmodel:displayName>
+								<bccmsmodel:description>French Language</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γαλλικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="de" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								German
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γερμανικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="el" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Greek
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ελληνικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="es" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Spanish
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ισπανικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="it" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Italian
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ιταλικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="nl" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Dutch
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ολλανδικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="pt" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Portuguese
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Πορτογαλλικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="ro" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Romanian
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ρουμανικά
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="ru" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="el">
+								Russian
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ρώσικα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

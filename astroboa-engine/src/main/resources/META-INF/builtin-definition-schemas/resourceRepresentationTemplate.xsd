@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors
+		
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/presentation/resourceRepresentationTemplate"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/presentation/resourceRepresentationTemplate"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+
+
+	<xs:element name="resourceRepresentationTemplateObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Template</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Use the (Resource Representation) "Template" Object Type to store a set of templates for rendering a single resource 
+					or a resource collection in various formats (e.g. as web page, excel, pdf).
+					</p>
+					<p>
+					Any object instance is a "resource". A resource collection is a list of object instances that 
+					are grouped by means of certain criteria (e.g. all objects published in 2009 which are tagged under the topic "Economy"). 
+					The term "resource" is used here in place of "object instance" as a more appropriate term in the context of web 2 applications 
+					which retrieve resources from the repository and the resources are served/presented to them according to a template.   
+					</p>
+					<p>
+					The "Template" object type provides a property that holds the template content in XHTML Form.
+					</p>
+					<p>
+					The Astroboa provided infrastructure (astroboa-portal-commons library) allows the construction of the XHTML template with the 
+					combination of simple HTML tags and tags from JSF / Facelets / Seam Framework and Rich Faces (or other component library).
+					</p>
+					<p>
+					Astroboa installation package provides a set of default "Presentation Templates" for the provided content types 
+					(Portal Section, File Resource, Generic Resource, Person, Organization, etc.) 
+					in order to support out of the box web publication
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Πρότυπη Σελίδα</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Χρησιμοποιείστε το αντικείμενο "Πρότυπη Σελίδα" για να αποθηκεύσετε τον πηγαίο κώδικα μέσω του οποίου 
+					θα γίνεται η παρουσίαση ενός αντικειμένου ή μιας λίστας αντικειμένων. 
+					</p>
+					<p>
+					Όταν χρησιμοποιείται η υποδομή απεικόνισης που παρέχει το Astroboa (portal-commons library) στα πεδία αποθηκεύεται XHTML κώδικας που 
+					ακολουθεί τις προδιαγραφές των τεχνολογιών Java Server Faces / Facelets / Seam Framework.
+					</p>
+					<p>
+					Μπορείτε να καθορίσετε το τρόπο παρουσίασης για διαφορετικές μορφές απεικόνισης 
+					(π.χ. σαν ιστοσελίδα, pdf excel, κλπ.) χρησιμοποιώντας τα διαφορετικά tags που προσφέρει το Seam Framework.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+
+						<xs:element name="xhtml" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="xs:string"
+							bccmsmodel:stringFormat="Code">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>XHTML Template</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										<p>
+										This property holds the XHTML template of a resource or resource collection. 
+										The template compines ordinary HTML tags with tags from JSF / Facelets / Seam Framework and Rich Faces (or other component library) 
+										in order to generate a resource representation. The representation can be an html page, a pdf file, an excel document or even an RSS feed. 
+										To learn how to write templates read the documentation about astroboa-portal-commons library at astroboa.org site 
+										</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Κώδικας Προτύπου σε μορφή XHTML</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Προσθέσθε κώδικα XHTML συνδυάζοντας απλά html tags με tags από τις βιβλιοθήκες JSF / Facelets / Seam Framework  and Rich Faces (ή άλλη component library) 
+										για να δημιουργήσετε μια δυναμική ιστοσελίδα που ανακτά και παρουσιάζει περιεχόμενο από το Astroboa 
+										(π.χ. παρουσιάζει τις πληροφορίες για ένα αντικείμενο περιεχομένου ή δείχνει μια λίστα 
+										αντικειμένων). Χρησιμοποιώντας τα κατάλληλα tags από την βιβλιοθήκη Seam Framework μπορείτε να δημιουργήσετε δυναμικά όχι μόνο ιστοσελίδες αλλά και 
+										pdf αρχεία,  έγγραφα excel ή RSS feeds. Για να μάθετε πως να φτιάχνετε πρότυπες σελίδες επισκεφτείτε τον ιστότοπο astroboa.org και δείτε την τεκμηρίωση για 
+										την βιβλιοθήκη astroboa-portal-commons που ενσωματώνει τις παραπάνω τεχνολογίες.
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

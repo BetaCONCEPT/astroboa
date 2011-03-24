@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
+
+   <!-- By not specifying the 'clustering' element, the cache runs in LOCAL mode. -->
+   
+   <!-- Configure the TransactionManager. 
+   		
+   		Although one can use org.jboss.cache.transaction.JBossTransactionManagerLookup, it is preferable
+   		to use GenerictransactionManagerLookup in cases where Astroboa is installed in another Application Server
+   		
+   		Excerpt from java documentation of GenerictransactionManagerLookup
+   		 
+   		 A transaction manager lookup class that attempts to locate a TransactionManager.
+ 		 A variety of different classes and JNDI locations are tried, for servers
+ 		 such as:
+		 	*  JBoss
+ 			*  JRun4
+ 			*  Resin
+ 			*  Orion
+ 			*  JOnAS
+ 			*  BEA Weblogic
+ 			*  Websphere 4.0, 5.0, 5.1, 6.0
+ 			*  Sun, Glassfish
+    -->
+   <transaction transactionManagerLookupClass="org.jboss.cache.transaction.GenericTransactionManagerLookup"/>
+
+	<!--
+		Used to register JMX statistics in any available MBean server.
+		We may not display this element since jmxStatistics are enabled by default.   
+	-->
+	<jmxStatistics enabled="true"/>
+
+    <!--
+       nodeLockingSchemes: mvcc, pessimistic (deprecated), optimistic (deprecated)
+
+       lockAcquisitionTimeout : If a writer is unable to acquire the write lock after some time, 
+       							a TimeoutException is thrown. This lock acquisition timeout defaults to 10000 millis
+
+       isolation levels supported: The isolation level used for transactions : READ_COMMITTED and REPEATABLE_READ
+       							(excerpt from JBoss Cache reference guide) 
+       							"REPEATABLE_READ is the default isolation level, to maintain compatibility with 
+       							 previous versions of JBoss Cache. READ_COMMITTED, while providing a slightly 
+       							 weaker isolation, has a significant performance benefit over REPEATABLE_READ"
+       
+       concurrencyLevel :  Specifies the number of shared locks to use for write locks acquired. Only used if nodeLockingScheme is mvcc.
+       						Default value is 500.  
+       						According to the following threads, a very large value forces JBC to consume a lot of memory.
+       						Check https://jira.jboss.org/browse/EXOJCR-696 .
+       						
+       writeSkewCheck : "This happens when concurrent transactions performing a read and then a write, based on the 
+       					 value that was read. Since reads involve holding on to the reference to the state in the 
+       					 transaction context, a subsequent write would work off that original state read, which may now be stale.
+						 
+						 The default behavior with dealing with a write skew is to throw a DataVersioningException, 
+						 when it is detected when copying state for writing. 
+						 
+						 However, in most applications, a write skew may not be an issue (for example, 
+						 if the state written has no relationship to the state originally read) and should be allowed. 
+						 
+						 If your application does not care about write skews, 
+						 you can allow them to happen by setting the writeSkewCheck configuration attribute to false.
+						 
+						 Note that write skews cannot happen when using READ_COMMITTED since threads always work off 
+						 committed state."
+						 
+						 We set writeSkewCheck's value to false not only because we use READ_COMMITTED isolation level but also
+						 because our writes have no relationship to the state originally read since we cache query results.
+						 
+	 lockParentForChildInsertRemove : Specifies whether parent nodes are locked when inserting or removing children. 
+	 								 This can also be configured on a per-node basis. Default is false.
+	 								 
+	 					"By default, before inserting a new node into the tree or removing an existing node from the tree, 
+	 					JBoss Cache will attempt to acquire a write lock on the new node's parent node. 
+	 					This approach treats child nodes as an integral part of a parent node's state. 
+	 					This approach provide greater correctness, but at a cost of lesser concurrency if nodes are 
+	 					frequently added or removed. For use cases where this greater correctness is not meaningful, 
+	 					JBoss Cache provides a configuration option LockParentForChildInsertRemove. 
+	 					If this is set to false, insertions and removals of child nodes only require the 
+	 					acquisition of a read lock on the parent node. "
+    -->
+    <locking
+            nodeLockingScheme="mvcc"
+            lockAcquisitionTimeout="20000"
+            concurrencyLevel="1000"
+            isolationLevel="READ_COMMITTED"
+            writeSkewCheck="false"
+            lockParentForChildInsertRemove="false"
+            />
+
+   <!--
+      wakeUpInterval: time interval (millis) when the eviction thread kicks in.
+   -->
+   <eviction wakeUpInterval="1000">
+      	<!--
+			# eventQueueSize - this optional parameter defines the size of the bounded queue 
+			which holds eviction events. If your eviction thread does not run often enough, 
+			you may find that the event queue fills up. It may then be necessary to get your
+			eviction thread to run more frequently, or increase the size of your event queue.
+			This configuration is just the default event queue size, and can be overridden in
+			specific eviction regions. If not specified, this defaults to 200000.
+	    -->
+      <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm" eventQueueSize="200000">
+         <property name="maxNodes" value="1000" />
+         <property name="timeToLive" value="0" />
+         <property name="maxAge" value="600000"/>
+      </default>
+
+      <!-- 
+      	configurations for various regions
+      	
+      	# maxNodes - This is the maximum number of nodes allowed in this region. 0 denotes immediate expiry, -1 denotes no limit.
+		# timeToLive - The amount of time a node is not written to or read (in milliseconds) before the node is swept away. 
+					0 denotes immediate expiry, -1 denotes no limit.
+		# maxAge - Lifespan of a node (in milliseconds) regardless of idle time before the node is swept away. 
+		0 denotes immediate expiry, -1 denotes no limit. 
+      --> 
+       <region name="/jcr-query/oneMinute">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="30000"/>
+           <property name="maxAge" value="60000"/>
+       </region>
+       
+       <region name="/jcr-query/fiveMinutes">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="60000"/>
+           <property name="maxAge" value="300000"/>
+       </region>
+       
+       <region name="/jcr-query/tenMinutes">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="60000"/>
+           <property name="maxAge" value="600000"/>
+       </region>
+       
+       <region name="/jcr-query/thirtyMinutes">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="600000"/>
+           <property name="maxAge" value="1800000"/>
+       </region>
+       
+       <region name="/jcr-query/oneHour">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="1800000"/>
+           <property name="maxAge" value="3600000"/>
+       </region>
+       
+       <region name="/jcr-query/sixHours">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="1800000"/>
+           <property name="maxAge" value="24600000"/>
+       </region>
+       
+       <region name="/jcr-query/twelveHours">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="1800000"/>
+           <property name="maxAge" value="49200000"/>
+       </region>
+       
+       <region name="/jcr-query/oneDay">
+           <property name="maxNodes" value="1000"/>
+           <property name="timeToLive" value="1800"/>
+           <property name="maxAge" value="98400000"/>
+       </region>
+   </eviction>
+</jbosscache>

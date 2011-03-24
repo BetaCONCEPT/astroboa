@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/admin/query"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/admin/query"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:multilingualStringPropertyType="http://www.betaconceptframework.org/schema/astroboa/utilTypes/multilingualStringPropertyType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/utilTypes/multilingualStringPropertyType"
+		schemaLocation="multilingualStringPropertyType-${project.version}.xsd" />
+
+	<xs:import  
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:element name="queryObject"
+		bccmsmodel:systemType="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>CMS Query</bccmsmodel:displayName>
+				<bccmsmodel:description>This content type represents a query for content in the repository.</bccmsmodel:description></xs:documentation>
+			<xs:documentation xml:lang="el">Ερώτημα Περιεχομένου</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+
+						<xs:element name="localizedLabels" minOccurs="1"
+							maxOccurs="1"
+							type="multilingualStringPropertyType:multilingualStringPropertyType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Localized Labels
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Όνομα Ερωτήματος σε διάφορες
+									γλώσσες
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="queryString" minOccurs="0"
+							maxOccurs="1"
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Query String
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ερώτημα
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

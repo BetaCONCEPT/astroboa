@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/common/rule"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/common/rule"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+
+	<xs:simpleType name="ruleGrammarTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Rule Grammar Type</bccmsmodel:displayName>
+				<bccmsmodel:description>Enumeration of all possible Drools rule language types. These are defined in XML simple 
+				type "ResourceType" specified in XML Schema for ChangeSet XML (http://drools.org/drools-5.0/change-set.xsd), which also 
+				can be found at http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-expert/html_single/index.html, section 3.1.2, example 3.7 
+				 </bccmsmodel:description>
+	    	</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Τύπος Γραμματικής κανόνa</bccmsmodel:displayName>
+				<bccmsmodel:description>Τύπος Γραμματικής κανόνa όπως αυτός ορίζεται στο απλό στοιχείο XML  
+				"ResourceType", στο XML Schema για το ChangeSet XML (http://drools.org/drools-5.0/change-set.xsd). Το XML Schema μπορείτε να το βρείτε και στην
+				διεύθυνση http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-expert/html_single/index.html, section 3.1.2, example 3.7 
+				 </bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+	
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DRL">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Drools Rule Language</xs:documentation>
+				<xs:documentation xml:lang="el">Drools Rule Language</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="XDRL">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">XML Rule Language</xs:documentation>
+				<xs:documentation xml:lang="el">XML Rule Language</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="DSL">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Domain Specific Language</xs:documentation>
+				<xs:documentation xml:lang="el">Domain Specific Language</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="DSLR">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Domain Specific Language Rule</xs:documentation>
+				<xs:documentation xml:lang="el">Domain Specific Language Rule</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="DRF">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Drools Rule</xs:documentation>
+				<xs:documentation xml:lang="el">Drools Rule</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="DTABLE">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Drools Decision Table</xs:documentation>
+				<xs:documentation xml:lang="el">Drools Decision Table</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="PKG">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Drools Package Rule</xs:documentation>
+				<xs:documentation xml:lang="el">Drools Package Rule</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="BRL">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Business Rule Language</xs:documentation>
+				<xs:documentation xml:lang="el">Business Rule Language</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			
+			<xs:enumeration value="CHANGE_SET">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Drools Change Set</xs:documentation>
+				<xs:documentation xml:lang="el">Drools Change Set</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="ruleObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Drools Rule</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Use this content object type to store a rule for the Drools Engine (http://www.drools.org).
+					By means of drools rules you may define custom presentation and security rules 
+					for the content input forms generated by the Astroboa Console. 
+					This functionality is still experimental in the current Astroboa Release
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Κανόνας για τη μηχανή Drools</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε ένα κανόνα της μηχανής Drools (http://www.drools.org).
+					</p>
+					<p>
+						Με την βοήθεια τέτοιων κανόνων μπορείτε να ρυθμίζετε τον τρόπο παρουσίασης και την ασφάλεια των  
+						φορμών εισαγωγής περιεχομένου που παράγει η κονσόλα διαχείρισης του Astroboa. 
+					</p>
+					<p>
+						Αυτή η λειτουργία βρίσκεται 
+						σε πειραματική λειτουργία στην υφιστάμενη έκδοση του Astroboa.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:contentObjectType">
+				<xs:sequence>
+				
+					<xs:element name="content" 
+							minOccurs="1"
+							maxOccurs="1"
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Content</bccmsmodel:displayName>
+								<bccmsmodel:description>Rule expressed using Drool Rule Language (http://www.drools.org)</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιεχόμενο κανόνa</bccmsmodel:displayName>
+								<bccmsmodel:description>Περιεχόμενο κανόνa όπως αυτό ορίζεται από το Drools (http://www.drools.org)</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+
+					<xs:element name="grammarType" 
+						minOccurs="0"
+						maxOccurs="1" type="tns:ruleGrammarTypeType"
+						default="DRL">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Grammar Type</bccmsmodel:displayName>
+								<bccmsmodel:description>Drools language type</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τύπος Γραμματικήs κανόνα</bccmsmodel:displayName>
+								<bccmsmodel:description>Τύπος Γραμματικήs κανόνα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:complexType name="ruleType"
+						bccmsmodel:labelElementPath="name">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Drools Rule</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type stores a drools rule to be attached to a content object</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Κανόνας</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Το σύνθετο αυτό πεδίο αποθηκεύει ένα κανόνα της μηχανής Drools. 
+					Ο κανόνας μπορεί να προσαρτηθεί δυναμικά σε οποιοδήποτε αντικείμενο
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="name" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Name</bccmsmodel:displayName>
+								<bccmsmodel:description>Rule Name</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Όνομα</bccmsmodel:displayName>
+								<bccmsmodel:description>Όνομα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="description" 
+							minOccurs="0"
+							maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Description</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Provide a description for your Rule 
+									(i.e. describe the Rule functionality, the parameters it needs to properly work, its outcome, etc.)
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιγραφή Κανόνα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Δώστε μια περιγραφή για τον Κανόνα 
+									(περιγράψτε τη λειτουργία του Κανόνα, τις παραμέτρους που χρειάζεται, τα αποτελέσματα που παράγει, κλπ.)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				
+					<xs:element name="content" 
+							minOccurs="1"
+							maxOccurs="1"
+							bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Content</bccmsmodel:displayName>
+								<bccmsmodel:description>Rule expressed using Drool Rule Language (http://www.drools.org)</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιεχόμενο κανόνa</bccmsmodel:displayName>
+								<bccmsmodel:description>Περιεχόμενο κανόνa όπως αυτό ορίζεται από το Drools (http://www.drools.org)</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+
+					<xs:element name="grammarType" 
+						minOccurs="0"
+						maxOccurs="1" type="tns:ruleGrammarTypeType"
+						default="DRL">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rule Grammar Type</bccmsmodel:displayName>
+								<bccmsmodel:description>Drools language type</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τύπος Γραμματικήs κανόνα</bccmsmodel:displayName>
+								<bccmsmodel:description>Τύπος Γραμματικήs κανόνα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	
+	<xs:complexType name="arrayOfRuleTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Rules</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of rules attached to content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Κανόνων
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="rule" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:ruleType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	<xs:element name="arrayOfRuleTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Rule Set for Drools Engine</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Use this content object type to store a set of rules for the Drools Engine (http://www.drools.org)
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Κανόνων  για τη Μηχανή Drools</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε μια λίστα κανόνων για την μηχανή 
+					Drools (http://www.drools.org)
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+					<xs:element name="rule" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:ruleType"/>
+	
+
+						<xs:element name="webPublication" minOccurs="0"
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+						<xs:element name="statistic" minOccurs="0"
+							maxOccurs="1" type="statisticType:statisticType" />
+
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+							BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded"
+							processContents="strict" />
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="arrayOfRuleObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Rule Objects</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type stores a list of REFERENCES to rule objects. 
+					This list can be attached to other content objects
+				</bccmsmodel:description> 
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Κανόνες της Μηχανής Drools
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="ruleObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="ruleObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Rule Object</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Add existing content object instances of type "Rule" (references to them will be actually stored)
+								</bccmsmodel:description> 
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Αναφορά σε Κανόνα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Προσθέσθε αντικείμενα τύπου "Κανόνας" από τους διαθέσιμους κανόνες που έχουν καταχωρηθεί στο σύστημα 
+									(για κάθε κανόνα που προσθέτετε θα δημιουργηθεί απλώς μια αναφορά σε αυτόν)
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

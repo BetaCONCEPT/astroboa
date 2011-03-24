@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<roleObject:roleObject 
+contentObjectTypeName="roleObject" 
+systemName="ROLE_CMS_EXTERNAL_VIEWER"
+xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/identity/role role-${project.version}.xsd"
+xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" 
+xmlns:roleObject="http://www.betaconceptframework.org/schema/astroboa/identity/role"
+xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <owner externalId="SYSTEM" cmsIdentifier="SYSTEM_USER_ID" />
+    <profile>
+        <title>ROLE_CMS_EXTERNAL_VIEWER</title>
+		<creator>SYSTEM ACCOUNT</creator>
+        <language>el</language>
+    </profile>
+    <accessibility>
+        <canBeReadBy>ALL</canBeReadBy>
+        <canBeTaggedBy>ALL</canBeTaggedBy>
+   		<canBeUpdatedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeUpdatedBy>
+        <canBeDeletedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeDeletedBy>
+    </accessibility>
+    <name>ROLE_CMS_EXTERNAL_VIEWER</name>
+</roleObject:roleObject>

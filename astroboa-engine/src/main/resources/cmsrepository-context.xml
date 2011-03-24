@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="cmsQueryHandler"
+		class="org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler" />
+
+	<!--  Daos -->
+	
+	<bean id="contentDefinitionDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.ContentDefinitionDao"/>
+	
+	<bean id="contentObjectDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.ContentObjectDao"/>
+
+	<bean id="contentDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.ContentDao"/>
+
+	<bean id="repositoryUserDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryUserDao">
+		<property name="defaultFolksonomyLocalization">
+				 <bean class="org.betaconceptframework.astroboa.model.impl.definition.LocalizationImpl">
+				 	<property name="localizedLabels">
+				 	 <!-- Map's key is Locale and map's value is localized label -->
+				 	  <map>
+				 	  	<entry key="en" value="User Folksonomy"/>
+				 	  	<entry key="el" value="Ταξινομία του Χρήστη"/>
+				 	  </map>
+				 	</property>
+				 </bean>
+			</property>
+		<property name="defaultSpaceLocalization">
+				 <bean class="org.betaconceptframework.astroboa.model.impl.definition.LocalizationImpl">
+				 	<property name="localizedLabels">
+				 	 <!-- Map's key is Locale and map's value is localized label -->
+				 	  <map>
+				 	  	<entry key="en" value="My Folders"/>
+				 	  	<entry key="el" value="Οι Φάκελοι μου"/>
+				 	  </map>
+				 	</property>
+				 </bean>
+			</property>		
+	</bean>
+	
+	
+	<bean id="spaceDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.SpaceDao"/>
+		
+	<bean id="taxonomyDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.TaxonomyDao"/>
+
+	<bean id="topicDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.TopicDao"/>
+
+	<bean id="repositoryDao" class="org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryDao" autowire="byName"/>
+	
+	<bean id="jcrContextDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.JcrContextDao"/>
+	
+	<bean id="serializationDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.SerializationDao"/>
+		
+	<bean id="serializationBean" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean"
+		scope="prototype"/>
+
+	<bean id="importDao" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.ImportDao"/>
+		
+	<bean id="importBean" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.io.ImportBean"
+		scope="prototype"/>
+	
+	<bean id="cmsRepositoryEntityAssociationDao"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.CmsRepositoryEntityAssociationDaoJcr"/>
+	
+	
+	<!-- Renderers -->
+	<bean id="binaryChannelRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.BinaryChannelRenderer"/>
+
+	<bean id="cmsRepositoryEntityRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.CmsRepositoryEntityRenderer"/>
+		
+	<bean id="contentObjectFolderRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.ContentObjectFolderRenderer"/>
+		
+	<bean id="contentObjectRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.ContentObjectRenderer"/>
+		
+	<bean id="repositoryUserRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.RepositoryUserRenderer"/>
+		
+	<bean id="taxonomyRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.TaxonomyRenderer"/>
+		
+	<bean id="spaceRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.SpaceRenderer"/>
+
+	<bean id="topicRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.TopicRenderer"/>
+
+	<bean id="cmsLocalizationRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.CmsLocalizationRenderer" />
+
+	<bean id="lazyContentObjectRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.LazyContentObjectRenderer"/>
+
+	<bean id="simpleCmsPropertyRenderer" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.renderer.SimpleCmsPropertyRenderer"/>
+
+	<!--  Utils  -->
+	<bean id="lazyComplexCmsPropertyLoader" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.model.lazy.local.LazyComplexCmsPropertyLoader" />
+	
+	
+	<bean id="binaryChannelUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.BinaryChannelUtils"/>
+		
+	<bean id="cmsRepositoryEntityUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils"/>
+
+	<bean id="rendererUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils"/>
+	
+	<bean id="queryUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.QueryUtils"/>
+
+	<bean id="spaceUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.SpaceUtils"/>
+
+	<bean id="topicUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.TopicUtils"/>
+
+	
+	<bean id="cmsLocalizationUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.CmsLocalizationUtils"/>
+		
+	<bean id="versionUtils" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.VersionUtils"/>
+
+		
+	<!--  CmsBackEnd initialization -->
+
+	<!--  CmsNodeTypeDefinitionManager -->
+	<bean id="cmsNodeTypeDefinitionManager"
+		class="org.betaconceptframework.astroboa.engine.jcr.nodetypeconfig.jackrabbit.JackrabbitNodeTypeDefinitionManagerImpl">
+		<property name="jackrabbitDefinitionDao">
+			<bean
+				class="org.betaconceptframework.astroboa.engine.jcr.nodetypeconfig.jackrabbit.JackrabbitNodeTypeDefinitionDao">
+				<!-- The maximum amount of memory in MB to distribute across the caches.
+	 			  Default is 16MB -->
+				<property name="maxMemory" value="256" />
+				<!-- The maximum memory per cache in MB 
+	 				Default is 4MB -->
+				<property name="maxMemoryPerCache" value="4" />
+				<!--  The minimum memory per cache in KB
+					 Default is 128KB -->
+				<property name="minMemoryPerCache" value="128" />
+				<property name="cmsLocalizationUtils" ref="cmsLocalizationUtils"/>
+				<property name="repositoryUserDao" ref="repositoryUserDao"/>
+				<property name="cmsRepositoryEntityAssociationDao" ref="cmsRepositoryEntityAssociationDao"/>
+				<property name="repositoryNodeTypeDefinitionFile" value="classpath:/META-INF/repository.cnd"/>
+				<property name="newNodeTypeDefinitionFile" value="classpath:/META-INF/new-node-types.cnd"/>
+				<property name="updatedNodeTypeDefinitionFile" value="classpath:/META-INF/updated-node-types.cnd"/>
+				<property name="subjectTaxonomyLocalization">
+				 <bean class="org.betaconceptframework.astroboa.model.impl.definition.LocalizationImpl">
+				 	<property name="localizedLabels">
+				 	 <!-- Map's key is Locale and map's value is localized label -->
+				 	  <map>
+				 	  	<entry key="en" value="Subject / Keyword"/>
+				 	  	<entry key="el" value="Θέμα / Λέξη Κλειδί"/>
+				 	  </map>
+				 	</property>
+				 </bean>
+				</property>
+				<property name="organizationSpaceLocalization">
+				 <bean class="org.betaconceptframework.astroboa.model.impl.definition.LocalizationImpl">
+				 	<property name="localizedLabels">
+				 	 <!-- Map's key is Locale and map's value is localized label -->
+				 	  <map>
+				 	  	<entry key="en" value="Organization Folders"/>
+				 	  	<entry key="el" value="Φάκελοι Οργανισμού"/>
+				 	  </map>
+				 	</property>
+				 </bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cmsIdentityStoreManager"
+		class="org.betaconceptframework.astroboa.engine.jcr.identitystore.jackrabbit.JackrabbitIdentiyStoreManagerImpl">
+		<property name="jackrabbitIdentityStoreDao">
+			<bean
+				class="org.betaconceptframework.astroboa.engine.jcr.identitystore.jackrabbit.JackrabbitIdentityStoreDao">
+				<property name="repositoryUserDao" ref="repositoryUserDao"/>
+				<property name="importDao" ref="importDao"/>
+				<property name="cmsRepositoryEntityUtils" ref="cmsRepositoryEntityUtils"/>
+				<property name="roleXmlResources">
+					<list>
+					 	<value>classpath:/META-INF/ROLE_ADMIN.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_EXTERNAL_VIEWER.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_INTERNAL_VIEWER.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_WEB_SITE_PUBLISHER.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_EDITOR.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_TAXONOMY_EDITOR.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_PORTAL_EDITOR.xml</value>
+					 	<value>classpath:/META-INF/ROLE_CMS_IDENTITY_STORE_EDITOR.xml</value>
+					</list>
+				</property>
+				<property name="systemPersonXmlResource" value="classpath:/META-INF/person_SYSTEM.xml"/>
+				<property name="contentService" ref="contentService"/>
+			</bean>
+		</property>
+	</bean>
+
+
+	<!--  Initialization Manager -->
+	<bean id="cmsRepositoryInitialisationManager"
+		class="org.betaconceptframework.astroboa.engine.jcr.initialization.CmsRepositoryInitializationManager" autowire="byName"/>
+	
+	
+	<!-- Population -->
+	<bean id="populateSimpleCmsProperty" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.PopulateSimpleCmsProperty"
+		scope="prototype" />
+
+	<bean id="populateContentObject" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.PopulateContentObject"
+		scope="prototype"/>
+
+	<bean id="populateComplexCmsProperty" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.util.PopulateComplexCmsProperty"
+		scope="prototype"/>
+
+
+	<bean id="complexCmsPropertyNodeRemovalVisitor" autowire="byName"
+		class="org.betaconceptframework.astroboa.engine.jcr.visitor.ComplexCmsPropertyNodeRemovalVisitor"
+		scope="prototype"/>
+		
+	<bean id="prototypeFactory" 
+      class="org.betaconceptframework.astroboa.engine.jcr.PrototypeFactory">
+      	<lookup-method name="newPopulateContentObject" bean="populateContentObject"/>
+      	<lookup-method name="newPopulateComplexCmsProperty" bean="populateComplexCmsProperty"/>
+      	<lookup-method name="newComplexCmsPropertyNodeRemovalVisitor" bean="complexCmsPropertyNodeRemovalVisitor"/>
+		<lookup-method name="newPopulateSimpleCmsProperty" bean="populateSimpleCmsProperty"/>
+		<lookup-method name="newSerializationBean" bean="serializationBean"/>
+		<lookup-method name="newImportBean" bean="importBean"/>
+     </bean>
+</beans>
+

@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/identity/person"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/identity/person"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:contactData="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+	xmlns:fileResource="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+	xmlns:webResourceLink="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/common/contactData"
+		schemaLocation="contactData-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/fileResource"
+		schemaLocation="fileResource-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webResourceLink"
+		schemaLocation="webResourceLink-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+		
+
+	<xs:complexType name="arrayOfAccountTypeType">
+		<xs:sequence>
+			<xs:element name="account" type="tns:accountType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Account</xs:documentation>
+					<xs:documentation xml:lang="el" >Ηλεκτρονικός Λογαριασμός</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>  
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfLanguageType">
+		<xs:sequence>
+			<xs:element name="language" 
+				 minOccurs="0" 
+				 maxOccurs="unbounded"
+				type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="language">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Language</xs:documentation>
+					<xs:documentation xml:lang="el" >Γλώσσα</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfInterestType">
+		<xs:sequence>
+			<xs:element name="interest" 
+				minOccurs="0" 
+				maxOccurs="unbounded"
+				type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="personalInterest">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Interest</bccmsmodel:displayName>
+						<bccmsmodel:description>
+							A person's favorite hobby or activity, e.g.  Reading, Jogging, Travelling, Gardening, etc. 
+							It gets values from a vocabulary with system name "personalInterest"
+						</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						<bccmsmodel:displayName>Τομέας Ενδιαφέροντος</bccmsmodel:displayName>
+						<bccmsmodel:description>
+							Μια αγαπημένη ασχολία ή δραστηριότητα του προσώπου, π.χ. διάβασμα, ταξίδια, κηπουρική, ξιφασκία, κλπ. 
+							Παίρνει τιμές από θησαυρό όρων με όνομα συστήματος "personalInterest".
+						</bccmsmodel:description>
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfTagType">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="tag" type="xs:string" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Tag</xs:documentation>
+					<xs:documentation xml:lang="el" >Ετικέτα Χρήστη</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+
+	<xs:complexType name="nameType">
+		<xs:all>
+			<xs:element name="additionalName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Additional Name</xs:documentation>
+					<xs:documentation xml:lang="el" >Πρόσθετο Όνομα</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="familyName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >
+					<bccmsmodel:displayName>Family Name</bccmsmodel:displayName>
+								<bccmsmodel:description>The family name of this Person, or 'Last Name' in most Western languages (e.g. Smarr given the full name Mr. Joseph Robert Smarr, Esq.).</bccmsmodel:description></xs:documentation>
+					<xs:documentation xml:lang="el" >Επώνυμο</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="givenName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >
+					<bccmsmodel:displayName>Given Name</bccmsmodel:displayName>
+								<bccmsmodel:description>The given name of this Person, or 'First Name' in most Western languages (e.g. Joseph given the full name Mr. Joseph Robert Smarr, Esq.).</bccmsmodel:description></xs:documentation>
+					<xs:documentation xml:lang="el" >Όνομα</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="fatherName" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Father Name</xs:documentation>
+					<xs:documentation xml:lang="el" >Πατρώνυμο</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="motherName" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Mother Name</xs:documentation>
+					<xs:documentation xml:lang="el" >Μητρώνυμο</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="honorificPrefix" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >
+					   <bccmsmodel:displayName>Honorific Prefix</bccmsmodel:displayName>
+						<bccmsmodel:description>The honorific prefix(es) of this Person, or 'Title' in most Western languages (e.g. Mr. given the full name Mr. Joseph Robert Smarr, Esq.).</bccmsmodel:description></xs:documentation>
+					<xs:documentation xml:lang="el" >Τίτλος Ευγενείας</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="formatted" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >
+						<bccmsmodel:displayName>Formatted Name</bccmsmodel:displayName>
+						<bccmsmodel:description>The full name, including all middle names, titles, and suffixes as appropriate, formatted for display (e.g. Mr. Joseph Robert Smarr, Esq.). 
+				This is the Primary Sub-Field for this field, for the purposes of sorting and filtering.</bccmsmodel:description></xs:documentation>
+					<xs:documentation xml:lang="el" >Μορφοποιημένη Απόδοση Ονόματος</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+
+	
+
+	
+	
+	
+	<xs:complexType name="personAuthorizationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>User Authorization</bccmsmodel:displayName>
+				<bccmsmodel:description>Describes a set of information elements which can be used by any application during authorization process</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Στοιχεία Εξουσιοδότησης Προσώπου
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+				<xs:element name="role"
+							type="bccmsmodel:contentObjectReferenceType" minOccurs="0" maxOccurs="unbounded"
+							bccmsmodel:acceptedContentTypes="roleObject">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Roles</bccmsmodel:displayName>
+									<bccmsmodel:description>One or more roles assigned to this person</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ρόλοι
+								</xs:documentation>
+							</xs:annotation>
+		</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	<xs:complexType name="personAuthenticationType" 
+				bccmsmodel:labelElementPath="username,userid">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>User Authentication</bccmsmodel:displayName>
+				<bccmsmodel:description>Describes a set of information elements the person should provide (electronically, by phone or in person) 
+		in order to identify herself, i.e. to allow an authenticated match between the physical person and this person record (the person information modeled by this XSD schema). 
+		Information regarding the validity of the authentication data may be included here such as expiration dates, whether authentication is enabled, etc.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Στοιχεία Ταυτοποίησης Προσώπου
+			</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="username" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Username</bccmsmodel:displayName>
+						<bccmsmodel:description>An alphanumeric user name, usually chosen by the user, e.g. 'jsmarr'.</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Όνομα Χρήστη
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="password" type="bccmsmodel:passwordType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>password</bccmsmodel:displayName>
+						<bccmsmodel:description>A secret one way encoded string corresponding to the unencoded secret word the user should provide along with her userid or username</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Συνθηματικό
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="authenticationDataEnabled" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Enabled Account</bccmsmodel:displayName>
+						<bccmsmodel:description>Flag indicating whether these authentication data are active or not</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ο λογαριασμός είναι ενεργοποιημένος
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	
+	
+	<xs:complexType name="personVerificationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Person Verification</bccmsmodel:displayName>
+				<bccmsmodel:description>Describes a set of information elements that have been cross-checked (any one or all of them) in order to verify the validity of person information kept in this record, 
+		especially in the case of self registraion or self provisioning.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Πιστοποίηση Στοιχείων Προσώπου
+			</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="identificationCardNumber" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Identification Card Number
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αριθμός Ταυτότητας
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passportNumber" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Passport Number
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αριθμός Διαβατηρίου
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="drivingLicenseNumber" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Driving License Number
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αριθμός Διπλώματος
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="voterId" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Voter Id
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ειδικός Εκλογικός Αριθμός
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="municipalRollNumber" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Municipal Roll Number
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αριθμός Μερίδας Δημοτολογίου
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	<xs:complexType name="accountType" 
+			bccmsmodel:labelElementPath="domain">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Account in other Service Provider</bccmsmodel:displayName>
+				<bccmsmodel:description>Describes an account held by this Contact on a different Service Provider (i.e. google, yahoo, facebook, myspace, etc.). 
+		Consumers SHOULD NOT assume that this account has been verified by the Service Provider to actually belong to this Contact. 
+		For each account, the domain is the top-most authoritative domain for this account, e.g. yahoo.com or reader.google.com, and MUST be non-empty. 
+		Each account must also contain a non-empty value for either username or userid, and MAY contain both, in which case the two values MUST be for the same account. 
+		These accounts can be used to determine if a user on one service is also known to be the same person on a different service, to facilitate connecting to people the user already knows on different services. 
+		If Consumers want to turn these accounts into profile URLs, they can use an open-source library like [google‑sgnodemapper] (Fitzpatrick, B., 'Social Graph Node Mapper' .).</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λογαριαμός σε άλλο Πάροχο Υπηρεσιών
+			</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="domain" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Domain (service provider)</bccmsmodel:displayName>
+						<bccmsmodel:description>The top-most authoritative domain for this account, e.g. 'twitter.com'. 
+				This is the Primary Sub-Field for this field, for the purposes of sorting and filtering.</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Domain (Πάροχος Υπηρεσιών)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="username" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Username</bccmsmodel:displayName>
+						<bccmsmodel:description>An alphanumeric user name, usually chosen by the user, e.g. 'jsmarr'.</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Όνομα Χρήστη
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userid" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>User Id</bccmsmodel:displayName>
+						<bccmsmodel:description>A user ID number, usually chosen automatically, and usually numeric but sometimes alphanumeric, e.g. '12345' or '1Z425A'.</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Κωδικός Χρήστης (userid)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+		</xs:all>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+	
+	<xs:complexType name="personJobPositionType" 
+						bccmsmodel:labelElementPath="title,organizationObjectReference,organizationName">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Person Job Position</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type represents a person's job position. Besides the organization, the department and the job title, it allows to describe the role of the person 
+					as well as the dates the person joined and left the position. The type does not hold a field for a person and therefore it should be used in the 
+					context of a person entity i.e. to define a field that captures a person's job positions.
+					A similar type named "organizationJobPositionType" is defined inside the organization schema which allows to capture job positions as part of an organization/department entity. 
+					While it might seem reduntant to have two similar types you should notice that both are required. If you model your organization you would like to define 
+					the departments and the job positions under each one (so you need a job position type in which the organization/department is implicit). 
+					If at the same time you maintain a social network you would possibly like to also maintain a list of job positions 
+					for each one of your users (in this case the job position type does not need a person field because the job position is defined as part of the person entity).
+					In conclusion you may keep your job positions either as part of organization/departments (use organizationJobPositionType) 
+					or as part of your users (use personJobPositionType), and in certain cases you may choose to have both.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Θέση Εργασίας Προσώπου</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να περιγραφεί η θέση εργασίας ενός προσώπου σε ένα οργανισμό. 
+					Περιλαμβάνει πεδία για τον Οργανισμό και το τμήμα που έχει εργαστεί, τον τίτλο της θέσης, την αναλυτική περιγραφή του ρόλου του προσώπου (τι έκανε σε αυτή τη θέση),
+					καθώς και το χρονικό διάστημα που το πρόσωπο κατείχε τη θέση. 
+					Ο τύπος δεν περιέχει πεδίο για το πρόσωπο γιατί προορίζεται για χρήση ως τμήμα ενός προσώπου, δηλαδή για να ορίσουμε ένα πεδίο σε ένα πρόσωπο (τύπος αντικειμένου) 
+					που κρατάει τις θέσεις εργασίας που είχε ή έχει το πρόσωπο.
+					Ένας παρόμοιος σύνθετος τύπος με το όνομα "organizationJobPositionType" υπάρχει και στο σχήμα του οργανισμού που επιτρέπει να ορίζουμε τις θέσεις εργασίας που έχει ένας οργανισμός ή τα τμήματά του.
+					Αυτό συμβαίνει γιατί υπάρχουν περιπτώσεις που μπορεί να θέλουμε οι θέσεις εργασίας να βρίσκονται κάτω από τον οργανισμό και άλλες που θέλουμε να τις ορίζουμε ως κομμάτι της πληροφορίας που διατηρούμε για ένα πρόσωπο. 
+					Π.χ. αν μοντελοποιούμε τον οργανισμό μας σαφώς θέλουμε να κρατάμε και τις θέσεις εργασίας κάτω από κάθε τμήμα του. Σε άλλη περίπτωση ή ταυτόχρονα αν διατηρούμε ένα κοινωνικό δίκτυο είναι επιθυμητό 
+					να κρατάμε για κάθε χρήστη του δικτύου μας πληροφορία σχετικά με το πότε και πού έχει εργαστεί.
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+			<xs:sequence>
+				<xs:element name="organizationObjectReference" 
+					minOccurs="0"  
+					maxOccurs="1"
+					type="bccmsmodel:contentObjectReferenceType" bccmsmodel:acceptedContentTypes="organizationType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Οrganization</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The organization (e.g. company, school, or other organization) for which the job position is defined. Select from one of the already available Organization object instances 
+								(the field will hold a reference to the selected organization).
+								Ιf you are going to specify the department as an object that is already connected to its organization then you may not use this field 
+								as it would be reduntant information.
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Οργανισμός</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								O οργανισμός (π.χ. εταιρεία, σχολείο, δημόσιος φορέας) για τον οποίο περιγράφεται αυτή η θέση εργασίας. 
+								Επιλέξτε έναν από τους διαθέσιμους οργανισμούς (αντικείμενα) που έχουν καταχωρηθεί στο σύστημα 
+								(στο πεδίο θα καταχωρηθεί αυτόματα μια αναφορά προς τον επιλεγμένο οργανισμό).
+								Aν πρόκειτε να καταχωρήσετε το τμήμα οργανισμού που εργάζεται το πρόσωπο ως αντικείμενο που είναι ήδη συνδεδεμένο με το οργανισμό του 
+								τότε μπορείτε να μην χρησιμοποιήσετε αυτό το πεδίο μια και η σχετική πληροφορία περιέχεται ήδη στο τμήμα. 
+								Αν δεν επιθυμείτε να φτιάχνετε ξεχωριστά αντικείμενα για κάθε οργανισμό τότε αγνοείστε αυτό το πεδίο και 
+								χρησιμοποιήσετε αυτό που ακολουθεί ("organizationName" - Όνομα Οργανισμού) για να καταχωρήσετε απλώς το όνομα ενός οργανισμού.
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="organizationName" 
+					minOccurs="0"  
+					maxOccurs="1"
+					type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Organization</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The name of the organization for which the job position is defined. Use this field instead of the 
+								preceding one (organizationObjectReference) if you do not intent to create objects for each organization and you are interested to 
+								just keep the organization name.
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Οργανισμός</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Το όνομα του οργανισμού για τον οποίο περιγράφεται αυτή η θέση εργασίας. 
+								Χρησιμοποιείστε αυτό το πεδίο αντι για το αμέσως προηγούμενο (organizationObjectReference) αν δεν θέλετε να δημιουργείτε αντικείμενα για τους οργανισμούς 
+								αλλά σας ενδιαφέρει απλώς το όνομά τους. 
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				
+				<!-- 
+				<xs:element name="departmentObjectReference" 
+					minOccurs="0"  
+					maxOccurs="1"
+					type="bccmsmodel:contentObjectReferenceType" bccmsmodel:acceptedContentTypes="departmentObject">
+					<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Department</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The organization department (e.g. marketing, accounting, etc.) that has this job position. Select from one of the already available Department object instances 
+								(the field will hold a reference to the selected department).
+								Use this field if you specify the department as an object. If you just want to specify the department as a string or through a vocabulary then select instead one of the following fields.
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Τμήμα Οργανισμού</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Το τμήμα του οργανισμού (π.χ. Τεχνική Διεύθυνση, Πωλήσεις, κλπ.) στο οποίο βρίσκεται αυτή η θέση εργασίας. 
+								Επιλέξτε ένα από τους διαθέσιμα τμήματα (αντικείμενα) που έχουν καταχωρηθεί στο σύστημα 
+								(στο πεδίο θα καταχωρηθεί αυτόματα μια αναφορά προς τον επιλεγμένο οργανισμό).
+								Χρησιμοποιείστε αυτό το πεδίο μόνο αν θα καταχωρήσετε το τμήμα οργανισμού ως αντικείμενο. Αν θέλετε να καταχωρήσετε το τμήμα ως απλό κείμενο ή από λέξικό δεσμευμένων όρων (Ταξινομία),
+								τότε χρησιμοποιήστε το πεδίο "departmentName (Όνομα Τμήματος Οργανισμού)" ή το πεδίο "deparmentAsTopic (Τμήμα Οργανισμού από θησαυρό)".   
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				-->
+				 
+				<xs:element name="departmentAsTopic" 
+	      			minOccurs="0"
+	      			maxOccurs="1" 
+	      			type="bccmsmodel:topicType"
+	      			bccmsmodel:acceptedTaxonomies="department">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Department</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The name of an organization's department, e.g. marketing, accounting, etc. 
+								It gets values from a vocabulary with system name "department"
+								Use this field if you want to keep a vocabulary of the department names. 
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Τμήμα Οργανισμού</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Χρησιμοποιείστε το θησαυρό όρων με όνομα συστήματος "department" για να καταχωρείστε 
+								το όνομα του τμήματος του οργανισμού στο οποίο εργάζεται ή εργαζόταν το πρόσωπο, π.χ. Τεχνική Διεύθυνση, Πωλήσεις, κλπ. 
+								Χρησιμοποιείστε αυτό το πεδίο αν θέλετε να έχετε τα ονόματά τους σε θησαυρό όρων.
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+				<xs:element name="departmentName" 
+					minOccurs="0"
+					maxOccurs="1"  
+					type="xs:string">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Department</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The name of an organization's department, e.g. marketing, accounting, etc. 
+								Use this field if you just want to keep the department name for this job position. 
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Τμήμα Οργανισμού</bccmsmodel:displayName>
+							<bccmsmodel:description>Καταχωρείστε το όνομα του τμήματος του οργανισμού στο οποίο εργάζεται ή εργαζόταν το πρόσωπο, π.χ. Τεχνική Διεύθυνση, Πωλήσεις, κλπ.</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		
+	      		
+	      		<xs:element name="title" 
+	      			minOccurs="0"  
+	      			maxOccurs="1"
+	      			type="bccmsmodel:topicType" bccmsmodel:acceptedTaxonomies="jobPositionTitle">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Job Title</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								The job title or organizational role, eg. IT Manager, Accountant, etc.  
+								It gets values from a vocabulary with system name "jobPositionTitle"
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Τίτλος / Θέση στον Οργανισμό</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Ο Τίτλος της Θέσης, π.χ. Διευθυντής Πληροφορικής. 
+								Παίρνει τιμές από θησαυρό όρων με όνομα συστήματος "jobPositionTitle".
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		<xs:element name="description" 
+	      			minOccurs="0"  
+	      			maxOccurs="1"
+	      			type="xs:string">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Description</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								A textual description of the role this Person played in this organization.
+							</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Περιγραφή Ρόλου</bccmsmodel:displayName>
+							<bccmsmodel:description>
+								Περιγραφή με κείμενο του ρόλου (αρμοδιότητες, έργα) του προσώπου σε αυτή τη θέση.
+							</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		
+	      		<xs:element name="startDate" 
+	      			minOccurs="0" 
+	      			maxOccurs="1"
+	      			type="xs:date">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+							<bccmsmodel:displayName>Start Date</bccmsmodel:displayName>
+							<bccmsmodel:description>The date the Person joined this organization.</bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Ημ/νία Έναρξης Εργασίας</bccmsmodel:displayName>
+							<bccmsmodel:description>Η ημερομηνία που το Πρόσωπο ανέλαβε αυτή την θέση εργασίας</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+	      		<xs:element name="endDate" 
+	      			minOccurs="0" 
+	      			maxOccurs="1"
+	      			type="xs:date">
+	      			<xs:annotation>
+						<xs:documentation xml:lang="en" >
+						 	<bccmsmodel:displayName>End Date</bccmsmodel:displayName>
+							<bccmsmodel:description>The date this Person left this job position</bccmsmodel:description></xs:documentation>
+						<xs:documentation xml:lang="el" >
+							<bccmsmodel:displayName>Ημ/νία Λήξης Εργασίας</bccmsmodel:displayName>
+							<bccmsmodel:description>Η ημερομηνία που το Πρόσωπο άφησε αυτή την θέση εργασίας</bccmsmodel:description>
+						</xs:documentation>
+					</xs:annotation>
+	      		</xs:element>
+			</xs:sequence>
+		</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="arrayOfPersonJobPositionTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Person Job Positions</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of job positions for a person. There is no field for keeping the person itself and so this type 
+					should be used in the context of a person definition, i.e. to define the field that holds all the job positions of the person.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Θέσεων Εργασίας Προσώπου</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τις θέσεις εργασίας που είχε ή έχει ένα πρόσωπο σε διάφορους οργανισμούς.
+					Ο τύπος έχει χρήση μόνο ως τμήμα πληροφορίας ενός προσώπου διότι δεν περιέχει πεδίο για το πρόσωπο που κατέχει την θέση. Δεδομένου ότι η λίστα θα 
+					περιέχεται μέσα σε ένα πρόσωπο, το πρόσωπο υπονοείται.   
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="jobPosition" 
+						minOccurs="1" 
+						maxOccurs="unbounded"
+						type="tns:personJobPositionType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="personType">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Person Type</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					A type that captures the attributes of a person 
+					in accordance to the attributes defined by the opensocial specification
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Τύπος Πρόσωπο</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Ο τύπος αυτός περιγράφει τα στοιχεία ενός προσώπου. Τα πεδία που τύπου έχουν ορισθεί κατ' αντιστοιχία 
+					των πεδίων που ορίζονται από το πρότυπο opensocial. 
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:contentObjectType">
+				<xs:sequence>
+					
+					<!-- The following fields specified in open social are ommited here since the content object itself has a unique id and the profile (dublin core metadata of person)
+						contain the 'created' and 'updated' fields  
+						-id
+						-published (corresponds to 'created' in profile)
+						-updated	
+					-->
+					
+					<xs:element name="thumbnail"
+						minOccurs="0"
+						maxOccurs="1"
+						type="bccmsmodel:binaryChannelType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									This property holds a jpeg/png/gif thumbnail for the person (e.g. an avatar icon). 
+									If this thumbnail is provided it can be used as an icon when displaying a list of person objects
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Ένα jpeg/png/gif thumbnail για το πρόσωπο (π.χ. ένα εικονίδιο avatar). 
+									Αν υπάρχει μπορεί να χρησιμοποιηθεί στην απεικόνιση λίστας προσώπων
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element name="name" type="tns:nameType"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Name
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Όνομα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="displayName" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Display Name</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The name of this Person, suitable for display to end-users. Each Person returned MUST include a non-empty displayName value. 
+									The name SHOULD be the full name of the Person being described if known (e.g. Cassandra Doll or Mrs. Cassandra Lynn Doll, Esq.), 
+									but MAY be a username or handle, if that is all that is available (e.g. doll). 
+									The value provided SHOULD be the primary textual label by which this Person is normally displayed by the Service Provider when presenting it to end-users.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Όνομα για παρουσίαση
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="nickname" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Nickname</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The casual way to address this Person in real life, e.g. 'Bob' or 'Bobby' instead of 'Robert'. 
+									This field SHOULD NOT be used to represent a user's username (e.g. jsmarr or daveman692); the latter should be represented by the preferredUsername field.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Σύντομο Όνομα (χαϊδευτικό)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="utcOffset" type="xs:int"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Utc Offset</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The offset from UTC of this Person's current time zone, as of the time this response was returned. 
+									The value MUST conform to the offset portion of xs:dateTime, e.g. if TZ offset=-08:00 utcOffset=-8. 
+									Note that this value MAY change over time due to daylight saving time, and is thus meant to signify only the current value of the user's timezone offset.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Utc Offset
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="aboutMe"
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:string"
+						bccmsmodel:stringFormat="RichText">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>About Me</bccmsmodel:displayName>
+								<bccmsmodel:description>A general statement about the person, specified as a string.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Σύντομο Βιογραφικό Σημείωμα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="birthday" type="xs:date"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Birthday
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ημ/νία Γέννησης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="gender"
+						minOccurs="0"
+						type="bccmsmodel:topicType"
+						bccmsmodel:acceptedTaxonomies="gender" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Gender
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Φύλο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="languagesSpoken"
+						minOccurs="0"
+						maxOccurs="1"
+						type="tns:arrayOfLanguageType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Languages Spoken</bccmsmodel:displayName>
+								<bccmsmodel:description>List of the languages that the person speaks as ISO 639-1 codes, specified as an Array of topics/strings.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ομιλούμενες Γλώσσες
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="currentLocation"
+						type="contactData:addressType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Current Location</bccmsmodel:displayName>
+								<bccmsmodel:description>Person's current location, specified as an Address.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ενεργή Διεύθυνση
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="addresses"
+						type="contactData:arrayOfAddressTypeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Αddresses</bccmsmodel:displayName>
+								<bccmsmodel:description>Addresses associated with the person, specified as an Array of Addresses.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Διευθύνσεις
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="phoneNumbers"
+						type="contactData:arrayOfPhoneTypeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Phone Numbers</bccmsmodel:displayName>
+							<bccmsmodel:description>Phone numbers associated with the person, specified as an Array of Phones.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Τηλέφωνα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="emails"
+						type="contactData:arrayOfEmailTypeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Emails</bccmsmodel:displayName>
+							<bccmsmodel:description>Emails associated with the person, specified as an Array of Emails.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Διευθύνσεις Ηλεκτρονικού
+								Ταχυδρομείου
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="ims" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="contactData:arrayOfImTypeType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Instant Messaging Addresses
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Διευθύνσεις Instant Messaging
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="organizations"
+						type="tns:arrayOfPersonJobPositionTypeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Organizations (Job Positions)</bccmsmodel:displayName>
+							<bccmsmodel:description>Jobs the person has held, specified as an Array of Job Positions in Organizations.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Οργανισμοί (Θέσεις Εργασίας)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="accounts"
+						type="tns:arrayOfAccountTypeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Accounts in other Service Providers
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ηλεκτρονικοί Λογαριαμοί σε άλλους
+								Παρόχους Υπηρεσιών
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="photos"
+						minOccurs="0"
+						maxOccurs="1"
+						type="fileResource:arrayOfFileResourceTypeType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Photos
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Φωτογραφίες
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="tags"
+						minOccurs="0"
+						maxOccurs="1"
+						type="tns:arrayOfTagType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Tags
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ετικέτες
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="interests"
+						minOccurs="0"
+						maxOccurs="1"
+						type="tns:arrayOfInterestType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Interests</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									The Interests of a person (hobbies, activities), e.g.  Reading, Jogging, Travelling, Gardening, etc. 
+									It gets values from a vocabulary with system name "personInterest"
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Ενδιαφέροντα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									Μια λίστα με τα ενδιαφέροντα του προσώπου (δραστηριότητες, ασχολίες), π.χ. διάβασμα, ταξίδια, κηπουρική, ξιφασκία, κλπ. 
+									Παίρνει τιμές από θησαυρό όρων με όνομα συστήματος "personInterest".
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="urls"
+						minOccurs="0"
+						maxOccurs="1"
+						type="webResourceLink:arrayOfWebResourceLinkTypeType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Urls
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Σύνδεσμοι
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="personAuthentication"
+						type="tns:personAuthenticationType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								User Authentication
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Στοιχεία Ταυτοποίησης Προσώπου
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="personVerification"
+						type="tns:personVerificationType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Person Verification
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Πιστοποίηση Στοιχείων Προσώπου
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="personAuthorization"
+						type="tns:personAuthorizationType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								User Authorization
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Στοιχεία Εξουσιοδότησης Προσώπου
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="personObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Person</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p> Use this content object type to store information about a person</p>
+					<p>
+					 	You can store the name, addresses, telephone numbers and emails, photographs, 
+					 	interests, job positions, service provider account data, authentication and authorization data for 
+					 	loging in and accessing astroboa content, etc.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Πρόσωπο</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>Χρησιμοποιήστε αυτό το αντικείμενο για να αποθηκεύσετε τα στοιχεία ενός προσώπου.</p>
+					<p> 
+						Μπορείτε να καταχωρήσετε στοιχεία ονόματος, διευθύνσεις, 
+						τηλέφωνα, email, φωτογραφίες, ενδιαφέροντα, θέσεις εργασίας, ηλεκτρονικούς λογαριασμούς σε παρόχους ηλεκτρονικών υπηρεσιών, 
+						στοιχεία ταυτοποίησης και εξουσιοδότησης στο περιεχόμενο της αποθήκης, κλπ.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="tns:personType">
+					<xs:sequence>
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+		 				<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+					
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION 
+						IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>			
+	
+	<xs:complexType name="arrayOfPersonObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Person Objects</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of REFERENCES to Person objects (i.e. person content objects). 
+					This list can be attached to other content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Πρόσωπα
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="personObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="personObject">
+						
+						<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Reference to Person Object</bccmsmodel:displayName>
+								<bccmsmodel:description>Person Object Instance referenced by another content object instance</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Αναφορά σε Πρόσωπο
+								</xs:documentation>
+						</xs:annotation>
+						
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

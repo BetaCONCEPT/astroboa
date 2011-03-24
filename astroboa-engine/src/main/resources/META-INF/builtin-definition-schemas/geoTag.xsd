@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors
+		
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/geoTag"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/geoTag"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+	
+	
+	
+	<xs:complexType name="geoTagType"
+			bccmsmodel:labelElementPath="placename">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			  <bccmsmodel:displayName>Geotag</bccmsmodel:displayName>
+			  <bccmsmodel:description>
+			  	<p>
+			  		Use this complex type to store the geographical identification metadata of a location. 
+			  	</p>
+				<p>
+					You can enter the Latitude, Longitude and Altitude coordinates expressed 
+					in decimal degrees according to the WGS84 datum
+				</p>
+				<p>
+					Head, Tilt and Range are additional properties (as proposed by FlickrFly) that allow to specify 
+					the viewing angle of photograph resources.
+				</p> 
+				<p>  
+					The place name and region properties are also provided to allow specify 
+					a name and region for the geographical location.
+				</p>
+			</bccmsmodel:description></xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Σημείo Γεωγραφικού Εντοπισμού (Geotag)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					 <p>
+					 	Χρησιμοποιείστε αυτόν τον σύνθετο τύπο για να αποθηκεύσετε τις γεωγραφικές συντεταγμένες ενός σημείου.
+					 </p>
+					 <p>
+					 	Μπορείτε να καταχωρήσετε το Γεωγραφικό Μήκος και Πλάτος καθώς και το Ύψος. Οι συντεταγμένες καταχωρούνται 
+					 	σε μοίρες με δεκαδικά ψηφία και με βάση το WGS84 datum.
+					 </p>
+					 <p>
+					 	 Αν καταχωρείτε σημείο που αντιστοιχεί σε κάποια φωτογραφία μπορείτε επίσης να καταχωρήσετε την κατεύθυνση, την 
+					 	 κλίση και την απόσταση της φωτογραφικής μηχανής για να καθορίσετε την γωνία λήψης φωτογραφιζόμενων σημείων 
+					 	 (δείτε το FlickrFly για περισσότερα).
+					 </p>
+					 <p>
+					 	Επίσης μπορείτε να καταχωρήσετε το τοπωνύμιο και το όνομα της περιοχής στην οποία βρίσκετε το σημείο. 
+					 </p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+
+					<xs:element name="longitude" 
+						minOccurs="1"
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>longitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The longitude (North to South) expressed in decimal degrees in the WGS84 datum</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γεωγραφικό Μήκος
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="latitude" 
+						minOccurs="1"
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>latitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The latitude (West to East) in decimal degrees in the WGS84 datum</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γεωγραφικό Πλάτος
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="altitude" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>altitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The altitude expressed in decimal meters</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Υψόμετρο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="head" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Camera Ηeading (degrees)</bccmsmodel:displayName>
+								<bccmsmodel:description>The heading of the camera is decimal degrees (i.e. 90 degrees means the camera was pointed heading the east)</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Κατεύθυνση Κάμερας
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="tilt" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Camera Tilt (degrees)</bccmsmodel:displayName>
+								<bccmsmodel:description>The tilt of the camera in decimal degrees (i.e. -45 degrees means the camera was pointed to the surface at an angle of 45 degrees)</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Κλίση Κάμερας
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="range" 
+						minOccurs="0" 
+						maxOccurs="1"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Camera Distance from Subject (meters)</bccmsmodel:displayName>
+								<bccmsmodel:description>The distance of the camera from the subject in decimal degrees (i.e. 150 means the camera was 150 meters away from the subject)</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Απόσταση Κάμερας από το Αντικείμενο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="placename" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Place Name</bccmsmodel:displayName>
+								<bccmsmodel:description>The place name for the identified physical location</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Τοπωνυμία
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="region" 
+						minOccurs="0"
+						maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Region</bccmsmodel:displayName>
+								<bccmsmodel:description>The region for the identified physical location</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Περιοχή
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="arrayOfGeoTagTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Geotags</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Use this complex type to store the geographical identification metadata for a list of locations (a list of geotags)
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Σημείων Γεωγραφικού Εντοπισμού (Geotags)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Χρησιμοποιείστε αυτό το σύνθετο τύπο για να αποθηκεύσετε τις γεωγραφικές συντεταγμένες για μια λίστα σημείων.
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="geoTag" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="tns:geoTagType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	<xs:element name="geoTagObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			  <bccmsmodel:displayName>Geotag</bccmsmodel:displayName>
+			  <bccmsmodel:description>
+			  	<p>
+			  		Use this content object type to store the geographical identification metadata of a location. 
+			  	</p>
+			  	<p>
+			  		The added geographical locations can be then used to show places on a map 
+			  		or can function as geotags to be referenced by 
+			  		other content resources.
+			  	</p>
+			  
+				<p>
+					You can enter the Latitude, Longitude and Altitude coordinates expressed 
+					in decimal degrees according to the WGS84 datum
+				</p>
+				<p>
+					Head, Tilt and Range are additional properties (as proposed by FlickrFly) that allow to specify 
+					the viewing angle of photograph resources.
+				</p> 
+				<p>  
+					The place name and region properties are also provided to allow specify 
+					a name and region for the geographical location.
+				</p>
+			</bccmsmodel:description></xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Σημείo Γεωγραφικού Εντοπισμού (Geotag)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					 <p>
+					 	Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τις γεωγραφικές συντεταγμένες ενός σημείου.
+					 </p>
+					 <p>
+					 	Μπορείτε κατόπιν να χρησιμοποιήσετε τέτοιου είδους αντικείμενα για να παρουσιάζετε τοποθεσίες πάνω σε ένα χάρτη ή 
+					 	μπορείτε να το χρησιμοποιήσετε σαν Γεω-Ετικέτα (geotag) και να αναφέρεστε σε αυτό από άλλα αντικείμενα.
+					 </p>
+					 <p>
+					 	Μπορείτε να καταχωρήσετε το Γεωγραφικό Μήκος και Πλάτος καθώς και το Ύψος. Οι συντεταγμένες καταχωρούνται 
+					 	σε μοίρες με δεκαδικά ψηφία και με βάση το WGS84 datum.
+					 </p>
+					 <p>
+					 	 Αν καταχωρείτε σημείο που αντιστοιχεί σε κάποια φωτογραφία μπορείτε επίσης να καταχωρήσετε την κατεύθυνση, την 
+					 	 κλίση και την απόσταση της φωτογραφικής μηχανής για να καθορίσετε την γωνία λήψης φωτογραφιζόμενων σημείων 
+					 	 (δείτε το FlickrFly για περισσότερα).
+					 </p>
+					 <p>
+					 	Επίσης μπορείτε να καταχωρήσετε το τοπωνύμιο και το όνομα της περιοχής στην οποία βρίσκετε το σημείο. 
+					 </p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+					
+						<xs:element name="longitude" 
+							minOccurs="1"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>longitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The longitude (North to South) expressed in decimal degrees in the WGS84 datum</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Γεωγραφικό Μήκος
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="latitude" 
+							minOccurs="1"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>latitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The latitude (West to East) in decimal degrees in the WGS84 datum</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Γεωγραφικό Πλάτος
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="altitude" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>altitude</bccmsmodel:displayName>
+								<bccmsmodel:description>The altitude expressed in decimal meters</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Υψόμετρο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="head" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Camera Ηeading (degrees)</bccmsmodel:displayName>
+								<bccmsmodel:description>The heading of the camera is decimal degrees (i.e. 90 degrees means the camera was pointed heading the east)</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Κατεύθυνση Κάμερας
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="tilt" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Camera Tilt (degrees)</bccmsmodel:displayName>
+								<bccmsmodel:description>The tilt of the camera in decimal degrees (i.e. -45 degrees means the camera was pointed to the surface at an angle of 45 degrees)</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Κλίση Κάμερας
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="range" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Camera Distance from Subject (meters)</bccmsmodel:displayName>
+								<bccmsmodel:description>The distance of the camera from the subject in decimal degrees (i.e. 150 means the camera was 150 meters away from the subject)</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Απόσταση Κάμερας από το Αντικείμενο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="placename" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Place Name</bccmsmodel:displayName>
+								<bccmsmodel:description>The place name for the identified physical location</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Τοπωνυμία
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="region" 
+							minOccurs="0"
+							maxOccurs="1" 
+							type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Region</bccmsmodel:displayName>
+								<bccmsmodel:description>The region for the identified physical location</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Περιοχή
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="arrayOfGeoTagObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Geotag Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of REFERENCES to Geotag objects (i.e. Geo Tag content objects). This list can be attached to other content objects</bccmsmodel:description> 
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Σημείa Γεωγραφικού Εντοπισμού (Geotag)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="geoTagObjectReference" 
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="geoTagObject">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Reference to Geotag Object</bccmsmodel:displayName>
+								<bccmsmodel:description>Geotag Object Instance referenced by another content object instance</bccmsmodel:description> 
+							</xs:documentation>	
+							<xs:documentation xml:lang="el">
+								Αναφορά σε Σημείο Γεωγραφικού Εντοπισμού (Geotag)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="arrayOfGeoTagTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of Geotags</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Use this content object type to store the geographical identification metadata 
+					for a list of locations (a list of geotags). Read the "GeoTag" description for more information.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Λίστα Σημείων Γεωγραφικού Εντοπισμού</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τις γεωγραφικές συντεταγμένες για μια λίστα σημείων.
+					Διαβάστε την περιγραφή για το "Σημείο Γεωγραφικού Εντοπισμού" για περισσότερες πληροφορίες.
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						<xs:element name="geoTag" 
+							minOccurs="0"
+							maxOccurs="unbounded" 
+							type="tns:geoTagType"/>
+							
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+				
+</xs:schema>

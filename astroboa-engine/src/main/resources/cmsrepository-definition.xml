@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!--  Content Definition file configuration -->
+	<bean id="contentDefinitionConfiguration"
+		class="org.betaconceptframework.astroboa.engine.definition.ContentDefinitionConfiguration">
+		<property name="configurationFile" value="content-definition.properties" />
+		<property name="cmsXsomParserFactory" ref="xsomParserFactory" />
+		<property name="definitionVisitor" ref="definitionVisitor" />
+		
+		<!-- 
+			The proper value for this property would be  "classpath*:/META-INF/builtin-definition-schemas/*.xsd" 
+			Due to class loader issues when running inside Jboss where its module is a jar, 
+			we must define each XSD separately 
+		
+			During Maven process-resources phase , project.version will be replaced by module version
+			
+			Every time you add or remove a value from this list, you should update
+			array BUILTIN_XSD_FILE_NAMES in module astroboa-distribution, in install.sh
+		-->
+		<property name="builtinDefinitionSchemas">
+		  <list>
+		   <value>/META-INF/builtin-definition-schemas/multilingualStringPropertyType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/administrativeMetadataType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/webPublicationType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/workflowType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/accessibilityType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/statisticType-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/portal-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/portalSection-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/query-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/person-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/role-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/scheduledContentArea-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/dynamicContentArea-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/organization-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/embeddedMultimediaResource-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/fileResource-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/genericContentResource-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/geoTag-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/webResourceLink-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/resourceRepresentationTemplate-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/contactData-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/rule-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/templateLayout-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/templateComponent-${project.version}.xsd</value>
+  		   <value>/META-INF/builtin-definition-schemas/script-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/cascadingStyleSheet-${project.version}.xsd</value>
+
+		   <value>/META-INF/builtin-definition-schemas/astroboa-api-${project.version}.xsd</value>
+		   <value>/META-INF/builtin-definition-schemas/astroboa-model-${project.version}.xsd</value>
+		  </list>
+       </property>
+	</bean>
+
+	<!-- Beans for parsing and loading XML schemas which contain information about Cms definitions -->
+	<bean id="definitionVisitor"
+		class="org.betaconceptframework.astroboa.engine.definition.visitor.CmsDefinitionVisitor"
+		autowire="byName"/>
+
+	<bean id="entityResolver" 
+	   class="org.betaconceptframework.astroboa.engine.definition.xsom.EntityResolverForBuiltInSchemas">
+		<property name="builtInDefinitionSchemaHomeDir" value="/META-INF/builtin-definition-schemas"></property>
+	</bean>
+	
+	<bean id="repositoryEntityResolver" 
+	   class="org.betaconceptframework.astroboa.engine.definition.RepositoryEntityResolver" autowire="byName"/>
+	
+	<bean id="errorHandler"
+		class="org.betaconceptframework.astroboa.engine.definition.xsom.CmsErrorHandler" />
+
+	<bean id="cmsAnnotationParser"
+		class="org.betaconceptframework.astroboa.engine.definition.xsom.CmsAnnotationParser"
+		scope="prototype"/>
+
+	<bean id="annotationParserFactory"
+		class="org.betaconceptframework.astroboa.engine.definition.xsom.CmsAnnotationParserFactory">
+		<lookup-method name="create" bean="cmsAnnotationParser" />
+	</bean>
+
+	<bean id="xsomParserFactory"
+		class="org.betaconceptframework.astroboa.engine.definition.xsom.CmsXsomParserFactory"
+		autowire="byName"/>
+
+</beans>

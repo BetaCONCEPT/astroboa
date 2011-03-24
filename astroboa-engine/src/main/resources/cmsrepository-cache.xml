@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+">
+
+	<!-- CmsRepository Cache -->
+	<bean id="cmsRepositoryCache" class="org.betaconceptframework.astroboa.engine.cache.CmsRepositoryCache">
+	    <constructor-arg index="0" value="META-INF/repository-cache-config.xml"/>
+	</bean>
+	
+	<!-- Cache Regions -->
+	<bean id="abstractCacheRegion" class="org.betaconceptframework.astroboa.engine.cache.regions.CmsRepositoryCacheRegion"
+	 abstract="true">
+	 	<property name="cmsRepositoryCache" ref="cmsRepositoryCache"/>
+	</bean>
+
+	<!-- Cache Region using Astroboa Cache Manager -->
+	<bean id="definitionCacheRegion" class="org.betaconceptframework.astroboa.engine.cache.regions.AstroboaReloadableDefinitionCacheRegion">
+		<property name="contentDefinitionConfiguration" ref="contentDefinitionConfiguration"/>
+		<property name="definitionCacheManager">
+		 	<bean class="org.betaconceptframework.astroboa.cache.DefinitionCacheManager"/>
+		</property>	 
+	</bean>
+	
+	<!-- First constructor value corresponds to enable/disable cache
+		 Second constructor value corresponds to propagate or not exceptions thrown by cache	 -->
+	<bean id="jcrQueryCacheRegion" class="org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion"
+		 parent="abstractCacheRegion">
+		 <constructor-arg value="true" index="0"/>
+		 <constructor-arg value="false" index="1"/>
+	</bean>
+	
+</beans>

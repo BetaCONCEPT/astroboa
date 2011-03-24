@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/web/embeddedMultimediaResource"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/web/embeddedMultimediaResource"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	version="${project.version}">
+
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+
+	<xs:complexType name="embeddedMultimediaResourceType"
+				bccmsmodel:labelElementPath="title" >
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Embedded Multimedia Resource</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Use this complex type to store multimedia content to be emmbedded in a web page.
+					</p>
+					<p>
+					'Embedded' means that a special application in the form of a plugin or javascript code needs 
+					to run in order to present the multimedia content inside the browser
+			 		window.
+			 		</p>
+			 		<p>
+			 		This is in contrast with attached or referenced resources where a simple link is presented to allow downloading 
+			 		a file resource and using a separate program in order to view / play the resource. 
+			 		For example an embedded flash video will be shown inside the users browser through a flash player plugin 
+			 		while an attached mpeg video requires the user to download the video file and watch it with some installed mpeg player.
+			 		</p>
+			 		<p>
+			 		So the embedded multimedia resource requires a field where to put some special code 
+			 		that runs / activates the appropriate multimedia plugin.
+					The embedded code may access the presented multimedia content from astroboa (through a content-api url) or an external site. 
+					External sites usually provide the appropriate embed code together with the multimedia content links, 
+					i.e. youtube. flickr, ad servers, etc.
+					The code usually contains an 'object' tag, an 'iframe' tag or a 'script' tag for javascript. 
+					In the case that the functioning of a multimedia resource requires some reusable javascript library code 
+					(to be loaded inside the page or to run on page load), 
+					insert the reusable code in the page template or added it in the proper order inside the embedded code field.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>
+					Εμβόλιμο Πολυμεσικό Περιεχόμενο (Embedded Video, slide
+					show, ad banner, podcast)
+				</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το σύνθετο τύπο για να αποθηκεύσετε πολυμεσικό περιεχόμενο που εμφανίζεται 
+						"εμβόλιμα" μέσα σε μια ιστοσελίδα.
+					</p>
+					<p>
+						"Εμβόλιμο" σημαίνει ότι ο φυλλομετρητής διαθέτει κάποιο ειδικό plugin που του επιτρέπει να παρουσιάσει ένα πολυμεσικό αρχείο 
+						απευθείας μέσα σε μια σελίδα, σαν να ήταν μέρος αυτής. Η πιο συχνή περίπτωση εμβόλιμου περιεχομένου είναι η ενσωμάτωση video μέσα 
+						στη σελίδα.
+			 		</p>
+			 		<p>
+			 			Το "εμβόλιμο" περιεχόμενο διαφέρει από το περιεχόμενο που είναι προσβάσιμο μέσω συνδέσμων (URLs) ως προς τον τρόπο
+			 			παρουσίασης. Το "εμβόλιμο" περιεχόμενο εμφανίζεται μέσα στη σελίδα ενώ ο σύνδεσμος απαιτεί να "κατεβάσουμε" πρώτα 
+			 			ένα "αρχείο" στο δίσκο του υπολογιστή και κατόπιν να ανοίξουμε το αρχείο με ένα ειδικό πρόγραμμα (π.χ. audio player).
+			 			Για παράδειγμα ένα εμβόλιμο video απαιτεί ειδικό κώδικα στην ιστοσελίδα ώστε ο φυλλομετρητής να φορτώσει το 
+			 			απαραίτητο plugin και να ενθέσει τον "video player" μέσα στη σελίδα. Επίσης μια σημαντική διαφορά είναι ότι δεν 
+			 			χρειάζεται να περιμένουμε να "κατέβει" το video για να αρχίσουμε να το βλέπουμε.
+			 			Σε αντιδιαστολή, ένας απλός σύνδεσμος προς το αρχείο του video απαιτεί να περιμένουμε να κατέβει το αρχείο video 
+			 			και κατόπιν να το "δούμε" με κάποιο ειδικό πρόγραμμα.
+			 		</p>
+			 		<p>
+			 			Δηλαδή το αντικείμενο εμβόλιμου περιεχομένου διαθέτει ένα ειδικό πεδίο μέσα στο οποίο πρέπει να αποθηκεύσετε τον κώδικα 
+			 			που ενεργοποιεί το κατάλληλο plugin του φυλλομετρητή
+			 		</p>
+			 		<p> 
+			 			Ο κώδικας μπορεί να παρουσιάζει ένα πολυμεσικό αρχείο που βρίσκεται αποθηκευμένο στο Astroboa ή σε ένα εξωτερικό site.
+			 			Τα εξωτερικά sites όπως το youtube, το flickr και πολλοί ad servers παρέχουν αυτόματα τον κατάλληλο κώδικα με ενσωματωμένους 
+			 			τους απαραίτητους συνδέσμους προς τα πολυμεσικά αρχεία. Το μόνο που χρειάζεται να κάνετε είναι να αντιγράψετε τον κώδικα 
+			 			στο ειδικό πεδίο του αντικειμένου.
+			 			Ο κώδικας συνήθως περιέχει ένα "object" tag, ένα "iframe" tag ή κάποια "script" tags αν πρόκειται για javascript.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="title" minOccurs="1" maxOccurs="1"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Title</bccmsmodel:displayName>
+								<bccmsmodel:description>The title / legend</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Τίτλος / Λεζάντα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="description" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Description
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Περιγραφή
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="1000"/>
+							</xs:restriction>
+						</xs:simpleType>
+						
+					</xs:element>
+
+					<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property is used to categorize / characterize the content in this object 
+								(i.e. the included file content) according to its use or purpose inside the organization 
+								(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+								</p>
+								<p>
+								The property values are restricted from a controlled vocabulary (a taxonomy) which 
+								is named 'contentDesignation'
+								</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+									<bccmsmodel:description>
+									<p>
+									Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου 
+									σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+									(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.). 
+									</p>
+									<p>
+									Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), 
+									η οποία ονομάζεται 'contentDesignation'
+									</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+					 
+					<xs:element name="embeddedCode" minOccurs="0"
+						maxOccurs="1" 
+						type="xs:string"
+						bccmsmodel:stringFormat="Code">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Embedded Code
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ενσωματωμένος κώδικας
+							</xs:documentation>
+						</xs:annotation>
+						
+					</xs:element>
+
+					<xs:element name="multimediaFile" minOccurs="0"
+						maxOccurs="1" type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Multimedia File</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								The multimedia binary file to which the embedded code refers. 
+								</p>
+								<p>
+								This is useful if the embedded object is not accessed through a remote site but it should 
+								reside inside the content repository.
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Ψηφιακό Αρχείο Πολυμέσων
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="previewImage" minOccurs="0"
+						maxOccurs="1" type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Preview Image</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif preview image.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Εικόνα Προεπισκόπησης
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="thumbnail" minOccurs="0"
+						maxOccurs="1" type="bccmsmodel:binaryChannelType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								A jpeg/png/gif thumbnail (usually up to 128 pixels width). 
+								This thumbnail can be generated from the previewImage through an aproprtiate api call (downscale the previewImage).
+								However it is more efficient to provide it rather than continuously generating it.
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Εικονίδιο
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+
+	<xs:complexType name="arrayOfEmbeddedMultimediaResourceTypeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Embedded Multimedia Resource List</bccmsmodel:displayName>
+				<bccmsmodel:description>
+				This complex type represents a list of multimedia resources to be emmbedded in a web page. 
+				In the case that the functioning of multimedia content requires some reusable javascript library code 
+				(to be loaded inside the page or to run on page load), 
+				insert the reusable code ONCE, in the proper order, as one of the multimedia resources.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Εμβόλιμων Πολυμέσων (Embedded Videos, slide shows,	ad banners, podcasts)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="embeddedMultimediaResource"
+						minOccurs="0" maxOccurs="unbounded"
+						type="tns:embeddedMultimediaResourceType"
+						/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:element name="embeddedMultimediaResourceObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Embedded Multimedia Resource</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+					Use this content object type to store multimedia content to be emmbedded in a web page.
+					</p>
+					<p>
+					'Embedded' means that a special application in the form of a plugin or javascript code needs 
+					to run in order to present the multimedia content inside the browser
+			 		window.
+			 		</p>
+			 		<p>
+			 		This is in contrast with attached or referenced resources where a simple link is presented to allow downloading 
+			 		a file resource and using a separate program in order to view / play the resource. 
+			 		For example an embedded flash video will be shown inside the users browser through a flash player plugin 
+			 		while an attached mpeg video requires the user to download the video file and watch it with some installed mpeg player.
+			 		</p>
+			 		<p>
+			 		So the embedded multimedia resource requires a field where to put some special code 
+			 		that runs / activates the appropriate multimedia plugin.
+					The embedded code may access the presented multimedia content from astroboa (through a content-api url) or an external site. 
+					External sites usually provide the appropriate embed code together with the multimedia content links, 
+					i.e. youtube. flickr, ad servers, etc.
+					The code usually contains an 'object' tag, an 'iframe' tag or a 'script' tag for javascript. 
+					In the case that the functioning of a multimedia resource requires some reusable javascript library code 
+					(to be loaded inside the page or to run on page load), 
+					insert the reusable code in the page template or added it in the proper order inside the embedded code field.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>
+					Εμβόλιμο Πολυμεσικό Περιεχόμενο (Embedded Video, slide
+					show, ad banner, podcast)
+				</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε πολυμεσικό περιεχόμενο που εμφανίζεται 
+						"εμβόλιμα" μέσα σε μια ιστοσελίδα.
+					</p>
+					<p>
+						"Εμβόλιμο" σημαίνει ότι ο φυλλομετρητής διαθέτει κάποιο ειδικό plugin που του επιτρέπει να παρουσιάσει ένα πολυμεσικό αρχείο 
+						απευθείας μέσα σε μια σελίδα, σαν να ήταν μέρος αυτής. Η πιο συχνή περίπτωση εμβόλιμου περιεχομένου είναι η ενσωμάτωση video μέσα 
+						στη σελίδα.
+			 		</p>
+			 		<p>
+			 			Το "εμβόλιμο" περιεχόμενο διαφέρει από το περιεχόμενο που είναι προσβάσιμο μέσω συνδέσμων (URLs) ως προς τον τρόπο
+			 			παρουσίασης. Το "εμβόλιμο" περιεχόμενο εμφανίζεται μέσα στη σελίδα ενώ ο σύνδεσμος απαιτεί να "κατεβάσουμε" πρώτα 
+			 			ένα "αρχείο" στο δίσκο του υπολογιστή και κατόπιν να ανοίξουμε το αρχείο με ένα ειδικό πρόγραμμα (π.χ. audio player).
+			 			Για παράδειγμα ένα εμβόλιμο video απαιτεί ειδικό κώδικα στην ιστοσελίδα ώστε ο φυλλομετρητής να φορτώσει το 
+			 			απαραίτητο plugin και να ενθέσει τον "video player" μέσα στη σελίδα. Επίσης μια σημαντική διαφορά είναι ότι δεν 
+			 			χρειάζεται να περιμένουμε να "κατέβει" το video για να αρχίσουμε να το βλέπουμε.
+			 			Σε αντιδιαστολή, ένας απλός σύνδεσμος προς το αρχείο του video απαιτεί να περιμένουμε να κατέβει το αρχείο video 
+			 			και κατόπιν να το "δούμε" με κάποιο ειδικό πρόγραμμα.
+			 		</p>
+			 		<p>
+			 			Δηλαδή το αντικείμενο εμβόλιμου περιεχομένου διαθέτει ένα ειδικό πεδίο μέσα στο οποίο πρέπει να αποθηκεύσετε τον κώδικα 
+			 			που ενεργοποιεί το κατάλληλο plugin του φυλλομετρητή
+			 		</p>
+			 		<p> 
+			 			Ο κώδικας μπορεί να παρουσιάζει ένα πολυμεσικό αρχείο που βρίσκεται αποθηκευμένο στο Astroboa ή σε ένα εξωτερικό site.
+			 			Τα εξωτερικά sites όπως το youtube, το flickr και πολλοί ad servers παρέχουν αυτόματα τον κατάλληλο κώδικα με ενσωματωμένους 
+			 			τους απαραίτητους συνδέσμους προς τα πολυμεσικά αρχεία. Το μόνο που χρειάζεται να κάνετε είναι να αντιγράψετε τον κώδικα 
+			 			στο ειδικό πεδίο του αντικειμένου.
+			 			Ο κώδικας συνήθως περιέχει ένα "object" tag, ένα "iframe" tag ή κάποια "script" tags αν πρόκειται για javascript.
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						
+						<xs:element name="contentDesignation" 
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property is used to categorize / characterize the content in this object 
+								(i.e. the included file content or embedded code) according to its use or purpose inside the organization 
+								(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+								</p>
+								<p>
+								The property values are restricted from a controlled vocabulary (a taxonomy) 
+								which is named 'contentDesignation'
+								</p>
+								</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+									<bccmsmodel:description>
+									<p>
+									Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου 
+									σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+									(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.). 
+									</p>
+									<p>
+									Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), η οποία ονομάζεται 'contentDesignation'
+									</p>
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="embeddedCode" minOccurs="0"
+							maxOccurs="1" 
+							type="xs:string"
+							bccmsmodel:stringFormat="Code">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Embedded Code
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ενσωματωμένος κώδικας
+								</xs:documentation>
+							</xs:annotation>
+							
+						</xs:element>
+
+						<xs:element name="multimediaFile" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Multimedia File</bccmsmodel:displayName>
+								<bccmsmodel:description>The multimedia binary file to which the embedded code refers. 
+							This is useful if the embedded object is not accessed through a remote site but it should reside inside the content repository.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Ψηφιακό Αρχείο Πολυμέσων
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="previewImage" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Preview Image</bccmsmodel:displayName>
+									<bccmsmodel:description>A jpeg/png/gif preview image.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικόνα Προεπισκόπησης
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="thumbnail" minOccurs="0"
+							maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Thumbnail</bccmsmodel:displayName>
+								<bccmsmodel:description>A jpeg/png/gif thumbnail (usually up to 128 pixels width). 
+							This thumbnail can be generated from the previewImage through an aproprtiate api call (downscale the previewImage).
+							However it is more efficient to provide it rather than continuously generating it.</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Εικονίδιο
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="arrayOfEmbeddedMultimediaResourceObjectType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>List of References to Embedded Multimedia Resource	Objects</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of REFERENCES to embedded multimedia resource objects (i.e. embedded multimedia resource content objects). 
+			This list can be attached to other content objects</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Λίστα Αναφορών σε Αντικείμενa Εμβόλιμου Πολυμεσικού
+				Περιεχομένου
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element
+						name="embeddedMultimediaResourceObjectReference" minOccurs="0"
+						maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+						bccmsmodel:acceptedContentTypes="embeddedMultimediaResourceObject">
+						<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Reference to Embedded Multimedia Resource Object</bccmsmodel:displayName>
+					<bccmsmodel:description>Embedded Multimedia Resource Object Instance referenced by another content object instance</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				Αναφορά σε Αντικείμενο Εμβόλιμου Πολυμεσικού Περιεχομένου
+			</xs:documentation>
+		</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:element name="arrayOfEmbeddedMultimediaResourceTypeObject">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Embedded Multimedia Resource List</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Use this content object type to store a list of multimedia resources to be emmbedded in a web page.
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>
+					Λίστα Εμβόλιμων Πολυμέσων (Embedded Videos, slide shows,
+					ad banners, podcasts)
+				</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε μια λίστα από πολυμεσικά αντικείμενα 
+					που εμφανίζονται "εμβόλιμα" μέσα σε μια ιστοσελίδα.
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+						<xs:element name="contentDesignation" 
+							minOccurs="1"
+							maxOccurs="1"
+							type="bccmsmodel:topicType"
+							bccmsmodel:acceptedTaxonomies="contentDesignation">
+
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Content Designation</bccmsmodel:displayName>
+								<bccmsmodel:description>This property is used to categorize / characterize the content in this object (i.e. the included multimedia resources) according to its use or purpose inside the organization 
+							(e.g. Speech, News, Budget, Balance, Municipal Council Proceedings, etc.).
+							The property values are restricted from a controlled vocabulary (a taxonomy) which is named 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Χαρακτηρισμός Περιεχομένου</bccmsmodel:displayName>
+								<bccmsmodel:description>Το πεδίο αυτό χρησιμοποιείται για την κατηγοριοποίηση / χαρακτηρισμό του περιεχομένου σε αυτό το αντικείμενο ανάλογα με τη χρήση ή το σκοπό του μέσα στον οργανισμού
+							(π.χ. Ομιλία, Είδηση, Ισολογιμός, Προϋπολογισμός, Πρακτικά Δημοτικού Συμβουλίου, κλπ.). 
+							Οι τιμές του πεδίου περιορίζονται από ελεγχόμενο λεξιλόγιο (ταξινομία), η οποία ονομάζεται 'contentDesignation'</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="embeddedMultimediaResource"
+							minOccurs="0" maxOccurs="unbounded"
+							type="tns:embeddedMultimediaResourceType"
+							bccmsmodel:labelElementPath="title" />
+							
+						<xs:element name="webPublication" minOccurs="0" maxOccurs="1" type="webPublicationType:webPublicationType"/>
+			 			<xs:element name="workflow" minOccurs="0" maxOccurs="1" type="workflowType:workflowType"/>
+						<xs:element name="statistic"  minOccurs="0" maxOccurs="1" type="statisticType:statisticType" />
+						
+						<!-- THIS ELEMENT SHOULD BE ALWAYS DEFINED AS THE LAST ELEMENT OF A CONTENT OBJECT TYPE DEFINITION IN ORDER TO ALLOW DYNAMIC PROPERTIES (ASPECTS) TO
+						BE ADDED TO CONTENT OBJECT INSTANCES  -->
+						<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+						
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

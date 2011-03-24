@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. 
+		
+		Authors:
+		Gregory Chomatas (gchomatas@betaconcept.com)
+		Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	version="${project.version}">
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+
+
+	<!--  Every element that does not define minOccurs and maxOccurs values, the defaults are considered
+		that is minOccurs=1 and maxOccurs=1 as defined by XML Schema -->
+
+	
+	
+	<xs:simpleType name="languageType">
+		<xs:restriction base="xs:string">
+			
+			<xs:enumeration value="en">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">   
+						English
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αγγλικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="sq">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Albanian
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Αλβανικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="bg">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Bulgarian
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Βουλγαρικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="fr">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						French
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Γαλλικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="de">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						German
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Γερμανικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="el">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Greek
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ελληνικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="es">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Spanish
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ισπανικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="it">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Italian
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ιταλικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="nl">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Dutch
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ολλανδικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="pt">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Portuguese
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Πορτογαλλικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="ro">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Romanian
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ρουμανικά
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="ru">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Russian
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Ρώσικα
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="contentObjectStatusType">
+		<xs:restriction base="xs:string">
+			
+			<xs:enumeration value="authored">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Content Object is in the process of creation (authoring)
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο είναι υπό Δημιουργία
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="submitted">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Submitted for Publication to the web (pending approval)
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγγρισης)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="approved">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Approved for Publication to the web
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει εγγριθεί για Δημοσίευση στο web
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="rejected">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Permanently Rejected for Publication to the web
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει απορριφθεί μόνιμα για Δημοσίευση στο web
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="temporarilyRejectedForReauthoring">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Temporarily Rejected for Publication to the web (reauthoring required)
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει απορριφθεί προσωρινά για Δημοσίευση στο web (απαιτούνται διορθώσεις)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="scheduledForPublication">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Scheduled for Publication to the web
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="published">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Published to the web
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο είναι Δημοσιευμένο στο web
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="archived">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Archived
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο είναι Αρχειοθετημένο
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="publishedAndArchived">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Published to the web and Archived
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο είναι Δημοσιευμένο στο web και Αρχειοθετημένο
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="staged">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Staged
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο είναι σε κατάσταση Επισκόπησης
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			
+			<xs:enumeration value="submittedByExternalUser">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Submitted by External User (pending approval)
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						Το Αντικείμενο έχει υποβληθεί από εξωτερικό χρήστη (εν αναμονή έγγρισης)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+	
+	<xs:complexType name="administrativeMetadataType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Dublin Core Metadata</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						This is a key complex property that keeps the metadata required for the administration of objects. 
+						The metadata are modeled according to the Dublin Core standard.
+					</p>
+					<p>
+						Be aware that we have choosen not to use the original dublic core namespaces and definitions in order to allow 
+						a more flexible management of these metadata utilizing the extra facilities 
+						provided by astroboa, i.e. to use Topics for "Subject" and "Language" fields instead of plain strings 
+						or to use enumerations for the object "Status" instead of plain strings.
+					</p>
+					<p> 
+						The Dublin Core Metadata is mandatory for every content object. 
+						Many elements of the Dublin Core Metadata such as the 'Title', the 'creation and modification dates', etc. 
+						are mandatory for proper functioning of the Astroboa content engine and the Web Console.
+						Thus every object type automatically inherits this property. 
+					</p>
+					<p>
+						You may have already noticed that three of the most importan elements of Dublin Core, 
+						the <strong>Title</strong>, the <strong>Description</strong> and <strong>Subject / Keyword</strong>
+						are always present in Web console as the first fields of the main object form. Since these three fields 
+						determine in a way the object identity are always present in the main object form for your convenience. 
+						They allow you to quickly identify 
+						the object you work for, without the need to go to the Dublin Core Metadata Form.  
+					</p>
+					<p>
+						If you are a programmer please remember that the above three fields are stored under the "Dublin Core Metadata" property 
+						despite their presence in the main object form. Thus to access the "Title", the property path to be used is "profile.title"
+					</p>
+					<p>
+						In contrast to the convention of naming properties after their type name 
+						(in this case the property name should be 'administrativeMetadata'), 
+						it has been choosen to name this complex property with the more abstract name 'profile'. 
+						'profile', as the name of the complex field that holds the basic information of an object, 
+						is more user friendly for programmers which may not be aware of cms terms or the dublin core standard.   
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Μεταδεδομένα Dublin Core</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					<p>
+						Αυτό το σύνθετο πεδίο περιέχει στοιχεία που βοηθούν στην εσωτερική διαχείριση του αντικειμένου.
+						Τα στοιχεία που παρέχονται ακολουθούν το πρότυπο <strong>Dublin Core</strong>. 
+						Τα περισσότερα από τα στοιχεία που περιέχονται σε αυτό το πεδίο είναι πολύ σημαντικά για την 
+						λειτουργία της αποθήκης περιεχομένου. Για αυτό το λόγο το πεδίο αυτό υπάρχει υποχρεωτικά σε όλους τους τύπους 
+						αντικειμένων. Αν φτιάξετε δικούς σας τύπους τότε αυτοί θα το κληρονομήσουν αυτόματα.
+					</p>
+					<p>
+						Τα τρία από τα σπουδαιότερα στοιχεία που περιέχονται σε αυτό το σύνθετο πεδίο είναι ο <strong>"Τίτλος"</strong> 
+						η <strong>"Περιγραφή"</strong> και το <strong>"Θέμα ή Λέξη Κλειδί"</strong> που παίρνει πολλές τιμές. 
+						Επειδή αυτά τα στοιχεία αποτελούν ουσιαστικά και την ταυτότητα των αντικειμένων θα 
+						παρατηρήσετε ότι εμφανίζονται σαν τα πρώτα πεδία της φόρμας κάθε αντικειμένου. Αυτό γίνεται για την διευκόλυνσή σας στην 
+						εισαγωγή στοιχείων και για να μπορείτε να αναγνωρίσετε εύκολα ένα αντικείμενο δίχως να χρειάζεται να επισκεφτείτε την 
+						φόρμα των μεταδεδομένων dublin core.
+					</p>
+					<p>
+						Αν είστε προγραμματιστής να θυμάστε ότι τα παραπάνω τρία πεδία αν κα εμφανίζονται στην πρώτη φόρμα κάθε αντικειμένου, 
+						αποθηκεύονται κάτω από το σύνθετο πεδίο των "Μεταδεδομένων Dublin Core" το οποίο έχει εσωτερικό όνομα 
+						<strong>profile</strong>. Οπότε ο "Τίτλος" βρίσκεται στo "path" <strong>profile.title</strong>.  
+					</p>
+				</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+					<xs:element name="title" 
+						minOccurs="1"
+						maxOccurs="1" 
+						bccmsmodel:order="-3"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Title</bccmsmodel:displayName>
+								<bccmsmodel:description>A name given to the resource. It is recommended to be unique, i.e. do not use the same title for a person and for her photograph</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τίτλος</bccmsmodel:displayName>
+								<bccmsmodel:description>Ένα όνομα που δίνεται στο αντικείμενο. Συνιστάται το όνομα να είναι μοναδικο, δηλαδή μην χρησιμοποιήσετε τον ίδιο τίτλο για ένα πρόσωπο και για τη φωτογραφία του.</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="description" 
+						minOccurs="0"
+						maxOccurs="1" 
+						bccmsmodel:order="-2"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Description</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An account of the resource.</p>
+									<p>Description may include but is not limited to: an abstract, a table of contents, or a free-text account of the resource.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Περιγραφή</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An account of the resource.</p>
+									<p>Description may include but is not limited to: an abstract, a table of contents, or a free-text account of the resource.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="subject" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="bccmsmodel:topicType"
+						bccmsmodel:order="-1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Subject / Keyword</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Use this multi-value property to add one or more subject terms or keywords related to the information captured 
+									by your content object instance. You can get your subject terms or keywords from any taxonomy. 
+									</p>
+									<p>
+									In the context of web published content, this property can be considered equivalent 
+									to the "tag" property, i.e. the property that holds the tags of a post, article, blog entry, news item, event, etc. 
+									In this sense there are no restrictions on the accepted taxonomies from which you can add topics to this field. 
+									In contast to other native content object properties which get values from a specific vocabulary/taxonomy, this is 
+									considered a generic "tagging" field which has no restrictions in order to give the ultimate flexibility 
+									on how it will be utilized by each organization.
+									</p>
+									<p>
+									To cover the most common use cases, the content engine automatically generates an empty taxonomy named by the special name 
+									"bccms:subjectTaxonomy" which by convention is the taxonomy which keeps all the subject terms or keywords 
+									to be used for adding values in this property. 
+									Additionally, the default installation of ASTROBOA provides a sample "bccms:subjectTaxonomy" appropriate for e-goverments. 
+									It is filled with terms from the UK Integrated Public Sector Vocabulary adapted to the needs of Greek Local Governments 
+									(terms are provided in both the english and the greek language). The provided sample has been created in the context of the 
+									EU co-funded project named LGAF (Local Government Application Framework). Astroboa is part of the LGAF framework.
+									</p>
+									<p>
+									In a more advanced usage scenario, this property can be used as a bucket of virtual/dymanic properties with controlled values.
+									When keywords are added from multiple taxonomies (and not just from the "bccms:subjectTaxonomy") then the name of the taxonomy 
+									can be considered as the name of the virtual property and the keyword as the value of the property, 
+									eg. Keywords = color: red, material: clay, period: minoan, usage: ceremonial. 
+									In this example we consider a monument object like a vessel and we have added the keywords 
+									"red", "clay", "minoan", "ceremonial" (keywords=topics in content engine terms) taken from the 
+									"color", "material", "period" and "usage" taxonomies respectively. Doing this we have managed to have four 
+									classification facets for ancient monuments stored in the single "Subject / Keyword" property and we can dynamically add 
+									more facets by just adding more keywords from other taxonomies. 
+									This is possible because the content engine treats topics (keywords / tags) as proper entities and not as simple strings. 
+									For each added topic its parent taxonomy is known. 
+									</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Θέμα / Λέξη Κλειδί</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>
+									Χρησιμοποιείστε αυτό το πεδίο πολλαπλών τιμών για να προσθέσετε μια ή περισότερες λέξεις κλειδιά ή θεματικούς όρους που
+									περιγράφουν / χαρακτηρίζουν το περιεχόμενο του αντικειμένου σας. Μπορείτε να πάρετε τις λέξεις κλειδιά απο οποιονδήποτε θησαυρό όρων.
+									</p>
+									<p>
+									Εάν χρησιμοποιείτε τη μηχανή περιεχομένου κυρίως για να δημοσιεύετε περιεχόμενο στο web, αυτό το πεδίο μπορεί να θεωρηθεί ως το πεδίο με το 
+									οποίο προσθέτετε ετικέτες στα άρθρα, τις ειδήσεις, τις εκδηλώσεις, τα blog entries και γενικά σε οποιοδήποτε αντικείμενο δημοσιεύετε.
+									Έτσι σε αντίθεση με άλλα πεδία αντικειμένων που συνήθως παίρνουν τιμές από ένα μόνο θησαυρό όρων, αυτό το πεδίο δεν έχει περιορισμούς ώστε 
+									να μπορείτε να τραβάτε όρους από οποιοδήποτε θησαυρό και να έχετε το μέγιστο της ευελιξίας στο πως θα διαμορφώσετε τους θησαυρούς σας.
+									</p>
+									<p>
+									Για να καλυφτούν οι απλές περιπτώσεις χρήσης, η μηχανή περιεχομένου δημιουργεί αυτόματα σε κάθε νέα αποθήκη περιεχομένου ένα κενό θησαυρό 
+									όρων  με το ειδικό όνομα "bccms:subjectTaxonomy" ο οποίος από σύμβαση περιέχει όλες τις λέξεις κλειδιά που χρησιμοποιούνται ως τιμές 
+									αυτού του πεδίου.
+									Επιπλέον, η βασική εγκατάσταση της Μηχανής Περιεχομένου παρέχει ένα δείγμα αυτού του θησαυρού φορτωμένο με όρους που σχετίζονται με την Ηλεκτρονική Διακυβέρνηση. 
+									Οι όροι προέρχονται από το UK Integrated Public Sector Vocabulary και έχουν διαμορφωθεί κατάλληλα ώστε να καλύπτουν τις ανάγκες των Ελληνικών 
+									Οργανισμών Τοπικής Αυτοδιοίκησης. Ο παρεχόμενος θησαυρός αναπτύχθηκε στα πλαίσια του συγχρηματοδοτούμενου ευρωπαϊκού έργου LGAF 
+									(Local Government Application Framework). Η μηχανή περιεχομένου ASTROBOA αποτελεί μέρος του πλαισίου LGAF.
+									</p>
+									<p>
+									Σε ποιο πολύπλοκα σενάρια χρήσης, αυτό το πεδίο μπορεί να χρησιμοποιηθεί ως λίστα εικονικών / δυναμικών πεδίων που παίρνουν τιμές από θησαυρούς. 
+									Όταν προσθέτουμε λέξεις κλειδία από πολλαπλούς θησαυρούς τότε το όνομα του θησαυρού από τον οποίο προέρχεται η λέξη κλειδί 
+									μπορεί να θεωρηθεί ως το όνομα ενός εικονικού πεδίου με τιμή τη ίδια την λέξη κλειδί, 
+									π.χ. Λεξεις Κλειδιά = Χρώμα: κόκκινο, Υλικό: πηλός, Περίοδος: μινωϊκή, Χρήση: τελετουργική.
+									Σε αυτό το παράδειγμα θεωρούμε ως αντικείμενο ένα μινωϊκό βάζο και του προσθέτουμε τις λέξεις κλειδία "κόκκινο", "πηλός", "μινωϊκή", "τελετουργική" απο τους 
+									θησαυρούς "Χρώμα", "Υλικό", "Περίοδος" και "Χρήση" αντίστοιχα. Με αυτό τον έξυπνο τρόπο έχουμε 
+									τέσσερα facets κατηγοριοποίησης για αρχαία μνημεία που αντιστοιχούν στους τέσσερις θησαυρούς και μπορούμε να αποθηκεύουμε τις τιμές τους σε ένα μόνο πεδίο, 
+									ενώ μπορούμε δυναμικά να προσθέσουμε και άλλα facets απλά προσθέτοντας λέξεις κλειδιά από επιπλέον θησαυρούς.
+									Αυτή η έξυπνή χρήση του πεδίου σε συνδυασμό με πολλαπλούς θησαυρούς είναι εφικτή διότι στο Astroboa οι ετικέτες (topics) είναι κανονικά αντικείμενα και όχι απλό κείμενο. 
+									Έτσι για κάθε χρησιμοποιούμενη λέξη κλειδί (topic) ο θησαυρός στον οποίο βρίσκεται είναι γνωστός και λειτουργεί ως το όνομα ενός εικονικού πεδίου.     
+									</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="created" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Date Created</bccmsmodel:displayName>
+								<bccmsmodel:description>Date of creation of the resource.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Ημ/νία Δημιουργίας</bccmsmodel:displayName>
+								<bccmsmodel:description>Η ημερομηνία την οποία δημιουργήθηκε το αντικείμενο</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="modified" minOccurs="0"
+						maxOccurs="1" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Date Modified</bccmsmodel:displayName>
+								<bccmsmodel:description>Date on which the resource was changed.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Ημ/νία Τελευτ. Αλλαγής</bccmsmodel:displayName>
+								<bccmsmodel:description>Η ημερομηνία στην οποία αλλάχτηκε τελευταία φορά το αντικείμενο</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="creator"
+						minOccurs="0" 
+						maxOccurs="unbounded"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Creator</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An entity or entities primarily responsible for making the resource.</p>
+									<p>Examples of a Creator include a person, an organization, or a service. Typically, the name of a Creator should be used to indicate the entity.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Δημιουργός</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An entity or entities primarily responsible for making the resource.</p>
+									<p>Examples of a Creator include a person, an organization, or a service. Typically, the name of a Creator should be used to indicate the entity.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="contributor" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Contributor</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An entity or entities responsible for making contributions to the resource.</p>
+									<p>Examples of a Contributor include a person, an organization, or a service. Typically, the name of a Contributor should be used to indicate the entity.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Συμμετέχοντες</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An entity or entities responsible for making contributions to the resource.</p>
+									<p>Examples of a Contributor include a person, an organization, or a service. Typically, the name of a Contributor should be used to indicate the entity.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="publisher" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Publisher</bccmsmodel:displayName>
+								<bccmsmodel:description>
+									<p>An entity responsible for making the resource available.</p>
+									<p>Examples of a Publisher include a person, an organization, or a service. Typically, the name of a Publisher should be used to indicate the entity.</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Παραγωγός</bccmsmodel:displayName>
+								<p>An entity responsible for making the resource available.</p>
+								<p>Examples of a Publisher include a person, an organization, or a service. Typically, the name of a Publisher should be used to indicate the entity.</p>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="rightsHolder" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Rights Holder</bccmsmodel:displayName>
+								<bccmsmodel:description>A person or organization owning or managing rights over the resource.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κάτοχος Πνευματικών Δικαιωμάτων</bccmsmodel:displayName>
+								<bccmsmodel:description>Το πρόσωπο ή ο οργανισμός που κατέχει ή διαχειρίζεται τα δικαιώματα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="dateCopyrighted" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:date">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Date Copyrighted</bccmsmodel:displayName>
+								<bccmsmodel:description>Date of copyright</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Ημ/νία Κατοχύρωσης Πνευματικών Δικαιωμάτων</bccmsmodel:displayName>
+								<bccmsmodel:description>Η ημερομηνία που κατοχυρώθηκαν τα Πνευματικά Δικαιώματα</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="language" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Language</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>The language or languages of the resource</p>
+								<p>
+								It is strongly advised to use 'language' taxonomy in order to provide values for this property.
+								</p>
+								<p>
+								Prior to version 2.2.0 this property was getting values from an enumeration provided by type 'languageType' 
+								which contained only a few values. 
+								</p>
+								<p>
+								Starting from version 2.2.0, all ISO coded languages are provided in a taxonomy called 'language'. 
+								As long as you use Astroboa web console's edit forms to provide values for this field, there is nothing more to do, as forms has been configured
+								to use the "language" taxonomy. 
+								If you utilize the Astroboa APIs to add content in the repository, 
+								you should use the 'language' taxonomy and the included topic names (the system name of topics) 
+								as values for this property. In future releases, this property
+								will become of bccmsmodel:topicType.
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Γλώσσα
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="hasPart" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="bccmsmodel:contentObjectReferenceType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Parts</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								If your object is a complilation of other objects, i.e. it has parts, you may store the references to its parts in this field.
+								</p>
+								<p>
+								For example if you object is mechanical device with parts that are modeled in other objects then you may connect the device with its parts
+								using this standardized field (Dublin Core is well known and it will be easier for others to recognize this relation if you expose your information to
+								third parties) 
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Τμήματα</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Αν το αντικείμενό σας είναι μια σύνθεση από άλλα αντικείμενα, δηλαδή αποτελείται από τμήματα, τότε μπορείτε να χρησιμοποιείσετε αυτό το πεδίο για να αποθηκεύσεται 
+								τις αναφορές προς τα αντικείμενα που αποτελούν τα τμήματα αυτού του αντικειμένου.
+								</p>
+								<p>
+								Για παράδειγμα αν το αντικείμενο είναι μια συσκευή που αποτελείτε από διάφορα κομμάτια που μοντελοποιούνται από άλλα αντικείμενα, μπορείτε να χρησιμοποιήσετε το προτυποποιημένο 
+								αυτό πεδίο για να συνδέσετε την συσκευή με τα κομμάτια της (Το πρότυπο Dublin Core που προδιαγράφει αυτό το πεδίο είναι πολύ διαδεδομένο και έτσι θα είναι εύκολο σε τρίτους που 
+								χρησιμοποιούν τις πληροφορίες που αποθηκεύετε να αναγνωρίσουν αυτή τη σχέση αντικείνων-τμημάτων)
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="references" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="bccmsmodel:contentObjectReferenceType"
+						>
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>References</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								If your object needs references to other objects, i.e. related objects, you may store the related references in this field.
+								</p>
+								<p>
+								For example if you object is an article then you may add references to related articles 
+								using this standardized field (You may create a custom field for this purpose but take into account that Dublin Core standard is well known and it will be easier 
+								for others to recognize this relation if you expose your information to third parties) 
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Αναφορές</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Αν το αντικείμενό σας σχετίζεται με άλλα αντικείμενα, τότε μπορείτε να χρησιμοποιείσετε αυτό το πεδίο για να αποθηκεύσεται 
+								τις αναφορές προς τα σχετικά αντικείμενα.
+								</p>
+								<p>
+								Για παράδειγμα αν το αντικείμενο είναι ένα άρθρο, μπορείτε να χρησιμοποιήσετε το προτυποποιημένο 
+								αυτό πεδίο για να αποθηκεύσετε τις συνδέσεις με άλλα σχετικά άρθρα (Μπορείτε βέβαια να ορίσετε ένα δικό σας πεδίο για αυτό το σκοπό 
+								αλλά να θυμάστε ότι το πρότυπο Dublin Core που προδιαγράφει αυτό το πεδίο είναι πολύ διαδεδομένο και έτσι θα είναι εύκολο σε τρίτους που 
+								χρησιμοποιούν τις πληροφορίες που αποθηκεύετε να αναγνωρίσουν αυτή τη σχέση)
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="hasVersion" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Version</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property stores the current version of your object. You cannot change it manually. 
+								It is used by the content engine when you save your objects with versions. 
+								If you do not use versioning then this property is always empty. 
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Έκδοση (version)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Αυτό το πεδίο αποθηκεύει την τρέχουσα έκδοση του αντικειμένου. Δεν μπορείτε να αλλάξετε την τιμή αυτού του πεδίου. 
+								Την αλλάζει αυτόματα η μηχανή περιεχομένου όταν σώζεται το αντικείμενο με εκδόσεις. 
+								Αν δεν χρησιμοποιείται εκδόσεις τότε το πεδίο δεν περιέχει τιμή.  
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="versions" 
+						minOccurs="0"
+						maxOccurs="unbounded" 
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>All Versions</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property stores all the available versions of your object. You cannot change it manually. 
+								It is used by the content engine when you save your objects with versions. 
+								If you do not use versioning then this property is always empty. 
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Όλες οι εκδόσεις (versions)</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Αυτό το πεδίο αποθηκεύει όλες τις διαθέσιμες εκδόσεις του αντικειμένου. Δεν μπορείτε να αλλάξετε την τιμή αυτού του πεδίου. 
+								Την αλλάζει αυτόματα η μηχανή περιεχομένου όταν σώζεται το αντικείμενο με εκδόσεις. 
+								Αν δεν χρησιμοποιείται εκδόσεις τότε το πεδίο δεν περιέχει τιμή.  
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="contentObjectStatus" 
+						minOccurs="0"
+						maxOccurs="1" 
+						type="tns:contentObjectStatusType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Status</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								This property stores the status of your object. For example an object may be "published" which means that its security restrictions for READ 
+								are temporarily shadowed and the object is publicly available ,i.e. it is served to the web.
+								</p>
+								<p>
+								The status is particularly useful when you work with workflows. As the object is moved through a workflow, its status is automatically updated to 
+								reflect the stage of work that has been performed or it remains to be performed to the object.
+								From all the possible statuses only the "published" status is relevant to the content engine. It is a reserved word and instructs the engine to shadow the object security for "READ" and 
+								make it publicly available (i.e. the API calls will allow anonymous users to read the object). All other statuses are only meaningful to the workflow that may run.
+								The statuses that are exposed in Astroboa console are relevant to the default "Web Publication" workflow.
+								</p>
+								<p>
+								You may set the status programmatically but when you work in Astroboa Console only the administrator can manually change the object status. 
+								In Astroboa console the status is automatically changed by the workfow mechanism if you add your object in a workflow. 
+								In addition to the workflow mechanism there is the action "Publish" which is available to users that have the role "Content Publisher". 
+								This action changes the status to "published" and saves the object .
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Κατάσταση Αντικειμένου</bccmsmodel:displayName>
+								<bccmsmodel:description>
+								<p>
+								Αυτό το πεδίο αποθηκεύει την κατάσταση του αντικειμένου. Για παράδειγμα ένα αντικείμενο με κατάσταση "Δημοσιευμένο" έχει προσωρινά απενεργοποιημένα τα δικαιώματα ανάγνωσης και
+								επιτρέπει την δημόσια ανάγνωσή του, π.χ. την εμφάνισή του σε μια ιστοσελίδα.  
+								</p>
+								<p>
+								Η "κατάσταση" ενός αντικειμένου χρησιμοποιείται κυρίως στις ροές εργασίες. Καθώς το αντικείμενο κινείται μέσα σε μια ροή η "κατάστασή" του ανανεώνεται αυτόματα και απεικονίζει τις εργασίες που 
+								έχουν γίνει ή πρέπει να γίνουν στο αντικείμενο. Από όλες τις πιθανές καταστάσεις, η κατάσταση "published" αποτελεί δεσμευμένη λέξη η οποία αναγνωρίζεται από τη μηχανή περιεχομένου 
+								και επιτρέπει την προσωρινή αναίρεση των περιορισμών ανάγνωσης του δημοσιευμένου αντικειμένου. Όλες οι άλλες πιθανές καταστάσεις δεν επηρεάζουν την μηχανή περιεχομένου και μπορούν να 
+								προσδιοριστούν ελεύθερα ανάλογα με τις ανάγκες των ροών εργασίας. Οι "καταστάσεις" που εμφανίζονται στην κονσόλα του Astroboa σχετίζονται με την ροή εργασίας για "Δημοσίευση στο Διαδίκτυο".
+								</p>
+								<p>
+								Η "κατάσταση" ενός αντικειμένου μπορεί να αλλάξει προγραμματιστικά αλλά όταν δουλεύετε με την κονσόλα του Astroboa μόνο ο Διαχειριστής μπορεί να αλλάξει την κατάσταση από την φόρμα.
+								Κατά την εργασία σας στην κονσόλα η "κατάσταση" αλλάζει αυτόματα από το μηχανισμό διαχείρισης ροών εφόσον έχεται προσθέσει το αντικείμενο σε κάποια ροή εργασίας. Επίσης αν δεν επιθυμείτε να 
+								χρησιμοποιήσετε ροή εργασίας για την δημοσίευση στο διαδίκτυο υπάρχει διαθέσιμη η ενέργεια "Δημοσίευση" η οποία αλλάζει άμεσα την κατάσταση ενός αντικειμένου σε "Δημοσιευμένο" (published) 
+								και αποθηκεύει το αντικείμενο. Αυτή η ενέργεια είναι διαθέσιμη μόνο στους χρήστες που έχουν ρόλο "Εκδότης Περιεχομένου".
+								</p>
+								</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>
