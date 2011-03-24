@@ -817,13 +817,19 @@ public class ContentObjectResource extends AstroboaResource{
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent){
   		  
-  		long start = System.currentTimeMillis();
- 		
-  		Response response = saveContentObjectByIdOrName(contentObjectIdOrName, requestContent, HttpMethod.PUT);
   		  
-  		logger.debug(" PUT ContentObject {} in {}", contentObjectIdOrName,  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
+  		  if (StringUtils.isBlank(contentObjectIdOrName)){
+  			  logger.warn("Use HTTP PUT to save object {} but no id or system name was provided ", requestContent);
+  			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+  		  }
+
+  		  long start = System.currentTimeMillis();
+ 		
+  		  Response response = saveContentObjectByIdOrName(contentObjectIdOrName, requestContent, HttpMethod.PUT);
+  		  
+  		  logger.debug(" PUT ContentObject {} in {}", contentObjectIdOrName,  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
 		
-		return response;
+  		  return response;
 
   	  }
 

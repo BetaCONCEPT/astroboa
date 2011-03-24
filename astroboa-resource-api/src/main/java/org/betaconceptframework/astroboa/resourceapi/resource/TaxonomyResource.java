@@ -282,6 +282,12 @@ public class TaxonomyResource extends AstroboaResource{
 	  public Response putTaxonomyByIdOrName(
 				@PathParam("taxonomyIdOrName") String taxonomyIdOrName,
 				String requestContent){
+  		  
+		  if (StringUtils.isBlank(taxonomyIdOrName)){
+			  logger.warn("Use HTTP PUT to save taxonomy {} but no id or name was provided ", requestContent);
+			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+		  }
+
   		  return saveTaxonomyByIdOrName(taxonomyIdOrName, requestContent, HttpMethod.PUT);
   	  }
 

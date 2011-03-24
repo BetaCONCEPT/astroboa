@@ -45,6 +45,7 @@ import org.betaconceptframework.astroboa.api.model.query.render.RenderInstructio
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.astroboa.model.impl.TopicImpl;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
@@ -152,6 +153,12 @@ public class TopicResource extends AstroboaResource{
 	  public Response putTopicByIdOrName(
 				@PathParam("topicNameOrId") String topicNameOrId,
 				String requestContent){
+		  
+		  if (StringUtils.isBlank(topicNameOrId)){
+			  logger.warn("Use HTTP PUT to save topic {} but no id or name was provided ", requestContent);
+			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+		  }
+		  
   		  return saveTopicByIdOrName(topicNameOrId, requestContent, HttpMethod.PUT);
   	  }
 
