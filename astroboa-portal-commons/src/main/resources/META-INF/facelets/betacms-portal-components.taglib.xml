@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+
+
+<facelet-taglib>
+	<namespace>http://www.betaconceptframework.org/facelets/components</namespace>
+	
+	<tag>
+        <tag-name>let</tag-name>
+        <component>
+            <component-type>let</component-type>
+        </component>
+    </tag>
+	
+	<tag> 
+        <tag-name>topicBox</tag-name> 
+        <source>topicBox.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>verticalTwoLevelsTaxonomyMenu</tag-name> 
+        <source>verticalTwoLevelsTaxonomyMenu.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>verticalOneLevelTaxonomyMenu</tag-name> 
+        <source>verticalOneLevelTaxonomyMenu.xhtml</source> 
+    </tag>
+    
+     <tag> 
+        <tag-name>selectOneTwoLevelsTaxonomyMenuWithTopicIds</tag-name> 
+        <source>selectOneTwoLevelsTaxonomyMenuWithTopicIds.xhtml</source> 
+    </tag>
+    
+     <tag> 
+        <tag-name>selectOneTwoLevelsTaxonomyMenuWithTopicNames</tag-name> 
+        <source>selectOneTwoLevelsTaxonomyMenuWithTopicNames.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>queryRefinementTaxonomyMenu</tag-name> 
+        <source>queryRefinementTaxonomyMenu.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>contentObjectTypesMenu</tag-name> 
+        <source>contentObjectTypesMenu.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>queryRefinementContentObjectTypesMenu</tag-name> 
+        <source>queryRefinementContentObjectTypesMenu.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>ajaxSubjectTaxonomyMenu</tag-name> 
+        <source>ajaxSubjectTaxonomyMenu.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>contentAreaBox</tag-name> 
+        <source>contentAreaBox.xhtml</source> 
+    </tag>
+    
+    <tag> 
+        <tag-name>verticalNLevelsTaxonomyMenu</tag-name> 
+        <source>verticalNLevelsTaxonomyMenu.xhtml</source> 
+    </tag>
+    
+</facelet-taglib>

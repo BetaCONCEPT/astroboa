@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+	xmlns:seam="http://jboss.com/products/seam/taglib"
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:th="http://jsf-comp.sourceforge.net/tomahawk-taghandlers" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core" 
+	xmlns:bcc="http://www.betaconcept.gr/facelets/components"
+	xmlns:bct="http://www.betaconcept.gr/facelets/tags"
+	xmlns:s="http://myfaces.apache.org/sandbox" 
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax" >
+	
+	<!--
+	PARAMETERS
+	
+	#{label} 
+	A label to be presented above the vertical menu i.e. "Subject - Menu"
+	
+	#{taxonomyName} 
+	The system name of the taxonomy from which the menu will be generated 
+	i.e. "bccms:subjectTaxonomy" or "myTaxonomy". Only the system default subject taxonomy has the prefix "bccms", user defined taxonomies do not have a prefix.
+	  
+	#{parentTopicName}
+	If you want to generate the menu from a subtree of the taxonomy provide in this parameter the parent topic name from where to start the menu.
+	
+	#{contentTypes}
+	Each generated menu item links to a query that retrieves content objects that their subject contains the topic corresponding to the menu item. 
+	If you require to retrieve objects of specific types, i.e. newsItems then provide the content type here (if you want more content types separate them with commas i.e. newsItem,image). 
+	If you want to find ANY content type then set this parameter to "anyContentType"
+	
+	#{queryUrlToAppend}
+	Besides the contentTypes, extra query parameters may be provided to further restrict the content objects to bring back. The query parameters are expressed in a RESTful manner as a URL. 
+	E.g. /dateProperty/webPublication.startDate/fromDateInclusive/2008-09-20/
+	The url SHOULD always end with a slash (/) and have no leadind slash (/).
+	The RESTful API supported by the portal is described in the portal developers manual
+	
+	#{resourceRepresentationTemplate}
+	The resource representation template to use for rendering the page that presents the results when a menu item is selected
+	
+	#{numberOfResults}
+	If you want to get only a subset of the topic list then specify the number of results
+	 
+	When a topic is selected by the user the results are returned in pages.
+	
+	 -->
+
+
+	<body>
+		<ui:composition>
+
+			<div class="menubar">
+				<c:if test="#{! empty label}">
+					<h2>
+						#{label}
+					</h2>
+				</c:if>
+				
+				<c:set var="topicList"
+					value="#{topicManager.getChildTopicsByParentTopicName(taxonomyName, parentTopicName, numberOfResults)}" />
+				<ul>
+					<li jsfc="ui:repeat" value="#{topicList}" var="topic">
+						<a
+							href="#{facesContext.externalContext.requestContextPath}/resource/contentObject/contentTypes/#{contentTypes}/topicNames/#{topic.name}/searchInSubtopics/true/#{queryUrlToAppend}pageNumber/1/resourceRepresentationTemplate/#{resourceRepresentationTemplate}"
+							class="mainlevel"> #{topic.localizedLabelForCurrentLocale} </a>
+					</li>
+				</ul>
+			</div>
+
+		</ui:composition>
+	</body>
+</html>

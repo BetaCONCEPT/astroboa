@@ -1,0 +1,17 @@
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+	
+	<component>
+		<component-type>let</component-type>
+		<component-class>org.betaconceptframework.astroboa.portal.facelets.UILet</component-class>
+	</component>
+	<application>
+		<locale-config />
+		<el-resolver>org.betaconceptframework.astroboa.portal.el.AstroboaELResolver</el-resolver>
+	</application>
+	<factory />
+	<lifecycle />
+
+</faces-config>

@@ -1,0 +1,89 @@
+<!--
+	
+	Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+	
+	Astroboa is free software: you can redistribute it and/or modify it
+	under the terms of the GNU Lesser General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version. Astroboa is distributed in the hope
+	that it will be useful, but WITHOUT ANY WARRANTY; without even the
+	implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+	PURPOSE. See the GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public
+	License along with Astroboa. If not, see
+	<http://www.gnu.org/licenses/>. 
+	
+	Authors
+	Gregory Chomatas (gchomatas@betaconcept.com) 
+	Savvas Triantafyllou (striantafyllou@betaconcept.com)
+	
+-->
+	
+	<!-- Default rules for navigation to Home Page 
+		By convention for these rules to work, the Home Page should always correspond to a Portal Section that has a 'systemName' equal to 'home'.
+		The following rules redirect the /, /index.html and /home URLs to the 'home' portal section 
+	-->
+	<rule>
+		<from>^/(?:([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?$</from>
+		<to last="true">/showPortalSectionResourceBySystemName.jsf?locale=$1$2&amp;contentObjectSystemName=home</to>
+	</rule>
+  	
+  	<rule>
+		<from>^/index.html$</from>
+		<to last="true">/showPortalSectionResourceBySystemName.jsf?contentObjectSystemName=home</to>
+	</rule>
+	
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/home$</from>
+		<to last="true">/showPortalSectionResourceBySystemName.jsf?locale=$1$2&amp;contentObjectSystemName=home</to>
+	</rule>
+	
+	
+	<!-- Portal API is a superset of Astroboa Content Resource API (provided by astroboa-resource-api module). 
+	The main extra feature of Portal API is the provision of content resources in the form of XHTML output through facelet templates and JSF components, a facility not yet available in the
+	Resource API. 
+	Portal API is mainly targeted for building web sites. The combination of portal API and the other astroboa-portal-commons library utilities make the building of a content portal an 
+	easy and fast task.
+	The ultimate goal is to bring all the functionality of portal API into the Resource API and end up with just one RESTful API that can provide resources in any format.
+	This is not an easy task and requires some kind of innovation. Current technologies are mainly focused on web site / portal building facilities enhanced with tools for 
+	sharing web site resources (i.e. as RSS). Astroboa supports a strong separation between the underlying content model and its various forms of representation (views) and will ultimately 
+	provide the means to 'RESTfully' ask for different views of stored resources in any form (HTML, JSON, XML, PDF). At the current moment the provision of such functionality is divided in 
+	two separate Astroboa Modules. The Resource API provides resources in XML format while the Portal API can provide the resources in XHTML, RSS, ATOM, PDF and EXCEL format. -->
+	
+	<!-- Portal API Resource URLs  -->
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/contentObject/(?:name|systemName)/([A-Za-z0-9_\-\.:]+)(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|pdf|excel))?$</from>
+		<to last="true">/showContentObjectResource.jsf?locale=$1$2&amp;contentObjectSystemName=$3&amp;resourceRepresentationTemplate=$4&amp;resourceRepresentationType=$5&amp;resourceRequestURL=$0</to>
+	</rule>
+  	
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/contentObject/id/([0-9abcdef\-]+)(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|pdf|excel))?$</from>
+		<to last="true">/showContentObjectResource.jsf?locale=$1$2&amp;contentObjectId=$3&amp;resourceRepresentationTemplate=$4&amp;resourceRepresentationType=$5&amp;resourceRequestURL=$0</to>
+	</rule>
+  
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/contentObject(?:/contentTypes/([A-Za-z0-9_,\-]+))?(?:/topicNames/([A-Za-z0-9_,\-\+:]+))?(?:/searchInSubtopics/(true|false))?(?:/dateProperty/([A-Za-z0-9_\-\.]+))?(?:/fromDateInclusive/((?:0[1-9]|[12][0-9]|3[01])-(?:0[1-9]|1[012])-(?:19|20)(?:\d\d)))?(?:/toDateInclusive/((?:0[1-9]|[12][0-9]|3[01])-(?:0[1-9]|1[012])-(?:19|20)(?:\d\d)))?(?:/discreteDates/(true|false))?(?:/textSearched/([^/]+))?(?:/queryExpression/([^/]+))?(?:/orderByProperty/([A-Za-z0-9_\-\.]+))?(?:/order/(asc|desc))?(?:/pageNumber/([0-9]+))?(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|rss_2.0|rss_1.0|atom_1.0|pdf|excel))?$</from>
+		<to last="true">/showContentObjectResources.jsf?locale=$1$2&amp;commaDelimitedContentObjectTypes=$3&amp;commaOrPlusDelimitedTopicNames=$4&amp;searchInSubtopics=$5&amp;dateProperty=$6&amp;fromDateInclusive=$7&amp;toDateInclusive=$8&amp;discreteDates=$9&amp;textSearched=$10&amp;queryExpression=$11&amp;orderByProperty=$12&amp;order=$13&amp;pageNumber=$14&amp;resourceRepresentationTemplate=$15&amp;resourceRepresentationType=$16&amp;resourceRequestURL=$0</to>
+	</rule>
+  
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/contentObject(?:/contentTypes/([A-Za-z0-9_,\-]+))?(?:/topicNames/([A-Za-z0-9_,\-\+:]+))?(?:/searchInSubtopics/(true|false))?(?:/dateProperty/([A-Za-z0-9_\-\.]+))?(?:/period/([A-Za-z0-9_\-\.]+))?(?:/discreteDates/(true|false))?(?:/textSearched/([^/]+))?(?:/pageNumber/([0-9]+))?(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|rss_2.0|rss_1.0|atom_1.0|pdf|excel))?$</from>
+		<to last="true">/showContentObjectResources.jsf?locale=$1$2&amp;commaDelimitedContentObjectTypes=$3&amp;commaOrPlusDelimitedTopicNames=$4&amp;searchInSubtopics=$5&amp;dateProperty=$6&amp;predefinedPeriod=$7&amp;discreteDates=$8&amp;textSearched=$9&amp;pageNumber=$10&amp;resourceRepresentationTemplate=$11&amp;resourceRepresentationType=$12&amp;resourceRequestURL=$0</to>
+	</rule>
+  
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/section/([A-Za-z0-9_\-\.:]+)(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|pdf|excel))?$</from>
+		<to last="true">/showPortalSectionResourceBySystemName.jsf?locale=$1$2&amp;contentObjectSystemName=$3&amp;resourceRepresentationTemplate=$4&amp;resourceRepresentationType=$5&amp;resourceRequestURL=$0</to>
+	</rule>
+  
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/file(?:/fileType/([A-Za-z0-9_,]+))?(?:/topicNames/([A-Za-z0-9_,\-\+:]+))?(?:/searchInSubtopics/(true|false))?(?:/dateProperty/([A-Za-z0-9_\-\.]+))?(?:/fromDateInclusive/((?:0[1-9]|[12][0-9]|3[01])-(?:0[1-9]|1[012])-(?:19|20)(?:\d\d)))?(?:/toDateInclusive/((?:0[1-9]|[12][0-9]|3[01])-(?:0[1-9]|1[012])-(?:19|20)(?:\d\d)))?(?:/discreteDates/(true|false))?(?:/textSearched/([^/]+))?(?:/queryExpression/([^/]+))?(?:/orderByProperty/([A-Za-z0-9_\-\.]+))?(?:/order/(asc|desc))?(?:/pageNumber/([0-9]+))?(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|rss_2.0|rss_1.0|atom_1.0|pdf|excel))?$</from>
+		<to last="true">/showFileResources.jsf?locale=$1$2&amp;commaDelimitedContentObjectTypes=fileResourceObject&amp;fileResourceContentType=$3&amp;commaOrPlusDelimitedTopicNames=$3&amp;searchInSubtopics=$4&amp;dateProperty=$6&amp;fromDateInclusive=$7&amp;toDateInclusive=$8&amp;discreteDates=$9&amp;textSearched=$10&amp;queryExpression=$11&amp;orderByProperty=$12&amp;order=$13&amp;pageNumber=$14&amp;resourceRepresentationTemplate=$15&amp;resourceRepresentationType=$16&amp;resourceRequestURL=$0</to>
+	</rule>
+  
+	<rule>
+		<from>^(?:/([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*))?/resource/scheduledContentArea/([A-Za-z0-9_\-\.:]+)(?:/(?:t|template|resourceRepresentationTemplate)/([A-Za-z0-9_\-]+))?(?:/(?:type|resourceRepresentationType)/(xhtml|rss_2.0|rss_1.0|atom_1.0|pdf|excel))?$</from>
+		<to last="true">/showScheduledContentAreaReferencedResources.jsf?locale=$1$2&amp;scheduledContentAreaName=$3&amp;resourceRepresentationTemplate=$4&amp;resourceRepresentationType=$5&amp;resourceRequestURL=$0</to>
+	</rule>
+

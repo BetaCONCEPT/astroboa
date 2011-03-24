@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
+
+	<!-- JTA Transaction Manager for JBOSS -->
+
+	<jee:jndi-lookup id="userTransaction" jndi-name="UserTransaction"
+		expected-type="org.jboss.tm.usertx.client.ServerVMClientUserTransaction"
+		proxy-interface="javax.transaction.UserTransaction" />
+
+	<!--  expected-type="org.jboss.tm.TxManager"-->
+
+
+	<jee:jndi-lookup id="transactionManager"
+		jndi-name="java:/TransactionManager"
+		proxy-interface="javax.transaction.TransactionManager" />
+
+	<bean id="portalJtaTransactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+
+		<property name="autodetectTransactionManager" value="false" />
+	 
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="userTransaction">
+			<ref local="userTransaction" />
+		</property>
+	</bean>
+	
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven  transaction-manager="portalJtaTransactionManager" proxy-target-class="true" />
+</beans>

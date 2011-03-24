@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<components xmlns="http://jboss.com/products/seam/components"
+            xmlns:core="http://jboss.com/products/seam/core"
+            xmlns:persistence="http://jboss.com/products/seam/persistence"
+            xmlns:transaction="http://jboss.com/products/seam/transaction"
+            xmlns:drools="http://jboss.com/products/seam/drools"
+            xmlns:bpm="http://jboss.com/products/seam/bpm"
+            xmlns:security="http://jboss.com/products/seam/security"
+            xmlns:mail="http://jboss.com/products/seam/mail"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:web="http://jboss.com/products/seam/web"
+            xsi:schemaLocation=
+                "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
+                 http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd
+                 http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.1.xsd 
+                 http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.1.xsd
+                 http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.1.xsd
+                 http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.1.xsd
+                 http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.1.xsd
+                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd
+                 http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.1.xsd">
+                 
+	<import>org.betaconceptframework.astroboa.portal.managedbean</import>
+                 
+</components>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+	xmlns:seam="http://jboss.com/products/seam/taglib"
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:th="http://jsf-comp.sourceforge.net/tomahawk-taghandlers"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:bcc="http://www.betaconcept.gr/facelets/components"
+	xmlns:bct="http://www.betaconcept.gr/facelets/tags"
+	xmlns:s="http://myfaces.apache.org/sandbox"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax">
+
+	<!-- 
+	Parameters
+	#{label}
+	#{taxonomyName}
+	#{parentTopicName}
+	#{selectedTopic}
+	#{reRenderedId}
+	#{selectOneMenuIdPrefix}
+	#{menuWidth}
+	#{noSelectionLabel}
+	 -->
+
+
+	<body>
+		<ui:composition>
+			<div align="center">
+				<c:if test="#{! empty label}">
+					<h4>
+						#{label}
+					</h4>
+				</c:if>
+
+				<ui:param name="firstLevelTopicList"
+					value="#{topicManager.getChildTopicsByParentTopicName(taxonomyName, parentTopicName)}" />
+
+				<c:if
+					test="#{(! empty resourceContext.topics) and (! empty selectedTopic)}">
+
+					<c:if
+						test="#{(empty selectedTopic.parent) or (selectedTopic.parent.name eq parentTopicName)}">
+						<ui:param name="firstLevelMenuValue" value="#{selectedTopic.name}" />
+						<ui:param name="secondLevelMenuValue" value="" />
+					</c:if>
+
+					<c:if
+						test="#{(! empty selectedTopic.parent) and (selectedTopic.parent.name ne parentTopicName)}">
+						<ui:param name="firstLevelMenuValue"
+							value="#{selectedTopic.parent.name}" />
+						<ui:param name="secondLevelMenuValue"
+							value="#{selectedTopic.name}" />
+					</c:if>
+
+				</c:if>
+
+				<h:selectOneMenu
+					id="#{selectOneMenuIdPrefix}FirstLevelSelectOneMenu"
+					value="#{firstLevelMenuValue}" style="width: #{menuWidth}px;">
+
+					<seam:selectItems value="#{firstLevelTopicList}"
+						var="firstLevelTopic"
+						label="#{firstLevelTopic.localizedLabelForCurrentLocale}"
+						itemValue="#{firstLevelTopic.name}"
+						noSelectionLabel="#{(! empty noSelectionLabel)? noSelectionLabel : '-- Επιλογή --'}" />
+						
+					<a4j:support event="onchange" reRender="#{reRenderedId}Menu"
+						ajaxSingle="true" />
+
+				</h:selectOneMenu>
+
+
+				<h:panelGroup />
+
+				<c:set var="secondLevelTopicList"
+					value="#{topicManager.getChildTopicsByParentTopicName(taxonomyName, firstLevelMenuValue)}" />
+				<a4j:outputPanel id="#{reRenderedId}Menu">
+
+					<h:selectOneMenu
+						id="#{selectOneMenuIdPrefix}SecondLevelSelectOneMenu"
+						value="#{secondLevelMenuValue}" style="width: #{menuWidth}px;"
+						rendered="#{!empty firstLevelMenuValue and !empty secondLevelTopicList}">
+						<seam:selectItems value="#{secondLevelTopicList}"
+							var="secondLevelTopic"
+							label="#{secondLevelTopic.localizedLabelForCurrentLocale}"
+							itemValue="#{secondLevelTopic.name}"
+							noSelectionLabel="#{(! empty noSelectionLabel)? noSelectionLabel : '-- Επιλογή --'}" />
+
+					</h:selectOneMenu>
+				</a4j:outputPanel>
+
+			</div>
+		</ui:composition>
+	</body>
+</html>
