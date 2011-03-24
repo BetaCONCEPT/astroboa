@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<ns:repositories
+	xmlns:ns="http://www.betaconceptframework.org/schema/astroboa/configuration/repositories"
+	serverURL="http://localhost:8080"
+	>
+
+<repository 
+		id="repository"
+		jcr-repository-jndi-name="repositoryJcrJNDI"
+		db-jndi-name="repositoryDbJNDI"
+		serverAliasURL="http://localhost:8080"
+		authenticationTokenTimeout="1"
+		identity-store-repository-id="identityStoreRepository">
+		
+		<localization>
+			<label xml:lang="el">Astroboa Test</label>
+			<label xml:lang="en">Astroboa Test</label>
+		</localization>
+		
+		<security>
+			<permanentUserKeyList>
+				<permanentUserKey userid="astroboaTest" key="keyForTest"/>
+				<permanentUserKey userid="anonymous,SYSTEM" key="specialKey"/>
+				<permanentUserKey userid="*" key="globalKey"/>
+			</permanentUserKeyList>
+			
+			<secretUserKeyList>
+				<administratorSecretKey userid="SYSTEM" key="secretSystemKey"/>
+				<secretUserKey userid="astroboaTest" key="secretTestKey"/>
+			</secretUserKeyList>
+			
+		</security>
+</repository>
+
+<repository 
+		id="identityStoreRepository"
+		jcr-repository-jndi-name="identityStoreRepositoryJcrJNDI"
+		db-jndi-name="identityStoreRepositoryDbJNDI">
+		
+		<localization>
+			<label xml:lang="el">Astroboa Test Identity Store</label>
+			<label xml:lang="en">Astroboa Test Identity Store</label>
+		</localization>
+		
+		<security>
+			<permanentUserKeyList>
+				<permanentUserKey userid="astroboaTest" key="keyForTest"/>
+				<permanentUserKey userid="anonymous,SYSTEM" key="specialKey"/>
+				<permanentUserKey userid="*" key="globalKey"/>
+			</permanentUserKeyList>
+			
+			<secretUserKeyList>
+				<administratorSecretKey userid="SYSTEM" key=""/>
+			</secretUserKeyList>
+		</security>
+</repository>
+
+<repository 
+		id="cloneRepository"
+		jcr-repository-jndi-name="cloneRepositoryJcrJNDI"
+		db-jndi-name="cloneRepositoryDbJNDI"
+		serverAliasURL="http://localhost:8080"
+		identity-store-repository-id="identityStoreRepository">
+		
+		<localization>
+			<label xml:lang="el">Astroboa Clone Repository Test</label>
+			<label xml:lang="en">Astroboa Clone Repository Test</label>
+		</localization>
+		
+		<security>
+			<permanentUserKeyList>
+				<permanentUserKey userid="astroboaTest" key="keyForTest"/>
+				<permanentUserKey userid="anonymous,SYSTEM" key="specialKey"/>
+				<permanentUserKey userid="*" key="globalKey"/>
+			</permanentUserKeyList>
+			
+			<secretUserKeyList>
+				<administratorSecretKey userid="SYSTEM" key="secretSystemKey"/>
+				<secretUserKey userid="astroboaTest" key="secretTestKey"/>
+			</secretUserKeyList>
+			
+		</security>
+</repository>
+</ns:repositories>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="imService" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Υπηρεσία Chat</label>
+        <label xml:lang="en">IM Service</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="Jabber">
+            <localization>
+                <label xml:lang="el">Jabber</label>
+                <label xml:lang="en">Jabber</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AIM-chat">
+            <localization>
+                <label xml:lang="el">AIM</label>
+                <label xml:lang="en">AIM</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="Yahoo-Messenger">
+            <localization>
+                <label xml:lang="el">Yahoo! Messenger</label>
+                <label xml:lang="en">Yahoo! Messenger</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MSN-Messenger">
+            <localization>
+                <label xml:lang="el">MSN Messenger</label>
+                <label xml:lang="en">MSN Messenger</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ICQ">
+            <localization>
+                <label xml:lang="el">ICQ</label>
+                <label xml:lang="en">ICQ</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="google-talk">
+            <localization>
+                <label xml:lang="el">Google Talk</label>
+                <label xml:lang="en">Google Talk</label>
+            </localization>
+            <taxonomy name="imService"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

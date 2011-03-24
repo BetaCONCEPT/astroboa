@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="typeOfEmail" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Τύπος Email</label>
+        <label xml:lang="en">Email Type</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="home-email">
+            <localization>
+                <label xml:lang="el">Προσωπικό Ηλ/κό Ταχυδρομείο</label>
+                <label xml:lang="en">Home Email</label>
+            </localization>
+            <taxonomy name="typeOfEmail"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="work-email">
+            <localization>
+                <label xml:lang="el">Ηλ/κό Ταχυδρομείο Εργασίας</label>
+                <label xml:lang="en">Work Email</label>
+            </localization>
+            <taxonomy name="typeOfEmail"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

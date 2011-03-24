@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="typeOfPhone" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Τύπος Τηλεφώνου</label>
+        <label xml:lang="en">Phone Type</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="mobile-personal-phone">
+            <localization>
+                <label xml:lang="el">Προσωπικό Κινητό Τηλέφωνο</label>
+                <label xml:lang="en">Personal Mobile Phone</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="parents-phone">
+            <localization>
+                <label xml:lang="el">Τηλέφωνο Οικίας Γονέων</label>
+                <label xml:lang="en">Parents Home Phone</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="home-phone">
+            <localization>
+                <label xml:lang="el">Τηλέφωνο Οικίας</label>
+                <label xml:lang="en">Home Phone</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="work-phone">
+            <localization>
+                <label xml:lang="el">Τηλέφωνο Εργασίας</label>
+                <label xml:lang="en">Work Phone</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mobile-work-phone">
+            <localization>
+                <label xml:lang="el">Κινητό Τηλέφωνο Εργασίας</label>
+                <label xml:lang="en">Work Mobile Phone</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="work-fax">
+            <localization>
+                <label xml:lang="el">Fax Εργασίας</label>
+                <label xml:lang="en">Work Fax</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="home-fax">
+            <localization>
+                <label xml:lang="el">Fax Οικίας</label>
+                <label xml:lang="en">Home Fax</label>
+            </localization>
+            <taxonomy name="typeOfPhone"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

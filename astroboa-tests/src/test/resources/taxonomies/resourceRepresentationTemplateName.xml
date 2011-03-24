@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="resourceRepresentationTemplateName" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Όνομα Πρότυπης Σελίδας</label>
+        <label xml:lang="en">Presentation Template Name</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="products-page-template">
+            <localization>
+                <label xml:lang="el">Πρότυπη Σελίδα Προϊόντων</label>
+                <label xml:lang="en">Products Page Template</label>
+            </localization>
+            <taxonomy name="resourceRepresentationTemplateName"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="company-page-template">
+            <localization>
+                <label xml:lang="el">Πρότυπη Σελίδας Εταιρίας</label>
+                <label xml:lang="en">Company Page Template</label>
+            </localization>
+            <taxonomy name="resourceRepresentationTemplateName"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="home-page-template">
+            <localization>
+                <label xml:lang="el">Πρότυπη Κεντρική Σελίδα</label>
+                <label xml:lang="en">Home Page Template</label>
+            </localization>
+            <taxonomy name="resourceRepresentationTemplateName"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

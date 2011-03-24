@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="typeOfOrganization" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Τύπος Οργανισμού</label>
+        <label xml:lang="en">Type Of Organization</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="society">
+            <localization>
+                <label xml:lang="el">Κοινότητα</label>
+                <label xml:lang="en">Society</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="library">
+            <localization>
+                <label xml:lang="el">Βιβλιοθήκη</label>
+                <label xml:lang="en">Library</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+            <childTopics>
+                <topic order="0" allowsReferrerContentObjects="true" name="medical-library">
+                    <localization>
+                        <label xml:lang="el">Ιατρική Βιβλιοθήκη</label>
+                        <label xml:lang="en">Medical Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="academic-library">
+                    <localization>
+                        <label xml:lang="el">Ακαδημαϊκή Βιβλιοθήκη</label>
+                        <label xml:lang="en">Academic Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="law-library">
+                    <localization>
+                        <label xml:lang="el">Νομική Βιβλιοθήκη</label>
+                        <label xml:lang="en">Law Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="research-library">
+                    <localization>
+                        <label xml:lang="el">Ερευνητική Βιβλιοθήκη</label>
+                        <label xml:lang="en">Research Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="national-library">
+                    <localization>
+                        <label xml:lang="el">Εθνική Βιβλιοθήκη</label>
+                        <label xml:lang="en">National Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="digital-library">
+                    <localization>
+                        <label xml:lang="el">Ψηφιακή Βιβλιοθήκη</label>
+                        <label xml:lang="en">Digital Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="public-library">
+                    <localization>
+                        <label xml:lang="el">Δημόσια Βιβλιοθήκη</label>
+                        <label xml:lang="en">Public Library</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="library">
+                        <localization>
+                            <label xml:lang="el">Βιβλιοθήκη</label>
+                            <label xml:lang="en">Library</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+            </childTopics>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="club">
+            <localization>
+                <label xml:lang="el">Λέσχη</label>
+                <label xml:lang="en">Club</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="company">
+            <localization>
+                <label xml:lang="el">Εταιρία</label>
+                <label xml:lang="en">Company</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+            <childTopics>
+                <topic order="0" allowsReferrerContentObjects="true" name="corporation">
+                    <localization>
+                        <label xml:lang="el">Ανώνυμη Εταιρία</label>
+                        <label xml:lang="en">Corporation</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="cooperative">
+                    <localization>
+                        <label xml:lang="el">Συνεταιρισμός</label>
+                        <label xml:lang="en">Cooperative</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="multinational-company">
+                    <localization>
+                        <label xml:lang="el">Πολυεθνική</label>
+                        <label xml:lang="en">Multinational Company</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="public-benefit-corporation">
+                    <localization>
+                        <label xml:lang="el">Εταιρία Κοινής Ωφέλειας</label>
+                        <label xml:lang="en">Public Benefit Corporation</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="limited-liability-company">
+                    <localization>
+                        <label xml:lang="el">Εταιρία Περιορισμένης Ευθύνης</label>
+                        <label xml:lang="en">Limited Liability Company</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="limited-partnership-company">
+                    <localization>
+                        <label xml:lang="el">Ετερόρυθμη Εταιρία (Ε.Ε.)</label>
+                        <label xml:lang="en">Limited Partnership Company (LP)</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="general-partnership-company">
+                    <localization>
+                        <label xml:lang="el">Ομόρυθμη Εταιρία (Ο.Ε.)</label>
+                        <label xml:lang="en">General Partnership Company (GP)</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="company">
+                        <localization>
+                            <label xml:lang="el">Εταιρία</label>
+                            <label xml:lang="en">Company</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+            </childTopics>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="committee">
+            <localization>
+                <label xml:lang="el">Επιτροπή (Committee)</label>
+                <label xml:lang="en">Committee</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="commission">
+            <localization>
+                <label xml:lang="el">Επιτροπή (Commission)</label>
+                <label xml:lang="en">Commission</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="political-organization">
+            <localization>
+                <label xml:lang="el">Πολιτική Οργάνωση</label>
+                <label xml:lang="en">Political Organization</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="academic-institution">
+            <localization>
+                <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                <label xml:lang="en">Academic Institution</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+            <childTopics>
+                <topic order="0" allowsReferrerContentObjects="true" name="college">
+                    <localization>
+                        <label xml:lang="el">Κολέγιο</label>
+                        <label xml:lang="en">College</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="university">
+                    <localization>
+                        <label xml:lang="el">Πανεπιστήμιο</label>
+                        <label xml:lang="en">University</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="military-school">
+                    <localization>
+                        <label xml:lang="el">Στρατιωτική Σχολή</label>
+                        <label xml:lang="en">Military School</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="technical-university">
+                    <localization>
+                        <label xml:lang="el">Πολυτεχνείο</label>
+                        <label xml:lang="en">Technical University</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="primary-school">
+                    <localization>
+                        <label xml:lang="el">Δημοτικό Σχολείο</label>
+                        <label xml:lang="en">Primary / Elementary School</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="middle-school">
+                    <localization>
+                        <label xml:lang="el">Γυμνάσιο</label>
+                        <label xml:lang="en">Middle / Secondary School</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="technical-school">
+                    <localization>
+                        <label xml:lang="el">Τεχνική Σχολή</label>
+                        <label xml:lang="en">Technical School</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+                <topic order="0" allowsReferrerContentObjects="true" name="high-school">
+                    <localization>
+                        <label xml:lang="el">Λύκειο</label>
+                        <label xml:lang="en">High School</label>
+                    </localization>
+                    <taxonomy name="typeOfOrganization"/>
+                    <owner externalId="SYSTEM"/>
+                    <parentTopic name="academic-institution">
+                        <localization>
+                            <label xml:lang="el">Ακαδημαϊκό Ίδρυμα</label>
+                            <label xml:lang="en">Academic Institution</label>
+                        </localization>
+                    </parentTopic>
+                </topic>
+            </childTopics>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="non-profit-organization">
+            <localization>
+                <label xml:lang="el">Μη Κερδοσκοπικός Οργανισμός</label>
+                <label xml:lang="en">Non Profit Organization</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="government-organization">
+            <localization>
+                <label xml:lang="el">Δημόσιος Οργανισμός</label>
+                <label xml:lang="en">Government Organization</label>
+            </localization>
+            <taxonomy name="typeOfOrganization"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

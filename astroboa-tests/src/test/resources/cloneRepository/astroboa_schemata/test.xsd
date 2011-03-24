@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/content/test"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/content/test"
+	xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:webPublicationType="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+	xmlns:statisticType="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+	xmlns:organization="http://www.betaconceptframework.org/schema/astroboa/web/organization"
+	xmlns:workflowType="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType">
+
+	<xs:import namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/webPublicationType"
+		schemaLocation="webPublicationType-${project.version}.xsd" />
+	
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/statisticType"
+		schemaLocation="statisticType-${project.version}.xsd" />
+	
+		
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
+		schemaLocation="workflowType-${project.version}.xsd" />
+
+	<xs:import
+		namespace="http://www.betaconceptframework.org/schema/astroboa/web/organization"
+		schemaLocation="organization-${project.version}.xsd" />
+
+
+	<xs:element name="test">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Test type</bccmsmodel:displayName>
+			  This type contains all properties used in tests
+			</xs:documentation>
+			<xs:documentation xml:lang="el"><![CDATA[Test <b>type</b>]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="tns:testType">
+				    <xs:sequence>
+	    					<xs:any minOccurs="0" maxOccurs="unbounded" 	processContents="strict" />
+				    </xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="testType">   
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Test type</bccmsmodel:displayName>
+			  This type contains all properties used in tests
+			</xs:documentation>
+			<xs:documentation xml:lang="el"><![CDATA[Test <b>type</b>]]>
+			</xs:documentation>
+		</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="bccmsmodel:contentObjectType">
+					<xs:sequence>
+
+						<xs:element name="webPublication" minOccurs="0" 
+							maxOccurs="1" type="webPublicationType:webPublicationType" />
+
+						<xs:element name="workflow" minOccurs="0"
+							maxOccurs="1" type="workflowType:workflowType" />
+
+						<xs:element name="singleComplexNotAspectWithNoCommonAttributes" minOccurs="0"	maxOccurs="1" type="tns:complexNotAspectWithNoCommonAttributesType" />
+						
+						<xs:element name="singleComplexNotAspectWithCommonAttributes" minOccurs="0"	maxOccurs="1" type="tns:complexNotAspectWithCommonAttributesType" />
+							
+						<xs:element name="stringEnum" 
+							minOccurs="0" maxOccurs="unbounded" default="RED">
+							<xs:annotation>   
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>String Enumeration</bccmsmodel:displayName>
+									<bccmsmodel:description>String Enumeration</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">String enumeration</xs:documentation>   
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="RED">    
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												RED   
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												RED
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="BLUE">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												BLUE
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												BLUE
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="GREEN">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												GREEN
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												GREEN
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+
+						<xs:element name="doubleConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">Double
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:double">
+									<xs:minExclusive value="3.1"/>									
+									<xs:maxExclusive value="10.0"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+
+						<xs:element name="longConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">Long
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:long">
+									<xs:minExclusive value="4"/>									
+									<xs:maxInclusive value="7"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						
+						<xs:element name="integerConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Int
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">Int
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="-100"/>									
+									<xs:maxExclusive value="300"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						
+						<xs:element name="stringConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">String
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">String
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="3"/>									
+									<xs:maxLength value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						
+						<xs:element name="stringPatternConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">String Pattern
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">String Pattern
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="[a-z]{1,100}"/>									
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						
+						
+						<xs:element name="stringFixedLengthConstrained" 
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">String
+									Constrained</xs:documentation>
+								<xs:documentation xml:lang="el">String
+									Constrained</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value="5"/>									
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+
+						<xs:element name="longEnum" 
+							minOccurs="0" maxOccurs="unbounded" default="1" type="tns:lonEnumType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long Enumeration
+								</xs:documentation>
+								<xs:documentation xml:lang="el">Long enumeration
+								</xs:documentation>
+							</xs:annotation>
+
+						</xs:element>
+
+						<xs:element name="doubleEnum" 
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double
+									Enumeration</xs:documentation>
+								<xs:documentation xml:lang="el">Double
+									enumeration</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:double">
+									<xs:enumeration value="0.0">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												0
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												0
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="1.3">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												1.3
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												1.3
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="3.4">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">
+												3.4
+								</xs:documentation>
+											<xs:documentation xml:lang="el">
+												3.4
+								</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+
+						<xs:element name="simpleLong" 
+							minOccurs="0" maxOccurs="1" type="xs:long">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long Property
+								</xs:documentation>
+								<xs:documentation xml:lang="el">Long Property
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+
+						<xs:element name="testTopic" minOccurs="0" maxOccurs="unbounded"
+							type="bccmsmodel:topicType" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Test topic</xs:documentation>
+								<xs:documentation xml:lang="el">Test topic</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="thumbnail"
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Thumbnail
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Thumbnail
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+
+						<xs:element 
+							name="commentSingle" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:moderatedAndRankedUserCommentType"/>
+
+						<xs:element 
+							name="comment" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:moderatedAndRankedUserCommentType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+								 <bccmsmodel:displayName>comment in english</bccmsmodel:displayName>
+								 <bccmsmodel:description>Multiple comment property in English</bccmsmodel:description>
+								 </xs:documentation>
+								<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>comment in greek</bccmsmodel:displayName>
+								 <bccmsmodel:description>Multiple comment property in Greek</bccmsmodel:description>
+								 </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+							
+						<xs:element 
+							name="allPropertyTypeContainer" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:containerOfAllPossiblePropertiesType"/>
+
+						<xs:element 
+							name="allPropertyTypeContainerMultiple" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:containerOfAllPossiblePropertiesType"/>
+							
+							
+						<xs:element 
+							name="allPropertyTypeContainerMultipleForLabelElementPath" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:containerOfAllPossiblePropertiesType"
+							bccmsmodel:labelElementPath="simpleContentObject.profile.title"/>
+							
+							
+						<xs:element name="simpleString" 
+							minOccurs="0" maxOccurs="1" type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>String</bccmsmodel:displayName>
+									<bccmsmodel:description><![CDATA[Simple <b>String</b> property]]></bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">String
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleStringMultiple" minOccurs="0" maxOccurs="unbounded"	 type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en"><![CDATA[Simple String  Multiple]]></xs:documentation>
+								<xs:documentation xml:lang="el">Simple String  Multiple</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDouble" 
+							minOccurs="0" maxOccurs="1" type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Double
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDoubleMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Double Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBinary" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Binary
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBinaryMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Binary Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="simpleBooleanMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Boolean Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Boolean Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBoolean" 
+							minOccurs="0" maxOccurs="1" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Boolean
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Boolean
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleContentObjectMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">ContentObject Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">ContentObject Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleContentObject" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">ContentObject
+									</xs:documentation>
+								<xs:documentation xml:lang="el">ContentObject
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:date">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDate" 
+							minOccurs="0" maxOccurs="1" type="xs:date">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date 
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date 
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateTimeMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateTime" 
+							minOccurs="0" maxOccurs="1" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleTopicMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:topicType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Topic Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Topic Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleTopic" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:topicType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Topic
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Topic
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						
+						<xs:element name="simpleLongMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:long">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Long Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					
+						<xs:element name="unmanagedThumbnail"
+							minOccurs="0"
+							maxOccurs="1"
+							type="bccmsmodel:binaryChannelType"
+							bccmsmodel:unmanagedBinaryChannel="true">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Unmanaged Thumbnail
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Unmanaged Thumbnail
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="image"
+							minOccurs="0"
+							maxOccurs="unbounded"
+							type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Images
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Images
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="unmanagedImage"
+							minOccurs="0"
+							maxOccurs="unbounded"
+							type="bccmsmodel:binaryChannelType"
+							bccmsmodel:unmanagedBinaryChannel="true">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Unmanaged Images
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									Unmanaged Images
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="password" minOccurs="0" maxOccurs="1"	 type="bccmsmodel:passwordType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Password</xs:documentation>
+								<xs:documentation xml:lang="el">Password</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="passwordWithExternalPasswordEncryptor" minOccurs="0" maxOccurs="1"	 type="bccmsmodel:passwordType"
+						bccmsmodel:passwordEncryptorClassName="org.betaconceptframework.astroboa.test.TestPasswordEncryptor">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">passwordWithExternalPasswordEncryptor</xs:documentation>
+								<xs:documentation xml:lang="el">passwordWithExternalPasswordEncryptor</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element 
+							name="statisticTypeMultiple" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="statisticType:statisticType"/>
+						
+						
+						<xs:element name="arrayOfPairsOfMandatoryContentObjects"  minOccurs="0" maxOccurs="1">
+                          
+                          <xs:annotation>
+                              <xs:documentation xml:lang="en">
+                                  <bccmsmodel:displayName>Pairs of Mandatory ContentObjects</bccmsmodel:displayName>  
+                                  <bccmsmodel:description></bccmsmodel:description>
+                              </xs:documentation>
+                          </xs:annotation>
+                          
+                          <xs:complexType>
+                              <xs:sequence>
+                                  <xs:element name="pairOfMandatoryContentObjects"  type="tns:pairOfMandatoryContentObjectsType" minOccurs="1" maxOccurs="unbounded"/>
+                              </xs:sequence>
+                              
+                              <xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+                          </xs:complexType>                        
+                      </xs:element>
+						
+					
+					  <xs:element name="departments" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="organization:arrayOfDepartmentTypeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									<bccmsmodel:displayName>Departments</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Departments that exist under the organization
+									</bccmsmodel:description>
+								</xs:documentation>
+								<xs:documentation xml:lang="el">
+									<bccmsmodel:displayName>Τμήματα  Οργανισμού</bccmsmodel:displayName>
+									<bccmsmodel:description>
+										Τμήματα μέσα στον Οργανισμό
+									</bccmsmodel:description>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="referenceOfAnyContentObjectOfTypeTestType" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="testType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type TestType
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type TestType
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTestType" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="testType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type TestType
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type TestType
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="referenceOfAnyContentObjectOfTypeTest" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTest" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="referenceOfAnyContentObjectOfTypeTestAndExtendedTest" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test,extendedTest">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTestAndExtendedTest" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test,extendedTest">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+
+<xs:complexType name="moderatedAndRankedUserCommentType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			 <bccmsmodel:displayName>Moderated And Ranked User Comment</bccmsmodel:displayName>
+			 <bccmsmodel:description>This property describes a moderated and ranked user comment</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">Αξιολογημένο και Βαθμολογημένο Σχόλιο Χρήστη</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+				
+					<xs:element name="body" minOccurs="1" maxOccurs="1"
+					 type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Comment Text</xs:documentation>
+							<xs:documentation xml:lang="el">Κείμενο Σχολίου</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element name="bodyMultiple" minOccurs="0" maxOccurs="unbounded"
+					 type="xs:string">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Comment Text</xs:documentation>
+							<xs:documentation xml:lang="el">Κείμενο Σχολίου</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element 
+							name="comment" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:moderatedAndRankedUserCommentType"/>
+					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:simpleType name="lonEnumType">
+		<xs:restriction base="xs:long">
+			<xs:enumeration value="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						0
+								</xs:documentation>
+					<xs:documentation xml:lang="el">
+						0
+								</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						1
+								</xs:documentation>
+					<xs:documentation xml:lang="el">
+						1
+								</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						3
+								</xs:documentation>
+					<xs:documentation xml:lang="el">
+						3
+								</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="containerOfAllPossiblePropertiesType"
+							bccmsmodel:labelElementPath="simpleString">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Complex property which contains all possible properties according to supporting type</xs:documentation>
+			<xs:documentation xml:lang="el">Σύνθετο στοιχείο που περιέχει όλους τους δυνατούς τύπους στοιχείων</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="bccmsmodel:complexCmsPropertyType">
+				<xs:sequence>
+				
+					<xs:element 
+							name="comment" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:moderatedAndRankedUserCommentType"/>
+					
+					<xs:element name="simpleString" minOccurs="0" maxOccurs="1"	 type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Simple String </xs:documentation>
+								<xs:documentation xml:lang="el">Simple String</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleStringMultiple" minOccurs="0" maxOccurs="unbounded"	 type="xs:string">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Simple String  Multiple</xs:documentation>
+								<xs:documentation xml:lang="el">Simple String  Multiple</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDouble" 
+							minOccurs="0" maxOccurs="1" type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Double
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDoubleMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:double">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Double Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Double Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBinary" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Binary
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBinaryMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:binaryChannelType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Binary Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="simpleBooleanMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Boolean Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Boolean Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleBoolean" 
+							minOccurs="0" maxOccurs="1" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Boolean
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Boolean
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleContentObjectMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">ContentObject Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">ContentObject Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleContentObject" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">ContentObject
+									</xs:documentation>
+								<xs:documentation xml:lang="el">ContentObject
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:date">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDate" 
+							minOccurs="0" maxOccurs="1" type="xs:date">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date 
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date 
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateTimeMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleDateTime" 
+							minOccurs="0" maxOccurs="1" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Date
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Date
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleTopicMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:topicType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Topic Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Topic Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleTopic" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:topicType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Topic
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Topic
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						
+						<xs:element name="simpleLongMultiple" 
+							minOccurs="0" maxOccurs="unbounded" type="xs:long">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long Multiple
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Long Multiple
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="simpleLong" 
+							minOccurs="0" maxOccurs="1" type="xs:long">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Long Property
+								</xs:documentation>
+								<xs:documentation xml:lang="el">Long Property
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element name="referenceOfAnyContentObjectOfTypeTestType" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="testType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type TestType
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type TestType
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTestType" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="testType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type TestType
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type TestType
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="referenceOfAnyContentObjectOfTypeTest" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTest" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="referenceOfAnyContentObjectOfTypeTestAndExtendedTest" 
+							minOccurs="0" maxOccurs="1" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test,extendedTest">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multipleReferenceOfAnyContentObjectOfTypeTestAndExtendedTest" 
+							minOccurs="0" maxOccurs="unbounded" type="bccmsmodel:contentObjectReferenceType"
+							bccmsmodel:acceptedContentTypes="test,extendedTest">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Reference of any content object of type Test And ExtendedTest
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						
+						<xs:element 
+							name="comment" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:moderatedAndRankedUserCommentType"/>
+
+						<xs:element 
+							name="commentMultiple" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:moderatedAndRankedUserCommentType"/>
+							
+						<xs:element 
+							name="allPropertyTypeContainer" 
+							minOccurs="0" 
+							maxOccurs="1"
+							type="tns:containerOfAllPossiblePropertiesType"/>
+
+						<xs:element 
+							name="allPropertyTypeContainerMultiple" 
+							minOccurs="0" 
+							maxOccurs="unbounded"
+							type="tns:containerOfAllPossiblePropertiesType"/>
+							
+						
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="complexNotAspectWithNoCommonAttributesType">
+		<xs:sequence>
+			<xs:element name="additionalName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Additional Name</xs:documentation>
+					<xs:documentation xml:lang="el" >Πρόσθετο Όνομα</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="testTopic" minOccurs="1" maxOccurs="1" type="bccmsmodel:topicType" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Test topic</xs:documentation>
+								<xs:documentation xml:lang="el">Test topic</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="complexNotAspectWithCommonAttributesType">
+		<xs:sequence>
+			<xs:element name="additionalName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en" >Additional Name</xs:documentation>
+					<xs:documentation xml:lang="el" >Πρόσθετο Όνομα</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="testTopic" minOccurs="1" maxOccurs="1" type="bccmsmodel:topicType" 
+							>
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Test topic</xs:documentation>
+								<xs:documentation xml:lang="el">Test topic</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
+   <xs:complexType name="pairOfMandatoryContentObjectsType">
+    <xs:annotation>
+            <xs:documentation xml:lang="en">
+                <bccmsmodel:displayName>Pair of Mandatory ContentObjects</bccmsmodel:displayName>
+                <bccmsmodel:description/>
+            </xs:documentation>
+    </xs:annotation>
+    
+    <xs:complexContent>
+       <xs:extension base="bccmsmodel:complexCmsPropertyType"> 
+        <xs:sequence>
+            
+            <xs:element name="contentObjectA" type="bccmsmodel:contentObjectReferenceType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        <bccmsmodel:displayName>ContentObject A</bccmsmodel:displayName>  
+                        <bccmsmodel:description></bccmsmodel:description>
+                    </xs:documentation>
+                </xs:annotation>                                       
+            </xs:element>
+            
+            <xs:element name="contentObjectB" type="bccmsmodel:contentObjectReferenceType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        <bccmsmodel:displayName>ContentObject B</bccmsmodel:displayName>  
+                        <bccmsmodel:description></bccmsmodel:description>
+                    </xs:documentation>
+                </xs:annotation>                                       
+            </xs:element>  
+            
+            <xs:element name="pairName" minOccurs="0" maxOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        <bccmsmodel:displayName>Pair Name</bccmsmodel:displayName>  
+                        <bccmsmodel:description></bccmsmodel:description>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+     </xs:extension>
+   </xs:complexContent>
+ </xs:complexType>
+ 
+</xs:schema>

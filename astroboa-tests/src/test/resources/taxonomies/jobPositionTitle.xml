@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="jobPositionTitle" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Τίτλος / Θέση στον Οργανισμό</label>
+        <label xml:lang="en">Job Title</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="customer-support">
+            <localization>
+                <label xml:lang="el">Υποστήριξη Πελατών </label>
+                <label xml:lang="en">Customer Support</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="network-and-computer-systems-administrator">
+            <localization>
+                <label xml:lang="el">Διαχειριστής Συστημάτων και Δικτύων</label>
+                <label xml:lang="en"> Network and Computer Systems Administrator</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="database-administrator">
+            <localization>
+                <label xml:lang="el">Διαχειριστής Βάσεων Δεδομένων </label>
+                <label xml:lang="en">Database Administrator</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="network-systems-and-data-communications-analyst">
+            <localization>
+                <label xml:lang="el">Αναλυτής Δικτύων</label>
+                <label xml:lang="en">Network Systems and Data Communications Analyst</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="software-engineer">
+            <localization>
+                <label xml:lang="el">Μηχανικός Λογισμικού</label>
+                <label xml:lang="en">Software Engineer</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="project-manager">
+            <localization>
+                <label xml:lang="el">Διαχειριστής Έργου</label>
+                <label xml:lang="en">Project Manager</label>
+            </localization>
+            <taxonomy name="jobPositionTitle"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

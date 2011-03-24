@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:taxonomy name="personalInterest" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Τομέας Ενδιαφέροντος (hobby)</label>
+        <label xml:lang="en">Personal Interest</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="book-reading">
+            <localization>
+                <label xml:lang="el">Διάβασμα</label>
+                <label xml:lang="en">Book Reading</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="stamp-collection">
+            <localization>
+                <label xml:lang="el">Συλλογή Γραμματοσήμων</label>
+                <label xml:lang="en">Stamp Collection</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="listening-to-music">
+            <localization>
+                <label xml:lang="el">Μουσική</label>
+                <label xml:lang="en">Listening to Music</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="car-driving">
+            <localization>
+                <label xml:lang="el">Οδήγηση</label>
+                <label xml:lang="en">Car Driving</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="traveling">
+            <localization>
+                <label xml:lang="el">Ταξίδια</label>
+                <label xml:lang="en">Traveling</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="horse-riding">
+            <localization>
+                <label xml:lang="el">Ιππασία</label>
+                <label xml:lang="en">Horse Riding</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="collecting-cards">
+            <localization>
+                <label xml:lang="el">Συλλογή Καρτών</label>
+                <label xml:lang="en">Collecting Cards</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="playing-computer-games">
+            <localization>
+                <label xml:lang="el">Ηλεκτρονικά Παιχνίδια</label>
+                <label xml:lang="en">Playing Computer Games</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="star-gazing">
+            <localization>
+                <label xml:lang="el">Παρατήρηση Αστεριών</label>
+                <label xml:lang="en">Star Gazing</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="flying-kites">
+            <localization>
+                <label xml:lang="el">Πέταγμα Χαρταετών</label>
+                <label xml:lang="en">Flying Kites</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="playing-chess">
+            <localization>
+                <label xml:lang="el">Σκάκι</label>
+                <label xml:lang="en">Playing Chess</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cycling">
+            <localization>
+                <label xml:lang="el">Ποδηλασία</label>
+                <label xml:lang="en">Cycling</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="doing-magic">
+            <localization>
+                <label xml:lang="el">Μαγικά Κόλπα</label>
+                <label xml:lang="en">Doing Magic</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="playing-cards">
+            <localization>
+                <label xml:lang="el">Χαρτοπαίγνια</label>
+                <label xml:lang="en">Playing Cards</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="collecting-pens">
+            <localization>
+                <label xml:lang="el">Συλλογή Στυλών</label>
+                <label xml:lang="en">Collecting Pens</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="watching-cartoons">
+            <localization>
+                <label xml:lang="el">Κινούμενα Σχέδια</label>
+                <label xml:lang="en">Watching Cartoons</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sports">
+            <localization>
+                <label xml:lang="el">Αθλητισμός</label>
+                <label xml:lang="en">Sports</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="chatting">
+            <localization>
+                <label xml:lang="el">Συζήτηση</label>
+                <label xml:lang="en">Chatting</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="painting">
+            <localization>
+                <label xml:lang="el">Ζωγραφική</label>
+                <label xml:lang="en">Painting</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="collecting-antiques">
+            <localization>
+                <label xml:lang="el">Συλλογή Αντικών</label>
+                <label xml:lang="en">Collecting Antiques</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="watching-movies">
+            <localization>
+                <label xml:lang="el">Κινηματογράφος</label>
+                <label xml:lang="en">Watching Movies</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="knitting">
+            <localization>
+                <label xml:lang="el">Πλέξιμο</label>
+                <label xml:lang="en">Knitting</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sewing">
+            <localization>
+                <label xml:lang="el">Ράψιμο</label>
+                <label xml:lang="en">Sewing</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cooking">
+            <localization>
+                <label xml:lang="el">Μαγείρεμα</label>
+                <label xml:lang="en">Cooking</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="making-crafts">
+            <localization>
+                <label xml:lang="el">Μοντελισμός</label>
+                <label xml:lang="en">Making Crafts</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="writing-poems">
+            <localization>
+                <label xml:lang="el">Συγγραφή Ποιημάτων</label>
+                <label xml:lang="en">Writing Poems</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="dancing">
+            <localization>
+                <label xml:lang="el">Χορός</label>
+                <label xml:lang="en">Dancing</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="writing-diary">
+            <localization>
+                <label xml:lang="el">Συγγραφή Ημερολογίου</label>
+                <label xml:lang="en">Writing Diary</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="photography">
+            <localization>
+                <label xml:lang="el">Φωτογραφία</label>
+                <label xml:lang="en">Photography</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="watching-TV">
+            <localization>
+                <label xml:lang="el">Τηλεόραση</label>
+                <label xml:lang="en">Watching TV</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="playing-musical-instruments">
+            <localization>
+                <label xml:lang="el">Παίξιμο Μουσικού Οργάνου</label>
+                <label xml:lang="en">Playing Musical Instruments</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gardening">
+            <localization>
+                <label xml:lang="el">Κηπουρική</label>
+                <label xml:lang="en">Gardening</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="coin-collection">
+            <localization>
+                <label xml:lang="el">Συλλογή Νομισμάτων</label>
+                <label xml:lang="en">Coin Collection</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bird-watching">
+            <localization>
+                <label xml:lang="el">Παρατήρηση Πουλιών</label>
+                <label xml:lang="en">Bird Watching</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fishing">
+            <localization>
+                <label xml:lang="el">Ψάρεμα</label>
+                <label xml:lang="en">Fishing</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="drawing-sketching">
+            <localization>
+                <label xml:lang="el">Σχέδιο και Σκίτσο</label>
+                <label xml:lang="en">Drawing and Sketching</label>
+            </localization>
+            <taxonomy name="personalInterest"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

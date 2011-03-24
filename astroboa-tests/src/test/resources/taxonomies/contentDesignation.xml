@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<ns2:taxonomy name="contentDesignation" 
+	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://www.betaconceptframework.org/schema/astroboa/astroboa-model-${project.version}.xsd"
+	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<localization>
+		<label xml:lang="el">Χαρακτηρισμός Περιεχομένου</label>
+		<label xml:lang="en">Content Designation</label>
+	</localization>
+	<rootTopics>
+		<topic allowsReferrerContentObjects="true" name="newsItem"
+			>
+			<localization>
+				<label xml:lang="el">Είδηση</label>
+				<label xml:lang="en">News Item</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic allowsReferrerContentObjects="true" name="speech"
+			>
+			<localization>
+				<label xml:lang="el">Ομιλία</label>
+				<label xml:lang="en">Speech</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic allowsReferrerContentObjects="true" name="tenderInvitation"
+			>
+			<localization>
+				<label xml:lang="el">Προκήρυξη-Διαγωνισμός</label>
+				<label xml:lang="en">Tender Invitation</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic allowsReferrerContentObjects="true" name="pressRelease"
+			>
+			<localization>
+				<label xml:lang="el">Δελτίο Τύπου</label>
+				<label xml:lang="en">Press Release</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic allowsReferrerContentObjects="true" name="interview"
+			>
+			<localization>
+				<label xml:lang="el">Συνέντευξη</label>
+				<label xml:lang="en">Interview</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="projectPlan"
+			>
+			<localization>
+				<label xml:lang="el">Σχέδιο Έργου</label>
+				<label xml:lang="en">Project Plan</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="proposal"
+			>
+			<localization>
+				<label xml:lang="el">Προσφορά - Πρόταση</label>
+				<label xml:lang="en">Proposal</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="businessPlan"
+			>
+			<localization>
+				<label xml:lang="el">Επιχειρησιακό Σχέδιο</label>
+				<label xml:lang="en">Βusiness Plan</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="meetingMinutes"
+			>
+			<localization>
+				<label xml:lang="el">Πρακικά Συνάντησης</label>
+				<label xml:lang="en">Meeting Minutes</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="trainingMaterial"
+			>
+			<localization>
+				<label xml:lang="el">Εκπαιδευτικό Υλικό</label>
+				<label xml:lang="en">Training Material</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="internalDocument"
+			>
+			<localization>
+				<label xml:lang="el">Εσωτερικό Έγγραφο</label>
+				<label xml:lang="en">Internal Document</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true"
+			name="balance" >
+			<localization>
+				<label xml:lang="el">Ισολογισμός</label>
+				<label xml:lang="en">Balance</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="project"
+			>
+			<localization>
+				<label xml:lang="el">Έργο</label>
+				<label xml:lang="en">Project</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true"
+			name="budget" >
+			<localization>
+				<label xml:lang="el">Προϋπολογισμός</label>
+				<label xml:lang="en">Budget</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true"
+			name="mayoralCommitteeProceedings" >
+			<localization>
+				<label xml:lang="el">Πρακτικά Δημοτικού Συμβουλίου</label>
+				<label xml:lang="en">Mayoral Committee Proceedings</label>
+			</localization>
+			<taxonomy name="contentDesignation" />
+			<owner externalId="SYSTEM" />
+		</topic>
+	</rootTopics>
+</ns2:taxonomy>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%p - %C{1}.%M(%L) | %m%n"/>
+        </layout>
+        <filter class="org.betaconceptframework.astroboa.test.log.ControlWriteOnLevelFilter"/>
+    </appender>
+    
+    <logger name="org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.security">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.jcr">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.service.security.aspect">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.service">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.definition.visitor.CmsPropertyVisitor">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.definition.visitor.DefinitionPropertyPathBuilder">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.definition.visitor.CmsDefinitionVisitor">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.model.jaxb.visitor">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.model.jaxb">
+    	<level value="WARN"/>
+   </logger>
+   
+    <category name="org.betaconceptframework.astroboa.engine.jcr.util">
+       <priority value="WARN"/>
+    </category>
+
+    <category name="org.betaconceptframework.astroboa.engine.jcr.io">
+        <priority value="WARN"/>
+    </category>
+    
+    <!-- Set the level of this logger to DEBUG in order to enable pretty print functionality
+    to all xml() and json() calls. This is useful when an error occurs and XML or JSON is logged.
+    If DEBUG level is enabled XML or JSON will be logged in a more human readable way -->
+   <logger name="org.betaconceptframework.astroboa.engine.AbstractRepositoryTest">
+    	<level value="WARN"/>
+   </logger>
+   
+   <!-- Log each test duration -->
+   <logger name="org.betaconceptframework.astroboa.engine.TestListener">
+    	<level value="WARN"/>
+   </logger>
+
+	<logger name="org.betaconceptframework.astroboa.engine.model.jaxb.CmsOutcomeJAXBTest">
+    	<level value="WARN"/>
+   </logger>
+
+	<logger name="com.sun.xml.bind">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.service.dao.DefinitionServiceDao">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.cache.DefinitionCacheManager">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.cache.regions">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.jboss.cache">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.model.lazy.local.LazyComplexCmsPropertyLoader">
+    	<level value="WARN"/>
+   </logger>
+
+   <logger name="org.betaconceptframework.astroboa.engine.definition.visitor">
+    	<level value="WARN"/>
+   </logger>
+   
+   <logger name="org.betaconceptframework.astroboa.engine.definition.ContentDefinitionConfiguration">
+    	<level value="WARN"/>
+   </logger>
+   
+   
+    <root>
+    	<priority value="WARN"/>
+    	<appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>

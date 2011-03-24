@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<ns2:taxonomy name="language"
+	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://www.betaconceptframework.org/schema/astroboa/astroboa-model-${project.version}.xsd"
+	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Γλώσσα</label>
+        <label xml:lang="en">Language</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="sq">
+            <localization>
+                <label xml:lang="el">Αλβανικά</label>
+                <label xml:lang="fr">albanais</label>
+                <label xml:lang="en">Albanian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="hy">
+            <localization>
+                <label xml:lang="el">Αρμένικα</label>
+                <label xml:lang="fr">arménien</label>
+                <label xml:lang="en">Armenian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fr">
+            <localization>
+                <label xml:lang="el">Γαλλικά</label>
+                <label xml:lang="fr">français</label>
+                <label xml:lang="en">French</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="el">
+            <localization>
+                <label xml:lang="el">Ελληνικά</label>
+                <label xml:lang="fr">grec moderne (après 1453)</label>
+                <label xml:lang="en">Greek, Modern (1453-)</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="av">
+            <localization>
+                <label xml:lang="fr">avar</label>
+                <label xml:lang="en">Avaric</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="aa">
+            <localization>
+                <label xml:lang="fr">afar</label>
+                <label xml:lang="en">Afar</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="en">
+            <localization>
+                <label xml:lang="el">Αγγλικά</label>
+                <label xml:lang="fr">anglais</label>
+                <label xml:lang="en">English</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ay">
+            <localization>
+                <label xml:lang="fr">aymara</label>
+                <label xml:lang="en">Aymara</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ab">
+            <localization>
+                <label xml:lang="fr">abkhaze</label>
+                <label xml:lang="en">Abkhazian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ak">
+            <localization>
+                <label xml:lang="fr">akan</label>
+                <label xml:lang="en">Akan</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="no">
+            <localization>
+                <label xml:lang="el">Νορβηγικά</label>
+                <label xml:lang="fr">norvégien</label>
+                <label xml:lang="en">Norwegian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tl">
+            <localization>
+                <label xml:lang="fr">tagalog</label>
+                <label xml:lang="en">Tagalog</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ty">
+            <localization>
+                <label xml:lang="fr">tahitien</label>
+                <label xml:lang="en">Tahitian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sn">
+            <localization>
+                <label xml:lang="fr">shona</label>
+                <label xml:lang="en">Shona</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sc">
+            <localization>
+                <label xml:lang="fr">sarde</label>
+                <label xml:lang="en">Sardinian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ss">
+            <localization>
+                <label xml:lang="fr">swati</label>
+                <label xml:lang="en">Swati</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sg">
+            <localization>
+                <label xml:lang="fr">sango</label>
+                <label xml:lang="en">Sango</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="om">
+            <localization>
+                <label xml:lang="fr">galla</label>
+                <label xml:lang="en">Oromo</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="qu">
+            <localization>
+                <label xml:lang="fr">quechua</label>
+                <label xml:lang="en">Quechua</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="rn">
+            <localization>
+                <label xml:lang="fr">rundi</label>
+                <label xml:lang="en">Rundi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="pa">
+            <localization>
+                <label xml:lang="fr">pendjabi</label>
+                <label xml:lang="en">Panjabi; Punjabi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="or">
+            <localization>
+                <label xml:lang="fr">oriya</label>
+                <label xml:lang="en">Oriya</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="false" name="oc">
+            <localization>
+                <label xml:lang="fr">occitan (après 1500)</label>
+                <label xml:lang="en">Occitan (post 1500)</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="na">
+            <localization>
+                <label xml:lang="fr">nauruan</label>
+                <label xml:lang="en">Nauru</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="se">
+            <localization>
+                <label xml:lang="fr">sami du Nord</label>
+                <label xml:lang="en">Northern Sami</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nn">
+            <localization>
+                <label xml:lang="fr">norvégien nynorsk; nynorsk, norvégien</label>
+                <label xml:lang="en">Norwegian Nynorsk; Nynorsk, Norwegian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ng">
+            <localization>
+                <label xml:lang="fr">ndonga</label>
+                <label xml:lang="en">Ndonga</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nv">
+            <localization>
+                <label xml:lang="fr">navaho</label>
+                <label xml:lang="en">Navajo; Navaho</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nd">
+            <localization>
+                <label xml:lang="fr">ndébélé du Nord</label>
+                <label xml:lang="en">Ndebele, North; North Ndebele</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="li">
+            <localization>
+                <label xml:lang="fr">limbourgeois</label>
+                <label xml:lang="en">Limburgan; Limburger; Limburgish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mi">
+            <localization>
+                <label xml:lang="fr">maori</label>
+                <label xml:lang="en">Maori</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gv">
+            <localization>
+                <label xml:lang="fr">manx; mannois</label>
+                <label xml:lang="en">Manx</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mh">
+            <localization>
+                <label xml:lang="fr">marshall</label>
+                <label xml:lang="en">Marshallese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kv">
+            <localization>
+                <label xml:lang="fr">kom</label>
+                <label xml:lang="en">Komi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="iu">
+            <localization>
+                <label xml:lang="fr">inuktitut</label>
+                <label xml:lang="en">Inuktitut</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ig">
+            <localization>
+                <label xml:lang="fr">igbo</label>
+                <label xml:lang="en">Igbo</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kl">
+            <localization>
+                <label xml:lang="fr">groenlandais</label>
+                <label xml:lang="en">Kalaallisut; Greenlandic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ht">
+            <localization>
+                <label xml:lang="fr">haïtien; créole haïtien</label>
+                <label xml:lang="en">Haitian; Haitian Creole</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lg">
+            <localization>
+                <label xml:lang="fr">ganda</label>
+                <label xml:lang="en">Ganda</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fj">
+            <localization>
+                <label xml:lang="fr">fidjien</label>
+                <label xml:lang="en">Fijian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="dz">
+            <localization>
+                <label xml:lang="fr">dzongkha</label>
+                <label xml:lang="en">Dzongkha</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="dv">
+            <localization>
+                <label xml:lang="fr">maldivien</label>
+                <label xml:lang="en">Divehi; Dhivehi; Maldivian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cr">
+            <localization>
+                <label xml:lang="fr">cree</label>
+                <label xml:lang="en">Cree</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cv">
+            <localization>
+                <label xml:lang="fr">tchouvache</label>
+                <label xml:lang="en">Chuvash</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ch">
+            <localization>
+                <label xml:lang="fr">chamorro</label>
+                <label xml:lang="en">Chamorro</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ny">
+            <localization>
+                <label xml:lang="fr">chichewa; chewa; nyanja</label>
+                <label xml:lang="en">Chichewa; Chewa; Nyanja</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cu">
+            <localization>
+                <label xml:lang="fr">slavon d'église; vieux slave; slavon liturgique; vieux bulgare</label>
+                <label xml:lang="en">Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="km">
+            <localization>
+                <label xml:lang="fr">khmer central</label>
+                <label xml:lang="en">Central Khmer</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kw">
+            <localization>
+                <label xml:lang="fr">cornique</label>
+                <label xml:lang="en">Cornish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nb">
+            <localization>
+                <label xml:lang="fr">norvégien bokmål</label>
+                <label xml:lang="en">Bokmål, Norwegian; Norwegian Bokmål</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bi">
+            <localization>
+                <label xml:lang="fr">bichlamar</label>
+                <label xml:lang="en">Bislama</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="am">
+            <localization>
+                <label xml:lang="fr">amharique</label>
+                <label xml:lang="en">Amharic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="af">
+            <localization>
+                <label xml:lang="fr">afrikaans</label>
+                <label xml:lang="en">Afrikaans</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="be">
+            <localization>
+                <label xml:lang="fr">biélorusse</label>
+                <label xml:lang="en">Belarusian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bh">
+            <localization>
+                <label xml:lang="fr">langues biharis</label>
+                <label xml:lang="en">Bihari languages</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bs">
+            <localization>
+                <label xml:lang="fr">bosniaque</label>
+                <label xml:lang="en">Bosnian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ba">
+            <localization>
+                <label xml:lang="fr">bachkir</label>
+                <label xml:lang="en">Bashkir</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bm">
+            <localization>
+                <label xml:lang="fr">bambara</label>
+                <label xml:lang="en">Bambara</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ae">
+            <localization>
+                <label xml:lang="fr">avestique</label>
+                <label xml:lang="en">Avestan</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="an">
+            <localization>
+                <label xml:lang="fr">aragonais</label>
+                <label xml:lang="en">Aragonese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ce">
+            <localization>
+                <label xml:lang="fr">tchétchène</label>
+                <label xml:lang="en">Chechen</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fo">
+            <localization>
+                <label xml:lang="fr">féroïen</label>
+                <label xml:lang="en">Faroese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ee">
+            <localization>
+                <label xml:lang="fr">éwé</label>
+                <label xml:lang="en">Ewe</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gd">
+            <localization>
+                <label xml:lang="fr"> gaélique; gaélique écossais</label>
+                <label xml:lang="en">Gaelic; Scottish Gaelic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gu">
+            <localization>
+                <label xml:lang="fr">goudjrati</label>
+                <label xml:lang="en">Gujarati</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ff">
+            <localization>
+                <label xml:lang="fr">peul</label>
+                <label xml:lang="en">Fulah</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gn">
+            <localization>
+                <label xml:lang="fr">guarani</label>
+                <label xml:lang="en">Guarani</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ik">
+            <localization>
+                <label xml:lang="fr">inupiaq</label>
+                <label xml:lang="en">Inupiaq</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="io">
+            <localization>
+                <label xml:lang="fr">ido</label>
+                <label xml:lang="en">Ido</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="hz">
+            <localization>
+                <label xml:lang="fr">herero</label>
+                <label xml:lang="en">Herero</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ho">
+            <localization>
+                <label xml:lang="fr">hiri motu</label>
+                <label xml:lang="en">Hiri Motu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ha">
+            <localization>
+                <label xml:lang="fr">haoussa</label>
+                <label xml:lang="en">Hausa</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lo">
+            <localization>
+                <label xml:lang="fr">lao</label>
+                <label xml:lang="en">Lao</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kj">
+            <localization>
+                <label xml:lang="fr">kuanyama; kwanyama</label>
+                <label xml:lang="en">Kuanyama; Kwanyama</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="rw">
+            <localization>
+                <label xml:lang="fr">rwanda</label>
+                <label xml:lang="en">Kinyarwanda</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kk">
+            <localization>
+                <label xml:lang="fr">kazakh</label>
+                <label xml:lang="en">Kazakh</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kg">
+            <localization>
+                <label xml:lang="fr">kongo</label>
+                <label xml:lang="en">Kongo</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ky">
+            <localization>
+                <label xml:lang="fr">kirghiz</label>
+                <label xml:lang="en">Kirghiz; Kyrgyz</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ki">
+            <localization>
+                <label xml:lang="fr">kikuyu</label>
+                <label xml:lang="en">Kikuyu; Gikuyu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kr">
+            <localization>
+                <label xml:lang="fr">kanouri</label>
+                <label xml:lang="en">Kanuri</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lb">
+            <localization>
+                <label xml:lang="fr">luxembourgeois</label>
+                <label xml:lang="en">Luxembourgish; Letzeburgesch</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mr">
+            <localization>
+                <label xml:lang="fr">marathe</label>
+                <label xml:lang="en">Marathi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lu">
+            <localization>
+                <label xml:lang="fr">luba-katanga</label>
+                <label xml:lang="en">Luba-Katanga</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ln">
+            <localization>
+                <label xml:lang="fr">lingala</label>
+                <label xml:lang="en">Lingala</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ml">
+            <localization>
+                <label xml:lang="fr">malayalam</label>
+                <label xml:lang="en">Malayalam</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="oj">
+            <localization>
+                <label xml:lang="fr">ojibwa</label>
+                <label xml:lang="en">Ojibwa</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nr">
+            <localization>
+                <label xml:lang="fr">ndébélé du Sud</label>
+                <label xml:lang="en">Ndebele, South; South Ndebele</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ps">
+            <localization>
+                <label xml:lang="fr">pachto</label>
+                <label xml:lang="en">Pushto; Pashto</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="os">
+            <localization>
+                <label xml:lang="fr">ossète</label>
+                <label xml:lang="en">Ossetian; Ossetic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="rm">
+            <localization>
+                <label xml:lang="fr">romanche</label>
+                <label xml:lang="en">Romansh</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="pi">
+            <localization>
+                <label xml:lang="fr">pali</label>
+                <label xml:lang="en">Pali</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sw">
+            <localization>
+                <label xml:lang="fr">swahili</label>
+                <label xml:lang="en">Swahili</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="st">
+            <localization>
+                <label xml:lang="fr">sotho du Sud</label>
+                <label xml:lang="en">Sotho, Southern</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ii">
+            <localization>
+                <label xml:lang="fr">yi de Sichuan</label>
+                <label xml:lang="en">Sichuan Yi; Nuosu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cs">
+            <localization>
+                <label xml:lang="el">Τσέχικα</label>
+                <label xml:lang="fr">tchèque</label>
+                <label xml:lang="en">Czech</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="th">
+            <localization>
+                <label xml:lang="el">Ταϋλανδέζικα</label>
+                <label xml:lang="fr">thaï</label>
+                <label xml:lang="en">Thai</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="su">
+            <localization>
+                <label xml:lang="el">Σουδανικά</label>
+                <label xml:lang="fr">soundanais</label>
+                <label xml:lang="en">Sundanese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mk">
+            <localization>
+                <label xml:lang="el">Σλάβικα</label>
+                <label xml:lang="fr">macédonien</label>
+                <label xml:lang="en">Macedonian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="si">
+            <localization>
+                <label xml:lang="el">Σιγκαλεσιανά</label>
+                <label xml:lang="fr">singhalais</label>
+                <label xml:lang="en">Sinhala; Sinhalese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sk">
+            <localization>
+                <label xml:lang="el">Σλοβένικα</label>
+                <label xml:lang="fr">slovaque</label>
+                <label xml:lang="en">Slovak</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sa">
+            <localization>
+                <label xml:lang="el">Σανσκριτικά</label>
+                <label xml:lang="fr">sanskrit</label>
+                <label xml:lang="en">Sanskrit</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sd">
+            <localization>
+                <label xml:lang="el">Σίντι (ινδική διάλεκτος)</label>
+                <label xml:lang="fr">sindhi</label>
+                <label xml:lang="en">Sindhi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="pl">
+            <localization>
+                <label xml:lang="el">Πολωνικά</label>
+                <label xml:lang="fr">polonais</label>
+                <label xml:lang="en">Polish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="cy">
+            <localization>
+                <label xml:lang="el">Ουαλλικά</label>
+                <label xml:lang="fr">gallois</label>
+                <label xml:lang="en">Welsh</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ks">
+            <localization>
+                <label xml:lang="el">Κασμιριανά</label>
+                <label xml:lang="fr">kashmiri</label>
+                <label xml:lang="en">Kashmiri</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ku">
+            <localization>
+                <label xml:lang="el">Κουρδικά</label>
+                <label xml:lang="fr">kurde</label>
+                <label xml:lang="en">Kurdish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="co">
+            <localization>
+                <label xml:lang="el">Κορσικά</label>
+                <label xml:lang="fr">corse</label>
+                <label xml:lang="en">Corsican</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="zh">
+            <localization>
+                <label xml:lang="el">Κινέζικα</label>
+                <label xml:lang="fr">chinois</label>
+                <label xml:lang="en">Chinese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ko">
+            <localization>
+                <label xml:lang="el">Κορεάτικα</label>
+                <label xml:lang="fr">coréen</label>
+                <label xml:lang="en">Korean</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="kn">
+            <localization>
+                <label xml:lang="el">Καναδέζικα</label>
+                <label xml:lang="fr">kannada</label>
+                <label xml:lang="en">Kannada</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="it">
+            <localization>
+                <label xml:lang="el">Ιταλικά</label>
+                <label xml:lang="fr">italien</label>
+                <label xml:lang="en">Italian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ca">
+            <localization>
+                <label xml:lang="el">Καταλανικά</label>
+                <label xml:lang="fr">catalan; valencien</label>
+                <label xml:lang="en">Catalan; Valencian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="hr">
+            <localization>
+                <label xml:lang="el">Κροάτικα</label>
+                <label xml:lang="fr">croate</label>
+                <label xml:lang="en">Croatian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="hi">
+            <localization>
+                <label xml:lang="el">Ινδικά</label>
+                <label xml:lang="fr">hindi</label>
+                <label xml:lang="en">Hindi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="id">
+            <localization>
+                <label xml:lang="el">Ινδονησιακά</label>
+                <label xml:lang="fr">indonésien</label>
+                <label xml:lang="en">Indonesian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="gl">
+            <localization>
+                <label xml:lang="el">Γκαλεσιανά</label>
+                <label xml:lang="fr">galicien</label>
+                <label xml:lang="en">Galician</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="de">
+            <localization>
+                <label xml:lang="el">Γερμανικά</label>
+                <label xml:lang="fr">allemand</label>
+                <label xml:lang="en">German</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="he">
+            <localization>
+                <label xml:lang="el">Εβραϊκά</label>
+                <label xml:lang="fr">hébreu</label>
+                <label xml:lang="en">Hebrew</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="da">
+            <localization>
+                <label xml:lang="el">Δανέζικα</label>
+                <label xml:lang="fr">danois</label>
+                <label xml:lang="en">Danish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ja">
+            <localization>
+                <label xml:lang="el">Γιαπωνέζικα</label>
+                <label xml:lang="fr">japonais</label>
+                <label xml:lang="en">Japanese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ia">
+            <localization>
+                <label xml:lang="el">Διεθνής Τεχνητή Γλώσσα</label>
+                <label xml:lang="fr">interlingua (langue auxiliaire internationale)</label>
+                <label xml:lang="en">Interlingua (International Auxiliary Language Association)</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ie">
+            <localization>
+                <label xml:lang="el">Διεθνής Τεχνητή Γλώσσα (Occidental)</label>
+                <label xml:lang="fr">interlingue</label>
+                <label xml:lang="en">Interlingue; Occidental</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ka">
+            <localization>
+                <label xml:lang="el">Γεωργιανά</label>
+                <label xml:lang="fr">géorgien</label>
+                <label xml:lang="en">Georgian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="xh">
+            <localization>
+                <label xml:lang="fr">xhosa</label>
+                <label xml:lang="en">Xhosa</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="wa">
+            <localization>
+                <label xml:lang="fr">wallon</label>
+                <label xml:lang="en">Walloon</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ur">
+            <localization>
+                <label xml:lang="fr">ourdou</label>
+                <label xml:lang="en">Urdu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tw">
+            <localization>
+                <label xml:lang="fr">twi</label>
+                <label xml:lang="en">Twi</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="to">
+            <localization>
+                <label xml:lang="fr">tongan (Îles Tonga)</label>
+                <label xml:lang="en">Tonga (Tonga Islands)</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ts">
+            <localization>
+                <label xml:lang="fr">tsonga</label>
+                <label xml:lang="en">Tsonga</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ta">
+            <localization>
+                <label xml:lang="fr">tamoul</label>
+                <label xml:lang="en">Tamil</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tg">
+            <localization>
+                <label xml:lang="fr">tadjik</label>
+                <label xml:lang="en">Tajik</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tn">
+            <localization>
+                <label xml:lang="fr">tswana</label>
+                <label xml:lang="en">Tswana</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="false" name="tt">
+            <localization>
+                <label xml:lang="fr">tatar</label>
+                <label xml:lang="en">Tatar</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ti">
+            <localization>
+                <label xml:lang="fr">tigrigna</label>
+                <label xml:lang="en">Tigrinya</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ug">
+            <localization>
+                <label xml:lang="fr">ouïgour</label>
+                <label xml:lang="en">Uighur; Uyghur</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="te">
+            <localization>
+                <label xml:lang="fr">télougou</label>
+                <label xml:lang="en">Telugu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="yi">
+            <localization>
+                <label xml:lang="fr">yiddish</label>
+                <label xml:lang="en">Yiddish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="wo">
+            <localization>
+                <label xml:lang="fr">wolof</label>
+                <label xml:lang="en">Wolof</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fy">
+            <localization>
+                <label xml:lang="fr">frison occidental</label>
+                <label xml:lang="en">Western Frisian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="vo">
+            <localization>
+                <label xml:lang="fr">volapük</label>
+                <label xml:lang="en">Volapük</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ve">
+            <localization>
+                <label xml:lang="fr">venda</label>
+                <label xml:lang="en">Venda</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="yo">
+            <localization>
+                <label xml:lang="fr">yoruba</label>
+                <label xml:lang="en">Yoruba</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ar">
+            <localization>
+                <label xml:lang="el">Αραβικά</label>
+                <label xml:lang="fr">arabe</label>
+                <label xml:lang="en">Arabic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bn">
+            <localization>
+                <label xml:lang="el">Βενγκάλι</label>
+                <label xml:lang="fr">bengali</label>
+                <label xml:lang="en">Bengali</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bg">
+            <localization>
+                <label xml:lang="el">Βουλγάρικα</label>
+                <label xml:lang="fr">bulgare</label>
+                <label xml:lang="en">Bulgarian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="eu">
+            <localization>
+                <label xml:lang="el">Βασκική</label>
+                <label xml:lang="fr">basque</label>
+                <label xml:lang="en">Basque</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="za">
+            <localization>
+                <label xml:lang="fr">zhuang; chuang</label>
+                <label xml:lang="en">Zhuang; Chuang</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="vi">
+            <localization>
+                <label xml:lang="el">Βιετναμέζικα</label>
+                <label xml:lang="fr">vietnamien</label>
+                <label xml:lang="en">Vietnamese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="my">
+            <localization>
+                <label xml:lang="el">Βιρμανικά</label>
+                <label xml:lang="fr">birman</label>
+                <label xml:lang="en">Burmese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="az">
+            <localization>
+                <label xml:lang="el">Αζερμπαϊτζάν</label>
+                <label xml:lang="fr">azéri</label>
+                <label xml:lang="en">Azerbaijani</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="as">
+            <localization>
+                <label xml:lang="el">Ασαμέζικα</label>
+                <label xml:lang="fr">assamais</label>
+                <label xml:lang="en">Assamese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="br">
+            <localization>
+                <label xml:lang="el">Βρετονική</label>
+                <label xml:lang="fr">breton</label>
+                <label xml:lang="en">Breton</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="eo">
+            <localization>
+                <label xml:lang="el">Εσπεράντο (Διεθνής Τεχνητή)</label>
+                <label xml:lang="fr">espéranto</label>
+                <label xml:lang="en">Esperanto</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="zu">
+            <localization>
+                <label xml:lang="el">Ζουλού</label>
+                <label xml:lang="fr">zoulou</label>
+                <label xml:lang="en">Zulu</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ga">
+            <localization>
+                <label xml:lang="el">Ιρλανδικά</label>
+                <label xml:lang="fr">irlandais</label>
+                <label xml:lang="en">Irish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="et">
+            <localization>
+                <label xml:lang="el">Εσθονικά</label>
+                <label xml:lang="fr">estonien</label>
+                <label xml:lang="en">Estonian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="es">
+            <localization>
+                <label xml:lang="el">Ισπανικά</label>
+                <label xml:lang="fr">espagnol; castillan</label>
+                <label xml:lang="en">Spanish; Castilian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="bo">
+            <localization>
+                <label xml:lang="el">Θιβετιανά</label>
+                <label xml:lang="fr">tibétain</label>
+                <label xml:lang="en">Tibetan</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="is">
+            <localization>
+                <label xml:lang="el">Ισλανδικά</label>
+                <label xml:lang="fr">islandais</label>
+                <label xml:lang="en">Icelandic</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="la">
+            <localization>
+                <label xml:lang="el">Λατινικά</label>
+                <label xml:lang="fr">latin</label>
+                <label xml:lang="en">Latin</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mg">
+            <localization>
+                <label xml:lang="el">Μαλαγκασιανά</label>
+                <label xml:lang="fr">malgache</label>
+                <label xml:lang="en">Malagasy</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lv">
+            <localization>
+                <label xml:lang="el">Λεττονικά</label>
+                <label xml:lang="fr">letton</label>
+                <label xml:lang="en">Latvian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mn">
+            <localization>
+                <label xml:lang="el">Μογκολικά</label>
+                <label xml:lang="fr">mongol</label>
+                <label xml:lang="en">Mongolian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="mt">
+            <localization>
+                <label xml:lang="el">Μαλτέζικα</label>
+                <label xml:lang="fr">maltais</label>
+                <label xml:lang="en">Maltese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ms">
+            <localization>
+                <label xml:lang="el">Μαλαισιανά</label>
+                <label xml:lang="fr">malais</label>
+                <label xml:lang="en">Malay</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ne">
+            <localization>
+                <label xml:lang="el">Νεπάλ</label>
+                <label xml:lang="fr">népalais</label>
+                <label xml:lang="en">Nepali</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="nl">
+            <localization>
+                <label xml:lang="el">Ολλανδικά</label>
+                <label xml:lang="fr">néerlandais; flamand</label>
+                <label xml:lang="en">Dutch; Flemish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="lt">
+            <localization>
+                <label xml:lang="el">Λιθουανικά</label>
+                <label xml:lang="fr">lituanien</label>
+                <label xml:lang="en">Lithuanian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ru">
+            <localization>
+                <label xml:lang="el">Ρωσικά</label>
+                <label xml:lang="fr">russe</label>
+                <label xml:lang="en">Russian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ro">
+            <localization>
+                <label xml:lang="el">Ρουμανικά; Μολδαβικά; Moldovan</label>
+                <label xml:lang="fr">roumain; moldave</label>
+                <label xml:lang="en">Romanian; Moldavian; Moldovan</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="hu">
+            <localization>
+                <label xml:lang="el">Ουγγαρέζικα</label>
+                <label xml:lang="fr">hongrois</label>
+                <label xml:lang="en">Hungarian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="uk">
+            <localization>
+                <label xml:lang="el">Ουκρανέζικα</label>
+                <label xml:lang="fr">ukrainien</label>
+                <label xml:lang="en">Ukrainian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="uz">
+            <localization>
+                <label xml:lang="el">Ουζμπέκ</label>
+                <label xml:lang="fr">ouszbek</label>
+                <label xml:lang="en">Uzbek</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="pt">
+            <localization>
+                <label xml:lang="el">Πορτογαλέζικα</label>
+                <label xml:lang="fr">portugais</label>
+                <label xml:lang="en">Portuguese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fa">
+            <localization>
+                <label xml:lang="el">Περσικά</label>
+                <label xml:lang="fr">persan</label>
+                <label xml:lang="en">Persian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sl">
+            <localization>
+                <label xml:lang="el">Σλοβένικα</label>
+                <label xml:lang="fr">slovène</label>
+                <label xml:lang="en">Slovenian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sr">
+            <localization>
+                <label xml:lang="el">Σερβικά</label>
+                <label xml:lang="fr">serbe</label>
+                <label xml:lang="en">Serbian</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sm">
+            <localization>
+                <label xml:lang="el">Σαμόα</label>
+                <label xml:lang="fr">samoan</label>
+                <label xml:lang="en">Samoan</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="so">
+            <localization>
+                <label xml:lang="el">Σομαλέζικα</label>
+                <label xml:lang="fr">somali</label>
+                <label xml:lang="en">Somali</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="jv">
+            <localization>
+                <label xml:lang="el">Τζαβανέζικα</label>
+                <label xml:lang="fr">javanais</label>
+                <label xml:lang="en">Javanese</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="sv">
+            <localization>
+                <label xml:lang="el">Σουηδικά</label>
+                <label xml:lang="fr">suédois</label>
+                <label xml:lang="en">Swedish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tk">
+            <localization>
+                <label xml:lang="el">Τουρκμενικά</label>
+                <label xml:lang="fr">turkmène</label>
+                <label xml:lang="en">Turkmen</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="fi">
+            <localization>
+                <label xml:lang="el">Φινλανδικά</label>
+                <label xml:lang="fr">finnois</label>
+                <label xml:lang="en">Finnish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="tr">
+            <localization>
+                <label xml:lang="el">Τουρκικά</label>
+                <label xml:lang="fr">turc</label>
+                <label xml:lang="en">Turkish</label>
+            </localization>
+            <taxonomy name="language"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<ns2:taxonomy name="country" 	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://www.betaconceptframework.org/schema/astroboa/astroboa-model-${project.version}.xsd"
+	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <localization>
+        <label xml:lang="el">Χώρα</label>
+        <label xml:lang="en">Country</label>
+    </localization>
+    <rootTopics>
+        <topic order="0" allowsReferrerContentObjects="true" name="BGD">
+            <localization>
+                <label xml:lang="en">BANGLADESH</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BLZ">
+            <localization>
+                <label xml:lang="en">BELIZE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BRB">
+            <localization>
+                <label xml:lang="en">BARBADOS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ATG">
+            <localization>
+                <label xml:lang="en">ANTIGUA AND BARBUDA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AIA">
+            <localization>
+                <label xml:lang="en">ANGUILLA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ABW">
+            <localization>
+                <label xml:lang="en">ARUBA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ALA">
+            <localization>
+                <label xml:lang="en">ALAND ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BRN">
+            <localization>
+                <label xml:lang="en">BRUNEI DARUSSALAM</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BWA">
+            <localization>
+                <label xml:lang="en">BOTSWANA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BTN">
+            <localization>
+                <label xml:lang="en">BHUTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IOT">
+            <localization>
+                <label xml:lang="en">BRITISH INDIAN OCEAN TERRITORY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BVT">
+            <localization>
+                <label xml:lang="en">BOUVET ISLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TUV">
+            <localization>
+                <label xml:lang="en">TUVALU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TTO">
+            <localization>
+                <label xml:lang="en">TRINIDAD AND TOBAGO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TCA">
+            <localization>
+                <label xml:lang="en">TURKS AND CAICOS ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MAF">
+            <localization>
+                <label xml:lang="en">SAINT MARTIN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SPM">
+            <localization>
+                <label xml:lang="en">SAINT PIERRE AND MIQUELON</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="STP">
+            <localization>
+                <label xml:lang="en">SAO TOME AND PRINCIPE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="WSM">
+            <localization>
+                <label xml:lang="en">SAMOA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VCT">
+            <localization>
+                <label xml:lang="en">SAINT VINCENT AND THE GRENADINES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PCN">
+            <localization>
+                <label xml:lang="en">PITCAIRN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PLW">
+            <localization>
+                <label xml:lang="en">PALAU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NFK">
+            <localization>
+                <label xml:lang="en">NORFOLK ISLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NIU">
+            <localization>
+                <label xml:lang="en">NIUE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MNP">
+            <localization>
+                <label xml:lang="en">NORTHERN MARIANA ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NER">
+            <localization>
+                <label xml:lang="en">NIGER</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NRU">
+            <localization>
+                <label xml:lang="en">NAURU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MMR">
+            <localization>
+                <label xml:lang="en">MYANMAR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MSR">
+            <localization>
+                <label xml:lang="en">MONTSERRAT</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MUS">
+            <localization>
+                <label xml:lang="en">MAURITIUS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FSM">
+            <localization>
+                <label xml:lang="en">MICRONESIA, FEDERATED STATES OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MYT">
+            <localization>
+                <label xml:lang="en">MAYOTTE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MLI">
+            <localization>
+                <label xml:lang="en">MALI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MHL">
+            <localization>
+                <label xml:lang="en">MARSHALL ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="REU">
+            <localization>
+                <label xml:lang="en">RÉUNION</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BLM">
+            <localization>
+                <label xml:lang="en">SAINT BARTHÉLEMY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="RSM">
+            <localization>
+                <label xml:lang="en">SAN MARINO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LCA">
+            <localization>
+                <label xml:lang="en">SAINT LUCIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SHN">
+            <localization>
+                <label xml:lang="en">SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KNA">
+            <localization>
+                <label xml:lang="en">SAINT KITTS AND NEVIS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SGS">
+            <localization>
+                <label xml:lang="en">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SWZ">
+            <localization>
+                <label xml:lang="en">SWAZILAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SJM">
+            <localization>
+                <label xml:lang="en">SVALBARD AND JAN MAYEN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SUR">
+            <localization>
+                <label xml:lang="en">SURINAME</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TGO">
+            <localization>
+                <label xml:lang="en">TOGO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TLS">
+            <localization>
+                <label xml:lang="en">TIMOR-LESTE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SYR">
+            <localization>
+                <label xml:lang="en">SYRIAN ARAB REPUBLIC</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TKL">
+            <localization>
+                <label xml:lang="en">TOKELAU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GRD">
+            <localization>
+                <label xml:lang="el">ΓΡΕΝΑΔΑ</label>
+                <label xml:lang="en">GRENADA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GRC">
+            <localization>
+                <label xml:lang="el">ΕΛΛΑΔΑ</label>
+                <label xml:lang="en">GREECE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GIB">
+            <localization>
+                <label xml:lang="el">ΓΙΒΡΑΛΤΑΡ</label>
+                <label xml:lang="en">GIBRALTAR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GIN">
+            <localization>
+                <label xml:lang="el">ΓΟΥΙΝΕΑ</label>
+                <label xml:lang="en">GUINEA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GNB">
+            <localization>
+                <label xml:lang="el">ΓΟΥΙΝΕΑ - ΜΠΙΣΣΑΟΥ</label>
+                <label xml:lang="en">GUINEA-BISSAU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GTM">
+            <localization>
+                <label xml:lang="el">ΓΟΥΑΤΕΜΑΛΑ</label>
+                <label xml:lang="en">GUATEMALA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GRL">
+            <localization>
+                <label xml:lang="el">ΓΡΟΙΛΑΝΔΙΑ</label>
+                <label xml:lang="en">GREENLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PYF">
+            <localization>
+                <label xml:lang="el">ΓΑΛΛΙΚΗ ΠΟΛΥΝΗΣΙΑ</label>
+                <label xml:lang="en">FRENCH POLYNESIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DEU">
+            <localization>
+                <label xml:lang="el">ΓΕΡΜΑΝΙΑ</label>
+                <label xml:lang="en">GERMANY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GUF">
+            <localization>
+                <label xml:lang="el">ΓΑΛΛΙΚΗ ΓΟΥΙΑΝΑ</label>
+                <label xml:lang="en">FRENCH GUIANA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GEO">
+            <localization>
+                <label xml:lang="el">ΓΕΩΡΓΙΑ</label>
+                <label xml:lang="en">GEORGIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GMB">
+            <localization>
+                <label xml:lang="el">ΓΚΑΜΠΙΑ</label>
+                <label xml:lang="en">GAMBIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FJI">
+            <localization>
+                <label xml:lang="el">ΦΙΤΖΙ</label>
+                <label xml:lang="en">FIJI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FRA">
+            <localization>
+                <label xml:lang="el">ΓΑΛΛΙΑ</label>
+                <label xml:lang="en">FRANCE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FIN">
+            <localization>
+                <label xml:lang="el">ΦΙΛΑΝΔΙΑ</label>
+                <label xml:lang="en">FINLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DNK">
+            <localization>
+                <label xml:lang="el">ΔΑΝΙΑ</label>
+                <label xml:lang="en">DENMARK</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CZE">
+            <localization>
+                <label xml:lang="el">ΤΣΕΧΙΚΗ ΔΗΜΟΚΡΑΤΙΑ</label>
+                <label xml:lang="en">CZECH REPUBLIC</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HRV">
+            <localization>
+                <label xml:lang="el">ΚΡΟΑΤΙΑ</label>
+                <label xml:lang="en">CROATIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="EGY">
+            <localization>
+                <label xml:lang="el">ΑΙΓΥΠΤΟΣ</label>
+                <label xml:lang="en">EGYPT</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CUB">
+            <localization>
+                <label xml:lang="el">ΚΟΥΒΑ</label>
+                <label xml:lang="en">CUBA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ETH">
+            <localization>
+                <label xml:lang="el">ΑΙΘΙΟΠΙΑ</label>
+                <label xml:lang="en">ETHIOPIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CYP">
+            <localization>
+                <label xml:lang="el">ΚΥΠΡΟΣ</label>
+                <label xml:lang="en">CYPRUS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SLV">
+            <localization>
+                <label xml:lang="el">ΕΛ ΣΑΛΒΑΔΟΡ</label>
+                <label xml:lang="en">EL SALVADOR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BGR">
+            <localization>
+                <label xml:lang="el">ΒΟΥΛΓΑΡΙΑ</label>
+                <label xml:lang="en">BULGARIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CRI">
+            <localization>
+                <label xml:lang="el">ΚΟΣΤΑ ΡΙΚΑ</label>
+                <label xml:lang="en">COSTA RICA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BIH">
+            <localization>
+                <label xml:lang="el">ΒΟΣΝΙΑ ΕΡΖΕΓΟΒΙΝΗ</label>
+                <label xml:lang="en">BOSNIA AND HERZEGOVINA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BEL">
+            <localization>
+                <label xml:lang="el">ΒΕΛΓΙΟ</label>
+                <label xml:lang="en">BELGIUM</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BHS">
+            <localization>
+                <label xml:lang="el">ΜΠΑΧΑΜΕΣ</label>
+                <label xml:lang="en">BAHAMAS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AZE">
+            <localization>
+                <label xml:lang="el">ΑΖΕΡΜΠΑΪΤΖΑΝ</label>
+                <label xml:lang="en">AZERBAIJAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AUT">
+            <localization>
+                <label xml:lang="el">ΑΥΣΤΡΙΑ</label>
+                <label xml:lang="en">AUSTRIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ARG">
+            <localization>
+                <label xml:lang="el">ΑΡΓΕΝΤΙΝΗ</label>
+                <label xml:lang="en">ARGENTINA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AGO">
+            <localization>
+                <label xml:lang="el">ΑΓΚΟΛΑ</label>
+                <label xml:lang="en">ANGOLA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DZA">
+            <localization>
+                <label xml:lang="el">ΑΛΓΕΡΙΑ</label>
+                <label xml:lang="en">ALGERIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AFG">
+            <localization>
+                <label xml:lang="el">ΑΦΓΑΝΙΣΤΑΝ</label>
+                <label xml:lang="en">AFGHANISTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ARM">
+            <localization>
+                <label xml:lang="el">ΑΡΜΕΝΙΑ</label>
+                <label xml:lang="en">ARMENIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AND">
+            <localization>
+                <label xml:lang="el">ΑΝΔΟΡΡΑ</label>
+                <label xml:lang="en">ANDORRA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="AUS">
+            <localization>
+                <label xml:lang="el">ΑΥΣΤΡΑΛΙΑ</label>
+                <label xml:lang="en">AUSTRALIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ATA">
+            <localization>
+                <label xml:lang="el">ΑΝΤΑΡΚΤΙΚΗ</label>
+                <label xml:lang="en">ANTARCTICA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ALB">
+            <localization>
+                <label xml:lang="el">ΑΛΒΑΝΙΑ</label>
+                <label xml:lang="en">ALBANIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BHR">
+            <localization>
+                <label xml:lang="el">ΜΠΑΧΡΕΙΝ</label>
+                <label xml:lang="en">BAHRAIN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BLR">
+            <localization>
+                <label xml:lang="el">ΛΕΥΚΟΡΩΣΙΑ</label>
+                <label xml:lang="en">BELARUS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BOL">
+            <localization>
+                <label xml:lang="el">ΠΟΛΥΕΥΘΝΟΤΙΚΟ ΚΡΑΤΟΣ ΤΗΣ ΒΟΛΙΒΙΑΣ</label>
+                <label xml:lang="en">BOLIVIA, PLURINATIONAL STATE OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BMU">
+            <localization>
+                <label xml:lang="el">ΒΕΡΜΟΥΔΕΣ</label>
+                <label xml:lang="en">BERMUDA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="COG">
+            <localization>
+                <label xml:lang="el">ΚΟΝΓΚΟ</label>
+                <label xml:lang="en">CONGO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="COL">
+            <localization>
+                <label xml:lang="el">ΚΟΛΟΜΒΙΑ</label>
+                <label xml:lang="en">COLOMBIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CAN">
+            <localization>
+                <label xml:lang="el">ΚΑΝΑΔΑΣ</label>
+                <label xml:lang="en">CANADA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CHL">
+            <localization>
+                <label xml:lang="el">ΧΙΛΗ</label>
+                <label xml:lang="en">CHILE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CHN">
+            <localization>
+                <label xml:lang="el">ΚΙΝΑ</label>
+                <label xml:lang="en">CHINA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BRA">
+            <localization>
+                <label xml:lang="el">ΒΡΑΖΙΛΙΑ</label>
+                <label xml:lang="en">BRAZIL</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CMR">
+            <localization>
+                <label xml:lang="el">ΚΑΜΕΡΟΥΝ</label>
+                <label xml:lang="en">CAMEROON</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="EST">
+            <localization>
+                <label xml:lang="el">ΕΣΘΟΝΙΑ</label>
+                <label xml:lang="en">ESTONIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GLP">
+            <localization>
+                <label xml:lang="el">ΓΟΥΑΔΕΛΟΥΠΗ</label>
+                <label xml:lang="en">GUADELOUPE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GHA">
+            <localization>
+                <label xml:lang="el">ΓΚΑΝΑ</label>
+                <label xml:lang="en">GHANA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TON">
+            <localization>
+                <label xml:lang="en">TONGA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LAO">
+            <localization>
+                <label xml:lang="en">LAO PEOPLE'S DEMOCRATIC REPUBLIC</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KIR">
+            <localization>
+                <label xml:lang="en">KIRIBATI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CYM">
+            <localization>
+                <label xml:lang="en">CAYMAN ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="COD">
+            <localization>
+                <label xml:lang="el">ΛΑΟΚΡΑΤΙΚΗ ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΚΟΝΓΚΟ</label>
+                <label xml:lang="en">CONGO, THE DEMOCRATIC REPUBLIC OF THE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MNE">
+            <localization>
+                <label xml:lang="el">ΜΑΥΡΟΒΟΥΝΙΟ</label>
+                <label xml:lang="en">MONTENEGRO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DOM">
+            <localization>
+                <label xml:lang="el">ΚΟΙΝΟΠΟΛΙΤΕΙΑ ΤΗΣ ΝΤΟΜΙΝΙΚΑΣ</label>
+                <label xml:lang="en">DOMINICAN REPUBLIC</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ZWE">
+            <localization>
+                <label xml:lang="el">ΖΙΜΠΑΜΠΟΥΕ</label>
+                <label xml:lang="en">ZIMBABWE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DJI">
+            <localization>
+                <label xml:lang="el">ΤΖΙΜΠΟΥΤΙ</label>
+                <label xml:lang="en">DJIBOUTI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ECU">
+            <localization>
+                <label xml:lang="el">ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΙΣΗΜΕΡΙΝΟΥ</label>
+                <label xml:lang="en">ECUADOR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="DMA">
+            <localization>
+                <label xml:lang="el">ΔΟΜΙΝΙΚΑ</label>
+                <label xml:lang="en">DOMINICA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VIR">
+            <localization>
+                <label xml:lang="el">ΑΜΕΡΙΚΑΝΙΚΕΣ ΠΑΡΘΕΝΟΙ ΝΗΣΟΙ</label>
+                <label xml:lang="en">VIRGIN ISLANDS, U.S.</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="USA">
+            <localization>
+                <label xml:lang="el">ΗΝΩΜΕΝΕΣ ΠΟΛΙΤΕΙΕΣ ΤΗΣ ΑΜΕΡΙΚΗΣ</label>
+                <label xml:lang="en">UNITED STATES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ZMB">
+            <localization>
+                <label xml:lang="el">ΖΑΜΠΙΑ</label>
+                <label xml:lang="en">ZAMBIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="YEM">
+            <localization>
+                <label xml:lang="el">ΥΕΜΕΝΗ</label>
+                <label xml:lang="en">YEMEN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="UZB">
+            <localization>
+                <label xml:lang="el">ΟΥΖΜΠΕΚΙΣΤΑΝ</label>
+                <label xml:lang="en">UZBEKISTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VGB">
+            <localization>
+                <label xml:lang="el">ΒΡΕΤΑΝΙΚΕΣ ΠΑΡΘΕΝΟΙ ΝΗΣΟΙ</label>
+                <label xml:lang="en">VIRGIN ISLANDS, BRITISH</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ESH">
+            <localization>
+                <label xml:lang="el">ΔΥΤΙΚΗ ΣΑΧΑΡΑ</label>
+                <label xml:lang="en">WESTERN SAHARA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VNM">
+            <localization>
+                <label xml:lang="el">BIETNAM</label>
+                <label xml:lang="en">VIET NAM</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VEN">
+            <localization>
+                <label xml:lang="el">ΒΕΝΕΖΟΥΕΛΑ, ΜΠΟΛΙΒΑΡΙΑΝΗ ΔΗΜΟΚΡΑΤΙΑ</label>
+                <label xml:lang="en">VENEZUELA, BOLIVARIAN REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="URY">
+            <localization>
+                <label xml:lang="el">ΟΥΡΟΥΓΟΥΑΗ</label>
+                <label xml:lang="en">URUGUAY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MCO">
+            <localization>
+                <label xml:lang="el">ΜΟΝΑΚΟ</label>
+                <label xml:lang="en">MONACO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TZA">
+            <localization>
+                <label xml:lang="el">ΤΑΝΖΑΝΙΑ</label>
+                <label xml:lang="en">TANZANIA, UNITED REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TKM">
+            <localization>
+                <label xml:lang="el">ΤΟΥΡΚΜΕΝΙΣΤΑΝ</label>
+                <label xml:lang="en">TURKMENISTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="UGA">
+            <localization>
+                <label xml:lang="el">ΟΥΓΚΑΝΤΑ</label>
+                <label xml:lang="en">UGANDA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="UKR">
+            <localization>
+                <label xml:lang="el">ΟΥΚΡΑΝΙΑ</label>
+                <label xml:lang="en">UKRAINE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TUR">
+            <localization>
+                <label xml:lang="el">ΤΟΥΡΚΙΑ</label>
+                <label xml:lang="en">TURKEY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TUN">
+            <localization>
+                <label xml:lang="el">ΤΥΝΗΣΙΑ</label>
+                <label xml:lang="en">TUNISIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LKA">
+            <localization>
+                <label xml:lang="el">ΣΡΙ ΛΑΝΚΑ</label>
+                <label xml:lang="en">SRI LANKA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ZAF">
+            <localization>
+                <label xml:lang="el">ΝΟΤΙΑ ΑΦΡΙΚΗ</label>
+                <label xml:lang="en">SOUTH AFRICA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TJK">
+            <localization>
+                <label xml:lang="el">ΤΑΤΖΙΚΙΣΤΑΝ</label>
+                <label xml:lang="en">TAJIKISTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SLB">
+            <localization>
+                <label xml:lang="el">ΝΗΣΟΙ ΣΟΛΟΜΩΝΤΑ</label>
+                <label xml:lang="en">SOLOMON ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SLE">
+            <localization>
+                <label xml:lang="el">ΣΙΕΡΑ ΛΕΟΝΕ</label>
+                <label xml:lang="en">SIERRA LEONE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SVN">
+            <localization>
+                <label xml:lang="el">ΣΛΟΒΕΝΙΑ</label>
+                <label xml:lang="en">SLOVENIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SVK">
+            <localization>
+                <label xml:lang="el">ΣΛΟΒΑΚΙΑ</label>
+                <label xml:lang="en">SLOVAKIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SGP">
+            <localization>
+                <label xml:lang="el">ΣΙΓΚΑΠΟΥΡΗ</label>
+                <label xml:lang="en">SINGAPORE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SRB">
+            <localization>
+                <label xml:lang="el">ΣΕΡΒΙΑ</label>
+                <label xml:lang="en">SERBIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="QAT">
+            <localization>
+                <label xml:lang="el">ΚΑΤΑΡ</label>
+                <label xml:lang="en">QATAR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SEN">
+            <localization>
+                <label xml:lang="el">ΣΕΝΕΓΑΛΗ</label>
+                <label xml:lang="en">SENEGAL</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="RWA">
+            <localization>
+                <label xml:lang="el">ΡΟΥΑΝΤΑ</label>
+                <label xml:lang="en">RWANDA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="POL">
+            <localization>
+                <label xml:lang="el">ΠΟΛΩΝΙΑ</label>
+                <label xml:lang="en">POLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="false" name="RUS">
+            <localization>
+                <label xml:lang="el">ΡΩΣΙΚΗ ΟΜΟΣΠΟΝΔΙΑ</label>
+                <label xml:lang="en">RUSSIAN FEDERATION</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SAU">
+            <localization>
+                <label xml:lang="el">ΣΑΟΥΔΙΚΗ ΑΡΑΒΙΑ</label>
+                <label xml:lang="en">SAUDI ARABIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ROU">
+            <localization>
+                <label xml:lang="el">ΡΟΥΜΑΝΙΑ</label>
+                <label xml:lang="en">ROMANIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PRI">
+            <localization>
+                <label xml:lang="el">ΠΟΥΕΡΤΟ ΡΙΚΟ</label>
+                <label xml:lang="en">PUERTO RICO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PRT">
+            <localization>
+                <label xml:lang="el">ΠΟΡΤΟΓΑΛΙΑ</label>
+                <label xml:lang="en">PORTUGAL</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SYC">
+            <localization>
+                <label xml:lang="el">ΣΕΫΧΕΛΛΕΣ</label>
+                <label xml:lang="en">SEYCHELLES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SOM">
+            <localization>
+                <label xml:lang="el">ΣΟΜΑΛΙΑ</label>
+                <label xml:lang="en">SOMALIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SWE">
+            <localization>
+                <label xml:lang="el">ΣΟΥΗΔΙΑ</label>
+                <label xml:lang="en">SWEDEN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CHE">
+            <localization>
+                <label xml:lang="el">ΕΛΒΕΤΙΑ</label>
+                <label xml:lang="en">SWITZERLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TWN">
+            <localization>
+                <label xml:lang="el">ΔΗΜΟΚΡΑΤΙΑ ΤΗΣ ΤΑΪΒΑΝ</label>
+                <label xml:lang="en">TAIWAN, PROVINCE OF CHINA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ESP">
+            <localization>
+                <label xml:lang="el">ΙΣΠΑΝΙΑ</label>
+                <label xml:lang="en">SPAIN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="SDN">
+            <localization>
+                <label xml:lang="el">ΣΟΥΔΑΝ</label>
+                <label xml:lang="en">SUDAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ARE">
+            <localization>
+                <label xml:lang="el">ΗΝΩΜΕΝΑ ΑΡΑΒΙΚΑ ΕΜΙΡΑΤΑ</label>
+                <label xml:lang="en">UNITED ARAB EMIRATES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GBR">
+            <localization>
+                <label xml:lang="el">ΗΝΩΜΕΝΟ ΒΑΣΙΛΕΙΟ</label>
+                <label xml:lang="en">UNITED KINGDOM</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="THA">
+            <localization>
+                <label xml:lang="el">ΤΑΪΛΑΝΔΗ</label>
+                <label xml:lang="en">THAILAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="UMI">
+            <localization>
+                <label xml:lang="en">UNITED STATES MINOR OUTLYING ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VUT">
+            <localization>
+                <label xml:lang="en">VANUATU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="WLF">
+            <localization>
+                <label xml:lang="en">WALLIS AND FUTUNA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MAC">
+            <localization>
+                <label xml:lang="en">MACAO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IMN">
+            <localization>
+                <label xml:lang="en">ISLE OF MAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GUY">
+            <localization>
+                <label xml:lang="en">GUYANA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GGY">
+            <localization>
+                <label xml:lang="en">GUERNSEY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GUM">
+            <localization>
+                <label xml:lang="en">GUAM</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FRO">
+            <localization>
+                <label xml:lang="en">FAROE ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="FLK">
+            <localization>
+                <label xml:lang="en">FALKLAND ISLANDS (MALVINAS)</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ERI">
+            <localization>
+                <label xml:lang="en">ERITREA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CIV">
+            <localization>
+                <label xml:lang="en">CÔTE D'IVOIRE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="COM">
+            <localization>
+                <label xml:lang="en">COMOROS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="COK">
+            <localization>
+                <label xml:lang="en">COOK ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CCK">
+            <localization>
+                <label xml:lang="en">COCOS (KEELING) ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BDI">
+            <localization>
+                <label xml:lang="en">BURUNDI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CAF">
+            <localization>
+                <label xml:lang="en">CENTRAL AFRICAN REPUBLIC</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BFA">
+            <localization>
+                <label xml:lang="en">BURKINA FASO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="TCD">
+            <localization>
+                <label xml:lang="en">CHAD</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CXR">
+            <localization>
+                <label xml:lang="en">CHRISTMAS ISLAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="CPV">
+            <localization>
+                <label xml:lang="en">CAPE VERDE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GNQ">
+            <localization>
+                <label xml:lang="en">EQUATORIAL GUINEA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ATF">
+            <localization>
+                <label xml:lang="en">FRENCH SOUTHERN TERRITORIES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="GAB">
+            <localization>
+                <label xml:lang="en">GABON</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="VAT">
+            <localization>
+                <label xml:lang="en">HOLY SEE (VATICAN CITY STATE)</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HMD">
+            <localization>
+                <label xml:lang="en">HEARD ISLAND AND MCDONALD ISLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HTI">
+            <localization>
+                <label xml:lang="en">HAITI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="JEY">
+            <localization>
+                <label xml:lang="en">JERSEY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="JOR">
+            <localization>
+                <label xml:lang="en">JORDAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LSO">
+            <localization>
+                <label xml:lang="en">LESOTHO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LBY">
+            <localization>
+                <label xml:lang="en">LIBYAN ARAB JAMAHIRIYA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KHM">
+            <localization>
+                <label xml:lang="en">CAMBODIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="BEN">
+            <localization>
+                <label xml:lang="en">BENIN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ASM">
+            <localization>
+                <label xml:lang="en">AMERICAN SAMOA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PHL">
+            <localization>
+                <label xml:lang="el">ΦΙΛΙΠΠΙΝΕΣ</label>
+                <label xml:lang="en">PHILIPPINES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NCL">
+            <localization>
+                <label xml:lang="el">ΝΕΑ ΚΑΛΗΔΟΝΙΑ</label>
+                <label xml:lang="en">NEW CALEDONIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NZL">
+            <localization>
+                <label xml:lang="el">ΝΕΑ ΖΗΛΑΝΔΙΑ</label>
+                <label xml:lang="en">NEW ZEALAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NAM">
+            <localization>
+                <label xml:lang="el">ΝΑΜΙΜΠΙΑ</label>
+                <label xml:lang="en">NAMIBIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ANT">
+            <localization>
+                <label xml:lang="el">ΟΛΛΑΝΔΙΚΕΣ ΑΝΤΙΛΛΕΣ</label>
+                <label xml:lang="en">NETHERLANDS ANTILLES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MOZ">
+            <localization>
+                <label xml:lang="el">ΜΟΖΑΜΒΙΚΗ</label>
+                <label xml:lang="en">MOZAMBIQUE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NIC">
+            <localization>
+                <label xml:lang="el">ΝΙΚΑΡΑΓΟΥΑ</label>
+                <label xml:lang="en">NICARAGUA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NPL">
+            <localization>
+                <label xml:lang="el">ΝΕΠΑΛ</label>
+                <label xml:lang="en">NEPAL</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NGA">
+            <localization>
+                <label xml:lang="el">ΝΙΓΗΡΙΑ</label>
+                <label xml:lang="en">NIGERIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MAR">
+            <localization>
+                <label xml:lang="el">ΜΑΡΟΚΟ</label>
+                <label xml:lang="en">MOROCCO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MDA">
+            <localization>
+                <label xml:lang="el">ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΜΟΛΒΟΔΑ</label>
+                <label xml:lang="en">MOLDOVA, REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MEX">
+            <localization>
+                <label xml:lang="el">ΜΕΞΙΚΟ</label>
+                <label xml:lang="en">MEXICO</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LBR">
+            <localization>
+                <label xml:lang="el">ΛΙΒΕΡΙΑ</label>
+                <label xml:lang="en">LIBERIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MDG">
+            <localization>
+                <label xml:lang="el">ΜΑΔΑΓΑΣΚΑΡΗ</label>
+                <label xml:lang="en">MADAGASCAR</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LTU">
+            <localization>
+                <label xml:lang="el">ΛΙΘΟΥΑΝΙΑ</label>
+                <label xml:lang="en">LITHUANIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LIE">
+            <localization>
+                <label xml:lang="el">ΛΙΧΤΕΣΤΑΙΝ</label>
+                <label xml:lang="en">LIECHTENSTEIN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LBN">
+            <localization>
+                <label xml:lang="el">ΛΙΒΑΝΟΣ</label>
+                <label xml:lang="en">LEBANON</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="JAM">
+            <localization>
+                <label xml:lang="el">ΤΖΑΜΑΙΚΑ</label>
+                <label xml:lang="en">JAMAICA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KOR">
+            <localization>
+                <label xml:lang="el">ΔΗΜΟΚΡΑΤΙΑ ΤΗΣ ΚΟΡΕΑΣ</label>
+                <label xml:lang="en">KOREA, REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KEN">
+            <localization>
+                <label xml:lang="el">ΚΕΝΥΑ</label>
+                <label xml:lang="en">KENYA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="JPN">
+            <localization>
+                <label xml:lang="el">ΙΑΠΩΝΙΑ</label>
+                <label xml:lang="en">JAPAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ITA">
+            <localization>
+                <label xml:lang="el">ΙΤΑΛΙΑ</label>
+                <label xml:lang="en">ITALY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IND">
+            <localization>
+                <label xml:lang="el">ΙΝΔΙΑ</label>
+                <label xml:lang="en">INDIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IRL">
+            <localization>
+                <label xml:lang="el">ΙΡΛΑΝΔΙΑ</label>
+                <label xml:lang="en">IRELAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HND">
+            <localization>
+                <label xml:lang="el">ΟΝΔΟΥΡΑ</label>
+                <label xml:lang="en">HONDURAS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IRQ">
+            <localization>
+                <label xml:lang="el">ΙΡΑΚ</label>
+                <label xml:lang="en">IRAQ</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ISL">
+            <localization>
+                <label xml:lang="el">ΙΣΛΑΝΔΙΑ</label>
+                <label xml:lang="en">ICELAND</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HUN">
+            <localization>
+                <label xml:lang="el">ΟΥΓΓΑΡΙΑ</label>
+                <label xml:lang="en">HUNGARY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="HKG">
+            <localization>
+                <label xml:lang="el">ΧΟΝΓΚ ΚΟΝΓΚ</label>
+                <label xml:lang="en">HONG KONG</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IDN">
+            <localization>
+                <label xml:lang="el">ΙΝΔΟΝΗΣΙΑ</label>
+                <label xml:lang="en">INDONESIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="ISR">
+            <localization>
+                <label xml:lang="el">ΙΣΡΑΗΛ</label>
+                <label xml:lang="en">ISRAEL</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="IRN">
+            <localization>
+                <label xml:lang="el">ΙΣΛΑΜΙΚΗ ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΙΡΑΝ</label>
+                <label xml:lang="en">IRAN, ISLAMIC REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PRK">
+            <localization>
+                <label xml:lang="el">ΛΑΟΚΡΑΤΙΚΗ ΔΗΜΟΚΡΑΤΙΑ ΤΗΣ ΚΟΡΕΑΣ</label>
+                <label xml:lang="en">KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="false" name="KGZ">
+            <localization>
+                <label xml:lang="el">ΚΙΡΓΙΣΤΑΝ</label>
+                <label xml:lang="en">KYRGYZSTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KAZ">
+            <localization>
+                <label xml:lang="el">ΚΑΖΑΚΣΤΑΝ</label>
+                <label xml:lang="en">KAZAKHSTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="KWT">
+            <localization>
+                <label xml:lang="el">ΚΟΥΒΕΙΤ</label>
+                <label xml:lang="en">KUWAIT</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MWI">
+            <localization>
+                <label xml:lang="el">ΜΑΛΑΟΥΙ</label>
+                <label xml:lang="en">MALAWI</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LVA">
+            <localization>
+                <label xml:lang="el">ΛΕΤΟΝΙΑ</label>
+                <label xml:lang="en">LATVIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MKD">
+            <localization>
+                <label xml:lang="el">ΠΡΩΗΝ ΓΙΟΥΓΚΟΣΛΑΒΙΚΗ ΔΗΜΟΚΡΑΤΙΑ ΤΗΣ ΜΑΚΕΔΟΝΙΑΣ</label>
+                <label xml:lang="en">MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="LUX">
+            <localization>
+                <label xml:lang="el">ΛΟΥΞΕΜΒΟΥΡΓΟ</label>
+                <label xml:lang="en">LUXEMBOURG</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MNG">
+            <localization>
+                <label xml:lang="el">ΜΟΓΓΟΛΙΑ</label>
+                <label xml:lang="en">MONGOLIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MLT">
+            <localization>
+                <label xml:lang="el">ΜΑΛΤΑ</label>
+                <label xml:lang="en">MALTA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MTQ">
+            <localization>
+                <label xml:lang="el">ΜΑΡΤΙΝΙΚΑ</label>
+                <label xml:lang="en">MARTINIQUE</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MYS">
+            <localization>
+                <label xml:lang="el">ΜΑΛΑΙΣΙΑ</label>
+                <label xml:lang="en">MALAYSIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MRT">
+            <localization>
+                <label xml:lang="el">ΜΑΥΡΙΤΑΝΙΑ</label>
+                <label xml:lang="en">MAURITANIA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="MDV">
+            <localization>
+                <label xml:lang="el">ΜΑΛΒΙΔΕΣ</label>
+                <label xml:lang="en">MALDIVES</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NLD">
+            <localization>
+                <label xml:lang="el">ΟΛΛΑΝΔΙΑ</label>
+                <label xml:lang="en">NETHERLANDS</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PSE">
+            <localization>
+                <label xml:lang="el">ΠΑΛΑΙΣΤΙΝΗ</label>
+                <label xml:lang="en">PALESTINIAN TERRITORY, OCCUPIED</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PER">
+            <localization>
+                <label xml:lang="el">ΠΕΡΟΥ</label>
+                <label xml:lang="en">PERU</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PAN">
+            <localization>
+                <label xml:lang="el">ΠΑΝΑΜΑΣ</label>
+                <label xml:lang="en">PANAMA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PAK">
+            <localization>
+                <label xml:lang="el">ΠΑΚΙΣΤΑΝ</label>
+                <label xml:lang="en">PAKISTAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="OMN">
+            <localization>
+                <label xml:lang="el">ΟΜΑΝ</label>
+                <label xml:lang="en">OMAN</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="NOR">
+            <localization>
+                <label xml:lang="el">ΝΟΡΒΗΓΙΑ</label>
+                <label xml:lang="en">NORWAY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PRY">
+            <localization>
+                <label xml:lang="el">ΠΑΡΑΓΟΥΑΗ</label>
+                <label xml:lang="en">PARAGUAY</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+        <topic order="0" allowsReferrerContentObjects="true" name="PNG">
+            <localization>
+                <label xml:lang="el">ΠΑΠΟΥΑ ΝΕΑ ΓΟΥΙΝΕΑ</label>
+                <label xml:lang="en">PAPUA NEW GUINEA</label>
+            </localization>
+            <taxonomy name="country"/>
+            <owner externalId="SYSTEM"/>
+        </topic>
+    </rootTopics>
+</ns2:taxonomy>

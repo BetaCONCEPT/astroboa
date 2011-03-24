@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<ns2:taxonomy name="fileResourceContentType" 
+	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://www.betaconceptframework.org/schema/astroboa/astroboa-model-${project.version}.xsd"
+	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<localization>
+		<label xml:lang="el">Τύπος Ψηφιακού Περιεχομένου
+		</label>
+		<label xml:lang="en">File Resource Type
+		</label>
+	</localization>
+	<rootTopics>
+		<topic order="0" allowsReferrerContentObjects="true" name="drawing">
+			<localization>
+				<label xml:lang="el">Σχεδιάγραμμα</label>
+				<label xml:lang="en">Drawing</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="video">
+			<localization>
+				<label xml:lang="el">Video</label>
+				<label xml:lang="en">Video</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="image">
+			<localization>
+				<label xml:lang="el">Εικόνα</label>
+				<label xml:lang="en">Image</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="audio">
+			<localization>
+				<label xml:lang="el">Ηχητικό Αρχείο
+				</label>
+				<label xml:lang="en">Audio</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="photograph">
+			<localization>
+				<label xml:lang="el">Φωτογραφία</label>
+				<label xml:lang="en">Photograph</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="presentation">
+			<localization>
+				<label xml:lang="el">Παρουσίαση</label>
+				<label xml:lang="en">Presentation</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="text">
+			<localization>
+				<label xml:lang="el">Κείμενο</label>
+				<label xml:lang="en">Text</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="sourceCode">
+			<localization>
+				<label xml:lang="el">Πηγαίος Κώδικας
+				</label>
+				<label xml:lang="en">Source Code</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="xml">
+			<localization>
+				<label xml:lang="el">Αρχείο XML</label>
+				<label xml:lang="en">XML</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="spreadsheet">
+			<localization>
+				<label xml:lang="el">Λογιστικό Φύλλο
+				</label>
+				<label xml:lang="en">Spreadsheet</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+		<topic order="0" allowsReferrerContentObjects="true" name="music">
+			<localization>
+				<label xml:lang="el">Μουσική</label>
+				<label xml:lang="en">Music</label>
+			</localization>
+			<taxonomy name="fileResourceContentType" />
+			<owner externalId="SYSTEM" />
+		</topic>
+	</rootTopics>
+
+</ns2:taxonomy>
