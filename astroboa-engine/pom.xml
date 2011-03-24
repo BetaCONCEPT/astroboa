@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		      
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>  
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-engine</artifactId>
+	<name>Astroboa Engine</name>
+	<packaging>jar</packaging>
+	<description>
+		This is the back end module of ASTROBOA. It defines an
+		abstraction above JCR with higher level concepts for content
+		mangement as Content Object, Taxonomy, Folksonomy, User Space,
+		Repository User. It provides an API with services for searching
+		with criteria (similar to hibrnate), creating content objects,
+		taxonomies, spaces,etc.
+	</description>
+
+	<build>
+		<plugins>
+			<plugin>
+      			  <artifactId>maven-assembly-plugin</artifactId>
+       			  <configuration>
+          		  	<descriptorRefs>
+            			<descriptorRef>jar-with-dependencies</descriptorRef>
+          		  	</descriptorRefs>
+        		</configuration>
+        		<executions>
+          			<execution>
+            			<id>make-assembly</id> <!-- this is used for inheritance merges -->
+            			<phase>package</phase> <!-- append to the package phase. -->
+            			<goals>
+              				<goal>single</goal> <!-- goals == mojos -->
+            			</goals>
+          			</execution>
+        		</executions>
+			</plugin>
+
+			
+			<!-- 
+				This instructs Maven to copy any empty directory found
+				in src/test/resources or in  src/main/resources
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+       			<configuration>
+					<includeEmptyDirs>true</includeEmptyDirs>
+          		</configuration>            
+			</plugin>
+			
+			<!-- Use this plugin to rename all built in definition schemas -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-antrun-plugin</artifactId>
+        		<!-- 
+        			Although plugin version is  provided in pluginManagement in
+        			betaconceptframework-parent.pom, plugin's info
+        			http://maven.apache.org/plugins/maven-antrun-plugin/plugin-info.html
+        			states that it should also be provided in project's pom as well 
+        		-->
+        		<version>1.4</version>
+        		<executions>
+          			<execution>
+          			    <id>rename-builtin-schemata</id>
+            			<phase>compile</phase>
+            			<configuration>
+              				<tasks>
+              				 	<move todir="${project.build.outputDirectory}/META-INF/builtin-definition-schemas" includeemptydirs="false">
+    								<fileset dir="${project.build.outputDirectory}/META-INF/builtin-definition-schemas">
+      									<include name="**/*.xsd" />
+      									<exclude name="**/*-${project.version}.xsd" />
+    								</fileset>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
+  								</move>
+		            		</tasks>
+        			    </configuration>
+            			<goals>
+              				<goal>run</goal>
+            			</goals>
+          			</execution>
+        		</executions>
+      		</plugin>
+			
+		</plugins>
+		
+		<!-- This instruct Maven to filter src/main/resources directory -->
+		<resources>          
+			<resource>
+            	<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		
+	</build>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--  
+			aspectj/aspectjweaver.jar, aspectj/aspectjrt.jar, (aspectj/aspectjtools.jar)
+			required at runtime when using Spring's AspectJ support
+		-->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!--  
+			Required by Spring
+		-->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- 
+		
+			This dependency MUST be defined AFTER the above 2 dependencies
+			javax.transaction:jta:1.1 and javax.persistence:persistence-api
+			otherwise an exception is thrown like
+			java.lang.ClassFormatError: Absent Code attribute in method that is not native or abstract in class file javax/transaction/RollbackException
+		 -->
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>  
+			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-jcr-commons</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>se-jcr</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+        -->
+        
+		<dependency>
+			<groupId>org.springmodules</groupId>
+			<artifactId>spring-modules-jcr</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework</groupId>
+			<artifactId>betaconceptframework-commons</artifactId>
+			<version>2.3.0.GA</version>
+		</dependency>
+		
+		<!-- JBoss Cache 3.1.0.GA which ships with JBoss 5.1.0.GA and JBoss dependencies -->
+		<dependency>
+			<groupId>org.jboss.cache</groupId>
+			<artifactId>jbosscache-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>    
+			<groupId>com.sun.xsom</groupId>
+  			<artifactId>xsom</artifactId>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>com.sun.xml</groupId>
+			<artifactId>relaxngDatatype</artifactId>
+		</dependency>
+		
+		<!-- SLF4J API is an abstraction of various logging systems. This allows the
+		use of any logging framework at the time of deployment -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+<!--  In this module we have chosen to use Log4j under Slf4j therefore this dependency
+			is the bridge from SLF4J to Log4j-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		
+		<!-- Log4j is the actual logging framework that is used in this module.
+			Log4j is used by SLF4J. If this module runs inside JBOSS which already contains
+			its own log4j.jar then this dependency must be marked as provided -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		
+		<dependency>
+			 <groupId>org.apache.commons</groupId>
+			 <artifactId>commons-compress</artifactId>
+  			 <version>1.0</version>
+		</dependency>
+		
+		
+		<dependency>
+		 <groupId>com.sun.jersey</groupId>
+		 <artifactId>jersey-json</artifactId>
+		 <version>1.4</version>
+		 <exclusions>
+		 	<exclusion>
+		 	  <groupId>org.codehaus.jackson</groupId>
+  			  <artifactId>jackson-core-asl</artifactId>
+		 	</exclusion>
+		    <exclusion>
+		     <groupId>com.sun.jersey</groupId>
+		 	 <artifactId>jersey-core</artifactId>
+		    </exclusion>
+		 	<exclusion>
+				<groupId>stax</groupId>
+				<artifactId>stax-api</artifactId>    
+			</exclusion>
+			<exclusion>
+				<groupId>org.codehaus.jettison</groupId>
+				<artifactId>jettison</artifactId>    
+			</exclusion>
+			<exclusion>
+			  	<groupId>com.sun.xml.bind</groupId>
+  				<artifactId>jaxb-impl</artifactId>
+			</exclusion>
+		 </exclusions>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-core-lgpl</artifactId>
+		  <scope>provided</scope>
+		</dependency>
+		
+		<!-- Used for class XMLStreamReaderToContentHandler ONLY -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+  			<artifactId>jaxb-impl</artifactId>
+  			<version>2.1.12</version>
+		</dependency>
+		
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-repository
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-repository
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-repository
+		</url>
+	</scm>
+
+</project>
+
