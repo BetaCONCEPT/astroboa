@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+    <artifactId>astroboa-portal-commons</artifactId>
+
+	<packaging>jar</packaging>
+	<name>Astroboa Portal Commons</name>
+	<description>This package provides the basic functionality for building a Web Site on top of astroboa repository. A web site is viewed as a content application that reads and writes content from/to astroboa repository. This package implements basic helper classes that allow searching the repository for published content and scheduling the publication of content. The functionality is exposed as beans managed by Seam framework.</description>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<configuration>
+							<tasks>
+								<native2ascii encoding="UTF-8" dest="src/main/resources" src="src/main/resources" includes="**/*.UTF8" ext="" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.7.0</version>
+					</dependency>
+					<!--
+						<dependency> <groupId>com.sun</groupId>
+						<artifactId>tools</artifactId> <version>1.5.0</version>
+						<scope>system</scope> <systemPath> ${java.home}/../lib/tools.jar
+						</systemPath> </dependency>
+					-->
+				</dependencies>
+			</plugin>
+
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>javax.activation</groupId>
+		  <artifactId>activation</artifactId>
+		  <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		
+		<!-- SLF4J API is an abstraction of various logging systems. This allows the
+		use of any logging framework at the time of deployment -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+<!-- These dependencies must be declared in the project that utilizes this module
+			in order to define that the actual logging framework that SLF4J will be using
+			in order for Logging to work properly is Log4j
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		-->
+		
+		<dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-java-client</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			  <exclusions>
+			  <!-- If running inside JBoss this jar is already available -->
+			  <exclusion>
+					<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-client</artifactId>
+		  		</exclusion>
+			</exclusions>	
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework</groupId>
+			<artifactId>betaconceptframework-jsf-commons</artifactId>
+			<version>2.1.1.GA</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework</groupId>
+			<artifactId>betaconceptframework-commons</artifactId>
+			<version>2.2.0.GA</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+		</dependency>  
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-ui</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-pdf</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-remoting</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-debug</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-mail</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-ioc</artifactId>
+		</dependency>
+		
+		<!-- 
+			Required by seam for validation. 3.1.0.GA is the version
+			of the module which ships with JBoss 5.1.0.GA 
+		-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>3.1.0.GA</version>
+		</dependency>
+		 	
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-impl</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome-fetcher</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>modules</artifactId>
+			<version>0.3.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.tuckey</groupId>
+			<artifactId>urlrewritefilter</artifactId>
+			<version>3.1.0</version>
+		</dependency>    
+				
+	</dependencies>
+      
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+		</url>
+	</scm>
+</project>
