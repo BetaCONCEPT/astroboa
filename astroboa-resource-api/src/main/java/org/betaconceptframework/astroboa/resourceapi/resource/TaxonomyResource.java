@@ -272,14 +272,9 @@ public class TaxonomyResource extends AstroboaResource{
 		return getTopicInTaxonomyInternal(taxonomyIdOrName, topicPathWithIdsOrNames, outputEnum, callback, isPrettyPrintEnabled);
 	}
 	
-	 @PUT
-	 public Response putTaxonomy(String requestContent) {
-		return saveTaxonomySource(requestContent, HttpMethod.PUT);
-	  }
-
 	 @POST
 	 public Response postTaxonomy(String requestContent) {
-		 return saveTaxonomySource(requestContent, HttpMethod.POST);
+		 return saveTaxonomySource(requestContent, HttpMethod.POST, true);
 	  }
 
   	  @PUT
@@ -288,14 +283,6 @@ public class TaxonomyResource extends AstroboaResource{
 				@PathParam("taxonomyIdOrName") String taxonomyIdOrName,
 				String requestContent){
   		  return saveTaxonomyByIdOrName(taxonomyIdOrName, requestContent, HttpMethod.PUT);
-  	  }
-
-  	  @POST
-   	  @Path("/{taxonomyIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	  public Response postTaxonomyByIdOrName(
-				@PathParam("taxonomyIdOrName") String taxonomyIdOrName,
-				String requestContent){
-  		  return saveTaxonomyByIdOrName(taxonomyIdOrName, requestContent, HttpMethod.POST);
   	  }
 
 	  private Response saveTaxonomyByIdOrName(
@@ -309,6 +296,8 @@ public class TaxonomyResource extends AstroboaResource{
 		  Taxonomy existedTaxonomy  = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
 
 		  boolean taxonomyIdHasBeenProvided = CmsConstants.UUIDPattern.matcher(taxonomyIdOrName).matches();
+		  
+		  boolean entityIsNew = false;
 		  
 		  if (taxonomyIdHasBeenProvided){
 			  if (taxonomyToBeSaved.getId()==null){
@@ -335,6 +324,8 @@ public class TaxonomyResource extends AstroboaResource{
 					  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
 				  }
 			  }
+			  
+			  
 		  }
 		  else{
 			  //A new taxonomy will be created.
@@ -345,22 +336,23 @@ public class TaxonomyResource extends AstroboaResource{
 						  new Object[]{httpMethod, taxonomyIdOrName, taxonomyToBeSaved.getName()});
 				  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
 			  }
+			  entityIsNew = true;
 		  }
    		  
    		  //Produce xml representation of imported taxonomy and continue with save
-   		  return saveTaxonomySource(taxonomyToBeSaved.xml(false), httpMethod);
+   		  return saveTaxonomySource(taxonomyToBeSaved.xml(false), httpMethod, entityIsNew);
   	 }
 
 
 	 
-	 private Response saveTaxonomySource(String taxonomySource, String httpMethod) {
+	 private Response saveTaxonomySource(String taxonomySource, String httpMethod, boolean entityIsNew) {
 		 
 		logger.debug("Want to save a new taxonomy {}",taxonomySource);
 		
 		try{
 			Taxonomy taxonomy = astroboaClient.getImportService().importTaxonomy(taxonomySource, true);
 			
-			return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(taxonomy,httpMethod, taxonomySource);
+			return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(taxonomy,httpMethod, taxonomySource, entityIsNew);
 			
 		}
 		catch(Exception e){
