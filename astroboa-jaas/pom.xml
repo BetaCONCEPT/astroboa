@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses />. Authors Gregory Chomatas
+		(gchomatas@betaconcept.com) Savvas Triantafyllou
+		(striantafyllou@betaconcept.com)
+	-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-jaas</artifactId>  
+
+	<packaging>jboss-sar</packaging>
+
+	<name>Astroboa JAAS</name>
+	<description>This module contains all necessary classes and configuration files needed for Astroboa to support JAAS. It also contains Application security domain configuration file specific to Jboss AS needs needed for Jackrabbit Security. It is packaged as a SAR module</description>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>codehaus-snapshots</id>
+			<name>Codehaus Snapshot Development Repository</name>
+			<url>http://snapshots.repository.codehaus.org</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jboss-packaging-maven-plugin</artifactId>
+				<version>2.1.1</version>
+				<!-- Enable packaging types and lifecycle bindings. -->
+				<extensions>true</extensions>
+				<!--
+					By default only dependencies with a compile or runtime scope will
+					be included in the generated sar file.
+				-->
+				<configuration>
+					<archive>
+              			<manifest>
+                			<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                			<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              			</manifest>
+              			<manifestSections>
+                			<manifestSection>
+                  				<name>Build-Information</name>
+                  				<manifestEntries>
+                    				<Maven-Version>${maven.version}</Maven-Version>
+                    				<Java-Version>${java.version}</Java-Version>
+                    				<Java-Vendor>${java.vendor}</Java-Vendor>
+                    				<Os-Name>${os.name}</Os-Name>
+                    				<Os-Arch>${os.arch}</Os-Arch>
+                    				<Os-Version>${os.version}</Os-Version>
+                    				<Scm-Revision>${buildNumber}</Scm-Revision>
+                    				<Scm-Url>${project.scm.developerConnection}</Scm-Url>
+                    				<Build-Time>${timestamp}</Build-Time>
+                  				</manifestEntries>
+                			</manifestSection>
+              			</manifestSections>
+            		</archive>
+					<excludes>
+					<exclude>org.slf4j:slf4j-log4j12</exclude>
+					<exclude>log4j:log4j</exclude>
+					<exclude>org.jboss.seam:jboss-seam</exclude>
+					<exclude>commons-collections:commons-collections</exclude>
+					<exclude>commons-lang:commons-lang</exclude>
+					<exclude>oro:oro</exclude>
+					<exclude>org.jboss.el:jboss-el</exclude>
+				</excludes>
+				</configuration>
+			</plugin>
+			
+			<!--
+				Used to install astroboa-jaas as a Jar as well.
+				Jar will be named after project.aritfact-project.version-jar.jar
+				
+				First compile and create a jar and then during install, install
+				the generated jar as well.
+				
+				Jar is mainly used by module astroboa-tests 
+			-->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>make-a-jar</id>
+			            <phase>compile</phase>
+			            <goals>
+			                <goal>jar</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+			
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-install-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <phase>install</phase>
+			            <goals>
+			                <goal>install-file</goal>
+			            </goals>
+			            <configuration>
+			                <packaging>jar</packaging>
+			                <artifactId>${project.artifactId}</artifactId>
+			                <groupId>${project.groupId}</groupId>
+			                <version>${project.version}</version>
+			                <file>
+			                    ${project.build.directory}/${project.artifactId}-${project.version}.jar
+			                </file>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-java-client</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			  <exclusions>
+			  <!-- If running inside JBoss this jar is already available -->
+			  <exclusion>
+					<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-client</artifactId>
+    	  	  </exclusion>
+			</exclusions>	
+		</dependency>
+		
+		<!--
+			SLF4J API is an abstraction of various logging systems. This allows
+			the use of any logging framework at the time of deployment
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		
+	</dependencies>
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+		</url>
+	</scm>
+</project>
