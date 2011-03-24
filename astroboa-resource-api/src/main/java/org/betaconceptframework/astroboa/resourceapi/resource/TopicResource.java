@@ -156,11 +156,8 @@ public class TopicResource extends AstroboaResource{
   	  }
 
   	  @POST
-   	  @Path("/{topicIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	  public Response postTopicByIdOrName(
-				@PathParam("topicNameOrId") String topicNameOrId,
-				String requestContent){
-  		  return saveTopicByIdOrName(topicNameOrId, requestContent, HttpMethod.POST);
+	  public Response postTopicByIdOrName(String requestContent){
+  		  return saveTopicSource(requestContent, HttpMethod.POST, true);
   	  }
 
 	  private Response saveTopicByIdOrName(String topicNameOrId,
@@ -169,11 +166,14 @@ public class TopicResource extends AstroboaResource{
 		  //Import from xml or json. Topic will not be saved
    		  Topic topicToBeSaved = astroboaClient.getImportService().importTopic(requestContent, false);
 
+   		  boolean entityIsNew = false;
+   		  
    		  if (CmsConstants.UUIDPattern.matcher(topicNameOrId).matches()){
-   			  //Save content object by Id
+   			  //Save topic by Id
    			  
    			  if (topicToBeSaved.getId() == null){
    				  topicToBeSaved.setId(topicNameOrId);
+   				  entityIsNew = true;
    			  }
    			  else{
    				  //Payload contains id. Check if they are the same
@@ -199,11 +199,14 @@ public class TopicResource extends AstroboaResource{
    			  if (cmsOutcome.getCount() >= 1) {
    				  existedTopic = (Topic) cmsOutcome.getResults().get(0);
    			  }
+   			  else{
+   				entityIsNew = true;
+   			  }
 
    			  //Check that payload contains id
    			  if (topicToBeSaved.getId() == null){
    				  if (existedTopic != null){
-   					  //A content object with system name 'topicIdOrName' exists, but in payload no id was provided
+   					  //A topic with name 'topicIdOrName' exists, but in payload no id was provided
    					  //Set this id to Topic representing the payload
    					  topicToBeSaved.setId(existedTopic.getId());
    				  }
@@ -224,17 +227,32 @@ public class TopicResource extends AstroboaResource{
    		  }
    		  
    		  //Save content object
-   		  return saveTopic(topicToBeSaved, httpMethod, requestContent);
+   		  return saveTopic(topicToBeSaved, httpMethod, requestContent, entityIsNew);
   	 }
 
 
-	 
-	 private Response saveTopic(Topic topic, String httpMethod, String requestContent) {
+	 private Response saveTopicSource(String topicSource, String httpMethod, boolean entityIsNew) {
+		 
+			logger.debug("Want to save a new topic {}",topicSource);
+			
+			try{
+				Topic topic = astroboaClient.getImportService().importTopic(topicSource, true);
+				
+				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, topicSource, entityIsNew);
+				
+			}
+			catch(Exception e){
+				logger.error("",e);
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
+		}
+
+	 private Response saveTopic(Topic topic, String httpMethod, String requestContent, boolean entityIsNew) {
 		 
 			try{
 				topic = astroboaClient.getTopicService().save(topic);
 				
-				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, requestContent);
+				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, requestContent, entityIsNew);
 				
 			}
 			catch(Exception e){
