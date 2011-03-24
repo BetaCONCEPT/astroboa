@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+<server>
+  <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+    name="astroboa:service=AstroboaLogin">
+    <attribute name="AuthConfig">META-INF/login-config.xml</attribute>
+    <depends optional-attribute-name="LoginConfigService">
+      jboss.security:service=XMLLoginConfig</depends>
+    <depends optional-attribute-name="SecurityManagerService">
+      jboss.security:service=JaasSecurityManager</depends>
+  </mbean>
+</server>

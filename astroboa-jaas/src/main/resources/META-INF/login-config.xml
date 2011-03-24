@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<!DOCTYPE policy PUBLIC
+      "-//JBoss//DTD JBOSS Security Config 3.0//EN"
+      "http://www.jboss.org/j2ee/dtd/security_config.dtd">
+<policy>
+<application-policy name="astroboa">
+    <authentication>
+      <login-module code="org.betaconceptframework.astroboa.security.jaas.AstroboaLoginModule"
+        flag="required"/>
+    </authentication>
+  </application-policy>
+	<!-- This is the security policy for Jackrabbit 1.5.0 or later.
+		It uses Jackrabbit's own LoginModule. -->
+  <application-policy name = "Jackrabbit">
+       <authentication>
+          <login-module code = "org.apache.jackrabbit.core.security.simple.SimpleLoginModule"
+             flag = "required" />
+       </authentication>
+    </application-policy> 
+</policy>
