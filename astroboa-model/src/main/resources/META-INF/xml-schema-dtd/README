@@ -1,0 +1,10 @@
+During the conversion of XSDs to Astroboa definition entities, XSDs are validated by the 
+parser. Part of the validation process is to import all necessary XSDs or DTDs dependencies.
+
+Some of these XSDs or DTDs are located externally and thus, can be imported only when an internet access
+is available. When this is not the case, XSD parser cannot complete validation and throws an exception.
+
+To avoid this situation (which causes a build to fail or even worse does not allow Astroboa to run), 
+Astroboa identifies whether these files can be accessed and if they cannot, it feeds the parser with 
+their copy which is located in this directory.
+

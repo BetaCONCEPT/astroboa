@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+
+		Astroboa is free software: you can redistribute it and/or modify it
+		under the terms of the GNU Lesser General Public License as published
+		by the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version. Astroboa is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU Lesser General Public License for more details.
+
+		You should have received a copy of the GNU Lesser General Public
+		License along with Astroboa. If not, see
+		<http://www.gnu.org/licenses/>. Authors Gregory Chomatas
+		(gchomatas@betaconcept.com) Savvas Triantafyllou
+		(striantafyllou@betaconcept.com)
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/configuration/repositories"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/configuration/repositories"
+	version="${project.version}"
+	elementFormDefault="unqualified">
+	
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+
+	<xs:element name="repositories">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="repository" minOccurs="1"
+					maxOccurs="unbounded" type="tns:RepositoryType" />
+			</xs:sequence>
+
+			<!--
+				Server default base url. This is the url that will be used in any
+				case where astroboa-server must serve several files like images or
+				definition xsd files. This attribute's value is used if attribute
+				'serverAlias' is not provided in any of the repositories defined.
+			-->
+			<xs:attribute name="serverURL" type="xs:anyURI" use="required" />
+
+			<!--
+				The name of the default application policy as defined in JAAS
+				configuration file. If not provided, 'astroboa' is the default
+				security domain. This attribute's value is used if attribute
+				'jaasApplicationPolicyName' is not provided in any of the
+				repositories defined.
+			-->
+			<xs:attribute name="jaasApplicationPolicyName" type="xs:string"
+				use="optional" default="astroboa" />
+
+			<!--
+				Authentication Token timeout in minutes. It represents the amount of
+				the idle time that authentication token is considered valid. After
+				that time authentication token is removed. This attribute's value is
+				used if attribute 'authenticationTokenTimeout' is not provided in
+				any of the repositories defined.
+			-->
+			<xs:attribute name="authenticationTokenTimeout" type="xs:int"
+				use="optional" default="30" />
+
+			<!-- 
+				Provide the id of a repository which is the identity store. If this value is not provided
+				and no external-identity-store-jndi-name has been defined as well, then identity store is
+				considered to be repository itself
+			-->
+			<xs:attribute name="identity-store-repository-id" type="xs:string"
+				use="optional" />
+			
+			<!-- 						
+			external-identity-store-jndi-name:
+							In cases where built in identity store is not used, users may specify a JNDI name which provides access
+							to a custom implementation of IdentityStore API	
+			 -->
+			 <xs:attribute name="external-identity-store-jndi-name" type="xs:string"
+				use="optional"/>
+
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="RepositoryType">
+		<xs:sequence>
+			<xs:element name="localization" type="tns:LocalizationType"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="security" type="tns:SecurityType"
+				minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+
+		<!-- Repository identifier -->
+		<xs:attribute name="id" type="xs:ID" use="required" />
+
+		<!--
+			Jcr Repository Jndi-name. This is where the JCR repository object is
+			loaded in the Naming Context
+		-->
+		<xs:attribute name="jcr-repository-jndi-name" type="xs:string"
+			use="required" />
+
+		<!--
+			DB data source Jndi-name. This is where the data source for
+			the database of a repository is loaded in the Naming Context
+		-->
+		<xs:attribute name="db-jndi-name" type="xs:string"
+			use="required" />
+
+		<!--
+			Server url. This is the url that will be used in any case where
+			astroboa server must serve several files like images or definition xsd
+			files. If value for this attribute is not provided the value of
+			'serverURL' will be used instead
+		-->
+		<xs:attribute name="serverAliasURL" type="xs:anyURI" use="optional" />
+		
+		<!--
+				This is the base path under which the RESTful API is accessible.
+				It only applies to this individual repository so you may specify a different one for each repository.
+				Do not provide the full server URL to the Astroboa RESTful API, provide just the base path that follows the server domain name.
+				The RESTful API base URL is then automatically generated appending this path to the "serverAliasURL" that you provided above. 
+				This attribute is optional. If you omit it the path is set by default to "/content-api" which is the context path 
+				of the content-api war (the war that implements the RESTful API). 
+				If you do not deployed content-api war under a different name and also you do not 
+				use a proxy or rewrite rules to set different paths to the RESTful API then you may omit this attribute and
+				keep the default value.
+			-->
+		<xs:attribute name="restfulApiBasePath" type="xs:string" use="optional" default="/resource-api"/>
+		
+		<!--
+			The name of the application policy for this repository as defined in
+			JAAS configuration file. If value for this attribute is not provided
+			the value of 'jaasApplicationPolicyName' in root element will be used
+			instead.
+		-->
+		<xs:attribute name="jaasApplicationPolicyName" type="xs:string"
+			use="optional" />
+
+		<!--
+			Authentication Token timeout in minutes. If value for this attribute
+			is not provided the value of 'authenticationTokenTimeout' in root
+			element will be used instead.
+		-->
+		<xs:attribute name="authenticationTokenTimeout" type="xs:int"
+			use="optional" />
+
+		
+		<!-- 
+				identity-store-id		: 
+							Check out comments on
+							attribute at the root element. If value for this attribute is not
+							provided the value of 'identity-store-id' in root element will be used
+							instead.
+			-->
+			<xs:attribute name="identity-store-repository-id" type="xs:string"
+				use="optional" />
+			
+			<!-- 						
+				external-identity-store-jndi-name:
+							Check out comments on
+							attribute at the root element. If value for this attribute is not
+							provided the value of 'external-identity-store-jndi-name' in root element will be used
+							instead.
+	
+			 -->
+			 <xs:attribute name="external-identity-store-jndi-name" type="xs:string"
+				use="optional"/>
+
+	</xs:complexType>
+
+
+	<!--
+		Internationalization support Provide labels for one or more locales
+	-->
+	<xs:complexType final="#all" name="LocalizationType">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="label">
+				<xs:complexType>
+					<xs:simpleContent>
+					   <xs:extension base="xs:string">
+							<xs:attribute ref="xml:lang" use="required"/>
+				      </xs:extension>
+    				</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Security Configuration -->
+	<xs:complexType name="SecurityType">
+		<xs:sequence>
+
+			<!--
+				List or permanent user keys acceptable for connecting to a
+				repository
+			-->
+			<xs:element name="permanentUserKeyList" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="permanentUserKey" minOccurs="1"
+							maxOccurs="unbounded">
+							<xs:complexType>
+								<!-- Comma delimited value or single value. * represents any user -->
+								<xs:attribute name="userid" use="required" type="xs:string"/>
+								<xs:attribute name="key" use="required" type="xs:string" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<!-- Secret key list -->
+			<xs:element name="secretUserKeyList" minOccurs="1"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="administratorSecretKey" minOccurs="1"
+							maxOccurs="1">
+							<xs:complexType>
+								<xs:attribute name="userid" use="required" type="xs:string"/>
+								<xs:attribute name="key" use="required" type="tns:secretKeyType" />
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="secretUserKey" minOccurs="0"
+							maxOccurs="unbounded">
+							<xs:complexType>
+								<!-- Comma delimited value or single value. * represents any user -->
+								<xs:attribute name="userid" use="required" type="xs:string"/>
+								<xs:attribute name="key" use="required" type="tns:secretKeyType" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Restrict secret key to be at least 8 chars long.
+	   However accept the empty string as value. Empty string has a special
+	   meaning to Astroboa engine -->
+	<xs:simpleType name="secretKeyType">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+					value="(.{8,})?" />
+			</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
