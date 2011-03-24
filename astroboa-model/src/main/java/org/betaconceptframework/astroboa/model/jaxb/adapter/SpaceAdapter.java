@@ -51,7 +51,9 @@ public class SpaceAdapter extends XmlAdapter<SpaceType, Space>{
 			spaceType.setSystemBuiltinEntity(space.isSystemBuiltinEntity());
 			spaceType.getLocalizedLabels().putAll(space.getLocalizedLabels());
 			spaceType.setOwner(space.getOwner());
-			spaceType.setUrl(space.getResourceApiURL(resourceRepresentationType, false));
+			
+			//TODO: Check whether user may have more control on whether a friendly url is generated or not
+			spaceType.setUrl(space.getResourceApiURL(resourceRepresentationType, false, space.getName()!=null));
 
 			if (space.getNumberOfChildren() > 0){
 				spaceType.setNumberOfChildren(space.getNumberOfChildren());

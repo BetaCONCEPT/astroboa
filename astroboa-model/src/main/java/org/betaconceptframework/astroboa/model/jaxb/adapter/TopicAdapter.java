@@ -52,7 +52,9 @@ public class TopicAdapter extends XmlAdapter<TopicType, Topic>{
 			topicType.setSystemBuiltinEntity(topic.isSystemBuiltinEntity());
 			topicType.getLocalizedLabels().putAll(topic.getLocalizedLabels());
 			topicType.setOwner(topic.getOwner());
-			topicType.setUrl(topic.getResourceApiURL(resourceRepresentationType, false));
+			
+			//TODO: Check whether user may have more control on whether a friendly url is generated or not
+			topicType.setUrl(topic.getResourceApiURL(resourceRepresentationType, false, topic.getName()!=null));
 
 			if (topic.getNumberOfChildren() > 0){
 				topicType.setNumberOfChildren(topic.getNumberOfChildren());

@@ -53,7 +53,9 @@ public class TaxonomyAdapter extends XmlAdapter<TaxonomyType, Taxonomy>{
 			taxonomyType.setName(taxonomy.getName());
 			taxonomyType.setSystemBuiltinEntity(taxonomy.isSystemBuiltinEntity());
 			taxonomyType.getLocalizedLabels().putAll(taxonomy.getLocalizedLabels());
-			taxonomyType.setUrl(taxonomy.getResourceApiURL(resourceRepresentationType, false));
+			
+			//TODO: Check whether user may have more control on whether a friendly url is generated or not
+			taxonomyType.setUrl(taxonomy.getResourceApiURL(resourceRepresentationType, false, taxonomy.getName()!= null));
 			
 			if (taxonomy.getNumberOfRootTopics() > 0){
 				taxonomyType.setNumberOfChildren(taxonomy.getNumberOfRootTopics());
