@@ -1,0 +1,125 @@
+/*
+ * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ *
+ * This file is part of Astroboa.
+ *
+ * Astroboa is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Astroboa is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.betaconceptframework.astroboa.console.jsf.dashboard;
+
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+
+import org.betaconceptframework.astroboa.api.model.ContentObject;
+import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
+import org.betaconceptframework.astroboa.api.model.query.Order;
+import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
+import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
+import org.betaconceptframework.astroboa.console.security.LoggedInRepositoryUser;
+import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
+import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+
+/**
+ * @author Gregory Chomatas (gchomatas@betaconcept.com)
+ * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
+ * 
+ */
+@Name("loggedInUserRecentlyAddedOrModifiedContentObjectsDashboardItem")
+@Scope(ScopeType.CONVERSATION)
+public class LoggedInUserRecentlyAddedOrModifiedContentObjectsDashboardItem extends ContentObjectListBean{
+	
+	private static final long serialVersionUID = 1L;
+	
+	private LoggedInRepositoryUser loggedInRepositoryUser;
+	
+
+	private int numberOfDaysToSearchBack = 1000;
+	private int cacheSizeForRecentlyAddedOrModifiedPublishedContentObjects = 100;
+
+
+	@Override
+	protected List<CmsRankedOutcome<ContentObject>> orderResults(
+			List<CmsRankedOutcome<ContentObject>> results) {
+		return results;
+	}
+	
+	@Override
+	public ContentObjectDataModel getReturnedContentObjects() {
+		if (super.getReturnedContentObjects() == null){
+			// reset search criteria to begin a new search
+			contentObjectCriteria = null;
+			contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
+			contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+
+
+			try {
+				
+				// we are searching only for objects owned by logged in user
+				contentObjectCriteria.addOwnerIdEqualsCriterion(loggedInRepositoryUser.getRepositoryUser().getId());
+
+
+				/*
+				 * we are looking for content objects modified the last <numberOfDaysToSearchBack>
+				 */
+				Calendar searchBackDate = GregorianCalendar.getInstance();
+				searchBackDate.add(Calendar.DAY_OF_MONTH, -numberOfDaysToSearchBack);
+
+				Criterion modificationDateCriterion = CriterionFactory.greaterThanOrEquals("profile.modified", searchBackDate);
+				contentObjectCriteria.addCriterion(modificationDateCriterion);
+
+				contentObjectCriteria.addOrderProperty("profile.modified", Order.descending);
+
+				// the number of returned content objects should be <cacheSizeForRecentlyAddedOrModifiedContentObjects>
+				//contentObjectCriteria.getResultRowRange().setRange(0, cacheSizeForRecentlyAddedOrModifiedPublishedContentObjects);
+				contentObjectCriteria.setOffsetAndLimit(0, cacheSizeForRecentlyAddedOrModifiedPublishedContentObjects);
+
+				logger.warn(contentObjectCriteria.getXPathQuery());
+
+				//Call parent to execute query and create paged list data model
+				searchForContentObjectWithPagedResults();
+
+
+
+			} catch (Exception e) {
+				logger.error("Error while loading content objects ",e);
+				JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", new String[] {e.toString()}, FacesMessage.SEVERITY_ERROR);
+			}
+		}
+		return super.getReturnedContentObjects();
+	}
+
+	
+	public void setLoggedInRepositoryUser(
+			LoggedInRepositoryUser loggedInRepositoryUser) {
+		this.loggedInRepositoryUser = loggedInRepositoryUser;
+	}
+	
+	public int getNumberOfDaysToSearchBack() {
+		return numberOfDaysToSearchBack;
+	}
+
+
+	public int getCacheSizeForRecentlyAddedOrModifiedPublishedContentObjects() {
+		return cacheSizeForRecentlyAddedOrModifiedPublishedContentObjects;
+	}
+
+}

@@ -1,0 +1,110 @@
+package org.betaconceptframework.astroboa.console.form.rules 
+
+import java.util.ArrayList
+import org.betaconceptframework.astroboa.api.model.*
+import org.betaconceptframework.astroboa.api.model.definition.StringFormat
+import org.betaconceptframework.astroboa.console.jsf.edit.UIComponent
+import org.betaconceptframework.astroboa.console.jsf.edit.UIComponent.UIComponentType
+
+function Integer calculateRows(Integer maxLength){
+
+ if (maxLength == null || maxLength == 0){
+   return 50;
+ }
+ 
+ return maxLength / 116 +1 ;
+
+}
+
+function Integer calculateMaxLength(Integer maxLength){
+
+ if (maxLength == null || maxLength == 0){
+   return 2000;
+ }
+ 
+ return maxLength;
+
+}
+
+rule "Rule Responsible To Create an Input Text for Properties of Type STRING of format PlainText with unlimited number chars allowed"
+dialect "mvel"
+/* 
+	Set this to true in order to avoid rule running again. This is happening because
+	one of the facts (uiCompononent) may change, in cases where this rule matches.
+*/
+no-loop true
+when 
+/*Expecting to find a CmsProperty and a UIComponent instance*/
+
+  /*
+        Match
+          1. Property type is STRING but no passwordType and no value enumeration
+          2. String format is 'PlainText'    
+          3. Property's value length is 0 (This is the value which represents unlimited)
+  */           
+      cmsProperty : StringProperty(  
+                   propertyDefinition.valueEnumeration == null && 
+                    propertyDefinition.passwordType == false && 
+                     propertyDefinition.stringFormat == StringFormat.PlainText  && 
+                     propertyDefinition.maxLength != null && 
+                     ( propertyDefinition.maxLength == 0 || propertyDefinition.maxLength > 100 )   
+               )
+         
+      uiComponent : UIComponent( completed == false )
+  
+then 
+
+   /* 
+      These properties correspond to a simple input text with max length at most 100 chars
+  */
+
+    modify( uiComponent ){
+        type = UIComponentType.TEXT_AREA,
+        addAttribute("rows", calculateRows(cmsProperty.propertyDefinition.maxLength)),
+        addAttribute("maxlength", calculateMaxLength(cmsProperty.propertyDefinition.maxLength)),
+        completed = true         
+   };               
+
+end
+
+rule "Rule Responsible To Create an Input Text for Properties of Type STRING of format PlainText with < 100 chars allowed length"
+dialect "mvel"
+/* 
+	Set this to true in order to avoid rule running again. This is happening because
+	one of the facts (uiCompononent) may change, in cases where this rule matches.
+*/
+no-loop true
+when 
+/*Expecting to find a CmsProperty and a UIComponent instance*/
+
+  /*
+        Match
+          1. Property type is STRING but no passwordType and no value enumeration
+          2. String format is 'PlainText'    
+          3. Property's value length is between 0 (exclusive) and 100 (inclusive) OR Undefined
+  */           
+      cmsProperty : StringProperty( 
+                   propertyDefinition.valueEnumeration == null && 
+                    propertyDefinition.passwordType == false && 
+                     propertyDefinition.stringFormat == StringFormat.PlainText  && 
+                     ( propertyDefinition.maxLength == null  || 
+                           ( propertyDefinition.maxLength ( > 0  && <= 100) )
+                    )
+               )
+         
+      uiComponent : UIComponent( completed == false )
+  
+then 
+
+   /* 
+      These properties correspond to a simple input text with max length at most 100 chars
+  */
+
+    modify( uiComponent ){
+        type = UIComponentType.TEXT,
+        addAttribute("size", 100),
+        addAttribute("maxlength", calculateMaxLength(cmsProperty.propertyDefinition.maxLength)),
+        completed = true         
+   };               
+
+end

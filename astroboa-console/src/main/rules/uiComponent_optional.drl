@@ -1,0 +1,83 @@
+package org.betaconceptframework.astroboa.console.form.rules 
+
+import java.util.ArrayList
+import org.betaconceptframework.astroboa.api.model.definition.*
+import org.betaconceptframework.astroboa.console.jsf.edit.UIComponent
+import org.betaconceptframework.astroboa.console.jsf.edit.UIComponent.UIComponentType
+
+function void populateUiComponent(StringPropertyDefinition cmsPropertyDefinition, UIComponent uiComponent){
+
+ if (cmsPropertyDefinition != null){
+ 
+ 	 Integer maxLength  = cmsPropertyDefinition.getMaxLength();
+ 	 
+ 	 if (maxLength  != null && ( maxLength == 0 || maxLength > 100 ) ){
+ 	 	uiComponent.setType(UIComponentType.TEXT_AREA);
+        uiComponent.addAttribute("rows", calculateRows(maxLength));
+        uiComponent.addAttribute("maxlength", calculateMaxLength(maxLength));
+        uiComponent.setCompleted(true);   
+ 	 }
+ 	 
+ 	 if (maxLength  == null  || ( maxLength > 0  && maxLength <= 100) ){
+ 	 	uiComponent.setType(UIComponentType.TEXT);
+        uiComponent.addAttribute("size", 100);
+        uiComponent.addAttribute("maxlength", calculateMaxLength(maxLength));
+        uiComponent.setCompleted(true);   
+ 	 }
+ 
+ }
+}
+
+function Integer calculateRows(Integer maxLength){
+
+ if (maxLength == null || maxLength == 0){
+   return 50;
+ }
+ 
+ return maxLength / 116 +1 ;
+
+}
+
+function Integer calculateMaxLength(Integer maxLength){
+
+ if (maxLength == null || maxLength == 0){
+   return 2000;
+ }
+ 
+ return maxLength;
+
+}
+
+rule "Rule Responsible To Create an Input Text for Properties of Type STRING of format PlainText with unlimited number chars allowed"
+dialect "mvel"
+
+/* 
+        Set this to true in order to avoid rule running again. This is happening because
+        one of the facts (uiCompononent) may change, in cases where this rule matches.
+*/
+no-loop true
+when 
+/*Expecting to find a CmsProperty and a UIComponent instance*/
+
+  /*
+        Match
+          1. Property type is STRING but no passwordType and no value enumeration
+          2. String format is 'PlainText'    
+          3. Property's value length is 0 (This is the value which represents unlimited)
+  */           
+      propertyDefinition : StringPropertyDefinition( valueEnumeration == null && 
+                    passwordType == false && 
+                     stringFormat == StringFormat.PlainText)   
+         
+      uiComponent : UIComponent( completed == false )
+  
+then 
+
+   /* 
+      These properties correspond to a simple input text with max length at most 100 chars
+  */
+	populateUiComponent(propertyDefinition, uiComponent);
+	
+    update( uiComponent );               
+
+end

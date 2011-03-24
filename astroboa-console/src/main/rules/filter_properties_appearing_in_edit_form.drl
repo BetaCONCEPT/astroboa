@@ -1,0 +1,84 @@
+package org.betaconceptframework.astroboa.console.form.rules.display 
+
+import java.util.ArrayList
+import org.betaconceptframework.astroboa.api.model.*
+
+global java.util.HashMap propertyPathsToExcludeMap
+
+/*
+	This set of rules are responsible to filter a list of CmsDefinitions
+	according to a list of property paths depending on the logged in user and /or 
+	its roles.
+	This list contains paths of	all properties which a logged in user or all
+	users can view in the edit form.
+	
+	So, what you actually have a map whose key is a 
+	comma delimited string which may contain one or 
+	more user names or one or more user role(s)  
+	(* stands for any user name or user role) 
+	and whose value is the list of property paths, 
+	this user or user role can view.
+*/
+
+/* 
+	The first rule which has higher priority, is responsible to initialize the map
+	with the property paths.
+*/
+
+function boolean propertyIsExcluded(String propertyPath){
+
+   
+}
+
+rule "Initialization of property paths map"
+dialect "mvel"
+salience 1000
+auto-focus true
+no-loop true
+
+when 
+ /* Expecting to find an empty Map */
+ eval (propertyPathsToExcludeMap == null)
+ 
+then
+  
+  /*
+   	Fill map with property paths
+  */
+  propertyPathsToExcludeMap = new HashMap();
+  
+  List<String> propertyPaths = new ArrayList<String>();
+  propertyPaths.add("profile.title");
+  propertyPaths.add("profile");
+  
+  propertyPathsToExcludeMap.put("*", propertyPaths);
+
+
+end
+
+
+rule "Rule Responsible To Filter provided properties which appear in edit form"
+dialect "mvel"
+salience 900
+  
+when 
+/*Expecting to find a List of CmsDefinitions*/
+
+     filteredDefinitions :  ArrayList(  )
+              from collect( CmsPropertyDefinition(  ) )
+
+  
+then 
+
+   /* 
+      These properties correspond to a simple input text with max length at most 100 chars
+  */
+
+    modify( uiComponent ){
+        type = UIComponentType.TEXT_AREA,
+        addAttribute("rows", calculateRows(cmsProperty.propertyDefinition.maxLength)),
+        addAttribute("maxlength", calculateMaxLength(cmsProperty.propertyDefinition.maxLength)),
+        completed = true         
+   };               
+
+end

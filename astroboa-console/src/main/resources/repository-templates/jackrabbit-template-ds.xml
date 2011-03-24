@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright (C) 2005-2011 BetaCONCEPT LP.
+ 
+  This file is part of Astroboa.
+ 
+  Astroboa is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  Astroboa is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-->
+
+<connection-factories> 
+    <tx-connection-factory>
+		<jndi-name>jcr/REPOSITORYID</jndi-name> 
+		<xa-transaction/>
+		<rar-name>jackrabbit-jca-JACKRABBIT_JCA_CURRENT_VERSION.rar</rar-name>
+		<connection-definition>javax.jcr.Repository</connection-definition>
+		<config-property name="homeDir" type="java.lang.String">REPOSITORYHOMEDIR/repository</config-property>
+		<config-property name="configFile" type="java.lang.String">REPOSITORYHOMEDIR/repository.xml</config-property>
+		<config-property name="bindSessionToTransaction" type="java.lang.Boolean">true</config-property>
+		<track-connection-by-tx/>
+    </tx-connection-factory>
+</connection-factories>

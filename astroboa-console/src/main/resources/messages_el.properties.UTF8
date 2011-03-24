@@ -1,0 +1,719 @@
+#header buttons
+logout=Έξοδος
+user.account.edit=Ο λογαριασμός μου
+user.account.display.name.not.available=Μη διαθέσιμο όνομα για παρουσίαση
+
+# Application Messages
+application.unknown.error.message = Συνέβη κάποιο σφάλμα. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης
+application.changeLanguageMessage = Διαλέξατε γλώσσα: {0}
+application.defaultRedirectionPageNotFoundError=Η εφαρμογή δεν μπόρεσε να προσδιορίσει την σελίδα στην οποία πρέπει να κατευθυνθείτε μετά την πιστοποίηση των στοιχείων σας. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης. 
+application.requiredUserRoleToAccessDefaultStartPageNotFoundError=Η εφαρμογή δεν μπόρεσε να προσδιορίσει το Ρόλο που απαιτείται να έχετε για να αποκτήσετε πρόσβαση στην αρχική σελίδα της εφαρμογής. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης.
+application.notLoggedIn = Θ πρέπει να είστε συνδεδεμένοι για να εκτελέσετε την ενέργεια
+
+application.messages.error=Συνέβη κάποιο Σφάλμα
+application.messages.warn=Προειδοποίηση
+
+# -- validator errors --
+errors.required=Η συμπλήρωση του πεδίου "{0}" είναι υποχρεωτική.
+errors.minlength=Η τιμή του πεδίου "{0}" πρέπει να έχει τουλάχιστον {1} χαρακτήρες.
+errors.maxlength=Η τιμή του πεδίου "{0}" μπορεί να έχει το πολύ {1} χαρακτήρες.
+errors.minToMaxlength=Η τιμή του πεδίου "{0}" μπορεί να έχει από {0} έως {1} χαρακτήρες.
+errors.invalid=Το πεδίο "{0}" έχει μη έγκυρη τιμή.
+
+errors.byte=Το πεδίο "{0}" πρέπει να έχει τιμή τύπου byte.
+errors.short=Το πεδίο "{0}" πρέπει να έχει τιμή τύπου short.
+errors.integer=Το πεδίο "{0}" πρέπει να συμπληρωθεί με αριθμό (integer).
+errors.long=Το πεδίο "{0}" πρέπει να συμπληρωθεί με αριθμό (long).
+errors.float=Το πεδίο "{0}" πρέπει να συμπληρωθεί με δεκαδικό αριθμό (float).
+errors.double=Το πεδίο "{0}" πρέπει να συμπληρωθεί με δεκαδικό αριθμό (double).
+errors.date=Το πεδίο "{0}" πρέπει να συμπληρωθεί με ημερομηνία.
+
+errors.range=Το πεδίο "{0}" δέχεται τιμές στο διάστημα {1} έως {2}.
+errors.creditcard=Το πεδίο "{0}" δεν είναι έγκυρος αριθμός πιστωτικής κάρτας.
+errors.email=Το πεδίο "{0}" δεν είναι έγκυρη διεύθυνση e-mail.
+errors.pattern=Το πεδίο "{0}" είναι μη έγκυρο. Η τιμή του δεν ακολουθεί το πρότυπο {1}
+
+# Login
+login.title= Astroboa - ΚΟΝΣΟΛΑ ΔΙΑΧΕΙΡΙΣΗΣ ΕΠΙΧΕΙΡΗΣΙΑΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ (ΕCMS ADMIN CONSOLE) ~ Καλώς Ήλθατε
+login.header = Astroboa - ΠΛΑΤΦΟΡΜΑ ΔΙΑΧΕΙΡΙΣΗΣ ΕΠΙΧΕΙΡΗΣΙΑΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ
+login.loginFormTitle=Καλώς ήρθατε. Παρακαλώ συμπληρώστε τα στοιχεία σας για την εισαγωγή στο σύστημα
+login.greek=Ελληνικά
+login.english=English
+login.formTitle=Είσοδος στο Σύστημα ASTROBOA
+login.enterUsername=Όνομα Χρήστη:
+login.enterPassword=Κωδικός:
+login.enterLanguage=Γλώσσα
+login.loginButton=Είσοδος
+login.invalidCredentials=Δεν δώσατε σωστά στοιχεία πρόσβασης. Παρακαλώ προσπαθείστε πάλι
+login.invalidUserName=Ο χρήστης δεν υπάρχει
+login.invalidPassword=Το συνθηματικό δεν είναι σωστό
+login.accountExpired=Ο λογαριασμός σας έχει λήξει
+login.accountLocked=Ο λογαριασμός σας είναι κλειδωμένος
+login.passwordExpired=Το συνθηματικό σας έχει λήξει
+login.unauthorizedRepositoryAccess=Δεν είστε εξουσιοδοτημένος να έχετε πρόσβαση στην επιλεγμένη αποθήκη περιεχομένου
+login.invalidRequestedUrl=Η Ταυτότητά σας έχει πιστοποιηθεί αλλα ζητήσατε λάθος σελίδα: {0}. Παρακαλώ εισάγετε πάλι τα στοιχεία πρόσβασης για να μεταφερθείτε στην αρχική σελίδα του συστήματος.
+login.authenticationServiceFailure=Δεν έχετε τους κατάλληλους ρόλους για να αποκτήσετε πρόσβαση στην εεπιλεγμένη αποθήκη περιεχομένου. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης.
+login.invalidRoles=Δεν επιτρέπεται η πρόσβαση στην εφαρμογή σε κανένα από τους Ρόλους που έχετε. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης για να ρυθμιστεί η πρόσβαση σας στην εφαρμογή.
+login.enterRepositoryToConnect=Αποθήκη περιεχομένου
+login.enterServer=Astroboa Server
+login.nonExistentUserDisplayName=Ονοματεπώνυμο  μη  διαθέσιμο
+login.welcome=Είστε ο χρήστης  {0}. Καλωσήρθατε στην εφαρμογή Διαχείρισης Επιχειρησιακού Περιεχομένου ASTROBOA 
+
+# Entities
+ContentObject = Αντικείμενο
+Space=Χώρος
+Folder=Χώρος
+RepositoryUser=Χρήστης
+Binary=Αρχείο
+Topic=Όρος Θησαυρού
+Tag = Ετικέτα
+
+# --Content Object Field Labels
+content.object.identifier = id
+content.object.owner = Ιδιοκτήτης
+content.object.contentObjectType=Τύπος Αντικ. Περιεχομένου
+
+# Content Object status
+content.object.profile.status.not.defined = Κατάσταση Αντικειμένου ΜΗ Ορισμένη
+content.object.profile.status.authored=Το Αντικείμενο είναι υπό Δημιουργία
+content.object.profile.status.submitted=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγγρισης)
+content.object.profile.status.approved=Το Αντικείμενο έχει εγγριθεί για Δημοσίευση στο web
+content.object.profile.status.rejected=Το Αντικείμενο έχει απορριφθεί μόνιμα για Δημοσίευση στο web
+content.object.profile.status.temporarilyRejectedForReauthoring=Το Αντικείμενο έχει απορριφθεί προσωρινά για Δημοσίευση στο web (απαιτούνται διορθώσεις)
+content.object.profile.status.scheduledForPublication=Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
+content.object.profile.status.published=Το Αντικείμενο είναι Δημοσιευμένο στο web
+content.object.profile.status.submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web από εξωτερικό χρήστη (εν αναμονή έγγρισης)
+authored=Το Αντικείμενο είναι υπό Δημιουργία
+submitted=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγγρισης)
+approved=Το Αντικείμενο έχει εγγριθεί για Δημοσίευση στο web
+rejected=Το Αντικείμενο έχει απορριφθεί μόνιμα για Δημοσίευση στο web
+temporarilyRejectedForReauthoring=Το Αντικείμενο έχει απορριφθεί προσωρινά για Δημοσίευση στο web (απαιτούνται διορθώσεις)
+scheduledForPublication=Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
+published=Το Αντικείμενο είναι Δημοσιευμένο στο web
+submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί  από εξωτερικό χρήστη (εν αναμονή έγγρισης)
+publishedAndArchived=Το Αντικείμενο είναι Δημοσιευμένο στο web και αρχειοθετημένο
+
+# Workflows
+workflow.none = Καμία Ροή Εργασίας
+workflow.webPublishing = Ροή Εργασίας για Δημοσίευση στο Web
+
+# Months
+1=Ιανουάριος
+2=Φεβρουάριος
+3=Μάρτιος
+4=Απρίλιος
+5=Μάιος
+6=Ιούνιος
+7=Ιούλιος
+8=Αύγουστος
+9=Σεπτέμβριος
+10=Οκτώβριος
+11=Νοέμβριος
+12=Δεκέμβριος
+
+# --JSF Messages
+javax.faces.component.UIInput.REQUIRED        = Λάθος κατά τον έλεγχο του πεδίου
+javax.faces.component.UIInput.REQUIRED_detail = "{0}": Παρακαλώ βάλτε τιμή στο πεδίο.
+
+javax.faces.validator.LengthValidator.MINIMUM        = Σφάλμα κατά τον έλεγχο του πεδίου
+javax.faces.validator.LengthValidator.MINIMUM_detail =  "{1}": Το πλήθος των χαρακτήρων που δώσατε είναι μικρότερο από την επιτρεπόμενη ελάχιστη τιμή των {0} χαρακτήρων.
+
+# --Validators Messages
+validator.capitalsOnly=Πρέπει να συμπληρωθεί με κεφαλαίους χαρακτήρες.
+validator.userNameAlreadyUsed=Ο κωδικός χρήστη χρησιμοποιείται ήδη από άλλον χρήστη.
+validator.userDataPasswordsDoNotMatch=Πεδίο {0}: Οι κωδικοί πρόσβασης στα στοιχεία χρήστη δεν συμφωνούν.
+validator.failed2EncryptPassword=Πεδίο {0}: Η κρυπτογράφηση του κωδικού πρόσβασης απέτυχε.
+validator.personRoleNameAlreadyExists=Υπάρχει ήδη ένας ρόλος με αυτό το όνομα
+validator.personGroupNameAlreadyExists=Υπάρχει ήδη μία ομάδα χρηστών με αυτό το όνομα
+validator.userOldPasswordDoesNotMatch=Πεδίο {0}: Ο παλαιός κωδικός πρόσβασης δεν είναι σωστός
+
+# Error page
+errorPage.title=Συνέβη κάποιο σφάλμα
+
+# Clipboard
+clipboard.dialoguebox.header = Clipboard
+#Draft Objects Table in clipboard
+clipboard.draft.object.table.top.header = Προσωρινά Αντικείμενα (auto-saved or manually saved)
+clipboard.draft.object.table.insertion.date.column.header=Ημ/νία Αποθήκευσης στο Πρόχειρο
+clipboard.draft.object.table.title.column.header=Τίτλος
+clipboard.draft.object.table.typeLabel.column.header=Τύπος Αντικειμένου
+clipboard.draft.object.table.actions.column.header=Ενέργειες
+# Object URLs Table in clipboard
+clipboard.object.url.table.top.header= Σύνδεσμοι (URLs) προς Αντικείμενα
+clipboard.object.url.table.title.column.header=Τίτλος
+clipboard.object.url.table.typeLabel.column.header=Τύπος Αντικειμένου
+clipboard.object.url.table.urlOutputType.column.header=Ο Σύνδεσμός επιστρέφει:
+clipboard.object.url.table.url.column.header=Σύνδεσμος
+clipboard.object.url.table.actions.column.header=Ενέργειες
+clipboard.object.url.output-type.html = HTML
+clipboard.object.url.output-type.xml = XML
+clipboard.object.url.output-type.json = JSON
+# Object Property URLs Table in clipboard
+clipboard.property.url.table.top.header= Σύνδεσμοι (URLs) προς Πεδία Αντικειμένων
+clipboard.property.url.table.title.column.header=Τίτλος Αντικειμένου
+clipboard.property.url.table.typeLabel.column.header=Τύπος Αντικειμένου
+clipboard.property.url.table.propertyLabel.column.header=Όνομα Πεδίου
+clipboard.property.url.table.internalPropertyName.column.header=Εσωτερικό Όνομα Πεδίου
+clipboard.property.url.table.propertyPath.column.header=Διαδρομή Πεδίου
+clipboard.property.url.table.propertyValueType.column.header=Τύπος Πεδίου
+clipboard.property.url.table.url.column.header=Σύνδεσμος
+clipboard.property.url.table.actions.column.header=Ενέργειες
+clipboard.property.url.table.action.removeURL=Διαγραφή Συνδέσμου
+clipboard.property.url.copy.to.clipboard.successful=Ο Σύνδεσμος αντιγράφηκε στο Πρόχειρο
+clipboard.property.url.copy.to.clipboard.failed=Η δημιουργία του συνδέσμου απέτυχε
+# Table of Objects for Drag and Drop
+clipboard.dnd.object.table.top.header= Αντικείμενα προς Επικόλληση (Drag and Drop)
+clipboard.dnd.object.table.dndIcon.column.header=Τραβήξτε το Εικονίδιο για Drag and Drop
+clipboard.dnd.object.table.title.column.header=Τίτλος
+clipboard.dnd.object.table.typeLabel.column.header=Τύπος Αντικειμένου
+clipboard.dnd.object.table.actions.column.header=Ενέργειες
+clipboard.dnd.object.table.action.removeObject=Διαγραφή Αντικειμένου από το πρόχειρο
+clipboard.dnd.object.copy.to.clipboard.successful=Το αντικείμενο αντιγράφηκε στον πίνακα αντικειμένων προς επικόλληση (Drag and Drop) μέσα στο πρόχειρο
+clipboard.dnd.object.copy.to.clipboard.failed=Δεν ήταν δυνατό να αντιγραφεί το αντικείμενο στο πρόχειρο
+clipboard.dnd.object.copy.to.clipboard.requiresAnObjectToBeSelected=Δεν έχει επιλεγεί αντικείμενο για αντιγραφή στο πρόχειρο
+clipboard.dnd.object.defaultTypeLabel=Αντικείμενο
+binaryChannel.contentURL=Σύνδεσμος (URL)
+binaryChannel.contentServerHostName=Εξυπηρετητής Περιεχομένου
+binaryChannel.relativeContentURL=Σχετικός Σύνδεσμος (Relative URL)
+binaryChannel.helpLabel=Πως να χρησιμοποιήσετε το URL
+binaryChannel.helpUsingURL=Αν το URL καλείται από τον ίδιο εξυπηρετητή στον οποίον βρίσκεται και η αποθήκη Περιεχομένου (π.χ. καλείται από ένα portal που τρέχει στον ίδιο  Εξυπηρετητή με την Αποθήκη Περιεχομένου) τότε απλώς χρησιμοποιήστε  τον σχετικό σύνδεσμο. Διαφορετικά επικολλήστε μπροστά από τον σχετικό σύνδεσμο και τον Εξυπηρετητή Περιεχομένου που εμφανίζεται στον πίνακα
+
+
+#In Content Object Trees the object localized labels are used as the descriptions of tree nodes
+no.localized.label.for.description=Δεν βρέθηκε όνομα
+
+#Query Operators
+query.operator.not.null= Υπάρχει
+query.operator.null=Δεν υπάρχει
+query.operator.contains=Περιέχει
+query.operator.like = Περιέχει
+
+#Content Object validation
+cms.property.single.value = Το στοιχείο {0} πρέπει να έχει μόνο μία τιμή 
+
+#Advanced Search
+boolean.radio.true = Ναι
+boolean.radio.false = Όχι
+order.descending=Φθίνουσα
+order.ascending=Αύξουσα
+no.ordering=Χωρίς
+
+#Top Menu
+topMenu.browsing = Πλοήγηση
+topMenu.dashboard = Πίνακας Επισκόπησης
+topMenu.organization.space = Φάκελοι Οργανισμού
+topMenu.my.space = Οι Φάκελοι μου
+topMenu.insert.content = Εισαγωγή Αντικειμένου
+topMenu.advancedSearch = Σύνθετη Αναζήτηση 
+topMenu.clipboard = Πρόχειρο
+
+topMenu.addNew = Προσθέσθε Νέο...
+topMenu.addNew.object = Αντικείμενο
+topMenu.addNew.object.selectTypeFromMenu = Επιλογή Τύπου 
+topMenu.addNew.object.showTypesPage = Λεπτομερής Λίστα
+topMenu.addNew.xmlSchema = XML Schema
+topMenu.addNew.Taxonomy = Θησαυρό Όρων
+topMenu.addNew.tag = Προσωπική Ετικέτα
+
+topMenu.edit = Διαχείριση
+topMenu.edit.submenu.header = Διαχειριστείτε τις οντότητες του Astroboa
+topMenu.edit.taxonomies = Θησαυροί Όρων
+topMenu.edit.userTags = Ετικέτες Χρήστη
+topMenu.edit.users = Χρήστες
+topMenu.edit.webSites = Ιστότοποι
+topMenu.edit.security = Ασφάλεια
+topMenu.edit.scriptEngine = Εκτέλεση Scripts
+
+#Content Object List Full View
+content.object.list.full.view.no.tags.added = Δεν έχετε προσθέσει Ετικέτες. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τις Ετικέτες σας προς το εικονίδιο του αντικειμένου. Ή επιλέξτε 'Προσθήκη/Αφαίρεση Ετικετών' 
+content.object.list.full.view.no.subject.added = Δεν έχουν προστεθεί Λέξεις Κλειδιά. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τους διαθέσιμους Θησαυρούς Όρων προς το εικονίδιο του αντικειμένου"
+content.object.list.full.view.content.object.view = Πλήρης Επισκόπηση
+content.object.list.full.view.content.object.edit = Αλλαγή / Διόρθωση
+content.object.list.full.view.tag.edit = Προσθήκη / Αφαίρεση Ετικετών
+content.object.list.full.view.other.versions =  Προηγούμενες Εκδόσεις
+content.object.list.full.view.profile.description = Περιγραφή
+content.object.list.full.view.profile.subject = Θέμα / Λέξεις Κλειδιά
+content.object.list.full.view.profile.creator = Δημιουργός
+content.object.list.full.view.profile.publisher = Εκδότης
+content.object.list.full.view.profile.created = Ημ/νια Δημιουργίας
+content.object.list.full.view.profile.modified = Ημ/νια Τελευταίας Αλλαγής
+content.object.list.full.view.profile.hasVersion = Έκδοση
+content.object.list.full.view.profile.status = Κατάσταση Αντικειμένου
+content.object.list.full.view.profile.workflow = Ενεργή Ροή Εργασίας
+
+#Content Search
+content.search.result.header = Αποτελέσματα Αναζήτησης 
+content.search.noContentObjectsContainingThisTextInfo=Δεν υπάρχουν Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις που επιλέξατε
+content.search.noContentObjectsRelatedToCriteria=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τα κριτήρια που θέσατε
+content.search.noContentObjectsInThisContentObjectFolderInfo=Δεν υπάρχουν Αντικείμενα στο φάκελο που διαλέξατε
+content.search.noContentObjectsRelatedToThisTopicInfo=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τον Όρο που διαλέξατε
+content.search.noContentObjectsOwnedByThisRepositoryUser=Δεν υπάρχουν Αντικείμενα που να ανήκουν στον χρήστη που διαλέξατε
+content.search.noContentObjectswhichHaveBeenViewedAtLeastOneTime=Δεν βρέθηκαν Αντικείμενα που να έχουν διαβαστεί τουλάχιστον 1 φορά
+content.search.contentObjectSuccessfulyTaggedInfo=Οι Ετικέτες σας για αυτό το Αντικείμενο ανανεώθηκαν
+content.search.contentObjectListHeaderMessageForTextSearch=Παρουσιάζονται τα Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις: "{0}". Αριθμός Αντικειμένων: {1}
+content.search.contentObjectListHeaderMessageForSearchByOwner=Παρουσιάζονται {1} Αντικείμενα που ανήκουν στον χρήστη: {0}. 
+content.search.contentObjectListHeaderMessageForSearchByTopic=Αναζήτηση Αντικειμένων με βάση τον Όρο: {0}. Αριθμός Αντικειμένων που χρησιμοποιούν τον Όρο σε κάποιο πεδίο τους: {1}
+content.search.contentObjectListHeaderMessageForSearchByContentType=Παρουσιάζονται {2} Αντικείμενα τύπου "{0}", που έχουν δημιουργηθεί τις ημερομηνίες {1}.
+content.search.contentObjectListHeaderMessageForSearchByContentTypeWithoutDate=Παρουσιάζονται {1} Αντικείμενα τύπου "{0}"
+content.search.contentObjectListHeaderMessageForOrderByViewCounter=Παρουσιάζονται τα Αντικείμενα ταξινομημένα σύμφωνα με τον αριθμό αναγνώσεων. Αριθμός Αντικειμένων που έχουν αναγνωστεί τουλάχιστον 1 φορά: {0}
+content.search.contentObjectListHeaderMessageAfterContentObjectRemoval=Μετά την διαγραφή ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
+content.search.contentObjectListHeaderMessageAfterContentObjectSave=Μετά την αποθήκευση ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
+content.search.contentObjectRetrievalError=Συνέβη κάποιο σφάλμα κατά την ανάκτηση των Αντικειμένων. \n Παρακαλώ δοκιμάστε πάλι και αν συμβεί το ίδιο σφάλμα επικοινωνήστε με το γραφείο υποστήριξης 
+content.search.contentObjectListHeaderMessageForSearchByCriteria = Παρουσιάζονται {0} αντικείμενα που πληρούν τα κριτήρια της αναζήτησης
+
+content.search.selected.all.page.rows=Επιλογή Όλων
+content.search.clear.selected.page.rows=Καθαρισμός Επιλεγμένων
+content.search.drop.down.menu.label=Περισσότερες Ενέργειες
+content.search.drop.down.menu.view.options=Προβολή
+content.search.drop.down.menu.fullView.option = Πλήρης Απεικόνιση
+content.search.drop.down.menu.listView.option = Λίστα
+content.search.drop.down.menu.rowsPerPage.option=αποτελέσματα ανά σελίδα
+content.search.drop.down.menu.export.to.xml=Εξαγωγή σε XML
+content.search.drop.down.menu.export.to.excel=Εξαγωγή σε Excel
+content.search.drop.down.menu.all.option=Όλα
+content.search.drop.down.menu.selected.option=Επιλεγμένα
+content.search.drop.down.menu.clear.selected.option=Καθαρισμός όλων των επιλεγμένων αντικειμένων
+content.search.drop.down.menu.delete=Διαγραφή
+content.search.drop.down.menu.delete.no.content.object.selected=Δεν έχει επιλεχθεί κανένα αντικείμενο. Η διαγραφή δεν μπορεί να συνεχιστεί
+content.search.drop.down.menu.delete.error=Η διαγραφή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
+content.search.drop.down.menu.delete.unauthorized.delete.message=Δεν είσαστε εξουσιοδοτημένος να διαγράψετε τα παρακατω αντικείμενα
+content.search.drop.down.menu.delete.error=Τα παρακατω αντικείμενα δεν διαγράτηκαν λόγω λάθους
+content.search.drop.down.menu.delete.panel.message=Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα;
+content.search.drop.down.menu.delete.all.success.info.message=Τα Αντ. Περιεχομένου διαγράφτηκαν από την Αποθήκη Περιεχομένου με επιτυχία
+content.search.drop.down.menu.delete.partial.success.info.message=Τα υπόλοιπα Αντ. Περιεχομένου διαγράφτηκαν από την Αποθήκη Περιεχομένου με επιτυχία
+
+content.search.exportResults.error = Η εξαγωγή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
+content.search.exportResults.nullList = Δεν μπορεί να γίνει εξαγωγή. Η λίστα αποτελεσμάτων είναι κενή
+
+
+#Entity Actions (Actions on Content Objects and their properties)
+entity.action.viewEditForm=Επεξεργασία
+entity.action.delete=Διαγραφή
+entity.action.clone=Δημιουργία Κλώνου
+entity.action.copyToClipboard= Αντιγραφή στο Πρόχειρο
+entity.action.treePreview=Επισκόπηση (Read Only)
+clone.title.prefix=(Αντίγραφο)
+
+#Navigation Menu
+navigation.menu.taxonomies  = Θησαυροί Όρων
+navigation.menu.mytags  = Οι Ετικέτες μου
+navigation.menu.most.popular.tags  = Οι πιο Δημοφιλείς Ετικέτες
+navigation.menu.users  = Χρήστες / Ρόλοι
+navigation.menu.users.suggestion.box.message = Επιλέξτε ένα χρήστη για να δείτε όλα τα αντικείμενα περιεχομένου που του ανήκουν.
+navigation.menu.content.objects  = Αντικείμενα στο χρόνο
+navigation.menu.websites = Ιστότοποι
+navigation.menu.webPages = Ιστοσελίδες
+navigation.menu.scripts = Scripts
+
+# Tabs
+tabs.dashboardTab.label=Πίνακας Επισκόπησης
+tabs.personalWorkSpaceTab.label=Προσωπικός Χώρος
+tabs.searchResultsTab.label=Αποτελέσματα Αναζήτησης
+tabs.objectEditorTab.label=Επεξεργασία Αντικειμένου
+tabs.objectViewerTab.label=Επισκόπηση Αντικειμένου
+ 
+# Content Object List Column headers
+contentSearch.list.header.thumbnail = Thumbnail
+contentSearch.list.header.views = Αναγνώσεις
+contentSearch.list.header.status = Κατάσταση
+contentSearch.list.header.type = Τύπος
+contentSearch.list.header.title = Τίτλος
+contentSearch.list.header.dates = Ημ. Δημιουργίας / Αλλαγής
+contentSearch.list.header.owner = Ιδιοκτήτης
+contentSearch.list.header.actions = Ενέργειες
+
+# Advanced Search
+advancedSearch.definition.tree.panel.header = Στοιχεία για την Αναζήτηση
+content.object.aspects=Δυναμικά στοιχεία
+advancedSearch.search.panel.header = Σύνθετη Αναζήτηση Αντικειμένων Περιεχομένου
+advancedSearch.criteria.tab.header = Με χρήση κριτηρίων
+advancedSearch.query.tab.header = Με χρήση αποθηκευμένων αναζητήσεων
+advancedSearch.criteria.tab.global.search.mode = Τύπος αναζήτησης
+advancedSearch.criteria.tab.global.search.mode.all.entities = Όλα τα αντικείμενα
+advancedSearch.criteria.tab.global.search.mode.system.entities = Μόνο τα αντικείμενα συστήματος
+advancedSearch.criteria.tab.global.search.mode.non.system.entities = Όλα τα αντικείμενα που δεν είναι του συστήματος
+advancedSearch.criteria.tab.global.owner = Με ιδιοκτήτη
+advancedSearch.criteria.tab.global.owner.me = Εμένα
+advancedSearch.criteria.tab.global.owner.groups = Οποιονδήποτε στις ομάδες μου
+advancedSearch.criteria.tab.global.owner.anyone = Οποιονδήποτε
+advancedSearch.criteria.tab.global.content.type = Τύπου
+advancedSearch.criteria.tab.global.content.type.all = Όλοι οι τύποι
+advancedSearch.criteria.tab.global.contentObject.id = Αναγνωριστικό αντικειμένου
+advancedSearch.criteria.tab.global.contentObject.system.name = Όνομα συστήματος
+advancedSearch.criteria.tab.global.contain =  Που περιέχουν τις λέξεις
+advancedSearch.criteria.tab.global.created.modified.from = Που δημιουργήθηκαν ή μεταβλήθηκαν Απο
+advancedSearch.criteria.tab.global.created.modified.to = Έως
+advancedSearch.criteria.panel.header = Προσθέστε Κριτήρια Αναζήτησης Με Βάση Δυναμικές Ιδιότητες ή τις Στατικές Ιδιότητες του Επιλεγμένου Τύπου Αντικειμένου 
+advancedSearch.criteria.panel.description.line1 = Για να προσθέσετε ένα κριτήριο σύρετε ένα στοιχείο από το δέντρο 'Δυναμικά Στοιχεία' ή από το δέντρο 'Στοιχεία για τον Τύπο' και αφήστε το πάνω στην	επικεφαλίδα 'Στοιχείο'.
+advancedSearch.criteria.panel.description.line2 = Για να καθαρίσετε το πεδίο 'Ταξινόμηση' αρκεί να κάνετε διπλό κλικ σε μία από τις δύο τιμές ('Αύξουσα', 'Φθίνουσα')
+advancedSearch.criteria.panel.description.line3 = Στην περίπτωση που δεν έχει επιλεχθεί κανένα στοιχείο για να συμμετέχει στην ταξινόμηση των αποτελεσμάτων, εμφανίζονται στα αποτελέσματα τα αντικείμενα περιεχομένου, τα οποία μεταβλήθηκαν	πιο πρόσφατα
+advancedSearch.criteria.table.column.property = Στοιχείο
+advancedSearch.criteria.table.column.operator = Τελεστής
+advancedSearch.criteria.table.column.value = Τιμή
+advancedSearch.criteria.table.column.sort = Ταξινόμηση
+advancedSearch.criteria.table.column.actions = Ενέργειες
+advancedSearch.criteria.table.search.button = ΑΝΑΖΗΤΗΣΗ
+advancedSearch.criteria.table.reset.button = ΚΑΘΑΡΙΣΜΟΣ
+advancedSearch.criteria.query.panel.header = Αποθήκευση κριτηρίων
+advancedSearch.criteria.query.panel.description.line1 = Μπορείτε να αποθηκεύσετε τα κριτήρια της αναζήτησης σε ένα αντικείμενο περιεχομένου για περαιτέρω χρήση.
+advancedSearch.criteria.query.panel.description.line2 = Κατά την αποθήκευση θα δημιουργηθούν εξ' ορισμού τιμές στα στοιχεία του αντικειμένου.
+advancedSearch.criteria.query.system.name = Όνομα Συστήματος
+advancedSearch.criteria.query.title = Τίτλος
+advancedSearch.criteria.query.localized.label = Όνομα στη γλώσσα
+advancedSearch.criteria.query.copy.to.clipboard = Μεταφορά του αντικειμένου στο πρόχειρο
+advancedSearch.criteria.query.save = ΑΠΟΘΗΚΕΥΣΗ
+
+# Dashboard
+dashboard = Πίνακας Επισκόπησης
+dashboard.recently.added.or.modified.published.content.objects.dashboard.item.label = Τελευταίες Εισαγωγές / Αλλαγές που έχουν δημοσιευτεί
+dashboard.most.read.published.content.objects.dashboard.item.label = Τα Πιο Δημοφιλή Δημοσιευμένα Αντικείμενα
+dashboard.content.objects.submitted.for.web.publishing.dashboard.item.label = Αντικείμενα προς Δημοσίευση
+dashboard.content.objects.submitted.by.external.user.for.web.publishing.dashboard.item.label =	Αντικείμενα Από Εξωτερικούς Χρήστες προς Δημοσίευση  
+dashboard.content.objects.temporarily.rejected.for.reauthoring.dashboard.item.label = Αντικείμενα για Διόρθωση (Προσωρινή απόρριψη δημοσίευσης)
+dashboard.loggedInUser.recently.added.or.modified.content.objects.dashboard.item.label= Τα Αντικείμενά μου (Τελευταίες Εισαγωγές / Αλλαγές) 
+dashboard.recently.added.or.modified.content.objects.dashboard.item.label = Οι πιο πρόσφατες εισαγωγές & αλλαγές
+
+# Footer
+footer.developed.by  = Ανάπτυξη από
+
+# Content Type Select
+content.type.editor.label = Επεξεργαστής "XML Σχήματος"
+content.type.select.panel.header = Επλογή Τύπου για το Νέο Αντικείμενο
+content.type.select.table.system.name.column.label = Εσωτερικό Όνομα
+content.type.select.table.localized.label.column.label = Όνομα Τύπου
+content.type.select.table.description.column.label = Περιγραφή
+content.type.select.table.actions.column.label = Ενέργειες
+content.type.select.table.save.content.type.link.label = ΑΠΟΘΗΚΕΥΣΗ
+content.type.select.table.edit.link.label = Επεξεργασία "XML Σχήματος"
+content.type.select.table.hide.link.label = ΚΛΕΙΣΙΜΟ
+content.type.select.table.save.content.type.success = Επιτυχής αποθήκευση του "XML Σχήματος" για τον τύπο "{0}"
+content.type.select.add.link.label = Δημιουργία Νέου Τύπου Αντικειμένου
+content.type.select.new.content.type.missing = Παρακαλώ συμπληρώστε το "XML Σχήμα" καθώς και το όνομα του αρχείου στο οποίο θα αποθηκευτεί το Σχήμα
+content.type.select.content.type.exists = Υπάρχει ήδη ένα Αρχείο με το όνομα "{0}"
+content.type.select.new.content.type.file.name.input.text.label = Όνομα Αρχείου
+content.type.validate.failure = Το "XML Σχήμα" του τύπου "{0}" δεν είναι έγκυρο : {1}
+
+
+# Miscallenous
+back.to.content.object.list.link.label = Πίσω στη Λίστα Αποτελεσμάτων Αναζήτησης
+close.dynamic.area = Κλείσιμο
+
+# Content Object Edit
+content.object.edit.new.content.object.panel.label = Νέο αντικείμενο τύπου : 
+content.object.edit.existing.content.object.panel.label = Αλλαγή / Διόρθωση αντικειμένου τύπου:
+content.object.edit.topic.selection.helpMessage=Για να συμπληρώσετε το πεδίο:
+content.object.edit.topic.selection.suggestion.box.helpMessage= Αρχίστε να συμλπηρώνετε στο πεδίο κειμένου τα πρώτα γράμματα του όρου και θα δείτε να εμφανίζονται αυτόματα λίστες όρων που περιέχουν τα γράμματα που συμπληρώνετε. Διαλέξτε τον όρο που σας ενδιαφέρει από τους προτεινόμενους όρους στις λίστες.
+content.object.edit.topic.selection.drag.and.drop.helpMessage = Εναλλακτικά, ανοίξτε το κουτί με τους θησαυρούς που εμφανίζεται στην αριστερή στήλη. Εντοπίστε τον θησαυρό και τον όρο που σας ενδιαφέρει και χρησιμοποιείστε το εικονίδιο που υπάρχει στα αριστερά κάθε όρου για να τον σύρετε μέσα στο πεδίο κειμένου.
+content.object.edit.topic.selection.accepted.values.fromAllTaxonomies = Μπορείτε να προσθέσετε όρους από οποιονδήποτε θησαυρό 
+content.object.edit.topic.selection.accepted.values.fromSpecificTaxonomies = Μπορείτε να προσθέσετε όρους απο τους θησαυρούς:
+content.object.edit.topic.already.exists=Έχετε ήδη προσθέσει αυτόν τον όρο στο πεδίο. Διαλέξτε κάποιον όρο που δεν έχει ήδη προστεθεί.
+content.object.edit.topic.doesNotAllowObjectsToUseIt=Ο όρος έχει ρυθμιστεί να μην επιτρέπει τη χρήση του από αντικείμενα. Αν έχετε τα κατάλληλα δικαιώματα μπορείτε να επεξεργαστείτε τον όρο και να ρυθμίσετε να επιτρέπεται την χρήση του από αντικείμενα. 
+content.object.edit.topic.taxonomyOfTopicNotInAllowedTaxonomies=Ο όρος που επιλέξατε βρίσκεται στο θησαυρό: "{0}". Το πεδίο επιτρέπει την εισαγωγή τιμών από τους θησαυρούς: "{1}". Μπορείτε να δείτε τους επιτρεπόμενους θησαυρούς αν αφήσετε το ποντίκι για λίγο πάνω στο μπλε κουμπάκι με το σύμβολο "(i)" που εμφανίζεται δεξιά από το κουτί με τις τιμές τους πεδίου. Επίσης μπορείτε να εισάγετε τιμές πατώντας το κουμπάκι με το σύμβολο της "ετικέτας" που εμφανίζεται αμέσως μετά το μπλέ κουμπάκι. Αν το χρησιμοποιείσετε θα σας δείξει μόνο τους επιτρεπόμενους θησαυρούς.
+content.object.edit.content.object.selection.helpMessage=Για να συμπληρώσετε το πεδίο:
+content.object.edit.content.object.selection.suggestion.box.helpMessage= Συμλπηρώστε στο πεδίο κειμένου τουλάχιστον τρία γράμματα του τίτλου και θα δείτε να εμφανίζονται αυτόματα λίστες αντικειμένων που περιέχουν στον τίτλο τους τα γράμματα που σμπληρώνετε. Διαλέξτε το αντικείμενο που σας ενδιαφέρει από τα προτεινόμενα αντικείμενα στις λίστες.
+content.object.edit.content.object.selection.drag.and.drop.helpMessage = Εναλλακτικά, ανοίξτε το πρόχειρο πατώντας το σχετικό σύνδεσμο που εμφανίζεται στο μενού στη κορυφή της σελίδας. Εντοπίστε το αντικείμενο που σας ενδιαφέρει στον πίνακα των "αντικειμένων προς επικόλληση" (πρέπει να έχετε φροντίσει να το έχετε προσθέσει από πριν στο πρόχειρο). Χρησιμοποιείστε το ειδικό εικονίδιο που εμφανίζεται στον πίνακα για να σύρετε το αντικείμενο μέσα στο πεδίο κειμένου.
+content.object.edit.content.object.selection.accepted.values.allObjectTypes = Μπορείτε να προσθέσετε αντικείμενα οποιουδήποτε τύπου
+content.object.edit.content.object.selection.accepted.values.specificObjectTypes = Μπορείτε να προσθέσετε αντικείμενα που έχουν τύπο: 
+content.object.edit.binary.channel.no.value = Παρακαλώ μεταφορτώστε ένα αρχείο
+content.object.edit.rich.text.no.value = Παρακαλώ ανοίξτε τον κειμενογράφο για να εισάγετε κείμενο
+content.object.edit.breadcrumb.label = ΒΛΕΠΕΤΕ ΤΗ ΦΟΡΜΑ:
+content.object.edit.aspect.panel.label = ΠΡΟΣΘΕΣΘΕ ΠΕΔΙΑ
+content.object.edit.actions.panel.label = ΕΝΕΡΓΕΙΕΣ
+content.object.edit.actions.instructions = Κατα την Αποθήκευση το Αντικείμενο μπορεί αυτόματα να προσαρτηθεί σε κάποιο Φάκελο. Έχετε τις παρακάτω επιλογές:
+content.object.edit.actions.do.not.attach.space = Να μην προσαρτηθεί
+content.object.edit.actions.attach.to.root.space = Να προσαρτηθεί στους Φακέλους μου (στο Root)
+content.object.edit.actions.attach.to.selected.space = Να προσαρτηθεί στο Φάκελο που επέλεξα από το δέντρο των Φακέλων
+content.object.edit.actions.drag.and.drop.panel.label = Σύρετε σε αυτή την περιοχή τον Φάκελο στον οποίο θέλετε να προσαρτηθεί το αντικείμενο (Διαλέξτε από το δέντρο των Φακέλων)
+content.object.edit.actions.do.not.create.new.version = Διατήρηση προηγούμενης Version κατά την αποθήκευση
+content.object.edit.actions.clearForm = ΚΑΘΑΡΙΣΜΟΣ ΦΟΡΜΑΣ
+content.object.edit.actions.close.form.after.save = Κλείσιμο φόρμας μετά την αποθήκευση
+content.object.edit.actions.copy.to.clipboard.after.save = Αντιγραφή στο πρόχειρο (στα αντικείμενα προς επικόλληση) μετά την αποθήκευση του αντικειμένου
+content.object.edit.actions.delete = ΔΙΑΓΡΑΦΗ
+content.object.edit.actions.cancelPublication = ΑΚΥΡΩΣΗ ΔΗΜΟΣΙΕΥΣΗΣ
+content.object.edit.actions.save = ΑΠΟΘΗΚΕΥΣΗ
+content.object.edit.actions.publish = ΔΗΜΟΣΙΕΥΣΗ
+content.object.edit.workflowActions.activatePublicationScheduling = ΕΝΕΡΓΟΠΟΙΗΣΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΗΣ ΔΗΜΟΣΙΕΥΣΗΣ
+content.object.edit.workflowActions.submitForApproval = content.object.edit.workflowActions.submitForApproval = ΥΠΟΒΟΛΗ ΓΙΑ ΕΓΓΡΙΣΗ
+content.object.edit.workflowActions.reject = ΑΠΟΡΡΙΨΗ
+content.object.edit.html.editor.panel.header = Εισαγωγή κειμένου
+content.object.edit.html.editor.save.link.label = Αποθήκευση και Κλείσιμο κειμενογράφου
+content.object.edit.html.editor.no.save.link.label = Κλείσιμο κειμενογράφου χωρίς αποθήκευση
+content.object.edit.file.upload.panel.header = Επιλογή Αρχείου για μεταφόρτωση
+content.object.edit.file.upload.close.button.label = Κλείσιμο
+content.object.edit.successful.save.info.message=Το Αντ. Περιεχομένου αποθηκεύτηκε στην Αποθήκη Περιεχομένου
+content.object.edit.successful.delete.info.message=Το Αντ. Περιεχομένου διαγράφηκε από την Αποθήκη Περιεχομένου με επιτυχία 
+content.object.edit.status.changed.info.message=Η κατάσταση του αντικειμένου άλλαξε σε: {0}
+content.object.edit.contentObjectCouldNotBePermanentlyRemovedError=Η Αποθήκη Περιεχομένου δεν μπόρεσε να διαγράψει το Αντικ. Περιεχομένου. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης
+content.object.edit.no.image.available=Δεν υπάρχει διαθέσιμη εικόνα
+content.object.edit.load.complex.property.error=Σφάλμα κατά την φόρτωση του σύνθετου στοιχείου
+content.object.edit.error.required=Δεν έχετε συμπληρώσει όλα τα υποχρεωτικά πεδία. Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία που εμφανίζονται παραπάνω. Μπορείτε εύκολα να εντοπίζετε τα υποχρεωτικά πεδία από τον αστερίσκο (*) που προηγείται του ονόματος του πεδίου.  
+content.object.edit.invalid.system.name=Το όνομα συστήματος {0} πρέπει να περιέχει το πολύ 60 λατινικούς χαρακτήρες (a-z,A-z) ή αριθμούς ή τους χαρακτήρες '-', '_',  χωρίς κενό
+content.object.edit.non.unique.system.name=Το όνομα συστήματος {0} έχει ήδη δοθεί σ' άλλο αντικείμενο περιεχομένου
+content.object.edit.save.system.name.provided=Το όνομα συστήματος {0} που δώσατε έχει ήδη δοθεί σε άλλο αντικείμενο. Για αυτό το λόγο δημιουργήθηκε αυτόματα μία άλλη τιμή από το σύστημα.
+content.object.edit.already.existing.portal.system.name=Υπάρχει ήδη ένας ιστότοπος με το όνομα {0}
+content.object.edit.invalid.accessibility.value = Η τιμή {0} περιορισμού πρόσβασης στο αντικείμενο  δεν είναι σωστή. Επιτρεπτές τιμές : 1(ΟΛΟΙ), 2(ΚΑΝΕΝΑΣ), 3(Επιλεγμένοι μόνο). Το λάθος οφείλεται στην εφαρμογή. Επικοινωνήστε με το γραφείο υποστήριξης.
+content.object.edit.webpublicationdate.set.info=Η ημερομηνία δημοσίευσης του αντικειμένου ορίστηκε η {0}
+content.object.edit.sucessfully.attach.content.object.to.space=Το αντικείμενο προσαρτήθηκε στο Φάκελο που επιλέξατε
+content.object.edit.accessibility.value.already.exists.warning=H επιλογή σας υπάρχει ήδη στη λίστα επιλεγμένων
+content.object.edit.error.creating.new.content.object=Σφάλμα κατά την δημιουργία του νέου αντικειμένου
+content.object.edit.accessibility.editor.empty.content.object.default.settings.label = Για την διευκόλυνσή σας κάθε νέο Αντ. Περιεχομένου έχει ήδη τις παρακάτω ρυθμίσεις ασφάλειας:
+content.object.edit.accessibility.editor.empty.content.object.default.settings.label.read = ΑΝΑΓΝΩΣΗ: Όλοι
+content.object.edit.accessibility.editor.empty.content.object.default.settings.label.update = ΔΙΟΡΘΩΣΗ: Κανένας
+content.object.edit.accessibility.editor.empty.content.object.default.settings.label.delete = ΔΙΑΓΡΑΦΗ: Κανένας
+content.object.edit.accessibility.editor.empty.content.object.default.settings.label.tag = ΠΡΟΣΘΗΚΗ ΕΤΙΚΕΤΩΝ: Όλοι
+content.object.edit.accessibility.editor.empty.content.object.default.settings.instructions =  Αν θέλετε να διαφοροποιήσετε τις προεπιλεγμένες ρυθμίσεις διαλέξτε το κατάλληλο Tab και κάντε τις επιθυμητές αλλαγές
+content.object.edit.accessibility.editor.tab.label.canBeReadBy = Ανάγνωση
+content.object.edit.accessibility.editor.tab.label.canBeUpdatedBy = Διόρθωση
+content.object.edit.accessibility.editor.tab.label.canBeDeletedBy = Διαγραφή
+content.object.edit.accessibility.editor.tab.label.canBeTaggedBy = Προσθήκη Ετικετών
+content.object.edit.accessibility.editor.tab.header.canBeReadBy = Αυτό το Αντ. Περιεχομένου μπορούν να το δούν:
+content.object.edit.accessibility.editor.tab.header.canBeUpdatedBy = Αυτό το Αντ. Περιεχομένου μπορούν να το αλλάξουν / διορθώσουν:
+content.object.edit.accessibility.editor.tab.header.canBeDeletedBy = Αυτό το Αντ. Περιεχομένου μπορούν να το διαγράψουν:
+content.object.edit.accessibility.editor.tab.header.canBeTaggedBy =Αυτό το Αντ. Περιεχομένου μπορούν να το κατηγοριοποιήσουν προσθέτοντας τις προσωπικές τους Ετικέτες:
+content.object.edit.accessibility.editor.radioButton.all = Όλοι
+content.object.edit.accessibility.editor.radioButton.none = Κανένας
+content.object.edit.accessibility.editor.radioButton.selected = Μόνο οι επιλεγμένοι Χρήστες / Ομάδες
+content.object.edit.accessibility.editor.tab.panel.header.canBeReadBy = Λίστα Χρηστών με Δικαίωμα Ανάγνωσης
+content.object.edit.accessibility.editor.tab.panel.header.canBeUpdatedBy = Λίστα Ομάδων και Χρηστών με Δικαίωμα Τροποποίησης
+content.object.edit.accessibility.editor.tab.panel.header.canBeDeletedBy =Λίστα Ομάδων και Χρηστών με Δικαίωμα Διαγραφής
+content.object.edit.accessibility.editor.tab.panel.header.canBeTaggedBy = Λίστα Ομάδων και Χρηστών με Δικαίωμα Προσθήκης Ετικετών
+content.object.edit.accessibility.editor.tab.drag.label.canBeReadBy = Σύρετε εδώ από το δέντρο χρηστών που εμφανίζεται στην αριστερή μπάρα κάποια ομάδα ή χρήστη που θα μπορεί να δεί αυτό το αντ. περιεχομένου.
+content.object.edit.accessibility.editor.tab.drag.label.canBeUpdatedBy = Σύρετε εδώ από το δέντρο χρηστών που εμφανίζεται στην αριστερή μπάρα κάποια ομάδα ή χρήστη που θα μπορεί να κάνει αλλαγές σε αυτό το αντ. περιεχομένου.
+content.object.edit.accessibility.editor.tab.drag.label.canBeDeletedBy = Σύρετε εδώ από το δέντρο χρηστών που εμφανίζεται στην αριστερή μπάρα κάποια ομάδα ή χρήστη που θα μπορεί να διαγράψει αυτό το αντ. περιεχομένου.
+content.object.edit.accessibility.editor.tab.drag.label.canBeTaggedBy = Σύρετε εδώ από το δέντρο χρηστών που εμφανίζεται στην αριστερή μπάρα κάποια ομάδα ή χρήστη που θα μπορεί να κατηγοριοποιήσει αυτό το αντ. περιεχομένου με τις δικές του ετικέτες.
+content.object.edit.accessibility.editor.tab.remove.value.from.list = Πατήστε για αφαίρεση από τη λίστα
+content.object.edit.accessibility.value.user.group.canBeReadBy.empty=Έχετε επιλέξει ότι μόνο συγκεκριμένοι χρήστες ή ομάδες μπορούν να δουν το αντικείμενο αλλά ΔΕΝ επιλέξατε τους χρήστες ή τις ομάδες που μπορούν να δουν το αντικείμενο
+content.object.edit.accessibility.value.user.group.canBeUpdatedBy.empty=Έχετε επιλέξει ότι μόνο συγκεκριμένοι χρήστες ή ομάδες μπορούν να αλλάξουν / διορθώσουν το αντικείμενο αλλά ΔΕΝ επιλέξατε τους χρήστες ή τις ομάδες που μπορούν να αλλάξουν το αντικείμενο
+content.object.edit.accessibility.value.user.group.canBeDeletedBy.empty=Έχετε επιλέξει ότι μόνο συγκεκριμένοι χρήστες ή ομάδες μπορούν να διαγράψουν το αντικείμενο αλλά ΔΕΝ επιλέξατε τους χρήστες ή τις ομάδες που μπορούν να διαγράψουν το αντικείμενο
+content.object.edit.accessibility.value.user.group.canBeTaggedBy.empty=Έχετε επιλέξει ότι μόνο συγκεκριμένοι χρήστες ή ομάδες μπορούν να  προσθέσουν ετικέτες στο αντικείμενο αλλά ΔΕΝ επιλέξατε τους χρήστες ή τις ομάδες που μπορούν να προσθέσουν ετικέτες στο αντικείμενο
+content.object.edit.accessibility.editor.tab.search.user.label = Αναζητήστε χρήστες με βάση τ όνομά τους ή το επίθετό τους, κτλ.
+content.object.edit.error.no.content.type=Δεν προσδιορίσατε τον Τύπο του νέου αντικειμένου
+content.object.edit.tag.already.exists=Η ΝΕΑ ετικέτα που προσπαθείτε να προσθέσετε βρίσκετε ήδη στις ετικέτες σας. Αν επιθυμείτε να βάλετε την ετικέτα αυτή σε κάποιο αντικείμενο παρακαλώ επιλέξτε τη από τη λίστα των ετικετών σας
+content.object.edit.tag.already.selected=Η ετικέτα είναι ήδη επιλεγμένη
+content.object.edit.empty.tag.error=To όνομα της ετικέτας είναι κενό. Παρακαλώ δώστε κάποιο όνομα.
+content.object.edit.invalid.topic.does.not.belong.to.accepted.taxonomies=Ο όρος που επιλέξατε ΔΕΝ ΠΡΟΣΤΕΘΗΚΕ γιατί δεν ανήκει στους αποδεκτούς Θησαυρούς Όρων από τους οποίους παίρνει τιμές το πεδίο
+content.object.edit.topic.added.to.content.object=Ο Όρος προστέθηκε στις λέξεις κλειδία του Αντικειμένου
+content.object.edit.thubnail.created=Το thumbnail δημιουργήθηκε.
+content.object.edit.remove.aspect.error=Σφάλμα κατά την απενεργοποίηση του σύνθετου στοιχείου
+content.object.edit.add.aspect.error=Σφάλμα κατά την ενεργοποίηση του σύνθετου στοιχείου
+content.object.edit.save.error=Η Αποθήκη Περιεχομένου δεν μπόρεσε να αποθηκεύσει το Αντικ. Περιεχομένου. Παρακαλώ επικοινωνήστε με το γραφείο υποστήριξης
+content.object.edit.portal.content.area.el.localized.label=Περιοχές αντικειμένων  
+content.object.edit.portal.content.area.en.localized.label= Content Areas
+content.object.edit.portal.content.area.created=Ο Θησαυρός Όρων για τα συμβολικά ονόματα των Τμημάτων Σελίδων (content areas) του Ιστότοπου δημιουργήθηκε
+content.object.edit.portal.content.area.creation.error=Δεν δημιουργήθηκε Ο Θησαυρός Όρων για τα συμβολικά ονόματα των Τμημάτων Σελίδων (content areas) για τον Ιστότοπο
+content.object.edit.no.selected.space=Δεν έχετε επιλέξει Φάκελο
+content.object.edit.space.attach.already.exists=Το αντικείμενο ΔΕΝ ΠΡΟΣΑΡΤΗΘΗΚΕ στο Φάκελο που επιλέξατε γιατί υπάρχει ήδη
+content.object.edit.space.attach.error=Το αντικείμενο ΔΕΝ ΠΡΟΣΑΡΤΗΘΗΚΕ στο Φάκελο που επιλέξατε
+content.object.edit.load.error=Σφάλμα κατά την φόρτωση του αντικειμένου
+content.object.edit.system.name = Εσωτερικό Όνομα Αντικειμένου
+content.object.edit.system.entity = Είναι Ειδικό Αντικείμενο Συστήματος
+content.object.edit.select.box.no.value = Επιλέξτε τιμή
+content.object.edit.validation.invalid.path.to.unmanaged.binary.channel=Η τιμή {1} του στοιχείου {0} δεν αντιστοιχεί σε πραγματική διαδρομή αρχείου κάτω από τον φάκελο UnmamagedDataStore της αποθήκης περιεχομένου
+content.object.edit.string.property.password.type.old.value=Παλιαός κωδικός
+content.object.edit.string.property.password.type.new.value=Νέος κωδικός
+content.object.edit.string.property.password.type.new.value.verify=Επιβεβαίωση κωδικού
+content.object.edit.restore.from.draft.error=Σφάλμα κατά την ανάκτηση της τιμής του πεδίου {0} από το πρόχειρο
+content.object.edit.actions.saveDraft = ΑΠΟΘΗΚΕΥΣΗ ΣΤΑ "ΠΡΟΣΩΡΙΝΑ ΑΝΤΙΚΕΙΜΕΝΑ"
+content.object.edit.save.draft.error=Απέτυχε η δημιουργία του "Προσωρινού Αντικειμένου" στο πρόχειρο
+content.object.edit.save.draft.success=Το "Προσωρινό Αντικείμενο" δημιουργήθηκε με επιτυχία στο πρόχειρο
+content.object.edit.web.publication.start.date=Ημερομηνία Δημοσίευσης
+content.object.edit.multiple.complex.cms.property.delete.question=Όλες οι τιμές του σύνθετου στοιχείου θα διαγραφούν. Η διαγραφή οριστικοποιείται με την αποθήκευση του αντικειμένου.
+content.object.edit.unmanagedBinaryChannel.addFilePath=Εισάγετε την διαδρομή του ψηφιακού αρχείου στο δίσκο. Εισάγετε μόνο το μέρος της διαδρομής που βρίσκετε από το φάκελο "UnmanagedDataStore" και κάτω (relative file path)
+content.object.edit.action.createThumbnail=Δημιουργία thumbnail
+content.object.edit.action.deleteFile=Διαγραφή Αρχείου
+content.object.edit.action.viewFileInline=Πατείστε την Εικόνα για Παρουσίαση 
+content.object.edit.action.downloadFile=Κατέβασμα Αρχείου
+content.object.edit.action.uploadFile=Ανέβασμα Αρχείου
+content.object.edit.action.addDynamicProperty=Προσθήκη Δυναμικού Πεδίου στο αντικείμενο
+content.object.edit.action.removeDynamicProperty=Αφαίρεση Δυναμικού Πεδίου
+content.object.edit.fileSize=Μέγεθος Αρχείου: 
+content.object.edit.fileName=Όνομα Αρχείου: 
+content.object.edit.mimeType=mime type:
+content.object.edit.toCreateURL.saveOfNewContentObjectIsRequired=Πρέπει να αποθηκεύστε το νέο αντικείμενο για να μπορέσετε να δημιουργήσετε το σύνδεσμο (URL) πρόσβασης
+content.object.edit.action.createObjectPropertyURL=Δημιουργία Συνδέσμου (URL)
+content.object.edit.action.createObjectPropertyURL.dialogTitle=Δημιουργία Συνδέσμου που επιστρέφει το περιεχόμενο του επιλεγμένου πεδίου
+content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend=Επιλέξτε τον τρόπο διάθεσης του περιεχομένου (Disposition Type)
+content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline=Θα γίνει Ένθεση (Inline)
+content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment=Θα γίνει download (Attachment)
+content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip=<p>Διαλέξτε <strong>"Inline"</strong> (προεπιλεγμένο) αν θέλετε να ενθέσετε σε μια σελίδα το περιέχομενο του πεδίου (π.χ. μια εικόνα)</p> \
+								<p>Διαλέξτε <strong>"Attachment"</strong> για να "επιβάλετε" το "κατέβασμα" του περιεχομένου, δηλαδή για να δείξει ο φυλλομετρητής το διάλογο "κατεβάσματος αρχείου" αντί να βάλει το περιεχόμενο μέσα στη σελίδα</p>
+
+content.object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend=Επιλέξτε τις Διαστάσεις και τις Αναλογίες της Εικόνας
+content.object.edit.action.createObjectPropertyURL.dialogImageWidth=Πλάτος
+content.object.edit.action.createObjectPropertyURL.dialogImageHeight=Ύψος
+content.object.edit.action.createObjectPropertyURL.dialogImageAspectRatio=Αναλογία Πλάτους / Ύψους
+content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyTop=Περικοπή από Δεξιά/Κάτω
+content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyCenter=Ισομερής Περικοπή
+content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyBottom=Περικοπή από Αριστερά/Πάνω
+content.object.edit.action.createObjectPropertyURL.dialogImageWidthFieldsetTooltip=<p>Όταν δημιουργείτε ένα σύνδεσμο προς μια εικόνα τύπου JPG, PNG ή GIF μπορείτε να καθορίσετε τις επιθυμητές διαστάσεις της εικόνας</p> \
+								<p>Αν προσδιορίσετε μόνο το πλάτος ή μόνο το ύψος, και δεν ορίσετε την επιθυμητή αναλογία πλάτους / ύψους, τότε οι διαστάσεις της εικόνας θα αλλαχτούν έτσι ώστε να διατηρηθεί η αρχική αναλογία διαστάσεων (θα διατηρηθεί ο λόγος πλάτους προς ύψος)</p> \
+								<p>Στην περίπτωση που θα αλλάξετε την αναλογία διαστάσεων, μπορείτε να προσδιορίσετε με πιο τρόπο θα γίνει περικοπή της εικόνας (crop) αν χρειαστεί.</p><p>Αν εισάγετε και το πλάτος και το ύψος και νέα αναλογία, τότε η νέα αναλογία δεν θα ληφθεί υπόψιν.</p>
+
+content.object.edit.action.createObjectPropertyURL.dialogWarning=Θυμηθείτε να ΔΗΜΟΣΙΕΥΣΕΤΕ το αντικείμενο αν σκοπεύετε να μοιραστείτε τον σύνδεσμο ή να τον χρησιμοποιήσετε σε ιστότοπους.
+content.object.edit.action.createObjectPropertyURL.dialogButton.createFriendlyURL=Φιλικός Σύνδεσμος 
+content.object.edit.action.createObjectPropertyURL.dialogButton.createPermanentURL=Μόνιμος Σύνδεσμος
+content.object.edit.internalPropertyName=Εσωτερικό Όνομα Πεδίου
+content.object.edit.objectIsEditedAndCannotBeRemoved=Η φόρμα του αντικειμένου που προσπαθείτε να διαγράψετε είναι υπό επεξεργασία (στο tab "Επεξεργασία Αντικειμένου"). Παρακαλώ φορτώστε ένα άλλο αντικείμενο για επεξεργασία και προσπαθείστε πάλι. 
+object.edit.swapPropertyValuePositions.failed=Απέτυχε η αντιμετάθεση των τιμών που επιλέξατε
+object.edit.changePropertyValuePosition.failed=Απέτυχε η αλλαγή θέσεως στην τιμή που επιλέξατε
+
+# Taxonomy Administration
+taxonomy.edit.panel.header.editedTaxonomy = Επεξεργασία Θησαυρού
+taxonomy.edit.panel.header.newTaxonomy = Νέος Θησαυρός
+taxonomy.panel.add.taxonomy = Προσθήκη Θησαυρού
+taxonomy.edit.main.properties = Βασικά στοιχεία
+taxonomy.edit.property.system.name = Εσωτερικό Όνομα Θησαυρού
+taxonomy.edit.localization = Όνομα Θησαυρού σε διάφορες γλώσσες
+taxonomy.edit.localization.taxonomyLabel = Όνομα Θησαυρού
+taxonomy.edit.localization.add.new.localized.label = Προσθήκη Ονόματος Θησαυρού σε άλλη γλώσσα
+taxonomy.edit.localization.deleteLocalizedLabel=Διαγραφή Ονόματος Θησαυρού για την επιλεγμένη γλώσσα
+taxonomy.edit.invalid.system.name=Το εσωτερικό όνομα {0} του Θησαυρού πρέπει να περιέχει λατινικούς χαρακτήρες (a-z,A-z) ή αριθμούς ή τους χαρακτήρες '-', '_',  χωρίς κενό
+taxonomy.non.unique.system.name=Υπάρχει ήδη ένας Θησαυρός με το ίδιο εσωτερικό όνομα. Επιλέξτε κάποιο άλλο όνομα
+taxonomy.save.button.label = ΑΠΟΘΗΚΕΥΣΗ ΘΗΣΑΥΡΟΥ
+taxonomy.save.button.helpMessage=Αποθήκευση των αλλαγών που κάνατε στο Θησαυρό
+taxonomy.save.successful=Ο Θησαυρός αποθηκεύτηκε
+taxonomy.save.error=Συνέβη κάποιο σφάλμα. Ο Θησαυρός δεν αποθηκεύτηκε
+taxonomy.tree.context.menu.edit = Επεξεργασία
+taxonomy.tree.context.menu.add.topic = Προσθήκη Νέου Όρου
+taxonomy.tree.context.menu.delete = Διαγραφή
+taxonomy.tree.context.menu.export.to.xml = Εξαγωγή Θησαυρού σε Αρχείο XML
+taxonomy.export.nullTaxonomy = Δεν μπορεί να γίνει εξαγωγή. Ο Θησαυρός δεν υπάρχει ή δεν έχει όνομα.
+taxonomy.file.upload.panel.header = Επιλέξτε αρχείο XML για μεταφόρτωση
+taxonomy.file.upload.close.button.label = Κλείσιμο
+taxonomy.taxonomy.xml.upload.panel.header = Εισαγωγή από Αρχείο XML
+taxonomy.cascadingDelete.succesful=Ο Θησαυρός διαγράφηκε και όλοι οι Όροι που περιείχε διαγράφηκαν και αφαιρέθηκαν από όλα τα αντικείμενα που τους χρησιμοποιούσαν ως τιμή κάποιου πεδίου τους
+taxonomy.cascadingDelete.error=Ο Θησαυρός δεν διαγράφηκε. Συνέβη κάποιο σφάλμα
+taxonomy.isNull=Δεν ήταν δυνατό να ανακτηθεί ο Θησαυρός. Παρακαλώ δοκιμάστε πάλι.
+
+topic.edit.panel.header.editedTopic = Επεξεργασία Όρου
+topic.edit.panel.header.newTopic = Νέος Όρος
+topic.edit.property.taxonomy = Ανήκει στο Θησαυρό 
+topic.edit.property.taxonomy.owner = Ιδιοκτήτης
+topic.edit.property.id = id
+topic.edit.property.system.name = Εσωτερικό Όνομα Όρου
+topic.edit.property.order = Σειρά Εμφάνισης Όρου
+topic.edit.property.parent = Πατέρας Όρος
+topic.edit.property.parent.drag.area.description = Σύρετε(drag) ένα Όρο ή ένα Θησαυρό από την αριστερή στήλη και αφήστε τον (drop) σε αυτή εδώ την περιοχή προκειμένου να αλλάξετε τον πατέρα
+topic.edit.property.number.referrer.content.objects = Αριθμός αντικειμένων περιεχομένου που χρησιμοποιούν αυτόν τον Όρο
+topic.edit.property.allow.referrer.content.objects = Επιτρέπεται η χρήση του Όρου ως τιμή σε πεδία αντικειμένων
+topic.edit.localization = Όνομα Όρου σε διαφορετικές γλώσσες
+topic.edit.localization.topicLabel = Όνομα Όρου
+topic.edit.localization.add.new.localized.label = Προσθήκη Ονόματος Όρου σε άλλη γλώσσα
+topic.edit.localization.deleteLocalizedLabel=Διαγραφή Ονόματος όρου για την επιλεγμένη γλώσσα
+topic.edit.localization.addAtLeastOneLocalizedLabel=Παρακαλώ επιλέξτε κάποια γλώσσα και προσθέσετε τουλάχιστον ένα όνομα για τον όρο
+topic.edit.localization.addALabelForTheSelectedLanguage=Παρακαλώ προσθέσετε ένα όνομα για την γλώσσα: {0}
+topic.edit.localization.chooseADifferentLanguageForEachLabel=Έχετε επιλέξει την ίδια γλώσσα περισσότερες από μία φορές. Παρακαλώ επιλέξτε διαφορετική γλώσσα για κάθε όνομα όρου
+topic.edit.invalid.system.name=Το εσωτερικό όνομα όρου {0} πρέπει να περιέχει λατινικούς χαρακτήρες (a-z,A-z) ή αριθμούς ή τους χαρακτήρες '-', '_',  χωρίς κενό
+topic.non.unique.system.name=Το εσωτερικό όνομα όρου που επιλέξατε χρησιμοποιείται ήδη στον όρο {0}. Παρακαλώ επιλέξτε ένα άλλο όνομα
+topic.save.button.label=ΑΠΟΘΗΚΕΥΣΗ ΟΡΟΥ
+topic.save.button.helpMessage=Αποθήκευση των αλλαγών που κάνατε στον όρο
+topic.save.successful=Ο Όρος αποθηκεύτηκε
+topic.save.error=Συνέβη κάποιο σφάλμα. Ο Όρος δεν αποθηκεύτηκε
+topic.relocate.error=Ο Όρος δεν αποθηκεύτηκε. Η μεταφορά του όρου σε άλλο Θησαυρό δεν είναι εφικτή. Ο όρος χρησιμοποιείτε σε κάποιο πεδίο αντικειμένου που δεν επιτρέπει τιμές από το Θησαυρό στο οποίο θέλετε να μετακινήσετε το όρο.
+topic.taxonomy.refresh.error=Συνέβη κάποιο σφάλμα κατα την ανανέωση των Θησαυρών. Παρόλο που οι αλλαγές που πραγματοποιήσατε αποθηκεύτηκαν είναι πιθανό να μην εμφανίζονται στην οθόνη σας. Δοκιμάστε έξοδο και είσοδο πάλι στο σύστημα. 
+topic.cascadingDelete.succesful=Ο όρος "{0}" διαγράφηκε και αφαιρέθηκε από όλα τα αντικείμενα που τον χρησιμοποιούσαν ως τιμή κάποιου πεδίου τους
+topic.cascadingDelete.error=Ο όρος δεν διαγράφηκε. Συνέβη κάποιο σφάλμα
+topic.draggedAndDroppedObjectIsNull=Ο όρος ή ο θησαυρός που σύρατε απο το δέντρο είναι κενός. Παρακαλώ δοκιμάστε την ενέργεια πάλι
+topic.changeParentTaxonomy.oldParentTaxonomyHasNoId=Δεν είναι εφικτή η αλλαγή του πατέρα. Ο θησαυρός στον οποίο βρίσκεται ο όρος δεν έχει id
+topic.changeParentTaxonomy.draggedAndDroppedTaxonomyHasNoId=Δεν είναι εφικτή η αλλαγή του πατέρα. Ο θησαυρός που σύρατε δεν έχει id
+topic.changeParentTopic.draggedAndDroppedEntityIsNotATopic=Η οντότητα που σύρατε από το δέντρο δεν είναι "όρος" θησαυρού
+topic.changeParentTopic.topicCannotBeTheParentOfItself=Ο "όρος" δεν μπορεί να έχει πατέρα τον εαυτό του
+topic.changeParentTopic.childTopicCannotBeAParentTopicToo=Ο όρος που σύρατε είναι ήδη "παιδί" του όρου που επεξεργάζεστε και δεν μπορεί ταυτόχρονα να γίνει και "πατέρας" του
+topic.parentTaxonomyLocalizedLabelMissingAndSystemNameIsShownInstead=Ο Θησαυρός δεν έχει όνομα στην επιλεγμένη γλώσσα. Εμφανίζεται το εσωτερικό όνομα.
+topic.isNull=Δεν ήταν δυνατό να ανακτηθεί ο Όρος. Παρακαλώ δοκιμάστε πάλι.
+
+tag.edit.panel.header.editedTopic = Επεξεργασία Ετικέτας
+tag.edit.panel.header.newTopic = Νέα Ετικέτα
+tag.edit.localization = Όνομα Ετικέτας σε διαφορετικές γλώσσες
+tag.save.button.label= ΑΠΟΘΗΚΕΥΣΗ ΕΤΙΚΕΤΑΣ
+tag.edit.property.owner = Ιδιοκτήτης
+tag.edit.property.id = id
+tag.edit.property.system.name = Εσωτερικό Όνομα Ετικέτας
+tag.edit.property.order = Σειρά Εμφάνισης της Ετικέτας
+tag.edit.property.number.referrer.content.objects = Αριθμός αντικειμένων με αυτή την Ετικέτα
+tag.edit.localization.deleteLocalizedLabel = Διαγραφή Ονόματος ετικέτας για την επιλεγμένη γλώσσα
+tag.edit.localization.add.new.localized.label = Προσθήκη Ονόματος ετικέτας σε άλλη γλώσσα
+tag.save.button.helpMessage = Αποθήκευση των αλλαγών που κάνατε στην ετικέτα
+
+# Security Administration
+security.administration.panel.header = Διαχειρίση Ασφάλειας
+security.administration.no.action.taxonomy.found = Ο Θησαυρός των Διαθέσιμων Ενεργειών δεν έχει δημιουργηθεί
+security.administration.no.resource.taxonomy.found = Ο Θησαυρός των Διαθέσιμων Πόρων δεν έχει δημιουργηθεί
+security.administration.navigation.menu.policy.tree.panel.header = Πολιτικές Ασφάλειας
+security.administration.policies.tree.context.menu.add.policy = Νέα Πολιτική
+security.administration.policies.tree.context.menu.delete.policy = Διαγραφή πολιτικής
+security.administration.policies.tree.edit.policy = Επεξεργασία Πολιτικής
+
+# User Provision
+user.provision.common.person.first.name = Όνομα
+user.provision.common.person.last.name = Επώνυμο
+user.provision.common.person.father.name = Όνομα Πατέρα
+user.provision.common.person.identity = Κωδικός Χρήστη (User Id)
+user.provision.edit.person.username = Όνομα Χρήστη (user name)
+user.provision.edit.person.password = Κωδικός Πρόσβασης
+user.provision.edit.person.passwordVerify = Επιβεβαίωση κωδικού
+user.provision.edit.update.user.panel.header = Αλλαγή / Διόρθωση Χρήστη
+user.provision.edit.user.details.panel.header = Στοιχεία Χρήστη
+user.provision.edit.user.account.data.panel.header = Στοιχεία Λογαριασμού
+user.provision.edit.user.account.data.old.password = Παλαιός Κωδικός Πρόσβασης
+user.provision.edit.user.account.data.new.password = Νέος Κωδικός Πρόσβασης
+user.provision.user.account.update.successfull = Τα στοιχεία του χρήστη ανανεώθηκαν με επιτυχία
+user.provision.user.authentication.update.successfull = Τα στοιχεία λογαριασμού ανανεώθηκαν με επιτυχία
+user.provision.user.authentication.update.failed = Η αλλαγή των στοιχείων λογαριασμού απέτυχε
+user.provision.user.account.save.failed = Συνέβη κάποιο σφάλμα. Τα στοιχεία του χρήστη και τα στοιχεία λογαριασμού δεν ανανεώθηκαν.
+user.provision.role.list = Λίστα Ρόλων Χρήστη (Άμεσοι και κληρονομούμενοι)
+user.provision.edit.user.save = ΑΠΟΘΗΚΕΥΣΗ
+validator.notEmpty=  πρέπει να δοθεί μια τιμή
+validator.notNull=  πρέπει να δοθεί μια τιμή
+
+# Space Administration
+spaces=Χώροι Εργασίας
+space.organization.space.root.name = Κοινόχρηστος Χώρος
+space.my.space.root.name = Προσωπικός Χώρος
+space.administration.my.space.panel.header = Πλοήγηση στον προσωπικό σας χώρο
+space.administration.organization.space.panel.header = Πλοήγηση στον κοινόχρηστο χώρο
+space.administration.add.new.space.link = Προσθήκη Νέου Φακέλου
+space.administration.new.space.default.localized.label = Νέος Φάκελος
+space.administration.delete.space = Διαγραφή
+space.administration.edit.space = Επεξεργασία
+space.administration.copy.content.object.to.clipboard = Προσθήκη στο πρόχειρο
+space.administration.delete.content.object.from.space = Διαγραφή από το Φάκελο
+space.administration.move.cannotMoveSpaceIntoItselfOrIntoChildSpace=Δεν μπορείτε να μετακινήσετε ένα φάκελο στον εαυτό του ή μέσα σε ένα υποφάκελό του
+space.administration.move.success=Ο Φάκελος μεταφέρθηκε με επιτυχία
+space.administration.move.failure=Αποτυχία μεταφοράς του φακέλου 
+space.administration.linkObject.success=Το αντικείμενο αντιγράφτηκε στο φάκελο
+space.administration.linkObject.failure=Αποτυχία αντιγραφής του αντικειμένου στο φάκελο
+
+#Portal Administration
+portal.administration.panel.header = Διαχείριση Ιστότοπων
+portal.administration.panel.add.portal = Νέος Ιστότοπος
+
+#Confirmation Panel
+confirmation.panel.header=Επιβεβαίωση ενέργειας
+confirmation.panel.delete.question=Θέλετε να προχωρήσετε στην διαγραφή της οντότητας
+confirmation.panel.save.script.question=Παρακαλώ επιβεβαιώστε την αποθήκευση του script 
+confirmation.panel.ok=OK
+confirmation.panel.cancel=Ακύρωση
+confirmation.panel.delete.draft.question=Υπάρχουν "προσωρινά αντικείμενα" στο πρόχειρο. Επιλέξτε αν θέλετε να διαγραφούν από το πρόχειρο ή να παραμείνουν εκεί. ΠΡΟΣΟΧΗ! τα "προσωρινά αντικείμενα" παραμένουν στο πρόχειρο το πολύ 2 μέρες και μετά διαγράφονται αυτόματα.
+confirmation.panel.removeDraftObjects=Σβήσιμο "Προσωρινών Αντικειμένων" και Έξοδος
+confirmation.panel.keepDraftObjects=Διατήρηση "Προσωρινών Αντικειμένων" και Έξοδος
+confirmation.panel.cancelApplicationExit=Ακύρωση Εξόδου
+
+# User - Roles Navigation tree
+users.roles.navigation.tree.root.node.label= Ρόλοι - Χρήστες
+users.roles.navigation.show.all.roles.link.label = Δείτε όλους τους ρόλους
+users.roles.navigation.hide.all.roles.link.label = Απόκρυψη
+
+# Script Engine
+scriptEngine.scriptMenu.header=Groovy Console
+scriptEngine.scriptMenu.addNewScript=Δημιουργία Νέου Script
+scriptEngine.script.save=ΑΠΟΘΗΚΕΥΣΗ
+scriptEngine.script.run=ΕΚΤΕΛΕΣΗ *
+scriptEngine.script.run.info=Όταν πατάτε το κουμπί "Εκτέλεση", εκτελείτε ο κώδικας του script που είναι αποθηκευμένος. Όποτε αλλάζετε τον κώδικα του script πατάτε πάντα "Αποθήκευση" πριν από την εκτέλεση ώστε να εκτελεστεί ο αλλαγμένος κώδικας.
+scriptEngine.outputconsole.header=Αποτελέσματα / Μηνύματα Script (Output Console)
+
+# richfaces pick list localization
+RICH_PICK_LIST_COPY_ALL_LABEL=Αντιγραφή Όλων
+RICH_PICK_LIST_COPY_LABEL=Αντιγραφή Επιλεγμένων
+RICH_PICK_LIST_REMOVE_ALL_LABEL=Διαγραφή Όλων
+RICH_PICK_LIST_REMOVE_LABEL=Διαγραφή Επιλεγμένων
