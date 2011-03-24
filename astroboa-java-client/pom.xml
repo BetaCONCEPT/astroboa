@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	
+	Copyright (C) 2005-2011 BetaCONCEPT LP.
+	
+	This file is part of Astroboa.
+	
+	Astroboa is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	Astroboa is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+	
+	Authors 
+	Gregory Chomatas (gchomatas@betaconcept.com)
+	Savvas Triantafyllou (striantafyllou@betaconcept.com)
+	
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-java-client</artifactId>
+	<packaging>jar</packaging>
+	<name>Astroboa Java Client</name>
+	<description>
+		Module for ASTROBOA repository client. Contains necessary classes
+		and configuration files for accessing a Astroboa repository
+		server and its services through Astroboa API
+	</description>
+
+	<dependencies>
+
+		<!-- SLF4J API is an abstraction of various logging systems. This allows the
+			use of any logging framework at the time of deployment -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!--  In this module we have chosen to use Log4j under Slf4j therefore this dependency
+			is the bridge from SLF4J to Log4j-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<!-- Log4j is the actual logging framework that is used in this module.
+			Log4j is used by SLF4J. If this module runs inside JBOSS which already contains
+			its own log4j.jar then this dependency must be marked as provided -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+
+		<!-- 
+			JBoss EJB3 client 
+			
+			Use type = pom because JBoss AS client is actually a collection of
+			jars and not one jar. This pom contains as dependencies all the necessary
+			jars.
+		-->
+		<dependency>
+			<groupId>org.jboss.jbossas</groupId>
+			<artifactId>jboss-as-client</artifactId>
+			<version>5.1.0.GA</version>
+			<type>pom</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-java-client
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-java-client
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-java-client
+		</url>
+	</scm>
+</project>
