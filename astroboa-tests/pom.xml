@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>  
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-tests</artifactId>    
+	<name>Astroboa Tests</name>
+	<packaging>jar</packaging>
+	<description>
+		This is the test module of Astroboa. It contains the main infrastructure
+		used by any other astroboa module which contains tests on it own.
+		Among other things it is responsible for creating a test JCR repository
+		on the memory which can be used for various tests.
+	</description>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				 <configuration>
+				  	<systemPropertyVariables>
+            			<astroboaVersion>${project.version}</astroboaVersion>
+          			</systemPropertyVariables>
+           			<properties>
+				        <property>
+				          <name>listener</name>
+				          <value>org.betaconceptframework.astroboa.test.TestListener</value>
+				        </property>
+			        </properties>
+          		</configuration>
+			</plugin>
+
+			<!-- 
+				This instructs Maven to copy any empty directory found
+				in src/test/resources or in  src/main/resources
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+       			<configuration>
+					<includeEmptyDirs>true</includeEmptyDirs>
+          		</configuration>            
+			</plugin>
+
+<!-- Use this plugin to rename all built in definition schemas -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-antrun-plugin</artifactId>
+        		<!-- 
+        			Although plugin version is  provided in pluginManagement in
+        			betaconceptframework-parent.pom, plugin's info
+        			http://maven.apache.org/plugins/maven-antrun-plugin/plugin-info.html
+        			states that it should also be provided in project's pom as well 
+        		-->
+        		<version>1.4</version>
+        		<executions>
+          			<execution>
+          				<id>rename-test-schemata</id>
+            			<phase>test-compile</phase>
+            			<configuration>
+              				<tasks>
+              				 	<move todir="${project.build.testOutputDirectory}/repository/astroboa_schemata" includeemptydirs="false">
+    								<fileset dir="${project.build.testOutputDirectory}/repository/astroboa_schemata">
+      									<include name="**/*.xsd" />
+      									<exclude name="**/*-${project.version}.xsd" />
+    								</fileset>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
+  								</move>
+  								<move todir="${project.build.testOutputDirectory}/cloneRepository/astroboa_schemata" includeemptydirs="false">
+    								<fileset dir="${project.build.testOutputDirectory}/cloneRepository/astroboa_schemata">
+      									<include name="**/*.xsd"/>
+										<exclude name="**/*-${project.version}.xsd"/>
+    								</fileset>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd"/>
+  								</move>
+  								<move todir="${project.build.testOutputDirectory}/newRepositoryAddedAtRuntime/astroboa_schemata" includeemptydirs="false">
+    								<fileset dir="${project.build.testOutputDirectory}/newRepositoryAddedAtRuntime/astroboa_schemata">
+      									<include name="**/*.xsd"/>
+										<exclude name="**/*-${project.version}.xsd"/>
+    								</fileset>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd"/>
+  								</move>
+  								
+		            		</tasks>
+        			    </configuration>
+            			<goals>
+              				<goal>run</goal>
+            			</goals>
+          			</execution>
+        		</executions>
+      		</plugin>
+		</plugins>
+		
+		<!-- This instruct Maven to filter src/test/resources directory -->
+		<testResources> 
+			<testResource>
+            	<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+			
+	</build>
+	
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<scope>test</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jboss.cache</groupId>
+			<artifactId>jbosscache-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	
+		  
+	  	<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-engine</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-jaas</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+
+		<!-- SLF4J API is an abstraction of various logging systems. This allows the
+		use of any logging framework at the time of deployment -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>  
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		
+		<!-- Due to http://jira.opensymphony.com/browse/TESTNG-401
+		we cannot use version 5.14 -->
+		 <dependency>
+		    <groupId>org.testng</groupId>
+    		<artifactId>testng</artifactId>
+    		<version>5.14.2</version>
+    		<scope>test</scope>
+  		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- It is not used directly but through SPRING JOTM Factory Bean -->
+		<dependency>
+	 		<groupId>jotm</groupId>
+			<artifactId>jotm</artifactId>
+			<version>2.0.10</version>
+			<exclusions>
+				<exclusion>
+				  <groupId>javax.activation</groupId>
+				  <artifactId>activation</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+  			
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>
+			<!-- Since in betaconcept-parent has provided scope we must
+			explicitly specify here the runtime scope in order to be available
+			to any module that depends on this one -->
+			<scope>runtime</scope>
+		</dependency>
+  			
+		<dependency>
+			<groupId>org.springmodules</groupId>
+			<artifactId>spring-modules-jcr</artifactId>
+		</dependency>
+		
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-tests
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-tests
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-tests
+		</url>
+	</scm>
+
+</project>
+
