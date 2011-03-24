@@ -174,7 +174,9 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 		contentObjectType.setContentObjectTypeName(contentObject.getContentObjectType());
 		contentObjectType.setSystemBuiltinEntity(contentObject.isSystemBuiltinEntity());
 		contentObjectType.setSystemName(contentObject.getSystemName());
-		contentObjectType.setUrl(contentObject.getResourceApiURL(marshalOutputTypeIsJSON() ? ResourceRepresentationType.JSON : ResourceRepresentationType.XML, false));
+		
+		//TODO: Check whether user may have more control on whether a friendly url is generated or not
+		contentObjectType.setUrl(contentObject.getResourceApiURL(marshalOutputTypeIsJSON() ? ResourceRepresentationType.JSON : ResourceRepresentationType.XML, false, contentObject.getSystemName()!=null));
 		
 		if (cmsPropertyPathsToMarshall == null || cmsPropertyPathsToMarshall.contains(CmsConstants.OWNER_ELEMENT_NAME)){
 			contentObjectType.setOwner(contentObject.getOwner());
