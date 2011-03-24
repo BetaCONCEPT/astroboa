@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	
+	Copyright (C) 2005-2011 BetaCONCEPT LP. This file is part of Astroboa.
+	
+	Astroboa is free software: you can redistribute it and/or modify it
+	under the terms of the GNU Lesser General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version. Astroboa is distributed in the hope
+	that it will be useful, but WITHOUT ANY WARRANTY; without even the
+	implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+	PURPOSE. See the GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public
+	License along with Astroboa. If not, see
+	<http://www.gnu.org/licenses />. Authors Gregory Chomatas
+	(gchomatas@betaconcept.com) Savvas Triantafyllou
+	(striantafyllou@betaconcept.com)
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../astroboa-parent/pom.xml</relativePath>
+	</parent>
+	<groupId>org.betaconceptframework.astroboa</groupId>
+	<artifactId>astroboa</artifactId>
+	<name>BetaCONCEPT Astroboa</name>
+	<version>3.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<description>BetaCONCEPT Astroboa is an Enterprise Content Management System. Its modular architecture allows to be used both as a full featured Web application for managing content across an organization as well as a component in a SOA architecture for creating content applications. This module builds all astroboa components</description>
+	
+	<issueManagement>
+		<system>Jira</system>
+		<url>http://jira.betaconceptframework.org/browse/ASTROBOA</url>
+	</issueManagement>
+	<url>http://www.astroboa.org</url>
+	<inceptionYear>2006</inceptionYear>
+	<ciManagement>
+		<system>Hudson</system>
+	</ciManagement>
+	
+	<licenses>
+    	<license>
+			<name>GNU Lesser General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<organization>
+		<name>BetaCONCEPT</name>
+		<url>http://www.betaconcept.com</url>
+	</organization>
+
+	<modules>
+		<module>../astroboa-parent</module>
+		<module>../astroboa-api</module>
+		<module>../astroboa-model</module>
+		<module>../astroboa-java-client</module>	
+		<module>../astroboa-jaas</module>
+		<module>../astroboa-engine</module>
+		<module>../astroboa-ejb3</module>
+		<module>../astroboa-resource-api</module>
+		<module>../astroboa-tests</module>
+		<module>../astroboa-console</module>
+		<module>../astroboa-portal-commons</module>
+	</modules>
+
+	
+	<scm>
+    	<connection>scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</connection>
+		<developerConnection>scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</developerConnection>
+		<url>http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</url>
+	</scm>
+	
+</project>
+
