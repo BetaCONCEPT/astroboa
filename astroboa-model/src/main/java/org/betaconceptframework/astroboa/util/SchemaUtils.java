@@ -41,7 +41,14 @@ public final class SchemaUtils {
 	}
 
 	public static String buildSchemaLocationAccordingToActiveClient(String schemaFileName){
-		return ResourceApiURLUtils.generateUrlForType(CmsDefinition.class, ResourceRepresentationType.XSD, false, schemaFileName);
+		
+		UrlProperties urlProperties = new UrlProperties();
+		urlProperties.setResourceRepresentationType(ResourceRepresentationType.XSD);
+		urlProperties.setFriendly(true);
+		urlProperties.setRelative(false);
+		urlProperties.setName(schemaFileName);
+
+		return ResourceApiURLUtils.generateUrlForType(CmsDefinition.class, urlProperties );
 	}
 
 	public static void appendSchemaLocationToMarshaller(

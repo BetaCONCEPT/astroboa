@@ -31,6 +31,7 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.model.jaxb.CmsEntitySerialization;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
 
 /**
  * CmsDefinition implementation class.
@@ -104,9 +105,19 @@ public abstract class CmsDefinitionImpl implements CmsDefinition, Serializable {
 	
 	private void generateUrls(){
 		if (urlsPerOutput.isEmpty()){
-			urlsPerOutput.put(ResourceRepresentationType.XML, ResourceApiURLUtils.generateUrlForEntity(this, ResourceRepresentationType.XML, false));
-			urlsPerOutput.put(ResourceRepresentationType.JSON, ResourceApiURLUtils.generateUrlForEntity(this, ResourceRepresentationType.JSON, false));
-			urlsPerOutput.put(ResourceRepresentationType.XSD, ResourceApiURLUtils.generateUrlForEntity(this, ResourceRepresentationType.XSD, false));
+			
+			UrlProperties urlProperties = new UrlProperties();
+			urlProperties.setFriendly(true);
+			urlProperties.setRelative(false);
+
+			urlProperties.setResourceRepresentationType(ResourceRepresentationType.XML);
+			urlsPerOutput.put(ResourceRepresentationType.XML, ResourceApiURLUtils.generateUrlForEntity(this, urlProperties));
+			
+			urlProperties.setResourceRepresentationType(ResourceRepresentationType.JSON);
+			urlsPerOutput.put(ResourceRepresentationType.JSON, ResourceApiURLUtils.generateUrlForEntity(this, urlProperties));
+
+			urlProperties.setResourceRepresentationType(ResourceRepresentationType.XSD);
+			urlsPerOutput.put(ResourceRepresentationType.XSD, ResourceApiURLUtils.generateUrlForEntity(this, urlProperties));
 			
 		}
 	}

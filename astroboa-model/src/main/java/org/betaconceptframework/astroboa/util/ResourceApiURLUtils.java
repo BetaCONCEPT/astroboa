@@ -43,11 +43,15 @@ import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
  */
 public class ResourceApiURLUtils {
 
-	public static String generateUrlForType(Class<?> type, ResourceRepresentationType<?>  resourceRepresentationType, boolean relative, String... identifierOrNameOrPath) {
+	public static String generateUrlForType(Class<?> type, UrlProperties urlProperties) {
+		
+		if (urlProperties == null){
+			urlProperties = new UrlProperties();
+		}
 		
 		StringBuilder sb = new StringBuilder();
 
-		if (!relative){
+		if (!urlProperties.isRelative()){
 			addHost(sb);
 		}
 		
@@ -55,22 +59,26 @@ public class ResourceApiURLUtils {
 		
 		addRepositoryId(sb);
 
-		addURLPartForType(sb, type, identifierOrNameOrPath);
+		addURLPartForType(sb, type, urlProperties);
 		
-		addOutput(resourceRepresentationType, sb, type);
+		addOutput(urlProperties.getResourceRepresentationType(), sb, type);
 		
 		return sb.toString();
 	}
 
-	public static String generateUrlForEntity(Object cmsEntity, ResourceRepresentationType<?>  resourceRepresentationType,	boolean relative) {
+	public static String generateUrlForEntity(Object cmsEntity, UrlProperties urlProperties) {
 
+		if (urlProperties == null){
+			urlProperties = new UrlProperties();
+		}
+		
 		if (cmsEntity instanceof BinaryChannel){
-			return ((BinaryChannel)cmsEntity).buildResourceApiURL(null, null, null, null, null, false, relative);
+			return ((BinaryChannel)cmsEntity).buildResourceApiURL(null, null, null, null, null, urlProperties.isFriendly(), urlProperties.isRelative());
 		}
 		
 		StringBuilder sb = new StringBuilder();
 
-		if (!relative){
+		if (!urlProperties.isRelative()){
 			addHost(sb);
 		}
 		
@@ -78,78 +86,63 @@ public class ResourceApiURLUtils {
 		
 		addRepositoryId(sb);
 
-		addURLForEntity(sb, cmsEntity);
+		addURLForEntity(sb, cmsEntity, urlProperties);
   
 		//Do not add resource representation output if property is a Binary Property
 		//since its url practically represents the binary content
 		//TODO: Clarify this issue
 		if (! (cmsEntity instanceof BinaryProperty)){
-			addOutput(resourceRepresentationType, sb, cmsEntity.getClass());
+			addOutput(urlProperties.getResourceRepresentationType(), sb, cmsEntity.getClass());
 		}
 		
 		return sb.toString();
 	}
 	
-	private static void addURLPartForType(StringBuilder sb, Class<?> type, String... identifierOrNameOrPath) {
+	private static void addURLPartForType(StringBuilder sb, Class<?> type, UrlProperties urlProperties) {
 		
 		if (type == null){
 			return;
 		}
 		else{ 
 			
-			if (identifierOrNameOrPath == null || identifierOrNameOrPath.length == 0){
-				identifierOrNameOrPath = new String[]{""};
+			sb.append(CmsConstants.FORWARD_SLASH);
+			
+			if (ContentObject.class.isAssignableFrom(type) || CmsProperty.class.isAssignableFrom(type) 
+					|| BinaryChannel.class.isAssignableFrom(type)){
+				sb.append(CmsBuiltInItem.ContentObject.getLocalPart());
+			}
+			else if (Topic.class.isAssignableFrom(type)){
+				sb.append(CmsBuiltInItem.Topic.getLocalPart());
+			}
+			else if (Space.class.isAssignableFrom(type)){
+				sb.append(CmsBuiltInItem.Space.getLocalPart());
+			}
+			else if (Taxonomy.class.isAssignableFrom(type)){
+				sb.append(CmsBuiltInItem.Taxonomy.getLocalPart());
+			}
+			else if (CmsDefinition.class.isAssignableFrom(type)){
+				sb.append("definition");
 			}
 			
 			sb.append(CmsConstants.FORWARD_SLASH);
 			
-			if (ContentObject.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
-					.append(CmsConstants.FORWARD_SLASH)
-					.append(identifierOrNameOrPath[0]);
+			if (urlProperties.isFriendly()){
+				sb.append(urlProperties.getName());
 			}
-			else if (Topic.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.Topic.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(identifierOrNameOrPath[0]);
+			else{
+				sb.append(urlProperties.getIdentifier());
 			}
-			else if (Space.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.Space.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(identifierOrNameOrPath[0]);
-			}
-			else if (Taxonomy.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.Taxonomy.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(identifierOrNameOrPath[0]);
-			}
-			else if (BinaryChannel.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.BinaryChannel.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(identifierOrNameOrPath[0]);
-			}
-			else if (CmsDefinition.class.isAssignableFrom(type)){
-				sb.append("definition")
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(identifierOrNameOrPath[0]);
-			}
-			else if (CmsProperty.class.isAssignableFrom(type)){
+			
+			if (CmsProperty.class.isAssignableFrom(type) || 
+					BinaryChannel.class.isAssignableFrom(type)){
 				
-				//Expecting 2 values
-				//The first one is the content object id or system name
-				//and the second one is property's path
-				sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
-					.append(CmsConstants.FORWARD_SLASH)
-					.append(identifierOrNameOrPath[0]);
-				
-				if(identifierOrNameOrPath.length>=2){
 					sb.append(CmsConstants.FORWARD_SLASH)
-					.append(identifierOrNameOrPath[1]);
+					.append(urlProperties.getPropertyPath());
 				}
 			}
-		}
 	}
-	private static void addURLForEntity(StringBuilder sb, Object cmsEntity) {
+	
+	private static void addURLForEntity(StringBuilder sb, Object cmsEntity, UrlProperties urlProperties) {
 		
 		if (cmsEntity == null){
 			return ;
@@ -159,29 +152,61 @@ public class ResourceApiURLUtils {
 		
 		if (cmsEntity instanceof Taxonomy){
 			sb.append(CmsBuiltInItem.Taxonomy.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(((Taxonomy)cmsEntity).getName());
+				.append(CmsConstants.FORWARD_SLASH);
+			
+			if (urlProperties.isFriendly()){
+				sb.append(((Taxonomy)cmsEntity).getName());
+			}
+			else{
+				sb.append(((Taxonomy)cmsEntity).getId());
+			}
 		}
 		else if (cmsEntity instanceof Topic){
 			sb.append(CmsBuiltInItem.Topic.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)	
-				.append(((Topic)cmsEntity).getName());
+				.append(CmsConstants.FORWARD_SLASH);
+
+			if (urlProperties.isFriendly()){
+				sb.append(((Topic)cmsEntity).getName());
+			}
+			else{
+				sb.append(((Topic)cmsEntity).getId());
+			}
 		}
 		else if (cmsEntity instanceof Space){
 			sb.append(CmsBuiltInItem.Space.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(((Space)cmsEntity).getName());
+				.append(CmsConstants.FORWARD_SLASH);
+			
+			if (urlProperties.isFriendly()){
+				sb.append(((Space)cmsEntity).getName());
+			}
+			else{
+				sb.append(((Space)cmsEntity).getId());
+			}
 		}
 		else if (cmsEntity instanceof ContentObject){
 			sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(((ContentObject)cmsEntity).getSystemName());
+				.append(CmsConstants.FORWARD_SLASH);
+			
+			if (urlProperties.isFriendly()){
+				sb.append(((ContentObject)cmsEntity).getSystemName());
+			}
+			else{
+				sb.append(((ContentObject)cmsEntity).getId());
+			}
+			
 		}
 		else if (cmsEntity instanceof CmsProperty<?,?>){
 			sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
-				.append(CmsConstants.FORWARD_SLASH)
-				.append(((CmsPropertyImpl<?,?>)cmsEntity).getContentObjectSystemName())
-				.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.FORWARD_SLASH);
+			
+			if (urlProperties.isFriendly()){
+				sb.append(((CmsPropertyImpl<?,?>)cmsEntity).getContentObjectSystemName());
+			}
+			else{
+				sb.append(((CmsPropertyImpl<?,?>)cmsEntity).getContentObjectId());
+			}
+			
+			sb.append(CmsConstants.FORWARD_SLASH)
 				.append(((CmsProperty<?,?>)cmsEntity).getPermanentPath());
 		}
 		else if (cmsEntity instanceof ContentObjectTypeDefinition){
