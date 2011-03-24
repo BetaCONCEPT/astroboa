@@ -81,6 +81,7 @@ import org.betaconceptframework.astroboa.service.dao.DefinitionServiceDao;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.PropertyPath;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.AttributesImpl;
@@ -1201,44 +1202,74 @@ public class Serializer {
 
 	private void addUrlForEntityRepresentedByNode(Node node) throws Exception {
 		
+		UrlProperties urlProperties = new UrlProperties();
+		urlProperties.setRelative(false);
+		urlProperties.setResourceRepresentationType(resourceRepresentationType);
+
 		if (node.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName())){
 			if (node.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
+				
+				urlProperties.setFriendly(true);
+				urlProperties.setName(node.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString());
+				
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-						ResourceApiURLUtils.generateUrlForType(ContentObject.class, resourceRepresentationType, false, node.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString()));
+						ResourceApiURLUtils.generateUrlForType(ContentObject.class, urlProperties));
 			}
 			else{
+				
+				urlProperties.setFriendly(false);
+				urlProperties.setIdentifier(cmsRepositoryEntityUtils.getCmsIdentifier(node));
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-					ResourceApiURLUtils.generateUrlForType(ContentObject.class, resourceRepresentationType, false, cmsRepositoryEntityUtils.getCmsIdentifier(node)));
+					ResourceApiURLUtils.generateUrlForType(ContentObject.class, urlProperties));
 			}
 		}
 		else if (node.isNodeType(CmsBuiltInItem.Topic.getJcrName())){
 			
 			if (node.hasProperty(CmsBuiltInItem.Name.getJcrName())){
+				
+				urlProperties.setFriendly(true);
+				urlProperties.setName(node.getProperty(CmsBuiltInItem.Name.getJcrName()).getString());
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-						ResourceApiURLUtils.generateUrlForType(Topic.class, resourceRepresentationType, false, node.getProperty(CmsBuiltInItem.Name.getJcrName()).getString()));
+						ResourceApiURLUtils.generateUrlForType(Topic.class, urlProperties));
 			}
 			else{
+				urlProperties.setFriendly(false);
+				urlProperties.setIdentifier(cmsRepositoryEntityUtils.getCmsIdentifier(node));
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-					ResourceApiURLUtils.generateUrlForType(Topic.class, resourceRepresentationType, false, cmsRepositoryEntityUtils.getCmsIdentifier(node)));
+					ResourceApiURLUtils.generateUrlForType(Topic.class, urlProperties));
 			}
 			
 		}
 		else if (node.isNodeType(CmsBuiltInItem.Space.getJcrName())){
 			
 			if (node.hasProperty(CmsBuiltInItem.Name.getJcrName())){
+				
+				urlProperties.setFriendly(true);
+				urlProperties.setName(node.getProperty(CmsBuiltInItem.Name.getJcrName()).getString());
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-						ResourceApiURLUtils.generateUrlForType(Space.class, resourceRepresentationType, false, node.getProperty(CmsBuiltInItem.Name.getJcrName()).getString()));
+						ResourceApiURLUtils.generateUrlForType(Space.class, urlProperties));
 			}
 			else{
+				
+				urlProperties.setFriendly(false);
+				urlProperties.setIdentifier(cmsRepositoryEntityUtils.getCmsIdentifier(node));
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-					ResourceApiURLUtils.generateUrlForType(Space.class, resourceRepresentationType, false, cmsRepositoryEntityUtils.getCmsIdentifier(node)));
+					ResourceApiURLUtils.generateUrlForType(Space.class, urlProperties));
 			}
 			
 		}
 		else if (node.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName())){
+			
+			urlProperties.setFriendly(true);
+			urlProperties.setName(node.getName());
+
 			writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, 
-					ResourceApiURLUtils.generateUrlForType(Taxonomy.class, resourceRepresentationType, false, 
-					node.getName()));
+					ResourceApiURLUtils.generateUrlForType(Taxonomy.class, urlProperties));
 		}
 		
 	}
@@ -1515,8 +1546,13 @@ public class Serializer {
 
 		boolean systemNameFound = false;
 
+		UrlProperties urlProperties = new UrlProperties();
+		urlProperties.setRelative(false);
+		urlProperties.setResourceRepresentationType(resourceRepresentationType);
+
 		if (contentObjectJcrNode != null){
 			
+
 			//ContentObject SystemName
 			if (contentObjectJcrNode.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
 
@@ -1524,8 +1560,11 @@ public class Serializer {
 				
 				writeAttribute(CmsBuiltInItem.SystemName.getLocalPart(), systemName);
 				
+				urlProperties.setFriendly(true);
+				urlProperties.setName(systemName);
+
 				writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME,
-						ResourceApiURLUtils.generateUrlForType(ContentObject.class, resourceRepresentationType, false, systemName));
+						ResourceApiURLUtils.generateUrlForType(ContentObject.class, urlProperties));
 				
 				systemNameFound = true;
 			}
@@ -1539,8 +1578,12 @@ public class Serializer {
 		}
 		
 		if (!systemNameFound){
+			
+			urlProperties.setFriendly(false);
+			urlProperties.setIdentifier(contentObjectId);
+
 			writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME,
-				ResourceApiURLUtils.generateUrlForType(ContentObject.class, resourceRepresentationType, false, contentObjectId));
+				ResourceApiURLUtils.generateUrlForType(ContentObject.class, urlProperties ));
 		}
 	}
 
