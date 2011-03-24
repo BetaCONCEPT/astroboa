@@ -33,6 +33,7 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.model.jaxb.CmsEntitySerialization;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.SystemBuiltInEntityAdapter;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
 
 
 /**
@@ -110,10 +111,10 @@ public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , 
 	private void generateUrl(ResourceRepresentationType<?>  resourceRepresentationType) {
 
 		if (resourceRepresentationType != null && ResourceRepresentationType.JSON.equals(resourceRepresentationType)){
-			url = getResourceApiURL(ResourceRepresentationType.JSON, false);
+			url = getResourceApiURL(ResourceRepresentationType.JSON, false, false);
 		}
 		else if (resourceRepresentationType != null && ResourceRepresentationType.XML.equals(resourceRepresentationType)){
-			url = getResourceApiURL(ResourceRepresentationType.XML, false);
+			url = getResourceApiURL(ResourceRepresentationType.XML, false, false);
 		}
 	}
 	
@@ -126,8 +127,14 @@ public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , 
 	}
 	
 	@Override
-	public String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative) {
-		return ResourceApiURLUtils.generateUrlForEntity(this, resourceRepresentationType, relative);
+	public String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative, boolean friendlyUrl) {
+
+		UrlProperties urlProperties = new UrlProperties();
+		urlProperties.setFriendly(friendlyUrl);
+		urlProperties.setRelative(relative);
+		urlProperties.setResourceRepresentationType(resourceRepresentationType);
+
+		return ResourceApiURLUtils.generateUrlForEntity(this, urlProperties);
 	}
 	
 	@Deprecated

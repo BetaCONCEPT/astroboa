@@ -719,9 +719,9 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 	}
 	
 	@Override
-	public String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative) {
+	public String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative, boolean friendlyUrl) {
 		
-		return buildResourceApiURL(null, null, null, null, null, false, relative);
+		return buildResourceApiURL(null, null, null, null, null, friendlyUrl, relative);
 		
 	}
 
