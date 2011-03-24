@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->          
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+    <display-name>Astroboa Resource api</display-name>
+    
+    <!--  used by patched seam to overcome resource servlet problem with multiple wars
+    <context-param>
+		<param-name>org.jboss.seam.applicationName</param-name>
+		<param-value>astroboa-resource-api</param-value>
+	</context-param>
+	-->
+    
+    <!--  
+    <context-param>
+		<description>
+			Prevents HTML-Comments from beeing rendered
+		</description>
+		<param-name>facelets.SKIP_COMMENTS</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>com.sun.faces.compressViewState</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+ 	-->
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+        	<!-- we directly load the repository services from the spring context which is available in JNDI. 
+        	The services are used by the BinaryChannel and CmsDefiniton Filters which do not utilize the astroboa client -->
+			classpath:astroboa-engine.xml
+			
+			<!-- load spring beans from astroboa-resource-api module -->
+			classpath:Filters.xml
+			classpath:Singletons.xml
+		
+        </param-value>
+    </context-param>
+    
+    <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
+    <context-param>
+        <param-name>resteasy.scan</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    
+    
+		<!--  
+		BinaryChannel dynamic loader filter. Filter class is a Spring bean and use of 
+		DelegatingFilterProxy provides the easy to instantiate Filter using Spring context
+		Any filter call is delegated to Spring bean.
+		
+		In this case spring bean's id is the same with filter's name  
+		Excerpt from org.springframework.web.filter.DelegatingFilterProxy documentation 
+		'The lifecycle methods defined by the Servlet Filter interface will by default not be delegated to the target bean, 
+		relying on the Spring application context to manage the lifecycle of that bean. 
+		Specifying the "targetFilterLifecycle" filter init-param as "true" will enforce invocation of the Filter.init 
+		and Filter.destroy lifecycle methods on the target bean, letting the servlet container manage the filter lifecycle.'
+	-->
+	<filter>
+		<filter-name>binaryChannelLoaderFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<!-- BinaryChannel dynamic loader filter mapping  -->
+	<filter-mapping>
+		<filter-name>binaryChannelLoaderFilter</filter-name>
+		<url-pattern>/f/binaryChannel/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>contentObjectTypeDefinitionSchemaFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<!-- BinaryChannel dynamic loader filter mapping  -->
+	<filter-mapping>
+		<filter-name>contentObjectTypeDefinitionSchemaFilter</filter-name>
+		<url-pattern>/f/definitionSchema/*</url-pattern>
+	</filter-mapping>
+	
+	
+	<!-- Seam Framework-->
+	<!-- Seam Framework filter and mapping  
+	<filter>
+        <filter-name>Seam Filter</filter-name>
+        <filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Seam Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	-->
+	
+	<!-- This filter is used by SEAM for Exception Handling in combination with 
+	facelets.DEVELOPMENT context parameter wich must be set to false and in 
+	components.xml debugging must be disabled ( <core:init debug=false .../>)
+ 	
+	<filter>
+		<filter-name>Seam Exception Filter</filter-name>
+		<filter-class>
+			org.jboss.seam.servlet.SeamExceptionFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Seam Exception Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	-->
+	
+	<!-- 
+   <listener>
+      <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
+   </listener>
+	 -->
+	 
+	<listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <!--  
+    <servlet>
+		<servlet-name>faces</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>faces</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+    -->
+    
+    <!-- Seam framework resources servlet 
+    <servlet>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <servlet-class>org.jboss.seam.servlet.SeamResourceServlet</servlet-class>
+   </servlet>
+    
+   <servlet-mapping>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <url-pattern>/astroboa/*</url-pattern>
+   </servlet-mapping>
+    -->
+    
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+    	<session-timeout>0</session-timeout>
+    </session-config>
+    
+</web-app>

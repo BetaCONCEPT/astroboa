@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context displayName="Resource API (RESTFUL)" docBase="/opt/jboss-5.1.0.GA/server/default/deploy/resource-api" 
+path="/resource-api" reloadable="false">
+
+	<Manager pathname="" />
+	
+	<Valve className="org.apache.catalina.valves.FastCommonAccessLogValve"
+		directory="/opt/jboss-5.1.0.GA/server/default/log"  
+		prefix="astroboa_resource_api_log." 
+		suffix=".txt" 
+		pattern="combined" 
+		resolveHosts="false"/>
+                
+</Context>
