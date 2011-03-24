@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+          
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+          
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://java.sun.com/jstl/core"
+		xmlns:a4j="http://richfaces.org/a4j"
+		xmlns:seam="http://jboss.com/products/seam/taglib">
+	
+	<f:view contentType="text/html" />
+	
+	<head>
+		<title>#{messages['login.title']}</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-store" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="keywords" content="Astroboa" />
+		<meta http-equiv="description" content="This is the login page of Astroboa" />
+		
+		
+		<link rel="Shortcut Icon" type="image/x-icon"
+			href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
+		
+		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/loginPage.css" />
+		<link href="#{facesContext.externalContext.requestContextPath}/css/slide.css" rel="stylesheet" type="text/css" />
+		
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.masonry.min.js"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.scale.js"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.showMessage.min.js" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			var bcmslib = {};
+			bcmslib.jQuery = jQuery.noConflict(true);
+		//]]>
+		</script>
+		
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/betacms-login.js"></script>
+		
+	</head>
+
+	<body>
+		<a4j:outputPanel id="applicationMessages" ajaxRendered="true" >
+			<ui:include
+				src="/WEB-INF/pageComponents/applicationMessages.xhtml" />
+		</a4j:outputPanel>
+			
+		<div id="toppanel">
+			<div id="panel">
+				<div class="content clearfix">
+					<div class="left">
+						<h1>Astroboa Console</h1>
+						<p class="grey">You may use the search box to search published content.</p>
+						<p class="grey">
+							If you already have an account you may login to get full access to stored content.
+						</p>
+						<p class="grey">
+							If you have not yet an account you may use the registration form. You will receive your password in your email account.
+						</p>
+						<p class="grey">
+							If you already have an account and wish to get access to a new repository just register with your existing username 
+							and select the repository to which you require access. You will receive a confirmation email. 
+						</p>
+					</div><!--left-->
+					<div class="left">
+						<!-- Login Form -->
+						<h:form id="loginForm" styleClass="clearfix">
+							<h1 class="padlock">Login</h1>
+							
+							<h:inputHidden id="defaultViewId"
+								value="betaCMSPage">
+								<f:attribute name="forceId" value="true" />
+							</h:inputHidden>
+							<h:inputHidden id="requiredUserRoleToAccessDefaultStartPage"
+								value="ROLE_CMS_INTERNAL_VIEWER">
+								<f:attribute name="forceId" value="true" />
+							</h:inputHidden>
+							
+							<label class="grey" for="userNameInput">#{messages['login.enterUsername']}</label>
+							<h:inputText id="userNameInput" name="userNameInput"
+								styleClass="field"
+								value="#{login.userName}"
+							 	label="#{messages['login.enterUsername']}"
+								size="23" 
+								maxLength="30" 
+								required="true">
+								<f:validateLength minimum="4" maximum="30" />
+							</h:inputText>
+							
+							<label class="grey" for="userPasswordInput">#{messages['login.enterPassword']}</label>
+							<h:inputSecret id="userPasswordInput" 
+								name="userPasswordInput"
+								styleClass="field"
+								value="#{login.passWord}"
+								label="#{messages['login.enterPassword']}"
+								size="23" 
+								maxLength="20" 
+								required="true">
+							<f:validateLength minimum="8" maximum="30" />
+							</h:inputSecret>
+							
+							<label class="grey" for="repository">#{messages['login.enterRepositoryToConnect']}</label>
+							<h:selectOneMenu id="repository"
+								name="repository"
+								styleClass="repositorySelectionList"
+								style="width: 200px;"
+								value="#{login.repositoryIdToConnectTo}" 
+								required="true">
+								<seam:selectItems
+									value="#{login.availableCmsRepositoriesForSelectedServer}"
+									var="cmsRepository"
+									label="#{cmsRepository.getLocalizedLabelForLocale(localeSelector.localeString)}"
+									itemValue="#{cmsRepository.id}"/>
+    						</h:selectOneMenu> 
+							
+							<label class="grey" for="language">#{messages['login.enterLanguage']}</label>
+							<h:selectOneMenu id="language"
+								name="language"
+								style="width: 200px;"
+								value="#{localeSelector.localeString}">
+    							<f:selectItems value="#{localeSelector.supportedLocales}"/>
+    							<a4j:support event="onchange" 
+	    							action="#{localeSelector.select}"
+	    							reRender="loginForm"
+	    							ajaxSingle="true" />
+    						</h:selectOneMenu> 
+							
+							<ui:remove>
+								<label><input name="rememberme" id="rememberme" class="left-input" type="checkbox" checked="checked" value="forever" /> &nbsp;Remember me</label>
+							</ui:remove>
+							<div class="clear"></div>
+							<h:commandButton
+								id="loginFormSubmitButton"
+								value="#{messages['login.loginButton']}" 
+								type="submit"
+								action="#{login.login}" 
+								styleClass="bt_login" />
+							<a class="lost-pwd" href="#">Lost your password?</a>
+						</h:form>
+					</div><!--left-->
+					<div class="left right">			
+						<!-- Register Form -->
+						<form action="#" method="post">
+							<h1>Not a member yet? Sign Up!</h1>				
+							<label class="grey" for="signup">Username:</label>
+							<input class="field" type="text" name="signup" id="signup" value="" size="23" />
+							<label class="grey" for="email">Email:</label>
+							<input class="field" type="text" name="email" id="email" size="23" />
+							<label>A password will be e-mailed to you.</label>
+							<input type="submit" name="submit" value="Register" class="bt_register" />
+						</form>
+					</div><!--left-right-->
+				</div><!--content-->
+			</div> <!--panel-->
+			
+			<!-- The tab on top -->	
+			<div class="tab">
+				<ul class="login">
+			    	<li class="left">&nbsp;</li>
+			        <li>Hello Guest!</li>
+					<li class="sep">|</li>
+					<li id="toggle">
+						<a id="open" class="open" href="#">Log In | Register</a>
+						<a id="close" style="display: none;" class="close" href="#">Close Panel</a>			
+					</li>
+		
+			    	<li class="right">&nbsp;</li>
+				</ul> 
+			</div> <!-- / top -->
+
+		</div><!--toppanel-->
+		
+		<div id="main-container">
+    		<div id="container">
+    			<div id="searchBox" style="text-align: center; margin-top: 60px; margin-bottom: 50px;">
+    				<div>
+    					<img src="#{facesContext.externalContext.requestContextPath}/images/astroboa_logo_black_128x128.png" style="margin-bottom: 10px;"/>
+    				</div>
+    				<input type="text" name="searchedText" id="searchedText" value="" size="50" 
+    					style="font-size: 1.6em; padding: 5px; color: #777777;"/>
+    			</div>
+    			<div id="searchResultsHeader" style="margin-top: 30px;">
+    				<h1>Recently Published Content</h1>
+    				<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+    			</div>
+    			<div id="searchResults" style="margin-top: 10px;">
+    				
+    			</div>
+    			<div id="showMore" style="font-size: 1.4em; color: #777777; text-align: center; cursor: pointer;">Show More...</div>
+    		</div>
+    		
+    		<div id="ajaxActivityIndicator"><img src="#{facesContext.externalContext.requestContextPath}/images/ajax-loader.gif" alt="ajax activity image"/> Loading...</div>
+    	</div>
+		
+		
+	</body>
+</html>

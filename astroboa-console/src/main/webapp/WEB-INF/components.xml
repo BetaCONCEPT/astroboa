@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<components xmlns="http://jboss.com/products/seam/components"
+            xmlns:core="http://jboss.com/products/seam/core"
+            xmlns:persistence="http://jboss.com/products/seam/persistence"
+            xmlns:transaction="http://jboss.com/products/seam/transaction"
+            xmlns:drools="http://jboss.com/products/seam/drools"
+            xmlns:bpm="http://jboss.com/products/seam/bpm"
+            xmlns:security="http://jboss.com/products/seam/security"
+            xmlns:mail="http://jboss.com/products/seam/mail"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:web="http://jboss.com/products/seam/web"
+            xmlns:i18n="http://jboss.com/products/seam/international"
+            xsi:schemaLocation=
+                "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd 
+                 http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd
+                 http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.2.xsd 
+                 http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd
+                 http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd
+                 http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd
+                 http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd
+                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd
+                 http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd
+                 http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.2.xsd">
+
+	<core:init debug="false" jndi-pattern="astroboa-console/#{ejbName}/local" transaction-management-enabled="false"/>
+	<transaction:no-transaction />
+	
+	<!-- Change appropriately the default values for your locale and time-zone -->
+	<i18n:locale-selector cookie-enabled="true" locale-string="el" />
+	<i18n:time-zone-selector cookie-enabled="true" time-zone-id="GMT+02:00"/>
+	
+	<web:ajax4jsf-filter force-parser="false" 
+		enable-cache="true" /> 
+	
+	<core:manager concurrent-request-timeout="120000" 
+		conversation-timeout="10800000" 
+		conversation-id-parameter="cid"/>
+		
+	<!--  <security:identity jaas-config-name="astroboa"/> -->
+	
+	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}"/>
+	</event>
+	<event type="org.jboss.seam.security.postAuthenticate">
+		<action execute="#{redirect.returnToCapturedView }"/>
+	</event>
+	
+	<!--  
+	<event type="org.jboss.seam.security.loggedOut"> 
+    	<action execute="#{openid.logout}" /> 
+	</event>
+	-->
+	
+	<component name="login">
+		<property name="astroboaClient">#{astroboaClient}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+	</component>
+	
+	<component name="contentObjectReadyForSaveObserver">
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+	
+	<!-- 
+	<component name="acegiLogin"> 
+		<property name="applicationSecurityManager">#{applicationSecurityManager}</property>
+		<property name="accessDecisionManager">#{accessDecisionManager}</property>
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+	 -->
+	 
+	<component name="contentObjectSearchByCriteria">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+
+		<property name="cmsUtilities">#{cmsUtilities}</property>
+		<property name="pageController">#{pageController}</property>
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="definitionService">#{definitionService}</property>
+		<property name="topicService">#{topicService}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+	</component>
+	
+	<component name="contentObjectSearchByContentType">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+	</component>
+	
+	<component name="contentObjectSearchByOwner">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property> 
+	</component>
+	
+	<!-- <component name="contentObjectSearchByStatus">
+		
+		
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	-->
+	
+	<component name="contentObjectSearchByText">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property> 
+	</component>
+	
+	<component name="contentObjectSearchByTopic">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+	</component>
+	
+	<component name="contentObjectSpecificSearchQueries">
+		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+	</component>
+	
+	
+	<component name="contentObjectViewAsTree">
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="definitionService">#{definitionService}</property>
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="pageController">#{pageController}</property>
+	</component>
+	
+	
+	<component name="uploadDataForBinaryChannelDialogue">
+		<property name="mimeTypesMap">#{mimeTypesMap}</property>
+	</component>
+	
+	<component name="textEdit">
+		<property name="contentObjectEdit">#{contentObjectEdit}</property>
+		<property name="pageController">#{pageController}</property>
+	</component>
+	
+	<component name="contentObjectEdit">
+		<property name="contentObjectList">#{contentObjectList}</property>
+		<property name="definitionService">#{definitionService}</property>
+		<property name="contentService">#{contentService}</property>
+		<property name="spaceService">#{spaceService}</property>
+		<property name="userSpaceNavigation">#{userSpaceNavigation}</property>
+		<property name="cmsUtilities">#{cmsUtilities}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="pageController">#{pageController}</property>
+		<property name="topicService">#{topicService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	<component name="tagEdit">
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="topicService">#{topicService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	
+	<component name="personInfoEditor">
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="pageController">#{pageController}</property>
+	</component>
+	
+	<component name="userSpaceNavigation">
+	    <property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="spaceService">#{spaceService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	<component name="sharedSpaceNavigation">
+	    <property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+		<property name="pageController">#{pageController}</property>
+		<property name="spaceService">#{spaceService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	<component name="taxonomyEdit">
+		<property name="pageController">#{pageController}</property>
+		<property name="taxonomyService">#{taxonomyService}</property>
+		<property name="topicService">#{topicService}</property>
+		<property name="cmsUtilities">#{cmsUtilities}</property>
+	</component>
+	
+	<component name="taxonomyEditor">
+		<property name="taxonomyService">#{taxonomyService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	<component name="repositoryNavigation">
+	    <property name="contentService">#{contentService}</property>
+		<property name="cmsUtilities">#{cmsUtilities}</property>
+		<property name="spaceService">#{spaceService}</property>
+	</component>
+	
+	<component name="spaceTree">
+	    <property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+	    <property name="spaceService">#{spaceService}</property>
+	</component>
+	
+	<component name="cmsDefinitionTree">
+	    <property name="definitionService">#{definitionService}</property>
+	</component>
+	
+	<component name="cmsDefinitionTreeForContentObjectSearch">
+	    <property name="definitionService">#{definitionService}</property>
+	</component>
+	
+	<component name="uiMenu">
+	    <property name="definitionService">#{definitionService}</property>
+	    <property name="cmsUtilities">#{cmsUtilities}</property>
+	</component>
+	
+	<component name="complexCmsPropertyEdit">
+		<property name="definitionService">#{definitionService}</property>
+		<property name="contentService">#{contentService}</property>
+		<property name="taxonomyService">#{taxonomyService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="topicService">#{topicService}</property>
+		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+	</component>
+	
+	<component name="contentObjectsSubmittedForWebPublishingDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="recentlyAddedOrModifiedPublishedContentObjectsDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="recentlyAddedOrModifiedContentObjectsDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="loggedInUserRecentlyAddedOrModifiedContentObjectsDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+	</component>
+
+	<component name="mostReadPublishedContentObjectsDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="contentObjectsTemporarilyRejectedForReauthoringDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="contentObjectsSubmittedByExternalUserForWebPublishingDashboardItem">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="portalEditor">
+		<property name="pageController">#{pageController}</property>
+		<property name="contentService">#{contentService}</property>
+	</component>
+	
+	<component name="scheduledForContentAreasContentObjectList">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	<component name="contentObjectListOfTypeQuery">
+		<property name="contentService">#{contentService}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	<component name="securityEdit">
+		<property name="pageController">#{pageController}</property>
+	</component>
+	
+	<component name="excelExportBean">
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+	
+	<component name="xmlExportBean">
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+	
+	<component name="scriptEngine">
+		<property name="astroboaClient">#{astroboaClient}</property>
+		<property name="pageController">#{pageController}</property>
+	</component>
+
+	<component name="importTaxonomyXMLDialogue">
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+	
+	<component name="identityStoreRunAsSystem">
+		<property name="activeAstroboaClient">#{astroboaClient}</property>
+	</component>
+	
+	<component name="deleteContentObjectBean">
+		<property name="astroboaClient">#{astroboaClient}</property>
+		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+	</component>
+	
+	
+	<component name="contentTypeEditor">
+	    <property name="definitionService">#{definitionService}</property>
+	    <property name="pageController">#{pageController}</property>
+	</component>
+	
+	<component name="ruleEngine">
+		<property name="astroboaClient">#{astroboaClient}</property>
+	</component>
+
+	<component name="copier">
+		<property name="astroboaClient">#{astroboaClient}</property>
+		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
+	</component>
+	
+	<component name="languageSelector">
+		<property name="topicService">#{topicService}</property>
+		<property name="taxonomyService">#{taxonomyService}</property>
+	</component>
+	
+	<component name="clipboard">
+	    <property name="contentService">#{contentService}</property>
+	</component>
+	
+	<component name="schemaServiceAsync">
+	    <property name="definitionService">#{definitionService}</property>
+	    <property name="taxonomyService">#{taxonomyService}</property>
+	</component>
+	
+	<!-- 
+	   createTempFiles — if this option is set to true, uploaded files are streamed to a temporary file instead of in memory.
+       maxRequestSize — the maximum size of a file upload request, in bytes.  -->
+     
+     <web:multipart-filter create-temp-files="true" 
+                          max-request-size="0" />
+	
+   <!-- 
+   <persistence:managed-persistence-context name="entityManager"
+                                     auto-create="true"
+                          entity-manager-factory="#{CRM_SeamEntityManagerFactory}"/>
+
+   <persistence:entity-manager-factory name="CRM_SeamEntityManagerFactory" 
+                      persistence-unit-name="CRM"/>
+   
+     
+   <drools:rule-base name="securityRules">
+       <drools:rule-files><value>/security.drl</value></drools:rule-files>
+   </drools:rule-base>
+
+   <security:identity authenticate-method="#{authenticator.authenticate}"
+                           security-rules="#{securityRules}"
+                              remember-me="true"/>
+                              
+   <event type="org.jboss.seam.notLoggedIn">
+       <action execute="#{redirect.captureCurrentView}"/>
+   </event>
+   <event type="org.jboss.seam.postAuthenticate">
+       <action execute="#{redirect.returnToCapturedView}"/>
+   </event>
+   
+   <mail:mail-session host="localhost" port="2525" username="test" password="test" />
+   -->
+        
+   <!-- For use with jBPM pageflow or process management -->
+   <!--  
+   <bpm:jbpm>
+      <bpm:process-definitions></bpm:process-definitions>
+      <bpm:pageflow-definitions></bpm:pageflow-definitions>
+   </bpm:jbpm>
+   -->
+      
+</components>

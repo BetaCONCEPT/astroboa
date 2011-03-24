@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JSFFlowViewLayout version="1.0">
+  <Drawing gridVisible="true" snapOn="true" />
+  <JSFFlowResource path="*" location="1149,0" dimension="110,36" />
+  <JSFFlowResource path="/selectContentObjectPage.jsf" location="30,330" dimension="200,36" />
+  <JSFFlowResource path="/selectFilePage.jsf" location="330,430" dimension="140,36" />
+  <JSFFlowResource path="/selectCreatorPage.jsf" location="30,430" dimension="163,36" />
+  <JSFFlowResource path="/topicEditPage.jsf" location="30,530" dimension="138,36" />
+  <JSFFlowResource path="/contentObjectTypeSelectionPage.jsf" location="330,330" dimension="241,36" />
+  <JSFFlowResource path="/repositoryReviewPage.jsf" location="330,130" dimension="183,36" />
+  <JSFFlowResource path="/repositoryNavigationPage.jsf" location="480,30" dimension="204,36" />
+  <JSFFlowResource path="/contentObjectListPage.jsf" location="330,230" dimension="186,36" />
+  <JSFFlowResource path="/home.jsf" location="30,130" dimension="105,36" />
+  <JSFFlowResource path="/login.jsf" location="180,30" dimension="102,36" />
+  <JSFFlowResource path="/betaCMSEditPage.jsf" location="330,530" dimension="157,36" />
+  <JSFFlowResource path="/error_jsf.jsp" location="1142,216" dimension="125,36" />
+  <JSFFlowResource path="/help.jsp" location="1342,216" dimension="139,36" />
+  <JSFFlowNavigationCase id="*,/selectContentObjectPage.jsf,dialog:selectContentObject,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1149,3" />
+      <AbsolutePoint location="142,3" />
+      <AbsolutePoint location="142,330" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/selectFilePage.jsf,dialog:selectFile,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1149,18" />
+      <AbsolutePoint location="916,18" />
+      <AbsolutePoint location="916,448" />
+      <AbsolutePoint location="470,448" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/selectCreatorPage.jsf,dialog:selectCreator,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1219,36" />
+      <AbsolutePoint location="1219,188" />
+      <AbsolutePoint location="252,188" />
+      <AbsolutePoint location="252,448" />
+      <AbsolutePoint location="193,448" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/topicEditPage.jsf,topicEdit,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1189,36" />
+      <AbsolutePoint location="1189,103" />
+      <AbsolutePoint location="304,103" />
+      <AbsolutePoint location="304,548" />
+      <AbsolutePoint location="168,548" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/contentObjectTypeSelectionPage.jsf,contentObjectTypeSelect,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1259,18" />
+      <AbsolutePoint location="1304,18" />
+      <AbsolutePoint location="1304,348" />
+      <AbsolutePoint location="571,348" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/repositoryReviewPage.jsf,repositoryReview,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1204,36" />
+      <AbsolutePoint location="1204,148" />
+      <AbsolutePoint location="513,148" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/repositoryNavigationPage.jsf,repositoryNavigation,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1174,36" />
+      <AbsolutePoint location="1174,48" />
+      <AbsolutePoint location="684,48" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/contentObjectListPage.jsf,contentObjectList,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1234,36" />
+      <AbsolutePoint location="1234,203" />
+      <AbsolutePoint location="423,203" />
+      <AbsolutePoint location="423,230" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/home.jsf,home,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1204,0" />
+      <AbsolutePoint location="1204,-37" />
+      <AbsolutePoint location="82,-37" />
+      <AbsolutePoint location="82,130" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/login.jsf,LOGOUT,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1219,0" />
+      <AbsolutePoint location="1219,-67" />
+      <AbsolutePoint location="231,-67" />
+      <AbsolutePoint location="231,30" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/betaCMSEditPage.jsf,contentObjectEditor,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1259,33" />
+      <AbsolutePoint location="1274,33" />
+      <AbsolutePoint location="1274,548" />
+      <AbsolutePoint location="487,548" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/error_jsf.jsp,error,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1249,36" />
+      <AbsolutePoint location="1249,216" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id="*,/help.jsp,help,null" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1259,3" />
+      <AbsolutePoint location="1411,3" />
+      <AbsolutePoint location="1411,216" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+</JSFFlowViewLayout>
+

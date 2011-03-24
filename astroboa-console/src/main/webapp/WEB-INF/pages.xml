@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<pages xmlns="http://jboss.com/products/seam/pages"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd"
+       no-conversation-view-id="/betaCMSPage.xhtml"
+       login-view-id="/login.xhtml">
+       
+    
+	<page view-id="/betaCMSPage.xhtml" login-required="true">
+		<restrict>#{s:hasRole('ROLE_CMS_INTERNAL_VIEWER')}</restrict>
+		<begin-conversation join="true"/>
+    </page>
+    
+    <page view-id="/portalEditPage.xhtml" login-required="true">
+    	<restrict>#{s:hasRole('ROLE_CMS_PORTAL_EDITOR')}</restrict>
+    </page>
+    <page view-id="/taxonomyEditPage.xhtml" login-required="true">
+    	<restrict>#{s:hasRole('ROLE_CMS_TAXONOMY_EDITOR')}</restrict>
+    </page>
+    <page view-id="/scriptEnginePage.xhtml" login-required="true">
+    	<restrict>#{s:hasRole('ROLE_ADMIN')}</restrict>
+    </page>
+    
+    <page view-id="/error.xhtml" login-required="true"/>
+	
+	<page view-id="*" >
+		 <navigation>
+			<rule if-outcome="loggedIn">  
+				<redirect view-id="/betaCMSPage.xhtml"/>
+			</rule>
+			<rule if-outcome="LOGOUT">  
+				<redirect view-id="/login.xhtml"/>
+			</rule>
+			<rule if-outcome="betaCMSPage">
+				<redirect view-id="/betaCMSPage.xhtml"/>
+			</rule>
+			<rule if-outcome="textEditorPage">
+				<redirect view-id="/textEditorPage.xhtml"/>
+			</rule>
+			
+			<rule if-outcome="taxonomyEditPage">
+				<redirect view-id="/taxonomyEditPage.xhtml"/>
+			</rule>
+			
+			<rule if-outcome="portalEditPage">
+				<redirect view-id="/portalEditPage.xhtml"/>
+			</rule>
+			
+			<rule if-outcome="scriptEnginePage">
+				<redirect view-id="/scriptEnginePage.xhtml"/>
+			</rule>
+
+			<rule if-outcome="clearContentObjectEditAndLoadAgain">
+				<redirect view-id="/clearContentObjectEditAndLoadAgain.xhtml"/>
+			</rule>
+			
+		</navigation>
+		
+		<navigation from-action="#{identity.logout}">
+			<redirect view-id="/login.xhtml"/>
+		</navigation>
+
+    </page>
+	 
+	 
+	 <page view-id="/clearContentObjectEditAndLoadAgain.xhtml" action="#{pageController.simulateOpenContentObjectTypeSelectorAction_PageAction}">
+		<action execute="#{contentObjectEdit.editContentObject_UIAction}"/>
+		 <navigation>
+			<rule if-outcome="betaCMSPage">
+				<redirect view-id="/betaCMSPage.xhtml"/>
+			</rule>
+		</navigation>
+    </page>
+    
+	<exception class="org.jboss.seam.security.NotLoggedInException"> 
+        <redirect view-id="/login.xhtml"> 
+            <message>#{messages['application.notLoggedIn']}</message> 
+        </redirect> 
+    </exception> 
+    <exception class="org.jboss.seam.security.AuthorizationException"> 
+        <end-conversation/> 
+        <redirect view-id="/login.xhtml"> 
+            <message>#{messages['login.invalidRoles']}</message> 
+        </redirect> 
+    </exception>
+    <exception>
+    	<end-conversation/>
+        <redirect view-id="/error.xhtml"/>
+    </exception>
+        
+    
+	  <!--
+	  no-conversation-view-id="/personSearch.xhtml"
+       login-view-id="/login.xhtml"
+	  <begin-conversation />
+	 action="#{conversation.begin}"
+	 <action execute="#{personCard.edit}" if="#{not validation.failed}"/>
+    <page view-id="*">
+        <navigation>
+            <rule if-outcome="home">
+                <redirect view-id="/home.xhtml"/>
+            </rule>
+        </navigation>
+    </page>
+	
+	
+    <exception class="org.jboss.seam.framework.EntityNotFoundException">
+        <redirect view-id="/error.xhtml">
+            <message>Not found</message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.persistence.EntityNotFoundException">
+        <redirect view-id="/error.xhtml">
+            <message>Not found</message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.persistence.OptimisticLockException">
+        <end-conversation/>
+        <redirect view-id="/error.xhtml">
+            <message>Another user changed the same data, please try again</message>
+        </redirect>
+    </exception>
+    
+    <exception class="org.jboss.seam.security.AuthorizationException">
+        <redirect view-id="/error.xhtml">
+            <message>You don't have permission to do this</message>
+        </redirect>
+    </exception>
+    
+    <exception class="org.jboss.seam.security.NotLoggedInException">
+        <redirect view-id="/login.xhtml">
+            <message>Please log in first</message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.faces.application.ViewExpiredException">
+        <redirect view-id="/error.xhtml">
+            <message>Your session has timed out, please try again</message>
+        </redirect>
+    </exception>-->
+       
+</pages>

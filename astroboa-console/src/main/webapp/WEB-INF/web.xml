@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of106
+		  
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+    <display-name>Astroboa Web Console</display-name>
+  
+	<!-- JSF Framework params -->
+	<context-param>
+		<description>
+            Comma separated list of URIs of (additional) faces config files.
+            (e.g. /WEB-INF/my-config.xml)
+            See JSF 1.0 PRD2, 10.3.2
+        </description>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>
+            /WEB-INF/faces-servlet.xml
+        </param-value>
+    </context-param>
+   
+    
+	<context-param> 
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value> 
+	</context-param> 
+    
+	<context-param>
+		<param-name>com.sun.faces.displayConfiguration</param-name>
+		<param-value>true</param-value>
+	</context-param>
+    
+    <!--  JSF RI Performance tuning -->
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+	
+	<context-param>
+        <param-name>com.sun.faces.externalizeJavaScript</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <context-param>
+		<param-name>com.sun.faces.compressViewState</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>com.sun.faces.responseBufferSize</param-name>
+		<param-value>500000</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>com.sun.faces.verifyObjects</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	
+	<!--  Facelets tuning -->
+	<context-param>
+    	<param-name>org.richfaces.LoadScriptStrategy</param-name>
+    	<param-value>ALL</param-value>
+	</context-param>
+	
+	<context-param>
+    	<param-name>org.richfaces.LoadStyleStrategy</param-name>
+    	<param-value>ALL</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>
+			org.ajax4jsf.xmlparser.ORDER
+		</param-name>
+		<param-value>
+			NEKO,TIDY
+		</param-value>
+	</context-param>
+	 
+	<context-param>
+		<param-name>org.ajax4jsf.xmlparser.NEKO</param-name>
+		<param-value>.*\..*</param-value>
+	</context-param>	 
+	
+	
+	<context-param>
+		<param-name>
+			facelets.RECREATE_VALUE_EXPRESSION_ON_BUILD_BEFORE_RESTORE
+		</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>
+			facelets.BUILD_BEFORE_RESTORE
+		</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<!-- SET this to false when in production -->
+	<context-param>
+		<param-name>facelets.DEVELOPMENT</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- REMOVE from comment when in production
+	<context-param>
+		<param-name>facelets.REFRESH_PERIOD</param-name>
+		<param-value>-1</param-value>
+	</context-param>
+	 -->
+	 
+	<context-param>
+        <description>Prevents HTML-Comments from being rendered</description>
+        <param-name>facelets.SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <!--  
+	<context-param>
+		<param-name>org.ajax4jsf.handleViewExpiredOnClient</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	To handle session timeouts add the above context param here
+	and at the page some javascript like the following
+	<script type="text/javascript">
+		A4J.AJAX.onError = function(req, status, message) {
+        	window.location.reload();
+		}
+	</script>
+	
+	-->
+	
+	<!-- USE ONLY IF RUNNING UNDER JBOSS -->
+	<context-param>
+		<param-name>
+			com.sun.faces.serializationProvider
+		</param-name>
+		<param-value>
+			org.jboss.web.jsf.integration.serialization.JBossSerializationProvider
+		</param-value>
+	</context-param>
+	
+	
+	<!--  
+	<context-param>
+		<param-name>facelets.LIBRARIES</param-name>
+		<param-value>/WEB-INF/facelets/staticMethods.taglib.xml</param-value>
+	</context-param>
+	-->
+	
+ 	<!-- Load a shared parent context file which is provided by the repository module and then add all other required context files 
+	<context-param>
+		<param-name>parentContextKey</param-name>
+        <param-value>astroboa.engine.context</param-value>
+    </context-param>
+    -->
+    
+    <!-- Other required context files besides the parent context 
+    Specify full path for context files and not with wildcard as Spring classpath resource
+ 		is not locating correctly files inside jars
+ 	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			<!-- use the following xml file if the astroboa repository is separately deployed in jboss and is accessed by applications 
+			as a shared application context accessible through JNDI 
+			classpath:astroboa-engine.xml -->
+			<!-- The above file accesses the shared repository context from JNDI and then creates spring beans as proxies for the astroboa repository services and factories 
+			that are provided by the shared application context. If this file is uncommented then the configuration that accesses the astroboa repository as a parent context 
+			should be commented out-->
+			
+			<!-- use the following xml file if the betaconceptframework identity module is separately deployed in jboss and is accessed by applications 
+			as a shared application context accessible through JNDI 
+			classpath:betaconceptframework-identity.xml-->
+			<!-- The above file accesses the shared identity context from JNDI and then creates spring beans as proxies for the identity services 
+			that are provided by the shared application context. -->
+			
+					
+			<!-- Required context files in any deployment scenario (with or without shared contexts for repository, security and identity -->
+			
+			<!-- load spring beans from betaconceptframework-security module
+			classpath:acegi-security.xml
+			classpath:security-ibatis.xml-->
+			
+			<!-- load spring beans from betacms-commons module -->
+			
+
+			<!-- load spring beans from astroboa-console module -->
+		<!--  classpath:Cms_JsfAcegiSecurityContext.xml -->
+			classpath:Cms_PrototypeSpringBeans.xml
+			classpath:Cms_SingletonSpringBeans.xml
+			classpath:Cms_Jsf_SessionSpringBeans.xml
+			classpath:Cms_Jsf_RequestSpringBeans.xml
+			classpath:Cms_Repository_Client_Services.xml
+			classpath:Filters.xml
+		</param-value>
+	</context-param>
+
+ 	
+ 
+ 	<!-- Load all required context files from individual jar files
+ 		Specify full path for context files and not with wildcard as Spring classpath resource
+ 		is not locating correctly files inside jars 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+			classpath:cmsrepository-services.xml
+			classpath:cmsrepository-context.xml
+			classpath:cmsrepository-criteria-prototypes.xml
+			classpath:cmsrepository-database-extension.xml
+			classpath:cmsrepository-definition-prototypes.xml
+			classpath:cmsrepository-factories.xml
+			classpath:cmsrepository-jcr.xml
+			classpath:cmsrepository-model-prototypes.xml
+			classpath:cmsrepository-transaction-manager.xml
+			classpath:cmsrepository-scheduler.xml
+			classpath:gr/betaCONCEPT/bean/UtilitySpringBeansContext.xml
+        	classpath:gr/betaCONCEPT/security/acegi/GenericSecurityContext_Acegi.xml
+        	classpath:org/betaconceptframework/identity/service/identity-services.xml
+        	classpath:org/betaconceptframework/identity/security/acegi/acegi-security-user-details-service.xml
+			classpath:org/betaconceptframework/identity/dao/hibernate/identity-hibernate.xml
+			classpath:org/betaconceptframework/identity/dao/ibatis/identity-ibatis.xml        	
+		 	classpath:org/betaconceptframework/betacms/webui/jsf/Cms_JsfAcegiSecurityContext.xml
+			classpath:org/betaconceptframework/betacms/commons/schedule/Cms_SchedulerContext.xml
+			classpath:org/betaconceptframework/betacms/commons/Cms_PrototypeSpringBeans.xml
+			classpath:org/betaconceptframework/betacms/commons/Cms_SingletonSpringBeans.xml
+			classpath:org/betaconceptframework/betacms/commons/Cms_SessionSpringBeans.xml
+			classpath:org/betaconceptframework/betacms/webui/jsf/Cms_Jsf_SessionSpringBeans.xml
+			classpath:org/betaconceptframework/betacms/webui/jsf/Cms_Jsf_RequestSpringBeans.xml
+			classpath:org/betaconceptframework/betacms/webui/jsf/Cms_Filters.xml
+			
+        </param-value>
+    </context-param>
+    -->
+    
+    <!-- Trinidad specific contect params 
+	<context-param>
+    	<param-name>org.apache.myfaces.trinidad.ALTERNATE_VIEW_HANDLER</param-name>
+    	<param-value>com.sun.facelets.FaceletViewHandler</param-value>
+	</context-param>
+	-->
+	
+	<!-- Trinidad also supports an optimized strategy for caching some
+		view state at an application level, which significantly improves
+		scalability.  However, it makes it harder to develop (updates to
+		pages will not be noticed until the server is restarted), and in
+		some rare cases cannot be used for some pages (see Trinidad
+		documentation for more information) 
+	<context-param>
+		<param-name>
+			org.apache.myfaces.trinidad.USE_APPLICATION_VIEW_CACHE
+		</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	-->
+	
+	<!-- If this parameter is enabled, Trinidad will automatically
+		check the modification date of your JSPs, and discard saved
+		state when they change;  this makes development easier,
+		but adds overhead that should be avoided when your application
+		is deployed 
+	<context-param>
+		<param-name>
+			org.apache.myfaces.trinidad.CHECK_FILE_MODIFICATION
+		</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	-->
+	
+	<!-- Enables Change Persistence at a session scope.  By default,
+		Change Persistence is entirely disabled. The ChangeManager is
+		an API, which can persist component modifications (like,
+		is a showDetail or tree expanded or collapsed). For providing
+		a custom Change Persistence implementation inherit from the 
+		Trinidad API's ChangeManager class. As the value you have 
+		to use the fullqualified class name. 
+	<context-param>
+		<param-name>
+			org.apache.myfaces.trinidad.CHANGE_PERSISTENCE
+		</param-name>
+		<param-value>session</param-value>
+	</context-param>
+	-->
+
+
+	<!-- Rich Faces specific parameters 
+	<context-param>
+		<param-name>org.richfaces.SKIN</param-name> 
+		<param-value>blueSky</param-value>
+	</context-param>
+	-->
+
+	<!-- Required if trinidad render-kit is disabled -->
+ 	<context-param>
+      <param-name>org.ajax4jsf.VIEW_HANDLERS</param-name>
+      <param-value>com.sun.facelets.FaceletViewHandler</param-value>
+    </context-param>
+	
+	<!-- This filter make sure that Repository Context with the necessary information about connected repository is available to
+    	HTTP request -->
+	<filter>
+		<filter-name>httpSessionRepositoryContextIntegrationFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+		    <param-name>targetFilterLifecycle</param-name>
+      		<param-value>true</param-value>
+    	</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>httpSessionRepositoryContextIntegrationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Rich Faces filter it is automatically installed by seam
+	<filter> 
+		<display-name>Ajax4jsf Filter</display-name>
+		<filter-name>ajax4jsf</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+		<init-param>
+			<param-name>enable-cache</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	-->
+	
+	<!-- Rich faces filter mapping 
+	<filter-mapping> 
+		<filter-name>ajax4jsf</filter-name>
+		<servlet-name>faces</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+ 	-->
+ 	
+ 	
+ <!-- HTTP Request Security Filter Implemented through a filter-to-bean proxy which calls another proxy bean that in turn calls a set of beans to finally implement a filter chain 
+	<filter>
+		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+		<init-param>
+			<param-name>targetClass</param-name>
+			<param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+		</init-param>
+   </filter>
+   
+    <filter-mapping>
+		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</filter-mapping>
+--> 
+
+	<!-- Seam Framework filter and mapping --> 
+	<filter>
+        <filter-name>Seam Filter</filter-name>
+        <filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Seam Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+<!-- This filter is used by SEAM for Exception Handling in combination with 
+facelets.DEVELOPMENT context parameter wich must be set to false and in 
+components.xml debugging must be disabled ( <core:init debug=false .../>)
+ -->
+	<filter>
+		<filter-name>Seam Exception Filter</filter-name>
+		<filter-class>
+			org.jboss.seam.servlet.SeamExceptionFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Seam Exception Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- MYFACES Extensions Filter 
+ 	
+    <filter>
+    		<description>
+			Set the path where the intermediary files will be stored.
+		</description>  
+        <filter-name>extensionsFilter</filter-name>
+        <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+        <init-param>
+            <param-name>uploadMaxFileSize</param-name>
+            <param-value>100m</param-value>
+        </init-param>
+        <init-param>
+            <param-name>uploadThresholdSize</param-name>
+            <param-value>100k</param-value>
+        </init-param>
+        <init-param>
+            <param-name>repositoryPath</param-name>
+            <param-value>/tmp</param-value> 
+        </init-param>
+    </filter>
+
+	 <filter-mapping>
+        <filter-name>extensionsFilter</filter-name>
+        <url-pattern>*.jsf</url-pattern>
+    </filter-mapping>
+    
+	extension mapping for serving page-independent resources (javascript, stylesheets, images, etc.)  
+ 	<filter-mapping>
+		<filter-name>extensionsFilter</filter-name>
+		<url-pattern>/faces/*</url-pattern>
+	</filter-mapping>
+	
+	-->
+	
+	<!-- Shale Framework filter 
+	<filter>
+		<filter-name>shale</filter-name>
+		<filter-class>
+			org.apache.shale.application.faces.ShaleApplicationFilter
+		</filter-class>
+	</filter>
+	-->
+	
+	<!--Shale filter mapping 
+    <filter-mapping>
+		<filter-name>shale</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+	 -->
+	
+	
+	<!--  
+		  BinaryChannel dynamic loader filter. Filter class is a Spring bean and use of 
+		  DelegatingFilterProxy provides the eas to instantiate Filter using Spring context
+		  Any filter call is delegated to Spring bean.
+		
+		 In this case spring bean's id is the same with filter's name  
+		  Excerpt from org.springframework.web.filter.DelegatingFilterProxy documentation 
+		  'The lifecycle methods defined by the Servlet Filter interface will by default not be delegated to the target bean, 
+		  relying on the Spring application context to manage the lifecycle of that bean. 
+		  Specifying the "targetFilterLifecycle" filter init-param as "true" will enforce invocation of the Filter.init 
+		  and Filter.destroy lifecycle methods on the target bean, letting the servlet container manage the filter lifecycle.'
+		 
+	<filter>
+		<filter-name>binaryChannelDynamicLoader</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+      
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+	</filter> -->
+	
+	<!-- BinaryChannel dynamic loader filter mapping  
+    <filter-mapping>
+		<filter-name>binaryChannelDynamicLoader</filter-name>
+		<url-pattern>/binaryChannel/*</url-pattern>
+	</filter-mapping>
+	-->
+	
+	<!-- Seam Framework
+	!!!!!! SEAM LISTENER SHOULD BE LOADED BEFORE SPRING CONTEXT LOADER LISTENER (possibly this is only required if spring beans are injected through @In)
+	In our case whre spring beans are statically injected in components.xml the order does not seem to be important !!!!!!!-->
+   <listener>
+      <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
+   </listener>
+	
+	
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <!--   this listener is required in order to be able to declare session/request scoped beans in spring context -->
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	
+    
+    <!--  
+    <listener>
+        <listener-class>de.mindmatters.faces.spring.support.ContextLoaderListener</listener-class>
+    </listener>
+	-->
+	
+	<!-- Required by Shale Framework
+	<listener>
+		<listener-class>org.apache.commons.chain.web.ChainListener</listener-class>
+	</listener>
+	-->
+	
+	
+    <servlet>
+        <servlet-name>faces</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+     <servlet-mapping>
+        <servlet-name>faces</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Seam framework resources servlet -->
+    <servlet>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <servlet-class>org.jboss.seam.servlet.SeamResourceServlet</servlet-class>
+   </servlet>
+    
+   <servlet-mapping>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <url-pattern>/seam/resource/*</url-pattern>
+   </servlet-mapping>
+    
+    <!-- resource loader servlet 
+	<servlet>
+    	<servlet-name>resources</servlet-name>
+    	<servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
+	</servlet>
+    
+    <servlet-mapping>
+    	<servlet-name>resources</servlet-name>
+    	<url-pattern>/adf/*</url-pattern>
+	</servlet-mapping>
+     -->
+	 
+<!-- Load servlet required to handle Jenia Component Resources  -->
+    <servlet>
+        <servlet-name>jenia internal servlet</servlet-name>
+        <servlet-class>org.jenia.faces.util.Servlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+
+
+    <servlet-mapping>
+        <servlet-name>jenia internal servlet</servlet-name>
+        <url-pattern>/jenia4faces/*</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+
+   <error-page>
+        <error-code>404</error-code>
+        <location>/404.html</location>
+    </error-page>
+    
+    <session-config>
+    	<session-timeout>180</session-timeout>
+    </session-config>
+    
+    <!-- Enable encryption for client side state saving -->
+    <env-entry>
+        <env-entry-name>com.sun.faces.ClientStateSavingPassword</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>BetaCONCEPT</env-entry-value>
+    </env-entry>
+    
+    <!-- Add to protect login page access
+    <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>betacms</web-resource-name>
+         <description>
+            Secure access to login page
+         </description>
+         <url-pattern>/*</url-pattern>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>betacms</role-name>
+      </auth-constraint>
+   </security-constraint>
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>Astroboa Web UI</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>betacms</role-name>
+   </security-role>
+     -->
+    
+</web-app>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+	<application>
+<!--  	<variable-resolver>de.mindmatters.faces.spring.support.DelegatingVariableResolver</variable-resolver> */ -->
+		<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
+		<locale-config>
+            <default-locale>el</default-locale>
+            <supported-locale>el</supported-locale>
+            <supported-locale>en</supported-locale>
+		</locale-config>
+		<message-bundle>messages</message-bundle>
+		<!-- <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>  -->
+		<!--<view-handler>org.ajax4jsf.framework.ajax.AjaxViewHandler</view-handler>-->
+		<!--  <default-render-kit-id>org.apache.myfaces.trinidad.core</default-render-kit-id> -->
+	</application>
+	
+	<!--  
+	<lifecycle>
+      <phase-listener>
+        org.betaconceptframework.astroboa.console.jsf.listeners.MessagesPhaseListener
+      </phase-listener>
+    </lifecycle>
+	-->
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		
+		<navigation-case>
+			<from-outcome>dialog:selectContentObject</from-outcome>
+			<to-view-id>/selectContentObjectPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>dialog:selectFile</from-outcome>
+			<to-view-id>/selectFilePage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>dialog:selectCreator</from-outcome>
+			<to-view-id>/selectCreatorPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>topicEdit</from-outcome>
+			<to-view-id>/topicEditPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>contentObjectTypeSelect</from-outcome>
+			<to-view-id>/contentObjectTypeSelectionPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>repositoryReview</from-outcome>
+			<to-view-id>/repositoryReviewPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>repositoryNavigation</from-outcome>
+			<to-view-id>/repositoryNavigationPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>contentObjectList</from-outcome>
+			<to-view-id>/contentObjectListPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>home</from-outcome>
+			<to-view-id>/home.jsf</to-view-id>
+		</navigation-case>
+			
+		<navigation-case>
+			<from-outcome>LOGOUT</from-outcome>
+			<to-view-id>/login.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>contentObjectEditor</from-outcome>
+			<to-view-id>/betaCMSEditPage.jsf</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>error</from-outcome>
+			<to-view-id>/error_jsf.jsp</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>help</from-outcome>
+			<to-view-id>/help.jsp</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+
+	<validator>
+		<description>
+			Validates an input control based on a regular expression.
+		</description>
+		<validator-id>RegularExpressionValidator</validator-id>
+		<validator-class>
+			org.betaconceptframework.ui.jsf.validators.RegularExpressionValidator
+		</validator-class>
+	</validator>
+
+	<validator>
+		<description>
+			Validates an input control based on a regular expression.
+		</description>
+		<validator-id>SingleLanguageRegularExpressionValidator</validator-id>
+		<validator-class>
+			org.betaconceptframework.ui.jsf.validators.SingleLanguageRegularExpressionValidator
+		</validator-class>
+	</validator>
+	
+	<validator>
+		<description>
+			Validates an input text field for ONLY CAPITAL letters.
+		</description>
+		<validator-id>CapitalsOnlyValidator</validator-id>
+		<validator-class>
+			org.betaconceptframework.ui.jsf.validators.CapitalsOnlyValidator
+		</validator-class>
+	</validator>
+	
+	<converter>
+		<description>
+			Converts a String object to and from a String (Capitalising and escaping single and double quotes).
+		</description>
+		<converter-id>betaCONCEPT.StringConverter</converter-id>
+		<converter-class>
+			org.betaconceptframework.ui.jsf.converters.StringConverter
+		</converter-class>
+	</converter>
+	
+</faces-config>

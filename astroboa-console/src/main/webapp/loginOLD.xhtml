@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:seam="http://jboss.com/products/seam/taglib" >
+	<body>
+		<ui:composition template="/WEB-INF/layout/loginPageLayout.xhtml">
+
+			<ui:define name="loginForm">
+			
+				<img style="display: block; margin: 0 auto;" src="images/BetaCMS_LogoWithTitle.png" />
+		 	
+		 		<rich:separator height="2" style="background-color: #FF0000;"/>
+		 		
+			 	<!-- <span style="display: block; padding: 4px;">#{messages['login.loginFormTitle']}</span>  -->
+			 	
+			 	<rich:spacer height="10" />
+				
+				
+				<center>
+					
+					<div  style="font-weight: bold; margin: 0 auto;">#{messages['login.loginFormTitle']}</div>
+					<rich:spacer height="6" />
+					
+					<h:inputHidden id="defaultViewId"
+						value="betaCMSPage">
+						<f:attribute name="forceId" value="true" />
+					</h:inputHidden>
+					<h:inputHidden id="requiredUserRoleToAccessDefaultStartPage"
+						value="ROLE_CMS_INTERNAL_VIEWER">
+						<f:attribute name="forceId" value="true" />
+					</h:inputHidden>
+					
+					
+				
+					<h:panelGrid columns="2">
+						<h:outputText value="#{messages['login.enterUsername']}" />
+						<h:inputText id="userNameInput" value="#{login.userName}"
+							 label="#{messages['login.enterUsername']}"
+							size="20" maxLength="30" required="true">
+							<f:validateLength minimum="4" maximum="30" />
+						</h:inputText>
+
+						<h:outputText value="#{messages['login.enterPassword']}" />
+						<h:inputSecret id="userPasswordInput" value="#{login.passWord}"
+							label="#{messages['login.enterPassword']}"
+							size="20" maxLength="20" required="true">
+							<f:validateLength minimum="8" maximum="30" />
+						</h:inputSecret>
+						
+						<h:outputText value="#{messages['login.enterServer']}" />
+						<h:selectOneMenu value="#{login.serverURLToConnectTo}" required="true">
+    						<f:selectItems value="#{login.availableServers}" />
+    						<a4j:support event="onchange" 
+    							action="#{login.connectToSelectedServer}"
+    							reRender="loginForm"
+    							ajaxSingle="true" 
+    							/>
+    					</h:selectOneMenu> 
+    					
+						<h:outputText value="#{messages['login.enterRepositoryToConnect']}" />
+						<h:selectOneMenu value="#{login.repositoryIdToConnectTo}" required="true">
+							<seam:selectItems
+									value="#{login.availableCmsRepositoriesForSelectedServer}"
+									var="cmsRepository"
+									label="#{cmsRepository.getLocalizedLabelForLocale(localeSelector.localeString)}"
+									itemValue="#{cmsRepository.id}"/>
+    					</h:selectOneMenu> 
+    					
+						<h:outputText value="#{messages['login.enterLanguage']}" />
+						<h:selectOneMenu value="#{localeSelector.localeString}">
+    						<f:selectItems value="#{localeSelector.supportedLocales}"/>
+    						<a4j:support event="onchange" 
+    							action="#{localeSelector.select}"
+    							reRender="loginForm"
+    							ajaxSingle="true" 
+    							/>
+    					</h:selectOneMenu> 
+						
+					</h:panelGrid>
+
+					<rich:spacer height="8"/>
+					<div>
+
+						<h:commandButton
+							id="loginFormSubmitButton"
+							style="font-size: 90%;"
+							value="#{messages['login.loginButton']}" type="submit"
+							action="#{login.login}" styleClass="buttonClass" />
+					</div>
+
+				</center>
+					<rich:spacer height="10"/>
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>
