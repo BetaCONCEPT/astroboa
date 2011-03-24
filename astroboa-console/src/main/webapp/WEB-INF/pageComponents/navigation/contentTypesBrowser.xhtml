@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<rich:tree id="cmsTree"
+				style="text-align:left; overflow: auto;"
+				value="#{repositoryNavigation.contentObjectFolderTreeNodeData}"
+				var="cmsTreeNode" 
+				nodeFace="#{cmsTreeNode.type}" 
+				switchType="ajax"
+				binding="#{uiComponentBinding.contentObjectFolderTreeRichFaces}">
+
+				<rich:treeNode type="rootContentObjectFolder">
+					<h:outputText value="#{cmsTreeNode.description}" />
+				</rich:treeNode>
+
+				
+				<rich:treeNode type="dayFolder">
+
+					<c:set var="numberOfContentObjectsReferencedByFolder"
+						value="#{cmsTreeNode.contentObjectFolder.numberOfContentObjects}" />
+
+					<a4j:commandLink
+						action="#{contentObjectSearchByContentType.findContentObjectsByContentTypeAndPresent_UIAction}"
+						reRender="searchResultsAjaxPanel"
+						oncomplete="showTab('searchResultsTab');">
+						
+						<h:outputText value="day #{cmsTreeNode.description}"/>
+
+					</a4j:commandLink>
+
+					<h:outputText
+						value=" [#{cmsTreeNode.contentObjectFolder.numberOfContentObjects}]"
+						rendered="#{numberOfContentObjectsReferencedByFolder gt 0}" />
+
+				</rich:treeNode>
+				
+
+				
+				<rich:treeNode type="monthFolder">
+				
+					<a4j:commandLink
+						action="#{contentObjectSearchByContentType.findContentObjectsByContentTypeAndPresent_UIAction}"
+						reRender="searchResultsAjaxPanel"
+						oncomplete="showTab('searchResultsTab');">
+						
+						<h:outputText value="#{messages[cmsTreeNode.description]}" />
+
+					</a4j:commandLink>
+
+					
+
+				</rich:treeNode>
+				
+				
+				<rich:treeNode type="yearFolder">
+					<a4j:commandLink
+							action="#{contentObjectSearchByContentType.findContentObjectsByContentTypeAndPresent_UIAction}"
+							reRender="searchResultsAjaxPanel"
+							oncomplete="showTab('searchResultsTab');">
+							
+							<h:outputText value="#{cmsTreeNode.description}" />
+	
+						</a4j:commandLink>
+					
+					
+				</rich:treeNode>
+				
+
+				<rich:treeNode type="contentTypeFolder" icon="/images/cms-icons/16/contentObjectType.png">
+
+					<a4j:commandLink
+							action="#{contentObjectSearchByContentType.findContentObjectsByContentTypeAndPresent_UIAction}"
+							reRender="searchResultsAjaxPanel"
+							oncomplete="showTab('searchResultsTab');">
+							
+						<h:outputText value="#{cmsTreeNode.description}" />
+	
+					</a4j:commandLink>
+
+				</rich:treeNode>
+
+			</rich:tree>
+		</ui:composition>
+	</body>
+</html>

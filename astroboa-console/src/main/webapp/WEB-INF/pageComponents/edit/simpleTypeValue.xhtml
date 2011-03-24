@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			
+			<!-- profile.created and profile.modified are read only and presented as date strings -->
+			<h:outputText value="#{simpleCmsPropertyValueWrapper.value.time}"
+				rendered="#{cmsPropertyWrapper.path eq 'profile.created' or cmsPropertyWrapper.path eq 'profile.modified'}">
+				<f:convertDateTime type="both" dateStyle="short"
+					timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+			</h:outputText>
+			
+			<!-- profile.hasVersion is read only and presented as string -->
+			<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
+				rendered="#{cmsPropertyWrapper.path eq 'profile.hasVersion'}">
+			</h:outputText>
+			
+			<!-- Input components for long but not enumerations
+			 <rich:inputNumberSpinner  maxValue="#{cmsPropertyWrapper.cmsProperty.propertyDefinition.maxValue}" minValue="#{cmsPropertyWrapper.cmsProperty.propertyDefinition.minValue}"
+				value="#{simpleCmsPropertyValueWrapper.value}" 
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and   
+						 cmsPropertyWrapper.valueType eq 'Long'
+						  and empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration}"
+				readonly="#{!cmsPropertyWrapper.writeGranted}"/>
+			-->
+
+			<!-- Input text for String, Long and Double enumerations -->
+			<h:selectOneMenu
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+							! empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and
+							(cmsPropertyWrapper.valueType eq 'Double' or   
+								 ( cmsPropertyWrapper.valueType eq 'String'  and 
+								 ! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType ) or
+									cmsPropertyWrapper.valueType eq 'Long')}"
+				disabled="#{!cmsPropertyWrapper.writeGranted or 
+							(cmsPropertyWrapper.path eq 'profile.contentObjectStatus' and !loggedInRepositoryUser.loggedInUserHasRoleAdmin())}">
+					<f:selectItems value="#{cmsPropertyWrapper.valueEnumeration}"/>
+			</h:selectOneMenu>
+			
+			<!-- Input text for String of type 'PlainText' (if no type is specified in XSD 'PlainText' is assumed) with unspecified length or length less than 100 chars, 
+			Also this is used for input of Longs and Doubles -->
+			<h:inputText
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+							cmsPropertyWrapper.path ne 'profile.hasVersion' and
+							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and
+							(cmsPropertyWrapper.valueType eq 'Double' or  cmsPropertyWrapper.valueType eq 'Long' or
+							( cmsPropertyWrapper.valueType eq 'String' and
+							  ! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
+							  cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and
+							  cmsPropertyWrapper.cmsProperty.path ne 'profile.description' and  
+						      ( cmsPropertyWrapper.cmsProperty.path eq 'profile.title' or  
+						       (cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength == null or 
+						        (cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength le 100 and
+						      cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 0) )) 
+						      ))}"
+				readonly="#{!cmsPropertyWrapper.writeGranted}">
+
+			</h:inputText>
+			
+			<!-- Input text for String of type 'Code' -->
+			
+			<ui:fragment
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and   
+							cmsPropertyWrapper.valueType eq 'String' and
+							! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
+							cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'Code'
+							}">
+							
+				
+				<ui:fragment rendered="#{cmsPropertyWrapper.cmsProperty.fullPath eq 'embeddedMultimediaResourceObject.embeddedCode'}"> 
+					<h:inputTextarea
+					styleClass="embeddedResource"
+					value="#{simpleCmsPropertyValueWrapper.value}"
+					rows="25" 
+					style="white-space: nowrap; width: 70%"/>
+					
+					<!--Display a button to allow viewing multimedia resources in embedded multimedia resource  objects-->
+					<input type="button" value="view" onclick="showEmbeddedResource();"/>
+				</ui:fragment>	
+				
+				<ui:fragment rendered="#{cmsPropertyWrapper.cmsProperty.fullPath ne 'embeddedMultimediaResourceObject.embeddedCode'}">
+					<h:inputTextarea
+						styleClass="codeEditor_#{simpleCmsPropertyValueWrapper.fullPropertyPath} saveHotKeyAllowed"
+						value="#{simpleCmsPropertyValueWrapper.value}"
+						rows="25" 
+						style="white-space: nowrap; width: 70%"/>
+					
+					
+					<input type="button" onclick="showCodeEditor('#{simpleCmsPropertyValueWrapper.fullPropertyPath}');" value="edit"/>
+					
+				
+					<ui:remove>
+					<script language="javascript" type="text/javascript">
+						//<![CDATA[
+						var codeEditorId=bcmslib.jQuery("textarea[class*='codeEditor_#{simpleCmsPropertyValueWrapper.fullPropertyPath}']").attr('id');
+						
+						var editor = new CodeMirror(CodeMirror.replace("inputfield"), {
+					  		parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+					  		path: "lib/codemirror/js/",
+					  		stylesheet: "lib/codemirror/css/jscolors.css",
+					  		content: document.getElementById("inputfield").value
+						});
+						/*
+						var editor = CodeMirror.fromTextArea(codeEditorId, {
+							  parserfile: "parsexml.js",
+							  path: "#{facesContext.externalContext.requestContextPath}/js/CodeMirror-0.93/js/",
+							  stylesheet: "#{facesContext.externalContext.requestContextPath}/css/xmlcolors.css"
+							});
+						*/
+						//]]>
+					</script>
+					
+					
+					<script language="javascript" type="text/javascript">
+						//<![CDATA[
+						var codeEditorId=bcmslib.jQuery("textarea[class*='codeEditor_#{simpleCmsPropertyValueWrapper.fullPropertyPath}']").attr('id');
+						
+						codeEditorAreas.push(codeEditorId);
+						//window.alert(codeEditorId);
+						//jQuery("textarea[class='codeEditor_#{simpleCmsPropertyValueWrapper.fullPropertyPath}']").css("color","red");
+						editAreaLoader.init({
+							id : codeEditorId,		// textarea id
+							syntax: "xml",			// syntax to be uses for highgliting
+							start_highlight: true,		// to display with highlight mode on start-up
+							// display: "onload",  "later" or "onload"
+							allow_toggle: false,
+							toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font, |, syntax_selection, |, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"
+							
+						});
+						//]]>
+					</script>
+					</ui:remove>
+				</ui:fragment>	
+			</ui:fragment>
+			
+			
+			<!-- Input text for String of type 'PlainText' which has been explicitly specified to have an unlimited number of chars (i.e. maxLength was set to 0 in XSD)-->
+			<h:inputTextarea
+				class="plainText"
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				rows="50"
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and   
+							cmsPropertyWrapper.valueType eq 'String' and
+							! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
+							cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and
+							cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength != null and 
+						        cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength eq 0 
+							}"
+				readonly="#{!cmsPropertyWrapper.writeGranted}">
+			</h:inputTextarea>
+
+
+			<!-- Input text for String of type 'PlainText' with length more than 100 chars -->
+			<h:inputTextarea value="#{simpleCmsPropertyValueWrapper.value}"
+				class="plainText"
+				rows="#{cmsPropertyWrapper.cmsProperty.path eq 'profile.description' ? 5 : ( cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength / 116 + 1)}"
+				readonly="#{!cmsPropertyWrapper.writeGranted}"
+				rendered="#{( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+					cmsPropertyWrapper.valueType eq 'String' and 
+					! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+					cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' 
+						and ( cmsPropertyWrapper.cmsProperty.path eq 'profile.description' or 
+						(cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength !=null and 
+						cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 100
+						and empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration ) )}">
+
+			</h:inputTextarea>
+
+			<!-- Input text for String of type 'RichText' -->
+			
+			<ui:fragment 
+				rendered="#{ cmsPropertyWrapper.writeGranted and
+								cmsPropertyWrapper.valueType eq 'String' and 
+								! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}">
+				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() gt 1500}">
+					<div class="editable" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px; height: 300px; overflow: auto;">
+						<div class="editable">
+							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
+								escape="false"/>
+						</div>
+					</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() le 1500}">
+					<div style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
+						<div class="editable">
+							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
+								escape="false"/>
+						</div>
+					</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{empty simpleCmsPropertyValueWrapper.value}">
+					<div style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
+						<div class="editable">
+							
+						</div>
+					</div>
+				</ui:fragment>
+				
+				<h:inputHidden name="textEditorHidden_#{simpleCmsPropertyValueWrapper.fullPropertyPath}"
+					value="#{simpleCmsPropertyValueWrapper.value}"/>
+					
+				<a href="#" onclick="destroyTextEditor();" style="display: none;">
+					<img 
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--minus.png"
+						alt="edit html text"/>
+				</a>
+				
+				
+			</ui:fragment>
+			
+			<!--
+		    <rich:editor
+				rendered="#{ cmsPropertyWrapper.writeGranted and
+								cmsPropertyWrapper.valueType eq 'String' and 
+								! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}"
+				configuration="textEditorConfig"
+				customPlugins="textEditorCustomPlugins"
+				
+				height="300"
+				viewMode="visual" 
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				useSeamText="false"
+				styleClass="saveHotKeyAllowed"/>
+              -->     
+			<!--  Display value when is read only -->
+			<h:outputText
+				rendered="#{ ! cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.readGranted  and
+					cmsPropertyWrapper.valueType eq 'String' and 
+					! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+					cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText' and 
+					 ! empty simpleCmsPropertyValueWrapper.value}"
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				escape="false"/>
+
+			<!-- Input text for Date -->
+			<rich:calendar style="font-size: 0.9em;" popupCalendar="true" size="10"
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				datePattern="#{cmsPropertyWrapper.cmsPropertyDefinition.dateTime? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy'}"
+				enableManualInput="true"
+				rendered="#{( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+					cmsPropertyWrapper.valueType eq 'Date' and !(cmsPropertyWrapper.path eq 'profile.created' or cmsPropertyWrapper.path eq 'profile.modified')}"
+				disabled="#{ ! cmsPropertyWrapper.writeGranted}" 
+				/>
+
+			<!-- Check box for Boolean Type -->
+			<h:selectBooleanCheckbox
+				value="#{simpleCmsPropertyValueWrapper.value}"
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
+					cmsPropertyWrapper.valueType eq 'Boolean'}"
+					disabled="#{!cmsPropertyWrapper.writeGranted}">
+			</h:selectBooleanCheckbox>
+
+
+			 <!-- Components for String of PasswordType  -->
+			<h:panelGrid columns="2"
+			 rendered="#{cmsPropertyWrapper.valueType eq 'String' and 
+								 cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType}" >
+				
+				<h:outputText value="#{messages['content.object.edit.string.property.password.type.old.value']}" 
+						rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
+									and	cmsPropertyWrapper.cmsProperty.hasValues()}"/>
+				<h:inputSecret
+							rendered="#{ (cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted )
+									and	cmsPropertyWrapper.cmsProperty.hasValues()}"
+							value="#{simpleCmsPropertyValueWrapper.passwordVerifier.oldPassword}" size="20" 
+							maxlength="50" 
+							label="#{messages['content.object.edit.string.property.password.type.old.value']}">
+				</h:inputSecret>
+
+				<h:outputText value="#{messages['content.object.edit.string.property.password.type.new.value']}" 
+						rendered="#{cmsPropertyWrapper.writeGranted}"/>
+				<h:inputSecret
+						rendered="#{cmsPropertyWrapper.writeGranted}"
+						value="#{simpleCmsPropertyValueWrapper.passwordVerifier.newPassword}" size="20" 
+						maxlength="50"
+						label="#{messages['content.object.edit.string.property.password.type.new.value']}">
+				</h:inputSecret>
+
+				<h:outputText value="#{messages['content.object.edit.string.property.password.type.new.value.verify']}" 
+						rendered="#{cmsPropertyWrapper.writeGranted}"/>
+						
+				<h:inputSecret
+							rendered="#{cmsPropertyWrapper.writeGranted}"
+							value="#{simpleCmsPropertyValueWrapper.passwordVerifier.newPasswordVerify}"
+							size="20"/>
+				
+			</h:panelGrid>
+
+
+		</ui:composition>
+	</body>
+</html>

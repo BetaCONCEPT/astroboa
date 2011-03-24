@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<div style="width: 98%; margin: 0 auto; padding-bottom: 5px;">
+				
+				<h:panelGrid columns="3" rendered="#{! empty scheduledForContentAreasContentObjectList.requestedAppearanceDate}">
+				
+						<h4>
+							Ημερομηνία εμφάνισης
+						</h4>
+						
+						<rich:calendar
+								id="requestedAppearanceDateInput" 
+								value="#{scheduledForContentAreasContentObjectList.requestedAppearanceDate}"
+								locale="#{localeSelector.localeString}"
+								currentDate="#{scheduledForContentAreasContentObjectList.requestedAppearanceDate}" 
+								popup="true"
+								datePattern="dd/MM/yyyy" 
+								showApplyButton="false"
+								defaultTime="00:00"/>
+						
+						<a4j:commandLink id="contentAreaLink"
+								reRender="ajaxDynamicAreaPanel"
+								action="#{scheduledForContentAreasContentObjectList.findScheduledContentObjectsForSelectedContentArea_UIAction()}"
+								title="Πατήστε για να κάνετε νέα αναζήτηση">
+								
+								<h:outputText value="Νέα αναζήτηση για την περιοχή αντικειμένων #{scheduledForContentAreasContentObjectList.selectedContentArea.getLocalizedLabelForLocale(localeSelector.localeString)}"/>
+								
+						</a4j:commandLink>
+						
+					<rich:spacer height="20" />
+				</h:panelGrid>
+
+
+				<rich:datascroller for="scheduledForContentAreasContentObjectListTable"
+					maxPages="10"
+					rendered="#{!empty scheduledForContentAreasContentObjectList.returnedContentObjects}"
+					renderIfSinglePage="false" />
+
+
+
+				<rich:spacer height="5" />
+
+				<rich:dataTable id="scheduledForContentAreasContentObjectListTable"
+					rendered="#{!empty scheduledForContentAreasContentObjectList.returnedContentObjects}"
+					rows="#{pageController.rowsPerDataTablePage}"
+					value="#{scheduledForContentAreasContentObjectList.returnedContentObjects}"
+					var="contentObjectUIWrapper"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					columnClasses="listViewTableCol">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+
+							<rich:column>
+								Περιοχή
+							</rich:column>
+
+							<rich:column>
+								Τύπος
+							</rich:column>
+
+							<rich:column>
+								Τίτλος
+							</rich:column>
+
+							<rich:column>
+								Σειρά - Ημ. Πρώτης - Ημ. Τελευταίας Εμφάνισης
+							</rich:column>
+
+							<rich:column>
+								Ιδιοκτήτης
+							</rich:column>
+
+							<rich:column>
+								Ενέργειες
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+
+					<rich:column>
+						#{scheduledForContentAreasContentObjectList.selectedContentArea.getLocalizedLabelForLocale(localeSelector.localeString)}
+					</rich:column>
+
+
+					<rich:column>
+						#{contentObjectUIWrapper.contentObjectTypeForCurrentLocale}
+					</rich:column>
+
+
+					<rich:column>
+
+					<a4j:commandLink title="Πατείστε για να κάνετε αλλαγές"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToUpdateContentObject}"
+								reRender="ajaxDynamicAreaPanel"
+								action="#{contentObjectEdit.editContentObject_UIAction}">
+								<h:outputText
+								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+								<a4j:actionparam name="contentObjectId"
+									value="#{contentObjectUIWrapper.contentObject.id}"
+									assignTo="#{contentObjectEdit.selectedContentObjectIdentifier}" />
+								
+							</a4j:commandLink>
+							
+					</rich:column>
+
+					<rich:column>
+					
+							<table align="center" cellpadding="5" cellspacing="5">
+						<ui:repeat
+							value="#{scheduledForContentAreasContentObjectList.filterScheduledContentAreasForSelectedContentArea(contentObjectUIWrapper.contentObject)}"
+							var="scheduledContentArea">
+							
+							<c:set var="appearanceStartDate" value="#{scheduledContentArea.getChildProperty('appearanceStartDate').simpleTypeValue}" />
+							<c:set var="appearanceEndDate" value="#{scheduledContentArea.getChildProperty('appearanceEndDate').simpleTypeValue}" />
+							
+							<c:set var="contentAreaIsScheduledForRequestedDate" value="#{scheduledForContentAreasContentObjectList.isRequestedAppearanceDateBetweenDates(appearanceStartDate, appearanceEndDate)}" />
+							<tr>
+							<td>
+								<h:outputText style="font-weight: #{ contentAreaIsScheduledForRequestedDate ? 'bold' : 'normal'};"
+									value="#{scheduledContentArea.getChildProperty('order').simpleTypeValue}"/>
+							</td>
+							<td>
+								<h:outputText style="font-weight: #{ contentAreaIsScheduledForRequestedDate ? 'bold' : 'normal'};"
+									value="#{appearanceStartDate.time}">
+									<f:convertDateTime type="date" dateStyle="short"
+										timeZone="#{timeZoneSelector.timeZone.ID}" />
+								</h:outputText>
+							</td>
+								<td>
+								<h:outputText style="font-weight: #{ contentAreaIsScheduledForRequestedDate ? 'bold' : 'normal'};"
+									value="#{appearanceEndDate.time}"
+									rendered="#{! empty appearanceEndDate}">
+									<f:convertDateTime type="date" dateStyle="short"
+										timeZone="#{timeZoneSelector.timeZone.ID}" />
+								</h:outputText>
+								</td>
+							</tr>
+							</ui:repeat>				
+							</table>
+					
+					</rich:column>
+
+
+					<rich:column>
+						<span style="font-size: 85%">#{contentObjectUIWrapper.contentObject.owner.label}</span>
+					</rich:column>
+
+
+					<rich:column>
+
+						<h:panelGrid columns="3" cellpadding="2">
+							<a4j:commandLink title="Πατείστε για να κάνετε αλλαγές"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToUpdateContentObject}"
+								reRender="ajaxDynamicAreaPanel"
+								action="#{contentObjectEdit.editContentObject_UIAction}">
+								<h:graphicImage
+									value="/images/cms-icons/16/editContentObject.png" />
+								<a4j:actionparam name="contentObjectId"
+									value="#{contentObjectUIWrapper.contentObject.id}"
+									assignTo="#{contentObjectEdit.selectedContentObjectIdentifier}" />
+							</a4j:commandLink>
+							<a4j:commandLink
+								title="Πατείστε για να διαγράψετε το αντικείμενο"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToDeleteContentObject}"
+								reRender="ajaxDynamicAreaPanel"
+								action="#{scheduledForContentAreasContentObjectList.permanentlyRemoveSelectedContentObject_UIAction(contentObjectUIWrapper.contentObject.id,contnetObjectUIWrapper.contentObject.contentObjectType,contentObjectUIWrapper.contentObjectProperty['profile.created'].simpleTypeValue)}">
+								
+								<h:graphicImage
+									value="/images/cms-icons/16/deleteContentObject.png" />
+							</a4j:commandLink>						</h:panelGrid>
+					</rich:column>
+
+				</rich:dataTable>
+			</div>
+
+
+		</ui:composition>
+	</body>
+
+</html>

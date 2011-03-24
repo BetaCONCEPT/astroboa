@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+
+			<h:panelGrid columns="2" >
+
+				<!-- ContentObject Selection can be accomplished either by using drag and drop
+				or suggestion box -->
+				<!--  ContentObject drag and drop area-->
+				<a4j:outputPanel layout="block" ajaxSingle="true">
+					<rich:dropSupport
+						acceptedTypes="#{criterionWrapper.acceptedContentTypes}"
+						reRender="criteriaPanel"
+						dropListener="#{criterionWrapper.addDraggedAndDroppedContentObject_Listener}">
+					</rich:dropSupport>
+					<img
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/dragAndDrop.png" />
+				</a4j:outputPanel>
+				
+				<h:panelGroup>
+				<center>
+				<h:panelGrid columns="1">
+				<h:outputText value="Αναζήτηση αντικειμένων σε όλους τους τύπους" />
+				<h:inputText id="suggestionContentObjectTitlePattern"
+						value="#{criterionWrapper.suggestionLocalizedLabelPattern}"
+						size="35" style="font-size: 0.9em;" />
+					<rich:suggestionbox for="suggestionContentObjectTitlePattern"
+						suggestionAction="#{criterionWrapper.findContentObjects_UIAction}"
+						var="suggestedContentObject"
+						fetchValue="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}"
+						zindex="200">
+						<h:column>
+							<h:outputText
+								value="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}" />
+						</h:column>
+						<a4j:support event="onselect" ajaxSingle="true"
+							reRender="criteriaPanel"
+							action="#{criterionWrapper.addSelectedContentObject_UIAction(suggestedContentObject.contentObject)}" />
+					</rich:suggestionbox>
+					</h:panelGrid>
+					</center>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}">
+					<center>
+					<h:outputText style="color: red;" 
+							value="#{criterionWrapper.localizedLabelForCurrentLocaleForContentObjectTypeValue}" />
+					</center>
+				</h:panelGroup>
+				
+				<h:outputText
+						rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}"
+							value="#{criterionWrapper.value.getCmsProperty('profile.title').simpleTypeValue}" />
+							
+				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}">
+					<center>
+				<h:outputText value="#{messages['content.object.owner']}" style="color: red;"	/>
+					</center>
+				</h:panelGroup>
+				<h:outputText rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}"
+							value="#{criterionWrapper.value.owner.label}" />
+
+			</h:panelGrid>
+
+		</ui:composition>
+	</body>
+
+</html>

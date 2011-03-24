@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>   
+			<ui:fragment rendered="#{
+						(cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted) and 
+						cmsPropertyWrapper.valueType eq 'Complex' and
+						cmsPropertyWrapper.multiple and 
+						! empty cmsPropertyWrapper.childComplexCmsPropertyWrappers}">
+						
+				<div class="formElementValuesLabelSpacer">fake label</div>
+					
+				<ol class="formElementValues">
+					<a4j:repeat
+						var="childComplexCmsPropertyWrapper"
+						value="#{cmsPropertyWrapper.childComplexCmsPropertyWrappers}"
+						rowKeyVar="indexOfWrapper">
+	
+						<li class="inlineFormElementValue">
+							<a4j:outputPanel>
+								<rich:dropSupport 
+									acceptedTypes="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}"
+									reRender="complexCmsPropertyChildPropertiesTable"
+									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
+									dropValue="#{childComplexCmsPropertyWrapper}">
+									
+								</rich:dropSupport>
+				
+								<a4j:commandLink
+									onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+									action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childComplexCmsPropertyWrapper.path)}"
+									reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs">
+					
+									<h:outputText
+										value="#{childComplexCmsPropertyWrapper.localizedLabelForCurrentLocale}"
+										escape="false" />
+									<h:outputText
+										value=" - #{childComplexCmsPropertyWrapper.cmsPropertyIndex}"/>
+								</a4j:commandLink>
+			
+							</a4j:outputPanel>
+							
+							<!-- Grab action -->
+							 <a4j:outputPanel 
+						 		styleClass="dragElementValue"
+							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}">
+								<rich:dragSupport 
+									dragIndicator="complexPropertyIndicator"
+									dragType="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}" 
+									dragValue="#{childComplexCmsPropertyWrapper}">
+	
+									<rich:dndParam name="label" type="drag"
+										value="#{childComplexCmsPropertyWrapper.localizedLabelForCurrentLocale}" />
+								</rich:dragSupport>
+								Drag to another position
+							</a4j:outputPanel>
+						
+							<!-- MoveUp action
+							<a4j:commandLink
+								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index gt 0}"
+								action="#{cmsPropertyWrapper.moveUp_UIAction(childComplexCmsPropertyWrapper)}"
+								reRender="complexCmsPropertyChildPropertiesTable">
+								<h:graphicImage value="/images/cms-icons/16/up_arrow.png" />
+							</a4j:commandLink>
+								
+							MoveDown action 
+							<a4j:commandLink
+								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index lt cmsPropertyWrapper.childComplexCmsPropertyWrappers.size()-1}"
+								action="#{cmsPropertyWrapper.moveDown_UIAction(childComplexCmsPropertyWrapper)}"
+								reRender="complexCmsPropertyChildPropertiesTable">
+								<h:graphicImage value="/images/cms-icons/16/down_arrow.png" />
+							</a4j:commandLink>
+							-->
+							
+						
+						
+							<!-- Delete action -->
+							<a4j:commandLink
+								value="Delete Complex Property"
+								styleClass="delete"
+								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								action="#{cmsPropertyWrapper.deleteComplexCmsProperty_UIAction(childComplexCmsPropertyWrapper.pathRelativeToCmsPropertyParent)}"
+								reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs"
+								rendered="#{cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted}">
+							</a4j:commandLink>
+	
+					 	
+						</li>	
+					</a4j:repeat>
+				</ol>
+				
+			</ui:fragment>
+
+		</ui:composition>
+	</body>
+</html>

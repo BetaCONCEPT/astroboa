@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+
+		<ui:composition>
+			<a4j:outputPanel id="objectEditorAjaxPanel">
+				<ui:fragment rendered="#{!empty contentObjectEdit.selectedContentObjectForEdit}">
+					<script language="javascript" type="text/javascript">
+					//<![CDATA[
+						var codeEditorAreas = [];
+					//]]>
+					</script>
+					
+					<a4j:jsFunction
+		              name="autoSaveContentObject"
+		              reRender="draftPanel,logoutPanel"
+		              action="#{draft.add(loggedInRepositoryUser.repositoryUser.id, contentObjectEdit.selectedContentObjectForEdit.contentObject)}"/>
+		              
+		             <a4j:jsFunction
+						name="saveContentObject"
+						action="#{contentObjectEdit.saveContentObject_UIAction}"
+						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+						reRender="objectEditorAjaxPanel,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" >
+					</a4j:jsFunction>
+					
+					<ui:include src="/WEB-INF/pageComponents/edit/complexCmsPropertyFormHeader.xhtml"/>
+					
+					<div id="formEditorScrollableArea">
+		
+						<a4j:outputPanel id="complexCmsPropertyChildPropertiesTable">
+							<ui:include
+								src="#{contentObjectEdit.complexCmsPropertyEditorPagePath}" />
+							
+							<script type="text/javascript">
+								bcmslib.jQuery(function(){
+									bcmslib.jQuery("#formEditorScrollableArea input, #formEditorScrollableArea textarea, #formEditorScrollableArea select").uniform();
+								});
+							</script>
+						</a4j:outputPanel>
+						
+					</div>
+						
+						
+						<!-- Show common actions on content object. These actions are allowed if there is no active workflow for the object 
+						 	or the user's role can override the restriction and allows access to common actions despite an active workflow.
+						 -->
+						<div id="formActions">	
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/actionsOnContentObject.xhtml" />
+						
+							<!-- Show actions on content object if there is an active workflow -->
+							<a4j:outputPanel id="workflowTransitionsPanel" ajaxRendered="true">
+								<ui:fragment
+									rendered="#{
+											contentObjectEdit.selectedContentObjectForEdit.contentObjectPropertyDefined['workflow'] and
+											(!empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue)
+										}">
+											
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/workflowTransitionsIfContentObjectIsInWorkflow.xhtml" />
+			
+								</ui:fragment>
+							</a4j:outputPanel>
+							
+						</div>
+											
+				
+					<script type="text/javascript">
+						// tweaking of the editors is required besides the script because they block the events (do not bubble them)
+						//activateSaveHotKeyInsideEditors();
+						bcmslib.jQuery(function(){
+							bcmslib.jQuery("#formActions input[type=button]").uniform();
+						});
+						resetContentObjectAutoSave();
+					</script>
+				
+				</ui:fragment>
+			</a4j:outputPanel>
+		</ui:composition>
+	</body>
+</html>

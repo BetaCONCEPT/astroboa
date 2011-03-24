@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core" 
+	xmlns:bcc="http://www.betaconceptframework.org/facelets/components">
+
+	<body>
+		<ui:composition>
+			
+			<rich:toolBar height="20" contentStyle="font-size: 80%">
+
+				<rich:toolBarGroup>
+					<h:graphicImage id="tagsImage" value="images/cms-icons/16/tags.png" />
+					<h:outputLabel value="Διαχείριση ετικετών" for="tagsImage" />
+				</rich:toolBarGroup>
+				
+				<rich:toolBarGroup location="right">
+					<a4j:commandLink
+						action="#{tagEdit.addTag_UIAction}"
+						reRender="tagEditRerenderedPanel"
+						title="Πατήστε για να προσθέσετε ετικέτα"
+						ajaxSingle="true">
+						
+						<h:graphicImage
+							value="/images/cms-icons/16/add1.png" />
+					</a4j:commandLink>
+					
+					<a4j:commandLink styleClass="dashboardLink"
+						action="#{tagEdit.addTag_UIAction}"
+						value="Προσθήκη Νέας Ετικέτας"
+						reRender="tagEditRerenderedPanel"
+						ajaxSingle="true" />
+					
+				</rich:toolBarGroup>
+
+			</rich:toolBar>
+
+			<div
+				style="padding-left: 2px; padding-top: 2px; height: auto; background: url(images/cms-icons/greyPanelBackground.gif) repeat-x top;">
+
+			</div>
+
+			<rich:spacer height="1" />
+
+			<div
+				style="margin-left: 2px; margin-right: 2px; padding-bottom: 3px;">
+				<a4j:outputPanel>
+					
+					
+					<rich:dataTable id="loggedInUserTagsTable"
+						value="#{loggedInRepositoryUser.repositoryUser.folksonomy.rootTopics}"
+						var="tag"
+						width="100%"
+						columnClasses="tableColumnsClass">
+						
+						<rich:column width="220px">
+							<f:facet name="header">
+								<a4j:commandLink 
+									reRender="loggedInUserTagsTable"
+									value="Όνομα Συστήματος"
+									action="#{tagEdit.sortByName}" />
+							</f:facet>
+							<h:outputText value="#{tag.name}" />
+						</rich:column>
+						<rich:column width="230px">
+							<f:facet name="header">
+								<a4j:commandLink 
+									reRender="loggedInUserTagsTable"
+									value="Ετικέτα στην επιλεγμένη γλώσσα (#{localeSelector.localeString})"
+									action="#{tagEdit.sortByLabel}" />
+							</f:facet>
+							<h:outputText
+								value="#{tag.localizedLabels[localeSelector.localeString]}" />
+						</rich:column>
+						<rich:column width="90px">
+							<f:facet name="header"># Αντικειμένων</f:facet>
+							<center>
+							<h:outputText value="#{tag.numberOfReferrerContentObjects}" />
+							</center>
+						</rich:column>
+						<rich:column width="100px">
+							<f:facet name="header">Ενέργειες</f:facet>
+							  <center>
+							<h:panelGrid columns="3" cellpadding="4">
+								<a4j:commandLink reRender="tagEditRerenderedPanel"
+									action="#{tagEdit.editTag_UIAction(tag)}"
+									title="Πατείστε για να κάνετε αλλαγές στην ετικέτα">
+
+									<h:graphicImage value="/images/cms-icons/16/edit.png" />
+								</a4j:commandLink>
+								
+								<a4j:commandLink 
+									title="Πατείστε για να διαγράψετε την ετικέτα"
+									action="#{confirmationBean.initiateConfirmation('confirmation.panel.delete.question',
+										tagEdit, 
+											'deleteTag_UIAction',
+											tag.name, 
+											'loggedInUserTagsTable,tagEditRerenderedPanel',
+											null,
+											tag)}"
+								 oncomplete="openConfirmationDialog();"
+								 reRender="confirmationDialogPanel">
+									
+									<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+								</a4j:commandLink>
+								
+								<a4j:commandLink
+									action="#{contentObjectSearchByTopic.findContentObjectsByTopicAndPresent_UIAction(tag)}"
+									reRender="ajaxDynamicAreaPanel"
+									title="Πατήστε για να δείτε τα αντ. Περιεχομένου με αυτή την Ετικέτα">
+
+									<h:graphicImage
+										value="/images/cms-icons/16/viewContentObject.png" />
+								</a4j:commandLink>
+							</h:panelGrid>
+								</center>
+						</rich:column>
+					</rich:dataTable>
+				</a4j:outputPanel>
+
+				<rich:spacer height="5" />
+
+				<rich:separator />
+
+				<a4j:outputPanel id="tagEditRerenderedPanel" keepTransient="true">
+					<a4j:outputPanel rendered="#{!empty tagEdit.editedTag}">
+						<h:panelGrid columns="2">
+							<h:outputText
+								value="Όνομα Συστήματος" />
+							<h:inputText id="tagSystemNameInput" 
+								styleClass="formItemClass" size="30"
+								value="#{tagEdit.editedTag.name}" >
+								<bcc:validateCapitalsOnly
+									errorMessage="Όνομα Συστήματος : #{messages['validator.capitalsOnly']}" />
+							</h:inputText>
+							<h:panelGroup />
+							<h:message for="tagSystemNameInput" errorClass="errorStyle" warnClass="warnStyle" infoClass="infoStyle"/>
+						</h:panelGrid>
+						
+						<fieldset>
+							<legend>Ετικέτα σε διάφορες γλώσσες</legend>
+							<rich:dataTable value="#{tagEdit.editedTagLabels}"
+								var="localizedLabel"
+								width="100%"
+								columnClasses="tableColumnsClass">
+								<rich:column>
+									<h:selectOneMenu styleClass="formItemClass"
+										value="#{localizedLabel.locale}">
+										<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
+									</h:selectOneMenu>
+								</rich:column>
+								<rich:column>
+									<h:panelGrid columns="1">
+										<h:inputText id="tagLabelInput"
+											value="#{localizedLabel.label}" 
+											required="true"
+											label="Όνομα Ετικέτας"
+											styleClass="formItemClass"
+											size="50">
+											<bcc:validateCapitalsOnly
+												errorMessage="Όνομα Ετικέτας : #{messages['validator.capitalsOnly']}" />
+										</h:inputText>
+										<h:message for="tagLabelInput" errorClass="errorStyle"
+											warnClass="warnStyle" infoClass="infoStyle" />
+									</h:panelGrid>
+								</rich:column>
+								<rich:column>
+									<a4j:commandLink
+										action="#{tagEdit.removeLocalizedLabel_UIAction(localizedLabel)}"
+										title="Πατείστε για να διαγράψετε το όνομα της ετικέτας για αυτή τη γλώσσα"
+										reRender="tagEditRerenderedPanel">
+
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+
+								</rich:column>
+
+							</rich:dataTable>
+							
+							<a4j:commandLink
+								value="Δημιουργία Ονόματος Ετικέτας σε άλλη γλώσσα"
+								reRender="tagEditRerenderedPanel"
+								action="#{tagEdit.addLocalizedLabel_UIAction}"
+								title="Πατείστε για να προσθέσετε όνομα σε άλλη γλώσσα στην ετικέτα"
+								styleClass="formItemClass" />
+						</fieldset>
+						
+						<center>
+						<a4j:commandLink value="Αποθήκευση" reRender="ajaxDynamicAreaPanel,myTags"
+							action="#{tagEdit.saveTag_UIAction}"
+							title="Πατείστε για αποθηκευτούν οι αλλαγές που κάνατε στην ετικέτα"
+							styleClass="formItemClass" />
+						</center>
+					</a4j:outputPanel>
+					
+				</a4j:outputPanel>
+			</div>
+			
+		</ui:composition>
+
+	</body>
+
+</html>

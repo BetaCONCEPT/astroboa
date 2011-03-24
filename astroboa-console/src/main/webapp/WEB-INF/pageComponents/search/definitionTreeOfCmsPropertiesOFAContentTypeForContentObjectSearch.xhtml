@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+		
+			<rich:dragIndicator id="propertyIndicator" />
+		
+		 	<rich:tree id="cmsDefinitionTreeForContentObjectSearch" switchType="ajax"
+				value="#{cmsDefinitionTreeForContentObjectSearch}"
+				var="node" 
+				nodeFace="#{node.type}"
+				rendered="#{! empty cmsDefinitionTreeForContentObjectSearch}"
+				style="text-align:left; overflow: auto; color: #777777;" >
+
+				<rich:treeNode type="NO_DEFINITION"
+					icon="/images/cms-icons/tree-node-complex-property-optional.png">
+
+					<h:outputText value="#{node.description}" />
+				</rich:treeNode>
+
+				<rich:treeNode type="COMPLEX_CMS_PROPERTY_DEFINITION"
+					icon="/images/cms-icons/tree-node-complex-property-optional.png">
+	
+					<rich:dragSupport
+						dragType="criterionPropertyPath"
+						dragIndicator="propertyIndicator"
+						dragValue="#{node}">
+						<rich:dndParam name="label" type="drag"	value="#{node.description}" />
+					</rich:dragSupport>
+			
+					<h:outputText value="#{node.description}" />
+
+				</rich:treeNode>
+
+				<!-- SimpleTypePropertyNode is ALWAYS a leaf node-->
+				<rich:treeNode type="SIMPLE_CMS_PROPERTY_DEFINITION"
+					iconLeaf="/images/cms-icons/tree-node-simple-property-optional.png">
+				
+				 	
+					<rich:dragSupport
+						dragType="criterionPropertyPath"
+						dragIndicator="propertyIndicator"
+						dragValue="#{node}">
+						<rich:dndParam name="label" type="drag"	value="#{node.description}" />
+					</rich:dragSupport>
+								
+					<h:outputText value="#{node.description}" />
+					
+				</rich:treeNode>
+				
+			</rich:tree>
+			
+		</ui:composition>
+	</body>
+</html>

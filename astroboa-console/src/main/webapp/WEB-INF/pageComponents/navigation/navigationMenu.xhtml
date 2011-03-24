@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			
+			<div id="spaces">
+				#{messages['spaces']}
+				<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+				<ui:include src="/WEB-INF/pageComponents/space/spaceTree.xhtml" />
+			</div>
+			
+
+
+			<rich:spacer height="10" />
+			
+			<div>
+				<div id="systemTopicsTrigger"><a href="#">#{messages['navigation.menu.taxonomies']}</a></div>
+				<div id="systemTopicsToggleContainer">
+					
+					<p style="text-align: left;">
+			
+						<a4j:commandLink
+							action="#{taxonomyEdit.addNewTaxonomy}"
+							value="#{messages['taxonomy.panel.add.taxonomy']}"
+							reRender="dynamicTabAjaxPanel"
+							oncomplete="showDynamicTab('New Taxonomy');"
+							ajaxSingle="true" 
+							style="padding-left: 30px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 10px center;"/>
+					</p>
+					<p style="text-align: left; padding-left: 10px;">
+						<a href="#" onclick="openImportTaxonomyXmlDialog();"
+							style="padding-left: 20px; background: url(images/cms-icons/16/up.png) no-repeat;">
+							#{messages['taxonomy.taxonomy.xml.upload.panel.header']}
+						</a>
+					</p>
+					
+					<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+					
+					<ui:include
+						src="/WEB-INF/pageComponents/navigation/taxonomyBrowserAjaxSuggestion.xhtml" />
+
+					<rich:spacer height="5" />
+
+					<ui:include
+						src="/WEB-INF/pageComponents/navigation/taxonomyBrowserTreeRichFaces.xhtml" />	
+				</div>
+			</div>
+			<script type="text/javascript">
+			//<![CDATA[
+				bcmslib.jQuery("#systemTopicsToggleContainer").hide();
+				
+				bcmslib.jQuery("#systemTopicsTrigger").click(function(){
+					bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+				});	
+			//]]>
+			</script>
+
+			
+			<rich:spacer height="10" />
+			
+			<div>
+				<div id="objectsTrigger"><a href="#">#{messages['navigation.menu.content.objects']}</a></div>
+				<div id="objectsToggleContainer">
+					<p style="text-align: left;">
+			
+						<a4j:commandLink
+							value="#{messages['topMenu.insert.content']}"
+							reRender="dynamicTabAjaxPanel"
+							oncomplete="showDynamicTab('#{messages['topMenu.insert.content']}');"
+							rendered="#{identity.hasRole('ROLE_CMS_EDITOR')}"
+							action="#{contentTypeEditor.loadContentTypesForEdit_UIAction}"
+							ajaxSingle="true"
+							style="padding-left: 30px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 10px center;"/>
+					</p>
+					
+					<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+					
+					<ui:include
+						src="/WEB-INF/pageComponents/navigation/contentTypesBrowser.xhtml" />	
+				</div>
+			</div>
+			<script type="text/javascript">
+			//<![CDATA[
+				bcmslib.jQuery("#objectsToggleContainer").hide();
+				
+				bcmslib.jQuery("#objectsTrigger").click(function(){
+					bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+				});
+			//]]>
+			</script>
+			
+			<rich:spacer height="10" />
+			
+			<div>
+				<div id="usersTrigger"><a href="#">#{messages['navigation.menu.users']}</a></div>
+				<div id="usersToggleContainer">
+					<ui:include
+					src="/WEB-INF/pageComponents/navigation/cmsUsersBrowserAjaxSuggestion.xhtml" />
+
+					<ui:include
+						src="/WEB-INF/pageComponents/navigation/cmsUsersBrowser.xhtml" />	
+				</div>
+			</div>
+			<script type="text/javascript">
+			//<![CDATA[
+				bcmslib.jQuery("#usersToggleContainer").hide();
+				
+				bcmslib.jQuery("#usersTrigger").click(function(){
+					bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+				});	
+			//]]>
+			</script>
+			
+			<rich:spacer height="10" />
+			
+			<ui:fragment rendered="#{identity.hasRole('ROLE_CMS_PORTAL_EDITOR')}">
+				<div>
+					<div id="webSitesTrigger"><a href="#">#{messages['navigation.menu.websites']}</a></div>
+					<div id="webSitesToggleContainer">
+						<ui:include
+							src="/WEB-INF/pageComponents/portal/portalTree.xhtml" />
+					</div>
+				</div>
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery("#webSitesToggleContainer").hide();
+					
+					bcmslib.jQuery("#webSitesTrigger").click(function(){
+						bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+					});	
+				//]]>
+				</script>
+				
+				<rich:spacer height="10" />
+			</ui:fragment>
+			
+			<ui:param name="userTags" value="#{loggedInRepositoryUser.loadUserTagsOrderedByLabel()}"/>
+			<ui:fragment rendered="#{!empty userTags and userTags.size() gt 0}">
+				<div>
+					<div id="userTagsTrigger"><a href="#">#{messages['navigation.menu.mytags']}</a></div>
+					<div id="userTagsToggleContainer">
+						<ui:include
+							src="/WEB-INF/pageComponents/navigation/loggedInUserTagsBrowser.xhtml" />	
+					</div>
+				</div>
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery("#userTagsToggleContainer").hide();
+					
+					bcmslib.jQuery("#userTagsTrigger").click(function(){
+						bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+					});	
+				//]]>
+				</script>
+			</ui:fragment>
+			
+			<rich:spacer height="10" />
+			
+			<ui:param name="mostUsedTags" value="#{contentObjectSubjectManagement.mostUsedTags}"/>
+			<ui:fragment rendered="#{!empty mostUsedTags and mostUsedTags.size() gt 0}">
+				<div>
+					<div id="mostUsedTagsTrigger"><a href="#">#{messages['navigation.menu.most.popular.tags']}</a></div>
+					<div id="mostUsedTagsToggleContainer">
+						<ui:include
+							src="/WEB-INF/pageComponents/navigation/mostUsedTagsBrowser.xhtml" />	
+					</div>
+				</div>
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery("#mostUsedTagsToggleContainer").hide();
+					
+					bcmslib.jQuery("#mostUsedTagsTrigger").click(function(){
+						bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+					});	
+				//]]>
+				</script>
+			</ui:fragment>
+			
+			<rich:spacer height="10" />
+			
+			<ui:fragment>
+				<div>
+					<div id="scriptsTrigger"><a href="#">#{messages['scriptEngine.scriptMenu.header']}</a></div>
+					<div id="scriptsToggleContainer">
+						<ui:include
+							src="/WEB-INF/pageComponents/scriptEngine/scriptMenu.xhtml" />	
+					</div>
+				</div>
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery("#scriptsToggleContainer").hide();
+					
+					bcmslib.jQuery("#scriptsTrigger").click(function(){
+						bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
+					});
+				//]]>
+				</script>
+			</ui:fragment>
+			
+		</ui:composition>
+	</body>
+</html>

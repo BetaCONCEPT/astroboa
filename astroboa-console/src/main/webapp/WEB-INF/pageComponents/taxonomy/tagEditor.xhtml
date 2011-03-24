@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<a4j:outputPanel id="tagEditRerenderedPanel" keepTransient="true">
+				<ui:fragment rendered="#{!empty tagEdit.editedTag}" >
+				
+					<ui:fragment rendered="#{!empty tagEdit.editedTag.id}">
+						<h:outputText value="#{messages['tag.edit.panel.header.editedTopic']}  - 
+							#{tagEdit.editedTag.getAvailableLocalizedLabel(localeSelector.localeString)}"
+							style="color: #777777; font-weight: bold;"/>
+					</ui:fragment>
+					
+					<ui:fragment rendered="#{empty tagEdit.editedTag.id}">
+						<h:outputText value="#{messages['tag.edit.panel.header.newTopic']}"
+							style="color: #777777; font-weight: bold;"/>
+					</ui:fragment>
+					
+					<div id="topicEditorScrollableArea">
+						<ol class="formElementList" id="topicPropertiesForm">
+							<li class="formElement">
+								<label>		
+									<h:outputText
+										value="#{messages['tag.edit.property.owner']}" />
+								</label>
+							
+								<h:outputText
+									value="#{tagEdit.editedTag.owner.label} - #{tagEdit.editedTag.owner.externalId}"/>
+							
+							</li>
+							<li class="formElement">
+								<label>		
+									<h:outputText
+										value="#{messages['tag.edit.property.id']}" />
+								</label>
+							
+								<h:outputText
+									value="#{tagEdit.editedTag.id}"/>
+							
+							</li>
+							<li class="formElement">
+								<label>		
+									<h:outputText
+										value="#{messages['tag.edit.property.system.name']}" />
+								</label>
+							
+								<h:inputText
+									value="#{tagEdit.editedTag.name}"/>
+							
+							</li>
+							<li class="formElement">
+								<label>		
+									<h:outputText
+										value="#{messages['tag.edit.property.order']}" />
+								</label>
+							
+								<h:inputText
+									value="#{tagEdit.editedTag.order}"/>
+							
+							</li>
+							<li class="formElement">
+								<label>		
+									<h:outputText
+										value="#{messages['tag.edit.property.number.referrer.content.objects']}" />
+								</label>
+							
+								<h:outputText
+									value="#{tagEdit.editedTag.numberOfReferrerContentObjects}"/>
+							
+							</li>
+							
+							
+						</ol>
+						
+						
+						<fieldset>
+							<legend><span>#{messages['tag.edit.localization']}</span></legend>
+							<ol class="formElementList" id="topicLabelsForm">
+								<a4j:repeat value="#{tagEdit.editedTagLabels}"
+									var="localizedLabel"
+									rowKeyVar="key">
+									<li class="formElement">
+										<label style="width: 30%;">
+											<h:selectOneMenu
+												value="#{localizedLabel.locale}">
+												<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
+											</h:selectOneMenu>
+										</label>
+										<h:inputText id="taxonomyLabelInput"
+											value="#{localizedLabel.label}" />
+										<ui:remove>	
+											<h:message for="tagLabelInput" errorClass="errorStyle"
+											warnClass="warnStyle" infoClass="infoStyle" />
+										</ui:remove>
+										<a4j:commandLink
+											rendered="#{key ne 0}"
+											action="#{tagEdit.removeLocalizedLabel_UIAction(localizedLabel)}"
+											reRender="tagEditRerenderedPanel">
+	
+											<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-button.png" 
+												width="16"
+												height="16"
+												alt="#{messages['tag.edit.localization.deleteLocalizedLabel']}"/>
+										
+										</a4j:commandLink>
+										
+										<a4j:commandLink
+											rendered="#{key eq 0}"
+											reRender="tagEditRerenderedPanel"
+											action="#{tagEdit.addLocalizedLabel_UIAction}">
+											
+											<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/plus.png" 
+												width="16"
+												height="16"
+												alt="#{messages['tag.edit.localization.add.new.localized.label']}"/>
+											
+										</a4j:commandLink>
+										
+									</li>
+								</a4j:repeat>
+							</ol>
+						</fieldset>
+						
+						<div id="topicSaveButton" style="clear: both; margin: 100px 0 0 0; position: relative; border-top: 1px solid #BBB8B4; padding-top: 20px;">
+							<center>
+							<a4j:commandButton value="#{messages['tag.save.button.label']}" 
+								reRender="dynamicTabAjaxPanel, topicTree"
+								action="#{tagEdit.saveTag_UIAction}"
+								title="#{messages['tag.save.button.helpMessage']}" />
+							</center>
+						</div>
+					
+						<script type="text/javascript" charset="utf-8">
+						//<![CDATA[
+							bcmslib.jQuery(function(){
+								bcmslib.jQuery("#topicPropertiesForm input, #topicLabelsForm input, #topicLabelsForm select, #topicSaveButton input[type=button]").uniform();
+							});
+						//]]>
+						</script>	
+									
+					</div>
+					
+				</ui:fragment>
+					
+			</a4j:outputPanel>
+				
+		</ui:composition>
+
+	</body>
+
+</html>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html">
+	<body>
+		<ui:composition>
+			<a4j:form id="topMenuForm">
+				<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#EDEDED">
+					<tr>
+						<td width="5" height="23" style="padding:10px" class="style">
+				
+						</td>
+						<td valign="bottom">
+							<table  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+								<tr>
+									<td class="betaCMSMenu" align="right">
+				
+										<!-- start horizontal menu -->
+										<table class="rootVoices" cellspacing='0' cellpadding='0' border='0'>
+											<tr>
+												<td align="center" class="rootVoice {menu: 'addMenu'}">
+													#{messages['topMenu.addNew']}
+												</td>
+												
+												<ui:remove>
+												<td align="center" class="rootVoice {menu: 'empty'}" 
+													onclick="showContentObjectTypeList();">
+													#{messages['topMenu.insert.content']}
+												</td>
+												
+												
+													<td align="center" class="rootVoice {menu: 'editMenu'}" >#{messages['topMenu.edit']}</td>
+												</ui:remove>
+												
+												<td align="center" class="rootVoice {menu: 'empty'}" 
+													onclick="showAdvancedSearch();">
+													#{messages['topMenu.advancedSearch']}
+												</td>
+												
+												<ui:remove>
+													<ui:fragment rendered="#{identity.hasRole('ROLE_ADMIN')}">
+														<td align="center" class="rootVoice {menu: 'empty'}" 
+															onclick="showScriptEngine();">
+															#{messages['topMenu.edit.scriptEngine']}
+														</td>
+													</ui:fragment>
+												</ui:remove>
+												
+												<td align="center" class="rootVoice {menu: 'empty'}" 
+													onclick="openClipboard();">
+													#{messages['topMenu.clipboard']}
+												</td>
+												
+											</tr>
+										</table>
+										<!-- end horizontal menu -->
+
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td align="right"  width="600px;" style="padding-right : 10px;" class="style" bgcolor="#EDEDED"> 
+							<h:inputText id="fullTextSearch"
+								value="#{contentObjectSearchByText.searchedText}" 
+								size="50"
+								onkeypress="var searchbox_call_outcome = callFunctionOnEnterKey(event,fullTextSearch); if (!searchbox_call_outcome) {return false;}"/>
+					
+							<a4j:commandLink name="textToSearch"
+								reRender="searchResultsAjaxPanel"
+								action="#{contentObjectSearchByText.findContentObjectsByTextAndPresent_UIAction}"
+								ajaxSingle="false"
+								oncomplete="showTab('searchResultsTab');">
+						
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/search.png" 
+									border="0"/>
+							</a4j:commandLink>
+							
+						</td>
+					</tr>
+				</table>
+				
+				<!-- menus -->
+				<ui:remove>
+				<div id="editMenu" class="mbmenu">
+					<ui:remove><a rel="title" >#{messages['topMenu.edit.submenu.header']}</a></ui:remove>
+				  
+					<ui:fragment rendered="#{identity.hasRole('ROLE_CMS_TAXONOMY_EDITOR')}">
+						<a class="{action: 'showTaxonomyEditor()'}" >#{messages['topMenu.edit.taxonomies']}</a>
+						<a rel="separator"> </a>
+					</ui:fragment>
+				  
+					<a class="{action: 'showUserTagEditor()'}" >#{messages['topMenu.edit.userTags']}</a>
+					<a rel="separator"> </a>
+				  
+					<ui:fragment rendered="#{identity.hasRole('ROLE_CMS_PORTAL_EDITOR')}">
+						<a class="{action: 'showWebSiteEditor()'}" >#{messages['topMenu.edit.webSites']}</a>
+						<a rel="separator"> </a>
+					</ui:fragment>
+				</div>
+				</ui:remove>
+				
+				<div id="addMenu" class="mbmenu">
+				  
+				  <ui:fragment rendered="#{identity.hasRole('ROLE_CMS_EDITOR')}">
+					  <a class="{menu: 'objectTypeListTopMenu'}" >#{messages['topMenu.addNew.object']}: #{messages['topMenu.addNew.object.selectTypeFromMenu']}</a>
+					  <a class="{action: 'showObjectTypeList()'}" >#{messages['topMenu.addNew.object']}: #{messages['topMenu.addNew.object.showTypesPage']}</a>
+					  <a rel="separator"> </a>
+				  </ui:fragment>
+				  
+				  <ui:fragment rendered="#{identity.hasRole('ROLE_ADMIN')}">
+					  <a class="{action: 'showObjectTypeEditor()'}" >#{messages['topMenu.addNew.xmlSchema']}</a>
+					  <a rel="separator"> </a>
+				  </ui:fragment>
+				  
+				  <ui:fragment rendered="#{identity.hasRole('ROLE_CMS_TAXONOMY_EDITOR')}">
+					  <a class="{action: 'showTaxonomyEditor()'}" >#{messages['topMenu.addNew.Taxonomy']}</a>
+					  <a rel="separator"> </a>
+				  </ui:fragment>
+				  
+				  <a class="{action: 'showUserTagEditor()'}" >#{messages['topMenu.addNew.tag']}</a>
+				  <a rel="separator"> </a>
+				  <ui:fragment rendered="#{identity.hasRole('ROLE_CMS_TAXONOMY_EDITOR')}">
+					  <a class="{action: 'showRepositoryEditor()'}" >Repository</a>
+					  <a rel="separator"> </a>
+				  </ui:fragment>
+				</div>
+				
+				<div id="objectTypeListTopMenu" class="boxMenu mbmenu">
+					<a4j:outputPanel id="topMenuObjectTypeSelectorAjaxPanel">
+						<ul class="menuSplittedObjectTypeList">	
+							<a4j:repeat 
+								value="#{contentObjectTypesAsSelectItems}"
+								var="contentType">
+								<li>
+									<a4j:commandLink 
+										value="#{contentType.label}"
+										action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
+										reRender="objectEditorAjaxPanel"
+										oncomplete="showTab('objectEditorTab');"
+										disabled="#{contentType.disabled}"
+										ajaxSingle="true"/> 
+								</li>
+							</a4j:repeat>
+						</ul>
+					</a4j:outputPanel>
+				</div>
+				
+				<a4j:jsFunction 
+					name="showObjectTypeList"
+					reRender="dynamicTabAjaxPanel"
+					oncomplete="showDynamicTab('#{messages['topMenu.insert.content']}');"
+					rendered="#{identity.hasRole('ROLE_CMS_EDITOR')}"
+					action="#{contentTypeEditor.loadContentTypesForEdit_UIAction}"
+					ajaxSingle="true"/>
+					
+					
+				<a4j:jsFunction 
+					name="showAdvancedSearch"
+					reRender="dynamicTabAjaxPanel"
+					oncomplete="showDynamicTab('#{messages['topMenu.advancedSearch']}');"
+					action="#{contentObjectSearchByCriteria.initialize_UIAction}"
+					ajaxSingle="true"/>
+					
+				<a4j:jsFunction
+					name="showTaxonomyEditor"
+					rendered="#{identity.hasRole('ROLE_CMS_TAXONOMY_EDITOR')}"
+					reRender="dynamicTabAjaxPanel,topicTreePanel"
+					oncomplete="showDynamicTab('#{messages['topMenu.edit.taxonomies']}');"
+					action="#{taxonomyEdit.addNewTaxonomy}"
+					ajaxSingle="true"/>
+				
+				
+				<a4j:jsFunction
+					name="showObjectTypeEditor"
+					action="#{contentTypeEditor.setSelectedContentTypeForEdit(null)}"
+					reRender="XSDEditorPanel"
+					oncomplete="openXSDEditor();"/>
+					
+				<a4j:jsFunction
+						name="showUserTagEditor"
+						reRender="dynamicTabAjaxPanel,loggedInUserTagsTableInNavigationMenu"
+						oncomplete="showDynamicTab('#{messages['topMenu.edit.userTags']}');"
+						action="#{taxonomyEdit.addTag_UIAction()}"
+						ajaxSingle="true" />
+						
+				<a4j:jsFunction
+						name="showRepositoryEditor"
+						rendered="#{identity.hasRole('ROLE_ADMIN')}"
+						reRender="dynamicTabAjaxPanel"
+						oncomplete="showDynamicTab('Repository Editor');"
+						action="#{pageController.loadPageComponentInDynamicUIArea('/WEB-INF/pageComponents/admin/repositoryEditor.xhtml')}"
+						ajaxSingle="true" />
+							
+				<ui:remove>
+					<a4j:jsFunction
+							name="showScriptEngine"
+							rendered="#{identity.hasRole('ROLE_ADMIN')}"
+							reRender="dynamicTabAjaxPanel"
+							oncomplete="showDynamicTab('#{messages['topMenu.edit.scriptEngine']}');"
+							action="#{pageController.loadPageComponentInDynamicUIArea('scriptEngine')}"
+							ajaxSingle="true"/>
+						
+						
+					<a4j:jsFunction
+						name="showWebSiteEditor"
+						rendered="#{identity.hasRole('ROLE_CMS_PORTAL_EDITOR')}"
+						reRender="dynamicTabAjaxPanel"
+						oncomplete="showDynamicTab('#{messages['topMenu.edit.webSites']}');"
+						action="#{portalEditor.initialize_UIAction}"
+						ajaxSingle="true" />
+				</ui:remove>
+					
+				<a4j:jsFunction
+	              name="fullTextSearch"
+	              reRender="searchResultsAjaxPanel"
+	              action="#{contentObjectSearchByText.findContentObjectsByTextAndPresent_UIAction}"
+	              ajaxSingle="true"
+	              process="fullTextSearch"
+	              oncomplete="showTab('searchResultsTab');"/>
+			
+			</a4j:form>
+		</ui:composition>
+	</body>
+</html>

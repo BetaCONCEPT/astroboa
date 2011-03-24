@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:jp="http://www.jenia.org/jsf/popup"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<ui:remove>
+			<div
+				style="width: 100%; background-color: gray; color: white; text-align: center;">
+				#{messages['content.object.edit.actions.panel.label']}
+			</div>
+
+			<rich:spacer height="3" />
+
+			<a4j:outputPanel id="spaceAttachPanel">
+				<div style="width: 100%">
+					#{messages['content.object.edit.actions.instructions']}
+					<br />
+					<h:selectOneRadio
+						value="#{contentObjectEdit.selectedOptionForAttachingObjectToUserSpace}"
+						style="font-size: 95%;">
+						<f:selectItem itemValue="1" itemLabel="#{messages['content.object.edit.actions.do.not.attach.space']}" />
+						<f:selectItem itemValue="2"
+							itemLabel="#{messages['content.object.edit.actions.attach.to.root.space']}" />
+						<f:selectItem itemValue="3"
+							itemLabel="#{messages['content.object.edit.actions.attach.to.selected.space']} : #{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}">
+						</f:selectItem>
+
+						<a4j:support event="onchange" />
+					</h:selectOneRadio>
+
+					<div align="center" style="margin-left: 20px; margin-bottom:20px; border: 1px solid #999; width: 60%; min-height: 40px; background-color: #AAA;" >
+					<a4j:outputPanel ajaxSingle="true" >
+						<rich:dropSupport acceptedTypes="space"
+							reRender="spaceAttachPanel"
+							dropListener="#{contentObjectEdit.addDraggedAndDroppedSpace_Listener}">
+						</rich:dropSupport>
+						
+							<div align="center"
+								style="font-size: 1.3em; color: red;">
+								<h:outputText
+									value="#{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}" />
+							</div>
+							<h:outputText style="font-weight: 600; font-size: 1.1em;"
+								value="#{messages['content.object.edit.actions.drag.and.drop.panel.label']}" />
+					</a4j:outputPanel>
+					</div>
+
+					<rich:separator height="1" />
+					<rich:spacer height="3" />
+				</div>
+			</a4j:outputPanel>
+
+
+
+			<h:panelGrid id="contentObjectEditCheckBoxesPanel" columns="3"
+				cellpadding="2" style="text-align: center;">
+				<h:panelGroup>
+					<h:selectBooleanCheckbox
+						value="#{loggedInRepositoryUserSettings.createVersionUponSuccessfulSave}" />
+					<h:outputText
+						value="#{messages['content.object.edit.actions.do.not.create.new.version']}" />
+
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox
+						value="#{loggedInRepositoryUserSettings.openNewContentObjectEditorUponSuccessfulSave}"
+						rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id}" />
+					<h:outputText value="#{messages['content.object.edit.actions.clear.form.after.save']}"
+						rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id}" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox
+						value="#{loggedInRepositoryUserSettings.closeEditorAfterSave}" />
+					<h:outputText value="#{messages['content.object.edit.actions.close.form.after.save']}" />
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<h:selectBooleanCheckbox
+						value="#{loggedInRepositoryUserSettings.copyContentObjectToClipboardUponSuccessfulSave}" />
+					<h:outputText value="#{messages['content.object.edit.actions.copy.to.clipboard.after.save']}" />
+				</h:panelGroup>
+			</h:panelGrid>
+</ui:remove>
+			
+
+					<a4j:commandButton id="saveContentObjectButton" 
+						value="#{messages['content.object.edit.actions.save']}"
+						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+						action="#{contentObjectEdit.saveContentObject_UIAction}"
+						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+
+					
+					<a4j:commandButton id="saveDraftContentObjectButton" 
+						value="#{messages['content.object.edit.actions.saveDraft']}"
+						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+						action="#{draft.add(loggedInRepositoryUser.repositoryUser.id, contentObjectEdit.selectedContentObjectForEdit.contentObject)}"
+						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+						reRender="draftPanel,logoutPanel"/>
+
+   
+					<a4j:commandButton id="removeObjectButton" 
+						value="#{messages['content.object.edit.actions.delete']}"
+						action="#{confirmationBean.initiateConfirmation(
+											'confirmation.panel.delete.question',
+											contentObjectEdit, 
+											'permanentlyRemoveContentObjectUIAction',
+											contentObjectEdit.selectedContentObjectForEdit.contentObject.getCmsProperty('profile.title').simpleTypeValue, 
+											'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
+											'hideTab(\'objectEditorTab\')',
+											null)}"
+						oncomplete="openConfirmationDialog();"
+						reRender="confirmationDialogPanel"
+						rendered="#{! empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id and 
+									contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToDeleteContentObject}" />
+
+
+					
+					<a4j:commandButton id="PublishButton" 
+						value="#{messages['content.object.edit.actions.publish']}"
+						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+						action="#{contentObjectEdit.publishContentObject_UIAction}"
+						rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue ne 'published' and 
+										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
+						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+						
+					<a4j:commandButton id="unPublishButton" 
+						value="#{messages['content.object.edit.actions.cancelPublication']}"
+						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+						action="#{contentObjectEdit.unPublishContentObject_UIAction}"
+						rendered="#{(contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'published' or
+										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'scheduledForPublication') and 
+										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
+						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+
+					<a4j:commandButton 
+						value="#{messages['content.object.edit.actions.clearForm']}"
+						action="#{objectEditInit.editNewObject_UIAction(contentObjectEdit.selectedContentObjectForEdit.contentObject.contentObjectType)}" 
+						reRender="objectEditorAjaxPanel"
+						ajaxSingle="true"/>
+
+
+					<ui:remove>
+						<a4j:commandButton id="archiveObjectButton"
+							value="Διαγραφή και Αρχειοθέτηση"
+							action="#{contentObjectEdit.archiveContentObjectUIAction}"
+							style="font-size: 95%"
+							rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToDeleteContentObject}" />
+
+						<a4j:commandButton id="insertWithoutVersionObjectButton"
+							value="Αποθήκευση χωρίς διατήρηση προηγούμενης Version"
+							action="#{contentObjectEdit.saveContentObjectWithoutVersion_UIAction}"
+							style="font-size: 95%"
+							rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+							reRender="ajaxDynamicAreaPanel,topicTreePanel,myTags,cmsTree" />
+
+						<a4j:commandButton id="insertWithVersionObjectButton"
+							value="Αποθήκευση και διατήρηση προηγούμενης Version"
+							action="#{contentObjectEdit.saveContentObjectWithVersion_UIAction}"
+							style="font-size: 95%"
+							rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+							reRender="ajaxDynamicAreaPanel,topicTreePanel,myTags,cmsTree" />
+					</ui:remove>
+
+
+
+		</ui:composition>
+	</body>
+</html>

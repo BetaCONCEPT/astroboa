@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			<div id="clipboard" title="#{messages['clipboard.dialoguebox.header']}">
+				<a4j:form id="clipboardForm">
+					<a4j:outputPanel id="toolsPanel" >
+			
+						<rich:dragIndicator id="clipboardIndicator" />
+						
+						<a4j:outputPanel id="clipboardPanel">
+							<rich:dataTable style="width: 100%;" id="contentObjectPropertyUrlTable"
+								value="#{contentObjectPropertyUrlItems}" var="contentObjectPropertyUrlItem"
+								rendered="#{! empty contentObjectPropertyUrlItems and contentObjectPropertyUrlItems.rowCount gt 0}">
+				
+								<f:facet name="header">
+									
+									<rich:columnGroup>
+										<rich:column colspan="7">
+											<h:outputText value="#{messages['clipboard.property.url.table.top.header']}"
+												style="font-size: 	100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column breakBefore="true">
+											<h:outputText value="#{messages['clipboard.property.url.table.title.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column >
+											<h:outputText value="#{messages['clipboard.property.url.table.typeLabel.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column >
+											<h:outputText value="#{messages['clipboard.property.url.table.propertyLabel.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.property.url.table.propertyPath.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.property.url.table.propertyValueType.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.property.url.table.url.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.property.url.table.actions.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+									</rich:columnGroup>
+								</f:facet>
+								
+								<rich:column>
+										<a4j:commandLink
+											value="#{contentObjectPropertyUrlItem.title}"
+											action="#{objectEditInit.editObject_UIAction(contentObjectPropertyUrlItem.id)}"
+											reRender="objectEditorAjaxPanel"
+											onclick="showTab('objectEditorTab');"
+											title="#{messages['entity.action.viewEditForm']}"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectPropertyUrlItem.typeLabel}"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectPropertyUrlItem.propertyLabel}"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectPropertyUrlItem.propertyPath}"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectPropertyUrlItem.propertyValueType}"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectPropertyUrlItem.URL}"/>
+								</rich:column>
+								
+								<rich:column>
+									<!-- Delete action -->
+									<a4j:commandLink action="#{clipboard.deleteContentObjectPropertyUrlItem_UIAction}"
+										reRender="clipboardPanel" title="#{messages['clipboard.property.url.table.action.removeURL']}">
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+				
+								</rich:column>
+				
+							</rich:dataTable>
+							
+							<rich:spacer height="7"/>
+							
+							<rich:dataTable style="width: 100%;" id="dndObjectTable"
+								value="#{contentObjectItems}" var="contentObjectItem"
+								rendered="#{! empty contentObjectItems and contentObjectItems.rowCount gt 0}">
+				
+								<f:facet name="header">
+									
+									<rich:columnGroup>
+										<rich:column colspan="4">
+											<h:outputText value="#{messages['clipboard.dnd.object.table.top.header']}"
+												style="font-size: 	100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column breakBefore="true">
+											<h:outputText value="#{messages['clipboard.dnd.object.table.title.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column >
+											<h:outputText value="#{messages['clipboard.dnd.object.table.typeLabel.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.dnd.object.table.actions.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+									</rich:columnGroup>
+								</f:facet>
+								
+								<rich:column>
+									<rich:dragSupport dragIndicator="clipboardIndicator"
+											dragType="#{contentObjectItem.type}" dragValue="#{contentObjectItem}">
+				
+											<!-- Null description causes an error -->
+											<rich:dndParam name="label" type="drag"
+												value="#{ empty contentObjectItem.typeLabel ? messages['clipboard.dnd.object.defaultTypeLabel'] : contentObjectItem.typeLabel}" />
+									</rich:dragSupport>
+									<a4j:commandLink
+										value="#{contentObjectItem.title}"
+										action="#{objectEditInit.editObject_UIAction(contentObjectItem.id)}"
+										reRender="objectEditorAjaxPanel"
+										onclick="showTab('objectEditorTab');"
+										title="#{messages['entity.action.viewEditForm']}"/>
+										<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-out.png" alt="Drag and Drop Indicator" title="you can drag and drop this object"/>
+								</rich:column>
+								
+								<rich:column>
+									<h:outputText value="#{contentObjectItem.typeLabel}"/>
+								</rich:column>
+								
+								<rich:column>
+									<!-- Delete action -->
+									<a4j:commandLink action="#{clipboard.deleteContentObjectItem_UIAction}"
+										reRender="clipboardPanel" title="#{messages['clipboard.dnd.object.table.action.removeObject']}">
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+				
+								</rich:column>
+								
+							</rich:dataTable>
+						</a4j:outputPanel>
+			
+						<rich:spacer height="7"/>
+						
+						<a4j:outputPanel id="draftPanel">
+							<rich:dataTable style="width: 100%;" id="draftTable"
+								value="#{draft.getDraftItemsForLoggedInRepositoryUser(loggedInRepositoryUser.repositoryUser.id)}" var="draftItem"
+								rendered="#{draft.hasLoggedInRepositoryUserItemsInDraft(loggedInRepositoryUser.repositoryUser.id)}">
+				
+								<f:facet name="header">
+									
+									<rich:columnGroup>
+										<rich:column colspan="4">
+											<h:outputText value="#{messages['clipboard.draft.object.table.top.header']}"
+												style="font-size: 	100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column breakBefore="true">
+											<h:outputText value="#{messages['clipboard.draft.object.table.insertion.date.column.header']}"
+												style="font-size: 	100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.draft.object.table.title.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.draft.object.table.typeLabel.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['clipboard.draft.object.table.actions.column.header']}"
+												style="font-size: 100%; color: #333; font-weight: bold;" />
+										</rich:column>
+									</rich:columnGroup>
+								</f:facet>
+				
+								<rich:column>
+										<h:outputText value="#{draftItem.insertionDateAsString}" />
+								</rich:column>
+				
+								<rich:column>
+										<h:outputText value="#{draftItem.label}" />
+								</rich:column>
+								
+								<rich:column>
+										<h:outputText value="#{draftItem.typeLabel}" />
+								</rich:column>
+								
+								<rich:column>
+									<h:panelGrid columns="2" cellpadding="2">
+								
+									<!-- Reload action valid only for content objects -->
+									<a4j:commandLink 
+											ajaxSingle="true"
+											rendered="#{draftItem.isAContentObject()}"   
+											action="#{objectEditInit.editObjectFromDraft_UIAction(draftItem.cmsRepositoryEntity)}"
+											reRender="objectEditorAjaxPanel"
+											onclick="showTab('objectEditorTab');"
+											title="Click to load draft object">
+											<h:graphicImage value="/images/cms-icons/16/reload.png" />
+									</a4j:commandLink>
+				
+									<!-- Delete action -->
+									<a4j:commandLink
+										ajaxSingle="true" 
+										action="#{draft.deleteDraftItem_UIAction(loggedInRepositoryUser.repositoryUser.id, draftItem.id)}"
+										reRender="draftPanel, logoutPanel" title="#{messages['entity.action.delete']}">
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+									</h:panelGrid>
+								</rich:column>
+							</rich:dataTable>
+						</a4j:outputPanel>
+			
+					</a4j:outputPanel>
+				</a4j:form>
+			</div>
+			
+		</ui:composition>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<!-- Content Object Selection can be accomplished either by using drag and drop or suggestion box -->
+            <a4j:outputPanel layout="block">
+            	
+            	<rich:dropSupport 
+					rendered="#{cmsPropertyWrapper.writeGranted}"
+					acceptedTypes="#{cmsPropertyWrapper.acceptedContentTypes}"
+					reRender="complexCmsPropertyChildPropertiesTable"
+					dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedContentObject_Listener}">
+				</rich:dropSupport>
+				
+				<h:inputText id="contentObjectTitlePattern"
+					value="#{cmsPropertyWrapper.contentObjectTitlePattern}" 
+					size="35"/>
+				
+				<img id="objectRefTipImg#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}" src="images/cms-icons/12/info.png"/>
+				<ui:remove>			
+				<div id="objectRefTooltipText#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}">
+					<h:outputText style="text-align:center" value="#{messages['content.object.edit.content.object.selection.accepted.values.allObjectTypes']}" rendered="#{empty cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}"/>
+		 			<ui:fragment rendered="#{! empty cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}">
+						#{messages['content.object.edit.content.object.selection.accepted.values.specificObjectTypes']} 
+						<b/>
+						<strong>#{cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}</strong>
+					</ui:fragment>
+					<hr />
+					<br/>
+					#{messages['content.object.edit.content.object.selection.helpMessage']}
+					<ul>
+						<li>
+							#{messages['content.object.edit.content.object.selection.suggestion.box.helpMessage']}
+						</li>
+						<li>
+							#{messages['content.object.edit.content.object.selection.drag.and.drop.helpMessage']}	
+						</li>
+					</ul>
+				</div>
+				<script type="text/javascript" >
+					//<![CDATA[
+					createtObjectReferenceHelpMessage("#objectRefTooltipText#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}", "#objectRefTipImg#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}");
+					//]]>
+				</script> 
+				</ui:remove>
+				<rich:suggestionbox for="contentObjectTitlePattern"
+					suggestionAction="#{cmsPropertyWrapper.findContentObjects_UIAction}" 
+					var="suggestedContentObject"
+					fetchValue="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}"
+					zindex="200"
+					minChars="3">
+					<h:column>
+						<h:outputText value="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}" />
+					</h:column>
+					<a4j:support event="onselect" 
+							reRender="complexCmsPropertyChildPropertiesTable"
+							action="#{cmsPropertyWrapper.addSelectedContentObject_UIAction(suggestedContentObject.contentObject, false)}" />
+				</rich:suggestionbox>
+			</a4j:outputPanel>
+			
+		</ui:composition>
+	</body>
+
+</html>

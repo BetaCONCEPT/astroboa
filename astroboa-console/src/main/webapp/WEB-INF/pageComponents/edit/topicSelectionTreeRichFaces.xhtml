@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<div style="position: absolute; top: 0px; left: 0px; right:0px; bottom: 50px; margin: 5px; overflow: auto">
+				<rich:dragIndicator id="draggedTopicIndicator" />
+				<rich:tree id="topicInputTree"
+					style="text-align:left;"  
+					switchType="ajax"
+					value="#{taxonomyTree.taxonomyRootNodeForTopicInput}" 
+					var="topicTreeNodeForInput"
+					nodeFace="#{topicTreeNodeForInput.type}"
+					rendered="#{taxonomyTree.topicSelectionDialogueActive}">
+
+					<rich:treeNode type="TAXONOMY" 
+						icon="/images/cms-icons/16/fugue/tags-label.png">
+						<h:outputText 
+							style="color: #333; font-size: 0.9em;"
+							value="#{topicTreeNodeForInput.description}" />
+					</rich:treeNode>
+					
+					
+
+					<rich:treeNode type="TOPIC" 
+						icon="/images/cms-icons/16/fugue/tag-label-red.png"
+						iconLeaf="/images/cms-icons/16/fugue/tag-label-red.png"
+						rendered="#{topicTreeNodeForInput.containerAndTopic}">
+						
+						<rich:dragSupport
+							dragIndicator="draggedTopicIndicator"
+							dragType="topic"
+							dragValue="#{topicTreeNodeForInput.topic}">
+							<rich:dndParam name="label" type="drag" value="#{topicTreeNodeForInput.description}" />
+						</rich:dragSupport>
+						
+						<c:set var="numberOfContentObjectsReferencedByTopicForInput"
+							value="#{topicTreeNodeForInput.topic.numberOfReferrerContentObjects}" />
+							
+						<a href="#">#{topicTreeNodeForInput.description}</a>
+						
+						<h:outputText
+							value=" (#{topicTreeNodeForInput.childCount})" 
+							rendered="#{topicTreeNodeForInput.childCount gt 0}" />
+							
+						<h:outputText
+							value=" [#{numberOfContentObjectsReferencedByTopicForInput}]"
+							rendered="#{numberOfContentObjectsReferencedByTopicForInput gt 0}" />
+						
+					</rich:treeNode>
+					
+					
+					<rich:treeNode type="TOPIC" 
+						icon="/images/cms-icons/16/fugue/tag-label-red.png"
+						iconLeaf="/images/cms-icons/16/fugue/tag-label-red.png"
+						rendered="#{!topicTreeNodeForInput.containerAndTopic}">
+							<h:outputText 
+								style="color: #333; font-size: 0.9em;"
+								value="#{topicTreeNodeForInput.description}" />
+							
+							<h:outputText
+								style="color: #333; font-size: 0.9em;"
+								value=" (#{topicTreeNodeForInput.childCount})" styleClass="treeNodeDescription"
+								rendered="#{topicTreeNodeForInput.childCount gt 0}" />
+					</rich:treeNode>
+					
+				</rich:tree>
+				
+			</div>
+		</ui:composition>
+	</body>
+</html>

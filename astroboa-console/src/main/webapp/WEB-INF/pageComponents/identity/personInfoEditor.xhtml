@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:seam="http://jboss.com/products/seam/taglib"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+
+		<ui:composition>
+			<!--  Load full person form if the person data is stored in a person object in this repository -->
+			<a4j:commandLink
+				value="Edit Full Person Form"
+				style="padding-left: 20px; background: url(images/cms-icons/16/fugue/user--pencil.png) no-repeat 0px center;"
+				action="#{objectEditInit.editObject_UIAction(loggedInRepositoryUser.personId)}" 
+				reRender="objectEditorAjaxPanel"
+				onclick="showTab('objectEditorTab');"
+				rendered="#{loggedInRepositoryUser.identityStoredInThisRepository}"
+				ajaxSingle="true"/>
+				
+			<div id="myAccountFormScrollableArea">
+				<fieldset>
+					<legend><span>#{messages['user.provision.edit.user.details.panel.header']}</span></legend>
+					<ol class="formElementList">
+						<li class="formElement">
+							<label>		
+								<h:outputText value="* #{messages['user.provision.common.person.last.name']}" />	
+							</label>
+							<h:inputText id="lastName"
+								value="#{personInfoEditor.person.familyName}"
+								required="true"
+								label="#{messages['user.provision.common.person.last.name']}"/>
+						</li>
+						
+						<li class="formElement">
+							<label>		
+								<h:outputText value="* #{messages['user.provision.common.person.first.name']}" />	
+							</label>
+							<h:inputText id="firstName"
+								value="#{personInfoEditor.person.firstName}"
+								required="true"
+								label="#{messages['user.provision.common.person.first.name']}"/>
+						</li>
+						
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.common.person.father.name']}" />
+							</label>
+							<h:inputText id="fatherName"
+								value="#{personInfoEditor.person.fatherName}" />
+						</li>
+						
+						<ui:remove>
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.common.person.identity']}" />
+							</label>
+							<h:inputText id="identity"
+								value="#{personInfoEditor.person.userid}" />
+						</li>
+						</ui:remove>
+						
+					</ol>
+				</fieldset>
+				
+				<fieldset>
+					<legend><span>#{messages['user.provision.edit.user.account.data.panel.header']}</span></legend>
+					<ol class="formElementList">
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.edit.person.username']}" />	
+							</label>
+							<h:outputText value="#{personInfoEditor.person.username}"/>
+						</li>
+						
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.edit.user.account.data.old.password']}"/>
+							</label>
+							<h:inputSecret styleClass="formItemClass" id="oldPassword"
+								value="#{personInfoEditor.oldPassword}" size="20" redisplay="true"
+								maxlength="50"/>
+						</li>
+						
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.edit.user.account.data.new.password']}" />
+							</label>
+							<h:inputSecret styleClass="formItemClass" id="newPassword"
+								value="#{personInfoEditor.newPassword}" size="20" redisplay="true"
+								maxlength="50"/>
+						</li>
+						
+						<li class="formElement">
+							<label>		
+								<h:outputText value="#{messages['user.provision.edit.person.passwordVerify']} " />
+							</label>
+							<h:inputSecret styleClass="formItemClass" id="newPasswordVerify"
+								redisplay="true" value="#{personInfoEditor.newPasswordVerify}"
+								size="20"/>
+						</li>
+						
+					</ol>
+				</fieldset>
+				
+				<div style="clear: both; margin: 100px 0 0 0; position: relative; border-top: 1px solid #BBB8B4; padding-top: 20px;">
+					<center>
+						<a4j:commandButton value="#{messages['user.provision.edit.user.save']}"
+							action="#{personInfoEditor.savePerson_UIAction}" />
+					</center>
+				</div>
+				
+				<div style="margin: 0 auto; color: #777777; margin-top: 30px;" id="myAccountRoles">
+					<ui:fragment rendered="#{! empty personInfoEditor.personRoles}">
+				
+						<h:outputText value="#{messages['user.provision.role.list']}"/>
+				
+						<rich:dataList var="role" value="#{personInfoEditor.personRoles}">
+		      				<h:outputText value="#{role}"/>
+		      			</rich:dataList>
+		      		
+		      		</ui:fragment>
+	      		</div>
+	            				
+			</div>
+				
+			<script type="text/javascript" charset="utf-8">
+			//<![CDATA[
+				bcmslib.jQuery(function(){
+					bcmslib.jQuery("#myAccountFormScrollableArea input, #myAccountFormScrollableArea input[type=button]").uniform();
+				});
+			//]]>
+			</script>
+
+		</ui:composition>
+	</body>
+</html>
+

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+		
+			<a4j:jsFunction 
+					name="setAtLeastOneContentObjectIsSelected"
+					reRender="actionsOnSelectedObjects"
+					ajaxSingle="true">
+					
+					<a4j:actionparam name="atLeastOneContentObjectIsSelected" assignTo="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}"/>
+			</a4j:jsFunction>
+					
+			<a4j:outputPanel id="searchResultsAjaxPanel">
+				<ui:fragment rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}">
+					
+					<ui:fragment rendered="#{!empty contentObjectList.contentObjectListHeaderMessage}">
+						<div class="roundedMessageBox">
+							<p style="color: #555; font-size: 0.9em; font-weight: bold;">
+								#{contentObjectList.contentObjectListHeaderMessage}
+							</p>
+						</div>
+					</ui:fragment>
+					
+					<ui:remove>
+					<div id="filtersAreEnabledReminderArea">
+						<h:outputText value="Τα Φίλτρα είναι ΕΝΕΡΓΟΠΟΙΗΜΕΝΑ.Τα αποτελέσματα της πλοήγησης φιλτράρονται σύμφωνα με τις τιμές στα φίλτρα" 
+								rendered="#{contentSearch.filteringDuringBrowsingEnabled}"/>
+					</div>
+					</ui:remove>
+					
+					<a4j:outputPanel id="actionsOnSelectedObjects">
+						<ui:fragment rendered="#{! empty contentObjectList.labelForFileGeneratedWhenExportingListToXml}">
+							<div style="float:left; margin: 0 10px 0 0;">
+								<ul class="horizontalList rowsPerPage">
+									<li>#{messages['content.search.drop.down.menu.export.to.xml']}:</li>
+									<li>
+										<a4j:htmlCommandLink 
+											value="#{messages['content.search.drop.down.menu.all.option']}"
+											action="#{xmlExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, 
+												contentObjectList.labelForFileGeneratedWhenExportingListToXml)}"/>
+												
+									</li>
+									
+									<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
+										<li>|</li>
+										
+										<li>
+											<a4j:htmlCommandLink 
+												value="#{messages['content.search.drop.down.menu.selected.option']}"
+												action="#{xmlExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+													contentObjectList.labelForFileGeneratedWhenExportingListToXml)}"/>
+										</li>
+									</ui:fragment>
+								</ul>
+							</div>
+						</ui:fragment>
+							
+						<div style="float:left; margin: 0 10px 0 0;">
+							<ul class="horizontalList rowsPerPage">
+								<li>#{messages['content.search.drop.down.menu.export.to.excel']}:</li>
+								<li>
+									<a4j:htmlCommandLink 
+										value="#{messages['content.search.drop.down.menu.all.option']}"
+										action="#{excelExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, localeSelector.localeString)}"/>
+											
+								</li>
+								
+								<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
+									<li>|</li>
+									
+									<li>
+										<a4j:htmlCommandLink
+											value="#{messages['content.search.drop.down.menu.selected.option']}"
+											action="#{excelExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+											localeSelector.localeString)}"/>
+									</li>
+								</ui:fragment>
+							</ul>
+						</div>
+						
+						<div style="float:left; margin: 0 10px 0 0;">
+							<ul class="horizontalList rowsPerPage">
+								<li>#{messages['content.search.drop.down.menu.delete']}:</li>
+								<li>
+									<a4j:commandLink 
+										value="#{messages['content.search.drop.down.menu.all.option']}"
+										ajaxSingle="true"
+										action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
+												deleteContentObjectBean, 
+												'deleteContentObjectsInList',
+												null, 
+												'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
+												null,
+												contentObjectStatefulSearchService.localContentObjectCriteria)}"
+										onclick="openConfirmationDialog();"
+										reRender="confirmationDialogPanel"/>
+											
+								</li>
+								
+								<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
+									<li>|</li>
+									
+									<li>
+										<a4j:commandLink
+											value="#{messages['content.search.drop.down.menu.selected.option']}"
+											ajaxSingle="true"
+											action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
+													deleteContentObjectBean, 
+													'deleteContentObjectSelection',
+													null, 
+													'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
+													null,
+													contentObjectStatefulSearchService.contentObjectSelection)}"
+											onclick="openConfirmationDialog();"
+											reRender="confirmationDialogPanel"/>
+									</li>
+								</ui:fragment>
+							</ul>
+						</div>
+					</a4j:outputPanel>
+					
+					<div style="position: absolute; top: 140px; left: 25px;">
+						<ul class="horizontalList rowsPerPage">
+							<li>#{messages['content.search.drop.down.menu.rowsPerPage.option']}:</li>
+							<li>
+								<a4j:commandLink
+									value="10" 
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel" 
+									style="#{pageController.rowsPerDataTablePage eq 10 ? 'text-decoration: underline;': ''}"
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(10)}"/>
+							</li>
+							
+							<li>
+								<a4j:commandLink
+									value="15"
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel"  
+									style="#{pageController.rowsPerDataTablePage eq 15 ? 'text-decoration: underline;': ''}"
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(15)}"/>
+											
+							</li>
+								
+							<li>	
+								<a4j:commandLink
+									value="20" 
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel"
+									style="#{pageController.rowsPerDataTablePage eq 20 ? 'text-decoration: underline;': ''}" 
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(20)}"/>
+							</li>
+											
+							<li>	
+								<a4j:commandLink
+									value="25"
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel"
+									style="#{pageController.rowsPerDataTablePage eq 25 ? 'text-decoration: underline;': ''}" 
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(25)}"/>
+							</li>
+							
+							<li>	
+								<a4j:commandLink 
+									value="30"
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel"
+									style="#{pageController.rowsPerDataTablePage eq 30 ? 'text-decoration: underline;': ''}" 
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(30)}"/>
+							</li>
+							
+							<li>
+								<a4j:commandLink
+									value="50" 
+									ajaxSingle="true"  
+									reRender="searchResultsAjaxPanel"
+									style="#{pageController.rowsPerDataTablePage eq 50 ? 'text-decoration: underline;': ''}"
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(50)}"/>
+							</li>
+								
+							<li>
+								<a4j:commandLink 
+									value="100"
+									ajaxSingle="true" 
+									reRender="searchResultsAjaxPanel"
+									style="#{pageController.rowsPerDataTablePage eq 100 ? 'text-decoration: underline;': ''}" 
+									action="#{pageController.changeRowsPerDataTablePage_UIAction(100)}"/>
+							</li>
+						</ul>
+					</div>
+					
+					<div style="position: absolute; top: 140px; left: 300px;">
+					
+						<rich:datascroller id="listViewContentObjectTableDataScroller"
+							ajaxSingle="true"
+							oncomplete="createSlideshow('.objectListSlideshow');"
+							for="listViewContentObjectTable" 
+							maxPages="10"
+							page="#{contentObjectList.activeContentObjectListPage}"
+							renderIfSinglePage="false"
+							rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
+							binding="#{uiComponentBinding.listViewContentObjectTableScrollerComponent}"
+							reRender="contentObjectList_ViewArea"/>
+					</div>	
+						
+					<div id="objectListScrollableArea">
+						<a4j:outputPanel id="contentObjectList_ViewArea" keepTransient="true">
+								
+							<ui:include
+								src="#{contentObjectList.contentObjectListCurrentViewPageComponent}" />
+							
+							<script type="text/javascript">
+							//<![CDATA[
+								var beanVariable_atLeastOneContentObjectIsSelected_HasAlreadyBeenSetToTrue = false;
+								monitorCheckboxChange();
+							//]]>
+							</script>	
+						</a4j:outputPanel>
+					</div>
+					
+				</ui:fragment>
+				
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery(document).ready(function(){
+						createSlideshow('.objectListSlideshow');
+					});
+				//]]>
+				</script>
+
+			</a4j:outputPanel>
+			
+		</ui:composition>
+	</body>
+</html>
+

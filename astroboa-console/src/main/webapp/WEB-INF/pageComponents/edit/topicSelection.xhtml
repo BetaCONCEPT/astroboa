@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+		
+			<!-- Topic Selection can be accomplished either by using drag and drop or suggestion box -->
+            <a4j:outputPanel layout="block">
+            	
+            	<rich:dropSupport 
+					acceptedTypes="topic"
+					reRender="complexCmsPropertyChildPropertiesTable"
+					dropListener="#{topicPropertyWrapper.addDraggedAndDroppedTopicToTopicProperty_Listener}">
+				</rich:dropSupport>
+				
+				<h:inputText id="topicLabelPattern"
+					value="#{topicPropertyWrapper.topicLabelPattern}" 
+					size="35"/>
+					
+				<img id="#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}" class="topicTipImg" src="images/cms-icons/12/info.png"/>
+				
+				<a4j:commandLink
+					action="#{taxonomyTree.setAcceptedTaxonomies(topicPropertyWrapper.acceptedTaxonomies)}"
+					oncomplete="openTopicSelectionDialog();"
+					reRender="topicSelectionDialogPanel"
+					ajaxSingle="true">
+					<img src="images/cms-icons/16/fugue/tag--plus.png"
+						alt="show topic selection dialog"/>
+				</a4j:commandLink>
+				
+				<div class="topicTip_#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+				
+				<rich:suggestionbox for="topicLabelPattern"
+					suggestionAction="#{topicPropertyWrapper.findTopics_UIAction}" 
+					var="suggestedTopic"
+					fetchValue="#{suggestedTopic.getAvailableLocalizedLabel(localeSelector.localeString)}"
+					zindex="200">
+					<h:column>
+						<h:outputText value="#{suggestedTopic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
+					</h:column>
+					<a4j:support event="onselect" 
+							reRender="complexCmsPropertyChildPropertiesTable"
+							action="#{topicPropertyWrapper.addSelectedTopic_UIAction(suggestedTopic, false)}"/>
+				</rich:suggestionbox>
+		
+			</a4j:outputPanel>
+			
+		</ui:composition>
+	</body>
+
+</html>

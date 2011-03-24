@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			
+			<ui:fragment 
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
+				and  cmsPropertyWrapper.valueType eq 'ContentObject'
+				and ! empty cmsPropertyWrapper.simpleCmsPropertyValueWrappers}">
+					
+				<div class="formElementValuesLabelSpacer">fake label</div>
+				
+				<ol class="formElementValues">
+					<a4j:repeat
+						var="simpleCmsPropertyValueWrapper"
+						value="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers}"
+						rowKeyVar="indexOfSimpleCmsPropertyValueWrapper">
+	
+						<li class="inlineFormElementValue">
+							<a4j:outputPanel>
+								<rich:dropSupport 
+									acceptedTypes="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}"
+									reRender="complexCmsPropertyChildPropertiesTable"
+									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
+									dropValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+									
+								</rich:dropSupport>
+				
+								<h:outputText rendered="#{!empty simpleCmsPropertyValueWrapper.value}"
+									value="#{simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}"/>
+			
+							</a4j:outputPanel>
+							
+							<!-- Grab action -->
+							 <a4j:outputPanel 
+						 		styleClass="dragElementValue"
+							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
+								<rich:dragSupport 
+									dragIndicator="propertyReferenceIndicator"
+									dragType="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}" 
+									dragValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+	
+									<rich:dndParam name="label" type="drag"
+										value="#{ empty simpleCmsPropertyValueWrapper.value ? ' ' : simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}" />
+								</rich:dragSupport>
+								Drag to another position
+							</a4j:outputPanel>
+						
+							<!-- MoveUp action 
+							<a4j:commandLink
+								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								rendered="#{cmsPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper gt 0}"
+								action="#{cmsPropertyWrapper.moveUp_UIAction(simpleCmsPropertyValueWrapper)}"
+								reRender="complexCmsPropertyChildPropertiesTable"
+								title="Μεταφορά μιά θέση επάνω">
+								<h:graphicImage value="/images/cms-icons/16/up_arrow.png" />
+							</a4j:commandLink>
+							-->
+						
+							<!-- MoveDown action 
+							<a4j:commandLink
+								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								rendered="#{cmsPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper lt cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size()-1}"
+								action="#{cmsPropertyWrapper.moveDown_UIAction(simpleCmsPropertyValueWrapper)}"
+								reRender="complexCmsPropertyChildPropertiesTable"
+								title="Μεταφορά μιά θέση κάτω">
+								<h:graphicImage value="/images/cms-icons/16/down_arrow.png" />
+							</a4j:commandLink>
+							-->
+
+							<!-- Delete action -->
+							<a4j:commandLink
+								value="Delete Object Reference"
+								styleClass="delete"
+								rendered="#{cmsPropertyWrapper.writeGranted}"
+								action="#{cmsPropertyWrapper.deleteValueFromContentObjectProperty_UIAction}"
+								reRender="complexCmsPropertyChildPropertiesTable">
+								<a4j:actionparam name="valueIndex"
+									value="#{indexOfSimpleCmsPropertyValueWrapper}"
+									assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />
+							</a4j:commandLink>
+					 	
+						</li>	
+					</a4j:repeat>
+				</ol>
+			</ui:fragment>
+		</ui:composition>
+	</body>
+</html>
+				

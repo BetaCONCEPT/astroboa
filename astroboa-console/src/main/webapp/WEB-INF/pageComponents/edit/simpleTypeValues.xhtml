@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			
+			<ui:fragment 
+				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
+						and cmsPropertyWrapper.multiple
+						and cmsPropertyWrapper.path ne 'profile.versions'
+						and  
+							( 
+								cmsPropertyWrapper.valueType ne 'Binary' or 
+								(cmsPropertyWrapper.valueType eq 'Binary' and  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged)
+							)
+						and  cmsPropertyWrapper.valueType ne 'Complex'
+						and  cmsPropertyWrapper.valueType ne 'Topic'
+						and  cmsPropertyWrapper.valueType ne 'ContentObject'
+						and ! empty cmsPropertyWrapper.simpleCmsPropertyValueWrappers}">
+				
+				
+				<ui:include
+					src="/WEB-INF/pageComponents/edit/simpleTypeValue.xhtml" >
+					<ui:param name="simpleCmsPropertyValueWrapper" 
+						value="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers[0]}"/>
+					<ui:param name="indexOfSimpleCmsPropertyValueWrapper" 
+						value="0"/>
+				</ui:include>
+				
+				<!-- "Add one more value" Action for a Property with multiple simple values -->
+				<a4j:commandLink
+					action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
+					reRender="complexCmsPropertyChildPropertiesTable"
+					title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
+					<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/plus.png" 
+						width="16"
+						height="16"/>
+				</a4j:commandLink>
+				
+				<ui:fragment rendered="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
+					<div class="formElementValuesLabelSpacer">fake label</div>
+					
+					<ol class="formElementValues">
+						<a4j:repeat
+							var="simpleCmsPropertyValueWrapper"
+							value="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers}"
+							rowKeyVar="indexOfSimpleCmsPropertyValueWrapper"
+							first="1">
+							
+							<li class="inColumnFormElementValue">
+						 		<ui:include
+									src="/WEB-INF/pageComponents/edit/simpleTypeValue.xhtml" />
+								
+								<!-- Delete action -->
+								<a4j:commandLink
+									rendered="#{cmsPropertyWrapper.writeGranted}"
+									action="#{cmsPropertyWrapper.deleteValueFromSelectedSimpleCmsProperty_UIAction}"
+									reRender="complexCmsPropertyChildPropertiesTable">
+									<a4j:actionparam name="valueIndex"
+										value="#{indexOfSimpleCmsPropertyValueWrapper}"
+										assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />
+									<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-button.png" 
+										width="16"
+										height="16"/>
+								</a4j:commandLink>
+							</li>
+								
+						</a4j:repeat>
+					</ol>
+				</ui:fragment>
+			</ui:fragment>
+			
+		</ui:composition>
+	</body>
+</html>
+				

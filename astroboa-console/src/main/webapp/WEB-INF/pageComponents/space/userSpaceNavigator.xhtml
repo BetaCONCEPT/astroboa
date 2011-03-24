@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<body>
+
+		<ui:composition>
+	
+			<div class="objectTypeSelectionMenu" style="display: inline;">
+				<table class="objectTypeSelectionRootVoices" cellspacing='0' cellpadding='0' border='0'>
+					<tr>
+						<td class="rootVoice {menu: 'empty'}" onclick="addFolder();">#{messages['space.administration.add.new.space.link']}</td>
+						<td class="rootVoice {menu: 'objectTypeListUserSpace'}" >#{messages['topMenu.insert.content']}</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div id="objectTypeListUserSpace" class="boxMenu mbmenu">
+				<a4j:outputPanel id="userSpaceObjectTypeSelectorAjaxPanel">
+					<ul class="menuSplittedObjectTypeList">	
+						<a4j:repeat 
+							value="#{contentObjectTypesAsSelectItems}"
+							var="contentType">
+							<li>
+								<a4j:commandLink 
+									value="#{contentType.label}"
+									action="#{objectEditInit.editNewObject_UIAction(contentType.value, userSpaceNavigation.currentSpace)}" 
+									reRender="objectEditorAjaxPanel"
+									onclick="showTab('objectEditorTab');"
+									disabled="#{contentType.disabled}"
+									ajaxSingle="true"/> 
+							</li>
+						</a4j:repeat>
+					</ul>
+				</a4j:outputPanel>
+			</div>
+				
+			<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+			
+			<a4j:outputPanel id="personalWorkSpaceTabAjaxPanel">
+			
+				<a4j:repeat value="#{breadCrumbForUserSpace}" var="breadCrumbSpace" 
+					rowKeyVar="index">
+
+					<h:outputText styleClass="breadcrumb" value=" > "
+						rendered="#{index ne 0}" />
+
+					<ui:fragment rendered="#{userSpaceNavigation.currentSpace.id eq breadCrumbSpace.id}">
+						<h:outputText styleClass="breadcrumb"
+							value="#{breadCrumbSpace.getAvailableLocalizedLabel(localeSelector.localeString)}"
+							rendered="#{index ne 0}" />
+						
+						<h:outputText styleClass="breadcrumb"
+							value="#{messages['space.my.space.root.name']}:"
+							rendered="#{
+									index eq 0
+									and
+									(
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'Personal Workspace'
+										or
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'My Space'
+										or
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'My Folders'
+									)
+								}" />
+					</ui:fragment>
+				
+					<a4j:commandLink
+						ajaxSingle="true"
+						rendered="#{userSpaceNavigation.currentSpace.id ne breadCrumbSpace.id}"
+						action="#{userSpaceNavigation.showSpace_UIAction(breadCrumbSpace)}"
+						title="click to view folder"
+						reRender="personalWorkSpaceTabAjaxPanel">
+		
+						<h:outputText styleClass="breadcrumb"
+							value="#{breadCrumbSpace.getAvailableLocalizedLabel(localeSelector.localeString)}"
+							rendered="#{index ne 0}" />
+						
+						<h:outputText styleClass="breadcrumb"
+							value="#{messages['space.my.space.root.name']}"
+							rendered="#{
+									index eq 0
+									and
+									(
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'Personal Workspace'
+										or
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'My Space'
+										or
+										breadCrumbSpace.getLocalizedLabelForLocale('en') eq 'My Folders'
+									)
+								}" />
+		
+					</a4j:commandLink>
+
+				</a4j:repeat>
+	
+				<div id="userSpaceNavigatorScrollableArea">
+					<ol style="list-style-type: none;">
+						<a4j:repeat value="#{userSpaceItems}" var="spaceItem">
+							<li style="float: left; width: 200px; height: 107px; text-align: center; margin: 0; padding: 0;">			
+								<span style="display: block; width: 100%; height: 32px; margin: 0 0 5px 0; padding: 0;">
+								<a4j:commandLink
+									ajaxSingle="true"
+									action="#{userSpaceNavigation.showSpace_UIAction(spaceItem.spaceItemObject)}"
+									reRender="personalWorkSpaceTabAjaxPanel"
+									rendered="#{spaceItem.type eq 'SPACE'}">
+								
+									<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/32/spaceFolder.png" 
+										width="32" height="32"/>
+								</a4j:commandLink>
+										
+								<!-- Content Object Icons -->
+								<a4j:commandLink
+									ajaxSingle="true"
+									onclick="showTab('objectEditorTab');"
+									rendered="#{spaceItem.type eq 'CONTENTOBJECT'}"
+									reRender="objectEditorAjaxPanel"
+									action="#{objectEditInit.editObject_UIAction(spaceItem.spaceItemObject.contentObject.id)}">
+										
+											<h:graphicImage
+												value="#{spaceItem.spaceItemObject.contentObjectIcon}"
+												width="32" height="32"
+												rendered="#{! spaceItem.spaceItemObject.thumbnailAvailable}" />
+		
+		
+											<a4j:outputPanel rendered="#{spaceItem.spaceItemObject.thumbnailAvailable}">
+										 		<img src="#{spaceItem.spaceItemObject.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+						 	  						height="32"/>
+											</a4j:outputPanel>
+		
+								</a4j:commandLink>
+								</span>				
+												
+								
+								<span style="display: block; width: 100%; height: 60px; max-height: 60px; overflow: hidden; margin: 0 0 10px 0; padding: 0;">
+									
+									<ui:fragment rendered="#{spaceItem.type eq 'SPACE'}">
+										<span id="#{spaceItem.spaceItemObject.id}" class="folderName">#{spaceItem.localizedLabel}</span>
+									</ui:fragment>
+									
+									<a4j:commandLink
+										ajaxSingle="true"
+										onclick="showTab('objectEditorTab');"
+										rendered="#{spaceItem.type eq 'CONTENTOBJECT'}"
+										value="#{spaceItem.localizedLabel}"
+										reRender="objectEditorAjaxPanel"
+										action="#{objectEditInit.editObject_UIAction(spaceItem.spaceItemObject.contentObject.id)}"
+										styleClass="objectName"
+										rel="#{spaceItem.spaceItemObject.contentObject.id}">
+									</a4j:commandLink>
+								</span>
+							</li>
+						</a4j:repeat>
+					</ol>
+				</div>
+				
+				<script type="text/javascript">
+				//<![CDATA[
+				/* Context Menu on Folders and objects*/
+					var objectContextMenu = 
+			    		[ 
+			    			{"#{messages['space.administration.copy.content.object.to.clipboard']}":function(menuItem,menu) 
+			    				{ 
+			    					var selectedObjectId = bcmslib.jQuery(this).attr("rel");
+			    					copyObjectToClipboard(selectedObjectId);
+			    				} 
+			    			},
+			    			{"#{messages['space.administration.delete.content.object.from.space']}":function(menuItem,menu) 
+			    				{ 
+			    					var selectedObjectId = bcmslib.jQuery(this).attr("rel"); 
+			    					removeObjectFromFolder(selectedObjectId); 
+			    				} 
+			    			}
+			    		];
+				
+			    	var folderContextMenu = 
+			    		[ {"#{messages['space.administration.delete.space']}":function(menuItem,menu) {var selectedFolderId = bcmslib.jQuery(this).attr("id"); deleteFolder(selectedFolderId); } } ];
+			    	
+					bcmslib.jQuery('#userSpaceNavigatorScrollableArea .folderName').contextMenu(folderContextMenu); 
+					bcmslib.jQuery('#userSpaceNavigatorScrollableArea .objectName').contextMenu(objectContextMenu);
+					bcmslib.jQuery("#userSpaceNavigatorScrollableArea .folderName").editable(
+							function(value, settings) {
+								var selectedFolderId = bcmslib.jQuery(this).attr("id");
+								renameFolder(selectedFolderId, value);
+								return(value);						
+							}, 
+							{ 
+						      tooltip		: "Double Click to rename, right click for menu",
+						      cssclass		: 'folderNameEdit',
+						      type			: 'textarea',
+						      rows			: "3",
+						      cols			: "26",
+						      onblur		: 'submit',
+						      event			: "dblclick",
+					  		});
+				//]]>
+				</script>
+			
+			</a4j:outputPanel>
+			
+			<a4j:jsFunction
+				name="addFolder"
+				action="#{userSpaceNavigation.addNewSpace_UIAction}"
+				reRender="personalWorkSpaceTabAjaxPanel,spaceTree"
+				ajaxSingle="true" />
+			
+			<a4j:jsFunction
+				name="renameFolder"
+				reRender="personalWorkSpaceTabAjaxPanel,spaceTree"
+				action="#{userSpaceNavigation.changeSpaceLocalizedLabel}"
+				ajaxSingle="true">
+				<a4j:actionparam
+					name="selectedFolderId"
+					assignTo="#{userSpaceNavigation.selectedSpaceId}" />
+				<a4j:actionparam
+					name="newFolderName"
+					assignTo="#{userSpaceNavigation.newSpaceName}" />
+			</a4j:jsFunction>
+			
+			<a4j:jsFunction
+				name="deleteFolder"
+				reRender="personalWorkSpaceTabAjaxPanel,spaceTree"
+				action="#{userSpaceNavigation.deleteSpace}"
+				ajaxSingle="true">
+				<a4j:actionparam
+					name="selectedFolderId"
+					assignTo="#{userSpaceNavigation.selectedSpaceId}" />
+			</a4j:jsFunction>
+			
+			<a4j:jsFunction 
+				name="reRenderFolder"
+				ajaxSingle="true"
+				reRender="personalWorkSpaceTabAjaxPanel"
+				action="#{userSpaceNavigation.reRenderSpace}">				
+			</a4j:jsFunction>
+			
+			<a4j:jsFunction 
+				name="removeObjectFromFolder"
+				ajaxSingle="true"
+				reRender="personalWorkSpaceTabAjaxPanel"
+				action="#{userSpaceNavigation.removeObjectFromSpace}">
+				<a4j:actionparam
+					name="selectedObjectId"
+					assignTo="#{userSpaceNavigation.selectedObjectId}" />				
+			</a4j:jsFunction>
+			
+			<a4j:jsFunction 
+				name="copyObjectToClipboard"
+				ajaxSingle="true"
+				reRender="clipboardPanel"
+				action="#{clipboard.copyContentObjectToClipboard_UIAction}">
+				<a4j:actionparam
+					name="selectedObjectId"
+					assignTo="#{clipboard.selectedObjectId}" />				
+			</a4j:jsFunction>
+			
+		</ui:composition>
+	</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://java.sun.com/jstl/core">
+	
+	<f:view contentType="text/html" />
+	
+	<head>
+		<title>Astroboa - Σφάλμα</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-store" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="keywords" content="Astroboa" />
+		<meta http-equiv="description" content="This is the login page of Astroboa" />
+		
+		<link rel="Shortcut Icon" type="image/x-icon"
+			href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
+			
+		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/niftyCorners.css" />
+
+		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/niftyPrint.css" media="print" />
+		
+		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/loginPage.css" />
+
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/nifty.js"></script>
+
+	</head>
+
+	<body>
+
+		<h:form id="errorForm">
+			<div id="wrapperArea">
+
+				<div id="header">
+					Astroboa - Open Source Enterprise Content Management
+				</div>
+
+
+				<div id="contentArea">
+					<ui:insert name="content">
+						Error Message goes here
+					</ui:insert>
+				</div>
+
+				<div id="footerArea">
+					<ui:insert name="footer">
+						<ui:include src="/WEB-INF/pageComponents/footer.xhtml" />
+					</ui:insert>
+				</div>
+			</div>
+
+
+		</h:form>
+
+		<script type="text/javascript">
+		//<![CDATA[
+			stopContentObjectAutoSave();
+				window.onload=function(){
+					if(!NiftyCheck())
+						return;
+					RoundedTop("div#wrapperArea","#FFF","#8395CB");
+					RoundedBottom("div#wrapperArea", "#FFF" ,"#8395CB");
+				}
+		//]]>
+		</script>
+	</body>
+</html>

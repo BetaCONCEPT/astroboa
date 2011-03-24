@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			
+			<a4j:outputPanel id="scriptInfoPanel">
+			
+				<div>
+					<p style="background: infobackground; font-size: 0.7em;">
+						#{messages['scriptEngine.script.run.info']}
+					</p>
+					
+					<a4j:commandButton value="#{messages['scriptEngine.script.save']}"
+						action="#{confirmationBean.initiateConfirmation(
+										'confirmation.panel.save.script.question', 
+										scriptEngine, 
+										'saveScriptToFileSystem',
+										scriptEngine.confirmationMessageForScriptSave, 
+										'scriptMessagePanel,scriptListPanel',
+										null,
+										confirmationBean.emptyArgumentArray)}"
+					onclick="editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+					oncomplete="openConfirmationDialog();"
+					reRender="confirmationDialogPanel" 
+					style="font-size: 0.8em;"/>
+	
+					<a4j:commandButton value="#{messages['scriptEngine.script.run']}"
+						action="#{scriptEngine.runScriptWithScriptEngine(loadedScriptFile.name)}"
+						reRender="scriptMessagePanel" 
+						ajaxSingle="true" 
+						style="font-size: 0.8em;"/>
+		
+					<ul style="font-size: 0.8em;" class="horizontalList">
+						<li>File Name: </li>
+						<li>
+							<h:inputText value="#{currentScriptFileName}" size="100"/>
+						</li>
+					</ul>
+				</div>
+		
+				<div id="scriptEngineEditor">		
+					
+					<script language="javascript" type="text/javascript">
+					//<![CDATA[
+						editAreaLoader.init({
+							id : "dynamicAreaForm:groovyEditor",		// textarea id
+							syntax: "java",			// syntax to be used for highgliting
+							start_highlight: true,		// to display with highlight mode on start-up
+							allow_toggle: false,
+							toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font, |, syntax_selection, |, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"							
+						});
+					//]]>
+					</script>
+					
+					<h:inputTextarea
+						id="groovyEditor" 
+						value="#{scriptSourceCode}"
+						style="font-size: 0.8em; width: 100%; height:100%; border: 1px solid #AAA;"/>
+					
+				</div>	
+
+			</a4j:outputPanel>
+			
+			<div id="parentOfResizableConslole">
+				<div id="scriptEngineConsole" class="scriptEngineConsole">
+					<a4j:outputPanel id="scriptMessagePanel">
+						<div style="font-size: 1.0em; font-weight: bold; color: #AAA; width: 100%;">
+						
+							<span  
+								onclick="toggleScriptEngineConsoleFullscreen('scriptEngineConsole', 'parentOfResizableConslole');"
+								style="display:block; width: 16px; height: 16px; float: right;  padding-right: 10px; background: url(./images/cms-icons/16/fugue/toggle-expand.png) no-repeat 0px center;">
+							</span>
+							#{messages['scriptEngine.outputconsole.header']}
+						</div>
+						
+						<hr style="margin: 5px 0 10px 0; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>	
+						
+						<div id="scriptEngineMessages">
+							<h:outputText value="#{scriptEngine.utilityAPI.scriptConsoleBuffer}"
+								escape="false"  style="font-size: 0.8em; color: #333;"/>
+						</div>
+					</a4j:outputPanel>
+				</div>
+			</div>
+			
+		</ui:composition>
+	</body>
+</html>

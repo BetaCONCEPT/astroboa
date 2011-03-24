@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	
+	<body>
+		<ui:composition>
+			<a4j:form id="headerForm">
+				<div id="header">
+					<div id="logo">
+						<img src="#{facesContext.externalContext.requestContextPath}/images/astroboa_white_small.png" width="20"
+							style="vertical-align: middle;" />
+						<span> ASTROBOA |  </span>
+						<span><h:outputText value="#{loggedInRepositoryUser.localizedLabelForConnectedRepository}"/></span>
+					</div>
+					<div id="userLoginInfo">
+						<span>#{loggedInRepositoryUser.displayName}
+							(#{loggedInRepositoryUser.identity}) | </span>
+							
+						<a4j:commandLink id="userDetailsEditButton" 
+							action="#{personInfoEditor.editPersonInfo_UIAction}"
+							reRender="dynamicTabAjaxPanel"
+							oncomplete="showDynamicTab('#{messages['user.account.edit']}');"
+							value="#{messages['user.account.edit']}"
+							ajaxSingle="true"/>
+						<span> | </span>
+						<a4j:outputPanel id="logoutPanel">
+						
+						<h:commandLink id="logoutButton" value="#{messages['logout']}"
+							action="#{login.logout}" immediate="true" 
+							rendered="#{! draft.hasLoggedInRepositoryUserItemsInDraft(loggedInRepositoryUser.repositoryUser.id)}"/>
+							
+						<a4j:commandLink id="logoutButton2" value="#{messages['logout']}"
+							rendered="#{draft.hasLoggedInRepositoryUserItemsInDraft(loggedInRepositoryUser.repositoryUser.id)}"
+							action="#{confirmationBean.initiateConfirmationWithActionOnOKAndFinalAction(
+											'confirmation.panel.delete.draft.question',
+											draft, 
+											'permanentlyRemoveDraftItemsForLoggedInRepositoryUser_UIAction',
+											confirmationBean.getArrayForCommaDelimitedObjects(loggedInRepositoryUser.repositoryUser.id),
+											login, 
+											'logout',
+											null,
+											'', 
+											'',
+											null
+											)}"
+							oncomplete="openConfirmationDialog();"
+							immediate="true"
+							reRender="confirmationDialogPanel"/>
+						</a4j:outputPanel>
+					</div>
+				</div>
+			</a4j:form>
+		</ui:composition>	
+	</body>
+</html>

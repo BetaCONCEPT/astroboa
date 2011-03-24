@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+	<body>
+		<ui:composition>
+			  
+			<div id="objectPropertyUrlCreationDialog" title="#{messages['content.object.edit.action.createObjectPropertyURL.dialogTitle']}">
+				<a4j:form id="objectPropertyUrlCreationDialogForm">
+		      		
+              		<a4j:jsFunction
+		              name="generateObjectPropertyUrlAndCopyToClipboard"
+		              reRender="objectPropertyUrlCreationDialogUrlBox,clipboardPanel"
+		              action="#{clipboard.selectedCmsPropertyWrapper.createURLForPropertyAndCopyItToClipboard_UIAction}">
+		              	<a4j:actionparam name="dispositionType" assignTo="#{clipboard.selectedCmsPropertyWrapper.selectedDispositionType}"/>
+		              	<a4j:actionparam name="imageWidth" assignTo="#{clipboard.selectedCmsPropertyWrapper.selectedImageWidth}"/>
+		              	<a4j:actionparam name="imageHeight" assignTo="#{clipboard.selectedCmsPropertyWrapper.selectedImageHeight}"/>
+		              	<a4j:actionparam name="aspectRatio" assignTo="#{clipboard.selectedCmsPropertyWrapper.selectedAspectRatio}"/>
+		              	<a4j:actionparam name="cropPolicy" assignTo="#{clipboard.selectedCmsPropertyWrapper.selectedCropPolicy}"/>
+		              	<a4j:actionparam name="friendlyUrl" assignTo="#{clipboard.selectedCmsPropertyWrapper.friendlyUrlSelected}"/>
+              		</a4j:jsFunction>
+              
+					<a4j:outputPanel id="objectPropertyUrlCreationDialogPanel" >
+						<div style="margin-top: 35px;">
+							<img id="objectPropertyUrlCreationDialogDispositionTypeHelp" src="images/cms-icons/12/info.png"/>
+							#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend']}
+						</div>
+
+						<ol class="formElementList">
+							<li class="formElement">
+								<label for="objectPropertyUrlCreationDialogDispostitionInline">#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline']}</label>
+								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionInline" name="dispositionType" checked="checked" value="INLINE"/>
+							</li>
+							<li>
+								<label for="objectPropertyUrlCreationDialogDispostitionAttachment">#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment']}</label>
+								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionAttachment" name="dispositionType" value="ATTACHMENT" />
+							</li>
+						</ol>
+						<div id="objectPropertyUrlCreationDialogDispositionTypeTooltip">
+							<h:outputText escape="false" 
+								value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip']}" />
+						</div>
+						
+						<ui:fragment 
+							rendered="#{clipboard.selectedCmsPropertyWrapper.simpleCmsPropertyValueWrappers[clipboard.selectedCmsPropertyWrapper.indexOfValueToBeCopied].isJPGorPNGorGIFImage()}">
+							<hr/>
+							<img  id="objectPropertyUrlCreationDialogImageSizeHelp" src="images/cms-icons/12/info.png"/>
+							#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend']}
+						
+								<ol class="formElementList">
+									<li class="formElement">
+										<label for="objectPropertyUrlCreationDialogImageWidth">#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageWidth']}</label>
+										<input id="objectPropertyUrlCreationDialogImageWidth" type="text" style="float: left; width: 50px;"/>
+										<label for="objectPropertyUrlCreationDialogImageHeight">#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageHeight']}</label>
+										<input id="objectPropertyUrlCreationDialogImageHeight" type="text" style="float: left; width: 50px;"/>
+									</li>
+									<li class="formElement">
+										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageAspectRatio']}</label>
+										<input id="objectPropertyUrlCreationDialogImageAspectRatio" type="text"/>
+									</li>
+									<li class="formElement">
+										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyTop']}</label>
+										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyTop" type="radio" name="cropPolicy" checked="checked" value="top"/>
+									</li>
+									<li class="formElement">
+										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyCenter']}</label>
+										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyCenter" type="radio" name="cropPolicy" value="center"/>
+									</li>
+									<li class="formElement">
+										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyBottom']}</label>
+										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyBottom" type="radio" name="cropPolicy" value="bottom"/>
+									</li>
+								</ol>
+							
+							<div id="objectPropertyUrlCreationDialogImageSizeTooltip">
+								<h:outputText escape="false"
+									value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageResizeAndCropTooltip']}" />
+							</div>
+						</ui:fragment>
+						
+						<div style="clear:both; border: 1px solid #ABABAB; margin: 10px 10px 10px 10px; padding: 10px 10px 10px 10px; font-size: 9px; color: blue;">
+							#{messages['content.object.edit.action.createObjectPropertyURL.dialogWarning']}
+						</div>
+						<div style="margin: 10 auto;">
+							<input type="button" onclick="generateObjectPropertyUrl(true);" value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogButton.createFriendlyURL']}"/>
+							<input type="button" onclick="generateObjectPropertyUrl(false);" value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogButton.createPermanentURL']}"/>
+						</div>
+						
+						<a4j:outputPanel id="objectPropertyUrlCreationDialogUrlBox" >
+							<ui:fragment rendered="#{!empty objectPropertyUrl}">
+								<div style="border: 1px solid #ABABAB; margin: 10px 10px 10px 10px; padding: 10px 10px 10px 10px; font-size: 9px; color: blue;">
+									#{objectPropertyUrl}
+								</div>
+							</ui:fragment>
+						</a4j:outputPanel>
+						
+						<script type="text/javascript">
+						//<![CDATA[
+							createUrlCreationDialogHelpMessages();
+							bcmslib.jQuery("#objectPropertyUrlCreationDialogForm input:not(input[type=button])").uniform();
+						//]]>
+						</script>
+						
+					</a4j:outputPanel>
+					
+				</a4j:form>
+			</div>
+			
+		</ui:composition>
+	</body>
+</html>

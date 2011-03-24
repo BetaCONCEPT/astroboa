@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<rich:dragIndicator id="parentSpaceIndicator" />
+			<rich:tree id="spaceTree" 
+				switchType="ajax"
+				style="text-align:left; overflow: auto;" 
+				value="#{spaceTree}"
+				var="node" 
+				nodeFace="#{node.type}">
+
+				<rich:treeNode type="USER_SPACE"
+					icon="/images/cms-icons/16/fugue/folder-horizontal.png"
+					iconLeaf="/images/cms-icons/16/fugue/folder-horizontal.png">
+					
+					
+					<rich:dragSupport dragIndicator="parentSpaceIndicator"
+						dragType="userSpace" dragValue="#{node}">
+
+						<!-- Null description cuases an error -->
+						<rich:dndParam name="label" type="drag"
+							value="#{ empty node.description ? ' ' : node.description}" />
+					</rich:dragSupport>
+					
+					<rich:dropSupport 
+						acceptedTypes="userSpace,contentObject"
+						reRender="spaceTree,personalWorkSpaceTabAjaxPanel"
+						dropListener="#{userSpaceNavigation.handleDraggedAndDroppedItem_Listener}"
+						dropValue="#{node}">
+					</rich:dropSupport>
+					
+					<a4j:commandLink
+							reRender="personalWorkSpaceTabAjaxPanel"
+							oncomplete="showTab('personalWorkSpaceTab');"
+							action="#{userSpaceNavigation.showSpace_UIAction(node.space)}">
+
+							<h:outputText value="#{node.description}"
+							rendered="#{!empty node.description}" />
+					</a4j:commandLink>
+					
+				</rich:treeNode>
+				
+				<rich:treeNode type="SHARED_SPACE"
+					icon="/images/cms-icons/16/fugue/folder-horizontal.png"
+					iconLeaf="/images/cms-icons/16/fugue/folder-horizontal.png">
+					
+					<rich:dragSupport dragIndicator="parentSpaceIndicator"
+						dragType="sharedSpace" dragValue="#{node}">
+
+						<!-- Null description cuases an error -->
+						<rich:dndParam name="label" type="drag"
+							value="#{ empty node.description ? ' ' : node.description}" />
+					</rich:dragSupport>
+					
+					<rich:dropSupport 
+						acceptedTypes="sharedSpace,contentObject"
+						reRender="spaceTree,sharedWorkSpaceTabAjaxPanel"
+						dropListener="#{sharedSpaceNavigation.handleDraggedAndDroppedItem_Listener}"
+						dropValue="#{node}">
+					</rich:dropSupport>
+					
+					<a4j:commandLink 
+							reRender="dynamicTabAjaxPanel"
+							oncomplete="showDynamicTab('#{messages['space.administration.organization.space.panel.header']}');"
+							action="#{sharedSpaceNavigation.showSpace_UIAction(node.space)}">
+
+							<h:outputText value="#{node.description}"
+							rendered="#{!empty node.description}" />
+					</a4j:commandLink>
+
+					
+				</rich:treeNode>
+
+			</rich:tree>
+
+		</ui:composition>
+	</body>
+</html>

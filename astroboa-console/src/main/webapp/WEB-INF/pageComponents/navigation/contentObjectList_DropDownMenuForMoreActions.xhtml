@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			
+				<rich:dropDownMenu 	submitMode="ajax">
+						<f:facet name="label"> 
+                    		<h:panelGroup>
+                        		<h:outputText value="#{messages['content.search.drop.down.menu.label']}"/>
+                    		</h:panelGroup>
+                		</f:facet>
+                		
+                		<ui:remove>
+                		<rich:menuGroup value="#{messages['content.search.drop.down.menu.view.options']}..." 
+							icon="/images/cms-icons/16/viewOptions.png" >
+
+                        	
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel" 
+								action="#{contentObjectList.changeContentObjectListView_UIAction('FullView')}">
+										#{messages['content.search.drop.down.menu.fullView.option']}
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel" 
+								action="#{contentObjectList.changeContentObjectListView_UIAction('ListView')}">
+										#{messages['content.search.drop.down.menu.listView.option']}
+							</rich:menuItem>
+							
+						</rich:menuGroup>
+						</ui:remove>
+						
+						<rich:menuGroup value="#{messages['content.search.drop.down.menu.rowsPerPage.option']}..." 
+							icon="/images/cms-icons/16/rowsPerPage.png" >
+
+                        	
+							<rich:menuItem ajaxSingle="true"  reRender="listViewContentObjectTable,listViewContentObjectTableDataScroller" 
+								icon="#{pageController.rowsPerDataTablePage eq 10 ? '/images/cms-icons/16/ok.png': ''}"
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(10)}">
+										10
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel" 
+							icon="#{pageController.rowsPerDataTablePage eq 15 ? '/images/cms-icons/16/ok.png': ''}"
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(15)}">
+										15
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel"
+							icon="#{pageController.rowsPerDataTablePage eq 20 ? '/images/cms-icons/16/ok.png': ''}" 
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(20)}">
+										20
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel"
+							icon="#{pageController.rowsPerDataTablePage eq 25 ? '/images/cms-icons/16/ok.png': ''}" 
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(25)}">
+										25
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel"
+							icon="#{pageController.rowsPerDataTablePage eq 30 ? '/images/cms-icons/16/ok.png': ''}" 
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(30)}">
+										30
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="ajaxDynamicAreaPanel" 
+							icon="#{pageController.rowsPerDataTablePage eq 50 ? '/images/cms-icons/16/ok.png': ''}"
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(50)}">
+										50
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"  reRender="listViewContentObjectTable,listViewContentObjectTableDataScroller"
+							icon="#{pageController.rowsPerDataTablePage eq 100 ? '/images/cms-icons/16/ok.png': ''}" 
+								action="#{pageController.changeRowsPerDataTablePage_UIAction(100)}">
+										100
+							</rich:menuItem>
+							
+							
+						</rich:menuGroup>
+						
+                		<rich:menuSeparator id="menuSeparator0" />
+                		
+						<rich:menuGroup value="#{messages['content.search.drop.down.menu.export.to.xml']}..." 
+							rendered="#{! empty contentObjectList.labelForFileGeneratedWhenExportingListToXml}"
+							icon="/images/cms-icons/32/xml.png" >
+
+                        	
+							<rich:menuItem ajaxSingle="true"  submitMode="server"
+								action="#{xmlExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, 
+								contentObjectList.labelForFileGeneratedWhenExportingListToXml)}">
+										#{messages['content.search.drop.down.menu.all.option']}
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true" submitMode="server"
+								action="#{xmlExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+									contentObjectList.labelForFileGeneratedWhenExportingListToXml)}">
+										#{messages['content.search.drop.down.menu.selected.option']}
+							</rich:menuItem>
+						
+						</rich:menuGroup>
+						
+						<rich:menuGroup value="#{messages['content.search.drop.down.menu.export.to.excel']}..."
+							icon="/images/cms-icons/32/Excel_Mac_32.png" >
+                        	
+							<rich:menuItem ajaxSingle="true" submitMode="server"
+								action="#{excelExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, localeSelector.localeString)}">
+									#{messages['content.search.drop.down.menu.all.option']}
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true" submitMode="server"
+								action="#{excelExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+									localeSelector.localeString)}">
+									#{messages['content.search.drop.down.menu.selected.option']}
+							</rich:menuItem>
+						
+						</rich:menuGroup>
+					
+                		<rich:menuSeparator id="menuSeparator1" />
+                		
+						<rich:menuGroup value="#{messages['content.search.drop.down.menu.delete']}..." 
+							icon="/images/cms-icons/16/deleteTag.png" >
+
+                        	
+							<rich:menuItem ajaxSingle="true"  submitMode="ajax"
+								action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
+											deleteContentObjectBean, 
+											'deleteContentObjectsInList',
+											null, 
+											'ajaxDynamicAreaPanel,topicTreePanel,cmsTree,clipboardTable',
+											null,
+											contentObjectStatefulSearchService.localContentObjectCriteria)}"
+								onclick="openConfirmationDialog();"
+								reRender="confirmationDialogPanel">
+										#{messages['content.search.drop.down.menu.all.option']}
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true" submitMode="ajax"
+							action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
+											deleteContentObjectBean, 
+											'deleteContentObjectSelection',
+											null, 
+											'ajaxDynamicAreaPanel,topicTreePanel,cmsTree,clipboardTable',
+											null,
+											contentObjectStatefulSearchService.contentObjectSelection)}"
+								onclick="openConfirmationDialog();"
+								reRender="confirmationDialogPanel">
+										#{messages['content.search.drop.down.menu.selected.option']}
+							</rich:menuItem>
+						
+						</rich:menuGroup>
+						
+					 	<rich:menuSeparator id="menuSeparator2" />
+
+					
+						<rich:menuItem ajaxSingle="true" reRender="ajaxDynamicAreaPanel"
+							action="#{contentObjectStatefulSearchService.contentObjectSelection.clearAllSelectedContentObjects_UIAction()}">
+									#{messages['content.search.drop.down.menu.clear.selected.option']}
+						</rich:menuItem>
+					
+					</rich:dropDownMenu>
+						
+		</ui:composition>
+	</body>
+</html>
+

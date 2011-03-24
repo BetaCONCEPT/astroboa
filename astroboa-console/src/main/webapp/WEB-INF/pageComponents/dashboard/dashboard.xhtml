@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:jp="http://www.jenia.org/jsf/popup"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<a4j:outputPanel id="dashboardAjaxPanel">
+				<div id="dashboardScrollableArea">
+				
+					<div class="portletColumn">
+					
+						<div class="portlet loggedInUserRecentlyAddedOrModifiedContent">
+							<div class="portlet-header">
+								#{messages['dashboard.loggedInUser.recently.added.or.modified.content.objects.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/loggedInUserRecentlyAddedOrModifiedContent.xhtml" />
+							</div>
+						</div>
+						
+					
+					
+						<div class="portlet recentlyAddedOrModifiedContent">
+							<div class="portlet-header">
+								#{messages['dashboard.recently.added.or.modified.content.objects.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/recentlyAddedOrModifiedContent.xhtml" />
+							</div>
+						</div>
+					
+						<div class="portlet recentlyAddedOrModifiedPublishedContent">
+							<div class="portlet-header">
+								#{messages['dashboard.recently.added.or.modified.published.content.objects.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/recentlyAddedOrModifiedPublishedContent.xhtml" />
+							</div>
+						</div>
+						
+						<div class="portlet mostReadPublishedContentObjects">
+							<div class="portlet-header">
+								#{messages['dashboard.most.read.published.content.objects.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/mostReadPublishedContentObjects.xhtml" />
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="portletColumn">
+						<div class="portlet contentObjectsSubmittedForWebPublishing">
+							<div class="portlet-header">
+								#{messages['dashboard.content.objects.submitted.for.web.publishing.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/contentObjectsSubmittedForWebPublishing.xhtml" />
+							</div>
+						</div>
+						
+						<div class="portlet contentObjectsSubmittedByExternalUserForWebPublishing">
+							<div class="portlet-header">
+								#{messages['dashboard.content.objects.submitted.by.external.user.for.web.publishing.dashboard.item.label']}
+							</div>
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/contentObjectsSubmittedByExternalUserForWebPublishing.xhtml" />
+							</div>
+						</div>
+						
+						<div class="portlet contentObjectsTemporarilyRejectedForReauthoring">
+							<div class="portlet-header">
+								#{messages['dashboard.content.objects.temporarily.rejected.for.reauthoring.dashboard.item.label']}
+							</div>	
+							<div class="portlet-content">
+								<ui:include
+									src="/WEB-INF/pageComponents/dashboard/contentObjectsTemporarilyRejectedForReauthoring.xhtml" />
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			
+				<script type="text/javascript">
+				//<![CDATA[
+					bcmslib.jQuery(createDashBoardPortlets());
+				//]]>
+				</script>
+			</a4j:outputPanel>
+			
+			<a4j:jsFunction 
+					name="refreshLoggedInUserRecentlyAddedOrModifiedContent"
+					reRender="loggedInUserRecentlyAddedOrModifiedContentObjectPanel"
+					action="#{loggedInUserRecentlyAddedOrModifiedContentObjectsDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshRecentlyAddedOrModifiedContent"
+					reRender="recentlyAddedOrModifiedContentObjectPanel"
+					action="#{recentlyAddedOrModifiedContentObjectsDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshRecentlyAddedOrModifiedPublishedContent"
+					reRender="recentlyAddedOrModifiedPublishedContentObjectPanel"
+					action="#{recentlyAddedOrModifiedPublishedContentObjectsDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshMostReadPublishedContentObjects"
+					reRender="mostReadPublishedContentObjectsPanel"
+					action="#{mostReadPublishedContentObjectsDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshContentObjectsSubmittedForWebPublishing"
+					reRender="contentObjectsSubmittedForWebPublishingPanel"
+					action="#{contentObjectsSubmittedForWebPublishingDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshContentObjectsSubmittedByExternalUserForWebPublishing"
+					reRender="contentObjectsSubmittedByExternalUserForWebPublishingPanel"
+					action="#{contentObjectsSubmittedByExternalUserForWebPublishingDashboardItem.clear()}"
+					ajaxSingle="true"/>
+					
+			<a4j:jsFunction 
+					name="refreshContentObjectsTemporarilyRejectedForReauthoring"
+					reRender="contentObjectsTemporarilyRejectedForReauthoringPanel"
+					action="#{contentObjectsTemporarilyRejectedForReauthoringDashboardItem.clear()}"
+					ajaxSingle="true"/>
+							
+		</ui:composition>
+	</body>
+</html>
+

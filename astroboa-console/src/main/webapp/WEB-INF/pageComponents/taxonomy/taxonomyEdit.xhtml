@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<ul class="horizontalList">
+				<li>
+					<!--  Upload taxonomy XML-->
+					<ui:remove>
+					<a4j:commandLink id="taxonomyXMLUploadCommnad"
+						style="padding-left: 20px; background: url(images/cms-icons/16/up.png) no-repeat 0px center;"
+						oncomplete="jQuery('#taxonomyImport').show('slow');"
+						immediate="true"
+						value="#{messages['taxonomy.taxonomy.xml.upload.panel.header']}"/>
+					</ui:remove>
+					<a href="#" onclick="openImportTaxonomyXmlDialog();"
+						style="padding-left: 20px; background: url(images/cms-icons/16/up.png) no-repeat;">
+						#{messages['taxonomy.taxonomy.xml.upload.panel.header']}
+					</a>
+				</li>
+				
+				<li>
+					<!--  Export taxonomy to XML-->
+					<a4j:htmlCommandLink
+						style="padding-left: 20px; background: url(images/cms-icons/16/up.png) no-repeat 0px center;"
+						action="#{xmlExportBean.exportTaxonomy(taxonomyEditor.editedTaxonomy)}">
+						#{messages['taxonomy.tree.context.menu.export.to.xml']}
+					</a4j:htmlCommandLink>
+				</li>
+									
+				<li>				
+					<a4j:commandLink
+						style="padding-left: 20px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 0px center;"
+						action="#{taxonomyEdit.addNewTaxonomy}"
+						reRender="taxonomyAndTopicEditorPanel"
+						value="#{messages['taxonomy.panel.add.taxonomy']}"
+						ajaxSingle="true"/>
+				</li>
+						
+			</ul>
+			
+			<hr style="margin: 5px 0 10px 0; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+				
+			<a4j:outputPanel id="taxonomyAndTopicEditorPanel">
+				<ui:include src="/WEB-INF/pageComponents/taxonomy/taxonomyEditor.xhtml" />
+				
+				<ui:include src="/WEB-INF/pageComponents/taxonomy/topicEditor.xhtml" />
+			</a4j:outputPanel>
+			
+			
+		</ui:composition>
+
+	</body>
+
+</html>

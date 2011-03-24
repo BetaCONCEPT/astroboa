@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+
+		<ui:composition>		
+						
+			<div id="cmsDefinitionTreeForSearch">
+				<ui:remove><strong>#{messages['advancedSearch.definition.tree.panel.header']}</strong></ui:remove>
+				Object Properties
+				<hr />
+				<a4j:outputPanel id="objectTypeTree">
+				<ui:include
+					src="/WEB-INF/pageComponents/search/definitionTreeOfCmsPropertiesOFAContentTypeForContentObjectSearch.xhtml" />
+				</a4j:outputPanel>
+			</div>
+						
+					
+				
+			<div id="advancedSearchFormFields">
+				<ol class="formElementList">
+					<!-- Content Object Identifier -->
+					<li class="formElement">
+						<label for="contentObjectIdentifier">#{messages['advancedSearch.criteria.tab.global.contentObject.id']}</label>
+						<h:inputText id="contentObjectIdentifier" 
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectIdentifier}" />
+					</li>
+					
+					<!-- System Name -->
+					<li class="formElement">
+						<label for="contentObjectSystemName">#{messages['advancedSearch.criteria.tab.global.contentObject.system.name']}</label>
+						<h:inputText id="contentObjectSystemName" 
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectSystemName}" />
+					</li>
+	
+					<!-- Search text -->
+					<li class="formElement">
+						<label for="searchedText">#{messages['advancedSearch.criteria.tab.global.contain']}</label>
+						<h:inputText id="searchedText"
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.searchedText}" />
+					</li>
+					
+					<!-- System Entities -->
+					<li class="formElement">
+						<label for="searchModeFilter">#{messages['advancedSearch.criteria.tab.global.search.mode']}</label>
+				
+						<h:selectOneRadio id="searchModeFilter"
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedSearchModeFilter}">
+							<f:selectItem itemValue="SEARCH_ALL_ENTITIES" itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.all.entities']}" />
+							<f:selectItem itemValue="SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES"	itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.system.entities']}" />
+							<f:selectItem itemValue="SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES" itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.non.system.entities']}" />
+						</h:selectOneRadio>
+					</li>
+					
+					<!-- Owner Criteria -->
+					<li class="formElement">
+						<label for="ownerFilter">#{messages['advancedSearch.criteria.tab.global.owner']}</label>
+						<h:selectOneRadio id="ownerFilter"
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedOwnerFilter}">
+							<f:selectItem itemValue="1" itemLabel="#{messages['advancedSearch.criteria.tab.global.owner.me']}" />
+							<!-- DISABLED DUE TO SUPPORT OF EXTERNAL IDM  <f:selectItem itemValue="2"
+								itemLabel="#{messages['advancedSearch.criteria.tab.global.owner.groups']}" />-->
+							<f:selectItem itemValue="3" itemLabel="#{messages['advancedSearch.criteria.tab.global.owner.anyone']}" />
+						</h:selectOneRadio>
+					</li>
+					
+					<!-- Type criteria. Do not forget value change listener -->
+					<li class="formElement">
+						<label for="typeFilter">#{messages['advancedSearch.criteria.tab.global.content.type']}</label>
+						<h:selectOneMenu id="typeFilter"
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectType}"
+							valueChangeListener="#{contentObjectSearchByCriteria.generateDefinitionTree_UIAction}">
+							<f:selectItem itemValue="" itemLabel="#{messages['advancedSearch.criteria.tab.global.content.type.all']}" />
+							<f:selectItems value="#{contentObjectTypesAsSelectItems}" />
+							<a4j:support ajaxSingle="true" event="onchange"
+								reRender="objectTypeTree" />
+						</h:selectOneMenu>
+					</li>
+					
+					<!-- Modified date -->
+					
+					<li class="formElement">
+						<label>#{messages['advancedSearch.criteria.tab.global.created.modified.from']}</label>
+						<rich:calendar
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedFromDate}"
+							id="fromDate" datePattern="dd/MM/yyyy" popupCalendar="true"
+							showApplyButton="false" />
+					</li>
+					
+					<li class="formElement">
+						<label>#{messages['advancedSearch.criteria.tab.global.created.modified.to']}</label>
+						<rich:calendar
+							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedToDate}"
+							id="toDate"  datePattern="dd/MM/yyyy" popupCalendar="true"
+							showApplyButton="false" />
+					</li>
+				</ol>
+				
+				<div id="advancedSearchButtons">
+					<center>
+						<a4j:commandButton
+							action="#{contentObjectSearchByCriteria.searchForContentWithPagedResults_UIAction}"
+							reRender="searchResultsAjaxPanel" 
+							oncomplete="showTab('searchResultsTab');"
+							value="#{messages['advancedSearch.criteria.table.search.button']}" />
+							
+						<a4j:commandButton
+							action="#{contentObjectSearchByCriteria.initialize_UIAction}"
+							reRender="dynamicTabAjaxPanel" 
+							value="#{messages['advancedSearch.criteria.table.reset.button']}"/>
+							
+					</center>
+				</div>
+				
+			
+				
+				
+				
+				<div style="margin-top: 40px; border: 1px solid #AAAAAA;">					
+				<a4j:outputPanel id="criteriaPanel" >
+					
+					<h4>#{messages['advancedSearch.criteria.panel.header']}</h4>
+					
+					<p style="color: #777777; font-size: 0.9em;">#{messages['advancedSearch.criteria.panel.description.line1']}
+       				
+       				#{messages['advancedSearch.criteria.panel.description.line2']}
+					
+					#{messages['advancedSearch.criteria.panel.description.line3']}</p>
+       							
+
+							<rich:dataTable id="criterionEditor" style="border-width: 0px;"
+								value="#{criterionWrappers}" var="criterionWrapper"
+								rowClasses="editorTableRowClass"
+								columnClasses="editorTableColumnClass" width="100%">
+
+								<f:facet name="header">
+
+									<rich:columnGroup>
+										<rich:column>
+											<a4j:outputPanel layout="block" ajaxSingle="true">
+												<rich:dropSupport acceptedTypes="criterionPropertyPath"
+													reRender="criteriaPanel"
+													dropListener="#{contentObjectSearchByCriteria.createACriterionWrapperFromDraggedDefinition_Listener}">
+												</rich:dropSupport>
+
+												<h:panelGrid columns="2" cellpadding="2">
+													<img
+														src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/dragAndDrop.png" />
+
+													<h:outputText value="#{messages['advancedSearch.criteria.table.column.property']}" />
+												</h:panelGrid>
+
+											</a4j:outputPanel>
+
+
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['advancedSearch.criteria.table.column.operator']}" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['advancedSearch.criteria.table.column.value']}" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['advancedSearch.criteria.table.column.sort']}" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{messages['advancedSearch.criteria.table.column.actions']}" />
+										</rich:column>
+									</rich:columnGroup>
+
+								</f:facet>
+								<rich:column>
+
+									<a4j:outputPanel layout="block" ajaxSingle="true">
+										<rich:dropSupport acceptedTypes="criterionPropertyPath"
+											reRender="criteriaPanel" dropValue="#{criterionWrapper}"
+											dropListener="#{contentObjectSearchByCriteria.addDraggedDefinitionToCriterion_Listener}">
+										</rich:dropSupport>
+										<h:panelGrid columns="2" cellpadding="2">
+											<img
+												src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/dragAndDrop.png" />
+
+											<h:outputText id="criterionLocalizedLabel"
+												value="#{criterionWrapper.propertyLocalizedLabel}" />
+										</h:panelGrid>
+									</a4j:outputPanel>
+
+								</rich:column>
+								<rich:column>
+								   <center>
+									<h:selectOneMenu id="queryOperatorFilter"
+										value="#{criterionWrapper.queryOperator}"
+										rendered="#{! empty criterionWrapper.queryOperatorsAsSelectItems}">
+										<f:selectItems
+											value="#{criterionWrapper.queryOperatorsAsSelectItems}" />
+										<a4j:support event="onchange" reRender="valueComponent" />
+									</h:selectOneMenu>
+									</center>
+								</rich:column>
+								<rich:column>
+								  <center>
+									<a4j:outputPanel id="valueComponent" layout="block">
+
+										<!-- Input Text for String, Long, Double -->
+										<h:inputText value="#{criterionWrapper.value}"
+											rendered="#{ ! empty criterionWrapper.propertyValueType
+													 and ! empty criterionWrapper.queryOperator
+													 and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
+													 and criterionWrapper.queryOperator ne 'IS_NULL'
+													 and criterionWrapper.propertyValueType ne 'Boolean'
+													 and criterionWrapper.propertyValueType ne 'Date' 
+													 and criterionWrapper.propertyValueType ne 'Complex'
+													 and criterionWrapper.propertyValueType ne 'Topic'
+													 and criterionWrapper.propertyValueType ne 'ContentObject'}" />
+
+										<!-- Select Box for Boolean -->
+										<h:selectOneRadio id="booleanSelectOneRadio"
+											value="#{criterionWrapper.value}" style="font-size: 0.95em"
+											rendered="#{criterionWrapper.propertyValueType eq 'Boolean' 
+														and ! empty criterionWrapper.queryOperator
+														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
+													 	and criterionWrapper.queryOperator ne 'IS_NULL'}">
+											<f:selectItem itemValue="true"
+												itemLabel="#{messages['boolean.radio.true']}" />
+											<f:selectItem itemValue="false"
+												itemLabel="#{messages['boolean.radio.false']}" />
+										</h:selectOneRadio>
+
+										<!-- Calendar component for Date -->
+										<rich:calendar style="font-size: 0.9em;" popupCalendar="true"
+											size="10" value="#{criterionWrapper.value}"
+											datePattern="dd/MM/yyyy HH:mm" enableManualInput="false"
+											rendered="#{criterionWrapper.propertyValueType eq 'Date' 
+														and ! empty criterionWrapper.queryOperator
+														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
+													 	and criterionWrapper.queryOperator ne 'IS_NULL'}" />
+										
+										<!-- Topic suggestion box and drag and drop area -->
+										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'Topic'
+														and ! empty criterionWrapper.queryOperator 
+														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
+													 	and criterionWrapper.queryOperator ne 'IS_NULL'}"
+											keepTransient="true">
+
+											<ui:include
+												src="/WEB-INF/pageComponents/search/topicSelectionForSearch.xhtml">
+												<!--  Need to pass property wrapper to xhtml to -->
+												<ui:param name="criterionWrapper"
+													value="#{criterionWrapper}" />
+											</ui:include>
+										</a4j:outputPanel>
+
+										<!-- ContentObject suggestion box and drag and drop area -->
+										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'ContentObject' 
+														and ! empty criterionWrapper.queryOperator
+														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
+													 	and criterionWrapper.queryOperator ne 'IS_NULL'}"
+											keepTransient="true">
+
+											<ui:include
+												src="/WEB-INF/pageComponents/search/contentObjectSelectionForSearch.xhtml">
+												<!--  Need to pass property wrapper to xhtml to -->
+												<ui:param name="criterionWrapper"
+													value="#{criterionWrapper}" />
+											</ui:include>
+										</a4j:outputPanel>
+
+									</a4j:outputPanel>
+									</center>
+								</rich:column>
+								<rich:column>
+								<!-- Check Box for Ordering -->
+										<h:selectOneRadio id="orderSelectOneRadio"  
+											value="#{criterionWrapper.order}" 
+											rendered="#{criterionWrapper.propertyValueType eq 'Boolean'
+														or criterionWrapper.propertyValueType eq 'String'
+														or criterionWrapper.propertyValueType eq 'Long'
+														or criterionWrapper.propertyValueType eq 'Double'
+														or criterionWrapper.propertyValueType eq 'Date' 
+														}">
+											<f:selectItem itemValue="ascending" 
+												itemLabel="#{messages['order.ascending']}" />
+											<f:selectItem itemValue="descending"
+												itemLabel="#{messages['order.descending']}" />
+											<a4j:support
+											 action="#{criterionWrapper.clearOrder_Listener}"
+												ajaxSingle="true"
+												event="ondblclick"
+												reRender="orderSelectOneRadio" />
+										</h:selectOneRadio>
+								</rich:column>
+								<rich:column>
+									<center>
+										<a4j:commandLink
+											action="#{contentObjectSearchByCriteria.deleteCriterionWrapper_UIAction}"
+											reRender="criteriaPanel">
+											<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+										</a4j:commandLink>
+									</center>
+								</rich:column>
+							</rich:dataTable>
+
+						
+					
+					</a4j:outputPanel>
+					</div>	
+				</div>			
+			
+			
+			<script type="text/javascript" charset="utf-8">
+			//<![CDATA[
+				bcmslib.jQuery(function(){
+					bcmslib.jQuery("#advancedSearchFormFields input, #advancedSearchFormFields textarea, #advancedSearchFormFields select, #advancedSearchFormFields input[type=button]").uniform();
+				});
+			//]]>
+			</script>
+			
+		</ui:composition>
+	</body>
+</html>
+

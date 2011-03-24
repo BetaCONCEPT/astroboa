@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:bcc="http://www.betaconceptframework.org/facelets/components">
+
+	<body>
+		<ui:composition>
+			<rich:spacer height="3"/>
+			
+			<div id="contentObjectSubjectArea2" style="clear: both;">
+				<fieldset id="contentObjectUserTagsFieldBox2" class="contentObjectUserTagsFieldBox">
+					<legend>ΠΡΟΣΘΕΣΘΕ ΤΙΣ ΔΙΚΕΣ ΣΑΣ ΕΤΙΚΕΤΕΣ ΚΑΤΗΓΟΡΙΟΠΟΙΗΣΗΣ</legend>
+					
+					<div id="contentObjectSubjectInputAreaInContentObjectList"
+						style="clear: both; float: left; width: 45%;">
+
+						<div id="contentObjectUserTagsAreaInContentObjectList"
+							class="contentObjectUserTagsArea2">
+
+							<h:outputText id="addUsedTagMessageInContentObjectList"
+								value="Χρησιμοποιείστε το πεδίο που ακολουθεί για να προσθέσετε νέες ετικέτες ή διαλέξετε από τις ετικέτες που έχετε ήδη χρησιμοποιήσει." />
+							<br />
+							<h:outputText
+								value="Μπορείτε επίσης να χρησιμοποιήσετε τα κουμπιά στη λίστα επιλεγμένων ετικετών για να αφαιρέσετε ετικέτες που προσθέσατε τώρα ή παλιότερα" />
+							<h:panelGroup>
+								<h:panelGrid columns="1">
+									<h:inputText value="#{contentObjectSubjectManagement.newTagLabel}"
+										id="loggedInUserNewTagLabelInContentObjectList"
+										styleClass="formItemClass">
+										<bcc:validateCapitalsOnly
+											errorMessage="Ετικέτα χρήστη : #{messages['validator.capitalsOnly']}" />
+									</h:inputText>
+									<h:message 
+										for="loggedInUserNewTagLabelInContentObjectList" 
+										infoStyle="background: url(images/cms-icons/16/navigation.png) no-repeat; color: #f00; height: 16px; padding-top: 3px; text-align: left; text-indent: 22px;"/>
+									
+									
+									<a4j:commandButton id="addLoggedInUserTag_InContentObjectList" 
+										value="Προσθήκη Νέας Ετικέτας" 
+										styleClass="buttonClass" 
+										action="#{contentObjectSubjectManagement.addNewUserTagToContentObjectSubject_UIAction}"
+										reRender="ajaxDynamicAreaPanel,myTags">
+										<a4j:actionparam 
+											name="selectedContentObjectIdToTag"
+											assignTo="#{contentObjectSubjectManagement.selectedContentObjectIdToTag}" 
+											value="#{contentObjectUIWrapper.contentObject.id}" />
+									</a4j:commandButton>
+									
+								</h:panelGrid>
+							</h:panelGroup>
+							<div class="spacer5px">
+								&nbsp;
+							</div>
+
+							<h:outputText id="myTagsMessageInContentObjectList" value="Οι Ετικέτες μου"
+								style="font-size: 10px; font-weight: bold; font-color: #666666;" />
+							<div id="loggedInUserTagsInContentObjectListArea" class="loggedInUserTagsArea">
+									<rich:dataList id="loggedInUserTagsTableInContentObjectList"
+										value="#{contentObjectSubjectManagement.loggedInUserTags}" var="topic" >
+										<a4j:commandLink id="loggedInUserTagInContentObjectListCommandLink" 
+											value=" [#{topic.localizedLabelForCurrentLocale}]"
+											action="#{contentObjectSubjectManagement.addExistingUserTagToContentObjectSubject_UIAction}"
+											styleClass="contentObjectSubjectInContentObjectList"
+											title="Πατήστε για να προσθέσετε την Ετικέτα στη λίστα"
+											reRender="ajaxDynamicAreaPanel">
+											<a4j:actionparam
+												name="selectedLoggedInUserTagId"
+												assignTo="#{contentObjectSubjectManagement.selectedLoggedInUserTagId}"
+												value="#{topic.id}" />
+											<a4j:actionparam
+												name="selectedContentObjectIdToTag"
+												assignTo="#{contentObjectSubjectManagement.selectedContentObjectIdToTag}"
+												value="#{contentObjectUIWrapper.contentObject.id}" />	
+										</a4j:commandLink>
+									</rich:dataList>
+							</div>
+						</div>
+					</div>
+					
+					<div id="contentObjectSubjectOutputArea2"
+						style="float: left; width: 53.5%; border: 1px solid #777; margin-left: 5px;">
+						<div class="leftBarMenuTitle2">
+							<h:outputText
+								value="Λίστα Επιλεγμένων Ετικετών" />
+						</div>
+						
+							<rich:dataTable
+								value="#{contentObjectUIWrapper.tagsAddedByLoggedInUser}"
+								var="topic"
+								width="100%">
+									<rich:column>
+										<h:outputText styleClass="userTagInSubjectOutputArea" 
+											value="#{topic.localizedLabelForCurrentLocale}" />
+									</rich:column>
+								
+									<rich:column>
+										<a4j:commandLink
+											action="#{contentObjectSubjectManagement.removeTopicFromContentObjectSubject_UIAction}"
+											title="Πατήστε για να αφαιρέσετε το Θέμα από τη λίστα"
+											reRender="ajaxDynamicAreaPanel">
+											<a4j:actionparam
+												name="selectedTopicIdForRemovalFromContentObjectSubject"
+												assignTo="#{contentObjectSubjectManagement.selectedTopicIdForRemovalFromContentObjectSubject}"
+												value="#{(empty topic.id)? topic.localizedLabelForCurrentLocale : topic.id}" />
+											<a4j:actionparam
+												name="selectedContentObjectIdToTag"
+												assignTo="#{contentObjectSubjectManagement.selectedContentObjectIdToTag}"
+												value="#{contentObjectUIWrapper.contentObject.id}" />
+											<h:graphicImage value="images/delete.jpg"  width="16" height="16" styleClass="imageMiddleAlign" />
+										</a4j:commandLink>
+									</rich:column>
+							</rich:dataTable>
+							
+					</div>
+					
+					
+				</fieldset>
+			</div>
+		</ui:composition>
+	</body>
+</html>

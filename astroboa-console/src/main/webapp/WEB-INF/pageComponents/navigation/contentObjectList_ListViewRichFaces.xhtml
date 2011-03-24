@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:jdt="http://www.jenia.org/jsf/dataTools">
+
+	<body>
+		<ui:composition>
+			<div style="padding: 5px 5px 5px 5px;">
+
+				<rich:dataTable id="listViewContentObjectTable"
+					styleClass="listViewContentObjectTable"
+					binding="#{uiComponentBinding.listViewContentObjectTableComponent}"
+					rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
+					rows="#{pageController.rowsPerDataTablePage}"
+					value="#{contentObjectStatefulSearchService.returnedContentObjects}"
+					var="contentObjectUIWrapper"
+					rowKeyVar="rowKey"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					columnClasses="listViewTableCol"
+					width="100%">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>#</rich:column>
+							<rich:column>
+							
+								<h:panelGrid columns="1">
+								<a4j:commandLink value="#{messages['content.search.selected.all.page.rows']}" 
+									ajaxSingle="true"
+									reRender="searchResultsAjaxPanel" 
+									action="#{contentObjectStatefulSearchService.contentObjectSelection.selectContentObjectsOfCurrentPage_UIAction(
+									contentObjectStatefulSearchService.returnedContentObjects,
+									uiComponentBinding.listViewContentObjectTableComponent)}"/>
+								
+								
+									<a4j:commandLink value="#{messages['content.search.clear.selected.page.rows']}" ajaxSingle="true"
+										reRender="searchResultsAjaxPanel" 
+											action="#{contentObjectStatefulSearchService.contentObjectSelection.clearSelectedContentObjectsOfCurrentPage_UIAction(
+												contentObjectStatefulSearchService.returnedContentObjects,
+												uiComponentBinding.listViewContentObjectTableComponent)}"/>
+									</h:panelGrid>
+							</rich:column>
+										
+							<rich:column>
+								#{messages['contentSearch.list.header.thumbnail']}
+							</rich:column>
+							
+							<rich:column>
+								#{messages['contentSearch.list.header.views']}
+							</rich:column>
+							
+							<rich:column>
+								#{messages['contentSearch.list.header.status']}
+							</rich:column>
+							
+							<rich:column>
+								#{messages['contentSearch.list.header.type']}
+							</rich:column>
+
+							<rich:column styleClass="title">
+								#{messages['contentSearch.list.header.title']}
+							</rich:column>
+
+							<rich:column>
+								#{messages['contentSearch.list.header.dates']}
+							</rich:column>
+
+							<rich:column>
+								#{messages['contentSearch.list.header.owner']}
+							</rich:column>
+
+							<rich:column styleClass="actions">
+								#{messages['contentSearch.list.header.actions']}
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					
+					<rich:column>#{rowKey +1}</rich:column>
+					
+					<rich:column>
+						<center>
+							<jdt:multipleRowsSelector id="selectedContentObjects"
+									selectionList="#{contentObjectStatefulSearchService.contentObjectSelection.selectedContentObjects}"/>
+						</center>
+					</rich:column>
+								
+					<rich:column>
+						<a4j:outputPanel layout="block">
+								
+							<ui:remove>
+							<rich:dropSupport acceptedTypes="topic, space"
+								dropValue="#{contentObjectUIWrapper}"
+								dropListener="#{repositoryNavigation.addDraggedAndDroppedTopicOrSpaceToContentObjectAndSave_Listener}"
+								reRender="topicTree"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToTagContentObject}">
+							</rich:dropSupport>
+							</ui:remove>
+							
+							<ui:fragment rendered="#{contentObjectUIWrapper.isJPGorPNGorGIFImageFile()}">
+								<a href="#{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+									class="objectListSlideshow" rel="objectListGallery"
+									title="#{contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.sourceFilename}">
+
+									<h:graphicImage
+										value="#{contentObjectUIWrapper.contentObjectIcon}" width="32"
+										height="32"
+										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
+		
+									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
+								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 	  	width="32" height="32"/>
+									</a4j:outputPanel>
+									
+									<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/slides-stack.png"/>
+								</a>
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{!contentObjectUIWrapper.isJPGorPNGorGIFImageFile()}">
+									<h:graphicImage
+										value="#{contentObjectUIWrapper.contentObjectIcon}" width="32"
+										height="32"
+										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
+		
+									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
+								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 	  	width="32" height="32"/>
+									</a4j:outputPanel>
+							</ui:fragment>
+							
+						</a4j:outputPanel>
+
+
+					</rich:column>
+
+					<rich:column>	
+						<h:outputText style="font-size: 100%; color: red;" rendered="#{contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter']}"
+						 value="#{contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue}"/>
+					</rich:column>
+					
+					<rich:column>	
+						<h:outputText
+							rendered="#{(! empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue)}"
+							style="font-size: 0.8em; font-weight: bold; color: red;"
+							value="#{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}" />
+					</rich:column>
+					
+					<rich:column>
+						#{contentObjectUIWrapper.contentObjectTypeForCurrentLocale}
+					</rich:column>
+
+
+					<rich:column styleClass="title">
+						<rich:dragIndicator id="contentObjectIndicator" />
+						<rich:dragSupport dragIndicator="contentObjectIndicator"
+							dragType="contentObject" dragValue="#{contentObjectUIWrapper}">
+							<rich:dndParam name="label"
+								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue}" />
+						</rich:dragSupport>
+						<a4j:commandLink 
+							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
+							reRender="objectEditorAjaxPanel"
+							oncomplete="showTab('objectEditorTab');"
+							title="#{messages['entity.action.viewEditForm']}">
+							<h:outputText
+								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+						</a4j:commandLink>
+					</rich:column>
+
+					<rich:column>
+						<h:outputText style="font-size: 95%"
+							value="#{contentObjectUIWrapper.contentObjectProperty['profile.created'].simpleTypeValue.time}">
+							<f:convertDateTime type="both" dateStyle="short"
+								timeStyle="short" timeZone="#{timeZoneSelector.timeZone.ID}" />
+						</h:outputText>
+						<br />
+						<h:outputText style="font-size: 95%"
+							value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
+							<f:convertDateTime type="both" dateStyle="short"
+								timeStyle="short" timeZone="#{timeZoneSelector.timeZone.ID}" />
+						</h:outputText>
+					</rich:column>
+
+
+					<rich:column>
+						<span style="font-size: 85%">#{contentObjectUIWrapper.contentObject.owner.label}</span>
+					</rich:column>
+
+
+					<rich:column styleClass="actions">
+						
+						<center>
+							<a4j:commandLink
+								ajaxSingle="true"
+								reRender="objectEditorAjaxPanel"
+								oncomplete="showTab('objectEditorTab');"
+								action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}">
+									
+								<img 
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
+									title="#{messages['entity.action.viewEditForm']}" alt="#{messages['entity.action.viewEditForm']}"/>
+							</a4j:commandLink>
+							
+							<ui:remove>
+							<a4j:commandLink
+								reRender="objectViewerAjaxPanel"
+								onclick="showTab('objectEditorTab');"
+								action="#{contentObjectViewAsTree.presentContentObject_UIAction(contentObjectUIWrapper.contentObject.id)}">
+
+								<img 
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document-tree.png"
+									title="#{messages['entity.action.treePreview']}" alt="#{messages['entity.action.treePreview']}"/>
+							</a4j:commandLink>
+							</ui:remove>
+							
+							<!-- Clone content object action -->
+							<a4j:commandLink
+								ajaxSingle="true"
+								action="#{copier.createACopyAndSaveContentObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
+								reRender="searchResultsAjaxPanel">
+								<img 
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-split.png"
+									title="#{messages['entity.action.clone']}" alt="#{messages['entity.action.clone']}"/>
+							</a4j:commandLink>
+							
+							<!-- Copy content object to clipboard action -->
+							<a4j:commandLink
+								ajaxSingle="true"
+								action="#{clipboard.copyContentObjectToClipboard_UIAction(
+									contentObjectUIWrapper.contentObject.id,
+									contentObjectUIWrapper.contentObject.systemName, 
+									contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue, 
+									contentObjectUIWrapper.contentObjectTypeForCurrentLocale, 
+									contentObjectUIWrapper.contentObject.contentObjectType)}"
+								reRender="clipboardPanel">
+								<img 
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/clipboard-paste.png"
+									title="#{messages['entity.action.copyToClipboard']}" alt="#{messages['entity.action.copyToClipboard']}"/>
+							</a4j:commandLink>
+							
+							<a4j:commandLink
+								ajaxSingle="true"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToDeleteContentObject}"
+								action="#{confirmationBean.initiateConfirmation('confirmation.panel.delete.question',contentObjectList, 
+											'permanentlyRemoveSelectedContentObject_UIAction',
+											contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue, 
+											'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
+											null,
+											contentObjectUIWrapper.contentObject.id,contentObjectUIWrapper.contentObject.contentObjectType,contentObjectUIWrapper.contentObjectProperty['profile.created'].simpleTypeValue)}"
+								 oncomplete="openConfirmationDialog();"
+								 reRender="confirmationDialogPanel">
+								<img 
+									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-button.png"
+									title="#{messages['entity.action.delete']}" alt="#{messages['entity.action.delete']}"/>
+	
+							</a4j:commandLink>
+ 
+						</center>
+					</rich:column>
+
+				</rich:dataTable>
+
+			</div>
+
+		</ui:composition>
+	</body>
+</html>
+

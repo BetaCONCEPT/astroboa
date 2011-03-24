@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<div style="padding-bottom: 5px;">
+
+				<rich:spacer height="5" />
+
+				<rich:datascroller 
+					ajaxSingle="true"
+					oncomplete="createSlideshow('.objectListSlideshow');"
+					for="fullViewContentObjectTable" 
+					page="#{contentObjectList.activeContentObjectListPage}"
+					renderIfSinglePage="false"
+					maxPages="10"
+					rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
+					binding="#{uiComponentBinding.fullViewContentObjectTableScrollerComponent}" />
+
+
+
+				<rich:spacer height="5" />
+
+				<rich:dataTable id="fullViewContentObjectTable"
+					binding="#{uiComponentBinding.fullViewContentObjectTableComponent}"
+					rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
+					rows="#{pageController.rowsPerDataTablePage}"
+					value="#{contentObjectStatefulSearchService.returnedContentObjects}"
+					var="contentObjectUIWrapper"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					columnClasses="fullViewTableCol1, fullViewTableCol2"
+					width="100%">
+
+
+
+					<rich:column>
+						<rich:dragIndicator id="contentObjectIndicator" />
+						<a4j:outputPanel layout="block">
+							
+							
+							<rich:dragSupport dragIndicator="contentObjectIndicator"
+								dragType="contentObject" dragValue="#{contentObjectUIWrapper}">
+								<rich:dndParam name="label"
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue}" />
+							</rich:dragSupport>
+							
+							<ui:remove>
+							<rich:dropSupport  acceptedTypes="topic, space"
+								dropValue="#{contentObjectUIWrapper}"
+								reRender="contentObjectSystemTagsList,topicTreePanel"
+								dropListener="#{repositoryNavigation.addDraggedAndDroppedTopicOrSpaceToContentObjectAndSave_Listener}"
+								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToTagContentObject}">
+							</rich:dropSupport>
+							</ui:remove>
+							
+							<ui:fragment rendered="isJPGorPNGorGIFImageFile()">
+								<a href="#{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+									class="objectListSlideshow" rel="objectListGallery"
+									title="#{contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.sourceFilename}">
+									<h:graphicImage
+										value="#{contentObjectUIWrapper.contentObjectIcon}" width="32"
+										height="32"
+										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
+			
+									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
+								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 	  	width="64" height="64" />
+								 	  </a4j:outputPanel>
+							 	  </a>
+							</ui:fragment>
+							
+							<ui:fragment rendered="!isJPGorPNGorGIFImageFile()">
+								<h:graphicImage
+									value="#{contentObjectUIWrapper.contentObjectIcon}" width="32"
+									height="32"
+									rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
+		
+								<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
+							 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+							 	  	width="64" height="64" />
+							 	  </a4j:outputPanel>
+							</ui:fragment>
+					
+						</a4j:outputPanel>
+					</rich:column>
+
+					<rich:column>
+
+						<a4j:commandLink 
+							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
+							reRender="objectEditorAjaxPanel"
+							onclick="showTab('objectEditorTab');">
+				
+							<h:outputText
+								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+								
+						</a4j:commandLink>
+
+						<h:panelGroup
+							rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['profile.description'].simpleTypeValue}">
+							<div>
+								<h:outputText
+									styleClass="contentObjectPropertyLabelInContentObjectList"
+									value="#{messages['content.object.list.full.view.profile.description']}: " />
+								<h:outputText
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.description'].simpleTypeValue}"
+									styleClass="contentObjectDescription" />
+							</div>
+						</h:panelGroup>
+
+
+						<div
+							style="margin-top: 5px; display: #{(! empty contentObjectUIWrapper.contentObjectProperty['profile.hasVersion'].simpleTypeValue )?'block':'none'}">
+
+							<div>
+								<h:outputText
+									value="#{messages['content.object.list.full.view.profile.hasVersion']}: #{contentObjectUIWrapper.contentObjectProperty['profile.hasVersion'].simpleTypeValue}"
+									styleClass="contentObjectPropertyLabelInContentObjectList" />
+							</div>
+
+							<div>
+								<h:outputText value="#{messages['content.object.list.full.view.other.versions']}: "
+									styleClass="contentObjectPropertyLabelInContentObjectList" />
+								<ui:repeat
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.versions'].simpleTypeValues}"
+									var="versionLabel">
+									<h:commandLink value="#{versionLabel} "
+										action="#{contentObjectEdit.viewContentObjectVersionInfoUIAction}">
+										<a4j:actionparam
+											name="selectedContentObjectVersion"
+											assignTo="#{contentObjectEdit.selectedContentObjectVersion}"
+											value="#{versionLabel}" />
+									</h:commandLink>
+								</ui:repeat>
+							</div>
+						</div>
+
+						<h:panelGroup
+							rendered="#{(! empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue) or
+										((!empty contentObjectUIWrapper.contentObjectProperty['workflow']) and (! empty contentObjectUIWrapper.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue)) or
+										((! empty contentObjectUIWrapper.contentObjectProperty['webPublication']) and (! empty contentObjectUIWrapper.contentObjectProperty['webPublication.webPublicationStartDate'].simpleTypeValue)) or
+										( contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter'] and (! empty contentObjectUIWrapper.contentObjectProperty['statistic']) and (! empty contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue))
+										}">
+							<div style="margin-top: 5px;">
+
+								<h:panelGroup
+									rendered="#{(! empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue)}">
+									<div>
+										<h:outputText
+											styleClass="contentObjectPropertyLabelInContentObjectList"
+											value="#{messages['content.object.list.full.view.profile.status']}: " />
+										<h:outputText
+											style="font-size: 10px; font-weight: bold; color: red;"
+											value="#{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}" />
+									</div>
+								</h:panelGroup>
+
+								<h:panelGroup
+									rendered="#{((!empty contentObjectUIWrapper.contentObjectProperty['workflow']) and (! empty contentObjectUIWrapper.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue))}">
+									<div>
+
+										<h:outputText
+											styleClass="contentObjectPropertyLabelInContentObjectList"
+											value="#{messages['content.object.list.full.view.profile.workflow']}: " />
+										<h:outputText
+											style="font-size: 10px; font-weight: bold; color: red;"
+											value="#{messages[contentObjectUIWrapper.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue]}" />
+									</div>
+								</h:panelGroup>
+
+								<h:panelGroup
+									rendered="#{((!empty contentObjectUIWrapper.contentObjectProperty['workflow']) and (! empty contentObjectUIWrapper.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue))}">
+									<div>
+										<h:outputText
+											styleClass="contentObjectPropertyLabelInContentObjectList"
+											value="Ημ/νια Δημοσίευσης: " />
+										<h:outputText
+											style="font-size: 10px; font-weight: bold; color: red;"
+											value="#{contentObjectUIWrapper.contentObjectProperty['webPublication.webPublicationStartDate'].simpleTypeValue.time}">
+											<f:convertDateTime type="both" dateStyle="short"
+												timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+										</h:outputText>
+									</div>
+								</h:panelGroup>
+
+								<h:panelGroup
+									rendered="#{contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter']}">
+									<div>
+										<h:outputText
+											styleClass="contentObjectPropertyLabelInContentObjectList"
+											value="Αριθμός Αναγνώσεων: " />
+										<h:outputText
+											style="font-size: 10px; font-weight: bold; color: red;"
+											value="#{contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue}" />
+									</div>
+								</h:panelGroup>
+
+							</div>
+						</h:panelGroup>
+
+
+						<h:panelGroup rendered="#{contentObjectUIWrapper.file}">
+							<br />
+							<h:outputText
+								styleClass="contentObjectPropertyLabelInContentObjectList"
+								value="Όνομα Αρχείου: " />
+							<h:outputText styleClass="sourceFileName"
+								value="#{contentObjectUIWrapper.sourceFileName}" />
+						</h:panelGroup>
+
+
+
+						<h:panelGrid columns="2">
+							<h:graphicImage value="images/cms-icons/group.png" width="16"
+								height="16" styleClass="imageMiddleAlign" />
+							<h:panelGroup>
+								<span class="contentObjectOwnerLabel">#{messages['content.object.owner']}:
+								</span>
+								<h:outputText styleClass="contentObjectOwner"
+									value="#{contentObjectUIWrapper.contentObject.owner.label} " />
+								<br />
+								<span class="contentObjectCreatorLabel">#{messages['content.object.list.full.view.profile.creator']}:
+								</span>
+								<span class="contentObjectCreator">#{contentObjectUIWrapper.contentObjectProperty['profile.creator'].simpleTypeValues[0]}
+								</span>
+								<br />
+								<h:outputText styleClass="contentObjectOwnerLabel"
+									value="#{messages['content.object.list.full.view.profile.publisher']}: " />
+								<h:outputText styleClass="contentObjectOwner"
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.publisher'].simpleTypeValue}" />
+							</h:panelGroup>
+
+							<h:graphicImage value="images/cms-icons/dates.png" width="16"
+								height="16" styleClass="imageMiddleAlign" />
+							<h:panelGroup>
+								<span class="contentObjectCreatedLabel">#{messages['content.object.list.full.view.profile.created']}:
+								</span>
+								<h:outputText styleClass="contentObjectCreated"
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.created'].simpleTypeValue.time}">
+									<f:convertDateTime type="both" dateStyle="short"
+										timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+								</h:outputText>
+								<br />
+								<span class="contentObjectModifiedLabel">#{messages['content.object.list.full.view.profile.modified']}:
+								</span>
+								<h:outputText styleClass="contentObjectCreated"
+									value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
+									<f:convertDateTime type="both" dateStyle="short"
+										timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+								</h:outputText>
+							</h:panelGroup>
+
+						</h:panelGrid>
+
+
+						<div class="contentObjectSubjectAreaInContentObjectList">
+							<h:panelGrid columns="2">
+								<h:graphicImage value="images/cms-icons/subjects.png" width="16"
+									height="16" styleClass="imageMiddleAlign" />
+								<h:panelGroup>
+									<div
+										style="margin-bottom: 0px; display: #{(! empty contentObjectUIWrapper.systemTags)? 'block' : 'none'}">
+										<h:outputText value="#{messages['content.object.list.full.view.profile.subject']} : "
+											styleClass="contentObjectPropertyLabelInContentObjectList" />
+										<rich:dataList id="contentObjectSystemTagsList"
+											value="#{contentObjectUIWrapper.systemTags}" var="topic">
+											<a4j:commandLink
+												reRender="ajaxDynamicAreaPanel"
+												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+												styleClass="contentObjectSubjectInContentObjectList">
+												<a4j:actionparam
+													name="selectedTopicId"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicId}"
+													value="#{topic.id}" />
+												<a4j:actionparam
+													name="selectedTopicTaxonomy"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicTaxonomy}"
+													value="#{topic.taxonomy.name}" />
+													
+												<a4j:actionparam
+													name="selectedTopicLabel"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
+													value="#{topic.localizedLabelForCurrentLocale}" />
+											</a4j:commandLink>
+										</rich:dataList>
+									</div>
+									
+									<div
+										style="margin-bottom: 0px; display: #{(empty contentObjectUIWrapper.systemTags)? 'block' : 'none'}">
+										<h:outputText 
+											value="#{messages['content.object.list.full.view.no.subject.added']}"									
+											style="color: #777;" />
+									</div>
+									
+									<div style="margin-top: 0px; display: #{(! empty contentObjectUIWrapper.userTagsAddedByOwner) ? 'block' : 'none'}">
+										<h:outputText value="Ετικέτες από τον Ιδιοκτήτη: "
+											styleClass="contentObjectPropertyLabelInContentObjectList" />
+										<rich:dataList id="userTagsAddedByOwnerList"
+											value="#{contentObjectUIWrapper.userTagsAddedByOwner}"
+											var="topic">
+											<h:commandLink
+												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+												styleClass="contentObjectSubjectInContentObjectList">
+												<a4j:actionparam
+													name="selectedTopicId"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicId}"
+													value="#{topic.id}" />
+												<a4j:actionparam
+													name="selectedTopicLabel"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
+													value="#{topic.localizedLabelForCurrentLocale}" />
+											</h:commandLink>
+										</rich:dataList>
+									</div>
+									<div style="display: #{(! empty contentObjectUIWrapper.tagsAddedByLoggedInUser) ? 'block' : 'none'}">
+										<h:outputText value="Ετικέτες από εσάς: "
+											styleClass="contentObjectPropertyLabelInContentObjectList" />
+										<rich:dataList id="tagsAddedByLoggedInUserList"
+											value="#{contentObjectUIWrapper.tagsAddedByLoggedInUser}"
+											var="topic">
+											<h:commandLink
+												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+												styleClass="contentObjectSubjectInContentObjectList">
+												<a4j:actionparam
+													name="selectedTopicId"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicId}"
+													value="#{topic.id}" />
+											<a4j:actionparam
+													name="selectedTopicLabel"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
+													value="#{topic.localizedLabelForCurrentLocale}" />
+											</h:commandLink>
+										</rich:dataList>
+									</div>
+									
+									<div style="display: #{(empty contentObjectUIWrapper.tagsAddedByLoggedInUser) ? 'block' : 'none'}">
+										<h:outputText 
+										value="#{messages['content.object.list.full.view.no.tags.added']}"
+										style="color: #777;" />
+									</div>
+									
+									
+									<div style="display: #{(! empty contentObjectUIWrapper.userTagsAddedByOthers) ? 'block' : 'none'}">
+										<h:outputText value="Ετικέτες από Άλλους Χρήστες: "
+											styleClass="contentObjectPropertyLabelInContentObjectList" />
+										<rich:dataList id="contentObjectOthersTagsList"
+											value="#{contentObjectUIWrapper.userTagsAddedByOthers}"
+											var="topic">
+											<a4j:commandLink
+												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+												styleClass="contentObjectSubjectInContentObjectList">
+												<a4j:actionparam
+													name="selectedTopicId"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicId}"
+													value="#{topic.id}" />
+												<a4j:actionparam
+													name="selectedTopicLabel"
+													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
+													value="#{topic.localizedLabelForCurrentLocale}" />
+											</a4j:commandLink>
+										</rich:dataList>
+
+									</div>
+								</h:panelGroup>
+								
+							</h:panelGrid>
+						</div>
+
+
+						<h:panelGroup id="addUserTagsPanel"
+							rendered="#{contentObjectUIWrapper.userTagsInputFormRendered}">
+							<ui:include
+								src="/WEB-INF/pageComponents/navigation/contentObjectAddUserTags.xhtml" />
+						</h:panelGroup>
+
+						<rich:separator height="1" />
+						<h:panelGrid columns="3" cellpadding="4px;">
+						<a4j:commandLink reRender="ajaxDynamicAreaPanel"
+							value="#{messages['content.object.list.full.view.content.object.view']}"
+							style="background: url(images/cms-icons/16/viewContentObject.png) no-repeat;"
+							styleClass="topmenuLink"
+							action="#{contentObjectViewAsTree.presentContentObject_UIAction}">
+							<a4j:actionparam name="contentObjectId"
+								value="#{contentObjectUIWrapper.contentObject.id}"
+								assignTo="#{contentObjectViewAsTree.selectedContentObjectIdentifier}" />
+							
+						</a4j:commandLink>
+
+						<a4j:commandLink reRender="ajaxDynamicAreaPanel"
+							value="#{messages['content.object.list.full.view.content.object.edit']}"
+							style="background: url(images/cms-icons/16/editContentObject.png) no-repeat;"
+							styleClass="topmenuLink"
+							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
+							reRender="objectEditorAjaxPanel"
+							onclick="showTab('objectEditorTab');">
+							
+						</a4j:commandLink>
+						
+						<a4j:commandLink
+							value="#{messages['content.object.list.full.view.tag.edit']}"
+							style="background: url(images/cms-icons/16/add_remove_tags.png) no-repeat;"
+							styleClass="topmenuLink"
+							action="#{contentObjectUIWrapper.toggleUserTagsInputFormRendered}"
+							rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToTagContentObject}"
+							reRender="ajaxDynamicAreaPanel"
+							title="Πατείστε για να ανοίξετε ή να κλείσετε το διάλογο Προσθ/Αφαίρεσης Ετικετών">
+							
+						</a4j:commandLink>
+						
+							<!-- Copy content object to clipboard action -->
+						<a4j:commandLink
+							value="#{messages['navigation.menu.clipboard']}"
+							style="background: url(images/cms-icons/16/clipboard.png) no-repeat;"
+							styleClass="topmenuLink"
+							action="#{clipboard.copyContentObjectToClipboard_UIAction(
+								contentObjectUIWrapper.contentObject.id, 
+								contentObjectUIWrapper.contentObject.systemName,
+								contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue, 
+								contentObjectUIWrapper.contentObjectTypeForCurrentLocale, 
+								contentObjectUIWrapper.contentObject.contentObjectType)}"
+							reRender="clipboardPanel"
+							title="Προσθήκη στο πρόχειρο">
+						</a4j:commandLink>
+						</h:panelGrid>
+
+						<h:panelGroup id="contentObjectPreviewPanel"
+							rendered="#{contentObjectUIWrapper.detailsRendered}">
+							<div id="contentObjectPreviewArea">
+								<div id="binaryDataPreviewAreaInContentObjectList">
+
+								<img src="#{contentObjectUIWrapper.contentObjectProperty['previewBinaryChannel'].simpleTypeValue.directURL}"/>
+								
+									<ui:remove>
+									<h:panelGrid id="audioAndVideoPreviewPanel" columns="1"
+										class="border: 1px solid;"
+										rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.id and 
+													(contentObjectUIWrapper.videoFile or contentObjectUIWrapper.audioFile) and 
+													contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.mimeType != 'flv-application/octet-stream'}">
+									</h:panelGrid>
+									</ui:remove>
+									
+									
+									<h:panelGroup
+										rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.id and 
+										contentObjectUIWrapper.videoFile and
+										contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.mimeType == 'flv-application/octet-stream'}">
+										<ui:remove>
+											<object type="application/x-shockwave-flash"
+												data="FlowPlayer.swf" width="320" height="240"
+												id="FlowPlayer">
+												<param name="allowScriptAccess" value="sameDomain" />
+												<param name="movie" value="FlowPlayer.swf" />
+												<param name="quality" value="high" />
+												<param name="scale" value="noScale" />
+												<param name="wmode" value="transparent" />
+												<param name="flashvars"
+													value="config={videoFile: 'downloadBinaryChannel.jsf?binaryChannelId=#{contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.id}', baseURL: 'http://localhost:8080/Astroboa/dynamic/binaryChannelLoader/', autoPlay: 'false'}" />
+											</object>
+										</ui:remove>
+
+										<div id="flashcontent"
+											style="text-align: center; margin-bottom: 10px; margin-top: 5px;">
+											Δεν έχετε εγκατεστημένη την απαραίτητη έκδοση του Flash
+											Player.
+											<br />
+											<a href="http://www.macromedia.com/go/getflashplayer">Πατείστε
+												για να εγκαταστείσετε το Flash Player και να μπορείτε να
+												δείτε το Video/Audio player. </a>
+										</div>
+
+
+										<script type="text/javascript">
+										//<![CDATA[
+												var FO = {movie:"FlowPlayer.swf",width:"320",height:"240",majorversion:"7",build:"0",bgcolor:"#FFFFFF",
+															flashvars:"config={autoBuffering: false, autoPlay: false, loop: false, videoFile: 'dynamic/binaryChannelLoader/downloadBinaryChannel.jsf%3FbinaryChannelId%3D#{contentObjectUIWrapper.contentObjectProperty['primaryBinaryChannel'].simpleTypeValue.id}'}"};
+  												UFO.create(FO,"flashcontent");
+  										//]]>
+										</script>
+									</h:panelGroup>
+
+									<h:inputTextarea rows="5"
+										value="#{contentObjectUIWrapper.plainTextPreviewOfBinaryData}"
+										readonly="true"
+										rendered="#{contentObjectUIWrapper.plainTextPreviewOfBinaryDataAvailable}" />
+								</div>
+							</div>
+						</h:panelGroup>
+
+
+
+						<br />
+						<br />
+					</rich:column>
+
+
+					<rich:column
+						rendered="#{contentObjectUIWrapper.textSearchRanking != 0}">
+						<h:outputText value="#{contentObjectUIWrapper.textSearchRanking}" />
+					</rich:column>
+
+
+				</rich:dataTable>
+			</div>
+
+		</ui:composition>
+	</body>
+</html>
+

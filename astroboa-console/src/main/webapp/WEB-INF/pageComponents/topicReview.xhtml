@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<h:panelGroup id="repositoryReviewPanel">
+				<div class="leftBarMenuTitle2">
+					<h:outputText value="Οι Πιο Πρόσφατες Εισαγωγές σε κάθε Θεματική Κατηγορία" styleClass="titleOfRightArea" />
+					<h:commandLink id="refreshTopicReview" action="#{topicReview.refreshLastModifiedContentObjectsGroupedByTopicUIAction}" >
+						<img src="images/cms-icons/refresh.png" border="0" width="16" height="16" align="top"/>
+					</h:commandLink>
+				</div>
+
+				<rich:dataList id="parentTopicsTable" var="topicsGroupedByParentTopic"
+					value="#{topicReview.lastModifiedContentObjectsGroupedByTopic}">
+
+					<div class="topicGroupContainer">
+						<div class="spacer">
+							&nbsp;
+						</div>
+						<div class="topicGroupBar">
+							<h:outputText
+								value="#{topicsGroupedByParentTopic['parentTopicLabel']}" />
+						</div>
+						<br />
+						<rich:dataList id="topicsInGroupTable" var="topic"
+							value="#{topicsGroupedByParentTopic['topicGroup']}">
+							<div class="contentObjectsGroupedByTopic">
+								<div class="topicLabelInRepositoryReviewPage" >
+									<h:commandLink id="contentObjectListLinkInTopicReview" action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}" styleClass="topicTitleInRepositoryReviewPage">
+										<a4j:actionparam assignTo="#{contentObjectSearchByTopic.selectedTopicId}" value="#{topic['topicId']}" />
+										<a4j:actionparam assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}" value="#{topic['topicLabel']}" />
+										<a4j:actionparam assignTo="#{contentObjectSearchByTopic.nextViewId}" value="repositoryNavigation" />
+										<h:outputText value="#{topic['topicLabel']}" />
+									</h:commandLink>
+								</div>
+								
+								<rich:dataList id="contentObjectTable" var="contentObjectUIWrapper"
+									value="#{topic['contentObjectsInTopic']}">
+									
+									<h:commandLink id="contentObjectEditLinkInTopicReview" action="#{contentObjectEdit.editContentObject}" styleClass="contentObjectTitleInRepositoryReviewPage">
+										<a4j:actionparam assignTo="#{contentObjectEdit.selectedContentObjectIdentifier}" value="#{contentObjectUIWrapper.contentObject.id}" />
+										<h:outputText value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+										<h:outputText  value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}" >
+											<f:convertDateTime type="date" dateStyle="short" timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+										</h:outputText>
+									</h:commandLink>
+									
+									<br />
+
+								</rich:dataList>
+							</div>
+						</rich:dataList>
+						<div class="spacer">
+							&nbsp;
+						</div>
+					</div>
+				</rich:dataList>
+
+			</h:panelGroup>
+
+		</ui:composition>
+	</body>
+</html>

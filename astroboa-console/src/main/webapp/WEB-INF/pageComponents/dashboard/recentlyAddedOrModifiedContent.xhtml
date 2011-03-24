@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+
+			<a4j:outputPanel id="recentlyAddedOrModifiedContentObjectPanel">
+
+				<rich:datascroller renderIfSinglePage="false"
+					for="recentlyAddedOrModifiedContentObjectTable"
+					maxPages="10"
+					rendered="#{!empty recentlyAddedOrModifiedContentObjectsDashboardItem.returnedContentObjects}"/>
+
+				<rich:dataTable
+					id="recentlyAddedOrModifiedContentObjectTable"
+					rendered="#{!empty recentlyAddedOrModifiedContentObjectsDashboardItem.returnedContentObjects}"
+					rows="#{pageController.rowsPerDataTablePage}"
+					value="#{recentlyAddedOrModifiedContentObjectsDashboardItem.returnedContentObjects}"
+					var="contentObjectUIWrapper"
+					style="border: 0;" 
+					styleClass="listViewContentObjectTable">
+
+					<rich:column style="border: 0;">
+						<a4j:commandLink title="#{messages['entity.action.viewEditForm']}"
+							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
+							reRender="objectEditorAjaxPanel"
+							onclick="showTab('objectEditorTab');">
+								
+							<h:outputText
+								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+						</a4j:commandLink>
+						<br/>
+						<span style="font-size: 85%;color: #BBB;">#{contentObjectUIWrapper.contentObjectTypeForCurrentLocale}</span>, 
+						<h:outputText style="font-size: 85%;color: #BBB;"
+							value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
+							<f:convertDateTime type="both" dateStyle="short"
+								timeStyle="short" timeZone="#{timeZoneSelector.timeZone.ID}" />
+						</h:outputText>, 
+						<span style="font-size: 85%;color: #BBB;">#{contentObjectUIWrapper.contentObject.owner.label}</span>, 
+						<h:outputText style="font-size: 80%; color: red;" rendered="#{contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter']}"
+						 	value="#{contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue}"/>
+						 
+						 <h:outputText style="font-size: 80%; color: red;" rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue}"
+						 	value=", #{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}"/>
+					</rich:column>
+
+				</rich:dataTable>
+				
+			</a4j:outputPanel>
+		</ui:composition>
+	</body>
+
+</html>

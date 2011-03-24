@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			<div id="saveAdvancedQueryDialogue" title="#{messages['advancedSearch.criteria.query.panel.header']}">
+				<a4j:form id="saveAdvancedQueryDialogueForm">
+					
+									
+									
+								<rich:panel style="border-width:0px;">
+								   <h:panelGrid columns="1">
+									<h:outputText  
+										value="#{messages['advancedSearch.criteria.query.panel.description.line1']}" />
+	       							<h:outputText
+										value="#{messages['advancedSearch.criteria.query.panel.description.line2']}" />
+	       							</h:panelGrid>
+								</rich:panel>
+										
+								<h:panelGrid columns="2">
+									<h:outputText value="#{messages['advancedSearch.criteria.query.system.name']}"/>
+									<h:inputText id="queryName"
+										value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.queryName}" />
+		
+									<h:outputText value="#{messages['advancedSearch.criteria.query.title']}"/>
+									<h:inputText id="queryTilte" size="75"
+										value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.queryTitle}" />
+										
+									<h:outputText value="#{messages['advancedSearch.criteria.query.localized.label']} '#{localeSelector.locale.getDisplayName(localeSelector.locale)}'" />
+									<h:inputText id="queryLocalizedLabel" size="50"
+										value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.queryLocalizedLabel}" />
+		
+									<h:outputText
+										value="#{messages['advancedSearch.criteria.query.copy.to.clipboard']}" />    
+									<h:selectBooleanCheckbox
+										value="#{contentObjectSearchByCriteria.moveToClipboardUponSuccessfullSave}" />
+									
+									<rich:spacer height="10"/>
+									<a4j:commandButton
+										action="#{contentObjectSearchByCriteria.saveCriteria_UIAction}"
+										reRender="ajaxDynamicAreaPanel, contentTypes, clipboard" value="#{messages['advancedSearch.criteria.query.save']}"
+										style="font-size: 1.2em;"/>
+									  
+								</h:panelGrid>
+							
+				</a4j:form>
+			</div>
+			
+		</ui:composition>
+	</body>
+</html>

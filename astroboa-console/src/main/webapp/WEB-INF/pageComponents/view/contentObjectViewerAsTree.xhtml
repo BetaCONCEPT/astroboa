@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			<ui:fragment rendered="#{!empty contentObjectViewAsTree.selectedContentObjectForView}">
+				<script type="text/javascript">
+				//<![CDATA[
+					var binaryChannelViewer = jQuery('#binaryChannelViewer');
+				//]]>
+				</script>
+	
+				<ui:include src="/WEB-INF/pageComponents/binaryChannelViewer.xhtml" />
+	
+				<rich:toolBar height="20" contentStyle="font-size: 80%">
+	
+					<rich:toolBarGroup>
+						<h:graphicImage id="contentObjectViewImage"
+							value="images/cms-icons/16/contentObjectView.png" />
+						<h:outputLabel value="Παρουσίαση Αντικειμένου"
+							for="contentObjectViewImage" />
+					</rich:toolBarGroup>
+	
+				</rich:toolBar>
+	
+				<div
+					style="padding-left: 2px; padding-top: 2px; height: auto; background: url(images/cms-icons/greyPanelBackground.gif) repeat-x top;">
+					<div style="float: left; padding-left: 2px; padding-top: 3px;">
+						<h:graphicImage style="vertical-align: middle;"
+							value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectIcon}"
+							width="32" height="32"
+							rendered="#{!contentObjectViewAsTree.selectedContentObjectForView.thumbnailAvailable}" />
+	
+						<a4j:outputPanel rendered="#{contentObjectViewAsTree.selectedContentObjectForView.thumbnailAvailable}">
+							<img src="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+									width="32" height="32"/>
+						</a4j:outputPanel>
+				
+					</div>
+					<div style="float: left;">
+						<p style="color: #555; font-size: 80%">
+							#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectTypeForCurrentLocale}:
+							#{contentObjectViewAsTree.contentObjectTitle}
+						</p>
+						<p style="color: #555; font-size: 80%">
+							Ιδιοκτήτης:
+							#{contentObjectViewAsTree.selectedContentObjectForView.contentObject.owner.label}
+						</p>
+					</div>
+					<div style="clear: both;" />
+				</div>
+	
+				<div style="clear: both; width: 100%;">
+					<rich:simpleTogglePanel headerClass="browserTogglePanelHeaderClass"
+						bodyClass="togglePanelInActiveAreaBodyClass" switchType="client"
+						label="Στοιχεία Διαχείρισης (Dublin Core Metadata) / Στοιχεία Ασφάλειας"
+						opened="true">
+	
+						<ui:include
+							src="/WEB-INF/pageComponents/view/contentObjectProfilePropertiesViewer.xhtml" />
+	
+						<rich:separator height="1" />
+						<rich:spacer height="2" />
+	
+						<ui:include
+							rendered="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectPropertyDefined['accessibility']}"
+							src="/WEB-INF/pageComponents/view/contentObjectAccessibilityPropertiesViewer.xhtml" />
+	
+						<h:outputText
+							rendered="#{!contentObjectViewAsTree.selectedContentObjectForView.contentObjectPropertyDefined['accessibility']}"
+							value="Δεν έχουν ορισθεί Στοιχεία Ασφάλειας για αυτό το αντικείμενο" />
+	
+					</rich:simpleTogglePanel>
+				</div>
+	
+				<rich:spacer height="2" />
+	
+	
+				<rich:spacer height="5" />
+	
+				<div style="margin: 0 auto; width: 100%; padding-bottom: 3px;">
+					<rich:tree id="contentObjectTreeInline" switchType="ajax"
+						binding="#{uiComponentBinding.contentObjectTreeComponent}"
+						value="#{contentObjectViewAsTree.contentObjectAsTreeData}"
+						var="node" nodeFace="#{node.type}" highlightedClass="none">
+	
+						<rich:treeNode type="RootPropertyNode">
+							<h:outputText value="#{node.description}" />
+						</rich:treeNode>
+	
+						<rich:treeNode type="ComplexTypeSingleOccurrencePropertyNode">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}"
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}" rendered="#{!empty node.description}" />
+						</rich:treeNode>
+	
+						<rich:treeNode type="ComplexTypeMultipleOccurrencesPropertyNode">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}"
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}" rendered="#{!empty node.description}" />
+						</rich:treeNode>
+	
+						<rich:treeNode type="SimpleTypeSingleValuePropertyNode">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+							<h:outputText value="#{node.contentObjectPropertyValue}" />
+						</rich:treeNode>
+	
+						<rich:treeNode type="SimpleTypeSingleValuePropertyNode:Date">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+							<h:outputText value="#{node.contentObjectPropertyValue.time}">
+								<f:convertDateTime type="both" dateStyle="short"
+									timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+							</h:outputText>
+						</rich:treeNode>
+	
+						<rich:treeNode type="SimpleTypeSingleValuePropertyNode:Topic">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}: " />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+							<a4j:commandLink reRender="ajaxDynamicAreaPanel"
+								action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+								title="Πατήστε για να δείτε τα σχετικά αντ. Περιεχομένου">
+	
+								<h:outputText
+									value="#{node.contentObjectPropertyValue.localizedLabelForCurrentLocale}" />
+	
+								<a4j:actionparam value="#{node.contentObjectPropertyValue.id}"
+									assignTo="#{contentObjectSearchByTopic.selectedTopicId}" />
+								<a4j:actionparam
+									value="#{node.contentObjectPropertyValue.taxonomy.name}"
+									assignTo="#{contentObjectSearchByTopic.selectedTopicTaxonomy}" />
+								<a4j:actionparam
+									value="#{node.contentObjectPropertyValue.localizedLabelForCurrentLocale}"
+									assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}" />
+							</a4j:commandLink>
+						</rich:treeNode>
+	
+						<rich:treeNode
+							type="SimpleTypeSingleValuePropertyNode:RepositoryUser">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}"
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}: " />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+							<h:outputText value="#{node.contentObjectPropertyValue.label}" />
+						</rich:treeNode>
+	
+	
+						<rich:treeNode type="SimpleTypeSingleValuePropertyNode:PlainText">
+	
+							<h:panelGroup
+								rendered="#{node.contentObjectPropertyDefinition.maxLength gt 100}">
+								<br />
+							</h:panelGroup>
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+	
+							<h:outputText style="font-size: 95%;"
+								value="#{node.contentObjectPropertyValue}"
+								rendered="#{node.contentObjectPropertyDefinition.maxLength le 100}" />
+	
+							<h:panelGroup
+								rendered="#{node.contentObjectPropertyDefinition.maxLength gt 100}">
+								<br />
+								<h:inputTextarea styleClass="mceNoEditor"
+									style="font-size: 100%;"
+									value="#{node.contentObjectPropertyValue}" cols="100"
+									rows="#{node.contentObjectPropertyDefinition.maxLength / 100 + 1}"
+									readonly="true" />
+							</h:panelGroup>
+	
+							<h:panelGroup
+								rendered="#{node.contentObjectPropertyDefinition.maxLength gt 100}">
+								<div>
+									<rich:spacer height="5" />
+								</div>
+							</h:panelGroup>
+						</rich:treeNode>
+	
+						<rich:treeNode type="SimpleTypeSingleValuePropertyNode:RichText">
+	
+							<br />
+							<br />
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+	
+							<br />
+	
+							<h:panelGrid width="600" columns="1">
+								<h:outputText style="font-size: 90%; white-space: normal;"
+									escape="false" value="#{node.contentObjectPropertyValue}" />
+							</h:panelGrid>
+	
+							<div>
+								<rich:spacer height="5" />
+							</div>
+	
+						</rich:treeNode>
+	
+	
+	
+						<rich:treeNode type="BinaryTypeSingleValuePropertyNode"
+							icon="/images/cms-icons/16/binaryChannel1.png"
+							iconLeaf="/images/cms-icons/16/binaryChannel1.png">
+	
+							<h:panelGrid columns="3"
+								style="border: 0px; width:100%;">
+	
+								<h:outputText value="#{node.description}" />
+	
+	
+								<a4j:outputPanel rendered="#{! empty node.binaryChannel}">
+	
+									<!-- An image preview in case that file is an image and can be rendered by browser -->
+									<seam:graphicImage styleClass="resizableInMultiBinary"
+										rendered="#{contentObjectUtilities.isImageMimeTypeWhichCanBeRenderedByBrowser(node.binaryChannel.mimeType)}"
+										value="#{node.binaryChannel.content}">
+										<seam:transformImageSize width="320" maintainRatio="true" />
+									</seam:graphicImage>
+	
+	
+									<!-- Icon of file type in case  file is not an image -->
+									<seam:graphicImage
+										rendered="#{! contentObjectUtilities.isImageMimeTypeWhichCanBeRenderedByBrowser(node.binaryChannel.mimeType)}"
+										value="#{contentObjectUtilities.getMimeTypeIconFilePath(node.binaryChannel.mimeType)}">
+									</seam:graphicImage>
+	
+								</a4j:outputPanel>
+	
+	
+	
+	
+	
+								<h:panelGrid columns="1" rendered="#{! empty node.binaryChannel}">
+									<h:outputText value="#{node.binaryChannel.sourceFilename}" />
+									<h:outputText value="#{node.binaryChannel.mimeType}" />
+									<h:outputText value="#{node.binaryChannel.calculatedSize}" />
+	
+									<h:outputText value="#{node.binaryChannel.modified.time}">
+										<f:convertDateTime type="both" dateStyle="short"
+											timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+									</h:outputText>
+	
+									<h:panelGrid columns="2" cellspacing="10">
+	
+										<ui:fragment>
+							 
+							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 						title="Πατείστε για να κατεβάσετε το αρχείο">
+												<h:graphicImage value="/images/cms-icons/16/download.png" />
+											</a>
+										</ui:fragment>
+							
+										<ui:fragment>
+							 
+							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'INLINE')}"
+							 				target="_blank"
+											title="Πατείστε για δείτε το αρχείο">
+	
+											<h:graphicImage
+												value="/images/cms-icons/16/playBinaryChannel.png" />
+											</a>
+										</ui:fragment>
+										
+									</h:panelGrid>
+								</h:panelGrid>
+							</h:panelGrid>
+						</rich:treeNode>
+	
+	
+	
+						<rich:treeNode type="BinaryTypeMultiValuePropertyNode"
+							icon="/images/cms-icons/16/binaryChannel1.png"
+							iconLeaf="/images/cms-icons/16/binaryChannel1.png">
+							<br />
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}: "
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}: "
+								rendered="#{!empty node.description}" />
+	
+	
+							<div>
+								<rich:spacer height="5" />
+							</div>
+						</rich:treeNode>
+	
+						<rich:treeNode type="OneOfMultipleBinaryChannelsNode"
+							icon="/images/cms-icons/16/binaryChannel1.png"
+							iconLeaf="/images/cms-icons/16/binaryChannel1.png">
+	
+							<h:panelGrid columns="3"
+								style="border: 0px; width:100%;">
+	
+								<h:outputText value="#{node.description}" />
+	
+	
+								<a4j:outputPanel rendered="#{! empty node.binaryChannel}">
+	
+									<!-- An image preview in case that file is an image and can be rendered by browser -->
+									<seam:graphicImage styleClass="resizableInMultiBinary"
+										rendered="#{contentObjectUtilities.isImageMimeTypeWhichCanBeRenderedByBrowser(node.binaryChannel.mimeType)}"
+										value="#{node.binaryChannel.content}">
+										<seam:transformImageSize width="320" maintainRatio="true" />
+									</seam:graphicImage>
+	
+									<!-- Icon of file type in case  file is not an image -->
+									<seam:graphicImage
+										rendered="#{! contentObjectUtilities.isImageMimeTypeWhichCanBeRenderedByBrowser(node.binaryChannel.mimeType)}"
+										value="#{contentObjectUtilities.getMimeTypeIconFilePath(node.binaryChannel.mimeType)}">
+									</seam:graphicImage>
+	
+								</a4j:outputPanel>
+	
+	
+	
+	
+	
+								<h:panelGrid columns="1" rendered="#{! empty node.binaryChannel}">
+									<h:outputText value="#{node.binaryChannel.sourceFilename}" />
+									<h:outputText value="#{node.binaryChannel.mimeType}" />
+									<h:outputText value="#{node.binaryChannel.calculatedSize}" />
+	
+									<h:outputText value="#{node.binaryChannel.modified.time}">
+										<f:convertDateTime type="both" dateStyle="short"
+											timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+									</h:outputText>
+	
+									<h:panelGrid columns="2" cellspacing="10">
+										<ui:fragment>
+							 
+							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 						title="Πατείστε για να κατεβάσετε το αρχείο">
+												<h:graphicImage value="/images/cms-icons/16/download.png" />
+											</a>
+										</ui:fragment>
+							
+										<ui:fragment>
+							 
+							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'INLINE')}"
+							 				target="_blank"
+											title="Πατείστε για δείτε το αρχείο">
+	
+											<h:graphicImage
+												value="/images/cms-icons/16/playBinaryChannel.png" />
+											</a>
+										</ui:fragment>
+									</h:panelGrid>
+								</h:panelGrid>
+							</h:panelGrid>
+						</rich:treeNode>
+	
+						<rich:treeNode type="SimpleTypeMultiValuePropertyNode"
+							icon="/images/cms-icons/16/multipleValuesProperty1.png"
+							iconLeaf="/images/cms-icons/16/multipleValuesProperty1.png">
+							<h:outputText
+								value="#{messages['no.localized.label.for.description']}"
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								rendered="#{empty node.description}" />
+							<h:outputText
+								style="color:#222; font-weight: bold; font-size: 90%;"
+								value="#{node.description}" rendered="#{!empty node.description}" />
+	
+						</rich:treeNode>
+	
+						<rich:treeNode type="OneOfMultipleValuesNode">
+							<h:outputText value="#{node.contentObjectPropertyValue}" />
+						</rich:treeNode>
+	
+						<rich:treeNode type="OneOfMultipleValuesNode:Topic">
+							<a4j:commandLink reRender="ajaxDynamicAreaPanel"
+								action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
+								title="Πατήστε για να δείτε τα σχετικά αντ. Περιεχομένου">
+	
+								<h:outputText
+									value="#{node.contentObjectPropertyValue.localizedLabelForCurrentLocale}" />
+	
+	
+								<a4j:actionparam value="#{node.contentObjectPropertyValue.id}"
+									assignTo="#{contentObjectSearchByTopic.selectedTopicId}" />
+								<a4j:actionparam
+									value="#{node.contentObjectPropertyValue.localizedLabelForCurrentLocale}"
+									assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}" />
+							</a4j:commandLink>
+	
+						</rich:treeNode>
+	
+						<rich:treeNode type="OneOfMultipleValuesNode:Date">
+							<h:outputText value="#{node.contentObjectPropertyValue.time}">
+								<f:convertDateTime type="both" dateStyle="short"
+									timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
+							</h:outputText>
+						</rich:treeNode>
+	
+						<rich:treeNode type="OneOfMultipleValuesNode:RepositoryUser">
+							<h:outputText value="#{node.contentObjectPropertyValue.label}" />
+						</rich:treeNode>
+	
+					</rich:tree>
+	
+				</div>
+
+			</ui:fragment>
+		</ui:composition>
+	</body>
+</html>

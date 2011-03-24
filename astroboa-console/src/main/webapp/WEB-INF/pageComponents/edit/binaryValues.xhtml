@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>   
+			
+			<ui:fragment rendered="#{
+						(cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted) and 
+						cmsPropertyWrapper.valueType eq 'Binary' and 
+						! empty cmsPropertyWrapper.simpleCmsPropertyValueWrappers}">
+						
+				<div class="formElementValuesLabelSpacer">fake label</div>
+				
+				<ol class="formElementValues">
+					<a4j:repeat	
+						var="simpleCmsPropertyValueWrapper"
+						value="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers}"
+						rowKeyVar="indexOfSimpleCmsPropertyValueWrapper">
+						
+						<li class="inColumnFormElementValue">
+							<ui:remove>
+							<h:outputText
+								rendered="#{simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath eq null}"
+								value="#{messages['content.object.edit.toCreateURL.saveOfNewContentObjectIsRequired']}"
+								style="font-size: 95%; color: #333; font-weight: bold;" />
+							
+							<h:outputText
+								rendered="#{cmsPropertyWrapper.writeGranted and
+									empty simpleCmsPropertyValueWrapper.binaryChannelValue and
+									! cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged}"
+								value="#{messages['content.object.edit.binary.channel.no.value']}"
+								style="font-size: 95%; color: #333; font-weight: bold;" />
+							</ui:remove>
+							
+							<div style="float: left; margin: 10px 20px 0 0">  	
+							  	<h:panelGroup rendered="#{cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged}">
+							  		<h:outputText
+										rendered="#{cmsPropertyWrapper.writeGranted}"
+										value="#{messages['content.object.edit.unmanagedBinaryChannel.addFilePath']}"
+										style="font-size: 95%; color: #333; font-weight: bold;" />
+									
+									<br/>
+							  		<h:inputText size="75" style="font-size: 0.9em;"
+											value="#{simpleCmsPropertyValueWrapper.unmanagedBinaryChannelRelativePath}"
+											readonly="#{!cmsPropertyWrapper.writeGranted}"/>
+							  	</h:panelGroup>
+							  	
+								<ui:fragment 
+									rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue}">
+									<!--  Image thumbnail -->
+									<a4j:outputPanel id="resizedImagePreview">
+									
+										<!-- it is a jpeg, png or gif image -->
+										<ui:fragment 
+											rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
+											<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}">
+												<a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+										 			class="objectPhotosSlideshow" rel="defaultGallery"
+										 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}">
+													<seam:graphicImage
+														value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.content}">
+														<seam:transformImageSize width="150" maintainRatio="true" />
+													</seam:graphicImage>
+												</a>
+												<br/><span style="font-size: 0.8em;">#{messages['content.object.edit.action.viewFileInline']}</span>
+											</ui:fragment>
+											<ui:fragment rendered="#{empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}" >
+													<seam:graphicImage
+														value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.content}">
+														<seam:transformImageSize width="150" maintainRatio="true" />
+													</seam:graphicImage>
+											</ui:fragment>
+										</ui:fragment>
+										
+										<h:outputText value="#{messages['content.object.edit.no.image.available']}"
+											rendered="#{simpleCmsPropertyValueWrapper.imageMimeType and !simpleCmsPropertyValueWrapper.contentAvailable }" />
+										
+									</a4j:outputPanel>
+									
+								
+									<!-- Icon of file type in case uploaded file is not an image 
+									<seam:graphicImage
+										rendered="#{! simpleCmsPropertyValueWrapper.imageMimeType}"
+										value="#{simpleCmsPropertyValueWrapper.mimeTypeIconPath}">
+									</seam:graphicImage>-->
+									<ui:fragment rendered="#{! simpleCmsPropertyValueWrapper.imageMimeType}">
+									 	<img src="#{simpleCmsPropertyValueWrapper.mimeTypeIconPath}"/>
+									</ui:fragment>
+	
+									<!-- In case no icon exists to represent mime type print mime type back to screen -->
+									<h:outputText
+										rendered="#{! simpleCmsPropertyValueWrapper.imageMimeType and simpleCmsPropertyValueWrapper.mimeTypeIconPath eq 'images/cms-icons/text1.png'}"
+										value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.mimeType}" />
+								</ui:fragment>
+							</div>
+							
+							<div style="float: left; margin: 10px 0 0 0;">
+							<!-- BinaryChannel information-->
+							<ui:fragment
+								rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue}">
+								<div>
+									<ui:remove>
+									<h:outputText value="#{messages['content.object.edit.fileName']} "/>
+									<h:outputText value="#{messages['content.object.edit.fileSize']} " />
+									<h:outputText value="#{messages['content.object.edit.mimeType']} " />
+									</ui:remove>
+									
+									<ul>
+										<li>
+											#{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}
+										</li>
+										<li>	
+											#{simpleCmsPropertyValueWrapper.binaryChannelValue.calculatedSize}
+										</li>
+										<li>
+											#{simpleCmsPropertyValueWrapper.binaryChannelValue.mimeType}
+										</li>
+									</ul>
+								</div>
+							</ui:fragment>				
+							
+							<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue}">
+							<div style="margin: 0 0 10px 0;">
+							<!-- Action: Upload File -->	
+							<a4j:commandLink id="uploadCommnad"
+								rendered="#{cmsPropertyWrapper.writeGranted 
+									and cmsPropertyWrapper.valueType eq 'Binary' 
+									and ! cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged}"
+								action="#{uploadDataForBinaryChannelDialogue.startDialogue_UIAction}"
+								oncomplete="openFileUploadDialog();"
+								title="#{messages['content.object.edit.action.uploadFile']}">
+		
+								<a4j:actionparam name="indexOfSimpleCmsPropertyValueWrapper"
+									value="#{indexOfSimpleCmsPropertyValueWrapper}"
+									assignTo="#{uploadDataForBinaryChannelDialogue.indexOfSimpleCmsPropertyValueWrapper}" />
+		
+								<a4j:actionparam name="indexOfSimpleCmsPropertyWrapper"
+									value="#{indexOfCmsPropertyWrapper}"
+									assignTo="#{uploadDataForBinaryChannelDialogue.indexOfSimpleCmsPropertyWrapper}" />
+		
+								<a4j:actionparam name="idOfUIComponentToBeUpdatedAfterSelection"
+									value="complexCmsPropertyChildPropertiesTable"
+									assignTo="#{uploadDataForBinaryChannelDialogue.idOfUIComponentToBeUpdatedAfterSelection}" />
+								<h:graphicImage value="/images/cms-icons/16/fugue/drive-upload.png" />
+							</a4j:commandLink>
+		
+							
+							<!-- Action: Download File -->
+							<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue and
+							 ( ! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id or 
+							  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
+							 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
+							 
+							 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 	title="#{messages['content.object.edit.action.downloadFile']}">
+											<h:graphicImage value="/images/cms-icons/16/fugue/drive-download.png" />
+							</a>
+							</ui:fragment>
+							
+							<ui:remove>
+							<!-- Action: View File Inline if it is an image-->
+							<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
+							 
+								 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+								 	class="slideshow"
+								 	title="#{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename} : #{messages['content.object.edit.action.viewFileInline']}">
+										<h:graphicImage
+											value="/images/cms-icons/16/fugue/ui-scroll-pane-blog.png" />
+								</a>
+							</ui:fragment>
+							
+							
+								<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue and
+								 ( ! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id or 
+								  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
+								 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
+								 
+								 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedContentApiURL(null, null, 'INLINE')}"
+								 target="_blank"
+								 	title="#{messages['content.object.edit.action.viewFileInline']}">
+												<h:graphicImage
+													value="/images/cms-icons/16/fugue/ui-scroll-pane-blog.png" />
+								</a>
+								</ui:fragment>
+							</ui:remove>							
+							
+							<!-- Action: Create binary file URL -->
+							<a4j:commandLink
+								ajaxSingle="true"
+								action="#{cmsPropertyWrapper.addWrapperReferenceToClipboard(indexOfSimpleCmsPropertyValueWrapper)}"
+								reRender="objectPropertyUrlCreationDialogPanel"
+								title="#{messages['content.object.edit.action.createObjectPropertyURL']}"
+								rendered="#{cmsPropertyWrapper.writeGranted and
+								! empty simpleCmsPropertyValueWrapper.binaryChannelValue and 
+								 simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}"
+								 oncomplete="openObjectPropertyUrlCreationDialog();">
+		
+								<h:graphicImage value="/images/cms-icons/16/fugue/globe-network.png" />
+							</a4j:commandLink>
+							
+								<!-- Action: Create Thumbnail-->
+							<a4j:commandLink
+								action="#{contentObjectEdit.generateThumbnailFromSelectedBinaryChannel_UIAction(indexOfCmsPropertyWrapper, indexOfSimpleCmsPropertyValueWrapper)}"
+								reRender="complexCmsPropertyChildPropertiesTable"
+								title="#{messages['content.object.edit.action.createThumbnail']}"
+								rendered="#{cmsPropertyWrapper.writeGranted and
+									cmsPropertyWrapper.cmsProperty.name ne 'thumbnail' and
+									! empty simpleCmsPropertyValueWrapper.binaryChannelValue and
+									simpleCmsPropertyValueWrapper.imageMimeType and 
+									 contentObjectEdit.thumbnailPropertyDefinedForEditedContentObject}">
+				
+								<h:graphicImage value="/images/cms-icons/16/fugue/document-resize-actual.png" />
+							</a4j:commandLink>
+							
+							<!-- Delete action -->
+							<a4j:commandLink
+								action="#{cmsPropertyWrapper.deleteValueFromSelectedSimpleCmsProperty_UIAction}"
+								reRender="complexCmsPropertyChildPropertiesTable"
+								title="#{messages['content.object.edit.action.deleteFile']}"
+								rendered="#{cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted}">
+								<a4j:actionparam name="valueIndex"
+									value="#{indexOfSimpleCmsPropertyValueWrapper}"
+									assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />
+								<h:graphicImage value="/images/cms-icons/16/fugue/cross-button.png" />
+							</a4j:commandLink>
+							</div>
+							</ui:fragment>
+							</div>	
+						</li>	
+					</a4j:repeat>
+				</ol>
+			</ui:fragment>
+			
+		</ui:composition>
+	</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			
+			<div>
+				<p style="text-align: left;">
+					<a4j:commandLink
+						action="#{portalEditor.addNewPortal_UIAction}"
+						value="#{messages['portal.administration.panel.add.portal']}"
+						reRender="objectEditorAjaxPanel"
+						oncomplete="showTab('objectEditorTab');"
+						ajaxSingle="true" 
+						style="padding-left: 30px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 10px center;"/>
+				</p>
+				<hr style="margin-bottom: 10px; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+					
+				<rich:tree id="portalTree" switchType="ajax"
+					style="text-align:left; overflow: auto;" value="#{portalTree}"
+					var="portalTreeNode" nodeFace="#{portalTreeNode.type}">
+	
+	
+					<rich:treeNode type="PORTAL">
+						<a4j:commandLink id="portalTreeNodeLink"
+									ajaxSingle="true"
+									reRender="objectEditorAjaxPanel"
+									oncomplete="showTab('objectEditorTab');"
+									action="#{portalEditor.editPortal_UIAction(portalTreeNode.portalContentObjectId)}"
+									title="Click to edit web site configuration">
+									
+									<h:outputText value="#{portalTreeNode.description}"/>
+									
+						</a4j:commandLink>
+					</rich:treeNode>
+
+					<rich:treeNode type="PORTAL_SECTION_ROOT_NODE">
+					
+						<rich:contextMenu attached="true" id="portalSectionRootContextMenu"
+							submitMode="ajax">
+							<rich:menuItem ajaxSingle="true"
+								action="#{portalEditor.addNewPortalSectionToPortal_UIContextMenuAction(portalTreeNode.portalContentObjectId)}"
+								reRender="objectEditorAjaxPanel"
+								oncomplete="showTab('objectEditorTab');">
+										Προσθήκη Νέας Ιστοσελίδας
+							</rich:menuItem>
+						</rich:contextMenu>
+						
+						<h:outputText value="#{portalTreeNode.description}"/>
+					</rich:treeNode>
+				
+					<rich:treeNode type="PORTAL_SECTION_NODE">
+					
+						<rich:contextMenu attached="true" id="portalSectionContextMenu"
+							submitMode="ajax">
+							<rich:menuItem ajaxSingle="true"
+								action="#{portalEditor.addNewPortalSubSectionToPortalSection_UIContextMenuAction(portalTreeNode.portalContentObjectId, portalTreeNode.portalSectionObjectId)}"
+								reRender="objectEditorAjaxPanel"
+								oncomplete="showTab('objectEditorTab');">
+										Προσθήκη Νέας Ιστοσελίδας
+							</rich:menuItem>
+							
+							<rich:menuItem ajaxSingle="true"
+								action="#{confirmationBean.initiateConfirmation('confirmation.panel.delete.question',
+									portalEditor, 
+									'deleteSelectedPortalSection_UIContextMenuAction',
+									portalTreeNode.description, 
+									'ajaxDynamicAreaPanel, portalTree',
+									null,
+									portalTreeNode.portalSectionObjectId)}"
+								 oncomplete="openConfirmationDialog();"
+								 reRender="confirmationDialogPanel">
+										Διαγραφή Ιστοσελίδας
+							</rich:menuItem>
+							
+						</rich:contextMenu>
+						
+						<a4j:commandLink id="portalSectionTreeNodeLink"
+									ajaxSingle="true"
+									reRender="objectEditorAjaxPanel"
+									oncomplete="showTab('objectEditorTab');"
+									action="#{portalEditor.editPortalSection_UIAction(portalTreeNode.portalContentObjectId,portalTreeNode.portalSectionObjectId)}"
+									title="Click to Edit Web Page">
+									
+									<h:outputText value="#{portalTreeNode.description}"/>
+									
+						</a4j:commandLink>
+						
+						
+					</rich:treeNode>
+				</rich:tree>
+
+			</div>
+		</ui:composition>
+	</body>
+</html>

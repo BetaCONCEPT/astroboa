@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<f:view contentType="text/html" />
+	
+	<ui:include src="/WEB-INF/pageComponents/head.xhtml"/>
+				
+	<body>
+		
+		<a4j:status id="a4jStatus">
+			<f:facet name="start">
+				<div class="ajaxActivityIndicator"><img src="#{facesContext.externalContext.requestContextPath}/images/ajax-loader.gif" alt="ajax activity image"/> Loading...</div>
+			</f:facet>
+		</a4j:status>
+		
+		<a4j:log popup="true" level="ALL" style="width: 800px; height: 300px;"/>
+		
+		<div id="wrapperArea">
+			
+			<a4j:outputPanel id="applicationMessages" ajaxRendered="true" >
+					<ui:include
+						src="/WEB-INF/pageComponents/applicationMessages.xhtml" />
+			</a4j:outputPanel>
+			
+			<div id="headerAnTopMenuArea" class="ui-layout-north">
+				<ui:include src="/WEB-INF/pageComponents/header.xhtml"/>
+	
+				<ui:include src="/WEB-INF/pageComponents/topMenu.xhtml" />
+			</div>
+			
+			
+			<h:form id="navigationToolsForm">
+				<div id="navigationMenuArea" class="ui-layout-west">
+				
+					<ui:insert name="navigationMenu">
+						<ui:include src="/WEB-INF/pageComponents/navigation/navigationMenu.xhtml" />
+					</ui:insert>
+				
+				</div>
+			</h:form>
+			
+			
+			
+			<a4j:form id="dynamicAreaForm" enctype="multipart/form-data">
+					
+				<div id="dynamicArea" class="ui-layout-center">
+					<div id="tipArea" style="position:absolute; top: 0px; left: 0px;"/>
+					<a4j:outputPanel id="ajaxDynamicAreaPanel" keepTransient="true">
+						<ui:insert name="dynamicContent">
+							<div id="tabs" style="display:none;">
+								<ul id="tabSelectors">
+									<li id="dashboardTabSelector"><a href="#dashboardTab"><span><strong>#{messages['tabs.dashboardTab.label']}</strong></span></a></li>
+									<li id="personalWorkSpaceTabSelector"><a href="#personalWorkSpaceTab"><span><strong>#{messages['tabs.personalWorkSpaceTab.label']}</strong></span></a></li>
+									<li id="searchResultsTabSelector"><a href="#searchResultsTab"><span>#{messages['tabs.searchResultsTab.label']}</span></a></li>
+									<li id="objectEditorTabSelector"><a href="#objectEditorTab"><span>#{messages['tabs.objectEditorTab.label']}</span></a></li>
+									<li id="objectViewerTabSelector"><a href="#objectViewerTab"><span>#{messages['tabs.objectViewerTab.label']}</span></a></li>
+									<li id="dynamicTabSelector"><a href="#dynamicTab"><span>Dynamic Tab</span></a></li>
+								</ul>
+								<div id="dashboardTab">
+									<ui:include
+										src="/WEB-INF/pageComponents/dashboard/dashboard.xhtml" />
+								</div>
+								<div id="personalWorkSpaceTab">
+									<ui:include
+										src="/WEB-INF/pageComponents/space/userSpaceNavigator.xhtml" />
+								</div>
+								<div id="searchResultsTab">
+									<ui:include
+										src="/WEB-INF/pageComponents/navigation/contentObjectList.xhtml" />
+								</div>
+								<div id="objectEditorTab">
+									<rich:editor 
+				                     configuration="textEditorConfig"
+                                        width="1"
+                                        height="1"
+                                        viewMode="visual" 
+                                        value=" " 
+                                        useSeamText="false"
+                                        id="fakeEditor"
+                                        rendered="false">
+                                     </rich:editor>
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/contentObjectEditor.xhtml" />
+								</div>
+								<div id="objectViewerTab">
+									<ui:include
+										src="/WEB-INF/pageComponents/view/contentObjectViewerAsTree.xhtml" />
+								</div>
+								<div id="dynamicTab">
+									<a4j:outputPanel id="dynamicTabAjaxPanel">
+										<ui:include src="#{pageController.dynamicUIAreaCurrentPageComponent}"/>
+									</a4j:outputPanel>
+								</div>
+							</div>
+							
+							
+							<s:fragment rendered="#{pageController.dynamicUIAreaCurrentPageComponent ne '/WEB-INF/pageComponents/edit/contentObjectEditor.xhtml'}">
+   								<script type="text/javascript">stopContentObjectAutoSave();</script>
+							</s:fragment>
+						</ui:insert>
+
+					</a4j:outputPanel>
+
+				</div>
+					
+				<ui:include src="/WEB-INF/pageComponents/sessionExpirationMessage.xhtml" />
+			
+			</a4j:form>
+
+
+			<div id="footerArea" class="ui-layout-south">
+				<ui:insert name="footer">
+					<ui:include src="/WEB-INF/pageComponents/footer.xhtml" />
+				</ui:insert>
+			</div>
+			
+		</div>
+
+		<ui:include src="/WEB-INF/pageComponents/xsdSchemaEditor.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/fileUploadDialog.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/clipboard.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/confirmationDialog.xhtml" />
+		
+		<ui:include src="/WEB-INF/pageComponents/objectPropertyUrlCreationDialog.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/edit/topicSelectionDialog.xhtml" />
+		
+		<ui:include src="/WEB-INF/pageComponents/taxonomy/importTaxonomyXmlDialog.xhtml" />
+		
+		<div id="dynamicConfirmationDialog">
+			<a4j:form id="dynamiConfirmationDialogForm">
+				
+			</a4j:form>
+		</div>
+		
+		<div id="codeEditorDialog">
+			<div id="codeEditor"></div>
+		</div>
+		
+		<ui:fragment rendered="#{identity.hasRole('ROLE_CMS_TAXONOMY_EDITOR')}">
+			<script type="text/javascript">
+			//<![CDATA[
+				shouldCreateTaxonomyAndTopicContextMenus = true;
+			//]]>
+			</script>
+		</ui:fragment>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			/* Context Menu on Taxonomy and Topics */
+		    function initializeTaxonomyContextMenus() {
+		    	if (!shouldCreateTaxonomyAndTopicContextMenus) {
+		    		return;
+		    	}
+		    	
+		    	topicContextMenu = 
+		    		[ 
+		    		 {"#{messages['taxonomy.tree.context.menu.edit']}":function(menuItem,menu) 
+		    			 { 
+		    			 var selectedTopicId = bcmslib.jQuery(this).attr("id");
+		    			 labelOfCurrentlyDisplayedTaxonomyOrTopicTab = bcmslib.jQuery(this).html();
+		    			 editTopic(selectedTopicId);
+		    			 } 
+		    		 },
+		    		 {"#{messages['taxonomy.tree.context.menu.add.topic']}":function(menuItem,menu) 
+		    			 { 
+		    			 var selectedTopicId = bcmslib.jQuery(this).attr("id"); 
+		    			 addNewTopicToTopic(selectedTopicId); 
+		    			 } 
+		    		 },
+		    		 {"#{messages['taxonomy.tree.context.menu.delete']}":function(menuItem,menu) 
+		    			 { 
+		    			 var selectedTopicId = bcmslib.jQuery(this).attr("id"); 
+		    			 showDynamicConfirmationDialog(
+		    					 "#{messages['confirmation.panel.header']}", 
+		    					 "#{messages['confirmation.panel.delete.question']}", 
+		    					 "#{messages['confirmation.panel.ok']}", 
+		    					 "#{messages['confirmation.panel.cancel']}", 
+		    					 'deleteTopic("' + selectedTopicId + '"); closeDynamicConfirmationDialog();', 
+		    					 ''
+		    			 ); 
+		    			 } 
+		    		 }
+		    		 ];
+	
+		    	taxonomyContextMenu = 
+		    		[ 
+		    		 {"#{messages['taxonomy.tree.context.menu.edit']}":function(menuItem,menu) 
+		    			 {
+		    			 var selectedTaxonomyId = bcmslib.jQuery(this).attr("id");
+		    			 labelOfCurrentlyDisplayedTaxonomyOrTopicTab = bcmslib.jQuery(this).html();
+		    			 editTaxonomy(selectedTaxonomyId); 
+		    			 } 
+		    		 },
+		    		 {"#{messages['taxonomy.tree.context.menu.add.topic']}":function(menuItem,menu) 
+		    			 {
+		    			 var selectedTaxonomyId = bcmslib.jQuery(this).attr("id");
+		    			 addNewTopicToTaxonomy(selectedTaxonomyId); 
+		    			 } 
+		    		 },
+		    		 {"#{messages['taxonomy.tree.context.menu.export.to.xml']}":function(menuItem,menu) 
+		    			 {
+		    			 var selectedTaxonomyId = bcmslib.jQuery(this).attr("id"); 
+		    			 exportTaxonomy(selectedTaxonomyId); 
+		    			 } 
+		    		 },
+		    		 {"#{messages['taxonomy.tree.context.menu.delete']}":function(menuItem,menu) 
+		    			 {
+		    			 var selectedTaxonomyId = bcmslib.jQuery(this).attr("id"); 
+		    			 showDynamicConfirmationDialog(
+		    					 "#{messages['confirmation.panel.header']}", 
+		    					 "#{messages['confirmation.panel.delete.question']} " + bcmslib.jQuery(this).html(), 
+		    					 "#{messages['confirmation.panel.ok']}", 
+		    					 "#{messages['confirmation.panel.cancel']}", 
+		    					 'deleteTaxonomy("' + selectedTaxonomyId + '"); closeDynamicConfirmationDialog();', 
+		    					 ''
+		    			 ); 
+		    			 } 
+		    		 } 
+		    		 ];
+	
+		    	bcmslib.jQuery('.taxonomy').contextMenu(taxonomyContextMenu);
+		    }
+		
+		//	window.onload=(function(){
+			bcmslib.jQuery(document).ready(function(){
+				createTopMenu();
+				createXSDEditor();
+				createCodeEditor();
+				createClipboard();
+				createfileUploadDialog();
+				createConfirmationDialog();
+				createDynamicConfirmationDialog();
+				createObjectPropertyUrlCreationDialog();
+				createTopicSelectionDialog();
+				createImportTaxonomyXmlDialog();
+				createTextEditorDialog();
+				
+				createObjectTypeSelectionMenuInFolderTab();
+				
+				splitListInColumns('menuSplittedObjectTypeList', 3, 'vertical');
+				
+				
+				activateHotKeys();
+				
+				createLayout();
+				initTabs();
+				
+				//positionAjaxLoaderOnSreenCenter();
+				
+				initializeTaxonomyContextMenus();
+				
+				registerDoubleClickEventForOpeningTextEditor();
+				
+				startSessionTimeoutCheck();
+				Seam.Remoting.displayLoadingMessage = function() {};
+			    Seam.Remoting.hideLoadingMessage = function() {};
+			});
+		//]]>
+		</script>
+
+	</body>
+</html>

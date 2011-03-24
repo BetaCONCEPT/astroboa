@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<body>
+		<ui:composition>
+			<div style="background-color: #D4CFC7; padding:5px 5px 5px 5px;">
+				<ui:include src="/WEB-INF/pageComponents/edit/complexCmsPropertyFormHeader.xhtml"/>
+			</div>
+
+			<div style="background-color: #DDDDEE; padding: 10px 5px 5px 10px;">
+				<h:panelGrid columns="2">
+					<h:outputText value="Ημ/νία Δημοσίευσης" style="color: black; font-weight: bold;"/>
+					<rich:calendar id="publicationStartDate" style="font-size: 100%"
+						datePattern="dd/MM/yyyy HH:mm" enableManualInput="true"
+						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['webPublication.webPublicationStartDate'].simpleTypeValueAsDate}">
+					</rich:calendar>
+
+					<h:outputText value="Ημ/νία Απόσυρσης" style="color: black; font-weight: bold;"/>
+					<rich:calendar id="publicationEndDate" style="font-size: 100%"
+						enableManualInput="true" datePattern="dd/MM/yyyy HH:mm"
+						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['webPublication.webPublicationEndDate'].simpleTypeValueAsDate}">
+					</rich:calendar>
+
+					<h:outputText value="Δημοσίευση του Ονόματος του Δημιουργού" style="color: black; font-weight: bold;"/>
+					<h:selectBooleanCheckbox id="publishAuthorName"
+						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['webPublication.publishCreatorName'].simpleTypeValue}">
+
+					</h:selectBooleanCheckbox>
+
+				</h:panelGrid>
+			</div>
+
+		</ui:composition>
+	</body>
+</html>
