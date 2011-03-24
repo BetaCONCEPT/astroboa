@@ -798,25 +798,12 @@ public class ContentObjectResource extends AstroboaResource{
 		return  new ArrayList<ContentObject>();
 	}
 	
-	 @PUT
-	 public Response putContentObject(String requestContent) {
-		 
-		long start = System.currentTimeMillis();
-		 
-		Response response =  saveContentObjectString(requestContent, HttpMethod.PUT);
-		
-		logger.debug(" PUT ContentObject in {}",  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
-		
-		return response;
-	  }
-
 	 @POST
-	 
 	 public Response postContentObject(String requestContent) {
 	
 		long start = System.currentTimeMillis();
 		 
-		Response response = saveContentObjectString(requestContent, HttpMethod.POST);
+		Response response = saveContentObjectString(requestContent, HttpMethod.POST, true);
 		 
 		logger.debug(" POST ContentObject in {}",  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
 			
@@ -840,26 +827,12 @@ public class ContentObjectResource extends AstroboaResource{
 
   	  }
 
-  	  @POST
-   	  @Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	  public Response postContentObjectByIdOrName(
-				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
-				String requestContent){
-  		  
-    		long start = System.currentTimeMillis();
-     		
-      		Response response = saveContentObjectByIdOrName(contentObjectIdOrName, requestContent, HttpMethod.POST);
-      		
-      		logger.debug(" POST ContentObject {} in {}", contentObjectIdOrName,  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
-    		
-      		return response;
-
-  	  }
-
 	  private Response saveContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent, String httpMethod){
 			
+		  boolean entityIsNew = false;
+		  
    		  //Import from xml or json. ContentObject will not be saved
    		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false);
 
@@ -872,6 +845,7 @@ public class ContentObjectResource extends AstroboaResource{
    			  
    			  if (contentObjectToBeSaved.getId() == null){
    				  contentObjectToBeSaved.setId(contentObjectIdOrName);
+   				  entityIsNew = true;
    			  }
    			  else{
    				  //Payload contains id. Check if they are the same
@@ -896,6 +870,9 @@ public class ContentObjectResource extends AstroboaResource{
    			  
    			  if (cmsOutcome.getCount() >= 1) {
    				  existedContentObject = (ContentObject) cmsOutcome.getResults().get(0);
+   			  }
+   			  else{
+   				  entityIsNew = true;
    			  }
 
    			  //Check that payload contains id
@@ -922,12 +899,12 @@ public class ContentObjectResource extends AstroboaResource{
    		  }
    		  
    		  //Save content object
-   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent);
+   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent, entityIsNew);
   	 }
 
 
 	 
-	 private Response saveContentObjectString(String contentSource, String httpMethod) {
+	 private Response saveContentObjectString(String contentSource, String httpMethod, boolean entityIsNew) {
 		 
 		try{
 			
@@ -955,7 +932,7 @@ public class ContentObjectResource extends AstroboaResource{
 
 				ContentObject contentObject = astroboaClient.getContentService().save(contentSource, false, true, null);
 
-				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, contentSource);
+				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, contentSource, entityIsNew);
 			}
 			
 		}
@@ -965,12 +942,12 @@ public class ContentObjectResource extends AstroboaResource{
 		}
 	}
 	 
-	 private Response saveContentObject(ContentObject contentObject, String httpMethod, String requestContent) {
+	 private Response saveContentObject(ContentObject contentObject, String httpMethod, String requestContent, boolean entityIsNew) {
 		 
 			try{
 				contentObject = astroboaClient.getContentService().save(contentObject, false, true, null);
 				
-				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, requestContent);
+				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, requestContent, entityIsNew);
 				
 			}
 			catch(Exception e){
