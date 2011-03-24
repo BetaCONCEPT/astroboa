@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-model</artifactId>
+	<packaging>jar</packaging>
+	<name>Astroboa Model</name>
+	<description>
+		This is the implementation of astroboa-api, mainly of package
+		org.betaconceptframework.astroboa.model
+	</description>
+
+	<build>
+	
+		<resources>
+    	  	<resource>
+        		<directory>src/main/resources</directory>
+        		<filtering>true</filtering>
+    	  	</resource>
+    	</resources>
+    	
+	
+	<plugins>
+	
+		<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.7.4</version>
+
+				<!--
+					This plugin is executed once by running 
+						mvn org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:generate
+					
+					 Automatic
+					execution is disabled as it does not takes into consideration the
+					forceRegenerate value and it is creating java code every time
+					module is compiled, which is annoying. <executions> <execution>
+					<goals> <goal>generate</goal> </goals> </execution> </executions>
+				-->
+				<configuration>
+					<schemaDirectory>src/main/resources/META-INF</schemaDirectory>
+					<generateDirectory>src/main/java</generateDirectory>
+					<generatePackage>
+						org.betaconceptframework.astroboa.commons.configuration
+					</generatePackage>
+					<includeSchemas>
+						<includeSchema>
+							astroboa-conf.xsd
+						</includeSchema>
+					</includeSchemas>
+					<strict>true</strict>
+					<verbose>true</verbose>
+					<forceRegenerate>false</forceRegenerate>
+
+				</configuration>
+			</plugin>
+			
+			<!-- Use this plugin to rename all built in definition schemas -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-antrun-plugin</artifactId>
+        		<!-- 
+        			Although plugin version is  provided in pluginManagement in
+        			betaconceptframework-parent.pom, plugin's info
+        			http://maven.apache.org/plugins/maven-antrun-plugin/plugin-info.html
+        			states that it should also be provided in project's pom as well 
+        		-->
+        		<version>1.4</version>
+        		<executions>
+          			<execution>
+          			    <id>rename-builtin-schemata</id>
+            			<phase>compile</phase>
+            			<configuration>
+              				<tasks>
+              				 	<move todir="${project.build.outputDirectory}/META-INF" includeemptydirs="false">
+    								<fileset dir="${project.build.outputDirectory}/META-INF">
+      									<include name="**/*.xsd" />
+      									<exclude name="**/xml.xsd" />
+      									<exclude name="**/*-${project.version}.xsd" />
+    								</fileset>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
+  								</move>
+		            		</tasks>
+        			    </configuration>
+            			<goals>
+              				<goal>run</goal>
+            			</goals>
+          			</execution>
+        		</executions>
+      		</plugin>
+	 <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>javacc-maven-plugin</artifactId>
+	        <version>2.5</version>
+	        <executions>
+	          <execution>
+	            <configuration>
+	              <sourceDirectory>${basedir}/src/main/javacc</sourceDirectory>
+	              <packageName>org.betaconceptframework.astroboa.model.impl.query.parser</packageName>
+	              <outputDirectory>${basedir}/src/main/java</outputDirectory>
+	              <interimDirectory>${basedir}/src/main/java</interimDirectory>
+	            </configuration>
+	            <goals>
+	              <goal>jjtree-javacc</goal>
+	            </goals>
+	          </execution>
+	        </executions>
+	      </plugin>
+	      
+			
+    </plugins>
+  </build>
+	<dependencies>
+
+<!-- SLF4J API is an abstraction of various logging systems. This allows the
+			use of any logging framework at the time of deployment -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!-- These dependencies must be declared in the project that utilizes this module
+			in order to define that the actual logging framework that SLF4J will be using
+			in order for Logging to work properly is Log4j
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		
+		<!-- Used for Utilities classes ISO9075 and ISO8601-->
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-jcr-commons</artifactId>
+		</dependency>
+		  		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers</artifactId>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+				 <groupId>javax.xml.stream</groupId>
+				 <artifactId>stax-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jasypt</groupId>
+			<artifactId>jasypt</artifactId>
+			<version>1.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.acegisecurity</groupId>
+					<artifactId>acegi-security</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.wicket</groupId>
+					<artifactId>wicket</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>  
+				</exclusion>
+				<exclusion>
+					<groupId>com.ibm.icu</groupId>
+					<artifactId>icu4j</artifactId>
+				</exclusion>
+
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>140</version>
+		</dependency>  		
+
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-core-lgpl</artifactId>
+		</dependency>
+		
+		<dependency>   
+	       <groupId>net.sf.json-lib</groupId>   
+	       <artifactId>json-lib</artifactId>   
+	       <version>2.4</version>   
+	       <classifier>jdk15</classifier>   
+	    </dependency>  
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-model
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-model
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-model
+		</url>
+	</scm>
+</project>
