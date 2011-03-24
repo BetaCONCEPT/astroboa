@@ -121,10 +121,10 @@ public interface CmsRepositoryEntity {
 	 * 
 	 * @param resourceRepresentationType XML (default) or JSON representation
 	 * @param relative <code>true</code> to return URL relative to server, <code>false</code> otherwise. 
-	 * Default is <code>false</code>.
+	 * @param friendlyUrl Specify whether you require a SEO / User friendly URL or a permanent URL. Permanent URLs are good for sharing while friendly URLs are better for Web Sites.
 	 *  
 	 * @return A RESTful API URL responsible to retrieve this entity in the specified representation type.
 	 */
-	String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative);
+	String getResourceApiURL(ResourceRepresentationType<?>  resourceRepresentationType, boolean relative, boolean friendlyUrl);
 	
 }
