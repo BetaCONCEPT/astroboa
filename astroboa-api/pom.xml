@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-api</artifactId>
+	<name>Astroboa API</name>
+	<description>
+		This modules holds all the interfaces to Astroboa services and
+		model objects, i.e the astroboa repository facade. This module
+		produces the jar required by those building applications that
+		utilize the astroboa engine
+	</description>
+
+
+	<scm>
+		<connection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+		</connection>
+		<developerConnection>
+			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+		</developerConnection>
+		<url>
+			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+		</url>
+	</scm>
+
+</project>
+
