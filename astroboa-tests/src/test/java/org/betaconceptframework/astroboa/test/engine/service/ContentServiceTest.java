@@ -2869,8 +2869,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			expectedProperty = "contentObjectTypeName=\""+contentObject.getContentObjectType()+"\"";
 			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object type "+contentObject.getContentObjectType());
 
-			expectedProperty = "url=\""+contentObject.getResourceApiURL(resourceRepresentationType,false)+"\"";
-			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false));
+			expectedProperty = "url=\""+contentObject.getResourceApiURL(resourceRepresentationType,false,contentObject.getSystemName()!=null)+"\"";
+			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false, contentObject.getSystemName()!= null));
 
 			if (fetchLevel == null || fetchLevel == FetchLevel.ENTITY || 
 					fetchLevel == FetchLevel.ENTITY_AND_CHILDREN && CollectionUtils.isEmpty(propertiesToExport)){
@@ -2987,8 +2987,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			expectedProperty = "\"contentObjectTypeName\":\""+contentObject.getContentObjectType()+"\"";
 			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object type "+contentObject.getContentObjectType());
 
-			expectedProperty = "\"url\":\""+contentObject.getResourceApiURL(resourceRepresentationType,false)+"\"";
-			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false));
+			expectedProperty = "\"url\":\""+contentObject.getResourceApiURL(resourceRepresentationType,false,false)+"\"";
+			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false,false));
 
 			if (fetchLevel == null || fetchLevel == FetchLevel.ENTITY || 
 					fetchLevel == FetchLevel.ENTITY_AND_CHILDREN && CollectionUtils.isEmpty(propertiesToExport)){

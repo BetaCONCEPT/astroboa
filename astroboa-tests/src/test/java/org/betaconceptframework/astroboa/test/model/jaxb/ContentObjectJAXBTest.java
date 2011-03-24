@@ -127,7 +127,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			assertPropertyIsExported(jsonFromApi,expectedOutcome);
 			assertPropertyIsExported(jsonFromService,expectedOutcome);
 
-			expectedOutcome = "\"url\":\""+contentObjectMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false)+"\"";
+			expectedOutcome = "\"url\":\""+contentObjectMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false,contentObjectMultipleFirstValue.getSystemName()!=null)+"\"";
 			assertPropertyIsExported(jsonFromApi,expectedOutcome);
 			assertPropertyIsExported(jsonFromService,expectedOutcome);
 			
@@ -156,7 +156,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			assertPropertyIsExported(jsonFromApi,expectedOutcome);
 			assertPropertyIsExported(jsonFromService,expectedOutcome);
 
-			expectedOutcome = "\"url\":\""+simpleContentObject.getResourceApiURL(ResourceRepresentationType.JSON, false)+"\"";
+			expectedOutcome = "\"url\":\""+simpleContentObject.getResourceApiURL(ResourceRepresentationType.JSON, false,simpleContentObject.getSystemName()!=null)+"\"";
 			assertPropertyIsExported(jsonFromApi,expectedOutcome);
 			assertPropertyIsExported(jsonFromService,expectedOutcome);
 
@@ -293,7 +293,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				assertPropertyIsExported(jsonFromApi,expectedSimpleContentObjectMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleContentObjectMultiple);
 
-				expectedSimpleContentObjectMultiple = "\"url\":\""+contentObjectMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false)+"\"";
+				expectedSimpleContentObjectMultiple = "\"url\":\""+contentObjectMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false,contentObjectMultipleFirstValue.getSystemName()!=null)+"\"";
 				assertPropertyIsExported(jsonFromApi,expectedSimpleContentObjectMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleContentObjectMultiple);
 
@@ -310,7 +310,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				assertPropertyIsExported(jsonFromApi,expectedSimpleTopicMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleTopicMultiple);
 
-				expectedSimpleTopicMultiple ="\"url\":\""+topicFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false)+"\"";
+				expectedSimpleTopicMultiple ="\"url\":\""+topicFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false,topicFirstValue.getName()!=null)+"\"";
 				assertPropertyIsExported(jsonFromApi,expectedSimpleTopicMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleTopicMultiple);
 
@@ -332,7 +332,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				assertPropertyIsExported(jsonFromApi,expectedsimpleBinaryMultipleExport);
 				assertPropertyIsExported(jsonFromService,expectedsimpleBinaryMultipleExport);
 
-				expectedsimpleBinaryMultipleExport = "\"url\":\""+simpleBinaryMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false)+"\"";
+				expectedsimpleBinaryMultipleExport = "\"url\":\""+simpleBinaryMultipleFirstValue.getResourceApiURL(ResourceRepresentationType.JSON, false,false)+"\"";
 				assertPropertyIsExported(jsonFromApi,expectedsimpleBinaryMultipleExport);
 				assertPropertyIsExported(jsonFromService,expectedsimpleBinaryMultipleExport);
 
@@ -562,9 +562,9 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				Assert.assertTrue(xmlFromApi.contains(expectedProperty), "XML export from API does not contain content object type "+contentObject.getContentObjectType());
 				Assert.assertTrue(xmlFromService.contains(expectedProperty), "XML export from Service does not contain content object type "+contentObject.getContentObjectType());
 
-				expectedProperty = "url=\""+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false)+"\"";
-				Assert.assertTrue(xmlFromApi.contains(expectedProperty), "XML export from API does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false));
-				Assert.assertTrue(xmlFromService.contains(expectedProperty), "XML export from Service does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false));
+				expectedProperty = "url=\""+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false,contentObject.getSystemName()!=null)+"\"";
+				Assert.assertTrue(xmlFromApi.contains(expectedProperty), "XML export from API does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false,contentObject.getSystemName()!=null));
+				Assert.assertTrue(xmlFromService.contains(expectedProperty), "XML export from Service does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.XML,false,contentObject.getSystemName()!=null));
 
 				expectedProperty = "<profile";
 				Assert.assertTrue(xmlFromApi.contains(expectedProperty), "XML export from API does not contain content object's profile ");
@@ -631,9 +631,9 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				Assert.assertTrue(jsonFromApi.contains(expectedProperty), "JSON export from API does not contain content object type "+contentObject.getContentObjectType());
 				Assert.assertTrue(jsonFromService.contains(expectedProperty), "JSON export from Service does not contain content object type "+contentObject.getContentObjectType());
 
-				expectedProperty = "\"url\":\""+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false)+"\"";
-				Assert.assertTrue(jsonFromApi.contains(expectedProperty), "JSON export from API does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false));
-				Assert.assertTrue(jsonFromService.contains(expectedProperty), "JSON export from Service does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false));
+				expectedProperty = "\"url\":\""+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false,contentObject.getSystemName()!=null)+"\"";
+				Assert.assertTrue(jsonFromApi.contains(expectedProperty), "JSON export from API does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false,contentObject.getSystemName()!=null));
+				Assert.assertTrue(jsonFromService.contains(expectedProperty), "JSON export from Service does not contain content object url "+contentObject.getResourceApiURL(ResourceRepresentationType.JSON,false,contentObject.getSystemName()!=null));
 
 				expectedProperty = "\"profile\":{";
 				Assert.assertTrue(jsonFromApi.contains(expectedProperty), "JSON export from API does not contain content object's profile ");

@@ -296,13 +296,13 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		
 		try{
 			String expectedString = "<references cmsIdentifier=\""+simpleContentObject.getId()+"\" systemName=\""+simpleContentObject.getSystemName()
-			+"\" url=\""+simpleContentObject.getResourceApiURL(ResourceRepresentationType.XML, false)+"\" contentObjectTypeName=\""+TEST_CONTENT_TYPE+"\"";
+			+"\" url=\""+simpleContentObject.getResourceApiURL(ResourceRepresentationType.XML, false,simpleContentObject.getSystemName()!=null)+"\" contentObjectTypeName=\""+TEST_CONTENT_TYPE+"\"";
 			
 			String expectedStringWithoutWhitespaces = removeWhitespacesIfNecessary(contentObjectCriteria, expectedString);
 			
 			Assert.assertTrue(xmlWithoutWhitespaces.contains(expectedStringWithoutWhitespaces), "ContentObjectReference has not been marshalled to XML. Did not find "+ expectedString+ " in XML "+xmlWithoutWhitespaces);
 			
-			expectedString = "<simpleTopic cmsIdentifier=\""+topic.getId()+"\" name=\""+topic.getName()+"\""+" url=\""+topic.getResourceApiURL(ResourceRepresentationType.XML, false)+"\"";
+			expectedString = "<simpleTopic cmsIdentifier=\""+topic.getId()+"\" name=\""+topic.getName()+"\""+" url=\""+topic.getResourceApiURL(ResourceRepresentationType.XML, false,topic.getName()!=null)+"\"";
 			expectedStringWithoutWhitespaces = removeWhitespacesIfNecessary(contentObjectCriteria, expectedString);
 
 			Assert.assertTrue(xmlWithoutWhitespaces.contains(expectedStringWithoutWhitespaces), "Topic reference has not been marshalled to XML"+expectedString);
