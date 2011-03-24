@@ -43,9 +43,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
-import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
-import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
@@ -59,6 +57,7 @@ import org.betaconceptframework.astroboa.security.CmsGroup;
 import org.betaconceptframework.astroboa.security.CmsPrincipal;
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -296,48 +295,43 @@ public class ContentApiUtils {
 	 * is the appropriate response status, depending on whether or not the response 
 	 * includes an entity that describes the result. 
 	 */
-	public static Response createSuccessfulResponseForPUTOrPOST(CmsRepositoryEntity entity, String httpMethod, ResourceRepresentationType<?> resourceRepresentationType) {
+	public static Response createSuccessfulResponseForPUTOrPOST(CmsRepositoryEntity entity, String httpMethod, ResourceRepresentationType<?> resourceRepresentationType, boolean entityIsNew) {
 		
 		ResponseBuilder responseBuilder = null;
 		
-		if (entity instanceof ContentObject){
-			ContentObject contentObject = (ContentObject) entity;
+		if (httpMethod == null || httpMethod.equals(HttpMethod.POST)){
+			//Entity is a new one. Send CREATED (201) status with location header
+			responseBuilder = Response.status(Status.CREATED);
 			
-			//After saving a content object , the only way to tell whether it is a new or not entity
-			//is by checking created and modified properties. If they are the same, 
-			//entity is a new one
-			CalendarProperty createdProperty = (CalendarProperty) contentObject.getCmsProperty("profile.created");
-			CalendarProperty modifiedProperty = (CalendarProperty) contentObject.getCmsProperty("profile.modified");
+			UrlProperties urlProperties = new UrlProperties();
+			urlProperties.setResourceRepresentationType(resourceRepresentationType);
+			urlProperties.setFriendly(false);
+			urlProperties.setRelative(false);
+			urlProperties.setIdentifier(entity.getId());
 			
-			if (createdProperty != null && createdProperty.hasValues() && modifiedProperty!=null &&
-					modifiedProperty.hasValues() && 
-					createdProperty.getFirstValue()!= null && 
-					createdProperty.getFirstValue().equals(modifiedProperty.getFirstValue())){
-				
-				//Entity is a new one. Send CREATED (201) status with location header
-				responseBuilder = Response.status(Status.CREATED);
-			}
-			else{
-				//Entity is not a new one. Send 200 (OK) header
-				responseBuilder = Response.status(Status.OK);
-			}
-			
+			responseBuilder.location(URI.create(ResourceApiURLUtils.generateUrlForEntity(entity, urlProperties)));
+
 		}
-		else {
-			//For all other entities (Taxonomy, Topic) there is no way of telling whether
-			//they are new or old ones. Response will depend on the calling HTTP method
-			if (httpMethod == null || httpMethod.equals(HttpMethod.PUT)){
+		else if (httpMethod.equals(HttpMethod.PUT)) {
+			
+			if (entityIsNew){
+				//Entity is a new one. Send CREATED (201) status
 				responseBuilder = Response.status(Status.CREATED);
+
 			}
 			else{
 				responseBuilder = Response.status(Status.OK);
 			}
+		}
+		else{
+			logger.warn("Expected to have either HTTP PUT or HTTP POST but the provided HTTP method is " + httpMethod+ " Will send OK status nevertheless");
+			responseBuilder = Response.status(Status.OK);
 		}
 		
 		responseBuilder.header("Content-Disposition", "inline");
 		responseBuilder.type(MediaType.TEXT_PLAIN + "; charset=utf-8");
-		responseBuilder.location(URI.create(ResourceApiURLUtils.generateUrlForEntity(entity, resourceRepresentationType, false)));
 		
+		//TODO: It should clarified whether entity identifier or entity's system name is provided 
 		responseBuilder.entity(entity.getId());
 
 		
@@ -346,13 +340,13 @@ public class ContentApiUtils {
 
 	public static Response createResponseForPutOrPostOfACmsEntity(
 			CmsRepositoryEntity cmsRepositoryEntity, String httpMethod,
-			String requestContent) {
+			String requestContent, boolean entityIsNew) {
 		
 		if (cmsRepositoryEntity != null && cmsRepositoryEntity.getId() != null){
 			
 			ResourceRepresentationType<?> resourceRepresentationType = contentIsXML(requestContent) ? ResourceRepresentationType.XML : ResourceRepresentationType.JSON;
 			
-			return createSuccessfulResponseForPUTOrPOST(cmsRepositoryEntity, httpMethod, resourceRepresentationType); 
+			return createSuccessfulResponseForPUTOrPOST(cmsRepositoryEntity, httpMethod, resourceRepresentationType, entityIsNew); 
 		}
 		else {
 			logger.error("{} request was not successfull. The entity created when importing the following content {}. \n {} ",
