@@ -608,32 +608,32 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
-		StringBuilder contentApiURLBuilder = new StringBuilder();
+		StringBuilder resourceApiURLBuilder = new StringBuilder();
 		
 		if (! relative){
 			String serverURL = getServerURL();
 			
 			if (serverURL != null){
-				contentApiURLBuilder.append(serverURL);
+				resourceApiURLBuilder.append(serverURL);
 			}
 		}
 		
-		contentApiURLBuilder.append(getRestfulApiBasePath()).append(CmsConstants.FORWARD_SLASH); 
+		resourceApiURLBuilder.append(getRestfulApiBasePath()).append(CmsConstants.FORWARD_SLASH); 
 
-		contentApiURLBuilder.append((StringUtils.isBlank(repositoryId) ? "no-repository":repositoryId));
-		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append("contentObject");
+		resourceApiURLBuilder.append((StringUtils.isBlank(repositoryId) ? "no-repository":repositoryId));
+		resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append("contentObject");
 		
 		if (friendlyUrl) {
-			contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(contentObjectSystemName);
+			resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(contentObjectSystemName);
 		}
 		else {
-			contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(contentObjectId);
+			resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(contentObjectId);
 		}
 		
-		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(binaryPropertyPermanentPath);
+		resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(binaryPropertyPermanentPath);
 		
 		if (binaryPropertyIsMultiValued){
-			contentApiURLBuilder.append(CmsConstants.LEFT_BRACKET)
+			resourceApiURLBuilder.append(CmsConstants.LEFT_BRACKET)
 			.append(getId())
 			.append(CmsConstants.RIGHT_BRACKET);
 		}
@@ -641,7 +641,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		StringBuilder urlParametersBuilder = new StringBuilder();
 		
 		if (contentDispositionType !=null){
-			contentApiURLBuilder
+			urlParametersBuilder
 				.append(CmsConstants.AMPERSAND)
 				.append("contentDispositionType")
 				.append(CmsConstants.EQUALS_SIGN)
@@ -650,7 +650,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		
 		if (isJPGorPNGorGIFImage()){
 			if (width != null && width > 0){
-				contentApiURLBuilder
+				urlParametersBuilder
 					.append(CmsConstants.AMPERSAND)
 					.append("width")
 					.append(CmsConstants.EQUALS_SIGN)
@@ -658,7 +658,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 			}
 			
 			if (height != null && height > 0){
-				contentApiURLBuilder.append(CmsConstants.AMPERSAND)
+				urlParametersBuilder.append(CmsConstants.AMPERSAND)
 					.append("height")
 					.append(CmsConstants.EQUALS_SIGN)
 					.append(height);
@@ -666,13 +666,13 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 			
 			// we accept to set a new aspect ratio only if  
 			if (aspectRatio != null && (width == null || height == null)) {
-				contentApiURLBuilder.append(CmsConstants.AMPERSAND)
+				urlParametersBuilder.append(CmsConstants.AMPERSAND)
 					.append("aspectRatio")
 					.append(CmsConstants.EQUALS_SIGN)
 					.append(aspectRatio);
 				
 				if (cropPolicy != null) {
-					contentApiURLBuilder.append(CmsConstants.AMPERSAND)
+					urlParametersBuilder.append(CmsConstants.AMPERSAND)
 					.append("cropPolicy")
 					.append(CmsConstants.EQUALS_SIGN)
 					.append(cropPolicy.toString());
@@ -684,7 +684,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		if (urlParametersBuilder.length() > 0) {
 			urlParametersBuilder.replace(0, 1, CmsConstants.QUESTION_MARK);
 		}
-		return contentApiURLBuilder.append(urlParametersBuilder).toString();
+		return resourceApiURLBuilder.append(urlParametersBuilder).toString();
 	}
 	
 	// we need this in order to determine if width, height, aspectRatio and cropPolicy url parameters should be appended in the URL 
