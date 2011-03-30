@@ -82,7 +82,7 @@ public class CriterionParserTest {
 
 		String propertyPath1="title";
 		String propertyPath2="profile.subject";
-		String propertyPath3="profile.title.el";
+		String propertyPath3="profile.language";
 
 		//Reserved property paths
 		checkExpressionForContentObjectCriteria("contentTypeName=\"1\"", CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), "1"));

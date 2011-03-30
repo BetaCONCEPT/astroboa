@@ -194,12 +194,12 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "comment", "user.comment", true);
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "user", "user", true);
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "footer", "user.comment.body.footer", true);
+		assertPropertyShouldBeExported(propertyPathsToMarshal, "banner", "user.comment.body.footer.banner", true);
 
 
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "created", "created", false);
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "created", "profile.created", false);
 		assertPropertyShouldBeExported(propertyPathsToMarshal, "author", "author", false);
-		assertPropertyShouldBeExported(propertyPathsToMarshal, "banner", "user.comment.body.footer.banner", false);
 
 	}
 
