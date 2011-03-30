@@ -319,7 +319,7 @@ public class ContentTypeEditor {
 
 	private String getDefinitionSchemaHomeDirectory() {
 		String contentDefinitionSchemaPath = AstroboaClientContextHolder.getActiveCmsRepository().getRepositoryHomeDirectory()+File.separator+
-		"astroboa_schematastroboa_schemata";
+		"astroboa_schemata";
 		return contentDefinitionSchemaPath;
 	}
 	
