@@ -21,7 +21,6 @@ package org.betaconceptframework.astroboa.model.jaxb;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 
 /**
@@ -45,31 +44,29 @@ public class MarshalUtils {
 			}
 			
 			//Check if property path is provided as is
-			if (propertyPath != null && propertyPathsToMarshal.contains(propertyPath)){
-				return true;
+			if (propertyPath != null){
+				
+				if (propertyPathsToMarshal.contains(propertyPath)){
+					return true;
+				}
+				
+				//Check if property list contains a path which starts with property's path or property's name
+				//For example, list contains path 'profile.created' and property name or path is 'profile'
+				for (String propertyPathToBeMarshalled : propertyPathsToMarshal){
+						
+					//User has requested property comment.comment and property is comment.comment.body
+					if(propertyPath.startsWith(propertyPathToBeMarshalled+CmsConstants.PERIOD_DELIM)){
+						return true;
+					}
+						
+					//User has requested property profile.title and property is profile
+					if (propertyPathToBeMarshalled.startsWith(propertyPath+CmsConstants.PERIOD_DELIM)){
+						return true;
+					}
+				}
 			}
 			
-			//Check if property list contains a path which starts with property's path or property's name
-			//For example, list contains path 'profile.created' and property name or path is 'profile'
-			for (String propertyPathToBeMarshalled : propertyPathsToMarshal){
 
-				if (propertyPath != null && propertyPathToBeMarshalled.startsWith(propertyPath+CmsConstants.PERIOD_DELIM)){
-					return true;
-				}
-				
-				if (propertyName != null && propertyPathToBeMarshalled.startsWith(propertyName+CmsConstants.PERIOD_DELIM)){
-					return true;
-				}
-			}
-
-			//Finally check if list contains parent's property
-			if (propertyPath != null && propertyPath.contains(CmsConstants.PERIOD_DELIM)){
-				String parentPath = StringUtils.substringBeforeLast(propertyPath, CmsConstants.PERIOD_DELIM);
-				
-				if (parentPath != null && propertyPathsToMarshal.contains(parentPath)){
-					return true;
-				}
-			}
 			return false;
 		}
 		
