@@ -700,11 +700,11 @@ public class Serializer {
 		//Get property path
 		String propertyPath = retrieveFullPathForProperty(propertyName);
 
-		if (!objectReferenceIsSerialized){
-			return MarshalUtils.propertyShouldBeMarshalled(propertyPathsWhoseValuesWillBeIncludedInTheSerialization, propertyName, propertyPath);
+		if (objectReferenceIsSerialized){
+			return MarshalUtils.propertyShouldBeMarshalled(propertyPathsWhoseValuesWillBeIncludedInTheSerializationOfObjectReferences, propertyName, propertyPath);
 		}
 		else{
-			return MarshalUtils.propertyShouldBeMarshalled(propertyPathsWhoseValuesWillBeIncludedInTheSerializationOfObjectReferences, propertyName, propertyPath);
+			return MarshalUtils.propertyShouldBeMarshalled(propertyPathsWhoseValuesWillBeIncludedInTheSerialization, propertyName, propertyPath);
 		}
 	}
 
