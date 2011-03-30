@@ -67,10 +67,10 @@ public class XPathUtils {
 		value = doubleQuotePattern.matcher(value).replaceAll("\"\"");
         value = singleQuotePattern.matcher(value).replaceAll("''");
 		
-		return createAttributeCriteria(property, operator, "'" + value + "'");
+		return createAttributeCriteria(property, operator, "'" + value + "'", true);
 	}
 
-	public static String attributeNullCriteria(String property) {
+	public static String createNullCriterion(String property, boolean lastPropertyInPathRepresentsASimpleProperty) {
 		
 		/*
 		 * Due to a feature request (?) 
@@ -99,78 +99,56 @@ public class XPathUtils {
 		 * 
 		 * not(comment/@jcr:primaryType=nt:unstructured and comment/comment/@jcr:primaryType=nt:unstructured and comment/comment/@body)
 		 */
-		String attributeNotNullCriteria = attributeNotNullCriteria(property);
+		String notNullCriterion = createNotNullCriterion(property, lastPropertyInPathRepresentsASimpleProperty);
 		
-		String pathBeforeAttribute = StringUtils.substringBeforeLast(attributeNotNullCriteria, CmsConstants.AT_CHAR);
+		return CmsConstants.NOT + CmsConstants.LEFT_PARENTHESIS +notNullCriterion + CmsConstants.RIGHT_PARENTHESIS;
+	}
+
+	public static String createNotNullCriterion(String property, boolean lastPropertyInPathRepresentsASimpleProperty) {
 		
-		if (StringUtils.isBlank(pathBeforeAttribute)){
-			//First level attribute proceed normally
-			return CmsConstants.NOT + CmsConstants.LEFT_PARENTHESIS +attributeNotNullCriteria + CmsConstants.RIGHT_PARENTHESIS;
+		String propertyPath = generateJcrPathForPropertyPath(property, lastPropertyInPathRepresentsASimpleProperty);
+		
+		String[] nodes = propertyPath.split(CmsConstants.FORWARD_SLASH);
+
+		if (nodes.length == 1 && nodes[0].startsWith(CmsConstants.AT_CHAR)){
+			//Property is a first level simple property
+			return propertyPath;
 		}
-		else{
 			
-			String[] nodes = attributeNotNullCriteria.split(CmsConstants.FORWARD_SLASH);
+		StringBuilder criterion = new StringBuilder(); 
+		
+		criterion.append(CmsConstants.LEFT_PARENTHESIS);
 			
-			StringBuilder criterion = new StringBuilder(); 
-			criterion.append(CmsConstants.LEFT_PARENTHESIS_WITH_LEADING_AND_TRAILING_SPACE)
-				.append(CmsConstants.NOT)
-				.append(CmsConstants.LEFT_PARENTHESIS);
+		StringBuilder partialPath = new StringBuilder();
 			
-			StringBuilder partialPath = new StringBuilder();
+		for (int i=0; i<nodes.length;i++){
 			
-			for (int i=0; i<nodes.length-1;i++){
-				
-				partialPath.append(nodes[i])
-				.append(CmsConstants.FORWARD_SLASH);
-				
-				criterion.append(partialPath.toString())
-					.append(createStringCriteria(JcrBuiltInItem.JcrPrimaryType.getJcrName(), QueryOperator.EQUALS, JcrBuiltInItem.NtUnstructured.getJcrName())) 
-					.append(CmsConstants.EMPTY_SPACE)
-					.append(CONDITION_AND_LOWER_CASE)
-					.append(CmsConstants.EMPTY_SPACE);
+			if (i == nodes.length-1 && nodes[i].startsWith(CmsConstants.AT_CHAR)){
+				//Reached the end. If property is a simple property then 
+				//its path starts with @ and therefore we do not need to add anything more 
+				partialPath.append(nodes[i]);
+				criterion.append(partialPath.toString());
 			}
-			
-			return criterion.append(attributeNotNullCriteria)
-						.append(CmsConstants.RIGHT_PARENTHESIS)
-						.append(CmsConstants.RIGHT_PARENTHESIS_WITH_LEADING_AND_TRAILING_SPACE).toString();
-			
-			//Child node attribute. create two constraints
-			// (
-			// not( profile/@jcr:primaryType=nt:unstructured and profile/@title )
-			/*return
-				CmsConstants.LEFT_PARENTHESIS + 
-			
-					CmsConstants.NOT + CmsConstants.LEFT_PARENTHESIS.trim() +
-					pathBeforeAttribute+"/@jcr:primaryType=nt:unstructured and "
-					+attributeNotNullCriteria + CmsConstants.RIGHT_PARENTHESIS.trim()+
+			else{
+
+				partialPath.append(nodes[i])
+							.append(CmsConstants.FORWARD_SLASH);
+
+				criterion.append(partialPath.toString())
+						.append(createStringCriteria(JcrBuiltInItem.JcrPrimaryType.getJcrName(), QueryOperator.EQUALS, JcrBuiltInItem.NtUnstructured.getJcrName())) 
+						.append(CmsConstants.EMPTY_SPACE);
 				
-				CmsConstants.RIGHT_PARENTHESIS ;
-				*/
-			
-				/*CmsConstants.LEFT_PARENTHESIS + 
-					
-					CmsConstants.NOT + CmsConstants.LEFT_PARENTHESIS.trim() +attributeNotNullCriteria + CmsConstants.RIGHT_PARENTHESIS.trim()+
-					
-					CmsConstants.EMPTY_SPACE+Condition.OR.toString().toLowerCase()+CmsConstants.EMPTY_SPACE+
-			
-					pathBeforeAttribute+ 
-					
-					CmsConstants.NOT + CmsConstants.LEFT_PARENTHESIS.trim() + CmsConstants.AT_CHAR+
-						StringUtils.substringAfterLast(attributeNotNullCriteria, CmsConstants.AT_CHAR) + CmsConstants.RIGHT_PARENTHESIS.trim()+
-						
-				CmsConstants.RIGHT_PARENTHESIS ;*/
+				if (i != nodes.length-1){
+					criterion.append(CONDITION_AND_LOWER_CASE)
+							.append(CmsConstants.EMPTY_SPACE);
+				}
+			}
 		}
+		
+		return criterion.append(CmsConstants.RIGHT_PARENTHESIS).toString();
 	}
 
-	public static String attributeNotNullCriteria(String property) {
-		return generateJcrPathForSimpleProperty(property);
-	}
-
-	private static String generateJcrPathForSimpleProperty(String property) {
-		return generateJcrPathForPropertyPath(property, true);
-	}
-	
-	private static String generateJcrPathForPropertyPath(String propertyPath, boolean lastPropertyInPathRepresentsASimpleProperty) {
+	public static String generateJcrPathForPropertyPath(String propertyPath, boolean lastPropertyInPathRepresentsASimpleProperty) {
 
 		if (StringUtils.isNotBlank(propertyPath)){
 			//It is high likely that property may contain function names. In this case
@@ -250,15 +228,15 @@ public class XPathUtils {
 	}
 
 	public static String createAttributeCriteria(String property,
-			QueryOperator operator, String value) {
-		return attributeNotNullCriteria(property) + CmsConstants.EMPTY_SPACE
+			QueryOperator operator, String value,boolean lastPropertyInPathRepresentsASimpleProperty) {
+		return generateJcrPathForPropertyPath(property, lastPropertyInPathRepresentsASimpleProperty) + CmsConstants.EMPTY_SPACE
 				+ operator.getOp() + CmsConstants.EMPTY_SPACE + value;
 	}
 
 	public static String createDateCriteria(String property,
 			QueryOperator operator, Calendar calendar) {
 		return createAttributeCriteria(property, operator, "xs:dateTime('"
-				+ formatForQuery(calendar) + "')");
+				+ formatForQuery(calendar) + "')", true);
 	}
 
 	public static String formatForQuery(Calendar calendar) {
@@ -281,7 +259,7 @@ public class XPathUtils {
 	}
 
 	public static String addLikeCriteria(String property, String textToFind) {
-		String attributeName = generateJcrPathForSimpleProperty(property);
+		String attributeName = generateJcrPathForPropertyPath(property, true);
 
 		if (StringUtils.isBlank(attributeName))
 			attributeName = CmsConstants.PERIOD_DELIM;
@@ -417,7 +395,7 @@ public class XPathUtils {
 	public static String createObjectCriteria(String property,QueryOperator operator, Object value, boolean propertyIsASimpleProperty, CaseMatching caseMatching, int numberOfNodeLevelsToSearchInTheModelHierarchy)	{
 
 		if (value == null || QueryOperator.IS_NULL == operator)
-			return attributeNullCriteria(property);
+			return createNullCriterion(property, propertyIsASimpleProperty);
 
 		if (QueryOperator.CONTAINS == operator)
 			return addContainsCriteria(property, value.toString(), propertyIsASimpleProperty, numberOfNodeLevelsToSearchInTheModelHierarchy);
@@ -426,7 +404,7 @@ public class XPathUtils {
 			return addLikeCriteria(property, value.toString());
 
 		if (QueryOperator.IS_NOT_NULL == operator)
-			return attributeNotNullCriteria(property);
+			return createNotNullCriterion(property,propertyIsASimpleProperty);
 		
 		if (value instanceof String){
 			if (caseMatching != null){
@@ -461,19 +439,18 @@ public class XPathUtils {
 
 	private static String createDoubleCriteria(String property,
 			QueryOperator operator, Double doubleValue) {
-		return createAttributeCriteria(property, operator, doubleValue
-				.toString());
+		return createAttributeCriteria(property, operator, doubleValue.toString(), true);
 	}
 
 	private static String createBooleanCriteria(String property,
 			QueryOperator operator, Boolean booleanValue) {
 		//Jackrabbit wants boolean value surrounded by quotes
-		return createAttributeCriteria(property, operator, "'"+ booleanValue.toString()+ "'");
+		return createAttributeCriteria(property, operator, "'"+ booleanValue.toString()+ "'", true);
 	}
 
 	public static String createLongCriteria(String property,
 			QueryOperator operator, Long longValue) {
-		return createAttributeCriteria(property, operator, longValue.toString());
+		return createAttributeCriteria(property, operator, longValue.toString(), true);
 	}
 
 	/**

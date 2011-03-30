@@ -88,7 +88,7 @@ public class OrderByClauseHelper {
 
 				if (StringUtils.isNotBlank(property) && order != null){
 					
-					String propertyXPathRepresentation = XPathUtils.attributeNotNullCriteria(property);
+					String propertyXPathRepresentation = XPathUtils.generateJcrPathForPropertyPath(property, true);
 					
 					String valueToBePlacedInColumnProjection = null;
 					String valueToBePlacedInOrderByClause = null;
@@ -161,7 +161,7 @@ public class OrderByClauseHelper {
 		if (order == null)
 			order = Order.ascending;
 
-		String propertyXPath = XPathUtils.attributeNotNullCriteria(property);
+		String propertyXPath = XPathUtils.generateJcrPathForPropertyPath(property, true);
 
 		switch (order) {
 		case ascending:

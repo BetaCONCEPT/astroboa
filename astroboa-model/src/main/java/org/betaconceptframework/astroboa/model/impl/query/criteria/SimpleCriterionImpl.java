@@ -133,16 +133,22 @@ public class SimpleCriterionImpl implements SimpleCriterion, Serializable{
 		if (operator == null)
 			operator = QueryOperator.EQUALS;
 		
-		if (QueryOperator.IS_NULL == operator)
-			criterion.append(XPathUtils.attributeNullCriteria(property));
-		else if (QueryOperator.IS_NOT_NULL == operator)
-			criterion.append(XPathUtils.attributeNotNullCriteria(property));
-		else if (CollectionUtils.isEmpty(values))
-		{
+		if (QueryOperator.IS_NULL == operator){
+			checkThatPropertyPathRefersToSimpleProperty();
+			criterion.append(XPathUtils.createNullCriterion(property,propertyIsSimple));
+		}
+		else if (QueryOperator.IS_NOT_NULL == operator){
+			checkThatPropertyPathRefersToSimpleProperty();
+			criterion.append(XPathUtils.createNotNullCriterion(property,propertyIsSimple));
+		}
+		else if (CollectionUtils.isEmpty(values)){
+			
+			checkThatPropertyPathRefersToSimpleProperty();
+			
 			if (operator == QueryOperator.EQUALS)
-				criterion.append(XPathUtils.attributeNullCriteria(property));
+				criterion.append(XPathUtils.createNullCriterion(property,propertyIsSimple));
 			else if (operator == QueryOperator.NOT_EQUALS)
-				criterion.append(XPathUtils.attributeNotNullCriteria(property));
+				criterion.append(XPathUtils.createNotNullCriterion(property, propertyIsSimple));
 			else
 				//No value has been provided. No need to create an empty criterion
 				return "";
