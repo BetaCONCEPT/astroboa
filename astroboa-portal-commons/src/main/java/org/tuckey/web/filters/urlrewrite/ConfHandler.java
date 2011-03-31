@@ -162,16 +162,19 @@ public class ConfHandler extends DefaultHandler {
 
 		try {
 
-			urlRewriteRules = ConfigurationUtils.locate(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME);
+			urlRewriteRules = this.getClass().getClassLoader().getResource(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME);
 			
+
 			if (urlRewriteRules == null)
 			{
+				System.out.println("ERROR : File Astroboa URL rewrite rules was not found in "+ urlRewriteRules);
 				log.error("Could not locate "+PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME );
 				return null;
 			}
 			
+			System.out.println("ERROR : File Astroboa URL rewrite rules was found in "+ urlRewriteRules.toString());
 			
-			System.out.println("ERROR : Found Astroboa URL rewrite rules file in "+ urlRewriteRules.toString());
+			
 			
 			InputSource is = new InputSource( urlRewriteRules.openStream() );
 
