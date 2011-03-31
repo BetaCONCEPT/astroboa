@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.configuration.ConfigurationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.portal.utility.PortalStringConstants;
 import org.tuckey.web.filters.urlrewrite.utils.Log;
 import org.xml.sax.InputSource;
@@ -94,6 +95,10 @@ public class ConfHandler extends DefaultHandler {
      */
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException {
+    	
+    	
+    	System.out.println("ERROR : Must resolve entity with publid Id "+ publicId + " and System Id "+ systemId);
+    	
         if (publicId == null) {
         	
         	if (StringUtils.isNotBlank(systemId) && systemId.endsWith(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME))
@@ -165,22 +170,19 @@ public class ConfHandler extends DefaultHandler {
 			urlRewriteRules = this.getClass().getClassLoader().getResource(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME);
 			
 
-			if (urlRewriteRules == null)
+			throw new CmsException(urlRewriteRules.toString());
+			
+			/*if (urlRewriteRules == null)
 			{
-				System.out.println("ERROR : File Astroboa URL rewrite rules was not found in "+ urlRewriteRules);
 				log.error("Could not locate "+PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME );
 				return null;
 			}
-			
-			System.out.println("ERROR : File Astroboa URL rewrite rules was found in "+ urlRewriteRules.toString());
-			
-			
 			
 			InputSource is = new InputSource( urlRewriteRules.openStream() );
 
 			is.setSystemId(urlRewriteRules.toString());
 			
-			return is;
+			return is;*/
 			
 		}
 		catch (Exception e) {
