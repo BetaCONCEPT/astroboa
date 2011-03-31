@@ -171,7 +171,7 @@ public class ConfHandler extends DefaultHandler {
 			}
 			
 			
-			log.error("Found Astroboa URL rewrite rules file in "+ urlRewriteRules.toString());
+			System.out.println("ERROR : Found Astroboa URL rewrite rules file in "+ urlRewriteRules.toString());
 			
 			InputSource is = new InputSource( urlRewriteRules.openStream() );
 
