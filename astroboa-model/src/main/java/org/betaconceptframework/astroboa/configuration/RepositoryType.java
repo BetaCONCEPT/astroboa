@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;attribute name="jcr-repository-jndi-name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="db-jndi-name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="serverAliasURL" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *       &lt;attribute name="restfulApiBasePath" type="{http://www.w3.org/2001/XMLSchema}string" default="/content-api" />
+ *       &lt;attribute name="restfulApiBasePath" type="{http://www.w3.org/2001/XMLSchema}string" default="/resource-api" />
  *       &lt;attribute name="jaasApplicationPolicyName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="authenticationTokenTimeout" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="identity-store-repository-id" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -235,7 +235,7 @@ public class RepositoryType {
      */
     public String getRestfulApiBasePath() {
         if (restfulApiBasePath == null) {
-            return "/content-api";
+            return "/resource-api";
         } else {
             return restfulApiBasePath;
         }
