@@ -109,15 +109,12 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		File configuration = retrieveConfigurationFile();
 		
 		//Copy File
-		System.out.println("BEFORE COPY New configuration last Modified  "+newRepositoryConfigurationFile.lastModified()+ " Old Configuration last modified "+configuration.lastModified());
 		FileUtils.copyFile(newRepositoryConfigurationFile, configuration, false);
 		//update last modified date to force Registry to reload configuration
 		
 		Calendar lastModified = Calendar.getInstance();
 		lastModified.add(Calendar.MILLISECOND, 400);
 		configuration.setLastModified(lastModified.getTimeInMillis());
-		
-		System.out.println("AFTER COPY New configuration last Modified  "+newRepositoryConfigurationFile.lastModified()+ " Old Configuration last modified "+configuration.lastModified());
 		
 		//Configure files in test context
 		AstroboaTestContext.INSTANCE.configureRepository(repositoryId, new InitialContext());
