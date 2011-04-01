@@ -304,7 +304,7 @@ public class ResourceApiURLUtils {
 		}
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
-		// http://server/content-api/
+		// http://server/resource-api/
 		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			

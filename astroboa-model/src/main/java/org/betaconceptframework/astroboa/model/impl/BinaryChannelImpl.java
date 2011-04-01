@@ -533,7 +533,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		}
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
-		// http://server/content-api/
+		// http://server/resource-api/
 		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
@@ -604,7 +604,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		}
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
-		// http://server/content-api/
+		// http://server/resource-api/
 		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			

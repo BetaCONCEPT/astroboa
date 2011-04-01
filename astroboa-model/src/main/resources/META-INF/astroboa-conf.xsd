@@ -117,7 +117,7 @@
 				It only applies to this individual repository so you may specify a different one for each repository.
 				Do not provide the full server URL to the Astroboa RESTful API, provide just the base path that follows the server domain name.
 				The RESTful API base URL is then automatically generated appending this path to the "serverAliasURL" that you provided above. 
-				This attribute is optional. If you omit it the path is set by default to "/content-api" which is the context path 
+				This attribute is optional. If you omit it the path is set by default to "/resource-api" which is the context path 
 				of the content-api war (the war that implements the RESTful API). 
 				If you do not deployed content-api war under a different name and also you do not 
 				use a proxy or rewrite rules to set different paths to the RESTful API then you may omit this attribute and
