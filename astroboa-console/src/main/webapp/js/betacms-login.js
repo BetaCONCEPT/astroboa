@@ -70,7 +70,7 @@ function initLoginPanel() {
 
 
 function getObjectCollection(repository, cmsQuery, projectionPaths, orderBy, offset, limit, callback) {
-	var resourceAPI_GetObjectURL = 'http://'+window.location.hostname+':' + window.location.port + '/content-api/' + repository + '/contentObject';
+	var resourceAPI_GetObjectURL = 'http://'+window.location.hostname+':' + window.location.port + '/resource-api/' + repository + '/contentObject';
 	
 	bcmslib.jQuery.ajax({
 		type: "GET",
