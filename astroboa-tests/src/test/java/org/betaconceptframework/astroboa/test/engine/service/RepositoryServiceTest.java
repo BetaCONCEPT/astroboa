@@ -105,12 +105,13 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		
 		final String repositoryId = "newRepositoryAddedAtRuntime";
 		File newRepositoryConfigurationFile = new ClassPathResource("new-astroboa-conf.xml").getFile();
-		newRepositoryConfigurationFile.setLastModified(Calendar.getInstance().getTimeInMillis());
 		
 		File configuration = retrieveConfigurationFile();
 		
 		//Copy File
 		FileUtils.copyFile(newRepositoryConfigurationFile, configuration, false);
+		//update last modified date to force Registry to reload configuration
+		FileUtils.touch(configuration);
 		
 		//Configure files in test context
 		AstroboaTestContext.INSTANCE.configureRepository(repositoryId, new InitialContext());
