@@ -96,9 +96,6 @@ public class ConfHandler extends DefaultHandler {
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException {
     	
-    	
-    	System.out.println("ERROR : Must resolve entity with publid Id "+ publicId + " and System Id "+ systemId);
-    	
         if (publicId == null) {
         	
         	if (StringUtils.isNotBlank(systemId) && systemId.endsWith(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME))
@@ -169,11 +166,7 @@ public class ConfHandler extends DefaultHandler {
 
 			urlRewriteRules = this.getClass().getClassLoader().getResource(PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME);
 			
-
-			throw new CmsException(urlRewriteRules.toString());
-			
-			/*if (urlRewriteRules == null)
-			{
+			if (urlRewriteRules == null){
 				log.error("Could not locate "+PortalStringConstants.ASTROBOA_URL_REWRITE_RULES_XML_FILENAME );
 				return null;
 			}
@@ -182,7 +175,7 @@ public class ConfHandler extends DefaultHandler {
 
 			is.setSystemId(urlRewriteRules.toString());
 			
-			return is;*/
+			return is;
 			
 		}
 		catch (Exception e) {
