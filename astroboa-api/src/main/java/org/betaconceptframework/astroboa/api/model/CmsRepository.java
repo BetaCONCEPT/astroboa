@@ -75,7 +75,7 @@ public interface CmsRepository extends Serializable {
 	
 	/**
 	 * Returns the base path under which the RESTful API is accessible i.e. the path that follows the Server URL provided by {@link #getServerURL()}.
-	 * The path is configured in the repositories configuration XML file and is set by default to "/content-api" 
+	 * The path is configured in the repositories configuration XML file and is set by default to "/resource-api" 
 	 * which is the context path of the content-api war (the war that implements the RESTful API). 
 	 * 
 	 * The path is used in combination with {@link CmsRepositoryImpl#serverURL} in order to
