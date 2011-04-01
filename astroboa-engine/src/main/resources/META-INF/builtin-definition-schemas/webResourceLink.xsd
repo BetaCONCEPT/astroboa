@@ -63,7 +63,7 @@
 							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
 							or it may point to external web sites, 
 							e.g. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>
@@ -96,7 +96,7 @@
 							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
 							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
 							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>
@@ -238,7 +238,7 @@
 							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
 							or it may point to external web sites, 
 							e.g. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>
@@ -271,7 +271,7 @@
 							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
 							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
 							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>
@@ -408,7 +408,7 @@
 							The URL may point to Astroboa content utilizing the RESTful Resource API / Portal API, 
 							or it may point to external web sites, 
 							e.g. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>
@@ -441,7 +441,7 @@
 							Αν θέλετε να δημιουργήσετε ένα σύνδεσμο προς περιεχόμενο που βρίσκεται στο Astroboa μπορείτε να 
 							χρησιμοποιείσετε τους τύπους συνδέσμων που παρέχουν τα RESTful Resource API και Portal API.
 							Π.χ. /portal/resource/contentObject/name/my-article (portal api), 
-							/content-api/my-repository/contentObject/my-article (Resource API), 
+							/resource-api/my-repository/contentObject/my-article (Resource API), 
 							http://www.site.com/page1, ftp://ftp.server.org/path/file. 
 						</li>
 						<li>

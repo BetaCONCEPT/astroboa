@@ -83,7 +83,7 @@ public class RepositoryEntityResolver implements EntityResolver{
 		String schemaFilename = systemId;
 		
 		//We expect URL of the form
-		//http://<server>/content-api/astroboa/repository/<repository-id>/definition/multilingualStringPropertyType?output=xsd
+		//http://<server>/resource-api/astroboa/repository/<repository-id>/definition/multilingualStringPropertyType?output=xsd
 		//Definition name is located after the last forward slash
 		if (schemaFilename.contains(CmsConstants.FORWARD_SLASH)){
 			schemaFilename = StringUtils.substringAfterLast(schemaFilename, CmsConstants.FORWARD_SLASH);
