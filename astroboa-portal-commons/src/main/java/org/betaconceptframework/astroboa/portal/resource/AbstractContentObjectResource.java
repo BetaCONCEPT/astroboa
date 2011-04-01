@@ -1851,7 +1851,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			String portalThumbnailURL = null;
 			BinaryProperty portalThumbnail = (BinaryProperty) portal.getCmsProperty("thumbnail");
 			if (portalThumbnail != null && portalThumbnail.getSimpleTypeValue() != null) {
-				//portalThumbnailURL = "http://" + portalHost + "/content-api/f/binaryChannel/" + portalThumbnail.getSimpleTypeValue().getFileAccessInfo();
+				//portalThumbnailURL = "http://" + portalHost + "/resource-api/f/binaryChannel/" + portalThumbnail.getSimpleTypeValue().getFileAccessInfo();
 				portalThumbnailURL = "http://" + portalHost + portalThumbnail.getSimpleTypeValue().getRelativeContentApiURL();
 			}
 			
