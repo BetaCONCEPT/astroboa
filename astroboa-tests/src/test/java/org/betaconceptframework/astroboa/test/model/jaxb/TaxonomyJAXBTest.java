@@ -268,7 +268,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		
 		String xsiNamesplaceDeclaration = "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
 		String xmlNamespaceDeclaration = "xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"";
-		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/content-api/repository/definition/astroboa-model");
+		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/definition/astroboa-model");
 		String xmlScehmaLocation = removeWhitespacesIfNecessary("http://www.w3.org/XML/1998/namespace http://www.w3.org/2001/03/xml.xsd");
 		
 		String xmlFromApi = taxonomy.xml(prettyPrint);
