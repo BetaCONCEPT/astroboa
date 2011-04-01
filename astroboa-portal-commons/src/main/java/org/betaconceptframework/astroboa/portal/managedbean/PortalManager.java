@@ -29,6 +29,8 @@ import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
+import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
+import org.betaconceptframework.astroboa.configuration.RepositoryType;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.portal.utility.PortalStringConstants;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -139,4 +141,25 @@ public class PortalManager {
 		
 		return findPortal();
 	}
+	
+	@Factory("resourceApiBasePath")
+	public String getResourceApiBasePath() {
+		if (astroboaClient != null){
+			
+			String repositoryId = astroboaClient.getConnectedRepositoryId();
+			
+			if (RepositoryRegistry.INSTANCE.isRepositoryRegistered(repositoryId)){
+				
+				RepositoryType repositoryConfiguration = RepositoryRegistry.INSTANCE.getRepositoryConfiguration(repositoryId);
+				
+				if (repositoryConfiguration!= null){
+					return repositoryConfiguration.getRestfulApiBasePath();
+				}
+			}
+		}
+		
+		//This is the default value
+		return "/resource-api";
+	}
+
 }
