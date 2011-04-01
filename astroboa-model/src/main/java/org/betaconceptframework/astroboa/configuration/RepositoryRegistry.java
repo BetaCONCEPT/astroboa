@@ -364,10 +364,6 @@ public enum RepositoryRegistry{
 
 	public boolean configurationHasChanged() {
 		
-		if (configuration != null){
-			System.out.println("Checking whether configuration has changed. Last Modified  "+lastModified+ " Configuration File last modified "+configuration.lastModified());
-		}
-		
 		return configuration == null || lastModified < configuration.lastModified();
 	}
 
