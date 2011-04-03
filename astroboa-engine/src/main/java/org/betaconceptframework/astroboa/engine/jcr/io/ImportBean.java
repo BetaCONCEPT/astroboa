@@ -53,7 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-@Transactional(readOnly = true, rollbackFor = CmsException.class, propagation=Propagation.SUPPORTS)
+@Transactional(readOnly = true, rollbackFor = CmsException.class, propagation=Propagation.REQUIRED)
 public class ImportBean extends JcrDaoSupport{
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
