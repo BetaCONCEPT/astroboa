@@ -166,6 +166,10 @@ public class Serializer {
 
 		this.session = session;
 
+		if (this.session == null){
+			throw new CmsException("Cannot initialize serializer because no JCR session has been provided");
+		}
+		
 		if (df == null){
 			try {
 				df = DatatypeFactory.newInstance();
