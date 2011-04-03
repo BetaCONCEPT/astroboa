@@ -90,7 +90,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-@Transactional(readOnly = true, rollbackFor = CmsException.class, propagation=Propagation.SUPPORTS)
+@Transactional(readOnly = true, rollbackFor = CmsException.class, propagation=Propagation.REQUIRED)
 public class SerializationBean extends JcrDaoSupport{
 
 	private static final String ZIP = ".zip";
