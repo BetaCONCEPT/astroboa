@@ -110,10 +110,11 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		
 		//Copy File
 		FileUtils.copyFile(newRepositoryConfigurationFile, configuration, false);
-		//update last modified date to force Registry to reload configuration
+
+		//update last modified date to force registry to reload configuration
 		
 		Calendar lastModified = Calendar.getInstance();
-		lastModified.add(Calendar.MILLISECOND, 400);
+		lastModified.add(Calendar.MILLISECOND, 4000);
 		configuration.setLastModified(lastModified.getTimeInMillis());
 		
 		//Configure files in test context
