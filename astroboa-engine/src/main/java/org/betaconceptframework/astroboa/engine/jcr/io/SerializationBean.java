@@ -231,8 +231,11 @@ public class SerializationBean extends JcrDaoSupport{
 		
 		Serializer serializer = null;
 		
+		Session session = null;
 		try{
-			serializer = new Serializer(os, cmsRepositoryEntityUtils, getSession(), resourceRepresentationType, cmsCriteria.getRenderProperties().isPrettyPrintEnabled());
+			session = getSession();
+			
+			serializer = new Serializer(os, cmsRepositoryEntityUtils, session, resourceRepresentationType, cmsCriteria.getRenderProperties().isPrettyPrintEnabled());
 
 			if (cmsCriteria instanceof ContentObjectCriteria){
 				entityTypeToSerialize = CmsEntityType.CONTENT_OBJECT;
@@ -267,9 +270,13 @@ public class SerializationBean extends JcrDaoSupport{
 			serializer.end();
 		}
 		catch (CmsException e) {
+			logger.error("Error thrown during serialization of the results of the query "+cmsCriteria.getXPathQuery()
+					+". JCR session instance "+ session+". CmsException is rethrown", e);
 			throw e;
 		}
 		catch (Exception e) {
+			logger.error("Error thrown during serialization of the results of the query "+cmsCriteria.getXPathQuery()
+					+". JCR session instance "+session+". A CmsException is rethrown.", e);
 			throw new CmsException(e);
 		}
 		finally {
