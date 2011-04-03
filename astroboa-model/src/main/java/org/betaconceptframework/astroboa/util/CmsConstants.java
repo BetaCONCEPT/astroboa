@@ -190,6 +190,7 @@ public final class CmsConstants {
 		archived
 	}
 
+	public final static Pattern DIACRITICAL_MARKS = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 	public final static String SYSTEM_NAME_ACCEPTABLE_CHARACTERS = "A-Za-z0-9_\\-\\.:";
 	public final static String SYSTEM_NAME_REG_EXP = "[" + SYSTEM_NAME_ACCEPTABLE_CHARACTERS + "]+";
 	public final static Pattern SystemNamePattern = Pattern.compile(SYSTEM_NAME_REG_EXP);

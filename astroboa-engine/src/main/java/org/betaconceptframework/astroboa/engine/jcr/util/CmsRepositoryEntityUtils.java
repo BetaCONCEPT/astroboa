@@ -20,6 +20,8 @@
 package org.betaconceptframework.astroboa.engine.jcr.util;
 
 
+import java.text.Normalizer;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -437,6 +439,9 @@ public class CmsRepositoryEntityUtils {
 		//Remove leading and trailing whitespace
 		systemName = systemName.trim();
 		
+		//Replace all accented characters
+		systemName = deAccent(systemName);
+		
 		//Replace all Greek Characters with their Latin equivalent
 		systemName = GreekToEnglish.convertString(systemName);
 		
@@ -459,6 +464,13 @@ public class CmsRepositoryEntityUtils {
 		
 		return systemName;
 		
+	}
+	
+	public String deAccent(String systemName) {
+
+		String nfdNormalizedString = Normalizer.normalize(systemName, Normalizer.Form.NFD); 
+		   
+		return CmsConstants.DIACRITICAL_MARKS.matcher(nfdNormalizedString).replaceAll("");
 	}
 
 	public Node retrieveUniqueNodeForTaxonomy(Session session, String taxonomyId) throws RepositoryException{

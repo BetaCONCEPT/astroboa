@@ -1348,6 +1348,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		checkSystemNameTransformation(contentObject, "090..__--92","090..__-92");
 		checkSystemNameTransformation(contentObject, "090..92","090..92");
 		checkSystemNameTransformation(contentObject, "a{{{{{{{{{l","a-l");
+		checkSystemNameTransformation(contentObject, "È,É,Ê,Ë,Û,Ù,Ï,Î,À,Â,Ô,è,é,ê,ë,û,ù,ï,î,à,â,ô,ç","E-E-E-E-U-U-I-I-A-A-O-e-e-e-e-u-u-i-i-a-a-o-c");
+		
+		checkSystemNameTransformation(contentObject, "Jeisaveta \"Seka\" Sablić","Jeisaveta-Seka-Sablic");
+		checkSystemNameTransformation(contentObject, "Zoan Ramilović","Zoan-Ramilovic");
+		checkSystemNameTransformation(contentObject, "Mustfa Naarević","Mustfa-Naarevic");
+		checkSystemNameTransformation(contentObject, "Dejan Čkić","Dejan-Ckic");
+		checkSystemNameTransformation(contentObject, "Voin Cetovic","Voin-Cetovic");
 		
 	}
 
