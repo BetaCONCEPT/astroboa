@@ -573,7 +573,7 @@ public class SerializationBean extends JcrDaoSupport{
 		
 		
 	}
-
+	@Transactional(readOnly = true, rollbackFor = CmsException.class, propagation=Propagation.REQUIRED)
 	public void serializeNode(Node nodeRepresentingEntity, OutputStream os, CmsEntityType entityTypeToSerialize,
 			ResourceRepresentationType<?>  resourceRepresentationType, List<String> propertyPathsWhoseValuesWillBeIncludedInTheSerialization, FetchLevel fetchLevel, boolean nodeRepresentsRootElement, boolean serializeBinaryContent,
 			boolean prettyPrint) throws Exception {
