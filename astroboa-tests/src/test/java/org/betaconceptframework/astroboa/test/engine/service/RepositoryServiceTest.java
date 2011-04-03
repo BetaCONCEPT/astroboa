@@ -114,11 +114,14 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		//update last modified date to force registry to reload configuration
 		
 		Calendar lastModified = Calendar.getInstance();
-		lastModified.add(Calendar.MILLISECOND, 4000);
+		lastModified.add(Calendar.MILLISECOND, 400);
 		configuration.setLastModified(lastModified.getTimeInMillis());
 		
 		//Configure files in test context
 		AstroboaTestContext.INSTANCE.configureRepository(repositoryId, new InitialContext());
+		
+		//Stop execution to allow last modified to actually change in the file.
+		Thread.sleep(5000);
 		
 		//Login to the repository. We expect to load the new repository at runtime
 		loginToRepository(repositoryId, "SYSTEM", "betaconcept", false);
