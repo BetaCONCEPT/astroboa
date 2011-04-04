@@ -716,6 +716,12 @@ public class Serializer {
 	// a complex cms property in the order specified in XSD
 	//Child properties can either be a jcr property or a node
 	private void serializeChildCmsProperties(Node node) throws Exception{
+		
+		if (node == null){
+			logger.warn("Could not serialize a null jcr node");
+			return;
+		}
+		
 		addToParentPropertyDefinitionQueueDefinitionForName(node.getName(), node.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName()));
 
 		Map<String, CmsPropertyDefinition> orderedChildCmsPropertyNames = retrieveChildPropertyDefinitionsPerName(node);
@@ -724,6 +730,9 @@ public class Serializer {
 
 			long numberOfJcrPropertiesLeftToProcess = node.getProperties().getSize();
 			long numberOfJcrNodesLeftToProcess = node.getNodes().getSize();
+			
+			
+			String objectPath = createObjectPath(node);
 			
 			for (Entry<String, CmsPropertyDefinition> cmsPropertyDefinitionEntry : orderedChildCmsPropertyNames.entrySet()){
 
@@ -746,7 +755,7 @@ public class Serializer {
 						numberOfJcrPropertiesLeftToProcess > 0){
 					
 					if (node.hasProperty(cmsPropertyName)){
-						serializePropertyAsElement(node.getProperty(cmsPropertyName));
+						serializePropertyAsElement(node.getProperty(cmsPropertyName), objectPath);
 						numberOfJcrPropertiesLeftToProcess--;
 					}
 				}
@@ -810,6 +819,20 @@ public class Serializer {
 		}
 
 		removeTheHeadDefinitionFromParentPropertyDefinitionQueue();
+	}
+
+	private String createObjectPath(Node node) throws RepositoryException,
+			PathNotFoundException {
+		
+		String objectPath = node.getPath();
+		
+		if (node.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName()) && 
+				node.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
+			
+			objectPath+="[systemName="+node.getProperty(CmsBuiltInItem.SystemName.getJcrName())+"]";
+		}
+		
+		return objectPath;
 	}
 
 	private Map<String, CmsPropertyDefinition>  retrieveChildPropertyDefinitionsPerName(Node node) throws Exception {
@@ -1302,6 +1325,8 @@ public class Serializer {
 
 		PropertyIterator properties = node.getProperties();
 
+		String objectPath = createObjectPath(node);
+		
 		while (properties.hasNext()){
 			Property property = properties.nextProperty();
 
@@ -1316,13 +1341,13 @@ public class Serializer {
 				continue;
 			}
 
-			serializePropertyAsElement(property);
+			serializePropertyAsElement(property, objectPath);
 
 		}
 
 	}
 
-	private void serializePropertyAsElement(Property property)  throws Exception{
+	private void serializePropertyAsElement(Property property, String objectPath)  throws Exception{
 		String propertyName = property.getName();
 
 		if (shouldSerializeProperty(propertyName)){
@@ -1368,7 +1393,7 @@ public class Serializer {
 			if (jcrHasMarkedPropertyAsMultiple){
 				
 				for (Value value : property.getValues()){
-					createElementWithValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple);
+					createElementWithValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple, objectPath);
 					
 					if (!userHasDefinedPropertyAsMultiple){
 						logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a single value property. Property's instance " +
@@ -1379,7 +1404,7 @@ public class Serializer {
 				}
 			}
 			else{
-				createElementWithValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple);
+				createElementWithValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple,objectPath);
 				
 				if (userHasDefinedPropertyAsMultiple){
 					logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a multi value property. Property's instance " +
@@ -1437,13 +1462,13 @@ public class Serializer {
 		}
 	}
 
-	private void createElementWithValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues) throws Exception {
+	private void createElementWithValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath) throws Exception {
 		if (value != null){
 			if (ValueType.Topic == valueType){
-				addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues);
+				addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
 			}
 			else if (ValueType.ContentObject == valueType){
-				addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues);
+				addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
 			}
 			else{
 
@@ -1478,7 +1503,7 @@ public class Serializer {
 		exportContentHandler.writeContent(ch, 0, ch.length);
 	}
 
-	private void addTopicReferenceElement(String propertyName, String topicId, boolean referenceMayHaveMultipleValues) throws Exception{
+	private void addTopicReferenceElement(String propertyName, String topicId, boolean referenceMayHaveMultipleValues, String objectPath) throws Exception{
 
 		if (cmsIdentifierAlreadyProcessed(topicId)){
 			serializeCmsRepositoryEntityIdentifierForAnAlreadySerializedEntity(propertyName, topicId);
@@ -1488,6 +1513,12 @@ public class Serializer {
 		}
 
 		Node topicJcrNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForTopic(session, topicId);
+
+		if (topicJcrNode == null){
+			logger.warn("Could not serialize value {} for property {} of object {} because no topic was found with this identifier '{}'", 
+					new Object[]{topicId, propertyName, objectPath, topicId});
+			return;
+		}
 
 		markCmsIdentifierProcessed(topicId);
 
@@ -1518,10 +1549,16 @@ public class Serializer {
 		}
 	}
 
-	private void addContentObjectReferenceElement(String propertyName, String contentObjectId, boolean referenceMayHaveMultipleValues) throws Exception {
+	private void addContentObjectReferenceElement(String propertyName, String contentObjectId, boolean referenceMayHaveMultipleValues, String objectPath) throws Exception {
 
 		Node contentObjectJcrNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(session, contentObjectId);
 
+		if (contentObjectJcrNode == null){
+			logger.warn("Could not serialize value {} for property {} of object {} because no object was found with this identifier '{}'", 
+					new Object[]{contentObjectId, propertyName, objectPath, contentObjectId});
+			return;
+		}
+		
 		startedNodeSerialization(propertyName);
 
 		openEntityWithAttribute(propertyName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), contentObjectId);
