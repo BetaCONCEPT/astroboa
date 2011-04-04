@@ -122,7 +122,6 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		//Configure files in test context
 		AstroboaTestContext.INSTANCE.configureRepository(repositoryId, new InitialContext());
 		
-		Thread.sleep(7000);
 		
 		//Login to the repository. We expect to load the new repository at runtime
 		loginToRepository(repositoryId, "SYSTEM", "betaconcept", false);
