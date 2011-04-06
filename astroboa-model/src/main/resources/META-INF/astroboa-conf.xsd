@@ -75,6 +75,10 @@
 			 -->
 			 <xs:attribute name="external-identity-store-jndi-name" type="xs:string"
 				use="optional"/>
+				
+			<!-- If true, Astroboa Engine performs  a consistency check on every startup to every repository defined unless
+			explicitly set otherwise in the repository's configuration. -->
+			<xs:attribute name="check-consistency" type="xs:boolean" use="optional" default="false"/>
 
 		</xs:complexType>
 	</xs:element>
@@ -163,6 +167,9 @@
 			 -->
 			 <xs:attribute name="external-identity-store-jndi-name" type="xs:string"
 				use="optional"/>
+
+			<!-- If true, Astroboa Engine performs  a consistency check on the repository -->
+			<xs:attribute name="check-consistency" type="xs:boolean" use="optional" default="false"/>
 
 	</xs:complexType>
 

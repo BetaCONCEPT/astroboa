@@ -410,6 +410,15 @@ public enum RepositoryRegistry{
 	public File getConfiguration() {
 		return configuration;
 	}
-	
+
+
+	public boolean isCheckConsistency() {
+
+		if (repositories != null){
+			return repositories.isCheckConsistency();
+		}
+
+		return false;
+	}
 	
 }
