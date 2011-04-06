@@ -69,7 +69,7 @@ Authors
 					<schemaDirectory>src/main/resources/META-INF</schemaDirectory>
 					<generateDirectory>src/main/java</generateDirectory>
 					<generatePackage>
-						org.betaconceptframework.astroboa.commons.configuration
+						org.betaconceptframework.astroboa.configuration
 					</generatePackage>
 					<includeSchemas>
 						<includeSchema>
