@@ -99,6 +99,9 @@ Authors
 	
 	<bean id="cmsRepositoryEntityAssociationDao"
 		class="org.betaconceptframework.astroboa.engine.jcr.dao.CmsRepositoryEntityAssociationDaoJcr"/>
+
+	<bean id="consistencyCheckerDao"
+		class="org.betaconceptframework.astroboa.engine.jcr.dao.ConsistencyCheckerDao" autowire="byName"/>
 	
 	
 	<!-- Renderers -->
@@ -185,7 +188,6 @@ Authors
 				<property name="minMemoryPerCache" value="128" />
 				<property name="cmsLocalizationUtils" ref="cmsLocalizationUtils"/>
 				<property name="repositoryUserDao" ref="repositoryUserDao"/>
-				<property name="cmsRepositoryEntityAssociationDao" ref="cmsRepositoryEntityAssociationDao"/>
 				<property name="repositoryNodeTypeDefinitionFile" value="classpath:/META-INF/repository.cnd"/>
 				<property name="newNodeTypeDefinitionFile" value="classpath:/META-INF/new-node-types.cnd"/>
 				<property name="updatedNodeTypeDefinitionFile" value="classpath:/META-INF/updated-node-types.cnd"/>
