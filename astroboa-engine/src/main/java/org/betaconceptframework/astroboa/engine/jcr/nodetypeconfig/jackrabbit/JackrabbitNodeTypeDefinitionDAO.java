@@ -112,15 +112,6 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 	 */
 	private Localization organizationSpaceLocalization;
 
-	private CmsRepositoryEntityAssociationDao cmsRepositoryEntityAssociationDao;
-
-	
-	public void setCmsRepositoryEntityAssociationDao(
-			CmsRepositoryEntityAssociationDao cmsRepositoryEntityAssociationDao) {
-		this.cmsRepositoryEntityAssociationDao = cmsRepositoryEntityAssociationDao;
-	}
-
-
 	public void setOrganizationSpaceLocalization(
 			Localization organizationSpaceLocalization) {
 		this.organizationSpaceLocalization = organizationSpaceLocalization;
