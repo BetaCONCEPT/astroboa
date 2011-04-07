@@ -114,7 +114,7 @@ public class CmsDefinitionFilter implements Filter {
 
 			repositoryService.loginAsAnonymous(repositoryId);
 
-			String definitionSchema = definitionService.getCmsDefinition(definitionFullPath, ResourceRepresentationType.XSD);
+			String definitionSchema = definitionService.getCmsDefinition(definitionFullPath, ResourceRepresentationType.XSD, true);
 
 			if (definitionSchema == null){
 				logger.warn("Definition service retuned null for "+ httpServletRequest.getRequestURI());
