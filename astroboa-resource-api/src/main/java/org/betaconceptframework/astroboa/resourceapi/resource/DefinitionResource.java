@@ -30,7 +30,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
@@ -142,70 +141,66 @@ public class DefinitionResource extends AstroboaResource{
 	
 	private Response getDefinitionInternal(String propertyPath, Output output, String callback, boolean prettyPrint){
 		
-		
-		//TODO : When prettyPrint functionality is enabled in DefinitionService.getCmsDefinition
-		// this implementation will change
-		
 		try {
 			
 			if (StringUtils.isBlank(propertyPath)){
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 			}
 			
-			
 			DefinitionService definitionService = astroboaClient.getDefinitionService();
 			
-			if (output != null && output == Output.XSD){
-				
-				StringBuilder definitionAsXMLOrJSON = new StringBuilder();
-				
-				definitionAsXMLOrJSON.append(definitionService.getCmsDefinition(propertyPath, ResourceRepresentationType.XSD));
-				
-				return ContentApiUtils.createResponse(definitionAsXMLOrJSON, output, callback, null);
-			}
+			StringBuilder definitionAsXMLOrJSONorXSD = new StringBuilder();
 
-			CmsDefinition definition = null;
-			
-			if  (!propertyPath.contains(".") && definitionService.hasContentObjectTypeDefinition(propertyPath)){
-				//Property path has only one part. It may well be a content type.
-				//Check if a content type with the provided name exists. If so, then use 
-				//the appropriate method.
-				definition = definitionService.getContentObjectTypeDefinition(propertyPath);
-			}
-			else{
-				definition = definitionService.getCmsPropertyDefinition(propertyPath);
-			}
-			
-			if (definition == null)
-			{
-				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
-			}
-			
-			StringBuilder definitionAsXMLOrJSON = new StringBuilder();
-			
 			switch (output) {
-			case XML:
-			{
+			case XML:{
+
+				String xml = definitionService.getCmsDefinition(propertyPath, ResourceRepresentationType.XML, prettyPrint);
+
+				if (StringUtils.isBlank(xml)){
+					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+				}
+
 				if (StringUtils.isBlank(callback)) {
-					definitionAsXMLOrJSON.append(definition.xml(prettyPrint));
+					definitionAsXMLOrJSONorXSD.append(xml);
 				}
 				else {
-					ContentApiUtils.generateXMLP(definitionAsXMLOrJSON, definition.xml(prettyPrint), callback);
+					ContentApiUtils.generateXMLP(definitionAsXMLOrJSONorXSD, xml, callback);
 				}
 				break;
 			}
 			case JSON:
+
+				String json = definitionService.getCmsDefinition(propertyPath, ResourceRepresentationType.JSON, prettyPrint);
+
+				if (StringUtils.isBlank(json)){
+					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+				}
+
 				if (StringUtils.isBlank(callback)) {
-					definitionAsXMLOrJSON.append(definition.json(prettyPrint));
+					definitionAsXMLOrJSONorXSD.append(json);
 				}
 				else {
-					ContentApiUtils.generateXMLP(definitionAsXMLOrJSON, definition.json(prettyPrint), callback);
+					ContentApiUtils.generateJSONP(definitionAsXMLOrJSONorXSD, json, callback);
+				}
+				break;
+			case XSD:
+
+				String xsd = definitionService.getCmsDefinition(propertyPath, ResourceRepresentationType.XSD, prettyPrint);
+
+				if (StringUtils.isBlank(xsd)){
+					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+				}
+
+				definitionAsXMLOrJSONorXSD.append(xsd);
+
+				if (StringUtils.isNotBlank(callback)) {
+					logger.warn("Callback {} is ignored in {} output", callback, output);
 				}
 				break;
 			}
-			
-			return ContentApiUtils.createResponse(definitionAsXMLOrJSON, output, callback, null);
-			
+		
+			return ContentApiUtils.createResponse(definitionAsXMLOrJSONorXSD, output, callback, null);
+		
 		}
 		catch(Exception e){
 			logger.error("Definition For property path: " + propertyPath, e);
