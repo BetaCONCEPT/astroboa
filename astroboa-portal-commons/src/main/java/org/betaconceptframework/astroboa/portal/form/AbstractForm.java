@@ -108,7 +108,7 @@ public abstract class AbstractForm<T extends AstroboaClient> {
 			
 			checkChallengeResponsePhase();
 				
-			formContentObject = getFormsRepositoryClient().getCmsRepositoryEntityFactory().newContentObjectForType(getFormType(), JSFUtilities.getLocaleAsString());
+			formContentObject = getFormsRepositoryClient().getCmsRepositoryEntityFactory().newObjectForType(getFormType());
 			
 			applyDefaultValuesPhase(formParams, formContentObject);
 
