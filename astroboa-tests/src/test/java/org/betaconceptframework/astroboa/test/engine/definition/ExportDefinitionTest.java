@@ -57,7 +57,7 @@ public class ExportDefinitionTest extends AbstractRepositoryTest{
 		
 		for (String contentType : contentTypes){
 			
-			CmsDefinition typeDefinition = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			CmsDefinition typeDefinition = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 			
 			Assert.assertTrue(typeDefinition instanceof ContentObjectTypeDefinition, "Invalid definition instance returned. Expected content type definition");
 			
@@ -67,16 +67,16 @@ public class ExportDefinitionTest extends AbstractRepositoryTest{
 			typeDefinition.json(true);
 			typeDefinition.xmlSchema();
 			
-			String typeDefinitionAsXML = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XML);
+			String typeDefinitionAsXML = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XML,prettyPrint);
 			
 			Assert.assertTrue(typeDefinitionAsXML instanceof String, "Invalid definition instance returned. Expected String"+ typeDefinitionAsXML);
 			
 
-			String typeDefinitionAsJSON = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.JSON);
+			String typeDefinitionAsJSON = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.JSON,prettyPrint);
 			
 			Assert.assertTrue(typeDefinitionAsJSON instanceof String, "Invalid definition instance returned. Expected String"+ typeDefinitionAsJSON);
 
-			String typeDefinitionAsXSD = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XSD);
+			String typeDefinitionAsXSD = definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XSD,prettyPrint);
 			
 			Assert.assertTrue(typeDefinitionAsXSD instanceof String, "Invalid definition instance returned. Expected String"+ typeDefinitionAsXSD);
 
