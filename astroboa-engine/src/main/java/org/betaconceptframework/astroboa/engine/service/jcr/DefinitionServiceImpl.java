@@ -64,7 +64,7 @@ class DefinitionServiceImpl implements DefinitionService {
 	public ContentObjectTypeDefinition getContentObjectTypeDefinition(String contentObjectTypeDefinitionName) 
 	{
 		try {
-			return (ContentObjectTypeDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeDefinitionName, ResourceRepresentationType.DEFINITION_INSTANCE);
+			return (ContentObjectTypeDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeDefinitionName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -89,7 +89,7 @@ class DefinitionServiceImpl implements DefinitionService {
 	@Deprecated
 	public CmsPropertyDefinition getCmsPropertyDefinition(String propertyName, String contentObjectTypeName)  {
 		try {
-			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeName+"."+propertyName, ResourceRepresentationType.DEFINITION_INSTANCE);
+			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeName+"."+propertyName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -103,7 +103,7 @@ class DefinitionServiceImpl implements DefinitionService {
 	@Deprecated
 	public ComplexCmsPropertyDefinition getAspectDefinition(String aspect) {
 		try {
-			return (ComplexCmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE);
+			return (ComplexCmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -143,7 +143,7 @@ class DefinitionServiceImpl implements DefinitionService {
 	public byte[] getXMLSchemaForDefinition(String definitionFullPath) {
 		
 		try{
-			String definition = contentDefinitionDao.getCmsDefinition(definitionFullPath, ResourceRepresentationType.XSD);
+			String definition = contentDefinitionDao.getCmsDefinition(definitionFullPath, ResourceRepresentationType.XSD,true);
 		
 			if (definition != null){
 				return definition.getBytes("UTF-8");
@@ -169,7 +169,7 @@ class DefinitionServiceImpl implements DefinitionService {
 	@Deprecated
 	public CmsPropertyDefinition getCmsPropertyDefinition(String fullPropertyDefinitionPath) {
 		try{
-			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE);
+			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -191,9 +191,9 @@ class DefinitionServiceImpl implements DefinitionService {
 
 	@Override
 	public <T> T getCmsDefinition(String fullPropertyDefinitionPath,
-			ResourceRepresentationType<T> output) {
+			ResourceRepresentationType<T> output, boolean prettyPrint) {
 		try{
-			return contentDefinitionDao.getCmsDefinition(fullPropertyDefinitionPath, output);
+			return contentDefinitionDao.getCmsDefinition(fullPropertyDefinitionPath, output, prettyPrint);
 		}
 		catch(CmsException e){
 			throw e;

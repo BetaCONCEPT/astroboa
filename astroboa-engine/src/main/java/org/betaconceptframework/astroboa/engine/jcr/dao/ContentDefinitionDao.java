@@ -108,7 +108,7 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 		}
 	}
 
-	public <T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output) throws Exception {
+	public <T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, boolean prettyPrint) throws Exception {
 		if (output == null){
 			output = (ResourceRepresentationType<T>) ResourceRepresentationType.DEFINITION_INSTANCE;
 		}
@@ -131,10 +131,10 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 				return (T) cmsDefinition;
 			}
 			else if (output.equals(ResourceRepresentationType.XML)){
-				return (T) cmsDefinition.xml(false);
+				return (T) cmsDefinition.xml(prettyPrint);
 			}
 			else if (output.equals(ResourceRepresentationType.JSON)){
-				return (T) cmsDefinition.json(false);
+				return (T) cmsDefinition.json(prettyPrint);
 			}
 		}
 
