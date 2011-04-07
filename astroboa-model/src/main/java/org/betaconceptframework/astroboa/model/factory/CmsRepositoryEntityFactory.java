@@ -159,6 +159,23 @@ public abstract class CmsRepositoryEntityFactory {
 
 	
 	/**
+	 * Create a new {@link ContentObject object}.
+	 * 
+	 * <p>
+	 * This is the entry point for creating new object instances and users
+	 * are strongly advised to use ONLY this method when they want to create new objects.
+	 * </p>
+	 * 
+	 * @param contentType
+	 *            Object type name.
+	 * 
+	 * @return An {@link ContentObject object} instance of specified content type.
+	 */
+	public ContentObject newObjectForType(String contentType){
+		return newContentObjectForType(contentType, null);
+	}
+	
+	/**
 	 * Create a new {@link ContentObject content object}.
 	 * 
 	 * <p>
@@ -173,7 +190,7 @@ public abstract class CmsRepositoryEntityFactory {
 	 * are strongly advised to use ONLY this method when they want to create new content objects.
 	 * </p>
 	 * 
-	 * @param contentObjectTypeName
+	 * @param contentType
 	 *            Content object type name.
 	 * @param locale
 	 *            Locale value as defined in {@link Localization} to be
@@ -181,10 +198,12 @@ public abstract class CmsRepositoryEntityFactory {
 	 *            to retrieve localized label for content 
 	 *            {@link CmsRepositoryEntity entities}.
 	 * 
+	 * @deprecated Use {@link #newObjectForType(String)} instead
+	 * 
 	 * @return A {@link ContentObject content object} instance of content object
 	 *         type.
 	 */
-	public ContentObject newContentObjectForType(String contentObjectTypeName,	String locale){
+	public ContentObject newContentObjectForType(String contentType,	String locale){
 		
 		try{	
 			LazyLoader lazyLoader = AstroboaClientContextHolder.getLazyLoaderForClient(getAuthenticationToken());
@@ -196,10 +215,10 @@ public abstract class CmsRepositoryEntityFactory {
 				lazyLoader.activateClientContextForAuthenticationToken(getAuthenticationToken());
 			}
 			
-			ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentObjectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE);
 
 			if (contentObjectTypeDefinition == null){
-				throw new CmsException("No content object definition for type "+ contentObjectTypeName + " for repository "+
+				throw new CmsException("No content object definition for type "+ contentType + " for repository "+
 						AstroboaClientContextHolder.getActiveRepositoryId());
 			}
 
