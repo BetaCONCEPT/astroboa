@@ -918,7 +918,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			List<String> contentObjectTypeList = new ArrayList<String>();
 			for (String contentObjectType : contentObjectTypes) {
 				if (astroboaClient.getDefinitionService().hasContentObjectTypeDefinition(contentObjectType)) {
-					resourceResponse.getResourceContext().getContentObjectTypeDefinitions().add((ContentObjectTypeDefinition) astroboaClient.getDefinitionService().getCmsDefinition(contentObjectType, ResourceRepresentationType.DEFINITION_INSTANCE));
+					resourceResponse.getResourceContext().getContentObjectTypeDefinitions().add((ContentObjectTypeDefinition) astroboaClient.getDefinitionService().getCmsDefinition(contentObjectType, ResourceRepresentationType.DEFINITION_INSTANCE,false));
 				}
 				else {
 					logger.warn("The provided content object type:" + contentObjectType + " does not exist and will not be added to query criteria");

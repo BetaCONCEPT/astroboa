@@ -732,7 +732,7 @@ public class CmsUtils {
 			List<SelectItem> contentObjectTypesAsSelectItems = new ArrayList<SelectItem>();
 			
 			for (String contentObjectTypeName : contentObjectTypeNames) {
-				 ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) astroboaClient.getDefinitionService().getCmsDefinition(contentObjectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE);
+				 ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) astroboaClient.getDefinitionService().getCmsDefinition(contentObjectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 				 String contentObjectTypeLocalisedLabel = getLocalizedNameFromDefinition(contentObjectTypeDefinition, locale);
 				 
 				 SelectItem selectItem = new SelectItem(contentObjectTypeDefinition.getName(), contentObjectTypeLocalisedLabel, 
@@ -1247,7 +1247,7 @@ public class CmsUtils {
 	public List<SelectItem> valueRangeAsSelectItems(String cmsPropertyFullPath) {
 		List<SelectItem> valueRangeSelectItems = new ArrayList<SelectItem>();
 	    
-		Map<?,Localization> valueRange = ((SimpleCmsPropertyDefinition<?>)astroboaClient.getDefinitionService().getCmsDefinition(cmsPropertyFullPath, ResourceRepresentationType.DEFINITION_INSTANCE)).getValueEnumeration();
+		Map<?,Localization> valueRange = ((SimpleCmsPropertyDefinition<?>)astroboaClient.getDefinitionService().getCmsDefinition(cmsPropertyFullPath, ResourceRepresentationType.DEFINITION_INSTANCE,false)).getValueEnumeration();
 		
 		if (valueRange != null){
 			

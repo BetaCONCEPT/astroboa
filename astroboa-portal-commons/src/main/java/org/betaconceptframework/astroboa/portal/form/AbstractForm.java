@@ -235,7 +235,7 @@ public abstract class AbstractForm<T extends AstroboaClient> {
 	private void applyFormParameterToContentObjectProperty(ContentObject formContentObject, Map<String, Object> formParameters, String formParameter) throws Exception, FormValidationException {
 		
 		CmsPropertyDefinition formParameterDefinition = 
-			(CmsPropertyDefinition) getFormsRepositoryClient().getDefinitionService().getCmsDefinition(formContentObject.getContentObjectType()+"."+formParameter, ResourceRepresentationType.DEFINITION_INSTANCE);
+			(CmsPropertyDefinition) getFormsRepositoryClient().getDefinitionService().getCmsDefinition(formContentObject.getContentObjectType()+"."+formParameter, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		
 		// check if field is defined
 		if (formParameterDefinition == null) {
