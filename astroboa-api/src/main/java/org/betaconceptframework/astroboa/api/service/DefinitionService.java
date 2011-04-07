@@ -293,10 +293,13 @@ public interface DefinitionService {
 	 * 			A period-delimited string defined in 
 	 *            ({@link CmsPropertyDefinition#getPath()}).
 	 * @param output {@link CmsDefinition} representation output, one of XML, JSON, XSD or {@link CmsDefinition} (default). 
-	 * 
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if 
+	 * <code>output</code> is either {@link ResourceRepresentationType#XML XML} or 
+	 * {@link ResourceRepresentationType#JSON JSON}
   	 * @return CmsDefinition as XML, JSON, XSD or {@link CmsDefinition}	 
   	 */
-	<T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output);
+	<T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, boolean prettyPrint);
 
 	/**
 	 * Validates provided definition XSD file against existing built in definitions.

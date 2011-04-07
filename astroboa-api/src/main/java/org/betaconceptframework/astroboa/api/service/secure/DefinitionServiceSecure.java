@@ -315,13 +315,17 @@ public interface DefinitionServiceSecure {
 	 * @param fullPropertyDefinitionPath
 	 * 			A period-delimited string defined in 
 	 *            ({@link CmsPropertyDefinition#getPath()}).
-	 * @param output {@link CmsDefinition} representation output, one of XML, JSON, XSD or {@link CmsDefinition}. 
+	 * @param output {@link CmsDefinition} representation output, one of XML, JSON, XSD or {@link CmsDefinition}.
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if 
+	 * <code>output</code> is either {@link ResourceRepresentationType#XML XML} or 
+	 * {@link ResourceRepresentationType#JSON JSON}
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
 	 * 
   	 * @return CmsDefinition as XML, JSON, XSD or {@link CmsDefinition}	 
   	 */
-	<T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, String authenticationToken);
+	<T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, boolean prettyPrint, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link DefinitionService#validateDefinintion(String, String)}
