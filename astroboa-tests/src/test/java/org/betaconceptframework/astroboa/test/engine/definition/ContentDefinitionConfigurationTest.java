@@ -53,14 +53,14 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	@Test
 	public void testExtendedContentTypes()
 	{
-		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE);
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		Assert.assertFalse(testDefinition.hasCmsPropertyDefinition("simpleExtendedString"), "Property simpleExtendedString is found in type "+TEST_CONTENT_TYPE);		
 		Assert.assertTrue(testDefinition.isTypeOf("testType"), "Test content type does not have super type testType");
 		
-		ContentObjectTypeDefinition extendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE);
+		ContentObjectTypeDefinition extendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(extendedTestDefinition, "simpleExtendedString", StringPropertyDefinition.class);
 		
-		Assert.assertNull(definitionService.getCmsDefinition("testType", ResourceRepresentationType.DEFINITION_INSTANCE), "Base Complex Type testType was loaded");
+		Assert.assertNull(definitionService.getCmsDefinition("testType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type testType was loaded");
 		Assert.assertNull(definitionService.getAspectDefinition("extendedTestType"), "Base Complex Type extendedTestType was loaded");
 		
 		Assert.assertTrue(extendedTestDefinition.isTypeOf("testType"), "Extended Test Type does not have super type testType");
@@ -76,15 +76,15 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		checkPropertyExistsAndIsOfType(personDefinition, "name.familyName", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(personDefinition, "thumbnail", BinaryPropertyDefinition.class);
 		
-		Assert.assertNull(definitionService.getCmsDefinition("personType", ResourceRepresentationType.DEFINITION_INSTANCE), "Base Complex Type personType was loaded");
+		Assert.assertNull(definitionService.getCmsDefinition("personType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type personType was loaded");
 		
 		Assert.assertTrue(personDefinition.isTypeOf("personType"), "PersonObject Type does not have super type personType");
 		
-		ContentObjectTypeDefinition organizationDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("organizationObject", ResourceRepresentationType.DEFINITION_INSTANCE);
+		ContentObjectTypeDefinition organizationDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("organizationObject", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "about", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "thumbnail", BinaryPropertyDefinition.class);
 		
-		Assert.assertNull(definitionService.getCmsDefinition("organizationType", ResourceRepresentationType.DEFINITION_INSTANCE), "Base Complex Type organizationType was loaded");
+		Assert.assertNull(definitionService.getCmsDefinition("organizationType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type organizationType was loaded");
 		
 		Assert.assertTrue(organizationDefinition.isTypeOf("organizationType"), "OrganizationObject Type does not have super type organizationType");
 	}
@@ -95,7 +95,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 		for (String testContentType : getTestContentTypes())
 		{
-			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 
 
 			if (TEST_CONTENT_TYPE.equals(testContentType))
@@ -139,7 +139,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 		for (String testContentType : getTestContentTypes())
 		{
-			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 
 			checkPropertyExistsAndIsOfType(testDefinition, "password", StringPropertyDefinition.class);
 
@@ -177,7 +177,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 		for (String testContentType : getTestContentTypes())
 		{
-			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 
 
 		checkPropertyExistsAndIsOfType(testDefinition, "thumbnail", BinaryPropertyDefinition.class);
@@ -222,7 +222,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	public void testRestrictions(){
 
 		for (String testContentType : getTestContentTypes()){
-			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 
 			checkPropertyExistsAndIsOfType(testDefinition, "stringFixedLengthConstrained", StringPropertyDefinition.class);
 			CmsPropertyDefinition stringFixedLengthConstrainedDefinition = testDefinition.getCmsPropertyDefinition("stringFixedLengthConstrained");
@@ -297,7 +297,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 		for (String testContentType : getTestContentTypes())
 		{
-			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(testContentType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 
 			
 		checkPropertyExistsAndIsOfType(testDefinition, "stringEnum", StringPropertyDefinition.class);
@@ -471,11 +471,11 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	}
 
 	private void checkBuiltInComplexTypeTypeExists(String complexType) {
-		Assert.assertNotNull(definitionService.getCmsDefinition(complexType, ResourceRepresentationType.DEFINITION_INSTANCE), "Built in complex type "+ complexType+ " was not loaded");
+		Assert.assertNotNull(definitionService.getCmsDefinition(complexType, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Built in complex type "+ complexType+ " was not loaded");
 	}
 
 	private void checkPropertyDefintionExists(String fullPropertyPath) {
-		Assert.assertNotNull(definitionService.getCmsDefinition(fullPropertyPath, ResourceRepresentationType.DEFINITION_INSTANCE), "Property"+ fullPropertyPath+ " was not loaded");
+		Assert.assertNotNull(definitionService.getCmsDefinition(fullPropertyPath, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Property"+ fullPropertyPath+ " was not loaded");
 	}
 
 }
