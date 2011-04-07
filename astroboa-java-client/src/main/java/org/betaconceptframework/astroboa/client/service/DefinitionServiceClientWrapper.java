@@ -406,13 +406,13 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 
 	@Override
 	public <T> T getCmsDefinition(String fullPropertyDefinitionPath,
-			ResourceRepresentationType<T> output) {
+			ResourceRepresentationType<T> output, boolean prettyPrint) {
 		if (definitionServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
 			//This method does not require caching since only a map will be serialized
-			return definitionServiceSecure.getCmsDefinition(fullPropertyDefinitionPath, output, getAuthenticationToken());
+			return definitionServiceSecure.getCmsDefinition(fullPropertyDefinitionPath, output, prettyPrint, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("DefinitionService reference was not found");
