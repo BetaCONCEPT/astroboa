@@ -1036,7 +1036,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 			//right after the end of this method
 			if (! (this instanceof ComplexCmsRootProperty)) {
 				lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
-				setPropertyDefinition((D)lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE));
+				setPropertyDefinition((D)lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE,false));
 			}
 		}
 	}

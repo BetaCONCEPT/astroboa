@@ -236,7 +236,7 @@ extends CmsPropertyImpl<D,P> implements SimpleCmsProperty<T, D,P>, Serializable{
 	  
 	  if (lazyLoader != null){
 		  lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
-		  setPropertyDefinition((D)lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE));
+		  setPropertyDefinition((D)lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE,false));
 	  }
 	}
 

@@ -215,7 +215,7 @@ public abstract class CmsRepositoryEntityFactory {
 				lazyLoader.activateClientContextForAuthenticationToken(getAuthenticationToken());
 			}
 			
-			ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE);
+			ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 
 			if (contentObjectTypeDefinition == null){
 				throw new CmsException("No content object definition for type "+ contentType + " for repository "+

@@ -160,7 +160,7 @@ public class ContentObjectImpl extends CmsRepositoryEntityImpl implements Conten
 	  
 	  if (lazyLoader != null){
    		  lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
-		  setTypeDefinition((ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentObjectType, ResourceRepresentationType.DEFINITION_INSTANCE));
+		  setTypeDefinition((ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(contentObjectType, ResourceRepresentationType.DEFINITION_INSTANCE,false));
 	  }
 	}
 

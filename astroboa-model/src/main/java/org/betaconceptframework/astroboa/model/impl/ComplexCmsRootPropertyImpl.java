@@ -80,7 +80,7 @@ implements ComplexCmsRootProperty,AspectDefinitionManager, Serializable{
 			
 			if (lazyLoader !=null){
 				lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
-				aspectDefinition = (ComplexCmsPropertyDefinition) getLazyLoader().getDefinitionService().getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE);
+				aspectDefinition = (ComplexCmsPropertyDefinition) getLazyLoader().getDefinitionService().getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 			}
 
 			if (aspectDefinition == null){
@@ -266,7 +266,7 @@ implements ComplexCmsRootProperty,AspectDefinitionManager, Serializable{
 			 lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
 			 
 			 //In this case fullPropertyDefinitionPath is the name of content type
-			 ContentObjectTypeDefinition contentTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE);
+			 ContentObjectTypeDefinition contentTypeDefinition = (ContentObjectTypeDefinition) lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 			 
 			 if (contentTypeDefinition != null){
 				 setPropertyDefinition(new ComplexCmsPropertyDefinitionImpl(contentTypeDefinition.getQualifiedName(),
