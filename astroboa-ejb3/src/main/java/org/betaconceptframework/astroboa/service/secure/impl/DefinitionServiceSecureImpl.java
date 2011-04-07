@@ -137,8 +137,8 @@ public class DefinitionServiceSecureImpl extends AbstractSecureAstroboaService i
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public <T> T getCmsDefinition(String fullPropertyDefinitionPath,
-			ResourceRepresentationType<T> output, String authenticationToken) {
-		return definitionService.getCmsDefinition(fullPropertyDefinitionPath, output);
+			ResourceRepresentationType<T> output, boolean prettyPrint, String authenticationToken) {
+		return definitionService.getCmsDefinition(fullPropertyDefinitionPath, output, prettyPrint);
 	}
 
 	@RolesAllowed("ROLE_ADMIN")
