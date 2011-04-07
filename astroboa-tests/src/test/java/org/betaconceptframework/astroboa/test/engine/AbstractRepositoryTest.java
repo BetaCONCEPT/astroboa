@@ -319,7 +319,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	
 	protected ContentObject createContentObjectForType(String contentType, RepositoryUser systemUser, String systemName, boolean systemEntity) {
 
-		ContentObject contentObject = cmsRepositoryEntityFactory.newContentObjectForType(contentType, "en");
+		ContentObject contentObject = cmsRepositoryEntityFactory.newObjectForType(contentType);
 		contentObject.setOwner(systemUser);
 		contentObject.setSystemBuiltinEntity(systemEntity);
 		contentObject.setSystemName(TestUtils.createValidSystemName(systemName));
