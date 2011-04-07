@@ -20,7 +20,6 @@ package org.betaconceptframework.astroboa.engine.jcr.renderer;
 
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -72,18 +71,11 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 		try{
 			
 
-			if (renderProperties == null)
+			if (renderProperties == null){
 				renderProperties = new RenderPropertiesImpl();
-
-			//Set Value for Locale
-			String locale = (String)renderProperties.getFirstLocaleUsedForRender();
-			
-			if (locale == null){
-				//Default value
-				locale = Locale.ENGLISH.toString();
 			}
-			
-			ContentObject contentObject  = cmsRepositoryEntityFactoryForActiveClient.newContentObjectForType(contentObjectType, locale); 
+
+			ContentObject contentObject  = cmsRepositoryEntityFactoryForActiveClient.newObjectForType(contentObjectType); 
 
 			//Content Object Id
 			renderContentObjectId(contentObjectNode, contentObject);

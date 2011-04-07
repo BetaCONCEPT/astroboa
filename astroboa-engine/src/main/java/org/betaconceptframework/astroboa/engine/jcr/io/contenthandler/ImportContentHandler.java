@@ -641,7 +641,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 			contentType = localName;
 		}
 		
-		ContentObject contentObject = CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newContentObjectForType(contentType, "");
+		ContentObject contentObject = CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newObjectForType(contentType);
 		
 		if (contentType == null){
 				throw new CmsException("Element {"+ uri+"}"+localName+" does not correspond to a known content type");
