@@ -247,7 +247,7 @@ public enum CmsEntitySerialization {
 				  fullPropertyDefinitionPath = ((CmsPropertyDefinition)cmsDefinition).getFullPath();
 			  }
 			  
-			  return lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.XSD);
+			  return lazyLoader.getDefinitionService().getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.XSD,true);
 			  
 		  }
 		  
