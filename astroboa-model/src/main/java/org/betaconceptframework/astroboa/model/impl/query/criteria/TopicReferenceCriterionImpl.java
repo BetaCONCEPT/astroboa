@@ -283,11 +283,19 @@ public class TopicReferenceCriterionImpl extends SimpleCriterionImpl implements 
 	@Override
 	public void addValue(Object value) {
 		
-		if (value != null && value instanceof Topic){
-			addTopicAsAValue((Topic)value);
-		}
-		else{
-			super.addValue(value);
+		if (value != null){
+			if (value instanceof Topic){
+				addTopicAsAValue((Topic)value);
+			}
+			else{
+				if (value instanceof String && ((String) value).endsWith(CmsConstants.INCLUDE_CHILDREN_EXPRESSION)){
+					expandCriterionToIncludeSubTopics();
+					super.addValue(StringUtils.substringBeforeLast((String)value, CmsConstants.INCLUDE_CHILDREN_EXPRESSION));
+				}
+				else{
+					super.addValue(value);
+				}
+			}
 		}
 	}
 
