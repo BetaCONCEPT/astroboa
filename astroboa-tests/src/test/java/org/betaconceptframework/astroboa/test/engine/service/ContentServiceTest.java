@@ -672,7 +672,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertEquals(previousId, newId, "Single value complex property 'singleComplexNotAspectWithNoCommonAttributes' was saved with different id");
 	}
 	
-	//@Test
+	@Test
 	public void testNodePathOfContentObjectSave() throws Exception{
 
 		//Create content objects for test
@@ -698,7 +698,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testGetContentObjectAsContentObjectOutcome() throws Throwable{
 		
 		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportAsContentObjectOutcome", false);
@@ -721,7 +721,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertEquals(outcome.getResults().get(0).getId(), contentObject.getId(), "ContentService.getContentObject returned invalid contentObject");
 	}
 	
-	//@Test
+	@Test
 	public void testGetContentObjectXmlorJSON() throws Throwable{
 		
 		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportXmlJSON", false);
@@ -938,7 +938,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	}
 	
-	//@Test
+	@Test
 	public void testCopy(){
 		
 		RepositoryUser systemUser = getSystemUser();
@@ -989,7 +989,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testProfileModifiedChangedUponSave()
 	{
 		RepositoryUser systemUser = getSystemUser();
@@ -1074,7 +1074,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testProjections(){
 
 		RepositoryUser systemUser = getSystemUser();
@@ -1221,7 +1221,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	}
 	
-	//@Test
+	@Test
 	public void testManagedBinaryChannel() throws Exception{
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
@@ -1293,7 +1293,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 
 	
-	//@Test
+	@Test
 	public void testSaveCreationDate() throws ItemNotFoundException, RepositoryException{
 		
 		//Create content objects for test
@@ -1314,7 +1314,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertTrue(contentObjectNode.getParent().getPath().endsWith(creationDatePath), "Invalid content object creation path "+contentObjectNode.getParent().getPath()+ ". It should end with "+ creationDatePath);
 	}
 	
-	//@Test
+	@Test
 	public void testSaveWithProvidedCreationDate() throws ItemNotFoundException, RepositoryException{
 		
 		//Create content objects for test
@@ -1347,7 +1347,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertTrue(contentObjectNode.getParent().getPath().endsWith(creationDatePath), "Invalid content object creation path "+contentObjectNode.getParent().getPath()+ ". It should end with "+ creationDatePath);
 	}
 	
-	//@Test
+	@Test
 	public void testUpdateCreationDate() throws ItemNotFoundException, RepositoryException{
 		
 		//Create content objects for test
@@ -1392,7 +1392,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertTrue(contentObjectNode.getParent().getPath().endsWith(creationDatePath), "Invalid content object creation path "+contentObjectNode.getParent().getPath()+ ". It should end with "+ creationDatePath);
 	}
 
-	//@Test
+	@Test
 	public void testSaveWithVariousSystemNames(){
 
 		//Create content objects for test
@@ -1483,7 +1483,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 	}
 
-	//@Test
+	@Test
 	public void testSystemName(){
 		
 		String expectedSystemName = "titleForSystemName";
@@ -1644,7 +1644,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 
 
-	//@Test
+	@Test
 	public void testOffsetAndLimitInSearchCriteria(){
 
 		RepositoryUser systemUser = getSystemUser();
@@ -1693,7 +1693,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 
 
-	//@Test
+	@Test
 	public void testEmptyStringPropertyIsNotSaved() throws Exception{
 
 		//Create content objects for test
@@ -1729,7 +1729,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 
 
-	//@Test
+	@Test
 	public void testTopicSearchUsingCriteria(){
 
 		RepositoryUser systemUser = getSystemUser();
@@ -1904,7 +1904,24 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
 
 		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(propertyPath, topic.getName()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(propertyPath, topic.getName()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, !includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+
+		contentObjectCriteria.reset();
 		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getName(), QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getName()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getName()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, !includeSubTopics));
 		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
 
 		contentObjectCriteria.reset();
@@ -1912,7 +1929,23 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
 
 		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(propertyPath, topic.getId()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(propertyPath, topic.getId()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, !includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
 		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getId(), QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+		
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getId()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, includeSubTopics));
+		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
+
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topic.getId()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION, QueryOperator.EQUALS, !includeSubTopics));
 		assertResult(contentObjectCriteria, 1, contentObjectSystemName);
 
 		contentObjectCriteria.reset();
@@ -1996,6 +2029,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, topics, Condition.AND, QueryOperator.EQUALS, includeSubTopics));
 		assertResult(contentObjectCriteria, 0, contentObjectSystemName);
 
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.equals(propertyPath, CmsConstants.TOPIC_REFERENCE_CRITERION_VALUE_PREFIX+topic.getName()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION));
+		assertResult(contentObjectCriteria, 1,contentObjectSystemName);
+		
+		contentObjectCriteria.reset();
+		contentObjectCriteria.addCriterion(CriterionFactory.equals(propertyPath, topic.getId()+CmsConstants.INCLUDE_CHILDREN_EXPRESSION));
+		assertResult(contentObjectCriteria, 1,contentObjectSystemName);
+
 		if (!includeSubTopics){
 			
 			contentObjectCriteria.reset();
@@ -2008,9 +2049,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		}
 		
+		
 	}
 	
-	//@Test
+	@Test
 	public void testSearchContentObjectsOrderByChildProperty(){
 		
 		RepositoryUser systemUser = getSystemUser();
@@ -2292,7 +2334,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		return contentObjectCriteria;
 	}
 	
-	//@Test
+	@Test
 	public void testSearchWithContentObjectReferenceCriterion(){
 		
 		RepositoryUser systemUser = getSystemUser();
@@ -2470,7 +2512,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		return contentObject;
 	}
 	
-	//@Test
+	@Test
 	public void testSearchContentObjects() throws Throwable{
  
 		RepositoryUser systemUser = getSystemUser();
@@ -2660,7 +2702,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	}
 
-	//@Test
+	@Test
 	public void testSaveOfContentObjectPropertyWhichAcceptsAnyContentObjectOfSomeType(){
 
 		//Create main content object
@@ -2806,6 +2848,27 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	//@Test
 	public void testGetContentObjectPreFetchedPropertyMechanism() throws Throwable{
 		
+		RepositoryUser systemUser = getSystemUser();
+		Taxonomy subjectTaxonomy = getSubjectTaxonomy();
+
+		//Create Topics
+		Topic topic = JAXBTestUtils.createTopic("firstTopicExportPreFetchMechanism", 
+				cmsRepositoryEntityFactory.newTopic(),
+				cmsRepositoryEntityFactory.newRepositoryUser());
+		topic.setOwner(systemUser);
+		topic.setTaxonomy(subjectTaxonomy);
+		
+		Topic childTopic1 = JAXBTestUtils.createTopic("secondTopicExportPreFetchMechanism", 
+				cmsRepositoryEntityFactory.newTopic(),
+				cmsRepositoryEntityFactory.newRepositoryUser());
+		childTopic1.setOwner(topic.getOwner());
+		childTopic1.setTaxonomy(subjectTaxonomy);
+		
+		topic.addChild(childTopic1);
+
+		topic = topicService.save(topic);
+		addEntityToBeDeletedAfterTestIsFinished(topic);
+		
 		ContentObject contentObject =  createContentObjectAndPopulateAllProperties(getSystemUser(), "contentObjectTestExportPreFetchMechanism", false);
 		
 		((LongProperty)contentObject.getCmsProperty("statisticTypeMultiple.viewCounter")).setSimpleTypeValue((long)1);
@@ -2884,7 +2947,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 			}
 			catch(Throwable e){
-				logger.error("FetchLevel "+fetchLevel);
+				logger.error("FetchLevel "+fetchLevel+ " \n Object "+ contentObject.xml(true));
 				throw e;
 			}
 		}
@@ -2974,6 +3037,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		xmlOrJson = removeWhitespacesIfNecessary(xmlOrJson);
 		
+		String expectedURL = contentObject.getResourceApiURL(resourceRepresentationType,false,contentObject.getSystemName()!=null);
+
 		if (resourceRepresentationType.equals(ResourceRepresentationType.XML)){
 			
 			String expectedProperty = "cmsIdentifier=\""+contentObject.getId()+"\"";
@@ -2985,11 +3050,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			expectedProperty = "contentObjectTypeName=\""+contentObject.getContentObjectType()+"\"";
 			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object type "+contentObject.getContentObjectType());
 
-			expectedProperty = "url=\""+contentObject.getResourceApiURL(resourceRepresentationType,false,contentObject.getSystemName()!=null)+"\"";
-			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false, contentObject.getSystemName()!= null));
+			expectedProperty = "url=\""+expectedURL+"\"";
+			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object url "+expectedURL);
 
-			if (fetchLevel == null || fetchLevel == FetchLevel.ENTITY || 
-					fetchLevel == FetchLevel.ENTITY_AND_CHILDREN && CollectionUtils.isEmpty(propertiesToExport)){
+			if ((fetchLevel == null || fetchLevel == FetchLevel.ENTITY) && CollectionUtils.isEmpty(propertiesToExport)){
 				
 				expectedProperty = "<profile";
 				Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object's profile ");
@@ -3067,27 +3131,48 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				}
 			}
 			else{
-				expectedProperty = "<title>"+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"</title>";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's profile.title");
 
-				expectedProperty = "<owner";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object owner ");
-
-				expectedProperty = "cmsIdentifier=\""+contentObject.getOwner().getId()+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner identifier "+contentObject.getOwner().getId());
-
-				expectedProperty = "externalId=\""+contentObject.getOwner().getExternalId()+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getExternalId());
-
-				expectedProperty = "label=\""+contentObject.getOwner().getLabel()+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getLabel());
-
-				
 				if (propertiesToExport != null && propertiesToExport.size() > 0){
+					
+					if (! propertiesToExport.contains("profile") && ! propertiesToExport.contains("profile.title") ){
+						expectedProperty = "<title>"+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"</title>";
+						Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's profile.title");
+
+						expectedProperty = "<owner";
+						Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object owner ");
+
+						expectedProperty = "cmsIdentifier=\""+contentObject.getOwner().getId()+"\"";
+						Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner identifier "+contentObject.getOwner().getId());
+
+						expectedProperty = "externalId=\""+contentObject.getOwner().getExternalId()+"\"";
+						Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getExternalId());
+
+						expectedProperty = "label=\""+contentObject.getOwner().getLabel()+"\"";
+						Assert.assertFalse(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getLabel());
+
+					}
+
 					for (String propertyToExport : propertiesToExport){
 						String propertyName = PropertyPath.getLastDescendant(propertyToExport);
 						Assert.assertTrue(xmlOrJson.contains(propertyName), "XML export \n"+xmlOrJson + " \n does not contain content object property "+propertyName);
 					}
+				}
+				else{
+					expectedProperty = "<title>"+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"</title>";
+					Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not contain content object's profile.title");
+
+					expectedProperty = "<owner";
+					Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not content object owner ");
+
+					expectedProperty = "cmsIdentifier=\""+contentObject.getOwner().getId()+"\"";
+					Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not content object's owner identifier "+contentObject.getOwner().getId());
+
+					expectedProperty = "externalId=\""+contentObject.getOwner().getExternalId()+"\"";
+					Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not content object's owner external id "+contentObject.getOwner().getExternalId());
+
+					expectedProperty = "label=\""+contentObject.getOwner().getLabel()+"\"";
+					Assert.assertTrue(xmlOrJson.contains(expectedProperty), "XML export \n"+xmlOrJson + " \n does not content object's owner external id "+contentObject.getOwner().getLabel());
+					
 				}
 			}
 
@@ -3103,11 +3188,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			expectedProperty = "\"contentObjectTypeName\":\""+contentObject.getContentObjectType()+"\"";
 			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object type "+contentObject.getContentObjectType());
 
-			expectedProperty = "\"url\":\""+contentObject.getResourceApiURL(resourceRepresentationType,false,false)+"\"";
-			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object url "+contentObject.getResourceApiURL(resourceRepresentationType,false,false));
+			expectedProperty = "\"url\":\""+expectedURL+"\"";
+			Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object url "+expectedURL);
 
-			if (fetchLevel == null || fetchLevel == FetchLevel.ENTITY || 
-					fetchLevel == FetchLevel.ENTITY_AND_CHILDREN && CollectionUtils.isEmpty(propertiesToExport)){
+			if ((fetchLevel == null || fetchLevel == FetchLevel.ENTITY ) && CollectionUtils.isEmpty(propertiesToExport)){
 				expectedProperty = "\"profile\":{";
 				Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's profile ");
 				
@@ -3186,30 +3270,56 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				
 			}
 			else{
-				expectedProperty = "\"title\":\""+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's profile.title");
-
-				expectedProperty = "\"owner\":{";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object owner ");
-
-				expectedProperty = "\"cmsIdentifier\":\""+contentObject.getOwner().getId()+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner identifier "+contentObject.getOwner().getId());
-
-				expectedProperty = "\"externalId\":\""+contentObject.getOwner().getExternalId()+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getExternalId());
-
-				//Since user is SYSTEM User , she has by default the label 'ACCOUNT SYSTEM'. If pretty print
-				//has been enabled, then xmlOrJson will processed to remove all whitespaces
-				//and therefore label wil be ACCOUNTSYSTEM. In this case we need to remove the whitespaces from the value
-				//in contentObject.getOwner().getLabel()
-				expectedProperty = "\"label\":\""+removeWhitespacesIfNecessary(contentObject.getOwner().getLabel())+"\"";
-				Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getLabel());
 
 				if (propertiesToExport != null && propertiesToExport.size() > 0){
+					
+					if (! propertiesToExport.contains("profile") && ! propertiesToExport.contains("profile.title") ){
+						expectedProperty = "\"title\":\""+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"\"";
+						Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's profile.title");
+						
+						expectedProperty = "\"owner\":{";
+						Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object owner ");
+
+						expectedProperty = "\"cmsIdentifier\":\""+contentObject.getOwner().getId()+"\"";
+						Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's owner identifier "+contentObject.getOwner().getId());
+
+						expectedProperty = "\"externalId\":\""+contentObject.getOwner().getExternalId()+"\"";
+						Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's owner external id "+contentObject.getOwner().getExternalId());
+
+						//Since user is SYSTEM User , she has by default the label 'ACCOUNT SYSTEM'. If pretty print
+						//has been enabled, then xmlOrJson will processed to remove all whitespaces
+						//and therefore label wil be ACCOUNTSYSTEM. In this case we need to remove the whitespaces from the value
+						//in contentObject.getOwner().getLabel()
+						expectedProperty = "\"label\":\""+removeWhitespacesIfNecessary(contentObject.getOwner().getLabel())+"\"";
+						Assert.assertTrue(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's owner external id "+contentObject.getOwner().getLabel());
+
+					}
+
 					for (String propertyToExport : propertiesToExport){
 						String propertyName = PropertyPath.getLastDescendant(propertyToExport);
 						Assert.assertTrue(xmlOrJson.contains(propertyName), "JSON export \n"+xmlOrJson + " \n does not contain content object property "+propertyName);
 					}
+				}
+				else{
+					expectedProperty = "\"title\":\""+StringUtils.deleteWhitespace(((StringProperty)contentObject.getCmsProperty("profile.title")).getSimpleTypeValue())+"\"";
+					Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n does not contain content object's profile.title "+expectedProperty );
+					
+					expectedProperty = "\"owner\":{";
+					Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object owner ");
+
+					expectedProperty = "\"cmsIdentifier\":\""+contentObject.getOwner().getId()+"\"";
+					Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner identifier "+contentObject.getOwner().getId());
+
+					expectedProperty = "\"externalId\":\""+contentObject.getOwner().getExternalId()+"\"";
+					Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getExternalId());
+
+					//Since user is SYSTEM User , she has by default the label 'ACCOUNT SYSTEM'. If pretty print
+					//has been enabled, then xmlOrJson will processed to remove all whitespaces
+					//and therefore label wil be ACCOUNTSYSTEM. In this case we need to remove the whitespaces from the value
+					//in contentObject.getOwner().getLabel()
+					expectedProperty = "\"label\":\""+removeWhitespacesIfNecessary(contentObject.getOwner().getLabel())+"\"";
+					Assert.assertFalse(xmlOrJson.contains(expectedProperty), "JSON export \n"+xmlOrJson + " \n contains content object's owner external id "+contentObject.getOwner().getLabel());
+
 				}
 			}
 
@@ -3234,8 +3344,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertEquals(contentObjectReloaded.getOwner().getExternalId(), contentObject.getOwner().getExternalId(), "ContentService.getContentObject returned invalid owner externalId");
 
 
-		if (fetchLevel == null || fetchLevel == FetchLevel.ENTITY || 
-				fetchLevel == FetchLevel.ENTITY_AND_CHILDREN && CollectionUtils.isEmpty(propertiesToExport)){
+		if ((fetchLevel == null || fetchLevel == FetchLevel.ENTITY ) && CollectionUtils.isEmpty(propertiesToExport)){
 			
 			Assert.assertTrue(contentObjectReloaded.getComplexCmsRootProperty().isChildPropertyLoaded("profile.title"), 
 			"ContentService.getContentObject did not return property 'profile.title'");
@@ -3260,14 +3369,22 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		}
 		else{
 			
-			Assert.assertFalse(contentObjectReloaded.getComplexCmsRootProperty().isChildPropertyLoaded("profile.title"), 
-			"ContentService.getContentObject returned property 'profile.title'");
-
 			if (propertiesToExport != null && propertiesToExport.size() > 0){
+
+				if (! propertiesToExport.contains("profile") && ! propertiesToExport.contains("profile.title") ){
+					Assert.assertFalse(contentObjectReloaded.getComplexCmsRootProperty().isChildPropertyLoaded("profile.title"), 
+					"ContentService.getContentObject returned property 'profile.title'");
+
+				}
 
 				for (String propertyToExport : propertiesToExport){
 					Assert.assertTrue(contentObjectReloaded.getComplexCmsRootProperty().isChildPropertyLoaded(propertyToExport),"ContentService.getContentObject did not return property '"+propertyToExport+"'");
 				}
+			}
+			else{
+				Assert.assertTrue(contentObjectReloaded.getComplexCmsRootProperty().isChildPropertyLoaded("profile.title"), 
+				"ContentService.getContentObject did not return property 'profile.title'");
+				
 			}
 		}
 
