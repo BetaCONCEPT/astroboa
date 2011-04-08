@@ -355,7 +355,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 		}
 	
 
-	private CmsProperty<?,?> createNewChildCmsPropertyTemplate(String propertyPath, boolean createPropertyOnlyIfComplexAndMultiple){
+	public CmsProperty<?,?> createNewChildCmsPropertyTemplate(String propertyPath, boolean createPropertyOnlyIfComplexAndMultiple){
 
 		try{
 			final Logger logger = LoggerFactory.getLogger(getClass());
