@@ -21,6 +21,7 @@ package org.betaconceptframework.astroboa.engine.jcr.util;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -35,6 +36,7 @@ import javax.security.auth.Subject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsApiConstants;
+import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
@@ -286,17 +288,34 @@ public class PopulateContentObject {
 					}
 
 					if (StringUtils.equals(owner.getId(), existingOwnerId)){
+						
 						contentObject.setOwner(owner);
+						
+						//In this case there is nothing else to be done.
+						return;
 					}
 					else{
-						String activeUsername = (AstroboaClientContextHolder.getActiveSecurityContext() != null? AstroboaClientContextHolder.getActiveSecurityContext().getIdentity() : null);
 						
-						logger.error("Content Object cannot be saved because no Owner has been specified and user "+activeUsername+" who " +
-								" performs the update is not the owner of the content object.This case needs to be examined more thoroughly. Proably the following exception is thrown " +
-								" when user tried to save an XML or JSON representation of a content object in which no owner has been specified and logged in user is not the owner of this object.");
+						if (existingOwnerId == null){
+							//This should never happen
+							logger.warn("Object "+context.getCmsRepositoryEntityUtils().nodeIdentity(contentObjectNode) + " does not have an owner. SYSTEM will be the owner");
+							owner = repositoryUserDao.getSystemRepositoryUser();
+							contentObject.setOwner(owner);
+						}
+						else{
 						
-						throw new RepositoryException("Content Object cannot be saved because no Owner has been specified and user "+activeUsername+" who " +
-								" performs the update is not the owner of the content object. Onwer Identifier for content object "+existingOwnerId);
+							//No owner has been provided and active user is not the owner of the object.
+							//However, active user has the permissions to update the object, therefore we allow save
+							//and we set the proper owner instance
+							Node repUsernode = context.retrieveNodeForRepositoryUser(existingOwnerId);
+							owner = repositoryUserDao.renderRepositoryUserFromNode(repUsernode, session, null, new HashMap<String, CmsRepositoryEntity>());
+							contentObject.setOwner(owner);
+							
+							//In this case there is nothing else to be done.
+							return;
+
+						}
+						
 					}
 			}
 		}
