@@ -63,6 +63,7 @@ import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectReferenceCriterion;
+import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
@@ -79,6 +80,7 @@ import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.query.criteria.ContentObjectReferenceCritetionImpl;
 import org.betaconceptframework.astroboa.model.impl.query.xpath.XPathUtils;
+import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.astroboa.test.AstroboaTestContext;
 import org.betaconceptframework.astroboa.test.TestConstants;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
@@ -101,12 +103,67 @@ import org.testng.annotations.Test;
 public class ContentServiceTest extends AbstractRepositoryTest {
 
 	@Test
+	public void testSaveWithNoAccessibility(){
+		
+		ContentObject object = cmsRepositoryEntityFactory.newObjectForType(TEST_CONTENT_TYPE);
+		object.setOwner(getSystemUser());
+		object.setSystemName(TestUtils.createValidSystemName("testEmptyAccessibility"));
+		
+		((StringProperty)object.getCmsProperty("profile.title")).setSimpleTypeValue(object.getSystemName());
+		((StringProperty)object.getCmsProperty("profile.language")).addSimpleTypeValue("en");
+		
+		//New object
+		object = contentService.save(object, false, true, null);
+		addEntityToBeDeletedAfterTestIsFinished(object);
+		
+		assertAccessibilityProperty(object, "accessibility.canBeReadBy");
+		assertAccessibilityProperty(object, "accessibility.canBeUpdatedBy");
+		assertAccessibilityProperty(object, "accessibility.canBeDeletedBy");
+		assertAccessibilityProperty(object, "accessibility.canBeTaggedBy");
+		
+		//Update one accessibility property
+		StringProperty accessibilityProperty = (StringProperty)object.getCmsProperty("accessibility.canBeUpdatedBy");
+		accessibilityProperty.removeValues();
+		String expectedValue = CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EDITOR);
+		accessibilityProperty.addSimpleTypeValue(expectedValue);
+		
+		object = contentService.save(object, false, true, null);
+		
+		//Reload object and resave with no accessibility
+		object = contentService.getContentObject(object.getSystemName(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY,
+				CacheRegion.NONE, null, false);
+		
+		//Save again
+		object = contentService.save(object, false, true, null);
+		
+		//And now check accessibility properties
+		accessibilityProperty = (StringProperty)object.getCmsProperty("accessibility.canBeUpdatedBy");
+		
+		Assert.assertNotNull(accessibilityProperty, "Property accessibility.canBeUpdatedBy was not saved ");
+		
+		Assert.assertTrue(accessibilityProperty.hasValues() && accessibilityProperty.getSimpleTypeValues().size() ==1 , " Property accessibility.canBeUpdatedBy does not contain one value "+ accessibilityProperty.getSimpleTypeValues());
+
+		Assert.assertTrue(expectedValue.equals(accessibilityProperty.getFirstValue()), "Property accessibility.canBeUpdatedBy contains invalid value. Expected "+expectedValue + " but found "+accessibilityProperty.getFirstValue());
+	}
+	
+	private void assertAccessibilityProperty(ContentObject object, String property){
+		
+		StringProperty accessibilityProperty = (StringProperty)object.getCmsProperty(property);
+		Assert.assertNotNull(accessibilityProperty, "Accessibility property "+property+" was not saved ");
+		
+		String defaultValue = accessibilityProperty.getPropertyDefinition().getDefaultValue();
+		
+		Assert.assertEquals(accessibilityProperty.getFirstValue(), defaultValue, "Accessibility property "+property+" was not saved with the default value "+defaultValue);
+	}
+	
+	@Test
 	public void testSaveWithNoOwner(){
 
 		ContentObject object = createContentObjectForType("genericContentResourceObject", null, "testEmptyOwner", false);
 	
 		//New object
 		object = contentService.save(object, false, true, null);
+		addEntityToBeDeletedAfterTestIsFinished(object);
 
 		Assert.assertNotNull(object.getOwner(), "Object was saved but owner is null");
 		repositoryContentValidator.compareRepositoryUsers(object.getOwner(), getSystemUser(), false, false);
