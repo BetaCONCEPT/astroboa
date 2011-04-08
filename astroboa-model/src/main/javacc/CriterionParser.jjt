@@ -141,7 +141,7 @@ import java.util.regex.Pattern;
 			else if (propertyPath.startsWith("label")){
 				return createLocalizationCriterion(propertyPath, value, queryOperator);
 			}
-			else if ("parent.name".equals(propertyPath)){
+			else if ("ancestor.name".equals(propertyPath)){
 				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
 				if (parentCriteria == null){
 					parentCriteria = CmsCriteriaFactory.newTopicCriteria();
@@ -158,7 +158,7 @@ import java.util.regex.Pattern;
      				return null;
 				}
 			}
-			else if (propertyPath.startsWith("parent.label")){
+			else if (propertyPath.startsWith("ancestor.label")){
 				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
 				if (parentCriteria == null){
 					parentCriteria = CmsCriteriaFactory.newTopicCriteria();
@@ -172,7 +172,7 @@ import java.util.regex.Pattern;
 				parentCriteria.addCriterion(locLabelCriterion);
 				return null;
 			}
-			else if (propertyPath.equals("parent.id")){
+			else if (propertyPath.equals("ancestor.id")){
 				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
 				if (parentCriteria == null){
 					parentCriteria = CmsCriteriaFactory.newTopicCriteria();

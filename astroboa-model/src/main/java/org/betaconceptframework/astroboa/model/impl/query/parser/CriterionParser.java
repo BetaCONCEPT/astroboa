@@ -133,7 +133,7 @@ import org.betaconceptframework.astroboa.util.DateUtils;
                                 return null;
                                 }
                         }
-                        else if (propertyPath.startsWith("parent.label")){
+                        else if (propertyPath.startsWith("ancestor.label")){
                                 TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
                                 if (parentCriteria == null){
                                         parentCriteria = CmsCriteriaFactory.newTopicCriteria();

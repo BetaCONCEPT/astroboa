@@ -1272,10 +1272,10 @@ public class CriterionFactory  {
 	 * <li><code>name</code> represents the name of a topic</li>
 	 * <li><code>label</code> represents a label of a topic in any locale</li>
 	 * <li><code>label.ANY_LOCALE</code> where ANY_LOCALE, can be replaced with "en", "el", etc and represents a label of a topic in a specific locale</li>
-	 * <li><code>parent.id</code> represents the id of a topic's ancestor</li>
-	 * <li><code>parent.name</code> represents the name of a topic's ancestor</li>
-	 * <li><code>parent.label</code> represents a label of a topic's ancestor in any locale</li>
-	 * <li><code>parent.label.ANY_LOCALE</code> where ANY_LOCALE, can be replaced with "en", "el", etc and represents a label of a topic's ancestor in a specific locale</li>
+	 * <li><code>ancestor.id</code> represents the id of a topic's ancestor</li>
+	 * <li><code>ancestor.name</code> represents the name of a topic's ancestor</li>
+	 * <li><code>ancestor.label</code> represents a label of a topic's ancestor in any locale</li>
+	 * <li><code>ancestor.label.ANY_LOCALE</code> where ANY_LOCALE, can be replaced with "en", "el", etc and represents a label of a topic's ancestor in a specific locale</li>
 	 * <li><code>taxonomy</code> represents the name of a topic's taxonomy</li>
 	 * </ul>
 	 * </p>
@@ -1311,16 +1311,16 @@ public class CriterionFactory  {
 	 * <li><code> (name%%"news%") </code></li>
 	 * <li><code> (name="ne'ws") </code></li>
 	 * <li><code> (name='ne"ws') </code></li>
-	 * <li><code> name="sports" AND parent.name="news" </code></li>
-	 * <li><code> (name="sports") AND (parent.name="news") </code></li>
-	 * <li><code> ( (name="sports") AND (parent.name="news") ) </code></li>
-	 * <li><code> ( name="sports" AND parent.name="news" ) </code></li>
-	 * <li><code> ( (name="sports") AND parent.name="news" ) </code></li>
-	 * <li><code> name="sport" AND parent.label CONTAINS "ne*" </code></li>
-	 * <li><code> name="sport" AND parent.label.en CONTAINS "ne*" </code></li>
-	 * <li><code> name CONTAINS "sport" AND parent.label.en CONTAINS "ne*" </code></li>
-	 * <li><code> label CONTAINS "sport*" AND parent.label.en CONTAINS "ne*" </code></li>
-	 * <li><code> taxonomy="sport" AND label CONTAINS "sport*" AND parent.label.en CONTAINS "ne*" </code></li>
+	 * <li><code> name="sports" AND ancestor.name="news" </code></li>
+	 * <li><code> (name="sports") AND (ancestor.name="news") </code></li>
+	 * <li><code> ( (name="sports") AND (ancestor.name="news") ) </code></li>
+	 * <li><code> ( name="sports" AND ancestor.name="news" ) </code></li>
+	 * <li><code> ( (name="sports") AND ancestor.name="news" ) </code></li>
+	 * <li><code> name="sport" AND ancestor.label CONTAINS "ne*" </code></li>
+	 * <li><code> name="sport" AND ancestor.label.en CONTAINS "ne*" </code></li>
+	 * <li><code> name CONTAINS "sport" AND ancestor.label.en CONTAINS "ne*" </code></li>
+	 * <li><code> label CONTAINS "sport*" AND ancestor.label.en CONTAINS "ne*" </code></li>
+	 * <li><code> taxonomy="sport" AND label CONTAINS "sport*" AND ancestor.label.en CONTAINS "ne*" </code></li>
 	 *</ul>
 	 * </p>
 	 * 
