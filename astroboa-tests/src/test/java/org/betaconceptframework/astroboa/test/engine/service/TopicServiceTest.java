@@ -62,14 +62,22 @@ import org.testng.annotations.Test;
  */
 public class TopicServiceTest extends AbstractRepositoryTest {
 
-	
+	//@Test
 	public void testTopicSearchUsingSearchExpression() throws Throwable{
 
+		Taxonomy taxonomy = JAXBTestUtils.createTaxonomy(
+				"test-search-parent-topic-using-search-expression-taxonomy", CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
+		
+		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
+		taxonomy = taxonomyService.save(taxonomy);
+		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		
 		Topic parentTopic = JAXBTestUtils.createTopic("test-search-parent-topic-using-search-expression", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
 				getSystemUser());
 		
 		parentTopic.addLocalizedLabel("en", parentTopic.getName()+"-en");
+		parentTopic.setTaxonomy(taxonomy);
 		parentTopic = topicService.saveTopic(parentTopic);
 		addEntityToBeDeletedAfterTestIsFinished(parentTopic);
 
@@ -87,7 +95,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
-		//CONTAINS  Restrictions are disabled. 
 		//value is the expected outcome. true for match one topic, false for no match for this topic (it may contain other topics but not
 		//the provided one
 		Map<String, Boolean> idRestrictions = new HashMap<String, Boolean>();
@@ -97,8 +104,8 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		Map<String, Boolean> nameRestrictions = new HashMap<String, Boolean>();
 		nameRestrictions.put("name=\""+topic.getName()+"\"", true);
 		nameRestrictions.put("name!=\""+topic.getName()+"\"", false);
-		nameRestrictions.put("name CONTAINS \"test\\-search\\-topic\\-using*\"", true);
-		nameRestrictions.put("name CONTAINS \"test\\-search2\\-*\"", false);
+		//nameRestrictions.put("name CONTAINS \"test\\-search\\-topic\\-using*\"", true);
+		//nameRestrictions.put("name CONTAINS \"test\\-search2\\-*\"", false);
 		nameRestrictions.put("name%%\"test-search-topic-using%\"", true);
 		nameRestrictions.put("name%%\"test-search-topic-using2%\"", false);
 
