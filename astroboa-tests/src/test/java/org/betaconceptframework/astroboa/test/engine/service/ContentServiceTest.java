@@ -63,12 +63,14 @@ import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectReferenceCriterion;
+import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.query.CalendarInfo;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.PopulateContentObject;
 import org.betaconceptframework.astroboa.engine.jcr.util.PopulateSimpleCmsProperty;
+import org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectSaveAspect;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -83,8 +85,8 @@ import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.engine.CmsPropertyPath;
 import org.betaconceptframework.astroboa.test.log.TestLogPolicy;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
-import org.betaconceptframework.astroboa.test.util.TestUtils;
 import org.betaconceptframework.astroboa.test.util.JcrUtils;
+import org.betaconceptframework.astroboa.test.util.TestUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.CmsConstants.ContentObjectStatus;
 import org.betaconceptframework.astroboa.util.PropertyPath;
@@ -97,6 +99,56 @@ import org.testng.annotations.Test;
  * 
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
+
+	@Test
+	public void testSaveWithNoOwner(){
+
+		ContentObject object = createContentObjectForType("genericContentResourceObject", null, "testEmptyOwner", false);
+	
+		//New object
+		object = contentService.save(object, false, true, null);
+
+		Assert.assertNotNull(object.getOwner(), "Object was saved but owner is null");
+		repositoryContentValidator.compareRepositoryUsers(object.getOwner(), getSystemUser(), false, false);
+		
+		//Update object
+		object.setOwner(null);
+		object = contentService.save(object, false, true, null);
+		Assert.assertNotNull(object.getOwner(), "Object was saved but owner is null");
+		repositoryContentValidator.compareRepositoryUsers(object.getOwner(), getSystemUser(), false, false);
+
+		
+		//Save object as another user
+		loginToTestRepositoryAsTestUser();
+		
+		try{
+			//Suppress warnings
+			TestLogPolicy.setLevelForLogger(Level.FATAL, SecureContentObjectSaveAspect.class.getName());
+
+			object = contentService.save(object, false, true, null);
+			
+			TestLogPolicy.setDefaultLevelForLogger(SecureContentObjectSaveAspect.class.getName());
+		}
+		catch(CmsException e){
+			Assert.assertTrue(e instanceof CmsUnauthorizedAccessException, "Invalid exception thrown for unauthorized access "+e);
+			Assert.assertTrue(e.getMessage().startsWith("User "+TestConstants.TEST_USER_NAME+" is not authorized to save content object"), "Invalid exception message thrown for unauthorized access");
+		}
+		
+		//Now update accessibility in order to allow save
+		loginToTestRepositoryAsSystem();
+		object = contentService.getContentObject(object.getSystemName(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+		((StringProperty)object.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(TestConstants.TEST_USER_NAME);
+		object = contentService.save(object, false, true, null);
+		
+		loginToTestRepositoryAsTestUser();
+		
+		object.setOwner(null);
+		object = contentService.save(object, false, true, null);
+		Assert.assertNotNull(object.getOwner(), "Object was saved but owner is null");
+		repositoryContentValidator.compareRepositoryUsers(object.getOwner(), getSystemUser(), false, false);
+
+		loginToTestRepositoryAsSystem();
+	}
 
 
 	@Test
