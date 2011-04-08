@@ -1186,12 +1186,11 @@ public class ContentDao  extends JcrDaoSupport{
 			return null;
 		}
 
-		if (FetchLevel.ENTITY == fetchLevel || 
-				(FetchLevel.ENTITY_AND_CHILDREN == fetchLevel && CollectionUtils.isEmpty(propertyPathsToInclude))){
+		if (CollectionUtils.isEmpty(propertyPathsToInclude)){
+			
 			//FetchLevel is either ENTITY or ENTITY_AND_CHILDREN but user did not specify any properties at all.
 			//In this case profile.title is returned and owner
 
-			//We are using a new array list since in these cases user list is ignored
 			propertyPathsToInclude = new ArrayList<String>();
 			
 			propertyPathsToInclude.add("profile.title");
@@ -1201,6 +1200,7 @@ public class ContentDao  extends JcrDaoSupport{
 			//However in the cases of XML or JSON, it should be specified as a regular one
 			if (ResourceRepresentationType.XML.equals(contentObjectOutput)|| 
 					ResourceRepresentationType.JSON.equals(contentObjectOutput)){
+				
 					propertyPathsToInclude.add(CmsConstants.OWNER_ELEMENT_NAME);
 			}
 		}
