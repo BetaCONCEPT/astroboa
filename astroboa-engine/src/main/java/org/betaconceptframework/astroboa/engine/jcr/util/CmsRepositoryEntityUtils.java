@@ -487,4 +487,25 @@ public class CmsRepositoryEntityUtils {
 		return  getUniqueNodeForCriteria(session, taxonomyId,CmsCriteriaFactory.newTaxonomyCriteria());
 	}
 
+	public String nodeIdentity(Node node) throws RepositoryException{
+		
+		if (node == null){
+			return "";
+		}
+		
+		String nodeIdentity = node.getPath();
+		
+		if (node.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
+			nodeIdentity += "["+node.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString() +"]";
+		}
+		else if (node.hasProperty(CmsBuiltInItem.Name.getJcrName())){
+			nodeIdentity += "["+node.getProperty(CmsBuiltInItem.Name.getJcrName()).getString() +"]";
+		}
+		else if (node.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+			nodeIdentity += "["+node.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString() +"]";
+		}
+		
+		return nodeIdentity;
+		
+	}
 }
