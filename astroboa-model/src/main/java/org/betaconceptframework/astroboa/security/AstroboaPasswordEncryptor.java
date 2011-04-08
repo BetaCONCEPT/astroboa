@@ -18,12 +18,20 @@
  */
 package org.betaconceptframework.astroboa.security;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.CmsPasswordEncryptor;
+import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jasypt.commons.CommonUtils;
 import org.jasypt.digest.StandardStringDigester;
 import org.jasypt.salt.FixedStringSaltGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Excerpt taken from http://www.jasypt.org/howtoencryptuserpasswords.html
@@ -61,6 +69,10 @@ public class AstroboaPasswordEncryptor implements CmsPasswordEncryptor{
 
 	private void initDigester()  {
 
+		if (digester != null){
+			return;
+		}
+		
 		try{
 			final FixedStringSaltGenerator fixedStringSaltGenerator = new FixedStringSaltGenerator();
 			fixedStringSaltGenerator.setSalt(DEFAULT_BETACONCEPT_SALT);
@@ -113,12 +125,29 @@ public class AstroboaPasswordEncryptor implements CmsPasswordEncryptor{
 
 	public boolean checkPassword(String plainPassword, String encryptedPassword) {
 
+		initDigester();
+		
 		return this.digester.matches(plainPassword, encryptedPassword);
 	}
 
 	public String encrypt(String password) {
-
+		
+		initDigester();
+		
 		return this.digester.digest(password);
 	}
 
+	//Override deserialization process to log any exception thrown 
+	//during deserialization
+	private void readObject(ObjectInputStream ois)
+	throws ClassNotFoundException, IOException {
+
+		//Deserialize bean normally
+		try{
+			ois.defaultReadObject();
+		}
+		catch(Exception e){
+			LoggerFactory.getLogger(getClass()).warn("Exception thrown while deserializing password encryptor. Digester will be initialized the first time any of the AstroboaPasswordEncryptor method is called");
+		}
+	}
 }
