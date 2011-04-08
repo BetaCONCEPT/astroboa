@@ -911,10 +911,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 		
 		// the following is a fix for profile.language. If it is an empty list we should nullify it because the pick list UI component 
 		// generates an immutable ArrayList that prevents the repository engine to add the default value (as is set in XSD)
-		StringProperty language = (StringProperty)selectedContentObjectForEdit.getContentObjectProperty().get("profile.language");
-		if (language != null && CollectionUtils.isEmpty(language.getSimpleTypeValues())) {
-			language.setSimpleTypeValues(null);
-		}
+		//StringProperty language = (StringProperty)selectedContentObjectForEdit.getContentObjectProperty().get("profile.language");
+		//if (language != null && CollectionUtils.isEmpty(language.getSimpleTypeValues())) {
+		//	language.setSimpleTypeValues(null);
+		//}
 		
 		//Validate ContentObject properties
 		validateProperties();
