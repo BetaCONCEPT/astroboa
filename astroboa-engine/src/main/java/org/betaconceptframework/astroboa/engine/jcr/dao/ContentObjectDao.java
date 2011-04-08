@@ -88,9 +88,6 @@ public class ContentObjectDao {
 	private QueryUtils queryUtils; 
 
 	@Autowired
-	private VersionUtils versionUtils;
-
-	@Autowired
 	private ContentObjectRenderer contentObjectRenderer;
 
 	@Autowired
