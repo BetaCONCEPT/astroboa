@@ -37,6 +37,8 @@ import org.betaconceptframework.astroboa.api.model.exception.SingleOccurenceExce
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -197,12 +199,27 @@ extends CmsPropertyImpl<D,P> implements SimpleCmsProperty<T, D,P>, Serializable{
 
 	public void setSimpleTypeValues(List<T> values)  throws SingleOccurenceException{
 
+		if (values == null){
+			//Throw and catch an exception to log the stack trace in order to 
+			//be able to check who provided a null list
+			try{
+				throw new Exception();
+			}
+			catch(Exception e){
+				final Logger logger = LoggerFactory.getLogger(getClass());
+				logger.warn("A null list is provided as values for property {}. An empty list will be created instead "+ getFullPath(), e);
+				this.values.clear();
+			}
+		}
+		else{
+			this.values = values;
+		}
+		
 		//Check if list contains more than value
 		//and this property is single value
 		if (CollectionUtils.isNotEmpty(this.values) && this.values.size() > 1)
 			throwExceptionIfPropertyIsSingleValue();
 
-		this.values = values;
 	}
 	
 	public boolean hasNoValues(){
