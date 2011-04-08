@@ -309,10 +309,10 @@ public class PopulateComplexCmsProperty{
 				
 				//Throw exception if at least one child property is saved
 				//or we reach a root complex definition which is mandatory
-				if (atLeastOneChildPropertySaved() || 
+				if (CollectionUtils.isNotEmpty(exceptionsForMandatoryProperties) && (atLeastOneChildPropertySaved() || 
 						(complexPropertyDefinition.isMandatory() &&
 								complexProperty.getParentProperty() != null && 
-								complexProperty.getParentProperty() instanceof ComplexCmsRootProperty)){
+								complexProperty.getParentProperty() instanceof ComplexCmsRootProperty))){
 					
 
 						logger.debug("Exceptions for mandatory properties found {}. Exception message is being built.", exceptionsForMandatoryProperties);
@@ -384,6 +384,9 @@ public class PopulateComplexCmsProperty{
 							}
 						}
 					}
+					else if (property.getPropertyDefinition() != null && property.getPropertyDefinition().isMandatory()){
+						foundAtLeastOnePropertyWhoseValueMustBeSaved = true;
+					}
 				}
 			}
 			
@@ -418,14 +421,23 @@ public class PopulateComplexCmsProperty{
 					}
 				}
 				else{
+					
+					//Special case. If object is a new object and property is accessibility then it must be loaded with the default values
+					if ( SaveMode.INSERT == saveMode && childPropertyDefinition instanceof ComplexCmsPropertyDefinition &&
+							StringUtils.equals("accessibility", childPropertyName) && 
+							complexProperty instanceof ComplexCmsRootProperty){
+						
+						((ComplexCmsPropertyImpl)complexProperty).createNewChildCmsPropertyTemplate(childPropertyName, false);
+						
+						populateComplexChildProperty(childPropertyName, (ComplexCmsPropertyDefinition)childPropertyDefinition);
+					}
 					//In case where property is a MANDATORY simple property with a default value
 					//initialize property and populate it
-					if ( childPropertyDefinition instanceof SimpleCmsPropertyDefinition && 
+					else if ( childPropertyDefinition instanceof SimpleCmsPropertyDefinition && 
 							((SimpleCmsPropertyDefinition)childPropertyDefinition).isMandatory() && 
 							((SimpleCmsPropertyDefinition)childPropertyDefinition).isSetDefaultValue()){
 						
-						//Just calling property is sufficient. Default value will be loaded
-						complexProperty.getChildProperty(childPropertyName);
+						((ComplexCmsPropertyImpl)complexProperty).createNewChildCmsPropertyTemplate(childPropertyName, false);
 						
 						populateSimpleChildProperty(childPropertyName, (SimpleCmsPropertyDefinition)childPropertyDefinition);
 					}
@@ -468,7 +480,7 @@ public class PopulateComplexCmsProperty{
 		else if (childPropertyDefinition.isMultiple()){
 			List<CmsProperty<?,?>> childPropertyList = complexProperty.getChildPropertyList(childPropertyName);
 
-			//An not null list specifies that child complex cms property has been loaded
+			//A not null list specifies that child complex cms property has been loaded
 			if (childPropertyList != null){
 
 				childComplexCmsPropertyLoaded = true;
