@@ -176,6 +176,8 @@ public final class CmsConstants {
 	public final static String ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION = ASTROBOA_MODEL_SCHEMA_FILENAME+"-"+ASTROBOA_VERSION+".xsd";
 	public final static String ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION = ASTROBOA_API_SCHEMA_FILENAME+"-"+ASTROBOA_VERSION+".xsd";
 
+	public final static String INCLUDE_CHILDREN_EXPRESSION = CmsConstants.FORWARD_SLASH+CmsConstants.ANY_NAME;
+	
 	public static enum ContentObjectStatus {
 		authored,
 		submitted,
