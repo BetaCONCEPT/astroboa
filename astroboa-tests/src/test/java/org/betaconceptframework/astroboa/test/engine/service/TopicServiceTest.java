@@ -97,8 +97,8 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		Map<String, Boolean> nameRestrictions = new HashMap<String, Boolean>();
 		nameRestrictions.put("name=\""+topic.getName()+"\"", true);
 		nameRestrictions.put("name!=\""+topic.getName()+"\"", false);
-		//nameRestrictions.put("name CONTAINS \"test-search-topic-using*\"", true);
-		//nameRestrictions.put("name CONTAINS \"test-search2-*\"", false);
+		nameRestrictions.put("name CONTAINS \"test\\-search\\-topic\\-using*\"", true);
+		nameRestrictions.put("name CONTAINS \"test\\-search2\\-*\"", false);
 		nameRestrictions.put("name%%\"test-search-topic-using%\"", true);
 		nameRestrictions.put("name%%\"test-search-topic-using2%\"", false);
 
@@ -109,42 +109,42 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		Map<String, Boolean> labelRestrictions = new HashMap<String, Boolean>();
 		labelRestrictions.put("label=\""+topic.getLocalizedLabelForLocale("en")+"\"", true);
 		labelRestrictions.put("label!=\""+topic.getLocalizedLabelForLocale("en")+"\"", false);
-		//labelRestrictions.put("label CONTAINS \"test-search-topic-using*\"", true);
-		//labelRestrictions.put("label CONTAINS \"test-search2-*\"", false);
+		labelRestrictions.put("label CONTAINS \"test\\-search\\-topic\\-using*\"", true);
+		labelRestrictions.put("label CONTAINS \"test\\-search2\\-*\"", false);
 		labelRestrictions.put("label%%\"test-search-topic-using%\"", true);
 		labelRestrictions.put("label%%\"test-search-topic-using2%\"", false);
 		labelRestrictions.put("label.en=\""+topic.getLocalizedLabelForLocale("en")+"\"", true);
 		labelRestrictions.put("label.en!=\""+topic.getLocalizedLabelForLocale("en")+"\"", false);
-		//labelRestrictions.put("label.en CONTAINS \"test-search-topic-using*\"", true);
-		//labelRestrictions.put("label.en CONTAINS \"test-search2-*\"", false);
+		labelRestrictions.put("label.en CONTAINS \"test\\-search\\-topic\\-using*\"", true);
+		labelRestrictions.put("label.en CONTAINS \"test\\-search2\\-*\"", false);
 		labelRestrictions.put("label.en%%\"test-search-topic-using%\"", true);
 		labelRestrictions.put("label.en%%\"test-search-topic-using2%\"", false);
 
 		Map<String, Boolean> parentIdRestrictions = new HashMap<String, Boolean>();
-		parentIdRestrictions.put("parent.id=\""+parentTopic.getId()+"\"", true);
-		parentIdRestrictions.put("parent.id!=\""+parentTopic.getId()+"\"", false);
+		parentIdRestrictions.put("ancestor.id=\""+parentTopic.getId()+"\"", true);
+		parentIdRestrictions.put("ancestor.id!=\""+parentTopic.getId()+"\"", false);
 
 		Map<String, Boolean> parentNameRestrictions = new HashMap<String, Boolean>();
-		parentNameRestrictions.put("parent.name=\""+parentTopic.getName()+"\"", true);
-		parentNameRestrictions.put("parent.name!=\""+parentTopic.getName()+"\"", false);
-		//parentNameRestrictions.put("parent.name CONTAINS \"test-search-parent*\"", true);
-		//parentNameRestrictions.put("parent.name CONTAINS \"test-search2-*\"", false);
-		parentNameRestrictions.put("parent.name%%\"test-search-parent%\"", true);
-		parentNameRestrictions.put("parent.name%%\"test-search-topic-using2%\"", false);
+		parentNameRestrictions.put("ancestor.name=\""+parentTopic.getName()+"\"", true);
+		parentNameRestrictions.put("ancestor.name!=\""+parentTopic.getName()+"\"", false);
+		parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search\\-parent*\"", true);
+		parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search2\\-\"", false);
+		parentNameRestrictions.put("ancestor.name%%\"test-search-parent%\"", true);
+		parentNameRestrictions.put("ancestor.name%%\"test-search-topic-using2%\"", false);
 		
 		Map<String, Boolean> parentLabelRestrictions = new HashMap<String, Boolean>();
-		parentLabelRestrictions.put("parent.label=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
-		parentLabelRestrictions.put("parent.label!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
-		//parentLabelRestrictions.put("parent.label CONTAINS \"test-search-parent*\"", true);
-		//parentLabelRestrictions.put("parent.label CONTAINS \"test-search2-*\"", false);
-		parentLabelRestrictions.put("parent.label%%\"test-search-parent%\"", true);
-		parentLabelRestrictions.put("parent.label%%\"test-search-topic-using2%\"", false);
-		parentLabelRestrictions.put("parent.label.en=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
-		parentLabelRestrictions.put("parent.label.en!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
-		//parentLabelRestrictions.put("parent.label.en CONTAINS \"test-search-parent*\"", true);
-		//parentLabelRestrictions.put("parent.label.en CONTAINS \"test-search2-*\"", false);
-		parentLabelRestrictions.put("parent.label.en%%\"test-search-parent%\"", true);
-		parentLabelRestrictions.put("parent.label.en%%\"test-search-topic-using2%\"", false);
+		parentLabelRestrictions.put("ancestor.label=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
+		parentLabelRestrictions.put("ancestor.label!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
+		parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search\\-parent*\"", true);
+		parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search2\\-*\"", false);
+		parentLabelRestrictions.put("ancestor.label%%\"test-search-parent%\"", true);
+		parentLabelRestrictions.put("ancestor.label%%\"test-search-topic-using2%\"", false);
+		parentLabelRestrictions.put("ancestor.label.en=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
+		parentLabelRestrictions.put("ancestor.label.en!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
+		parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search\\-parent*\"", true);
+		parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search2\\-*\"", false);
+		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-parent%\"", true);
+		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-topic-using2%\"", false);
 
 		//Search by its id
 		for (Entry<String, Boolean> idRestrictionEntry: idRestrictions.entrySet()){
