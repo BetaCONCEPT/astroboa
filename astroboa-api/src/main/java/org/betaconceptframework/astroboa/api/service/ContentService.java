@@ -601,8 +601,9 @@ public interface ContentService {
      *  <ul>
      *  	<li> {@link FetchLevel#FULL} : Loads all properties of a {@link ContentObject}. 
      *  		Value of <code>propertyPathsToInclude</code> is ignored</li>
-     *  	<li> {@link FetchLevel#ENTITY} : Loads the aforementioned properties of a {@link ContentObject}. 
-     *  		Value of <code>propertyPathsToInclude</code> is ignored</li>
+     *  	<li> {@link FetchLevel#ENTITY} : Loads the aforementioned properties of a 
+     *  		{@link ContentObject} plus any property specified in <code>propertyPathsToInclude</code>. If <code>propertyPathsToInclude</code> is empty 
+     *  properties <code>owner</code> and <profile.title</code> are not loaded.  
      *  	<li> {@link FetchLevel#ENTITY_AND_CHILDREN} : Loads the aforementioned properties (except owner and title) of a 
      *  {@link ContentObject} plus any property specified in <code>propertyPathsToInclude</code>. It should be stated that
      *  if {@link ResourceRepresentationType#CONTENT_OBJECT_INSTANCE} or {@link ResourceRepresentationType#CONTENT_OBJECT_LIST} resource representation is selected then
