@@ -69,8 +69,12 @@ public class LocalizationCriterionImpl implements LocalizationCriterion, Seriali
 			criterion.setCaseMatching(CaseMatching.LOWER_CASE);
 		}
 
-		if (CmsBuiltInItem.Localization.getJcrName().equals(localizationPropertyPath) && QueryOperator.CONTAINS == queryOperator){
+		if (CmsBuiltInItem.Localization.getJcrName().equals(criterion.getProperty())){
 			((SimpleCriterionImpl)criterion).propertyIsComplex();
+			
+			if (criterion.getOperator() != null && QueryOperator.EQUALS == criterion.getOperator()){
+				criterion.setOperator(QueryOperator.CONTAINS);
+			}
 		}
 		
 		if (CollectionUtils.isNotEmpty(localizedLabels)){
