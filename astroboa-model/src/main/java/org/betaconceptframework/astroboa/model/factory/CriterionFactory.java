@@ -312,7 +312,7 @@ public class CriterionFactory  {
 	 * Creates an "equals" restriction for property but for a list of values.
 	 * Example :
 	 * 
-	 * <pre>equals("index", Condition.OR, Arrays.asList(1, 2)</pre> 
+	 * <pre>equals("index", Condition.OR, Arrays.asList(1, 2))</pre> 
 	 * <p>
 	 * will constrain query results to entities whose <code>index</code>
 	 * property has value <code>1</code> or <code>2</code>.
@@ -591,13 +591,40 @@ public class CriterionFactory  {
 	}
 
 	public static  Criterion createSimpleCriterion(String propertyPath, List values, Condition internalCondition, QueryOperator operator){
+
+		//Special case
+		if (values != null && operator != null && ( operator == QueryOperator.EQUALS || operator == QueryOperator.NOT_EQUALS)){
+			
+			for (Object value : values){
+				if (topicReferenceCriterionMustBeCreated(value)){
+					return newTopicReferenceCriterion(propertyPath, values, internalCondition, operator, ((String)value).endsWith(CmsConstants.INCLUDE_CHILDREN_EXPRESSION));
+				}
+			}
+		}
+
+		
 		return CriterionUtils.createSimpleCriterion(propertyPath, values, internalCondition, operator, CaseMatching.NO_CASE);
 	}
 	
 	public static  Criterion createSimpleCriterion(String propertyPath, Object value, QueryOperator operator){
+		
+		//Special case
+		if (operator != null && ( operator == QueryOperator.EQUALS || operator == QueryOperator.NOT_EQUALS) &&  topicReferenceCriterionMustBeCreated(value)){
+			
+			return newTopicReferenceCriterion(propertyPath, (String)value, operator, ((String)value).endsWith(CmsConstants.INCLUDE_CHILDREN_EXPRESSION));
+		}
+
 		return CriterionUtils.createSimpleCriterion(propertyPath, value, operator, CaseMatching.NO_CASE);
 	}
-	
+
+	private static boolean topicReferenceCriterionMustBeCreated(Object value) {
+		
+		 return value != null &&
+		 		value instanceof String && 
+		 		( ((String)value).startsWith(CmsConstants.TOPIC_REFERENCE_CRITERION_VALUE_PREFIX) ||
+		 				((String)value).endsWith(CmsConstants.INCLUDE_CHILDREN_EXPRESSION) );
+	}
+
 	private static  RangeCriterion createRangeCriterion(String propertyPath, Object lowerLimit, Object upperLimit)
 	{
 		RangeCriterion rangeCriteria = new RangeCriterion();
@@ -1228,19 +1255,24 @@ public class CriterionFactory  {
 		
 		if (referenceIdOrSystemName != null && referenceCriterion != null){
 			
-			if  (
-					CmsConstants.UUIDPattern.matcher(referenceIdOrSystemName).matches() ||
-					referenceIdOrSystemName.startsWith(expectedPrefix)  ||
-					! CmsConstants.SystemNamePattern.matcher(referenceIdOrSystemName).matches() 
-				){
+			//1. Reference Id or system name may end with /*
+			//   This is taken into account only when criterion
+			//   corresponds to a Topic Reference
+			if (referenceCriterion instanceof TopicReferenceCriterion && referenceIdOrSystemName.endsWith(CmsConstants.INCLUDE_CHILDREN_EXPRESSION)){
 				
-				//Value is a UUID or has been already prefixed or it is not a valid system name
-				//Add value as is
-				referenceCriterion.addValue(referenceIdOrSystemName);
+				((TopicReferenceCriterion)referenceCriterion).expandCriterionToIncludeSubTopics();
+				
+				//Remove suffix and continue processing
+				referenceIdOrSystemName  =StringUtils.substringBeforeLast(referenceIdOrSystemName, CmsConstants.INCLUDE_CHILDREN_EXPRESSION);
 			}
-			else{
-				//Value is a valid system name.Add appropriate prefix 
+
+			//2. If value represents a system name , add the proper prefix
+			if  (CmsConstants.SystemNamePattern.matcher(referenceIdOrSystemName).matches()){
 				referenceCriterion.addValue(expectedPrefix+referenceIdOrSystemName);
+			}
+			//3. In all other cases, add value as is
+			else {
+				referenceCriterion.addValue(referenceIdOrSystemName);
 			}
 		}
 	}
