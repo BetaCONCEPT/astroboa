@@ -28,6 +28,7 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
@@ -62,6 +63,12 @@ import org.testng.annotations.Test;
  */
 public class TopicServiceTest extends AbstractRepositoryTest {
 
+	enum SearchOutcome{
+		ONLY_EXPECTED_TOPIC,
+		AT_LEAST_EXPECTED_TOPIC,
+		NO_EXPECTED_TOPIC_AT_ALL
+	}
+	
 	//@Test
 	public void testTopicSearchUsingSearchExpression() throws Throwable{
 
@@ -79,7 +86,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		parentTopic.addLocalizedLabel("en", parentTopic.getName()+"-en");
 		parentTopic.setTaxonomy(taxonomy);
 		parentTopic = topicService.saveTopic(parentTopic);
-		addEntityToBeDeletedAfterTestIsFinished(parentTopic);
 
 		Topic topic = JAXBTestUtils.createTopic("test-search-topic-using-search-expression", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
@@ -89,6 +95,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		topic.addLocalizedLabel("en", english_label);
 		topic.setParent(parentTopic);
+		topic.setTaxonomy(taxonomy);
 		topic = topicService.saveTopic(topic);
 		
 		//Create criteria
@@ -97,94 +104,94 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//value is the expected outcome. true for match one topic, false for no match for this topic (it may contain other topics but not
 		//the provided one
-		Map<String, Boolean> idRestrictions = new HashMap<String, Boolean>();
-		idRestrictions.put("id=\""+topic.getId()+"\"", true);
-		idRestrictions.put("id!=\""+topic.getId()+"\"", false);
+		Map<String, SearchOutcome> idRestrictions = new HashMap<String, SearchOutcome>();
+		idRestrictions.put("id=\""+topic.getId()+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		idRestrictions.put("id!=\""+topic.getId()+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
-		Map<String, Boolean> nameRestrictions = new HashMap<String, Boolean>();
-		nameRestrictions.put("name=\""+topic.getName()+"\"", true);
-		nameRestrictions.put("name!=\""+topic.getName()+"\"", false);
+		Map<String, SearchOutcome> nameRestrictions = new HashMap<String, SearchOutcome>();
+		nameRestrictions.put("name=\""+topic.getName()+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		nameRestrictions.put("name!=\""+topic.getName()+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 		//nameRestrictions.put("name CONTAINS \"test\\-search\\-topic\\-using*\"", true);
 		//nameRestrictions.put("name CONTAINS \"test\\-search2\\-*\"", false);
-		nameRestrictions.put("name%%\"test-search-topic-using%\"", true);
-		nameRestrictions.put("name%%\"test-search-topic-using2%\"", false);
+		nameRestrictions.put("name%%\"test-search-topic-using%\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		nameRestrictions.put("name%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
-		Map<String, Boolean> taxonomyRestrictions = new HashMap<String, Boolean>();
-		taxonomyRestrictions.put("taxonomy=\""+topic.getTaxonomy().getName()+"\"", true);
-		taxonomyRestrictions.put("taxonomy!=\""+topic.getName()+"\"", false);
+		Map<String, SearchOutcome> taxonomyRestrictions = new HashMap<String, SearchOutcome>();
+		taxonomyRestrictions.put("taxonomy=\""+topic.getTaxonomy().getName()+"\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC); //We have 2 topics under this taxonomy
+		taxonomyRestrictions.put("taxonomy!=\""+topic.getName()+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
-		Map<String, Boolean> labelRestrictions = new HashMap<String, Boolean>();
-		labelRestrictions.put("label=\""+topic.getLocalizedLabelForLocale("en")+"\"", true);
-		labelRestrictions.put("label!=\""+topic.getLocalizedLabelForLocale("en")+"\"", false);
-		labelRestrictions.put("label CONTAINS \"test\\-search\\-topic\\-using*\"", true);
-		labelRestrictions.put("label CONTAINS \"test\\-search2\\-*\"", false);
-		labelRestrictions.put("label%%\"test-search-topic-using%\"", true);
-		labelRestrictions.put("label%%\"test-search-topic-using2%\"", false);
-		labelRestrictions.put("label.en=\""+topic.getLocalizedLabelForLocale("en")+"\"", true);
-		labelRestrictions.put("label.en!=\""+topic.getLocalizedLabelForLocale("en")+"\"", false);
-		labelRestrictions.put("label.en CONTAINS \"test\\-search\\-topic\\-using*\"", true);
-		labelRestrictions.put("label.en CONTAINS \"test\\-search2\\-*\"", false);
-		labelRestrictions.put("label.en%%\"test-search-topic-using%\"", true);
-		labelRestrictions.put("label.en%%\"test-search-topic-using2%\"", false);
+		Map<String, SearchOutcome> labelRestrictions = new HashMap<String, SearchOutcome>();
+		labelRestrictions.put("label=\""+escapeSearchExpressionForContains(topic.getLocalizedLabelForLocale("en"))+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		labelRestrictions.put("label!=\""+topic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		//labelRestrictions.put("label CONTAINS \"test\\-search\\-topic\\-using*\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		//labelRestrictions.put("label CONTAINS \"test\\-search2\\-*\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		labelRestrictions.put("label%%\"test-search-topic-using%\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		labelRestrictions.put("label%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		labelRestrictions.put("label.en=\""+topic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		labelRestrictions.put("label.en!=\""+topic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		//labelRestrictions.put("label.en CONTAINS \"test\\-search\\-topic\\-using*\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		//labelRestrictions.put("label.en CONTAINS \"test\\-search2\\-*\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		labelRestrictions.put("label.en%%\"test-search-topic-using%\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		labelRestrictions.put("label.en%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
-		Map<String, Boolean> parentIdRestrictions = new HashMap<String, Boolean>();
-		parentIdRestrictions.put("ancestor.id=\""+parentTopic.getId()+"\"", true);
-		parentIdRestrictions.put("ancestor.id!=\""+parentTopic.getId()+"\"", false);
+		Map<String, SearchOutcome> parentIdRestrictions = new HashMap<String, SearchOutcome>();
+		parentIdRestrictions.put("ancestor.id=\""+parentTopic.getId()+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		parentIdRestrictions.put("ancestor.id!=\""+parentTopic.getId()+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
-		Map<String, Boolean> parentNameRestrictions = new HashMap<String, Boolean>();
-		parentNameRestrictions.put("ancestor.name=\""+parentTopic.getName()+"\"", true);
-		parentNameRestrictions.put("ancestor.name!=\""+parentTopic.getName()+"\"", false);
-		parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search\\-parent*\"", true);
-		parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search2\\-\"", false);
-		parentNameRestrictions.put("ancestor.name%%\"test-search-parent%\"", true);
-		parentNameRestrictions.put("ancestor.name%%\"test-search-topic-using2%\"", false);
+		Map<String, SearchOutcome> parentNameRestrictions = new HashMap<String, SearchOutcome>();
+		parentNameRestrictions.put("ancestor.name=\""+parentTopic.getName()+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		parentNameRestrictions.put("ancestor.name!=\""+parentTopic.getName()+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		//parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search\\-parent*\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		//parentNameRestrictions.put("ancestor.name CONTAINS \"test\\-search2\\-\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		parentNameRestrictions.put("ancestor.name%%\"test-search-parent%\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		parentNameRestrictions.put("ancestor.name%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 		
-		Map<String, Boolean> parentLabelRestrictions = new HashMap<String, Boolean>();
-		parentLabelRestrictions.put("ancestor.label=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
-		parentLabelRestrictions.put("ancestor.label!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
-		parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search\\-parent*\"", true);
-		parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search2\\-*\"", false);
-		parentLabelRestrictions.put("ancestor.label%%\"test-search-parent%\"", true);
-		parentLabelRestrictions.put("ancestor.label%%\"test-search-topic-using2%\"", false);
-		parentLabelRestrictions.put("ancestor.label.en=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", true);
-		parentLabelRestrictions.put("ancestor.label.en!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", false);
-		parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search\\-parent*\"", true);
-		parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search2\\-*\"", false);
-		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-parent%\"", true);
-		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-topic-using2%\"", false);
+		Map<String, SearchOutcome> parentLabelRestrictions = new HashMap<String, SearchOutcome>();
+		parentLabelRestrictions.put("ancestor.label=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		parentLabelRestrictions.put("ancestor.label!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		//parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search\\-parent*\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		//parentLabelRestrictions.put("ancestor.label CONTAINS \"test\\-search2\\-*\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		parentLabelRestrictions.put("ancestor.label%%\"test-search-parent%\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		parentLabelRestrictions.put("ancestor.label%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		parentLabelRestrictions.put("ancestor.label.en=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.ONLY_EXPECTED_TOPIC);
+		parentLabelRestrictions.put("ancestor.label.en!=\""+parentTopic.getLocalizedLabelForLocale("en")+"\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		//parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search\\-parent*\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		//parentLabelRestrictions.put("ancestor.label.en CONTAINS \"test\\-search2\\-*\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
+		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-parent%\"", SearchOutcome.AT_LEAST_EXPECTED_TOPIC);
+		parentLabelRestrictions.put("ancestor.label.en%%\"test-search-topic-using2%\"", SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL);
 
 		//Search by its id
-		for (Entry<String, Boolean> idRestrictionEntry: idRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> idRestrictionEntry: idRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, idRestrictionEntry.getKey(), idRestrictionEntry.getValue());
 		}
 
 		//Search by its name
-		for (Entry<String, Boolean> nameRestrictionEntry: nameRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> nameRestrictionEntry: nameRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, nameRestrictionEntry.getKey(), nameRestrictionEntry.getValue());
 		}
 
 		//Search by its taxonomy
-		for (Entry<String, Boolean> restrictionEntry: taxonomyRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> restrictionEntry: taxonomyRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, restrictionEntry.getKey(), restrictionEntry.getValue());
 		}
 
 		//Search by its label
-		for (Entry<String, Boolean> restrictionEntry: labelRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> restrictionEntry: labelRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, restrictionEntry.getKey(), restrictionEntry.getValue());
 		}
 
 		//Search by its parent id
-		for (Entry<String, Boolean> restrictionEntry: parentIdRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> restrictionEntry: parentIdRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, restrictionEntry.getKey(), restrictionEntry.getValue());
 		}
 
 		//Search by its parent name
-		for (Entry<String, Boolean> restrictionEntry: parentNameRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> restrictionEntry: parentNameRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, restrictionEntry.getKey(), restrictionEntry.getValue());
 		}
 
 		//Search by its parent label
-		for (Entry<String, Boolean> restrictionEntry: parentLabelRestrictions.entrySet()){
+		for (Entry<String, SearchOutcome> restrictionEntry: parentLabelRestrictions.entrySet()){
 			assertTopicOutcome(topicCriteria, topic, restrictionEntry.getKey(), restrictionEntry.getValue());
 		}
 
@@ -255,22 +262,57 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 	private void assertCombinedRestrictions(Topic topic,
 			TopicCriteria topicCriteria,
-			Map<String, Boolean> firstRestrictionMap,
-			Map<String, Boolean> secondRestrictionMap) throws Throwable {
+			Map<String, SearchOutcome> firstRestrictionMap,
+			Map<String, SearchOutcome> secondRestrictionMap) throws Throwable {
 		
-		for (Entry<String, Boolean> firstRestrictionEntry: secondRestrictionMap.entrySet()){
-			for (Entry<String, Boolean> secondRestrictionEntry: firstRestrictionMap.entrySet()){
+		for (Entry<String, SearchOutcome> firstRestrictionEntry: secondRestrictionMap.entrySet()){
+			for (Entry<String, SearchOutcome> secondRestrictionEntry: firstRestrictionMap.entrySet()){
 				
 				String expression = firstRestrictionEntry + " AND "+ secondRestrictionEntry;
 
-				boolean expectingResult = firstRestrictionEntry.getValue() && secondRestrictionEntry.getValue();
+				SearchOutcome searchOutcome = null;
 				
-				assertTopicOutcome(topicCriteria, topic, expression, expectingResult);
+				if (firstRestrictionEntry.getValue() == SearchOutcome.AT_LEAST_EXPECTED_TOPIC){
+					if (secondRestrictionEntry.getValue() == SearchOutcome.AT_LEAST_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.AT_LEAST_EXPECTED_TOPIC;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL){
+						searchOutcome = SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.ONLY_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.AT_LEAST_EXPECTED_TOPIC;
+					}
+				}
+				else if (firstRestrictionEntry.getValue() == SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL){
+					if (secondRestrictionEntry.getValue() == SearchOutcome.AT_LEAST_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL){
+						searchOutcome = SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.ONLY_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL;
+					}
+				}
+				if (firstRestrictionEntry.getValue() == SearchOutcome.ONLY_EXPECTED_TOPIC){
+					if (secondRestrictionEntry.getValue() == SearchOutcome.AT_LEAST_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.AT_LEAST_EXPECTED_TOPIC;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL){
+						searchOutcome = SearchOutcome.NO_EXPECTED_TOPIC_AT_ALL;
+					}
+					else if (secondRestrictionEntry.getValue() == SearchOutcome.ONLY_EXPECTED_TOPIC){
+						searchOutcome = SearchOutcome.ONLY_EXPECTED_TOPIC;
+					}
+				}
+				
+				
+				assertTopicOutcome(topicCriteria, topic, expression, searchOutcome);
 			}
 		}
 	}
 	
-	private void assertTopicOutcome(TopicCriteria topicCriteria, Topic topic, String expression, boolean expectedToFindTheProvidedTopicOnly) throws Throwable{
+	private void assertTopicOutcome(TopicCriteria topicCriteria, Topic topic, String expression, SearchOutcome searchOutcome) throws Throwable{
 		
 		try{
 
@@ -280,17 +322,29 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
 
-			if (expectedToFindTheProvidedTopicOnly){
+			if (SearchOutcome.ONLY_EXPECTED_TOPIC == searchOutcome){
 				Assert.assertEquals(outcome.getCount(), 1, "Invalid topic outcome count.");
 
 				Assert.assertEquals(outcome.getResults().get(0).getId(), topic.getId(), "Invalid topic outcome ");
 			}
 			else{
 				
+				//At least the provided topic must exist
+				boolean providedTopicFound = false;
+				
 				if (outcome.getCount() > 0){
 					for (Topic topicResult : outcome.getResults()){
-						Assert.assertFalse(topicResult.getId().equals(topic.getId()), "Invalid topic outcome. Did not expect to find topic "+topic + " in the results");
+						if (StringUtils.equals(topicResult.getId(), topic.getId())){
+							providedTopicFound = true;
+						}
 					}
+				}
+				
+				if (SearchOutcome.AT_LEAST_EXPECTED_TOPIC == searchOutcome){
+					Assert.assertTrue(providedTopicFound, "Invalid topic outcome. Did not find topic "+topic + " in the results");
+				}
+				else{
+					Assert.assertFalse(providedTopicFound, "Invalid topic outcome. Found topic "+topic + " in the results");
 				}
 			}
 		}		
@@ -1174,6 +1228,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 			
 	}
 	
-	
+
+	private String escapeSearchExpressionForContains(String searchExpression){
+		
+	  return searchExpression.replaceAll("-", "\\'-");
+	}
 
 }
