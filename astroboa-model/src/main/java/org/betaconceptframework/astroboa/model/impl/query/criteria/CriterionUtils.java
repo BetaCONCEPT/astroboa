@@ -34,8 +34,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.SimpleCriterio
  */
 public final class CriterionUtils {
 
-	public static  Criterion createSimpleCriterion(String propertyPath, Object value, QueryOperator operator, CaseMatching caseMatching)
-	{
+	public static  Criterion createSimpleCriterion(String propertyPath, Object value, QueryOperator operator, CaseMatching caseMatching){
 		List<Object> values = new ArrayList<Object>();
 		
 		if (value != null){
@@ -44,9 +43,8 @@ public final class CriterionUtils {
 		
 		return createSimpleCriterion(propertyPath, values, null, operator, caseMatching);
 	}
-	
-	public static  Criterion createSimpleCriterion(String propertyPath, List<?> values, Condition internalCondition, QueryOperator operator, CaseMatching caseMatching)
-	{
+
+	public static  Criterion createSimpleCriterion(String propertyPath, List<?> values, Condition internalCondition, QueryOperator operator, CaseMatching caseMatching){
 		SimpleCriterion simpleCriterion = new SimpleCriterionImpl();
 		simpleCriterion.setProperty(propertyPath);
 		simpleCriterion.setOperator(operator);
