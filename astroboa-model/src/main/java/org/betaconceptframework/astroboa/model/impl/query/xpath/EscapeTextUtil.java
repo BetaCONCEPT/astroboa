@@ -33,24 +33,24 @@ public final class EscapeTextUtil {
 	private final static Expression[] expressions = new Expression[]{
 			new Expression("\\*", "jcrany"+randomNumber),
 			new Expression("\"", "jcrphrase"+randomNumber),
-			new Expression("'", "jcrsingle"+randomNumber, "''"),
+			new Expression("'", "jcrsingle"+randomNumber),
 			new Expression(" AND ", " jcrand "+randomNumber),
 			new Expression(" OR ", " jcror "+randomNumber),
 			new Expression("-", "jcrdash"+randomNumber),
 			new Expression("_", "jcrunderscore"+randomNumber),
-			new Expression("\\+", "jcrplus"+randomNumber, "\\\\\\+"),
-			new Expression("!", "jcrexclamation"+randomNumber, "\\\\!"),
-			new Expression("\\(", "jcrleftparenthesis"+randomNumber, "\\\\("),
-			new Expression("\\)", "jcrrightparenthesis"+randomNumber, "\\\\)"),
-			new Expression("\\[", "jcrleftsquarebracket"+randomNumber, "\\\\["),
-			new Expression("\\]", "jcrrightbracket"+randomNumber, "\\\\]"),
-			new Expression("\\{", "jcrleftcurlybracket"+randomNumber, "\\\\{"),
-			new Expression("\\}", "jcrrightcurlybracket"+randomNumber, "\\\\}"),
-			new Expression("\\^", "jcrcaret"+randomNumber, "\\\\^"),
-			new Expression("~", "jcrswungdash"+randomNumber, "\\\\~"),
-			new Expression("\\?", "jcrquestionmark"+randomNumber, "\\\\?"),
-			new Expression(":", "jcrcolon"+randomNumber, "\\\\:"),
-			new Expression("\\\\", "jcrbackslash"+randomNumber, "\\\\\\\\")
+			new Expression("\\+", "jcrplus"+randomNumber),
+			new Expression("!", "jcrexclamation"+randomNumber),
+			new Expression("\\(", "jcrleftparenthesis"+randomNumber),
+			new Expression("\\)", "jcrrightparenthesis"+randomNumber),
+			new Expression("\\[", "jcrleftsquarebracket"+randomNumber),
+			new Expression("\\]", "jcrrightbracket"+randomNumber),
+			new Expression("\\{", "jcrleftcurlybracket"+randomNumber),
+			new Expression("\\}", "jcrrightcurlybracket"+randomNumber),
+			new Expression("\\^", "jcrcaret"+randomNumber),
+			new Expression("~", "jcrswungdash"+randomNumber),
+			new Expression("\\?", "jcrquestionmark"+randomNumber),
+			new Expression(":", "jcrcolon"+randomNumber),
+			new Expression("\\\\", "jcrbackslash"+randomNumber)
 			};
 	
 	public static String escape(String text){
