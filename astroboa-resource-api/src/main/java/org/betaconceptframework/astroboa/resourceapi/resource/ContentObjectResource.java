@@ -571,12 +571,8 @@ public class ContentObjectResource extends AstroboaResource{
  			StringBuilder resourceRepresentation = new StringBuilder();
 
  			switch (output) {
- 			case XML:
- 			{
- 				long start = System.currentTimeMillis();
+ 			case XML:{
  				queryResult = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.XML);
- 				
- 				System.out.println("Returned results in "+ (System.currentTimeMillis() - start)/1000 + " ms");
  				
  				if (StringUtils.isBlank(callback)) {
  					resourceRepresentation.append(queryResult);
