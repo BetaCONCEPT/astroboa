@@ -176,8 +176,6 @@ public final class CmsConstants {
 	public final static String ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION = ASTROBOA_MODEL_SCHEMA_FILENAME+"-"+ASTROBOA_VERSION+".xsd";
 	public final static String ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION = ASTROBOA_API_SCHEMA_FILENAME+"-"+ASTROBOA_VERSION+".xsd";
 
-	public final static String INCLUDE_CHILDREN_EXPRESSION = CmsConstants.FORWARD_SLASH+CmsConstants.ANY_NAME;
-	
 	public static enum ContentObjectStatus {
 		authored,
 		submitted,
@@ -228,7 +226,8 @@ public final class CmsConstants {
 
 	public static final String CONTENT_OBJECT_REFERENCE_CRITERION_VALUE_PREFIX = "@";
 	public static final String TOPIC_REFERENCE_CRITERION_VALUE_PREFIX = "#";
-	
+	public final static String INCLUDE_CHILDREN_EXPRESSION = CmsConstants.FORWARD_SLASH+CmsConstants.ANY_NAME;
+
 	
 	private static String loadVersion() {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("astroboa");
