@@ -142,45 +142,45 @@ import java.util.regex.Pattern;
 				return createLocalizationCriterion(propertyPath, value, queryOperator);
 			}
 			else if ("ancestor.name".equals(propertyPath)){
-				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-				if (parentCriteria == null){
-					parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-					parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-					topicCriteria.setAncestorCriteria(parentCriteria);
+				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+				if (ancestorCriteria == null){
+					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 				
 				if (QueryOperator.EQUALS == queryOperator){
-					parentCriteria.addNameEqualsCriterion(value);
+					ancestorCriteria.addNameEqualsCriterion(value);
 					return null;
 				}
 				else{
-					parentCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.Name.getJcrName(), value, queryOperator));
+					ancestorCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.Name.getJcrName(), value, queryOperator));
      				return null;
 				}
 			}
 			else if (propertyPath.startsWith("ancestor.label")){
-				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-				if (parentCriteria == null){
-					parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-					parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-					topicCriteria.setAncestorCriteria(parentCriteria);
+				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+				if (ancestorCriteria == null){
+					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 
-				//Remove 'parent.' from proerty path
+				//Remove 'ancestor.' from proerty path
 				LocalizationCriterion locLabelCriterion = createLocalizationCriterion(StringUtils.substringAfter(propertyPath,"."), value, queryOperator);
 
-				parentCriteria.addCriterion(locLabelCriterion);
+				ancestorCriteria.addCriterion(locLabelCriterion);
 				return null;
 			}
 			else if (propertyPath.equals("ancestor.id")){
-				TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-				if (parentCriteria == null){
-					parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-					parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-					topicCriteria.setAncestorCriteria(parentCriteria);
+				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+				if (ancestorCriteria == null){
+					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 
-				parentCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.CmsIdentifier.getJcrName(), value, queryOperator));
+				ancestorCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.CmsIdentifier.getJcrName(), value, queryOperator));
     			return null;
 			}
 

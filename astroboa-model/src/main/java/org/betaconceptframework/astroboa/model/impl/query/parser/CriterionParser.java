@@ -2,23 +2,23 @@
 package  org.betaconceptframework.astroboa.model.impl.query.parser;
 
 
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
+import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
+import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
+import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
+import org.betaconceptframework.astroboa.api.model.query.Condition;
+import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
+import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
+import org.betaconceptframework.astroboa.util.DateUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.query.Condition;
-import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
-import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
-import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
-import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
-import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
-import org.betaconceptframework.astroboa.util.DateUtils;
 
 
 /**
@@ -116,46 +116,46 @@ import org.betaconceptframework.astroboa.util.DateUtils;
                         else if (propertyPath.startsWith("label")){
                                 return createLocalizationCriterion(propertyPath, value, queryOperator);
                         }
-                        else if ("parent.name".equals(propertyPath)){
-                                TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-                                if (parentCriteria == null){
-                                        parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-                                        topicCriteria.setAncestorCriteria(parentCriteria);
+                        else if ("ancestor.name".equals(propertyPath)){
+                                TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+                                if (ancestorCriteria == null){
+                                        ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+                                        topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
                                 if (QueryOperator.EQUALS == queryOperator){
-                                        parentCriteria.addNameEqualsCriterion(value);
+                                        ancestorCriteria.addNameEqualsCriterion(value);
                                         return null;
                                 }
                                 else{
-                                        parentCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.Name.getJcrName(), value, queryOperator));
+                                        ancestorCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.Name.getJcrName(), value, queryOperator));
                                 return null;
                                 }
                         }
                         else if (propertyPath.startsWith("ancestor.label")){
-                                TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-                                if (parentCriteria == null){
-                                        parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-                                        topicCriteria.setAncestorCriteria(parentCriteria);
+                                TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+                                if (ancestorCriteria == null){
+                                        ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+                                        topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
-                                //Remove 'parent.' from proerty path
+                                //Remove 'ancestor.' from proerty path
                                 LocalizationCriterion locLabelCriterion = createLocalizationCriterion(StringUtils.substringAfter(propertyPath,"."), value, queryOperator);
 
-                                parentCriteria.addCriterion(locLabelCriterion);
+                                ancestorCriteria.addCriterion(locLabelCriterion);
                                 return null;
                         }
-                        else if (propertyPath.equals("parent.id")){
-                                TopicCriteria parentCriteria = topicCriteria.getAncestorCriteria();
-                                if (parentCriteria == null){
-                                        parentCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        parentCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-                                        topicCriteria.setAncestorCriteria(parentCriteria);
+                        else if (propertyPath.equals("ancestor.id")){
+                                TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
+                                if (ancestorCriteria == null){
+                                        ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
+                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+                                        topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
-                                parentCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.CmsIdentifier.getJcrName(), value, queryOperator));
+                                ancestorCriteria.addCriterion(CriterionFactory.createSimpleCriterion(CmsBuiltInItem.CmsIdentifier.getJcrName(), value, queryOperator));
                         return null;
                         }
 
