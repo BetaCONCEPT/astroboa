@@ -69,27 +69,42 @@ public class LocalizationCriterionImpl implements LocalizationCriterion, Seriali
 			criterion.setCaseMatching(CaseMatching.LOWER_CASE);
 		}
 
+		boolean escapeLocalizedLabels = false;
+		
 		if (CmsBuiltInItem.Localization.getJcrName().equals(criterion.getProperty())){
+			
 			((SimpleCriterionImpl)criterion).propertyIsComplex();
 			
-			if (criterion.getOperator() != null && QueryOperator.EQUALS == criterion.getOperator()){
-				criterion.setOperator(QueryOperator.CONTAINS);
+			if (criterion.getOperator() != null){
+				if (QueryOperator.EQUALS == criterion.getOperator()){
+					criterion.setOperator(QueryOperator.CONTAINS);
+				}
+				else if (QueryOperator.LIKE == criterion.getOperator()){
+					criterion.setOperator(QueryOperator.CONTAINS);
+					escapeLocalizedLabels = true;
+				}
 			}
 		}
 		
 		if (CollectionUtils.isNotEmpty(localizedLabels)){
 			for (String value : localizedLabels){
-				//Trim value before insertion to criterion
-				value = value.trim();
 				
-				criterion.addValue(value);
+				if (value != null){
+					//	Trim value before insertion to criterion
+					value = value.trim();
+				
+					if (escapeLocalizedLabels){
+						if (value.contains("-")){
+							value = "\""+value.replaceAll("%", "")+"\"";
+						}
+						else{
+							value = value.replace('%', '*');
+						}
+					}
+					
+					criterion.addValue(value);
+				}
 			}
-		}
-		
-		//Property name of this criterion is CmsBuiltInItem.Localization.getJcrName()
-		//which is a complex property
-		if (CmsBuiltInItem.Localization.getJcrName().equals(criterion.getProperty())){
-			((SimpleCriterionImpl)criterion).propertyIsComplex();
 		}
 		
 		return criterion.getXPath();
