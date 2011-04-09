@@ -234,7 +234,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		assertContainsInSearch(contentObject, contentObjectNode, "blu");
 
-		assertContainsInSearch(contentObject, contentObjectNode, "titl");
+		assertContainsInSearch(contentObject, contentObjectNode, "cont");
 
 		assertContainsInSearch(contentObject, contentObjectNode, "comm");
 
@@ -1808,7 +1808,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testSearchWithTopicReferenceCriterion(){
 		
 		//Create content
