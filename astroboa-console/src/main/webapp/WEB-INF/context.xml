@@ -23,7 +23,7 @@ Authors
 		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
 		 		    
 -->
-<Context displayName="Astroboa" docBase="/opt/jboss-5.1.0.GA/server/default/deploy/console" path="/console">
+<Context displayName="Astroboa" docBase="/opt/jboss-5.1.0.GA/server/default/deploy/console" path="/console" reloadable="false">
 
 <!-- Comment out the two resource links if deploying inside jboss / keep if deploying in tomcat 
 <ResourceLink name="jdbc/betacrmDB" global="jdbc/betacrmDB"
