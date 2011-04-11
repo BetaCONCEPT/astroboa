@@ -212,7 +212,7 @@ Authors
 								! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
 								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}">
 				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() gt 1500}">
-					<div class="editable" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px; height: 300px; overflow: auto;">
+					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px; height: 300px; overflow: auto;">
 						<div class="editable">
 							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
 								escape="false"/>
@@ -220,7 +220,7 @@ Authors
 					</div>
 				</ui:fragment>
 				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() le 1500}">
-					<div style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
+					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
 						<div class="editable">
 							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
 								escape="false"/>
@@ -228,7 +228,7 @@ Authors
 					</div>
 				</ui:fragment>
 				<ui:fragment rendered="#{empty simpleCmsPropertyValueWrapper.value}">
-					<div style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
+					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
 						<div class="editable">
 							
 						</div>
@@ -237,11 +237,17 @@ Authors
 				
 				<h:inputHidden name="textEditorHidden_#{simpleCmsPropertyValueWrapper.fullPropertyPath}"
 					value="#{simpleCmsPropertyValueWrapper.value}"/>
+				
+				<a href="#" onclick="openTextEditor(this);">
+					<img 
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--plus.png"
+						alt="open editor"/>
+				</a>
 					
 				<a href="#" onclick="destroyTextEditor();" style="display: none;">
 					<img 
 						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--minus.png"
-						alt="edit html text"/>
+						alt="close editor"/>
 				</a>
 				
 				

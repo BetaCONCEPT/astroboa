@@ -1067,6 +1067,17 @@ function callFunctionOnEnterKey(e, func, arg) {
     /* CKEDITOR */
     var textEditorHiddenField;
     var textEditorCloseButton;
+    var textEditorOpenButton;
+    var editor;
+    
+    function resetEditorGlobalVars() {
+    	textEditorHiddenField = null;
+        textEditorCloseButton = null;
+        textEditorOpenButton =null;
+        if (editor) {
+        	editor.destroy();
+        }
+    }
     
     function registerDoubleClickEventForOpeningTextEditor() {
     	if ( window.addEventListener )
@@ -1093,16 +1104,12 @@ function callFunctionOnEnterKey(e, func, arg) {
     		// first save the data of an existing text editor and then destoy the editor
     		destroyTextEditor();
     		
-    		// Lets also hide the text editor close button in the text field that had the text editor
-    		if (textEditorCloseButton != null) {
-    			bcmslib.jQuery(textEditorCloseButton).hide();
-    		}
-    		
     		// Now we are ready to find the hidden form field for the currently double clicked text box
     		textEditorHiddenField = bcmslib.jQuery(parentElementIfTextFieldIsNotEmpty.parentNode).next();
     		
-    		// find the new close button
-    		textEditorCloseButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		// find the new close and open buttons
+    		textEditorOpenButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		textEditorCloseButton = bcmslib.jQuery(textEditorOpenButton).next();
     		replaceTextWithTextEditor( parentElementIfTextFieldIsNotEmpty );
     	}
     	else if (parentElementIfTextFieldIsEmpty != null && parentElementIfTextFieldIsEmpty.nodeName.toLowerCase() == 'div'
@@ -1111,26 +1118,43 @@ function callFunctionOnEnterKey(e, func, arg) {
     		// first save the data of an existing text editor and then destoy the editor
     		destroyTextEditor();
     		
-    		// Lets also hide the text editor close button in the text field that had the text editor
-    		if (textEditorCloseButton != null) {
-    			bcmslib.jQuery(textEditorCloseButton).hide();
-    		}
-    		
     		// Now we are ready to find the hidden form field for the currently double clicked text box
     		textEditorHiddenField = bcmslib.jQuery(parentElementIfTextFieldIsEmpty.parentNode).next();
     		
-    		// find the new close button
-    		textEditorCloseButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		// find the new close and open buttons
+    		textEditorOpenButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		textEditorCloseButton = bcmslib.jQuery(textEditorOpenButton).next();
     		replaceTextWithTextEditor( parentElementIfTextFieldIsEmpty );
     	}
     }
+    
+    function openTextEditor(openEditorButton) {
+    	
+    	// Find out the div that contains the editor
+    	var editorDivParent = bcmslib.jQuery(openEditorButton).siblings(".editableParent");
+    	var editorDiv = editorDivParent.children('.editable').get(0);
 
-    var editor;
+    	if ( editorDiv != null) {
+    		
+    		// first save the data of an existing text editor and then destoy the editora, hide its closeEditorButton and show its openEditorButton
+    		destroyTextEditor();
+    		
+    		// Now we are ready to find the hidden form field for the currently edited text box as well as the buttons to open and close the editor
+    		textEditorHiddenField = bcmslib.jQuery(editorDivParent).next();
+    		textEditorOpenButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		textEditorCloseButton = bcmslib.jQuery(textEditorOpenButton).next();
+    		
+    		replaceTextWithTextEditor(editorDiv);
+    	}
+    }
+    
+    
 
     function replaceTextWithTextEditor( div )
     {
 
     	editor = CKEDITOR.replace( div );
+    	bcmslib.jQuery(textEditorOpenButton).hide();
     	bcmslib.jQuery(textEditorCloseButton).show();
     }
     
@@ -1144,6 +1168,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     	
     	if (textEditorCloseButton) {
     		bcmslib.jQuery(textEditorCloseButton).hide();
+    	}
+    	
+    	if (textEditorOpenButton) {
+    		bcmslib.jQuery(textEditorOpenButton).show();
     	}
     }
     
