@@ -86,7 +86,9 @@ function getObjectCollection(repository, cmsQuery, projectionPaths, orderBy, off
 		async : true,
 		url : resourceAPI_GetObjectURL,
 		success : function(data) {
-						callback(data.resourceCollection.resource, repository);
+						if (data.resourceCollection != null) {
+							callback(data.resourceCollection.resource, repository);
+						}
 					}
 	});
 }
