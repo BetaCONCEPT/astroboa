@@ -97,7 +97,7 @@ public interface ComplexCmsProperty<D extends ComplexCmsPropertyDefinition,P ext
 	 * 
 	 *  
 	 * <ul>
-	 * <li>Single or Multi value simple property ({@link StringProperty}, {@link CalendarProperty}, {@link TopicProperty}), etc) <br/>
+	 * <li>Single or Multi value simple property ({@link StringProperty}, {@link CalendarProperty}, {@link TopicReferenceProperty}), etc) <br/>
 	 *   <code>getCmsProperty("title")</code> or <code>getCmsProperty("title[0]")</code>. <br/> 
 	 *     <code>getCmsProperty("title[1]")</code> returns null
 	 * </li>
