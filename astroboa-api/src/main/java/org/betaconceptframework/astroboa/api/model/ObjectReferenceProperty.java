@@ -19,17 +19,18 @@
 
 package org.betaconceptframework.astroboa.api.model;
 
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 
 /**
  * Marker interface for a simple property
  * whose value(s) is(are) of type {@link ContentObject content object}.
  * 
- * @deprecated Use {@link ObjectReferenceProperty} instead
- * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public interface ContentObjectProperty extends ObjectReferenceProperty {
+public interface ObjectReferenceProperty extends
+		SimpleCmsProperty<ContentObject, ObjectReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> {
 
 }
