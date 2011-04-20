@@ -60,21 +60,14 @@ public enum ValueType {
 	Boolean,
 
 	/**
-	 * Specifies a definition of type <code>ContentObject</code>.
+	 * Specifies a definition of type <code>ObjectReference</code>.
+	 * 
 	 */
-	ContentObject,
+	ObjectReference,
 	/**
-	 * Specifies a definition of type <code>Topic</code>.
+	 * Specifies a definition of type <code>TopicReference</code>.
 	 */
-	Topic,
-	/**  
-	 * Specifies a definition of type <code>Space</code>.
-	 */
-	Space,
-	/**
-	 * Specifies a definition of type <code>RepositoryUser</code>.
-	 */
-	RepositoryUser,
+	TopicReference,
 	/**
 	 * Specifies a definition of type <code>Binary</code>.
 	 */
