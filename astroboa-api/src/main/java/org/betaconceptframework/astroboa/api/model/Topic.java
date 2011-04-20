@@ -31,7 +31,7 @@ import java.util.List;
  * thus is directly connected to its {@link Taxonomy taxonomy}. 
  * A Topic has zero or many children nodes,  
  * belongs to a {@link RepositoryUser} and it may be referred by a
- * {@link ContentObject content object} {@link TopicProperty property}.
+ * {@link ContentObject content object} {@link TopicReferenceProperty property}.
  * </p>
  * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
