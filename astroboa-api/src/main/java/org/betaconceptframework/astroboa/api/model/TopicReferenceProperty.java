@@ -19,17 +19,18 @@
 
 package org.betaconceptframework.astroboa.api.model;
 
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 
 /**
  * Marker interface for a simple property whose
  * value(s) is(are) of type {@link ValueType#Topic topic}.
  * 
- * @deprecated Use {@link TopicReferenceProperty} instead
- * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public interface TopicProperty extends TopicReferenceProperty {
+public interface TopicReferenceProperty extends
+		SimpleCmsProperty<Topic, TopicReferencePropertyDefinition, ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> {
 
 }
