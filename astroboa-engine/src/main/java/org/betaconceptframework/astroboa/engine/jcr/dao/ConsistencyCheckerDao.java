@@ -165,7 +165,7 @@ public class ConsistencyCheckerDao extends JcrDaoSupport{
 						if (propertyDefinition == null){
 							logger.warn("Could not locate definition for property "+propertyPath);
 						}
-						else if (ValueType.ContentObject == propertyDefinition.getValueType()){
+						else if (ValueType.ObjectReference == propertyDefinition.getValueType()){
 							logger.info("Checking consistency on property "+ property.getPath());
 							if (propertyDefinition.isMultiple()){
 								checkObjectsExist(property.getValues(), session, propertyPath, objectSystemName, alreadyVisitedIds);
@@ -174,7 +174,7 @@ public class ConsistencyCheckerDao extends JcrDaoSupport{
 								checkObjectExist(property.getValue(), session, propertyPath, objectSystemName, alreadyVisitedIds);	
 							}
 						}
-						else if (ValueType.Topic == propertyDefinition.getValueType()){
+						else if (ValueType.TopicReference == propertyDefinition.getValueType()){
 							logger.info("Checking consistency on property "+ property.getPath());
 							if (propertyDefinition.isMultiple()){
 								checkTopicsExist(property.getValues(), session, propertyPath, objectSystemName, alreadyVisitedIds);
