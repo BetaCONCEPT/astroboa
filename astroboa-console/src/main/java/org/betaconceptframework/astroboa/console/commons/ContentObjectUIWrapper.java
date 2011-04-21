@@ -40,8 +40,8 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.service.ContentService;
@@ -409,7 +409,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	
 	public List<Topic> getSystemTags() {
 		
-		TopicProperty profileSubjectProperty = ((TopicProperty)contentObject.getCmsProperty("profile.subject"));
+		TopicReferenceProperty profileSubjectProperty = ((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject"));
 		if (profileSubjectProperty.getSimpleTypeValues() != null) {
 			return profileSubjectProperty.getSimpleTypeValues();
 		}
@@ -420,7 +420,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	
 	public List<Topic> getUserTagsAddedByOwner() {
 		List<Topic> userTagsAddedByOwner = null;
-		TopicProperty profileSubjectProperty = ((TopicProperty)contentObject.getCmsProperty("profile.subject"));
+		TopicReferenceProperty profileSubjectProperty = ((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject"));
 		if (profileSubjectProperty.getSimpleTypeValues() != null) {
 			String contentObjectOwnerId =  getContentObject().getOwner().getId();
 			userTagsAddedByOwner = new ArrayList<Topic>();
@@ -434,7 +434,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	
 	public List<Topic> getTagsAddedByLoggedInUser() {
 		List<Topic> tagsAddedByLoggedInUser = null;
-		TopicProperty profileSubjectProperty = ((TopicProperty)contentObject.getCmsProperty("profile.subject"));
+		TopicReferenceProperty profileSubjectProperty = ((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject"));
 		if (profileSubjectProperty.getSimpleTypeValues() != null) {
 			tagsAddedByLoggedInUser = new ArrayList<Topic>();
 			String loggedInUserId = getLoggedInRepositoryUserId();
@@ -462,7 +462,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	 */
 	public List<Topic> getUserTagsAddedByOthers() {
 		List<Topic> othersTags = null;
-		TopicProperty profileSubjectProperty = ((TopicProperty)contentObject.getCmsProperty("profile.subject"));
+		TopicReferenceProperty profileSubjectProperty = ((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject"));
 		if (profileSubjectProperty.getSimpleTypeValues() != null) {
 			othersTags = new ArrayList<Topic>();
 			String contentObjectOwnerUUID =  getContentObject().getOwner().getId();
@@ -480,7 +480,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	
 	public void removeTopicFromContentObjectSubject(String topicId) throws Exception {
 		// We examine the  Subject of the currently edited content object which is a List of Topics to find which topic in Content Object Subject we should remove
-		TopicProperty profileSubjectProperty = ((TopicProperty)contentObject.getCmsProperty("profile.subject"));
+		TopicReferenceProperty profileSubjectProperty = ((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject"));
 		if (profileSubjectProperty.getSimpleTypeValues() != null) {
 			boolean topicFound = false;
 			String topicIdOrLabel;
@@ -735,17 +735,17 @@ public class ContentObjectUIWrapper extends AbstractBean{
 				
 				//Property profile.subject is defined. Get its definition
 				//In most cases it should be attached to content object's type definition
-				TopicPropertyDefinition profileSubjectDefinition = null;
+				TopicReferencePropertyDefinition profileSubjectDefinition = null;
 				
 				if (getContentObject().getComplexCmsRootProperty().getPropertyDefinition() != null){
-					profileSubjectDefinition = (TopicPropertyDefinition) getContentObject().getComplexCmsRootProperty().getPropertyDefinition().getChildCmsPropertyDefinition("profile.subject"); 
+					profileSubjectDefinition = (TopicReferencePropertyDefinition) getContentObject().getComplexCmsRootProperty().getPropertyDefinition().getChildCmsPropertyDefinition("profile.subject"); 
 				}
 				
 				if (profileSubjectDefinition == null){
 					//Look in aspect definitions
 					if (!MapUtils.isEmpty(getContentObject().getComplexCmsRootProperty().getAspectDefinitions()) && 
 							getContentObject().getComplexCmsRootProperty().getAspectDefinitions().containsKey("profile")){
-						profileSubjectDefinition = (TopicPropertyDefinition) getContentObject().getComplexCmsRootProperty().getAspectDefinitions().get("profile").getChildCmsPropertyDefinition("subject");
+						profileSubjectDefinition = (TopicReferencePropertyDefinition) getContentObject().getComplexCmsRootProperty().getAspectDefinitions().get("profile").getChildCmsPropertyDefinition("subject");
 					}
 				}
 				
