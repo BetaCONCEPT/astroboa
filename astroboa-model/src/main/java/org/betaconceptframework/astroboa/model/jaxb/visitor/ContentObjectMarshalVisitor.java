@@ -588,7 +588,7 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 				addJaxbElementToCurrentParentComplexCmsPropertyType(simpleCmsPropertyTypeJaxbElement);
 
 				break;
-			case Topic:
+			case TopicReference:
 
 				try {
 					TopicType topicType = marshalTopicReference(value);
@@ -606,29 +606,6 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 
 				} catch (Exception e) {
 					throw new CmsException("Unable to marshal topic "+ ((Topic)value).getName(), e);
-				}
-
-
-				break;
-			case Space:
-
-				try {
-					
-					SpaceType spaceType = marshalSpaceReference(value);
-
-					if (marshalOutputTypeIsJSON() && simplePropertyDefinition.isMultiple()){
-						spaceType.setExportAsAnArray(true);
-					}
-					
-					CmsPropertyTypeJAXBElement<SpaceType> spaceTypeJaxbElement = new CmsPropertyTypeJAXBElement(
-							new QName(simplePropertyDefinition.getQualifiedName().getLocalPart()),
-							SpaceType.class, null, spaceType);
-
-
-					addJaxbElementToCurrentParentComplexCmsPropertyType(spaceTypeJaxbElement);
-
-				} catch (Exception e) {
-					throw new CmsException("Unable to marshal space "+ ((Space)value).getName(), e);
 				}
 
 
@@ -653,7 +630,7 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 
 
 				break;
-			case ContentObject:
+			case ObjectReference:
 				try{
 					
 					logger.debug("\t Property is a reference to another object");
