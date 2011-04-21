@@ -122,7 +122,7 @@ public interface TaxonomyService {
 	 *            where <code>locale</code> is blank (empty or null), all
 	 *            localized labels will be rendered.
 	 *            
-	 * @deprecated Use {@link #getAllTaxonomies(ResourceRepresentationType, FetchLevel)}
+	 * @deprecated Use {@link #getAllTaxonomies(ResourceRepresentationType, FetchLevel, boolean)} instead
 	 * @return A list of all taxonomies in content repository model.
 	 */
 	@Deprecated
@@ -206,10 +206,12 @@ public interface TaxonomyService {
 	 * @param output Taxonomy representation output, one of XML, JSON or {@link Taxonomy}. Default is {@link ResourceRepresentationType#TAXONOMY_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Taxonomy}'s only properties, its children as well or the whole {@link Taxonomy} tree.
 	 * Default is {@link FetchLevel#ENTITY}
-	 * 
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if
+	 *  
 	 * @return A taxonomy as XML, JSON or {@link Taxonomy}, or <code>null</code> of none is found.
 	 */
-	<T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel);
+	<T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint);
 
 	
 	
@@ -249,10 +251,12 @@ public interface TaxonomyService {
 	 * @param output Taxonomy representation output, one of XML, JSON or {@link Taxonomy}. Default is {@link ResourceRepresentationType#TAXONOMY_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Taxonomy}'s only properties, its children as well or the whole {@link Taxonomy} tree.
 	 * Default is {@link FetchLevel#ENTITY}
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if 
 	 * 
 	 * @return All taxonomies as XML, JSON or {@link CmsOutcome}
 	 */
-	<T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel);
+	<T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint);
 
 	/**
 	 * Save or update a {@link Taxonomy taxonomy} in content repository model.

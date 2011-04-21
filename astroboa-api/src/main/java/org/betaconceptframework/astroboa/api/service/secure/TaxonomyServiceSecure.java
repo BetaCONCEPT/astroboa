@@ -131,9 +131,12 @@ public interface TaxonomyServiceSecure {
 	 *            localized labels will be rendered.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
+	 *  
+	 * @deprecated Use {@link #getAllTaxonomies(ResourceRepresentationType, FetchLevel, boolean)} instead
 	 * 
 	 * @return A list of all taxonomies in content repository model.
 	 */
+	@Deprecated
 	List<Taxonomy> getTaxonomies(String locale, String authenticationToken);
 
 	/**
@@ -174,13 +177,15 @@ public interface TaxonomyServiceSecure {
 	 * @param output Taxonomy representation output, one of XML, JSON or {@link Taxonomy}. Default is {@link ResourceRepresentationType#TAXONOMY_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Taxonomy}'s only properties, its children as well or the whole {@link Taxonomy} tree.
 	 * Default is {@link FetchLevel#ENTITY}
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
 	 * 
 	 * 
 	 * @return A taxonomy as XML, JSON or {@link Taxonomy}, or <code>null</code> of none is found.
 	 */
-	<T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, String authenticationToken);
+	<T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link TaxonomyService#getAllTaxonomiesAsXML()}
@@ -197,12 +202,14 @@ public interface TaxonomyServiceSecure {
 	 * @param output Taxonomy representation output, one of XML, JSON or {@link Taxonomy}. Default is {@link ResourceRepresentationType#TAXONOMY_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Taxonomy}'s only properties, its children as well or the whole {@link Taxonomy} tree.
 	 * Default is {@link FetchLevel#ENTITY}
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
 	 * 
 	 * @return All taxonomies as XML, JSON or {@link CmsOutcome}
 	 */
-	<T> T getAllTaxonomies(ResourceRepresentationType<T> output,  FetchLevel fetchLevel, String authenticationToken);
+	<T> T getAllTaxonomies(ResourceRepresentationType<T> output,  FetchLevel fetchLevel, boolean prettyPrint, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link TaxonomyService#save(Object)}
