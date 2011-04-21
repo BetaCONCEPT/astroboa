@@ -424,7 +424,7 @@ public class TopicDao extends JcrDaoSupport {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> topicOutput, FetchLevel fetchLevel) {
+	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> topicOutput, FetchLevel fetchLevel, boolean prettyPrint) {
 
 		ByteArrayOutputStream os = null;
 
@@ -489,7 +489,7 @@ public class TopicDao extends JcrDaoSupport {
 
 				os = new ByteArrayOutputStream();
 
-				serializationDao.serializeCmsRepositoryEntity(topicNode, os, topicOutput, CmsEntityType.TOPIC, null, fetchLevel, true, false, false);
+				serializationDao.serializeCmsRepositoryEntity(topicNode, os, topicOutput, CmsEntityType.TOPIC, null, fetchLevel, true, false, prettyPrint);
 
 				topic = new String(os.toByteArray(), "UTF-8");
 
