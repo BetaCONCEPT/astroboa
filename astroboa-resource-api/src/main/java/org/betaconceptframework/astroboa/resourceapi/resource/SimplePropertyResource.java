@@ -19,9 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
 import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
-import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
@@ -126,17 +124,11 @@ public class SimplePropertyResource extends AstroboaResource{
 			case Double:
 				propertyValueAsString = ((Double) propertyValue).toString();
 				break;
-			case ContentObject:
+			case ObjectReference:
 				propertyValueAsString = ((ContentObject) propertyValue).getId(); // when values are references to cms entities the id of the entity is returned
 				break;
-			case RepositoryUser:
-				propertyValueAsString = ((RepositoryUser) propertyValue).getId(); // when values are references to cms entities the id of the entity is returned
-				break;
-			case Topic:
+			case TopicReference:
 				propertyValueAsString = ((Topic) propertyValue).getId(); // when values are references to cms entities the id of the entity is returned
-				break;
-			case Space:
-				propertyValueAsString = ((Space) propertyValue).getId(); // when values are references to cms entities the id of the entity is returned
 				break;
 			default:
 				logger.warn("Content Object name: " + contentObject.getSystemName() + ". The provided property " + property.getPath() + " has the value type " + property.getValueType().toString() + " which is not supported by the current astroboa resource api version");
