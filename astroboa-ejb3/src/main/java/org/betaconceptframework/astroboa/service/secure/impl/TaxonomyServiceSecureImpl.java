@@ -91,15 +91,15 @@ public class TaxonomyServiceSecureImpl extends AbstractSecureAstroboaService imp
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel,
+	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint,
 			String authenticationToken) {
-		return taxonomyService.getAllTaxonomies(output, fetchLevel);
+		return taxonomyService.getAllTaxonomies(output, fetchLevel,prettyPrint);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public <T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel, String authenticationToken) {
-		return taxonomyService.getTaxonomy(taxonomyIdOrName, output, fetchLevel);
+			FetchLevel fetchLevel, boolean prettyPrint, String authenticationToken) {
+		return taxonomyService.getTaxonomy(taxonomyIdOrName, output, fetchLevel,prettyPrint);
 	}
 
 	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
