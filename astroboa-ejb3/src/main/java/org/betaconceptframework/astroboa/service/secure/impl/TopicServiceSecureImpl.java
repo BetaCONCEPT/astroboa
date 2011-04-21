@@ -97,8 +97,8 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel, String authenticationToken) {
-		return topicService.getTopic(topicIdOrName, output, fetchLevel);
+			FetchLevel fetchLevel, boolean prettyPrint, String authenticationToken) {
+		return topicService.getTopic(topicIdOrName, output, fetchLevel, prettyPrint);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
