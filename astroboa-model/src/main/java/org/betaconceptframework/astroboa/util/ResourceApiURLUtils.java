@@ -105,23 +105,23 @@ public class ResourceApiURLUtils {
 		}
 		else{ 
 			
-			sb.append(CmsConstants.FORWARD_SLASH);
 			
 			if (ContentObject.class.isAssignableFrom(type) || CmsProperty.class.isAssignableFrom(type) 
 					|| BinaryChannel.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.ContentObject.getLocalPart());
+				sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
 			}
 			else if (Topic.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.Topic.getLocalPart());
+				sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH);
 			}
 			else if (Space.class.isAssignableFrom(type)){
+				sb.append(CmsConstants.FORWARD_SLASH);
 				sb.append(CmsBuiltInItem.Space.getLocalPart());
 			}
 			else if (Taxonomy.class.isAssignableFrom(type)){
-				sb.append(CmsBuiltInItem.Taxonomy.getLocalPart());
+				sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH);
 			}
 			else if (CmsDefinition.class.isAssignableFrom(type)){
-				sb.append("definition");
+				sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH);
 			}
 			
 			sb.append(CmsConstants.FORWARD_SLASH);
@@ -148,10 +148,9 @@ public class ResourceApiURLUtils {
 			return ;
 		}
 		
-		sb.append(CmsConstants.FORWARD_SLASH);
 		
 		if (cmsEntity instanceof Taxonomy){
-			sb.append(CmsBuiltInItem.Taxonomy.getLocalPart())
+			sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -162,7 +161,7 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof Topic){
-			sb.append(CmsBuiltInItem.Topic.getLocalPart())
+			sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 
 			if (urlProperties.isFriendly()){
@@ -173,7 +172,8 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof Space){
-			sb.append(CmsBuiltInItem.Space.getLocalPart())
+			sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsBuiltInItem.Space.getLocalPart())
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -184,7 +184,7 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof ContentObject){
-			sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
+			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -196,7 +196,7 @@ public class ResourceApiURLUtils {
 			
 		}
 		else if (cmsEntity instanceof CmsProperty<?,?>){
-			sb.append(CmsBuiltInItem.ContentObject.getLocalPart())
+			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -210,12 +210,12 @@ public class ResourceApiURLUtils {
 				.append(((CmsProperty<?,?>)cmsEntity).getPermanentPath());
 		}
 		else if (cmsEntity instanceof ContentObjectTypeDefinition){
-			sb.append("definition")
+			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH)
 			.append(((ContentObjectTypeDefinition)cmsEntity).getName());
 		}
 		else if (cmsEntity instanceof CmsPropertyDefinition){
-			sb.append("definition")
+			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH)
 			.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
 		}
@@ -308,7 +308,7 @@ public class ResourceApiURLUtils {
 		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
-		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH+"contentObject");
+		contentApiURLBuilder.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
 
 		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH+contentObjectIdOrSystemName);
 		
