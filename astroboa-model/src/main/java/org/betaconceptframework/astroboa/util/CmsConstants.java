@@ -245,4 +245,11 @@ public final class CmsConstants {
 		return version;
 	}
 	
+	
+	public static final String RESOURCE_API_CONTENT_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
+	public static final String RESOURCE_API_TAXONOMY_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
+	public static final String RESOURCE_API_TOPIC_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
+	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
+	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
+	
 }
