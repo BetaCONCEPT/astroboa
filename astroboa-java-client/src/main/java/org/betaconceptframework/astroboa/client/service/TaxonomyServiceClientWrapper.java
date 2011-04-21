@@ -137,12 +137,12 @@ public class TaxonomyServiceClientWrapper extends AbstractClientServiceWrapper i
 	}
 
 	@Override
-	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel) {
+	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint) {
 		if (taxonomyServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return taxonomyServiceSecure.getAllTaxonomies(output, fetchLevel, getAuthenticationToken());
+			return taxonomyServiceSecure.getAllTaxonomies(output, fetchLevel, prettyPrint, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("TaxonomyService reference was not found");
@@ -151,12 +151,12 @@ public class TaxonomyServiceClientWrapper extends AbstractClientServiceWrapper i
 
 	@Override
 	public <T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel) {
+			FetchLevel fetchLevel, boolean prettyPrint) {
 		if (taxonomyServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return taxonomyServiceSecure.getTaxonomy(taxonomyIdOrName, output, fetchLevel, getAuthenticationToken());
+			return taxonomyServiceSecure.getTaxonomy(taxonomyIdOrName, output, fetchLevel, prettyPrint, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("TaxonomyService reference was not found");
