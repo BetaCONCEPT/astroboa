@@ -51,7 +51,6 @@ Authors
              
              <center>
              <h:panelGrid columns="1">
-			 <h:outputText  value="Αναζήτηση όρων σε όλες τις ταξινομίες" />
 			
 			<h:inputText id="suggestionLocalizedLabelPattern"
 				value="#{criterionWrapper.suggestionLocalizedLabelPattern}" 
@@ -74,8 +73,8 @@ Authors
 			 </center>
 			</h:panelGroup>
 			
-			<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'Topic'}"/>
-			<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'Topic'}">
+			<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'TopicReference'}"/>
+			<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'TopicReference'}">
 			<center>
 			<h:outputText style="font-size: 0.9em;" 
 					value="#{criterionWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString)} - (#{criterionWrapper.value.taxonomy.localizedLabelForCurrentLocale})"/>

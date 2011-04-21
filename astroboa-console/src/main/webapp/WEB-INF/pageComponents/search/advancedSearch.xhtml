@@ -241,8 +241,8 @@ Authors
 													 and criterionWrapper.propertyValueType ne 'Boolean'
 													 and criterionWrapper.propertyValueType ne 'Date' 
 													 and criterionWrapper.propertyValueType ne 'Complex'
-													 and criterionWrapper.propertyValueType ne 'Topic'
-													 and criterionWrapper.propertyValueType ne 'ContentObject'}" />
+													 and criterionWrapper.propertyValueType ne 'TopicReference'
+													 and criterionWrapper.propertyValueType ne 'ObjectReference'}" />
 
 										<!-- Select Box for Boolean -->
 										<h:selectOneRadio id="booleanSelectOneRadio"
@@ -267,7 +267,7 @@ Authors
 													 	and criterionWrapper.queryOperator ne 'IS_NULL'}" />
 										
 										<!-- Topic suggestion box and drag and drop area -->
-										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'Topic'
+										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'TopicReference'
 														and ! empty criterionWrapper.queryOperator 
 														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
 													 	and criterionWrapper.queryOperator ne 'IS_NULL'}"
@@ -282,7 +282,7 @@ Authors
 										</a4j:outputPanel>
 
 										<!-- ContentObject suggestion box and drag and drop area -->
-										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'ContentObject' 
+										<a4j:outputPanel rendered="#{criterionWrapper.propertyValueType eq 'ObjectReference' 
 														and ! empty criterionWrapper.queryOperator
 														and criterionWrapper.queryOperator ne 'IS_NOT_NULL' 
 													 	and criterionWrapper.queryOperator ne 'IS_NULL'}"

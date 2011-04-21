@@ -39,7 +39,7 @@ Authors
 			
 			<ui:fragment 
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
-				and  cmsPropertyWrapper.valueType eq 'ContentObject'
+				and  cmsPropertyWrapper.valueType eq 'ObjectReference'
 				and ! empty cmsPropertyWrapper.simpleCmsPropertyValueWrappers}">
 					
 				<div class="formElementValuesLabelSpacer">fake label</div>

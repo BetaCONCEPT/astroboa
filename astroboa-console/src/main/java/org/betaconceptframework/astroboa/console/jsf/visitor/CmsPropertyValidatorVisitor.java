@@ -486,10 +486,8 @@ public class CmsPropertyValidatorVisitor {
 				validateStringProperty(values, simpleCmsProperty);
 				break;
 			case Boolean:
-			case ContentObject:
-			case RepositoryUser:
-			case Space:
-			case Topic:
+			case ObjectReference:
+			case TopicReference:
 				//Nothing to validate for these yet. 
 				break;
 			case Complex:

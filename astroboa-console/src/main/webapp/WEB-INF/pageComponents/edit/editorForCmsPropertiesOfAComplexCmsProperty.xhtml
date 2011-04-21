@@ -164,8 +164,8 @@ Authors
 														!childPropertyWrapper.multiple and 
 														childPropertyWrapper.valueType ne 'Binary' and 
 														childPropertyWrapper.valueType ne 'Complex' and 
-														childPropertyWrapper.valueType ne 'Topic' and 
-														childPropertyWrapper.valueType ne 'ContentObject'}"
+														childPropertyWrapper.valueType ne 'TopicReference' and 
+														childPropertyWrapper.valueType ne 'ObjectReference'}"
 														keepTransient="true">
 													
 														<ui:include
@@ -188,7 +188,7 @@ Authors
 													<!-- TOPIC property with single or multiple values-->
 													<a4j:outputPanel
 														rendered="#{childPropertyWrapper.writeGranted and 
-														childPropertyWrapper.valueType eq 'Topic'}"
+														childPropertyWrapper.valueType eq 'TopicReference'}"
 														keepTransient="true">
 														
 														<ui:include
@@ -213,7 +213,7 @@ Authors
 													<!-- Object Reference Property with single or multiple values -->
 													<a4j:outputPanel
 														rendered="#{childPropertyWrapper.writeGranted and 
-														childPropertyWrapper.valueType eq 'ContentObject'}"
+														childPropertyWrapper.valueType eq 'ObjectReference'}"
 														keepTransient="true">
 														
 														<ui:include
@@ -397,8 +397,8 @@ Authors
 											!cmsPropertyWrapper.multiple and 
 											cmsPropertyWrapper.valueType ne 'Binary' and 
 											cmsPropertyWrapper.valueType ne 'Complex' and 
-											cmsPropertyWrapper.valueType ne 'Topic' and 
-											cmsPropertyWrapper.valueType ne 'ContentObject'}"
+											cmsPropertyWrapper.valueType ne 'TopicReference' and 
+											cmsPropertyWrapper.valueType ne 'ObjectReference'}"
 											keepTransient="true">
 										
 											<ui:include
@@ -420,7 +420,7 @@ Authors
 										<!-- TOPIC property with single or multiple values-->
 										<a4j:outputPanel
 											rendered="#{cmsPropertyWrapper.writeGranted and 
-											cmsPropertyWrapper.valueType eq 'Topic'}"
+											cmsPropertyWrapper.valueType eq 'TopicReference'}"
 											keepTransient="true">
 											
 											<ui:include
@@ -443,7 +443,7 @@ Authors
 										<!-- Object Reference Property with single or multiple values -->
 										<a4j:outputPanel
 											rendered="#{cmsPropertyWrapper.writeGranted and 
-											cmsPropertyWrapper.valueType eq 'ContentObject'}"
+											cmsPropertyWrapper.valueType eq 'ObjectReference'}"
 											keepTransient="true">
 											
 											<ui:include

@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.portal.PortalTree.PortalTreeNodeType;
@@ -60,7 +60,7 @@ public class LazyLoadingPortalSectionRootNode extends LazyLoadingTreeNodeRichFac
 			ContentObject portalContentObject = contentService.getContentObjectById(portalContentObjectId, CacheRegion.NONE);
 			
 			//Retrieve Portal Sections 
-			ContentObjectProperty portalSectionProperty = (ContentObjectProperty) portalContentObject.getCmsProperty("portalSection");
+			ObjectReferenceProperty portalSectionProperty = (ObjectReferenceProperty) portalContentObject.getCmsProperty("portalSection");
 			
 			if (portalSectionProperty != null && ! portalSectionProperty.hasNoValues()){
 				

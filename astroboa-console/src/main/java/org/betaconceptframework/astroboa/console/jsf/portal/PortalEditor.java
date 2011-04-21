@@ -24,7 +24,7 @@ import javax.faces.application.FacesMessage;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.edit.ObjectEditInit;
@@ -156,12 +156,12 @@ public class PortalEditor {
 		if (CmsConstants.PORTAL_SECTION_CONTENT_OBJECT_TYPE.equals(contentObjectType)){
 			ContentObject portalSectionContentObject = contentService.getContentObjectById(contentObjectId, null);
 
-			ContentObjectProperty portalSectionProperty = null;
+			ObjectReferenceProperty portalSectionProperty = null;
 
 			if (StringUtils.isNotBlank(parentPortalSectionContentObjectId)){
 				
 				ContentObject parentPortalSectionContentObject = contentService.getContentObjectById(parentPortalSectionContentObjectId, null);
-				portalSectionProperty = (ContentObjectProperty)parentPortalSectionContentObject.getCmsProperty("subPortalSection");
+				portalSectionProperty = (ObjectReferenceProperty)parentPortalSectionContentObject.getCmsProperty("subPortalSection");
 				portalSectionProperty.addSimpleTypeValue(portalSectionContentObject);
 				contentService.saveContentObject(parentPortalSectionContentObject, false);
 
@@ -169,7 +169,7 @@ public class PortalEditor {
 			}
 			else if (StringUtils.isNotBlank(portalContentObjectId)){
 				ContentObject portalContentObject = contentService.getContentObjectById(portalContentObjectId, null);
-				portalSectionProperty = (ContentObjectProperty)portalContentObject.getCmsProperty("portalSection");
+				portalSectionProperty = (ObjectReferenceProperty)portalContentObject.getCmsProperty("portalSection");
 				portalSectionProperty.addSimpleTypeValue(portalSectionContentObject);
 				contentService.saveContentObject(portalContentObject, false);
 

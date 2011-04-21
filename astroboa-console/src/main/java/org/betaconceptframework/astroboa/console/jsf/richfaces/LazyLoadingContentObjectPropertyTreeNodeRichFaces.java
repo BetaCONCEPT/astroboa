@@ -244,8 +244,7 @@ public class LazyLoadingContentObjectPropertyTreeNodeRichFaces extends LazyLoadi
 		// some value types require special handling and thus we introduce a different type of node appending the value type to the default node type
 		switch (valueType) {
 		case Date:
-		case Topic:
-		case RepositoryUser:
+		case TopicReference:
 			nodeType = "OneOfMultipleValuesNode" + ":" + valueType.toString();
 			break;
 			
@@ -274,8 +273,7 @@ public class LazyLoadingContentObjectPropertyTreeNodeRichFaces extends LazyLoadi
 		// some value types require special handling and thus we introduce a different type of node appending the value type to the default node type
 		switch (childPropertyDefinition.getValueType()) {
 		case Date:
-		case Topic:
-		case RepositoryUser:
+		case TopicReference:
 			nodeType = "SimpleTypeSingleValuePropertyNode" + ":" + childPropertyDefinition.getValueType().toString();
 			break;
 			

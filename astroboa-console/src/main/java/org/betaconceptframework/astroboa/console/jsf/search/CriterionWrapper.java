@@ -108,7 +108,7 @@ public class CriterionWrapper {
 		
 		//Add a generic one
 		if (acceptedContentTypes != null){
-			acceptedContentTypes.add(ValueType.ContentObject.toString());
+			acceptedContentTypes.add(ValueType.ObjectReference.toString());
 		}
 	}
 
@@ -159,11 +159,11 @@ public class CriterionWrapper {
 				simpleCriterion.setProperty(getPropertyPath());
 
 			 if (value != null){
-				 if (ValueType.Topic == propertyValueType && value != null &&
+				 if (ValueType.TopicReference == propertyValueType && value != null &&
 						 value instanceof Topic) {
 					 simpleCriterion.addValue(((Topic)value).getId());
 				 }
-				 else if (ValueType.ContentObject == propertyValueType && value != null &&
+				 else if (ValueType.ObjectReference == propertyValueType && value != null &&
 						 value instanceof ContentObject) {
 					 simpleCriterion.addValue(((ContentObject)value).getId());
 				 }
@@ -252,8 +252,8 @@ public class CriterionWrapper {
 				queryOperatorsAsSelectItems.add(new SelectItem(QueryOperator.IS_NOT_NULL, JSFUtilities.getLocalizedMessage("query.operator.not.null", null)));
 				queryOperatorsAsSelectItems.add(new SelectItem(QueryOperator.IS_NULL, JSFUtilities.getLocalizedMessage("query.operator.null", null)));
 				break;
-			case Topic:
-			case ContentObject:
+			case TopicReference:
+			case ObjectReference:
 				queryOperator = QueryOperator.NOT_EQUALS;
 				
 				queryOperatorsAsSelectItems.add(new SelectItem(QueryOperator.NOT_EQUALS, QueryOperator.NOT_EQUALS.getOp()));
@@ -412,6 +412,15 @@ public class CriterionWrapper {
 			contentObjectCriteria.setOffsetAndLimit(0,15);
 			contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 			
+			if (acceptedContentTypes != null && 
+					(acceptedContentTypes.size() > 1 || 
+							! ValueType.ObjectReference.toString().equals(acceptedContentTypes.get(0)))){
+				
+				List<String> contentObjectTypes = new ArrayList<String>(acceptedContentTypes);
+				
+				contentObjectCriteria.addContentObjectTypesEqualsAnyCriterion(contentObjectTypes);
+			}
+			
 			//Profile Title criterion
 			Criterion profileTitleCriterion = CriterionFactory.like("profile.title", "%"+selectedContentObjectTitle+"%");
 			contentObjectCriteria.addCriterion(profileTitleCriterion);
@@ -461,7 +470,7 @@ public class CriterionWrapper {
 	}
 	
 	public String getLocalizedLabelForCurrentLocaleForContentObjectTypeValue(){
-		if (value != null && propertyValueType == ValueType.ContentObject && value instanceof ContentObject){
+		if (value != null && propertyValueType == ValueType.ObjectReference && value instanceof ContentObject){
 			Object contentObject = getValue();
 
 			if (contentObject != null){

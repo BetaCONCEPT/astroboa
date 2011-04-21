@@ -75,7 +75,7 @@ Authors
 					</center>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}">
+				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ObjectReference'}">
 					<center>
 					<h:outputText style="color: red;" 
 							value="#{criterionWrapper.localizedLabelForCurrentLocaleForContentObjectTypeValue}" />
@@ -83,15 +83,15 @@ Authors
 				</h:panelGroup>
 				
 				<h:outputText
-						rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}"
+						rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ObjectReference'}"
 							value="#{criterionWrapper.value.getCmsProperty('profile.title').simpleTypeValue}" />
 							
-				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}">
+				<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ObjectReference'}">
 					<center>
 				<h:outputText value="#{messages['content.object.owner']}" style="color: red;"	/>
 					</center>
 				</h:panelGroup>
-				<h:outputText rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ContentObject'}"
+				<h:outputText rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'ObjectReference'}"
 							value="#{criterionWrapper.value.owner.label}" />
 
 			</h:panelGrid>

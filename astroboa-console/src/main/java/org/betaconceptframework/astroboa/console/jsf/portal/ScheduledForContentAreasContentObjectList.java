@@ -29,7 +29,7 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.console.jsf.dashboard.ContentObjectListBean;
@@ -72,8 +72,8 @@ public class ScheduledForContentAreasContentObjectList extends ContentObjectList
 			for (CmsProperty<?,?> scheduledContentArea :scheduledContentAreas){
 				CmsProperty<?, ?> contentAreaProperty = ((ComplexCmsProperty<?, ?>)scheduledContentArea).getChildProperty("contentArea");
 				
-				if (contentAreaProperty!=null && ! ((TopicProperty)contentAreaProperty).hasNoValues() &&
-						((TopicProperty)contentAreaProperty).getSimpleTypeValue().getId().equals(selectedContentArea.getId())){
+				if (contentAreaProperty!=null && ! ((TopicReferenceProperty)contentAreaProperty).hasNoValues() &&
+						((TopicReferenceProperty)contentAreaProperty).getSimpleTypeValue().getId().equals(selectedContentArea.getId())){
 					filteredScheduledContentAreas.add(scheduledContentArea);
 				}
 			}
