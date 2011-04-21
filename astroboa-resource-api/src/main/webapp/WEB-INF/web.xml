@@ -164,6 +164,21 @@ Authors
 	</filter-mapping>
 	-->
 	
+	
+	<!-- RestEasy as a Filter. This way we can server static content 
+            org.jboss.resteasy.plugins.server.servlet.FilterDispatcher -->
+	 <filter>
+        <filter-name>Resteasy</filter-name>
+        <filter-class>
+        	org.betaconceptframework.astroboa.resourceapi.filter.AstroboaResourceApiDispatcher
+        </filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Resteasy</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 	<!-- 
    <listener>
       <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
@@ -203,6 +218,7 @@ Authors
    </servlet-mapping>
     -->
     
+    <!-- 
     <servlet>
         <servlet-name>Resteasy</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
@@ -212,7 +228,8 @@ Authors
         <servlet-name>Resteasy</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-    
+     -->
+     
     <session-config>
     	<session-timeout>0</session-timeout>
     </session-config>
