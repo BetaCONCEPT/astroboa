@@ -29,6 +29,7 @@ import org.betaconceptframework.astroboa.resourceapi.resource.ContentObjectResou
 import org.betaconceptframework.astroboa.resourceapi.resource.DefinitionResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.TaxonomyResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.TopicResource;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 
 /**
  * Class responsible to locate the appropriate resource
@@ -50,36 +51,44 @@ public class ResourceLocator {
 		}
 	}
 
-	@Path("/contentObject")
+	@Path(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
 	public ContentObjectResource getContentObjectResource(){
 		
 		return new ContentObjectResource(astroboaClient);
 		
 	}
 	
-	@Path("/taxonomy")
+	@Path(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
 	public TaxonomyResource getTaxonomyResource(){
 		
 		return new TaxonomyResource(astroboaClient);
 		
 	}
 	
-	@Path("/topic")
+	@Path(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
 	public TopicResource getTopicResource(){
 		
 		return new TopicResource(astroboaClient);
 		
 	}
 	
-	@Path("/binaryChannel")
+	@Path(CmsConstants.RESOURCE_API_BINARY_CHANNEL_URI_PATH)
 	public BinaryChannelResource getBinaryChannelResource(){
 		
 		return new BinaryChannelResource(astroboaClient);
 
 	}
 	
-	@Path("/definition")
+	@Path(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
 	public DefinitionResource getDefinitionResource(){
+		
+		return new DefinitionResource(astroboaClient);
+		
+	}
+
+	@Path("/definition")
+	@Deprecated
+	public DefinitionResource getDefinitionResourceUsingOldBasePath(){
 		
 		return new DefinitionResource(astroboaClient);
 		
