@@ -191,7 +191,7 @@ public interface DefinitionService {
 	byte[] getXMLSchemaForDefinition(String definitionFullPath);
 
 	/**
-	 * Retrieve all {@link TopicProperty topic property} paths per taxonomy
+	 * Retrieve all {@link TopicReferenceProperty topic property} paths per taxonomy
 	 * defined for the connected repository. This is useful when search for a 
 	 * specific {@link Topic topic} inside a {@link ContentObject contentObject}
 	 * and we do not know the name of the topic property.
@@ -249,7 +249,7 @@ public interface DefinitionService {
 		    "personObject":{
 		     "path":"personObject"
 		     ,"valueType":"ContentType"
-		     ,"url":"http://www.digitalplan.gov.gr/resource-api/dipla/definition/personObject?output=json"
+		     ,"url":"http://host/resource-api/dipla/model/personObject?output=json"
 		       ,"label":{
 		        "el":"Πρόσωπο"
 		        ,"en":"Person"
@@ -257,7 +257,7 @@ public interface DefinitionService {
 		       ,"profile":{
 		        "path":"profile"
 		        ,"valueType":"Complex"
-		        ,"url":"http://www.digitalplan.gov.gr/resource-api/dipla/definition/personObject.profile?output=json"
+		        ,"url":"http://host/resource-api/dipla/model/personObject.profile?output=json"
 		        ,"mandatory":"true"
 		        ,"multiple":"false"
 		          ,"label":{
@@ -267,7 +267,7 @@ public interface DefinitionService {
 		          ,"title":{
 		           "path":"profile.title"
 		           ,"valueType":"String"
-		           ,"url":"http://www.digitalplan.gov.gr/resource-api/dipla/definition/personObject.profile.title?output=json"
+		           ,"url":"http://host/resource-api/dipla/model/personObject.profile.title?output=json"
 		           ,"mandatory":"true"
 		           ,"multiple":"false"
 		             ,"label":{
