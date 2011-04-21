@@ -48,7 +48,7 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	@Deprecated
 	public List<Taxonomy> getTaxonomies(String locale) {
 		try{
-			CmsOutcome<Taxonomy> outcome = taxonomyDao.serializeAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY);
+			CmsOutcome<Taxonomy> outcome = taxonomyDao.serializeAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false);
 			
 			if (outcome.getResults() != null){
 				return outcome.getResults();
@@ -83,7 +83,7 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	@Deprecated
 	public Taxonomy getTaxonomy(String taxonomyName, String locale) {
 		try{
-			return taxonomyDao.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+			return taxonomyDao.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -109,7 +109,7 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 
 	public Taxonomy getBuiltInSubjectTaxonomy(String locale) {
 		try{
-			return taxonomyDao.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+			return taxonomyDao.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -121,9 +121,9 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 
 	
 	@Override
-	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel) {
+	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint) {
 		try{
-			return taxonomyDao.serializeAllTaxonomies(output, fetchLevel);
+			return taxonomyDao.serializeAllTaxonomies(output, fetchLevel, prettyPrint);
 		}
 		catch(CmsException e){
 			throw e;
@@ -135,9 +135,9 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 
 	@Override
 	public <T> T getTaxonomy(String taxonomyName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel) {
+			FetchLevel fetchLevel, boolean prettyPrint) {
 		try{
-			return taxonomyDao.getTaxonomy(taxonomyName, output, fetchLevel);
+			return taxonomyDao.getTaxonomy(taxonomyName, output, fetchLevel, prettyPrint);
 		}
 		catch(CmsException e){
 			throw e;
@@ -165,7 +165,7 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	@Deprecated
 	public Taxonomy getTaxonomyById(String taxonomyId) {
 		try{
-			return taxonomyDao.getTaxonomy(taxonomyId, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+			return taxonomyDao.getTaxonomy(taxonomyId, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch(CmsException e){
 			throw e;

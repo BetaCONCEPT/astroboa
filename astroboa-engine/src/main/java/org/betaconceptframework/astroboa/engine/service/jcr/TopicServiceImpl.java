@@ -59,7 +59,7 @@ class TopicServiceImpl  implements TopicService {
 
 	public Topic getTopic(String topicId, String locale) {
 		try{
-			return topicDao.getTopic(topicId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY);
+			return topicDao.getTopic(topicId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch(CmsException e){
 			throw e;
@@ -132,9 +132,9 @@ class TopicServiceImpl  implements TopicService {
 
 	@Override
 	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel) {
+			FetchLevel fetchLevel, boolean prettyPrint) {
 		try{
-			return topicDao.getTopic(topicIdOrName, output, fetchLevel);
+			return topicDao.getTopic(topicIdOrName, output, fetchLevel,prettyPrint);
 		}
 		catch(CmsException e){
 			throw e;
