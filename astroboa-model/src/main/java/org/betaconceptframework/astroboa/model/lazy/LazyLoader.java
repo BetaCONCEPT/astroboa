@@ -347,7 +347,7 @@ public class LazyLoader  {
 				
 				activateClientContextForAuthenticationToken(authenticationToken);
 				
-				Topic parentTopic = topicService.getTopic(parentId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY);
+				Topic parentTopic = topicService.getTopic(parentId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 				
 				if (parentTopic != null){
 					topic.setParent(parentTopic);
@@ -373,7 +373,7 @@ public class LazyLoader  {
 			
 			activateClientContextForAuthenticationToken(authenticationToken);
 			
-			Topic topic = topicService.getTopic(topicId,ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY);
+			Topic topic = topicService.getTopic(topicId,ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 			
 			if (topic != null){
 				return topic.getTaxonomy();
