@@ -30,11 +30,11 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 
@@ -59,7 +59,7 @@ public class DefinitionPropertyPathBuilder extends AbstractCmsPropertyDefinition
 
 	private Deque<String> parentComplexPropertyPath = new ArrayDeque<String>();
 	
-	private List<ContentObjectPropertyDefinition> contentObjectPropertyDefinitions = new ArrayList<ContentObjectPropertyDefinition>();
+	private List<ObjectReferencePropertyDefinition> objectReferencePropertyDefinitions = new ArrayList<ObjectReferencePropertyDefinition>();
 
 	
 	public DefinitionPropertyPathBuilder(boolean rootDefinitionIsComplex){
@@ -128,12 +128,12 @@ public class DefinitionPropertyPathBuilder extends AbstractCmsPropertyDefinition
 		}
 		
 		switch (simplePropertyDefinition.getValueType()) {
-		case ContentObject:
-			contentObjectPropertyDefinitions.add((ContentObjectPropertyDefinition) simplePropertyDefinition);
+		case ObjectReference:
+			objectReferencePropertyDefinitions.add((ObjectReferencePropertyDefinition) simplePropertyDefinition);
 			
 			break;
-		case Topic:
-			List<String> acceptedTaxonomies = ((TopicPropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies();
+		case TopicReference:
+			List<String> acceptedTaxonomies = ((TopicReferencePropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies();
 			
 			if (rootDefinitionIsComplex){
 				addTopicPropertyPathForTaxonomies(simplePropertyDefinition.getFullPath(),acceptedTaxonomies);
@@ -189,8 +189,8 @@ public class DefinitionPropertyPathBuilder extends AbstractCmsPropertyDefinition
 		return mutlivalueProperties;
 	}
 
-	public List<ContentObjectPropertyDefinition> getContentObjectPropertyDefinitions() {
-		return contentObjectPropertyDefinitions;
+	public List<ObjectReferencePropertyDefinition> getObjectReferencePropertyDefinitions() {
+		return objectReferencePropertyDefinitions;
 	}
 
 }
