@@ -175,7 +175,7 @@ public interface TopicService {
 
 	/**
 	 * Returns a list of {@link ContentObject contentObject} identifiers which
-	 * contain one or more {@link TopicProperty property} whose value(s) is a 
+	 * contain one or more {@link TopicReferenceProperty property} whose value(s) is a 
 	 * {#link Topic topic} with the provided <code>topicId</code>.
 	 * 
 	 * This method is used mainly for lazy loading purposes. It should not used directly
@@ -190,7 +190,7 @@ public interface TopicService {
 	
 	/**
 	 * Returns count of {@link ContentObject contentObject} identifiers which
-	 * contain one or more {@link TopicProperty property} whose value(s) is a 
+	 * contain one or more {@link TopicReferenceProperty property} whose value(s) is a 
 	 * {#link Topic topic} with the provided <code>topicId</code>.
 	 * 
 	 * This method is used mainly for lazy loading purposes. It should not used directly
@@ -269,10 +269,12 @@ public interface TopicService {
 	 * @param output Topic representation output, one of XML, JSON or {@link Topic}. Default is {@link ResourceRepresentationType#TOPIC_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Topic}'s only properties, its children as well or the whole {@link Topic} tree.
 	 * Default is {@link FetchLevel#ENTITY}
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if
 	 * 
 	 * @return A topic as XML, JSON or {@link Topic}, or <code>null</code> of none is found.
 	 */
-	<T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel);
+	<T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint);
 
 	/**
 	 * Save or update a {@link Topic topic}.

@@ -225,12 +225,14 @@ public interface TopicServiceSecure {
 	 * @param output Topic representation output, one of XML, JSON or {@link Topic}. Default is {@link ResourceRepresentationType#TOPIC_INSTANCE}
 	 * @param fetchLevel Specify whether to load {@link Topic}'s only properties, its children as well or the whole {@link Topic} tree.
 	 * Default is {@link FetchLevel#ENTITY}
+	 * @param prettyPrint <code>true</code> to enable pretty printer functionality such as 
+	 * adding identation and linefeeds in order to make output more human readable, <code>false<code> otherwise. Only useful if
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
 	 *  to an Astroboa repository.
 	 * 
 	 * @return A topic as XML, JSON or {@link Topic}, or <code>null</code> of none is found.
 	 */
-	<T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, String authenticationToken);
+	<T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link TopicService#save(Object)}
