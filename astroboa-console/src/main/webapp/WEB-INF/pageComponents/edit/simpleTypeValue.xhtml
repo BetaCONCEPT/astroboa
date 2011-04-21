@@ -211,32 +211,10 @@ Authors
 								cmsPropertyWrapper.valueType eq 'String' and 
 								! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
 								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}">
-				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() gt 1500}">
-					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px; height: 300px; overflow: auto;">
-						<div class="editable">
-							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
-								escape="false"/>
-						</div>
-					</div>
-				</ui:fragment>
-				<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.value.length() le 1500}">
-					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
-						<div class="editable">
-							<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
-								escape="false"/>
-						</div>
-					</div>
-				</ui:fragment>
-				<ui:fragment rendered="#{empty simpleCmsPropertyValueWrapper.value}">
-					<div class="editableParent" style="border: 1px solid #EBE8E4; width: 70%; padding: 10px; float: left; -moz-border-radius:6px 6px 6px 6px;">
-						<div class="editable">
-							
-						</div>
-					</div>
-				</ui:fragment>
-				
-				<h:inputHidden name="textEditorHidden_#{simpleCmsPropertyValueWrapper.fullPropertyPath}"
-					value="#{simpleCmsPropertyValueWrapper.value}"/>
+								
+				<div class="editableParent" style="width: 70%; float: left;">
+					<h:inputTextarea styleClass="editable" value="#{simpleCmsPropertyValueWrapper.value}" style="width:95%;" rows="1"/>
+				</div>
 				
 				<a href="#" onclick="openTextEditor(this);">
 					<img 
@@ -249,8 +227,12 @@ Authors
 						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--minus.png"
 						alt="close editor"/>
 				</a>
-				
-				
+				<a href="#" onclick="previewTextArea(this);">
+					<img 
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/magnifier.png"
+						alt="preview text"/>
+				</a>
+					
 			</ui:fragment>
 			
 			<!--

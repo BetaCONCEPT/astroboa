@@ -1065,13 +1065,13 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
     
     /* CKEDITOR */
-    var textEditorHiddenField;
+    var textEditorArea;
     var textEditorCloseButton;
     var textEditorOpenButton;
     var editor;
     
     function resetEditorGlobalVars() {
-    	textEditorHiddenField = null;
+    	textEditorArea = null;
         textEditorCloseButton = null;
         textEditorOpenButton =null;
         if (editor) {
@@ -1079,6 +1079,16 @@ function callFunctionOnEnterKey(e, func, arg) {
         }
     }
     
+    /*
+    // Open the editor in full page view by default
+    CKEDITOR.on('instanceReady',
+    	function( evt ) {
+    		var editor = evt.editor;
+    		editor.execCommand('maximize');
+    });
+    */
+    
+    /*
     function registerDoubleClickEventForOpeningTextEditor() {
     	if ( window.addEventListener )
     		document.body.addEventListener( 'dblclick', openTextEditorOnDoubleClick, false );
@@ -1127,42 +1137,42 @@ function callFunctionOnEnterKey(e, func, arg) {
     		replaceTextWithTextEditor( parentElementIfTextFieldIsEmpty );
     	}
     }
+    */
     
     function openTextEditor(openEditorButton) {
     	
     	// Find out the div that contains the editor
     	var editorDivParent = bcmslib.jQuery(openEditorButton).siblings(".editableParent");
-    	var editorDiv = editorDivParent.children('.editable').get(0);
+    	var currentTextEditorArea = editorDivParent.children('.editable').get(0);
 
-    	if ( editorDiv != null) {
+    	if ( currentTextEditorArea != null) {
     		
     		// first save the data of an existing text editor and then destoy the editora, hide its closeEditorButton and show its openEditorButton
     		destroyTextEditor();
     		
     		// Now we are ready to find the hidden form field for the currently edited text box as well as the buttons to open and close the editor
-    		textEditorHiddenField = bcmslib.jQuery(editorDivParent).next();
-    		textEditorOpenButton = bcmslib.jQuery(textEditorHiddenField).next();
+    		textEditorArea = currentTextEditorArea;
+    		textEditorOpenButton = bcmslib.jQuery(editorDivParent).next();
     		textEditorCloseButton = bcmslib.jQuery(textEditorOpenButton).next();
     		
-    		replaceTextWithTextEditor(editorDiv);
+    		replaceTextWithTextEditor(textEditorArea);
     	}
     }
     
     
 
-    function replaceTextWithTextEditor( div )
+    function replaceTextWithTextEditor( textEditorArea )
     {
-
-    	editor = CKEDITOR.replace( div );
+    	editor = CKEDITOR.replace( textEditorArea );
     	bcmslib.jQuery(textEditorOpenButton).hide();
     	bcmslib.jQuery(textEditorCloseButton).show();
     }
     
     // Save text editor data in relevant hidden form field and then destroy the text editor
     function destroyTextEditor() {
-    	if ( editor && textEditorHiddenField) {
-    		bcmslib.jQuery(textEditorHiddenField).val(editor.getData());
-    		textEditorHiddenField = null;
+    	if ( editor && textEditorArea) {
+    		bcmslib.jQuery(textEditorArea).val(editor.getData());
+    		textEditorArea = null;
     		editor.destroy();
     	}
     	
@@ -1172,6 +1182,20 @@ function callFunctionOnEnterKey(e, func, arg) {
     	
     	if (textEditorOpenButton) {
     		bcmslib.jQuery(textEditorOpenButton).show();
+    	}
+    }
+    
+    function previewTextArea(previewButton) {
+    	// Find out the div that contains the editor
+    	var editorDivParent = bcmslib.jQuery(previewButton).siblings(".editableParent");
+    	var currentTextEditorArea = editorDivParent.children('.editable').get(0);
+
+    	if ( currentTextEditorArea != null) {
+    		var text = bcmslib.jQuery(currentTextEditorArea).val();
+    		if (!text) {
+    			text = 'The field is empty'; 
+    		}
+    		bcmslib.jQuery.fancybox(text);
     	}
     }
     
