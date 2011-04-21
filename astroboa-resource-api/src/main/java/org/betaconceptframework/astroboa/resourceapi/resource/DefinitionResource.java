@@ -34,6 +34,7 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
+import org.betaconceptframework.astroboa.resourceapi.utility.ModelSerializer;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,5 +208,89 @@ public class DefinitionResource extends AstroboaResource{
 			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
 		}
 	}
-	
+
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+    public Response getModelAsXml(
+			@QueryParam("output") String output, 
+			@QueryParam("callback") String callback, 
+			@QueryParam("prettyPrint") String prettyPrint){
+		
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
+		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
+
+		return getModelInternal(callback, prettyPrintEnabled, outputEnum);
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response getModelAsJson(
+			@QueryParam("output") String output, 
+			@QueryParam("callback") String callback, 
+			@QueryParam("prettyPrint") String prettyPrint){
+
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
+		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
+
+		return getModelInternal(callback, prettyPrintEnabled, outputEnum);
+
+	}
+
+	@GET
+	@Produces("*/*")
+    public Response getModel(
+			@QueryParam("output") String output, 
+			@QueryParam("callback") String callback, 
+			@QueryParam("prettyPrint") String prettyPrint){
+
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
+		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
+
+		return getModelInternal(callback, prettyPrintEnabled, outputEnum);
+
+	}
+
+	private Response getModelInternal(String callback,
+			boolean prettyPrintEnabled, Output outputEnum) {
+		try{
+			
+			if (outputEnum != Output.XML && outputEnum != Output.JSON){
+				throw new Exception("All definitions are exported only in XML and JSON format. "+outputEnum + " is not supported");
+			}
+			
+			String allDefinitions = new ModelSerializer(prettyPrintEnabled, outputEnum == Output.JSON, astroboaClient.getDefinitionService(), astroboaClient.getConnectedRepositoryId()).serialize();
+			
+			if (StringUtils.isBlank(allDefinitions)){
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
+			
+			StringBuilder definitionAsXMLOrJSONorXSD = new StringBuilder();
+			if (StringUtils.isBlank(callback)) {
+				definitionAsXMLOrJSONorXSD.append(allDefinitions);
+			}
+			else {
+				switch (outputEnum) {
+				case XML:{
+					ContentApiUtils.generateXMLP(definitionAsXMLOrJSONorXSD, allDefinitions, callback);
+					break;
+				}
+				case JSON:
+					ContentApiUtils.generateJSONP(definitionAsXMLOrJSONorXSD, allDefinitions, callback);
+					break;
+				}
+			}
+
+
+			return ContentApiUtils.createResponse(definitionAsXMLOrJSONorXSD, outputEnum, callback, null);
+
+		}
+		catch(Exception e){
+			logger.error("When exporting all Definitions", e);
+			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+		}
+	}
 }
