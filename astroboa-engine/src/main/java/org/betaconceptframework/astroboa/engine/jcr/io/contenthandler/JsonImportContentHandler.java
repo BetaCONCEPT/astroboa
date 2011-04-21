@@ -23,7 +23,13 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import javax.xml.XMLConstants;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.RepositoryUser;
+import org.betaconceptframework.astroboa.api.model.definition.Localization;
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.engine.jcr.io.Deserializer;
 import org.betaconceptframework.astroboa.engine.jcr.io.IOUtils;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportContext;
@@ -61,8 +67,6 @@ public class JsonImportContentHandler<T> implements ContentHandler{
 
 	private ImportContext importContext;
 	
-	private Deque<Boolean> currentElementRepresentsAnAttribute = new ArrayDeque<Boolean>();
-	
 	public JsonImportContentHandler(Class<T> resultType, Deserializer deserializer) {
 		importContext = new ImportContext();
 		importContentHandler = new ImportContentHandler<T>(importContext, resultType, deserializer);
@@ -80,40 +84,103 @@ public class JsonImportContentHandler<T> implements ContentHandler{
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 	
-		if (currentElementRepresentsAnAttribute.poll()){
-			IOUtils.addAttribute(elementQueue.peek().atts, localName, elementContent.toString());
-		}
-		else{
-
-			XMLElement finishedElement = elementQueue.poll();
+		XMLElement finishedElement = elementQueue.poll();
 			
-			if (finishedElement != null){
+		if (finishedElement != null){
+			
+			finishedElement.content = elementContent.toString();
+			
+			//Special cases. These built in attributes must be known when creating the actual
+			//repository entity which will represent this element
+			if (StringUtils.equalsIgnoreCase(CmsBuiltInItem.ContentObjectTypeName.getLocalPart(),localName) ||
+					StringUtils.equalsIgnoreCase(CmsBuiltInItem.CmsIdentifier.getLocalPart(),localName) ||
+					StringUtils.equalsIgnoreCase(CmsBuiltInItem.Name.getLocalPart(),localName) ||
+					StringUtils.equalsIgnoreCase(CmsBuiltInItem.SystemName.getLocalPart(),localName) ||
+					StringUtils.equalsIgnoreCase(CmsBuiltInItem.ExternalId.getLocalPart(),localName)){
 				
-				finishedElement.content = elementContent.toString();
-				
+				if (elementQueue.isEmpty()){
+					throw new CmsException("Element "+localName + " represents a built in attribute but no parent element found");
+				}
+				else{
+					if (StringUtils.isBlank(finishedElement.content)){
+						if (! StringUtils.equalsIgnoreCase(CmsBuiltInItem.Name.getLocalPart(),localName)){
+							throw new CmsException("Element "+localName+ " must have a value");
+						}
+					}
+					else{
+
+						XMLElement parentElement = elementQueue.peek();
+	
+						IOUtils.addAttribute(parentElement.attributes, localName, finishedElement.content.trim());
+
+						parentElement.childElements.remove(finishedElement);
+
+					}
+				}
+			}
+			else{
 				//Forward Element to be imported normally
 				if (elementQueue.isEmpty()){
 					importElement(uri, localName, qName, finishedElement);
 				}
-				
-				logger.debug("Removed element {} from the queue", localName);
-				
-				//Special case
-				finishedElement.changeLocalNameIfItRepresentsAnItemOfAResourceCollection();
 			}
+			
+			logger.debug("Removed element {} from the queue", localName);
+			
 		}
 		
 		clearElementContent();
 	}
+	
+	/*
+	private void printAttributes(Attributes atts) throws SAXException {
+		
+		if (atts != null && atts.getLength() >0){
+			for (int i=0;i<atts.getLength();i++){
+				
+				logger.debug(atts.getLocalName(i)+ ":"+ atts.getValue(i));
+			}
+		}
+		
+	}*/
+
 
 	private void importElement(String uri, String localName, String qName,
 			XMLElement element) throws SAXException {
 		
-		importContentHandler.startElement(uri, localName, qName, element.atts);
+		importContentHandler.startElement(uri, localName, qName, element.attributes);
 		
 		if (! element.childElements.isEmpty()){
+
+			Object entityCurrentlyImported = importContentHandler.getCurrentEntityImported();
+			
+			boolean elementContainsTheLabelsOfAnEntity = 
+				CmsBuiltInItem.Localization.getLocalPart().equalsIgnoreCase(localName) && entityCurrentlyImported != null &&
+				entityCurrentlyImported instanceof Localization ;
+			
 			for (XMLElement childElement : element.childElements){
-				importElement(uri, childElement.localName, childElement.localName, childElement);
+				
+				entityCurrentlyImported = importContentHandler.getCurrentEntityImported();
+				
+				//Check if element represents a built in attribute
+			    if (elementContainsTheLabelsOfAnEntity && CmsConstants.LOCALIZED_LABEL_ELEMENT_NAME.equalsIgnoreCase(childElement.localName) && 
+			    		CollectionUtils.isNotEmpty(childElement.childElements)){
+			    	
+			    	for (XMLElement childElementOfLabel : childElement.childElements){
+			    		((Localization) entityCurrentlyImported).addLocalizedLabel(childElementOfLabel.localName, childElementOfLabel.content);
+			    	}
+			    }
+			    else if (childElement.childElements.isEmpty()  && 
+						importContext.nameCorrespondsToAnAttribute(childElement.localName, entityCurrentlyImported)){
+				
+					importContentHandler.addAttributeToImportedEntity(childElement.localName, childElement.content);
+				}
+			    else if (entityCurrentlyImported != null && entityCurrentlyImported instanceof RepositoryUser && CmsConstants.URL_ATTRIBUTE_NAME.equalsIgnoreCase(childElement.localName)){
+			    	continue; //Do not import attribute URL for RepositoryUser entity as it is not yet supported
+			    }
+				else{
+					importElement(uri, childElement.localName, childElement.localName, childElement);
+				}
 			}
 		}
 		
@@ -128,32 +195,20 @@ public class JsonImportContentHandler<T> implements ContentHandler{
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		
-		String parentElementName = elementQueue.peek() != null ? elementQueue.peek().localName : null;
+		XMLElement element = new XMLElement();
+		element.localName = localName;
 		
-		if ( nameCorrespondsToAnElement(localName, parentElementName)){
+		if (! elementQueue.isEmpty()){
 
-			XMLElement element = new XMLElement();
-			element.localName = localName;
+			XMLElement parentElement = elementQueue.peek();
 			
-			if (! elementQueue.isEmpty()){
-
-				XMLElement parentElement = elementQueue.peek();
-				
-				parentElement.childElements.add(element);
-				
-			}
-			
-			elementQueue.push(element);
-			
-			currentElementRepresentsAnAttribute.push(false);
-
-			logger.debug("Pushed element {} to queue",localName);
+			parentElement.childElements.add(element);
 			
 		}
-		else{
-			currentElementRepresentsAnAttribute.push(true);
-		}
 		
+		elementQueue.push(element);
+		
+		logger.debug("Pushed element {} to queue",localName);
 		
 	}
 
@@ -215,18 +270,15 @@ public class JsonImportContentHandler<T> implements ContentHandler{
 		
 		private String localName;
 		
-		private AttributesImpl atts = new AttributesImpl();
-		
 		private String content;
+		
+		//Built in attribute values
+		private AttributesImpl attributes = new AttributesImpl();
 
 		private List<XMLElement> childElements = new ArrayList<XMLElement>();
-
-		public void changeLocalNameIfItRepresentsAnItemOfAResourceCollection() {
-			if (StringUtils.equals(CmsConstants.CONTENT_OBJECTS_ELEMENT_NAME, localName) ||
-				(StringUtils.equals(CmsConstants.RESOURCE_COLLECTION, localName) && atts.getIndex(CmsBuiltInItem.ContentObjectTypeName.getLocalPart())!=-1)
-			){
-				localName = atts.getValue(CmsBuiltInItem.ContentObjectTypeName.getLocalPart());
-			}
+		
+		public String toString(){
+			return localName; 
 		}
 	}
 	
@@ -234,30 +286,4 @@ public class JsonImportContentHandler<T> implements ContentHandler{
 		elementContent.delete(0, elementContent.length());
 	}
 
-
-	private boolean elementNameIsLabel(String element) {
-		return element != null && StringUtils.equals(element, CmsConstants.LOCALIZED_LABEL_ELEMENT_NAME);
-	}
-
-	private boolean nameCorrespondsToAnElement(String elementName, String parentElementName){
-		
-		//Checking if elementName is one of the built in attribute names
-		boolean nameCorrespondsToAnAttribute = importContext.nameCorrespondsToAnAttribute(elementName);
-
-		if (nameCorrespondsToAnAttribute && elementNameIsLabel(elementName)){
-			//Checking if elementName == 'label' and parentElementName == 'localization'
-			//There is an attribute 'label' of the 'repositoryUser' element. We need to distinguish this 
-			//from the 'label' element of the 'localization' element.
-			if (StringUtils.equals(CmsBuiltInItem.Localization.getLocalPart(),parentElementName)){
-				return true;
-			}
-		}
-
-		//Checking if parentElementName == 'label' which means that elementName is a lang code , 'el', 'en' ,etc
-		if (! nameCorrespondsToAnAttribute && elementNameIsLabel(parentElementName)){
-			return false;
-		}
-		
-		return ! nameCorrespondsToAnAttribute;
-	}
 }
