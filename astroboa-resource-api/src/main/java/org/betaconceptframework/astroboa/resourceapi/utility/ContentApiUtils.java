@@ -194,7 +194,7 @@ public class ContentApiUtils {
 
 		if (StringUtils.isNotBlank(taxonomyName)) {
 
-			Taxonomy taxonomy = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+			Taxonomy taxonomy = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 
 			if (taxonomy != null) {
 				List<Topic> rootTopics = taxonomy.getRootTopics();
