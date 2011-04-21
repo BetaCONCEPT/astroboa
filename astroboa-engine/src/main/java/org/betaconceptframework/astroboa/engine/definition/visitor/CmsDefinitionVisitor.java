@@ -41,14 +41,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants;
 import org.betaconceptframework.astroboa.api.model.ValueType;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.cache.region.DefinitionCacheRegion;
 import org.betaconceptframework.astroboa.model.impl.ItemQName;
-import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ObjectReferencePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsDefinitionItem;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -103,7 +103,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 	
 	private Map<String, LocalizableCmsDefinition> internalDefinitionsCache = new HashMap<String, LocalizableCmsDefinition>();
 
-	private List<ContentObjectPropertyDefinition> contentObjectPropertyDefinitions = new ArrayList<ContentObjectPropertyDefinition>();
+	private List<ObjectReferencePropertyDefinition> objectReferencePropertyDefinitions = new ArrayList<ObjectReferencePropertyDefinition>();
 	
 	public void createContentDefintions() throws Exception {
 
@@ -156,11 +156,11 @@ public class CmsDefinitionVisitor implements XSVisitor{
 	 */
 	private void processContentObjectPropertyDefinitions() {
 		
-		if (CollectionUtils.isNotEmpty(contentObjectPropertyDefinitions)){
+		if (CollectionUtils.isNotEmpty(objectReferencePropertyDefinitions)){
 			
-			for (ContentObjectPropertyDefinition contentObjectPropertyDefinition: contentObjectPropertyDefinitions){
+			for (ObjectReferencePropertyDefinition objectReferencePropertyDefinition: objectReferencePropertyDefinitions){
 				
-				List<String> acceptedContentTypes = contentObjectPropertyDefinition.getAcceptedContentTypes();
+				List<String> acceptedContentTypes = objectReferencePropertyDefinition.getAcceptedContentTypes();
 				
 				if (CollectionUtils.isNotEmpty(acceptedContentTypes)){
 					
@@ -178,11 +178,11 @@ public class CmsDefinitionVisitor implements XSVisitor{
 						}
 					}
 					
-					((ContentObjectPropertyDefinitionImpl)contentObjectPropertyDefinition).addExpandedAcceptedContentTypes(new HashSet<String>(expandedContentTypes));
+					((ObjectReferencePropertyDefinitionImpl)objectReferencePropertyDefinition).addExpandedAcceptedContentTypes(new HashSet<String>(expandedContentTypes));
 					
 					if (logger.isDebugEnabled()){
 						logger.debug("Accepted content types {} of property {} have been expanded to {}", 
-							new Object[]{contentObjectPropertyDefinition.getAcceptedContentTypes(), contentObjectPropertyDefinition.getFullPath(), contentObjectPropertyDefinition.getExpandedAcceptedContentTypes()});
+							new Object[]{objectReferencePropertyDefinition.getAcceptedContentTypes(), objectReferencePropertyDefinition.getFullPath(), objectReferencePropertyDefinition.getExpandedAcceptedContentTypes()});
 					}
 				}
 			}
@@ -337,7 +337,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 				DefinitionPropertyPathBuilder definitionPropertyPathBuilder = new DefinitionPropertyPathBuilder(ValueType.Complex == definition.getValueType());
 				definition.accept(definitionPropertyPathBuilder);
 
-				contentObjectPropertyDefinitions.addAll(definitionPropertyPathBuilder.getContentObjectPropertyDefinitions());
+				objectReferencePropertyDefinitions.addAll(definitionPropertyPathBuilder.getObjectReferencePropertyDefinitions());
 				
 				//definitionPropertyPathBuilder.loadPropertyPathsForDefinition(((ContentObjectTypeDefinition)definition).getPropertyDefinitions(), definition);
 
@@ -480,7 +480,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 		
 		definitionsUnderProcess.clear();
 		
-		contentObjectPropertyDefinitions.clear();
+		objectReferencePropertyDefinitions.clear();
 	}
 
 	public void addXMLSchemaDefinitionForFileName(byte[] fileContent,String filename) {

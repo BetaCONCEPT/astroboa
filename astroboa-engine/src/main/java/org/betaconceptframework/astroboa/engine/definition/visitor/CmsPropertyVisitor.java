@@ -59,16 +59,14 @@ import org.betaconceptframework.astroboa.model.impl.definition.CalendarPropertyD
 import org.betaconceptframework.astroboa.model.impl.definition.CmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexPropertyDefinitionHelper;
-import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectTypeDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.DoublePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LocalizableCmsDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LocalizationImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LongPropertyDefinitionImpl;
-import org.betaconceptframework.astroboa.model.impl.definition.RepositoryUserPropertyDefinitionImpl;
-import org.betaconceptframework.astroboa.model.impl.definition.SpacePropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ObjectReferencePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.StringPropertyDefinitionImpl;
-import org.betaconceptframework.astroboa.model.impl.definition.TopicPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.TopicReferencePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsDefinitionItem;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -318,9 +316,9 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				complexPropertyDefinitionHelper.setChildPropertyDefinitions(childPropertyDefinitions);
 				
 				break;
-			case ContentObject:
+			case ObjectReference:
 				
-				definition = new ContentObjectPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
+				definition = new ObjectReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,	null, acceptedContentTypes);
 				
 				break;
@@ -377,16 +375,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 						defaultValue, null, maxLength, minLength, stringFormat, definitionValueRange, 
 						passwordEncryptorClassName, passwordType, pattern);
 				break;
-			case RepositoryUser:
-				definition = new RepositoryUserPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null);
-				break;
-			case Space:
-				definition = new SpacePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null);
-				break;
-			case Topic:
-				definition = new TopicPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
+			case TopicReference:
+				definition = new TopicReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,	null, acceptedTaxonomies);
 				break;
 
@@ -1007,7 +997,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 									binaryChannelIsUnmanaged = true;
 								}
 							}
-							else if (ValueType.Topic == valueType){
+							else if (ValueType.TopicReference == valueType){
 								if (attribute.equals(CmsDefinitionItem.acceptedTaxonomies)){
 									try{
 										String[] acceptedTaxonomyNameArray = StringUtils.split(valueToBeSet, ",");
@@ -1028,7 +1018,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 									}
 								}
 
-							}else if (ValueType.ContentObject == valueType){
+							}else if (ValueType.ObjectReference == valueType){
 								//Expecting a comma delimited string
 								if (attribute.equals(CmsDefinitionItem.acceptedContentTypes)){
 									try{
@@ -1284,25 +1274,19 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 		//Type is a global type defined either in the same XSD file or in another XSD file
 		//Check if complex type is one of CmsRepositoryEntity complex type
-		if (typeItemQName.equals(CmsDefinitionItem.repositoryUserType)){
-			valueType = ValueType.RepositoryUser;
-		}
-		else if (typeItemQName.equals(CmsDefinitionItem.contentObjectReferenceType) ){
-			valueType = ValueType.ContentObject;
+		if (typeItemQName.equals(CmsDefinitionItem.contentObjectReferenceType) ){
+			valueType = ValueType.ObjectReference;
 		}
 		else if (typeItemQName.equals(CmsDefinitionItem.contentObjectType)){
 			//Issue a warning for backwards compatibility
 			logger.warn("Property {} {} represents a content object reference. Type 'contentObjectReferenceType' shoud be used instead." +
 					"If you leave this unchanged, import service might not work properly.",
 					new Object[]{element.getName(), element.getSourceDocument() !=null ? "in "+ element.getSourceDocument().getSystemId() : ""});
-			valueType = ValueType.ContentObject;
+			valueType = ValueType.ObjectReference;
 
 		}
 		else if (typeItemQName.equals(CmsDefinitionItem.topicType)){
-			valueType = ValueType.Topic;
-		}
-		else if (typeItemQName.equals(CmsDefinitionItem.spaceType)){
-			valueType = ValueType.Space;
+			valueType = ValueType.TopicReference;
 		}
 		else if (typeItemQName.equals(CmsDefinitionItem.binaryChannelType)){
 			valueType = ValueType.Binary;
