@@ -27,14 +27,14 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class TopicPropertyImpl extends SimpleCmsPropertyImpl<Topic, TopicPropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements TopicProperty, Serializable {
+public class TopicReferencePropertyImpl extends SimpleCmsPropertyImpl<Topic, TopicReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements TopicProperty, Serializable {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class TopicPropertyImpl extends SimpleCmsPropertyImpl<Topic, TopicPropert
 	private static final long serialVersionUID = -5825697951295882921L;
 
 	public ValueType getValueType() {
-		return ValueType.Topic;
+		return ValueType.TopicReference;
 	}
 
 	protected void checkValues(List<Topic> asList) {
