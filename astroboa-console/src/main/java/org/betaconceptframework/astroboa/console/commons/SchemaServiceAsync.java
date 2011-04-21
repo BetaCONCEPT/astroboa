@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.jboss.seam.ScopeType;
@@ -51,7 +51,7 @@ public class SchemaServiceAsync {
 		allowedTaxonomies[0] = fullPropertyPath;
 		
 		try {
-			List<String> allowedTaxonomyNames = ((TopicPropertyDefinition) definitionService.getCmsPropertyDefinition(fullPropertyPath))
+			List<String> allowedTaxonomyNames = ((TopicReferencePropertyDefinition) definitionService.getCmsPropertyDefinition(fullPropertyPath))
 			.getAcceptedTaxonomies();
 
 			if (CollectionUtils.isNotEmpty(allowedTaxonomyNames)) {
