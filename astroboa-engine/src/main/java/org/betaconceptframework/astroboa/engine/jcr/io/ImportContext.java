@@ -27,11 +27,13 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
+import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.engine.model.jaxb.Repository;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 
@@ -44,31 +46,71 @@ public class ImportContext {
 
 	private Map<String, CmsRepositoryEntity> cmsRepositoriesEntitiesMap = new HashMap<String, CmsRepositoryEntity>();
 
-	private List<String> attributes = Arrays.asList(
-			CmsBuiltInItem.CmsIdentifier.getLocalPart(), 
-			CmsConstants.URL_ATTRIBUTE_NAME,
-			CmsConstants.LANG_ATTRIBUTE_NAME,
-			CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
-			CmsBuiltInItem.Name.getLocalPart(),
-			CmsBuiltInItem.SystemName.getLocalPart(),
-			CmsBuiltInItem.ContentObjectTypeName.getLocalPart(),
-			CmsBuiltInItem.MimeType.getLocalPart(),
-			CmsBuiltInItem.Encoding.getLocalPart(),
-			CmsBuiltInItem.SourceFileName.getLocalPart(),
-			CmsConstants.LAST_MODIFICATION_DATE_ATTRIBUTE_NAME,
-			CmsBuiltInItem.ExternalId.getLocalPart(), 
-			CmsBuiltInItem.Label.getLocalPart(),
-			CmsBuiltInItem.Order.getLocalPart(),
-			CmsBuiltInItem.AllowsReferrerContentObjects.getLocalPart(),
-			CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME,
-			CmsBuiltInItem.SystemBuiltinEntity.getLocalPart(),
-			CmsConstants.REPOSITORY_ID_ATTRIBUTE_NAME,
-			CmsConstants.TOTAL_RESOURCE_COUNT,
-			CmsConstants.OFFSET,
-			CmsConstants.LIMIT
-			);
-
+	private static Map<Class<?>, List<String>> reservedAttributeNamesPerEntityType = new HashMap<Class<?>, List<String>>();
 	
+	static {
+		reservedAttributeNamesPerEntityType.put(ContentObject.class, 
+				Arrays.asList(CmsBuiltInItem.SystemName.getLocalPart(),
+						CmsConstants.URL_ATTRIBUTE_NAME,
+							  CmsBuiltInItem.ContentObjectTypeName.getLocalPart(),
+							  CmsBuiltInItem.CmsIdentifier.getLocalPart(), 
+							  CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(ComplexCmsProperty.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(Topic.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
+						CmsConstants.URL_ATTRIBUTE_NAME,
+						CmsConstants.LANG_ATTRIBUTE_NAME,
+						      CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
+						      CmsBuiltInItem.Name.getLocalPart(),
+						      CmsBuiltInItem.AllowsReferrerContentObjects.getLocalPart(),
+						      CmsBuiltInItem.Order.getLocalPart(),
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME, 
+						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(Space.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
+						CmsConstants.URL_ATTRIBUTE_NAME,
+						CmsConstants.LANG_ATTRIBUTE_NAME,
+						      CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
+						      CmsBuiltInItem.Name.getLocalPart(),
+						      CmsBuiltInItem.Order.getLocalPart(),
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME, 
+						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(Taxonomy.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
+						CmsConstants.URL_ATTRIBUTE_NAME,
+						CmsConstants.LANG_ATTRIBUTE_NAME,
+						      CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
+						      CmsBuiltInItem.Name.getLocalPart(),
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME,
+						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(BinaryChannel.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
+						CmsBuiltInItem.Name.getLocalPart(),
+						CmsConstants.URL_ATTRIBUTE_NAME,
+						CmsBuiltInItem.MimeType.getLocalPart(),
+						CmsBuiltInItem.Encoding.getLocalPart(),
+						CmsBuiltInItem.SourceFileName.getLocalPart(),
+						CmsConstants.LAST_MODIFICATION_DATE_ATTRIBUTE_NAME,
+						CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(RepositoryUser.class, 
+				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
+						CmsBuiltInItem.ExternalId.getLocalPart(), 
+						CmsBuiltInItem.Label.getLocalPart(),
+						CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+
+		reservedAttributeNamesPerEntityType.put(Repository.class, 
+				Arrays.asList(CmsConstants.REPOSITORY_ID_ATTRIBUTE_NAME,
+						CmsConstants.REPOSITORY_SERIALIZATION_CREATION_DATE_ATTRIBUTE_NAME));
+
+	}
+		
 	public void cacheEntity(String cacheKey, CmsRepositoryEntity  cmsRepositoryEntity){
 		cmsRepositoriesEntitiesMap.put(cacheKey, cmsRepositoryEntity);
 	}
@@ -79,7 +121,7 @@ public class ImportContext {
 				! (cmsRepositoryEntity instanceof CmsProperty)){
 			
 			if (cmsRepositoryEntity.getId() != null){
-				cmsRepositoriesEntitiesMap.put(cmsRepositoryEntity.getId(), cmsRepositoryEntity);
+				cacheEntity(cmsRepositoryEntity.getId(), cmsRepositoryEntity);
 			}
 			else{
 				//If entity is of type Topic or Taxonomy or Space or ContentObject
@@ -88,13 +130,13 @@ public class ImportContext {
 				if (cmsRepositoryEntity instanceof Taxonomy){
 					final String name = ((Taxonomy)cmsRepositoryEntity).getName();
 					if (name != null && ! isEntityCached(name)){
-						cmsRepositoriesEntitiesMap.put(((Taxonomy)cmsRepositoryEntity).getName(), cmsRepositoryEntity);
+						cacheEntity(((Taxonomy)cmsRepositoryEntity).getName(), cmsRepositoryEntity);
 					}
 				}
 				else if (cmsRepositoryEntity instanceof ContentObject){
 					final String systemName = ((ContentObject)cmsRepositoryEntity).getSystemName();
 					if (systemName != null && ! isEntityCached(systemName)){
-						cmsRepositoriesEntitiesMap.put(((ContentObject)cmsRepositoryEntity).getSystemName(), cmsRepositoryEntity);
+						cacheEntity(((ContentObject)cmsRepositoryEntity).getSystemName(), cmsRepositoryEntity);
 					}
 				}
 				//TopicNames are not unique, therefore we use topic name and
@@ -102,19 +144,19 @@ public class ImportContext {
 				else if (cmsRepositoryEntity instanceof Topic){
 					final String name = ((Topic)cmsRepositoryEntity).getName();
 					if (name != null && ! isEntityCached(name)){
-						cmsRepositoriesEntitiesMap.put(name, cmsRepositoryEntity);
+						cacheEntity(name, cmsRepositoryEntity);
 					}
 				}
 				else if (cmsRepositoryEntity instanceof Space){
 					final String name = ((Space)cmsRepositoryEntity).getName();
 					if (name != null && ! isEntityCached(name)){
-						cmsRepositoriesEntitiesMap.put(((Space)cmsRepositoryEntity).getName(), cmsRepositoryEntity);
+						cacheEntity(((Space)cmsRepositoryEntity).getName(), cmsRepositoryEntity);
 					}
 				}
 				else if (cmsRepositoryEntity instanceof RepositoryUser){
 					final String externalId = ((RepositoryUser)cmsRepositoryEntity).getExternalId();
 					if (externalId != null && ! isEntityCached(externalId)){
-						cmsRepositoriesEntitiesMap.put(((RepositoryUser)cmsRepositoryEntity).getExternalId(), cmsRepositoryEntity);
+						cacheEntity(((RepositoryUser)cmsRepositoryEntity).getExternalId(), cmsRepositoryEntity);
 					}
 				}
 				
@@ -138,14 +180,38 @@ public class ImportContext {
 		cmsRepositoriesEntitiesMap.clear();
 	}
 
-	public boolean nameCorrespondsToAnAttribute(String elementName){
+	public boolean nameCorrespondsToAnAttribute(String elementName, Object parentEntity){
 		
-		if (StringUtils.isBlank(elementName)){
+		if (StringUtils.isBlank(elementName) || parentEntity == null){
 			return false;
 		}
 		
-		return attributes.contains(elementName);
-			
+		if (parentEntity instanceof ContentObject){
+			return reservedAttributeNamesPerEntityType.get(ContentObject.class).contains(elementName);
+		}
+		else if (parentEntity instanceof ComplexCmsProperty){
+			return reservedAttributeNamesPerEntityType.get(ComplexCmsProperty.class).contains(elementName);
+		}
+		else if (parentEntity instanceof Topic){
+			return reservedAttributeNamesPerEntityType.get(Topic.class).contains(elementName);
+		}
+		else if (parentEntity instanceof Taxonomy){
+			return reservedAttributeNamesPerEntityType.get(Taxonomy.class).contains(elementName);
+		}
+		else if (parentEntity instanceof Space){
+			return reservedAttributeNamesPerEntityType.get(Space.class).contains(elementName);
+		}
+		else if (parentEntity instanceof BinaryChannel){
+			return reservedAttributeNamesPerEntityType.get(BinaryChannel.class).contains(elementName);
+		}
+		else if (parentEntity instanceof RepositoryUser){
+			return reservedAttributeNamesPerEntityType.get(RepositoryUser.class).contains(elementName);
+		}
+		else if (parentEntity instanceof Repository){
+			return reservedAttributeNamesPerEntityType.get(Repository.class).contains(elementName);
+		}
+
+		return false;
 	}
 	
 }
