@@ -26,14 +26,14 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class ContentObjectPropertyImpl  extends SimpleCmsPropertyImpl<ContentObject, ContentObjectPropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements ContentObjectProperty, Serializable {
+public class ObjectReferencePropertyImpl  extends SimpleCmsPropertyImpl<ContentObject, ObjectReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements ContentObjectProperty, Serializable {
 
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class ContentObjectPropertyImpl  extends SimpleCmsPropertyImpl<ContentObj
 	private static final long serialVersionUID = -8308985889892542813L;
 
 	public ValueType getValueType() {
-		return ValueType.ContentObject;
+		return ValueType.ObjectReference;
 	}
 
 	@Override
