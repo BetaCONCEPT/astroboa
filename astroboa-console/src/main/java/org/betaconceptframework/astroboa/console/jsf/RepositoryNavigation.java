@@ -48,7 +48,7 @@ import org.betaconceptframework.astroboa.api.model.ContentObjectFolder;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.SpaceService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
@@ -217,7 +217,7 @@ public class RepositoryNavigation extends AbstractUIBean{
 			}
 		}
 		
-		List<Topic> subjectTopics= ((TopicProperty)contentObjectUIWrapper.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues();
+		List<Topic> subjectTopics= ((TopicReferenceProperty)contentObjectUIWrapper.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues();
 		String selectedTopicId = topic.getId();
 		
 		// check if selected topic is already in subject
@@ -231,7 +231,7 @@ public class RepositoryNavigation extends AbstractUIBean{
 		}
 		
 		if (!topicExists) {
-			((TopicProperty)contentObjectUIWrapper.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+			((TopicReferenceProperty)contentObjectUIWrapper.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 			
 			try {
 				contentService.saveAndVersionContentObject(contentObjectUIWrapper.getContentObject());

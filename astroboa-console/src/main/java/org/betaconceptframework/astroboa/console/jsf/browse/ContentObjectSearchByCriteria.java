@@ -36,9 +36,9 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -821,11 +821,11 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 
 				criterionWrapper.setPropertyLocalizedLabel(draggedDefinitionNode.getDescription());
 				
-				if (draggedDefinitionNode.getCmsDefinition() instanceof TopicPropertyDefinition){
-					criterionWrapper.setAcceptedTaxonomies(((TopicPropertyDefinition)draggedDefinitionNode.getCmsDefinition()).getAcceptedTaxonomies());
+				if (draggedDefinitionNode.getCmsDefinition() instanceof TopicReferencePropertyDefinition){
+					criterionWrapper.setAcceptedTaxonomies(((TopicReferencePropertyDefinition)draggedDefinitionNode.getCmsDefinition()).getAcceptedTaxonomies());
 				}
-				else if (draggedDefinitionNode.getCmsDefinition() instanceof ContentObjectPropertyDefinition){
-					criterionWrapper.setAcceptedContentTypes(((ContentObjectPropertyDefinition)draggedDefinitionNode.getCmsDefinition()).getExpandedAcceptedContentTypes());
+				else if (draggedDefinitionNode.getCmsDefinition() instanceof ObjectReferencePropertyDefinition){
+					criterionWrapper.setAcceptedContentTypes(((ObjectReferencePropertyDefinition)draggedDefinitionNode.getCmsDefinition()).getExpandedAcceptedContentTypes());
 				}
 
 			}

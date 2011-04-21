@@ -370,7 +370,7 @@ public class SimpleCmsPropertyValueWrapper {
 
 
 	public String getLocalizedLabelForCurrentLocaleForContentObjectTypeValue(){
-		if (simpleCmsProperty != null && simpleCmsProperty.getValueType() == ValueType.ContentObject){
+		if (simpleCmsProperty != null && simpleCmsProperty.getValueType() == ValueType.ObjectReference){
 			Object contentObject = getValue();
 
 			if (contentObject != null){

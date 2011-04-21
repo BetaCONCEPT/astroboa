@@ -44,6 +44,7 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsNonUniqueContentObjectSystemNameException;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -1332,7 +1333,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 
 			// check if the new tag is already in contentObject subject. Remember that the new tags are saved with the object and are not yet in the list of user tags, so the above check is not enough 
-			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
+			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
 					newTagLabel) != null) {
 				logger.warn("The user tag is already in content object subject."); 
 				JSFUtilities.addMessage(null, "content.object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
@@ -1344,7 +1345,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			topicService.saveTopic(newUserTag);
 
 			//Attach tag to content object
-			((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(newUserTag); 
+			((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(newUserTag); 
 
 			// reset tag value
 			newTagLabel = null;
@@ -1365,7 +1366,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		Topic selectedLoggedInUserTag = cmsUtilities.findTopicInTopicListByTopicId(loggedInRepositoryUser.getRepositoryUser().getFolksonomy().getRootTopics(), selectedLoggedInUserTagId);
 		if (selectedLoggedInUserTag != null) {
 			//	check if the selected tag is already in contentObject subject 
-			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
+			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
 					selectedLoggedInUserTag.getLocalizedLabelForCurrentLocale()) != null) {
 				logger.warn("The selected tag is already in content object subject."); 
 				JSFUtilities.addMessage(null, "content.object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
@@ -1373,7 +1374,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 
 			// if we reached this point everything is ok. Let proceed to add the selected tag
-			((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(selectedLoggedInUserTag); 
+			((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(selectedLoggedInUserTag); 
 		}
 		else {
 			logger.error("Some strange problem occured. Selected tag is not present in logged in user Tags List (loggedInUserTags)"); 
@@ -1434,7 +1435,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		}
 
 		//Load existing subject topics
-		List<Topic> subjectTopics= ((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(); 
+		List<Topic> subjectTopics= ((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(); 
 
 		String selectedTopicId = droppedTopic.getId();
 
@@ -1449,7 +1450,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		}
 
 		if (!topicExists) {
-			((TopicProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topicTreeNode.getTopic()); 
+			((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topicTreeNode.getTopic()); 
 
 			JSFUtilities.addMessage(null, "content.object.edit.topic.added.to.content.object", null , FacesMessage.SEVERITY_INFO); 
 

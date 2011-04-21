@@ -36,9 +36,9 @@ import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
@@ -295,7 +295,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 		switch (cmsPropertyDefinition.getValueType()) {
 		case ContentType:
-			logger.warn("Found Cms property of type 'ContentType' inside complex cms property "+ editedComplexCmsProperty.getFullPath()); 
+			logger.warn("Found Cms property of type '"+ValueType.ContentType+"' inside complex cms property "+ editedComplexCmsProperty.getFullPath()); 
 			break;
 		case Complex:{
 
@@ -390,10 +390,10 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 			if (simpleCmsProperty == null)
 				logger.warn("SimpleCmsProperty "+ cmsPropertyDefinition.getName() + " does not exist in complex cms property "+ editedComplexCmsProperty.getFullPath()); 
 			else{
-				if (cmsPropertyDefinition.getValueType() == ValueType.Topic){
+				if (cmsPropertyDefinition.getValueType() == ValueType.TopicReference){
 					editedCmsProperties.add(
 							new TopicPropertyWrapper(
-									(TopicProperty)simpleCmsProperty, 
+									(TopicReferenceProperty)simpleCmsProperty, 
 									CmsCriteriaFactory.newTopicCriteria(),
 									cmsPropertyDefinition, 
 									parentPath, 
@@ -402,10 +402,10 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									cmsRepositoryEntityFactory,
 									editedContentObject));
 				}
-				else if (cmsPropertyDefinition.getValueType() == ValueType.ContentObject){
+				else if (cmsPropertyDefinition.getValueType() == ValueType.ObjectReference){
 					editedCmsProperties.add(
 							new ContentObjectPropertyWrapper(
-									(ContentObjectProperty)simpleCmsProperty, 
+									(ObjectReferenceProperty)simpleCmsProperty, 
 									CmsCriteriaFactory.newContentObjectCriteria(),
 									cmsPropertyDefinition, 
 									parentPath, 
@@ -454,7 +454,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 		
 		switch (childPropertyDefinition.getValueType()) {
 		case ContentType:
-			logger.warn("Found Cms property of type 'ContentType' inside complex cms property "+ editedComplexCmsProperty.getFullPath()); 
+			logger.warn("Found Cms property of type '"+ValueType.ContentType+"' inside complex cms property "+ editedComplexCmsProperty.getFullPath()); 
 			break;
 		case Complex:{
 
@@ -488,10 +488,10 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 			if (simpleCmsProperty == null)
 				logger.warn("SimpleCmsProperty "+ childPropertyDefinition.getName() + " does not exist in complex cms property "+ editedComplexCmsProperty.getFullPath()); 
 			else{
-				if (childPropertyDefinition.getValueType() == ValueType.Topic){
+				if (childPropertyDefinition.getValueType() == ValueType.TopicReference){
 					singleValueComplexPropertyChildPropertyWrappers.add(
 							new TopicPropertyWrapper(
-									(TopicProperty)simpleCmsProperty, 
+									(TopicReferenceProperty)simpleCmsProperty, 
 									CmsCriteriaFactory.newTopicCriteria(),
 									childPropertyDefinition, 
 									parentPath, 
@@ -500,10 +500,10 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									cmsRepositoryEntityFactory,
 									editedContentObject));
 				}
-				else if (childPropertyDefinition.getValueType() == ValueType.ContentObject){
+				else if (childPropertyDefinition.getValueType() == ValueType.ObjectReference){
 					singleValueComplexPropertyChildPropertyWrappers.add(
 							new ContentObjectPropertyWrapper(
-									(ContentObjectProperty)simpleCmsProperty, 
+									(ObjectReferenceProperty)simpleCmsProperty, 
 									CmsCriteriaFactory.newContentObjectCriteria(),
 									childPropertyDefinition, 
 									parentPath, 

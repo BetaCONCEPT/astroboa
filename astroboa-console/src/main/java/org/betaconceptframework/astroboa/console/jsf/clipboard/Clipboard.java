@@ -162,7 +162,7 @@ public class Clipboard {
 			contentObjectItem.setTypeLabel(contentObjectTypeLocalized);
 			
 			if (contentObjectType == null){
-				contentObjectItem.setType(ValueType.ContentObject.toString());
+				contentObjectItem.setType(ValueType.ObjectReference.toString());
 			}
 			else{
 				contentObjectItem.setType(contentObjectType);

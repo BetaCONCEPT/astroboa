@@ -27,11 +27,11 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -53,7 +53,7 @@ import org.richfaces.event.DropEvent;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<ContentObjectProperty>{
+public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<ObjectReferenceProperty>{
 
 	
 	private int indexOfValueToBeDeleted = -1;
@@ -68,7 +68,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 	private DefinitionService definitionService;
 	private String localizedLabelsForAcceptedTypes = null;
 
-	public ContentObjectPropertyWrapper(ContentObjectProperty contentObjectProperty,
+	public ContentObjectPropertyWrapper(ObjectReferenceProperty contentObjectProperty,
 			ContentObjectCriteria contentObjectCriteria,
 			CmsPropertyDefinition cmsPropertyDefinition,
 			String parentCmsPropertyPath, 
@@ -89,14 +89,14 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 		this.contentObjectCriteria = contentObjectCriteria;
 
 		if (getCmsPropertyDefinition() != null)
-			acceptedContentTypes = ((ContentObjectPropertyDefinition)getCmsPropertyDefinition()).getExpandedAcceptedContentTypes();
+			acceptedContentTypes = ((ObjectReferencePropertyDefinition)getCmsPropertyDefinition()).getExpandedAcceptedContentTypes();
 
 		if (CollectionUtils.isEmpty(acceptedContentTypes)){
 			//Load all content object types
 			acceptedContentTypes = definitionService.getContentObjectTypes();
 			//Add a default
 			if (acceptedContentTypes != null){
-				acceptedContentTypes.add(ValueType.ContentObject.toString());
+				acceptedContentTypes.add(ValueType.ObjectReference.toString());
 			}
 		}
 
@@ -199,7 +199,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 
 		//Only content object is supported
 		if (getCmsPropertyDefinition() != null && 
-				getCmsPropertyDefinition() instanceof ContentObjectPropertyDefinition && 
+				getCmsPropertyDefinition() instanceof ObjectReferencePropertyDefinition && 
 				StringUtils.isNotBlank(dragType)){ //Drag type not used for now
 
 			//A Content Object has been dragged
@@ -302,7 +302,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 				List<String> localizedLabels = new ArrayList<String>();
 
 				for (String acceptedContentType : acceptedContentTypes){
-					if (!ValueType.ContentObject.toString().equals(acceptedContentType)){
+					if (!ValueType.ObjectReference.toString().equals(acceptedContentType)){
 						ContentObjectTypeDefinition typeDefinition = definitionService.getContentObjectTypeDefinition(acceptedContentType);
 
 						if (typeDefinition == null){

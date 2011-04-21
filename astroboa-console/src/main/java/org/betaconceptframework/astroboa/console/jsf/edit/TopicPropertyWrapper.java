@@ -29,9 +29,9 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
@@ -53,7 +53,7 @@ import org.richfaces.event.DropEvent;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<TopicProperty>{
+public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<TopicReferenceProperty>{
 
 	private int indexOfValueToBeDeleted = -1;
 
@@ -66,7 +66,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 	
 	private String localizedLabelsForAcceptedTaxonomies;
 
-	public TopicPropertyWrapper(TopicProperty topicProperty,
+	public TopicPropertyWrapper(TopicReferenceProperty topicProperty,
 			TopicCriteria topicCriteria,
 			CmsPropertyDefinition cmsPropertyDefinition,
 			String parentCmsPropertyPath, 
@@ -83,7 +83,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 		this.topicCriteria = topicCriteria;
 
 		if (getCmsPropertyDefinition() != null){
-			acceptedTaxonomies = ((TopicPropertyDefinition)getCmsPropertyDefinition()).getAcceptedTaxonomies();
+			acceptedTaxonomies = ((TopicReferencePropertyDefinition)getCmsPropertyDefinition()).getAcceptedTaxonomies();
 			
 			if (CollectionUtils.isNotEmpty(acceptedTaxonomies)){
 				

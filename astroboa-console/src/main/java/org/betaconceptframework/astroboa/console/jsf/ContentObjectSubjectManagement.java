@@ -46,7 +46,7 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
@@ -120,7 +120,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 			}
 			
 			// if we have reached this point everything is ok. Let proceed to add and save the new  tag
-			((TopicProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues().add(newUserTag);
+			((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues().add(newUserTag);
 			saveContentObjectUpdatedTags(selectedContentObjectToTag);
 			setNewTagLabel(null);
 			
@@ -158,7 +158,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 			return null;
 		}
 		// check if the selected tag is already in contentObject subject 
-		if (getCmsUtilities().findTopicInTopicListByLocalizedTopicLabel(((TopicProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues(), 
+		if (getCmsUtilities().findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues(), 
 				selectedLoggedInUserTag.getLocalizedLabelForCurrentLocale()) != null) {
 			logger.warn("The selected tag is already in content object subject.");
 			JSFUtilities.addMessage(null, "Η ετικέτα που επιλέξατε υπάρχει ήδη στις επιλεγμένες ετικέτες για αυτό το αντικείμενο.", FacesMessage.SEVERITY_WARN);
@@ -166,7 +166,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 		}
 		
 		// if we reached this point everything is ok. Let proceed to add and save the selected tag
-		((TopicProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).addSimpleTypeValue(selectedLoggedInUserTag);
+		((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).addSimpleTypeValue(selectedLoggedInUserTag);
 		saveContentObjectUpdatedTags(selectedContentObjectToTag);
 		
 		setSelectedLoggedInUserTagId(null);
@@ -210,7 +210,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 			
 			// reload the tags and versions of the newly tagged content object into the existing content object list (returnedContentObjects) in order to refresh changes (i.e. get topic ids and new version information)
 			ContentObject reloadedContentObject = getContentService().getContentObjectByIdAndLocale(getSelectedContentObjectIdToTag(), JSFUtilities.getLocaleAsString(), null);
-			((TopicProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).setSimpleTypeValues(((TopicProperty)reloadedContentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
+			((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).setSimpleTypeValues(((TopicReferenceProperty)reloadedContentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
 			((StringProperty)selectedContentObjectToTag.getCmsProperty("profile.versions")).setSimpleTypeValues(((StringProperty)reloadedContentObject.getCmsProperty("profile.versions")).getSimpleTypeValues());
 			((StringProperty)selectedContentObjectToTag.getCmsProperty("profile.hasVersion")).setSimpleTypeValue(((StringProperty)reloadedContentObject.getCmsProperty("profile.hasVersion")).getSimpleTypeValue());
 			

@@ -304,7 +304,7 @@ public class ExcelSheetBuilder{
 			}
 			break;
 		}
-		case Topic: {
+		case TopicReference: {
 			
 			String cellValue = getTopicPath((Topic) value, locale);
 			row.addValueAndStyleForPath(propertyPath, creationHelper.createRichTextString(cellValue), stringPropertyValueCellStyle);
@@ -321,7 +321,7 @@ public class ExcelSheetBuilder{
 			row.addValueAndStyleForPath(propertyPath, (Long) value, integerPropertyValueCellStyle);
 			break;
 		}
-		case ContentObject: {
+		case ObjectReference: {
 			
 			String cellValue = getContentObjectTitle((ContentObject) value, locale);
 			
