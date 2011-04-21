@@ -30,6 +30,7 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 
 
 /**
@@ -37,7 +38,7 @@ import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefin
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public final class TopicPropertyDefinitionImpl extends
+public final class TopicReferencePropertyDefinitionImpl extends
 		SimpleCmsPropertyDefinitionImpl<Topic> implements
 		TopicPropertyDefinition, Serializable {
 
@@ -46,7 +47,7 @@ public final class TopicPropertyDefinitionImpl extends
 	 */
 	private static final long serialVersionUID = 6939264578698663366L;
 
-	public TopicPropertyDefinitionImpl(QName qualifiedName, Localization description,
+	public TopicReferencePropertyDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory, Integer order, String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
@@ -62,7 +63,7 @@ public final class TopicPropertyDefinitionImpl extends
 	private List<String> acceptedTaxonomies;
 	
 	public ValueType getValueType() {
-		return ValueType.Topic;
+		return ValueType.TopicReference;
 	}
 
 	@Override
@@ -71,10 +72,10 @@ public final class TopicPropertyDefinitionImpl extends
 	}
 
 	@Override
-	public TopicPropertyDefinition clone(
+	public TopicReferencePropertyDefinition clone(
 			ComplexCmsPropertyDefinition parentDefinition) {
 		
-		return new TopicPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
+		return new TopicReferencePropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
 				getRepositoryObjectRestriction(), acceptedTaxonomies);
