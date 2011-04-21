@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+i * Copyright (C) 2005-2011 BetaCONCEPT LP.
  *
  * This file is part of Astroboa.
  *
@@ -34,13 +34,14 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
+import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public final class ContentObjectPropertyDefinitionImpl extends SimpleCmsPropertyDefinitionImpl<ContentObject> implements ContentObjectPropertyDefinition, Serializable{
+public final class ObjectReferencePropertyDefinitionImpl extends SimpleCmsPropertyDefinitionImpl<ContentObject> implements ContentObjectPropertyDefinition, Serializable{
 
 
 	/**
@@ -63,7 +64,7 @@ public final class ContentObjectPropertyDefinitionImpl extends SimpleCmsProperty
 	 */
 	private Set<String> expandedAcceptedContentTypes;
 
-	public ContentObjectPropertyDefinitionImpl(QName qualifiedName, Localization description,
+	public ObjectReferencePropertyDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory, Integer order, String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
@@ -84,7 +85,7 @@ public final class ContentObjectPropertyDefinitionImpl extends SimpleCmsProperty
 	}
 
 	public ValueType getValueType() {
-		return ValueType.ContentObject;
+		return ValueType.ObjectReference;
 	}
 
 	@Override
@@ -93,10 +94,10 @@ public final class ContentObjectPropertyDefinitionImpl extends SimpleCmsProperty
 	}
 
 	@Override
-	public ContentObjectPropertyDefinition clone(
+	public ObjectReferencePropertyDefinition clone(
 			ComplexCmsPropertyDefinition parentDefinition) {
 		
-		ContentObjectPropertyDefinitionImpl cloneDefinition = new ContentObjectPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
+		ObjectReferencePropertyDefinitionImpl cloneDefinition = new ObjectReferencePropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
 				getRepositoryObjectRestriction(), acceptedContentTypes);
