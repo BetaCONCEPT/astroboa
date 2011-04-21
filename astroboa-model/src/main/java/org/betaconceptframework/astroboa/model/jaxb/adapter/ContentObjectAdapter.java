@@ -43,15 +43,13 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
-import org.betaconceptframework.astroboa.api.model.Space;
-import org.betaconceptframework.astroboa.api.model.SpaceProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
@@ -64,7 +62,6 @@ import org.betaconceptframework.astroboa.model.jaxb.type.CmsPropertyType;
 import org.betaconceptframework.astroboa.model.jaxb.type.ComplexCmsPropertyType;
 import org.betaconceptframework.astroboa.model.jaxb.type.ContentObjectType;
 import org.betaconceptframework.astroboa.model.jaxb.type.SimpleCmsPropertyType;
-import org.betaconceptframework.astroboa.model.jaxb.type.SpaceType;
 import org.betaconceptframework.astroboa.model.jaxb.type.TopicType;
 import org.betaconceptframework.astroboa.model.jaxb.visitor.ContentObjectMarshalVisitor;
 import org.betaconceptframework.astroboa.util.SchemaUtils;
@@ -378,7 +375,7 @@ public class ContentObjectAdapter extends XmlAdapter<ContentObjectType, ContentO
 
 			break;
 
-		case ContentObject:
+		case ObjectReference:
 
 			if (! (cmsPropertyType instanceof ContentObjectType)){
 				logger.warn("CmsPropertyType {} is not a content object type where as corresponding cms property is a content object property {}. Unmarhsalling will ignore this property",
@@ -407,16 +404,10 @@ public class ContentObjectAdapter extends XmlAdapter<ContentObjectType, ContentO
 				}
 			}*/
 			
-			((ContentObjectProperty)cmsProperty).addSimpleTypeValue(contentObject);
+			((ObjectReferenceProperty)cmsProperty).addSimpleTypeValue(contentObject);
 
 			break;
-		case RepositoryUser:
-			/*RepositoryUser repositoryUser = cmsRepositoryEntityConverter.unMarshallAnotherCmsRepositoryEntity(reader, RepositoryUser.class, context, repositoryUserConverter);
-
-			((RepositoryUserProperty)cmsProperty).addSimpleTypeValue(repositoryUser);
-			break;*/
-			break;
-		case Topic:
+		case TopicReference:
 
 			if (! (cmsPropertyType instanceof TopicType)){
 				logger.warn("CmsPropertyType {} is not a topic property type where as corresponding cms property is a topic property {}. Unmarhsalling will ignore this property",
@@ -433,29 +424,9 @@ public class ContentObjectAdapter extends XmlAdapter<ContentObjectType, ContentO
 				" topic cmsIdentifier or  topic name");
 			}
 
-			((TopicProperty)cmsProperty).addSimpleTypeValue(topic);
+			((TopicReferenceProperty)cmsProperty).addSimpleTypeValue(topic);
 
 			break;
-		case Space:
-
-			if (! (cmsPropertyType instanceof SpaceType)){
-				logger.warn("CmsPropertyType {} is not a topic property type where as corresponding cms property is a topic property {}. Unmarhsalling will ignore this property",
-						cmsPropertyType.getQname().toString(), cmsProperty.getFullPath());
-				return;
-			}
-
-
-			//Further unmarshall spaceType to SpaceImpl
-			Space space = getSpaceAdapterFromUnmarshaller().unmarshal((SpaceType)cmsPropertyType);
-
-			if (StringUtils.isBlank(space.getId()) && StringUtils.isBlank(space.getName())){
-				throw new CmsException("Unable to further unmarshal element "+ ((SpaceType)cmsPropertyType).getName().toString()+ " Found no " +
-				" space cmsIdentifier or  topic name");
-			}
-
-			((SpaceProperty)cmsProperty).addSimpleTypeValue(space);
-			break;
-
 		default:
 			throw new CmsException("Unsupported ValueType "+cmsProperty.getValueType()+" for unmarshalling ");
 		}
