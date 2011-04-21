@@ -272,7 +272,7 @@ public class ContentObjectCriteriaImpl extends CmsCriteriaImpl implements Conten
 
 	public void addSystemNameContainsCriterion(String systemName) {
 		if (StringUtils.isNotBlank(systemName)){
-			addCriterion(CriterionFactory.simpleCmsPropertycontains(CmsBuiltInItem.SystemName.getJcrName(), systemName));
+			addCriterion(CriterionFactory.contains(CmsBuiltInItem.SystemName.getJcrName(), systemName));
 		}
 
 	}
