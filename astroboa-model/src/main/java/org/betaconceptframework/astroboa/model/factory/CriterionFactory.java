@@ -27,7 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
@@ -1146,7 +1146,7 @@ public class CriterionFactory  {
 		return topicReferenceCriterion;
 	}
 	/**
-	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ContentObjectProperty}) which 
+	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ObjectReferenceProperty}) which 
 	 * refer to a {@link ContentObject}.
 	 * 
 	 * This is a useful method when searching for {@link ContentObject contentObjects} which refer to a specific
@@ -1195,7 +1195,7 @@ public class CriterionFactory  {
 		return contentObjectReferenceCriterion;
 	}
 	/**
-	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ContentObjectProperty}) which 
+	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ObjectReferenceProperty}) which 
 	 * refer to a {@link ContentObject}.
 	 * 
 	 * This is a useful method when searching for {@link ContentObject contentObjects} which refer to a specific
@@ -1222,7 +1222,7 @@ public class CriterionFactory  {
 	}
 	
 	/**
-	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ContentObjectProperty}) which 
+	 * Criterion used to match all content object properties of type {@link ContentObject} ( {@link ObjectReferenceProperty}) which 
 	 * refer to a {@link ContentObject}.
 	 * 
 	 * This is a useful method when searching for {@link ContentObject contentObjects} which refer to a specific
