@@ -40,10 +40,8 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
-import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
@@ -321,8 +319,8 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 				newProperty = new ComplexCmsPropertyImpl();
 				break;
 			}
-			case ContentObject:
-				newProperty = new ContentObjectPropertyImpl();
+			case ObjectReference:
+				newProperty = new ObjectReferencePropertyImpl();
 				break;
 			case Double:
 				newProperty = new DoublePropertyImpl();
@@ -330,17 +328,11 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 			case Long:
 				newProperty = new LongPropertyImpl();
 				break;
-			case RepositoryUser:
-				newProperty = new RepositoryUserPropertyImpl();
-				break;
-			case Space:
-				newProperty = new SpacePropertyImpl();
-				break;
 			case String:
 				newProperty = new StringPropertyImpl();
 				break;
-			case Topic:
-				newProperty = new TopicPropertyImpl();
+			case TopicReference:
+				newProperty = new TopicReferencePropertyImpl();
 				break;
 
 			default:
@@ -1125,8 +1117,8 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 					break;
 				}
 				else{
-					if (property.getValueType() == ValueType.ContentObject){
-						if (((ContentObjectProperty)property).hasNoValues()){
+					if (property.getValueType() == ValueType.ObjectReference){
+						if (((ObjectReferenceProperty)property).hasNoValues()){
 							LoggerFactory.getLogger(getClass()).debug("Property path {} which is responsible to " +
 									" provide label is invalid. Reached path {} but cannot continue to path {} as this path corresponds to a " +
 											" content object property which has no values", 
@@ -1134,7 +1126,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 							return null;
 						}
 						else{
-							property =  ((ContentObjectProperty)property).getFirstValue().getCmsProperty(path);
+							property =  ((ObjectReferenceProperty)property).getFirstValue().getCmsProperty(path);
 						}
 					}
 					else if (property.getValueType() == ValueType.Complex){
@@ -1193,7 +1185,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 				return ((BinaryChannel)value).getName();
 			}
 
-		case ContentObject:
+		case ObjectReference:
 			if (((ContentObject)value).getComplexCmsRootProperty().isChildPropertyDefined("profile.title")){
 				StringProperty profileTitle = (StringProperty)((ContentObject)value).getCmsProperty("profile.title");
 
@@ -1211,7 +1203,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 			
 			return localizedLabelForLocale;
 
-		case Topic:{
+		case TopicReference:{
 			
 			String topicLocalizedLabelForLocale = ((Topic)value).getLocalizedLabelForLocale(locale);
 			
@@ -1222,22 +1214,6 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 			return topicLocalizedLabelForLocale;
 		}
 
-		case Space: {
-			String spaceLocalizedLabelForLocale = ((Space)value).getLocalizedLabelForLocale(locale);
-			
-			if (StringUtils.isEmpty(spaceLocalizedLabelForLocale)){
-				return ((Space)value).getName();
-			}
-			
-			return spaceLocalizedLabelForLocale;
-		}
-
-		case RepositoryUser:
-			if (((RepositoryUser)value).getLabel() != null){
-				return ((RepositoryUser)value).getLabel();
-			}
-
-			return ((RepositoryUser)value).getExternalId();
 		default:
 			return null;
 		}
