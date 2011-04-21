@@ -45,9 +45,7 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
-import org.betaconceptframework.astroboa.api.model.RepositoryUserProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
@@ -73,14 +71,12 @@ import org.betaconceptframework.astroboa.model.impl.BooleanPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.CalendarPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.CmsRepositoryEntityImpl;
 import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
-import org.betaconceptframework.astroboa.model.impl.ContentObjectPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.DoublePropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.LazyCmsProperty;
 import org.betaconceptframework.astroboa.model.impl.LongPropertyImpl;
-import org.betaconceptframework.astroboa.model.impl.RepositoryUserPropertyImpl;
-import org.betaconceptframework.astroboa.model.impl.SpacePropertyImpl;
+import org.betaconceptframework.astroboa.model.impl.ObjectReferencePropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.StringPropertyImpl;
-import org.betaconceptframework.astroboa.model.impl.TopicPropertyImpl;
+import org.betaconceptframework.astroboa.model.impl.TopicReferencePropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.CmsReadOnlyItem;
@@ -220,8 +216,8 @@ public class LazyComplexCmsPropertyLoader {
 			newProperty = new ComplexCmsPropertyImpl();
 			break;
 		}
-		case ContentObject:
-			newProperty = new ContentObjectPropertyImpl();
+		case ObjectReference:
+			newProperty = new ObjectReferencePropertyImpl();
 			break;
 		case Double:
 			newProperty = new DoublePropertyImpl();
@@ -229,17 +225,11 @@ public class LazyComplexCmsPropertyLoader {
 		case Long:
 			newProperty = new LongPropertyImpl();
 			break;
-		case RepositoryUser:
-			newProperty = new RepositoryUserPropertyImpl();
-			break;
-		case Space:
-			newProperty = new SpacePropertyImpl();
-			break;
 		case String:
 			newProperty = new StringPropertyImpl();
 			break;
-		case Topic:
-			newProperty = new TopicPropertyImpl();
+		case TopicReference:
+			newProperty = new TopicReferencePropertyImpl();
 			break;
 
 		default:
@@ -630,16 +620,10 @@ public class LazyComplexCmsPropertyLoader {
 				}
 			}
 			break;
-		case ContentObject:
-			renderContentObject((ContentObjectProperty)simpleProperty, values,cachedCmsRepositoryEntities, session, renderProperties);
+		case ObjectReference:
+			renderContentObject((ObjectReferenceProperty)simpleProperty, values,cachedCmsRepositoryEntities, session, renderProperties);
 			break;
-		case RepositoryUser:
-			renderRepositoryUser((RepositoryUserProperty)simpleProperty, values, cachedCmsRepositoryEntities, session, renderProperties);
-			break;
-		case Space:
-			renderSpace();
-			break;
-		case Topic: 
+		case TopicReference: 
 			renderTopic(values, session, cachedCmsRepositoryEntities, renderProperties, simpleProperty);
 			break;
 		case Binary:
@@ -682,33 +666,7 @@ public class LazyComplexCmsPropertyLoader {
 
 	}
 
-	private void renderSpace() {
-
-
-	}
-
-	private void renderRepositoryUser(RepositoryUserProperty repositoryUserProperty, List<Value> values, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws   RepositoryException {
-
-
-		for (Value repUserValue : values)
-		{
-//			Do not render RepositoryUser if it has already been rendered
-			RepositoryUser repUser = null;
-			String repUserIdAsString = repUserValue.getString();
-			if (cachedCmsRepositoryEntities.containsKey(repUserIdAsString))
-				repUser = (RepositoryUser)cachedCmsRepositoryEntities.get(repUserIdAsString);
-			else
-			{
-				repUser = repositoryUserRenderer.renderRepositoryUserNode(repUserValue.getString(), renderProperties, session, cachedCmsRepositoryEntities);
-				cachedCmsRepositoryEntities.put(repUserIdAsString, repUser);
-			}
-
-			repositoryUserProperty.addSimpleTypeValue(repUser);
-		}
-
-	}
-
-	private void renderContentObject(ContentObjectProperty contentObjectProperty, List<Value> values, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws RepositoryException {
+	private void renderContentObject(ObjectReferenceProperty contentObjectProperty, List<Value> values, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws RepositoryException {
 
 		Map<String, ContentObjectTypeDefinition> cachedContentObjectTypeDefinitions = new HashMap<String, ContentObjectTypeDefinition>();
 

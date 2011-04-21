@@ -39,23 +39,21 @@ import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.BinaryPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.TopicDao;
 import org.betaconceptframework.astroboa.model.impl.BinaryPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.ItemQName;
-import org.betaconceptframework.astroboa.model.impl.RepositoryUserPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
 import org.betaconceptframework.astroboa.model.impl.SimpleCmsPropertyImpl;
-import org.betaconceptframework.astroboa.model.impl.TopicPropertyImpl;
+import org.betaconceptframework.astroboa.model.impl.TopicReferencePropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.DefinitionReservedName;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
@@ -157,13 +155,11 @@ public class PopulateSimpleCmsProperty {
 			switch (propertyDefinition.getValueType()) {
 			case Binary:
 			case Boolean:
-			case ContentObject:
+			case ObjectReference:
 			case Date:
 			case Double:
 			case Long:
-			case RepositoryUser:
-			case Topic:
-			case Space:
+			case TopicReference:
 			case String:
 				//If property contains more than one value a MultipleOccurence exception will be thrown
 				//Otherwise nothing will happen
@@ -237,16 +233,10 @@ public class PopulateSimpleCmsProperty {
 		case Long:
 			populateSimpleProperty(valueFactory, definitionValueType, propertyAsItem);
 			break;
-		case ContentObject:
+		case ObjectReference:
 			populatePropertyAsContentObject(propertyAsItem);
 			break;
-		case RepositoryUser:
-			populatePropertyAsRepositoryUser(propertyAsItem);
-			break;
-		case Space:
-			populatePropertyAsSpace();
-			break;
-		case Topic:
+		case TopicReference:
 			populatePropertyAsTopic(propertyAsItem);
 			break;
 		case Binary:{
@@ -326,10 +316,10 @@ public class PopulateSimpleCmsProperty {
 
 		if (simpleCmsPropertyToBeSaved.hasValues()){
 
-			List<Topic> topics = ((TopicPropertyImpl)simpleCmsPropertyToBeSaved).getValues();
+			List<Topic> topics = ((TopicReferencePropertyImpl)simpleCmsPropertyToBeSaved).getValues();
 
 			if (CollectionUtils.isNotEmpty(topics)){
-				List<String> acceptedTaxonomies = ((TopicPropertyDefinition)propertyDefinition).getAcceptedTaxonomies();
+				List<String> acceptedTaxonomies = ((TopicReferencePropertyDefinition)propertyDefinition).getAcceptedTaxonomies();
 
 				boolean valuesAreRestrictedToSpecificTaxonomies = CollectionUtils.isNotEmpty(acceptedTaxonomies);
 
@@ -465,23 +455,6 @@ public class PopulateSimpleCmsProperty {
 
 			return null;
 		}
-	}
-
-	private void populatePropertyAsSpace() {
-
-
-	}
-
-	@SuppressWarnings("unchecked")
-	private void populatePropertyAsRepositoryUser(ItemQName propertyAsItem) throws RepositoryException {
-
-
-		EntityAssociationUpdateHelper repositoryUserAssociationUpdateHelper = createDefaultEntityAssociationUpdateHepler(propertyAsItem);
-
-		List<RepositoryUser> repositoryUsersToBeSaved = ((RepositoryUserPropertyImpl)simpleCmsPropertyToBeSaved).getValues();
-
-		repositoryUserAssociationUpdateHelper.setValuesToBeAdded(repositoryUsersToBeSaved);
-		repositoryUserAssociationUpdateHelper.update();
 	}
 
 	private void populatePropertyAsContentObject(ItemQName propertyAsItem) throws RepositoryException {

@@ -158,10 +158,8 @@ public class JcrValueUtils {
 
 			return getJcrLong((Long)value, valueFactory);
 		case String:
-		case ContentObject:
-		case Space:
-		case Topic:
-		case RepositoryUser:
+		case ObjectReference:
+		case TopicReference:
 			return getJcrString((String)value, valueFactory);
 
 		default:

@@ -29,7 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BooleanProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -248,7 +248,7 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		if (personObject != null){
 
-			ContentObjectProperty rolesProperty = (ContentObjectProperty) personObject.getCmsProperty("personAuthorization.role");
+			ObjectReferenceProperty rolesProperty = (ObjectReferenceProperty) personObject.getCmsProperty("personAuthorization.role");
 
 			if (rolesProperty != null && rolesProperty.hasValues()){
 
@@ -304,7 +304,7 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		if (personObject != null){
 
-			ContentObjectProperty rolesProperty = (ContentObjectProperty) personObject.getCmsProperty("personAuthorization.role");
+			ObjectReferenceProperty rolesProperty = (ObjectReferenceProperty) personObject.getCmsProperty("personAuthorization.role");
 
 			if (rolesProperty != null && rolesProperty.hasValues()){
 
@@ -326,7 +326,7 @@ public class IdentityStoreImpl implements IdentityStore{
 		if (impliedRoles.add(roleName)){
 
 			//Continue further only if role does not already exist in the list
-			ContentObjectProperty isMemberOfProperty = (ContentObjectProperty) roleObject.getCmsProperty("isMemberOf");
+			ObjectReferenceProperty isMemberOfProperty = (ObjectReferenceProperty) roleObject.getCmsProperty("isMemberOf");
 
 			if (isMemberOfProperty.hasValues()){
 
@@ -347,7 +347,7 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		if (roleObject != null){
 
-			ContentObjectProperty roleGroupsProperty = (ContentObjectProperty) roleObject.getCmsProperty("isMemberOf");
+			ObjectReferenceProperty roleGroupsProperty = (ObjectReferenceProperty) roleObject.getCmsProperty("isMemberOf");
 
 			if (roleGroupsProperty != null && roleGroupsProperty.hasValues()){
 
@@ -483,7 +483,7 @@ public class IdentityStoreImpl implements IdentityStore{
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personType");
 
 		if (filter != null){
-			contentObjectCriteria.addCriterion(CriterionFactory.simpleCmsPropertycontains("personAuthentication.username", "*"+filter+"*"));
+			contentObjectCriteria.addCriterion(CriterionFactory.contains("personAuthentication.username", "*"+filter+"*"));
 		}
 
 		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);

@@ -28,8 +28,6 @@ import javax.jcr.Value;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
-import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
@@ -90,16 +88,10 @@ public class SimpleCmsPropertyRenderer {
 		case Long:
 			return value.getLong();
 
-		case ContentObject:
+		case ObjectReference:
 			return renderContentObject(value,cachedCmsRepositoryEntities, cachedContentObjectTypeDefinitions, session, renderProperties);
 
-		case RepositoryUser:
-			return renderRepositoryUser(value, cachedCmsRepositoryEntities, session, renderProperties);
-
-		case Space:
-			return renderSpace();
-
-		case Topic: 
+		case TopicReference: 
 			return renderTopic(value, session, cachedCmsRepositoryEntities, renderProperties);
 
 		case Binary:
@@ -141,33 +133,6 @@ public class SimpleCmsPropertyRenderer {
 		}
 	}
 
-	private Space renderSpace() 
-	{
-		return null;
-	}
-
-	public RepositoryUser renderRepositoryUser(Value value, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws   RepositoryException {
-
-		//			Do not render RepositoryUser if it has already been rendered
-		String repUserIdAsString = value.getString();
-		if (cachedCmsRepositoryEntities != null && cachedCmsRepositoryEntities.containsKey(repUserIdAsString))
-		{
-			return (RepositoryUser)cachedCmsRepositoryEntities.get(repUserIdAsString);
-		}
-		else
-		{
-			RepositoryUser repUser = repositoryUserRenderer.renderRepositoryUserNode(repUserIdAsString, renderProperties, session, cachedCmsRepositoryEntities);
-
-			if (cachedCmsRepositoryEntities != null)
-			{
-				cachedCmsRepositoryEntities.put(repUserIdAsString, repUser);
-			}
-
-			return repUser;
-		}
-
-	}
-	
 	public Topic renderTopic(Value value, Session session, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties) throws   RepositoryException {
 
 		//Do not render Topic if it has already been rendered

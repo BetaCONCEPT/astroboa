@@ -39,7 +39,7 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
@@ -411,11 +411,11 @@ public class TopicUtils {
 						throw new CmsException("Found no topic property definition for "+PropertyPath.createFullPropertyPath(contentObjectTypeName, propertyPath));
 					}
 					
-					if (topicPropertyDefinition.getValueType() != ValueType.Topic){
+					if (topicPropertyDefinition.getValueType() != ValueType.TopicReference){
 						throw new CmsException("Property "+PropertyPath.createFullPropertyPath(contentObjectTypeName, propertyPath)+ " does not correspond to a topic definition "+ topicPropertyDefinition.getFullPath());
 					}
 					
-					final List<String> acceptedTaxonomies = ((TopicPropertyDefinition)topicPropertyDefinition).getAcceptedTaxonomies();
+					final List<String> acceptedTaxonomies = ((TopicReferencePropertyDefinition)topicPropertyDefinition).getAcceptedTaxonomies();
 					
 					if (CollectionUtils.isNotEmpty(acceptedTaxonomies) && ! acceptedTaxonomies.contains(newTaxonomyName)){
 						throw new CmsException("Cannot move topic "+ topic.getName() + " to taxonomy "+ newTaxonomyName + " because topic is referenced by content object "+ contentObjectAssociationToTopic.getReferrerCmsRepositoryEntityId() +

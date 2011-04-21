@@ -31,7 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -165,7 +165,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 					}
 					else{
 						//Role exists. Check to see if it is member of any other role (this is not permitted)
-						ContentObjectProperty isMemberOfProperty = (ContentObjectProperty) roleCmsExternalViewerContentObject.getCmsProperty("isMemberOf");
+						ObjectReferenceProperty isMemberOfProperty = (ObjectReferenceProperty) roleCmsExternalViewerContentObject.getCmsProperty("isMemberOf");
 						
 						if (isMemberOfProperty != null && isMemberOfProperty.hasValues()){
 							logger.warn("Content object "+ roleCmsExternalViewerContentObject.getSystemName() + " which represents "+ CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_EXTERNAL_VIEWER,repositoryId)+ 
@@ -256,7 +256,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 			ContentObject parentRoleObject = rolesPerName.get(parentRoleAffiliation);
 
 			if (parentRoleObject != null && memberRoleObject != null){
-				ContentObjectProperty isMemberOfProperty = (ContentObjectProperty) memberRoleObject.getCmsProperty("isMemberOf");
+				ObjectReferenceProperty isMemberOfProperty = (ObjectReferenceProperty) memberRoleObject.getCmsProperty("isMemberOf");
 				if (isMemberOfProperty.hasNoValues()){
 					isMemberOfProperty.addSimpleTypeValue(parentRoleObject);
 					memberRoleHasBeenUpdated = true;
@@ -378,7 +378,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 				}
 			}
 			
-			ContentObjectProperty systemRoleProperty = (ContentObjectProperty) systemPersonObject.getCmsProperty("personAuthorization.role");
+			ObjectReferenceProperty systemRoleProperty = (ObjectReferenceProperty) systemPersonObject.getCmsProperty("personAuthorization.role");
 
 			systemUpdated = fixRolesForSystemIfBroken(systemRoleProperty, cmsRepositoryId) || systemUpdated;
 
@@ -433,7 +433,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 	}
 
 
-	private boolean fixRolesForSystemIfBroken(ContentObjectProperty systemRoleProperty, String cmsRepositoryId)
+	private boolean fixRolesForSystemIfBroken(ObjectReferenceProperty systemRoleProperty, String cmsRepositoryId)
 	{
 		boolean foundRoleAdmin = false;
 

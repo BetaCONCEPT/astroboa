@@ -35,13 +35,13 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
@@ -99,7 +99,6 @@ public class ImportContentHandler<T> implements ContentHandler{
 	private DatatypeFactory df;
 
 	private Deserializer deserializer;
-
 	
 	public ImportContentHandler(Class<T> resultType, Deserializer deserializer){
 		this(new ImportContext(), resultType, deserializer);
@@ -227,7 +226,6 @@ public class ImportContentHandler<T> implements ContentHandler{
 			return;
 		}
 		
-		
 		if (importResult == null){
 			createRootEntity(uri, localName, atts);
 		}
@@ -236,7 +234,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 			//Queue should not be empty
 			throwExceptionIfQeueIsEmpty(uri, localName);
 			
-			Object currentEntity = cmsRepositoryEntityQueue.peek().getEntity();
+			Object currentEntity = getCurrentEntityImported();
 			
 			//	Element corresponds to a cms property
 			if (currentEntity instanceof ContentObject){
@@ -427,6 +425,14 @@ public class ImportContentHandler<T> implements ContentHandler{
 			throw new SAXException("Unexpected element "+localName);
 			
 		}
+	}
+
+	public Object getCurrentEntityImported() {
+		if (cmsRepositoryEntityQueue.isEmpty()){
+			return null;
+		}
+		
+		return cmsRepositoryEntityQueue.peek().getEntity();
 	}
 
 	private boolean shouldIgnoreElement(String localName) {
@@ -726,7 +732,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 		
 	}
 
-	private void addAttributeToImportedEntity(String attributeName, String attributeValue) throws SAXException {
+	public void addAttributeToImportedEntity(String attributeName, String attributeValue) throws SAXException {
 		
 		boolean attributeHasBeenAdded  = false;
 		
@@ -890,12 +896,12 @@ public class ImportContentHandler<T> implements ContentHandler{
 			pushEntity(localName, binaryChannel, atts);
 			
 		}
-		else if (cmsProperty.getValueType() == ValueType.Topic){
-			Topic topic = populateTopicProperty(((TopicProperty)cmsProperty), atts, localName);
+		else if (cmsProperty.getValueType() == ValueType.TopicReference){
+			Topic topic = populateTopicProperty(((TopicReferenceProperty)cmsProperty), atts, localName);
 			pushEntity(localName, topic, atts);
 		}
-		else if (cmsProperty.getValueType() == ValueType.ContentObject){
-			ContentObject contentObject = populateContentObjectProperty(((ContentObjectProperty)cmsProperty), atts, localName, uri);
+		else if (cmsProperty.getValueType() == ValueType.ObjectReference){
+			ContentObject contentObject = populateContentObjectProperty(((ObjectReferenceProperty)cmsProperty), atts, localName, uri);
 			pushEntity(localName, contentObject, atts, true);
 		}
 		else {
@@ -904,17 +910,17 @@ public class ImportContentHandler<T> implements ContentHandler{
 	}
 
 	private ContentObject populateContentObjectProperty(
-			ContentObjectProperty contentObjectProperty, Attributes atts,
+			ObjectReferenceProperty contentObjectProperty, Attributes atts,
 			String localName, String uri) {
 		
-		ContentObject contentObject = createNewContentObject(atts, null, uri);
+		ContentObject contentObject = createNewContentObject(atts, localName, uri);
 		
 		contentObjectProperty.addSimpleTypeValue(contentObject);
 		
 		return contentObject;
 	}
 
-	private Topic populateTopicProperty(TopicProperty topicProperty,
+	private Topic populateTopicProperty(TopicReferenceProperty topicProperty,
 			Attributes atts, String entityLocalName) {
 		
 		Topic topic = createNewTopic(atts, entityLocalName);

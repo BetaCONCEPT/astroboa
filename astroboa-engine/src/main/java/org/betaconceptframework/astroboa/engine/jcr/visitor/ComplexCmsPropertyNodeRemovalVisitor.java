@@ -134,10 +134,8 @@ public class ComplexCmsPropertyNodeRemovalVisitor extends AbstractCmsPropertyDef
 		//Update values and references only if there are child nodes and simple property definition
 		//is one of the following Cms Repository Entities
 		if (CollectionUtils.isNotEmpty(childrenNodesToBeRemoved) && 
-				(simplePropertyDefinition.getValueType() == ValueType.ContentObject ||
-						simplePropertyDefinition.getValueType() == ValueType.RepositoryUser || 
-						simplePropertyDefinition.getValueType() == ValueType.Space|| 
-						simplePropertyDefinition.getValueType() == ValueType.Topic )){
+				(simplePropertyDefinition.getValueType() == ValueType.ObjectReference ||
+						simplePropertyDefinition.getValueType() == ValueType.TopicReference )){
 
 			EntityAssociationUpdateHelper<CmsRepositoryEntity> associationUpdateHelper = 
 				new EntityAssociationUpdateHelper<CmsRepositoryEntity>(session,cmsRepositoryEntityAssociationDao, context);
