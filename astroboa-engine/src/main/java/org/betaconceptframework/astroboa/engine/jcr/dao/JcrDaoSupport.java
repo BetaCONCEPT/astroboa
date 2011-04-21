@@ -40,7 +40,7 @@ public abstract class JcrDaoSupport extends AbstractCmsDao {
 	@Autowired
 	private RepositoryDao repositoryDao;
 	
-	final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected final Session getSession(){
 		
