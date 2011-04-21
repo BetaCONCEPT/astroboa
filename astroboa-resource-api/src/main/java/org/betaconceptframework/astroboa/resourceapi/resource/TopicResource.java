@@ -41,11 +41,9 @@ import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
-import org.betaconceptframework.astroboa.model.impl.TopicImpl;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
@@ -93,7 +91,8 @@ public class TopicResource extends AstroboaResource{
 	public Response getTopic(
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		/*if (output == null)
 		{
@@ -102,7 +101,7 @@ public class TopicResource extends AstroboaResource{
 
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback);
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
 
 	}
 	
@@ -112,7 +111,8 @@ public class TopicResource extends AstroboaResource{
 	public Response getRootTopicsInTaxonomyAsJson(
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
-			@QueryParam("callback") String callback) {
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint) {
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -124,7 +124,7 @@ public class TopicResource extends AstroboaResource{
 		
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.JSON);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback);
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
 	}
 	
 	@GET
@@ -133,7 +133,8 @@ public class TopicResource extends AstroboaResource{
 	public Response getRootTopicsInTaxonomyAsXml(
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
-			@QueryParam("callback") String callback) {
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint) {
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -145,7 +146,7 @@ public class TopicResource extends AstroboaResource{
 		
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback);
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
 	}
 	
 	  @PUT
@@ -277,7 +278,8 @@ public class TopicResource extends AstroboaResource{
 			@QueryParam("limit") Integer limit, 
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("output") String output,
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -293,7 +295,8 @@ public class TopicResource extends AstroboaResource{
 				limit, 
 				orderBy, 
 				outputEnum, 
-				callback);
+				callback,
+				prettyPrint);
 	}
 	
 	@GET
@@ -304,7 +307,8 @@ public class TopicResource extends AstroboaResource{
 			@QueryParam("limit") Integer limit, 
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("output") String output,
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -320,7 +324,8 @@ public class TopicResource extends AstroboaResource{
 				limit, 
 				orderBy, 
 				outputEnum, 
-				callback);		
+				callback, 
+				prettyPrint);		
 	}
 
 	@GET
@@ -331,11 +336,12 @@ public class TopicResource extends AstroboaResource{
 			@QueryParam("limit") Integer limit, 
 			@QueryParam("orderBy") String orderBy, 
 			@QueryParam("output") String output,
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		
 		if (output == null) {
-			return retrieveTopics(cmsQuery, offset, limit, orderBy, Output.XML, callback);
+			return retrieveTopics(cmsQuery, offset, limit, orderBy, Output.XML, callback, prettyPrint);
 		}
 
 		Output outputEnum = Output.valueOf(output.toUpperCase());
@@ -346,7 +352,8 @@ public class TopicResource extends AstroboaResource{
 				limit, 
 				orderBy, 
 				outputEnum, 
-				callback);
+				callback,
+				prettyPrint);
 		
 	}
 	
@@ -355,15 +362,18 @@ public class TopicResource extends AstroboaResource{
 			Integer offset,Integer limit, 
 			String orderBy, 
 			Output output,
-			String callback) {
+			String callback,
+			String prettyPrint) {
 		
 		if (output == null) {
 			output = Output.XML;
 		}
 		
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
 		try {
 			//Build Topic criteria
-			TopicCriteria topicCriteria = buildCriteria(cmsQuery, offset, limit, orderBy);
+			TopicCriteria topicCriteria = buildCriteria(cmsQuery, offset, limit, orderBy, prettyPrintEnabled);
 			
  			String queryResult = null;
  			
@@ -372,7 +382,7 @@ public class TopicResource extends AstroboaResource{
  			switch (output) {
  			case XML:
  			{
- 				queryResult = astroboaClient.getTopicService().searchTopicsAndExportToXml(topicCriteria);
+ 				queryResult = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.XML);
  				
  				if (StringUtils.isBlank(callback)) {
  					resourceRepresentation.append(queryResult);
@@ -383,7 +393,7 @@ public class TopicResource extends AstroboaResource{
  				break;
  			}
  			case JSON:
- 				queryResult = astroboaClient.getTopicService().searchTopicsAndExportToJson(topicCriteria);
+ 				queryResult = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.JSON);
  				
  				if (StringUtils.isBlank(callback)) {
  					resourceRepresentation.append(queryResult);
@@ -440,7 +450,8 @@ public class TopicResource extends AstroboaResource{
 	private TopicCriteria buildCriteria(String cmsQuery, 
 			Integer offset, 
 			Integer limit, 
-			String orderBy) {
+			String orderBy,
+			boolean prettyPrint) {
 		
 		//Build Topic criteria
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
@@ -459,8 +470,9 @@ public class TopicResource extends AstroboaResource{
 			topicCriteria.setLimit(limit);
 		}
 
-		topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.DISABLE_LAZY_LOADING_OF_CONTENT_OBJECT_PROPERTIES, true);
-
+		topicCriteria.getRenderProperties().renderAllContentObjectProperties(true);
+		topicCriteria.getRenderProperties().prettyPrint(prettyPrint);
+		
 		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		//Parse query
@@ -505,10 +517,12 @@ public class TopicResource extends AstroboaResource{
 
 	}
 	
-	private Response getTopicInternal(String topicIdOrName, Output output, String callback){
+	private Response getTopicInternal(String topicIdOrName, Output output, String callback, String prettyPrint){
 		
 		//OLD Method
 		//return generateTopicResponseUsingTopicInstance(topicIdOrName, output,	callback);
+		
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
 		try {
 			
@@ -516,7 +530,7 @@ public class TopicResource extends AstroboaResource{
 			
 			switch (output) {
 			case XML:{
-				String topicXML = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+				String topicXML = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
 
 				if (StringUtils.isBlank(topicXML)){
 					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -531,7 +545,7 @@ public class TopicResource extends AstroboaResource{
 				break;
 			}
 			case JSON:{
-				String topicJSON = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN);
+				String topicJSON = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
 
 				if (StringUtils.isBlank(topicJSON)){
 					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -613,7 +627,7 @@ public class TopicResource extends AstroboaResource{
 			return null;
 		}
 
-		Topic topic = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topic = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		if (topic == null) {
 			logger.info("The provided topicIdOrName: " + topicIdOrName + " does not exist.");

@@ -46,6 +46,7 @@ import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
+import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
@@ -225,7 +226,7 @@ public class ContentObjectResource extends AstroboaResource{
 				}
 			
 			case ContentType:
-				logger.error("Astroboa returned value type 'ContentType' for property '{}' for content object with id or system name '{}'. This should never happen", propertyPath, contentObjectIdOrName);
+				logger.error("Astroboa returned value type '"+ValueType.ContentType+"' for property '{}' for content object with id or system name '{}'. This should never happen", propertyPath, contentObjectIdOrName);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 				
 			default:
@@ -321,7 +322,7 @@ public class ContentObjectResource extends AstroboaResource{
 				return new BinaryChannelResource(astroboaClient, contentObject, (BinaryProperty) property, valueIndex);
 			
 			case ContentType:
-				logger.error("Astroboa returned value type 'ContentType' for property '{}' for content object with id or system name '{}'. This should never happen", propertyPathWithoutIndex, contentObjectIdOrName);
+				logger.error("Astroboa returned value type '"+ValueType.ContentType+"' for property '{}' for content object with id or system name '{}'. This should never happen", propertyPathWithoutIndex, contentObjectIdOrName);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 				
 			default:
@@ -353,7 +354,8 @@ public class ContentObjectResource extends AstroboaResource{
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("output") String output,
 			@QueryParam("template") String templateIdOrSystemName,
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -371,7 +373,8 @@ public class ContentObjectResource extends AstroboaResource{
 				orderBy, 
 				outputEnum, 
 				templateIdOrSystemName, 
-				callback);
+				callback,
+				prettyPrint);
 	}
 	
 	@GET
@@ -384,7 +387,8 @@ public class ContentObjectResource extends AstroboaResource{
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("output") String output,
 			@QueryParam("template") String templateIdOrSystemName,
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -402,7 +406,8 @@ public class ContentObjectResource extends AstroboaResource{
 				orderBy, 
 				outputEnum, 
 				templateIdOrSystemName, 
-				callback);		
+				callback,
+				prettyPrint);		
 	}
 	
 	/* Returning html or pdf is based on facelets and seam which have been currently
@@ -482,7 +487,8 @@ public class ContentObjectResource extends AstroboaResource{
 			@QueryParam("orderBy") String orderBy, 
 			@QueryParam("output") String output,
 			@QueryParam("template") String templateIdOrSystemName, 
-			@QueryParam("callback") String callback){
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		
 		
 		/*if (output == null) {
@@ -499,7 +505,8 @@ public class ContentObjectResource extends AstroboaResource{
 				orderBy, 
 				outputEnum, 
 				templateIdOrSystemName, 
-				callback);
+				callback,
+				prettyPrint);
 		
 	}
 	
@@ -556,15 +563,18 @@ public class ContentObjectResource extends AstroboaResource{
 			String orderBy, 
 			Output output,
 			String templateIdOrSystemName,
-			String callback) {
+			String callback,
+			String prettyPrint) {
 		
 		if (output == null) {
 			output = Output.XML;
 		}
 		
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
 		try {
 			//Build ContentObject criteria
-			ContentObjectCriteria contentObjectCriteria = buildCriteria(cmsQuery, offset, limit, commaDelimitedProjectionPaths, orderBy);
+			ContentObjectCriteria contentObjectCriteria = buildCriteria(cmsQuery, offset, limit, commaDelimitedProjectionPaths, orderBy, prettyPrintEnabled);
 			
  			String queryResult = null;
  			
@@ -640,7 +650,7 @@ public class ContentObjectResource extends AstroboaResource{
 			Integer offset, 
 			Integer limit, 
 			String commaDelimitedProjectionPaths,
-			String orderBy) {
+			String orderBy, boolean prettyPrint) {
 		
 		//Build ContentObject criteria
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
@@ -666,6 +676,8 @@ public class ContentObjectResource extends AstroboaResource{
 			contentObjectCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		}
 
+		contentObjectCriteria.getRenderProperties().prettyPrint(prettyPrint);
+		
 		//Parse query
 		if (StringUtils.isNotBlank(cmsQuery)) {
 			CriterionFactory.parse(cmsQuery, contentObjectCriteria);

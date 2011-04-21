@@ -71,20 +71,22 @@ public class TaxonomyResource extends AstroboaResource{
 	@GET
 	@Produces("*/*")
 	@Path("/{taxonomyIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	public Response getTaxonomyByName(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback){
+	public Response getTaxonomyByName(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		if (output == null) {
-			return getTaxonomy(taxonomyIdOrName, Output.XML, callback);
+			return getTaxonomy(taxonomyIdOrName, Output.XML, callback, prettyPrint);
 		}
 
 		Output outputEnum = Output.valueOf(output.toUpperCase());
 
-		return getTaxonomy(taxonomyIdOrName, outputEnum, callback);
+		return getTaxonomy(taxonomyIdOrName, outputEnum, callback, prettyPrint);
 	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	@Path("/{taxonomyIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	public Response getTaxonomyByNameAsJson(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback){
+	public Response getTaxonomyByNameAsJson(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
@@ -92,13 +94,14 @@ public class TaxonomyResource extends AstroboaResource{
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
 		}
-		return getTaxonomy(taxonomyIdOrName, outputEnum, callback);
+		return getTaxonomy(taxonomyIdOrName, outputEnum, callback, prettyPrint);
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("/{taxonomyIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
-	public Response getTaxonomyByNameAsXml(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback){
+	public Response getTaxonomyByNameAsXml(@PathParam("taxonomyIdOrName") String taxonomyIdOrName, @QueryParam("output") String output, @QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
@@ -106,7 +109,7 @@ public class TaxonomyResource extends AstroboaResource{
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
 		}
-		return getTaxonomy(taxonomyIdOrName, outputEnum, callback);
+		return getTaxonomy(taxonomyIdOrName, outputEnum, callback, prettyPrint);
 	}
 	
 	
@@ -299,7 +302,7 @@ public class TaxonomyResource extends AstroboaResource{
 		  Taxonomy taxonomyToBeSaved = astroboaClient.getImportService().importTaxonomy(requestContent, false);
 
 		  //Bring taxonomy from repository
-		  Taxonomy existedTaxonomy  = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+		  Taxonomy existedTaxonomy  = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 
 		  boolean taxonomyIdHasBeenProvided = CmsConstants.UUIDPattern.matcher(taxonomyIdOrName).matches();
 		  
@@ -412,7 +415,7 @@ public class TaxonomyResource extends AstroboaResource{
 		}
 	}
 	
-	private Response getTaxonomy(String taxonomyIdOrName, Output output, String callback){
+	private Response getTaxonomy(String taxonomyIdOrName, Output output, String callback, String prettyPrint){
 		
 		if (StringUtils.isBlank(taxonomyIdOrName)){
 			logger.warn("No Taxonomy Name provided");
@@ -420,7 +423,7 @@ public class TaxonomyResource extends AstroboaResource{
 		}
 		
 		try {
-			String taxonomyXmlorJson  = retrieveTaxonomyXMLorJSONByIdOrSystemName(taxonomyIdOrName, output);
+			String taxonomyXmlorJson  = retrieveTaxonomyXMLorJSONByIdOrSystemName(taxonomyIdOrName, output, prettyPrint);
 			
 			StringBuilder resourceRepresentation = new StringBuilder();
 			
@@ -481,7 +484,7 @@ public class TaxonomyResource extends AstroboaResource{
  			switch (output) {
  			case XML:
  			{
- 				String resourceCollectionAsXML = astroboaClient.getTaxonomyService().getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY);
+ 				String resourceCollectionAsXML = astroboaClient.getTaxonomyService().getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY, prettyPrint);
  				
  				if (StringUtils.isBlank(callback)) {
  					resourceRepresentation.append(resourceCollectionAsXML);
@@ -492,7 +495,7 @@ public class TaxonomyResource extends AstroboaResource{
  				break;
  			}
  			case JSON:
- 				String resourceCollectionAsJSON = astroboaClient.getTaxonomyService().getAllTaxonomies(ResourceRepresentationType.JSON, FetchLevel.ENTITY);
+ 				String resourceCollectionAsJSON = astroboaClient.getTaxonomyService().getAllTaxonomies(ResourceRepresentationType.JSON, FetchLevel.ENTITY, prettyPrint);
  				
  				if (StringUtils.isBlank(callback)) {
  					resourceRepresentation.append(resourceCollectionAsJSON);
@@ -512,7 +515,7 @@ public class TaxonomyResource extends AstroboaResource{
 		}	
 	}
 
-	private String retrieveTaxonomyXMLorJSONByIdOrSystemName(String taxonomyIdOrName, Output output) {
+	private String retrieveTaxonomyXMLorJSONByIdOrSystemName(String taxonomyIdOrName, Output output, String prettyPrint) {
 
 		if (StringUtils.isBlank(taxonomyIdOrName)){
 			logger.warn("The provided Taxonomy IdOrName {} is Blank ", taxonomyIdOrName);
@@ -524,9 +527,11 @@ public class TaxonomyResource extends AstroboaResource{
 			output = Output.XML;
 		}
 		
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
+		
 		switch (output) {
 		case XML:{
-			String taxonomyXML = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+			String taxonomyXML = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
 			
 			if (StringUtils.isBlank(taxonomyXML)){
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -534,7 +539,7 @@ public class TaxonomyResource extends AstroboaResource{
 			return taxonomyXML;
 		}
 		case JSON:{
-			String taxonomyJSON = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN);
+			String taxonomyJSON = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
 			
 			if (StringUtils.isBlank(taxonomyJSON)){
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -543,7 +548,7 @@ public class TaxonomyResource extends AstroboaResource{
 
 		}
 		default:{
-			String taxonomyXML = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+			String taxonomyXML = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
 			
 			if (StringUtils.isBlank(taxonomyXML)){
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
