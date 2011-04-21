@@ -29,7 +29,7 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.collections.CollectionUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Create;
@@ -72,7 +72,7 @@ public class PortalThemeSelector implements Serializable {
 	public void initDefaultTheme() {
 		
 		// get available themes from portal object
-		availableThemes = ((TopicProperty)portal.getCmsProperty("theme")).getSimpleTypeValues();
+		availableThemes = ((TopicReferenceProperty)portal.getCmsProperty("theme")).getSimpleTypeValues();
 		
 		String userThemeName = cookieManager.getCookieValue(themeCookieName);
 		

@@ -154,7 +154,7 @@ public class SyndicationFeedGenerator<T extends ContentObjectResourceContext> {
 				SyndContent syndContent = new SyndContentImpl();
 				if (thumbnailProperty != null && thumbnailProperty.getSimpleTypeValue() != null) {
 						//thumbnailURL = new URL("http://" + portalHost + "/resource-api/f/binaryChannel/" + thumbnailProperty.getSimpleTypeValue().getFileAccessInfo());
-					thumbnailURL = new URL("http://" + portalHost + thumbnailProperty.getSimpleTypeValue().getRelativeContentApiURL());
+					thumbnailURL = new URL("http://" + portalHost + thumbnailProperty.getSimpleTypeValue().buildResourceApiURL(null, null, null, null, null, false, true));
 						syndContent.setValue("<img src=\"" + thumbnailURL.toString() + "\"" + "</img>");
 				}
 				
@@ -200,7 +200,7 @@ public class SyndicationFeedGenerator<T extends ContentObjectResourceContext> {
 					{
 					MediaContent[] mediaContents = new MediaContent[1];
 					//MediaContent mediaContent = new MediaContent( new UrlReference("http://" + portalHost + "/resource-api/f/binaryChannel/" + imageProperty.getSimpleTypeValue().getFileAccessInfo()));
-					MediaContent mediaContent = new MediaContent( new UrlReference("http://" + portalHost + image.getRelativeContentApiURL()));
+					MediaContent mediaContent = new MediaContent( new UrlReference("http://" + portalHost + image.buildResourceApiURL(null, null, null, null, null, false, true)));
 					mediaContents[0] = mediaContent;
 					if (thumbnailURL != null) {
 						Metadata md = new Metadata();

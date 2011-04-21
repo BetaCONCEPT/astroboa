@@ -168,7 +168,7 @@ public class TopicManager extends AbstractUIBean {
 					return new ArrayList<Topic>();
 				}
 				Taxonomy taxonomy = 
-					astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+					astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 				
 				if (taxonomy == null) {
 					return new ArrayList<Topic>();

@@ -34,7 +34,7 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -323,7 +323,7 @@ public abstract class AbstractForm<T extends AstroboaClient> {
 			}
 			break;
 		}
-		case Topic:
+		case TopicReference:
 		{
 			// check if form value is of the appropriate type
 			// we expect a string which corresponds to the id of an existing topic
@@ -339,12 +339,12 @@ public abstract class AbstractForm<T extends AstroboaClient> {
 			
 			
 			
-			TopicProperty formParameterProperty = (TopicProperty) formContentObject.getCmsProperty(formParameter);
+			TopicReferenceProperty formParameterProperty = (TopicReferenceProperty) formContentObject.getCmsProperty(formParameter);
 			if (StringUtils.isBlank((String)formParameterValue)) {
 				formParameterProperty.setSimpleTypeValue(null);
 			}
 			else {
-				Topic retrievedTopic = getFormsRepositoryClient().getTopicService().getTopic((String) formParameterValue, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY);
+				Topic retrievedTopic = getFormsRepositoryClient().getTopicService().getTopic((String) formParameterValue, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 				if (retrievedTopic == null) {
 					throw new Exception("Not topic found for the provided topic id:" + formParameterValue);
 				}

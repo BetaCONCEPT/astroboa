@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
@@ -177,7 +177,7 @@ public class PortalSectionResource extends AbstractContentObjectResource<PortalS
 			return false;
 		}
 		
-		List<ContentObject> subPortalSections = ((ContentObjectProperty) parentSection.getCmsProperty("subPortalSection")).getSimpleTypeValues(); 
+		List<ContentObject> subPortalSections = ((ObjectReferenceProperty) parentSection.getCmsProperty("subPortalSection")).getSimpleTypeValues(); 
 
 		if (CollectionUtils.isEmpty(subPortalSections)) {
 			return false;

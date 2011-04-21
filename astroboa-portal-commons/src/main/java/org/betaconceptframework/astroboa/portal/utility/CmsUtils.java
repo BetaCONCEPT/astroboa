@@ -35,7 +35,7 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
@@ -772,7 +772,7 @@ public class CmsUtils {
 				for (ContentObject contentObject: rankedOutcomeList){
 					
 					//Retrieve subjects
-					TopicProperty subjectProperty = (TopicProperty)contentObject.getCmsProperty("profile.subject");
+					TopicReferenceProperty subjectProperty = (TopicReferenceProperty)contentObject.getCmsProperty("profile.subject");
 					
 					if (subjectProperty != null && ! subjectProperty.hasNoValues()){
 							
@@ -853,7 +853,7 @@ public class CmsUtils {
 			for (ContentObject contentObject: contentObjects){
 
 				//Retrieve subjects
-				TopicProperty subjectProperty = (TopicProperty)contentObject.getCmsProperty("profile.subject");
+				TopicReferenceProperty subjectProperty = (TopicReferenceProperty)contentObject.getCmsProperty("profile.subject");
 
 				if (subjectProperty != null && ! subjectProperty.hasNoValues()){
 
@@ -1150,7 +1150,7 @@ public class CmsUtils {
 		TopicComparator topicComparator = new TopicComparator(JSFUtilities.getLocaleAsString(),OrderByProperty.LABEL);
 		
 		if (StringUtils.isBlank(parentTopicName)) {
-			Taxonomy taxonomy = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+			Taxonomy taxonomy = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 			if (taxonomy!=null && CollectionUtils.isNotEmpty(taxonomy.getRootTopics())){
 				
 				List<Topic> alphabeticallyOrderedTopics = taxonomy.getRootTopics();

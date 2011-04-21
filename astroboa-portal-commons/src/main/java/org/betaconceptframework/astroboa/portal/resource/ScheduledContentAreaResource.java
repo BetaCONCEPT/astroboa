@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
@@ -130,7 +130,7 @@ public class ScheduledContentAreaResource extends AbstractContentObjectResource<
 		resourceResponse = new ResourceResponse<ContentObject, ContentObjectResourceContext>();
 		resourceResponse.setResourceContext(new ContentObjectResourceContext());
 		resourceResponse.getResourceContext().setResourceRequestURL(resourceRequestURL);
-		resourceResponse.setResourceRepresentation(((ContentObjectProperty)activeScheduledContentArea.getCmsProperty("referencedContentObjects")).getSimpleTypeValues());
+		resourceResponse.setResourceRepresentation(((ObjectReferenceProperty)activeScheduledContentArea.getCmsProperty("referencedContentObjects")).getSimpleTypeValues());
 		resourceResponse.getResourceContext().setResourceContainerObject(activeScheduledContentArea);
 		outjectResponseAndDefaultResourceCollectionRequestParameters();
 		

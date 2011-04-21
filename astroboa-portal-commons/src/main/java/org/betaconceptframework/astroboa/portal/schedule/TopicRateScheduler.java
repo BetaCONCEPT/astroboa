@@ -30,7 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -122,7 +122,7 @@ public class TopicRateScheduler {
 			for (ContentObject contentObject: contentObjects){
 
 				//Retrieve subjects
-				TopicProperty subjectProperty = (TopicProperty)contentObject.getCmsProperty("profile.subject");
+				TopicReferenceProperty subjectProperty = (TopicReferenceProperty)contentObject.getCmsProperty("profile.subject");
 
 				if (subjectProperty != null && ! subjectProperty.hasNoValues()){
 

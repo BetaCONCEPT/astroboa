@@ -40,10 +40,10 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -1204,7 +1204,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 		
 		if (contentObject != null) {
 			contentObjects.add(contentObject);
-			resourceResponse.getResourceContext().setTopics(((TopicProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
+			resourceResponse.getResourceContext().setTopics(((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
 		}
 		
 		resourceResponse.setResourceRepresentation(contentObjects);
@@ -1270,7 +1270,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 		
 		if (contentObject != null) {
 			contentObjects.add(contentObject);
-			resourceResponse.getResourceContext().setTopics(((TopicProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
+			resourceResponse.getResourceContext().setTopics(((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
 		}
 		
 		resourceResponse.setResourceRepresentation(contentObjects);
@@ -1604,7 +1604,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 		// check if the content object has a value stored in "resourceRepresentationTemplateObjectReference" property
 		if (!templateFound) {
 			if (resourceResponse.getFirstResource() != null){
-				ContentObjectProperty templateObjectProperty = (ContentObjectProperty)resourceResponse.getFirstResource().getCmsProperty("resourceRepresentationTemplateObjectReference");
+				ObjectReferenceProperty templateObjectProperty = (ObjectReferenceProperty)resourceResponse.getFirstResource().getCmsProperty("resourceRepresentationTemplateObjectReference");
 				if (templateObjectProperty.hasValues()) {
 					StringProperty templateProperty = (StringProperty)templateObjectProperty.getSimpleTypeValue().getCmsProperty(resourceRepresentationType);
 					if (templateProperty.hasValues()) {
@@ -1620,9 +1620,9 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 		// The resourceRepresentationType is ignored in this case. There is a possibility that the mapped template file is not appropriate for the requested type.
 		if (!templateFound) {
 			if ( resourceResponse.getFirstResource() != null && 
-				((TopicProperty)((ContentObject) resourceResponse.getFirstResource()).getCmsProperty("resourceRepresentationTemplateName")).hasValues()){
+				((TopicReferenceProperty)((ContentObject) resourceResponse.getFirstResource()).getCmsProperty("resourceRepresentationTemplateName")).hasValues()){
 
-				Topic pageTemplate = ((TopicProperty)((ContentObject) resourceResponse.getFirstResource()).getCmsProperty("resourceRepresentationTemplateName")).getSimpleTypeValue();
+				Topic pageTemplate = ((TopicReferenceProperty)((ContentObject) resourceResponse.getFirstResource()).getCmsProperty("resourceRepresentationTemplateName")).getSimpleTypeValue();
 
 				String templatePath;
 				if (activeTheme != null) {
@@ -1852,7 +1852,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			BinaryProperty portalThumbnail = (BinaryProperty) portal.getCmsProperty("thumbnail");
 			if (portalThumbnail != null && portalThumbnail.getSimpleTypeValue() != null) {
 				//portalThumbnailURL = "http://" + portalHost + "/resource-api/f/binaryChannel/" + portalThumbnail.getSimpleTypeValue().getFileAccessInfo();
-				portalThumbnailURL = "http://" + portalHost + portalThumbnail.getSimpleTypeValue().getRelativeContentApiURL();
+				portalThumbnailURL = "http://" + portalHost + portalThumbnail.getSimpleTypeValue().buildResourceApiURL(null, null, null, null, null, false, true);
 			}
 			
 			try {
