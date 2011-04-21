@@ -392,6 +392,10 @@ public class Serializer {
 			serializeCmsRepositoryEntityIdentifierForAnAlreadySerializedEntity(topicQName, topicCmsIdentifier);
 
 			serializeBasicTopicInformation(node);
+			
+			if (CmsConstants.PARENT_TOPIC == topicQName){
+				addOwnerAsElement(node);
+			}
 		}
 		else{
 			startedNodeSerialization(topicQName);
@@ -1464,10 +1468,10 @@ public class Serializer {
 
 	private void createElementWithValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath) throws Exception {
 		if (value != null){
-			if (ValueType.Topic == valueType){
+			if (ValueType.TopicReference == valueType){
 				addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
 			}
-			else if (ValueType.ContentObject == valueType){
+			else if (ValueType.ObjectReference == valueType){
 				addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
 			}
 			else{
