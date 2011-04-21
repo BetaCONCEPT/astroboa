@@ -102,33 +102,33 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 
 						Space spaceUnMarshalledFromXML = importDao.importSpace(xml, importMode); 
 
-						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, compareChildSpaces, compareChildSpaces, true,true);
+						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, compareChildSpaces, compareChildSpaces, true,true, true);
 
 						json = space.json(prettyPrint);
 
 						Space spaceUnMarshalledFromJSON = importDao.importSpace(json, importMode); 
 
-						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, compareChildSpaces, compareChildSpaces, true,true);
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSON, compareChildSpaces,compareChildSpaces, true,true);
+						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, compareChildSpaces, compareChildSpaces, true,true, true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSON, compareChildSpaces,compareChildSpaces, true,true, true);
 
 						//Now create XML and JSON from Service and compare each other
 						json = spaceService.getSpace(space.getId(), ResourceRepresentationType.JSON, fetchLevel);
 
 						Space spaceUnMarshalledFromJSONService = importDao.importSpace(json, importMode); 
 
-						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true);
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true);
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true);
+						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
 
 						xml = spaceService.getSpace(space.getId(), ResourceRepresentationType.XML, fetchLevel);
 
 						Space spaceUnMarshalledFromXMLService = importDao.importSpace(xml, importMode); 
 
-						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true);
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true);
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true);
+						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true, true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true, true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true, true);
 
-						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true);
+						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
 					}
 				}
 			}
@@ -136,9 +136,9 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 
 				logger.error("Fetch Level {}", fetchLevelForLog);
 				logger.error("Import Mode {}", importModeForLog);
-				logPrettyXmlToError(xml, "XML");
-				logger.error("JSON {}", json);
-
+				logger.error("xml {}", space.xml(true));
+				logger.error("JSON {}", space.json(true));
+				
 				throw e;
 			}
 

@@ -163,7 +163,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromXML, topicUnMarshalledFromJSON, compareChildTopics, compareChildTopics);
 
 						//Now create XML and JSON from Service and compare each other
-						json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, fetchLevel);
+						json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, fetchLevel, prettyPrint);
 
 						Topic topicUnMarshalledFromJSONService = importDao.importTopic(json, importMode); 
 
@@ -171,7 +171,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromJSON, topicUnMarshalledFromJSONService, compareChildTopics, compareChildTopics);
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromXML, topicUnMarshalledFromJSONService, compareChildTopics, compareChildTopics);
 
-						xml = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, fetchLevel);
+						xml = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, fetchLevel, prettyPrint);
 
 						Topic topicUnMarshalledFromXMLService = importDao.importTopic(xml, importMode); 
 
@@ -189,7 +189,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 
 				logger.error("Fetch Level {}", fetchLevelForLog);
 				logger.error("Import Mode {}", importModeForLog);
-				logPrettyXmlToError(xml, "XML");
+				logger.error("xml {}", xml);
 				logger.error("JSON {}", json);
 
 				throw e;

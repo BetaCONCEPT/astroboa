@@ -34,15 +34,15 @@ import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
@@ -91,8 +91,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 		referencedObject = contentService.save(referencedObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(referencedObject);
 
-		((ContentObjectProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObject")).addSimpleTypeValue(referencedObject);
-		((ContentObjectProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(referencedObject);
+		((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObject")).addSimpleTypeValue(referencedObject);
+		((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(referencedObject);
 		contentObjectForTestExportObjectReference = contentService.save(contentObjectForTestExportObjectReference, false, true, null);
 
 		String jsonFromApi = null;
@@ -106,7 +106,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			jsonFromApi = removeWhitespacesIfNecessary(jsonFromApi);
 			jsonFromService = removeWhitespacesIfNecessary(jsonFromService);
 			
-			ContentObject contentObjectMultipleFirstValue = ((ContentObjectProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
+			ContentObject contentObjectMultipleFirstValue = ((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
 
 			String profileId = ((ComplexCmsProperty)contentObjectMultipleFirstValue.getCmsProperty("profile")).getId();
 			String title = ((StringProperty)contentObjectMultipleFirstValue.getCmsProperty("profile.title")).getSimpleTypeValue();
@@ -135,7 +135,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			assertPropertyIsExported(jsonFromApi,expectedOutcome);
 			assertPropertyIsExported(jsonFromService,expectedOutcome);
 			
-			ContentObject simpleContentObject = ((ContentObjectProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
+			ContentObject simpleContentObject = ((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
 			profileId = ((ComplexCmsProperty)simpleContentObject.getCmsProperty("profile")).getId();
 			title = ((StringProperty)simpleContentObject.getCmsProperty("profile.title")).getSimpleTypeValue();
 
@@ -276,7 +276,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 
 				//Since attribute order is not the same between API export and Service Export
 				//we check export in pieces
-				ContentObject contentObjectMultipleFirstValue = ((ContentObjectProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
+				ContentObject contentObjectMultipleFirstValue = ((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).getFirstValue();
 				String expectedSimpleContentObjectMultiple = "\"simpleContentObjectMultiple\":[{"; //Check that property is exported as an array
 				assertPropertyIsExported(jsonFromApi,expectedSimpleContentObjectMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleContentObjectMultiple);
@@ -297,7 +297,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				assertPropertyIsExported(jsonFromApi,expectedSimpleContentObjectMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleContentObjectMultiple);
 
-				Topic topicFirstValue = ((TopicProperty)contentObject.getCmsProperty("simpleTopicMultiple")).getFirstValue();
+				Topic topicFirstValue = ((TopicReferenceProperty)contentObject.getCmsProperty("simpleTopicMultiple")).getFirstValue();
 				String expectedSimpleTopicMultiple = "\"simpleTopicMultiple\":[{";
 				assertPropertyIsExported(jsonFromApi,expectedSimpleTopicMultiple);
 				assertPropertyIsExported(jsonFromService,expectedSimpleTopicMultiple);
@@ -832,8 +832,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 
 		//Reference one another
 
-		((ContentObjectProperty)contentObject2.getCmsProperty("profile.hasPart")).addSimpleTypeValue(contentObject);
-		((ContentObjectProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
+		((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.hasPart")).addSimpleTypeValue(contentObject);
+		((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
 
 		contentObject2 = contentService.save(contentObject2, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject2);
@@ -856,13 +856,13 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object : for JAXB test");
 
-		((TopicProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(childTopic1);
+		((TopicReferenceProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(childTopic1);
 
 		ComplexCmsProperty<?, ?> statisticTypeProperty = (ComplexCmsProperty<?, ?>) contentObject.getCmsProperty("statisticType");
 		((LongProperty)statisticTypeProperty.getChildProperty("viewCounter")).addSimpleTypeValue((long)4);
 
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(childTopic1);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(childTopic1);
 
 		return contentObject;
 	}

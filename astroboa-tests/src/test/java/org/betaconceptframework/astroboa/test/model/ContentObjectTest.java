@@ -33,9 +33,9 @@ import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
@@ -45,7 +45,6 @@ import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -154,7 +153,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		((StringProperty)contentObject.getCmsProperty("allPropertyTypeContainer.allPropertyTypeContainer.commentMultiple[1].body")).setSimpleTypeValue("allPropertyTypeContainerSecondCommentMultipleString");
 		((StringProperty)contentObject.getCmsProperty("allPropertyTypeContainer.allPropertyTypeContainer.commentMultiple[2].body")).setSimpleTypeValue("allPropertyTypeContainerThirdCommentMultipleString");
 
-		contentObject = contentService.saveContentObject(contentObject, false);
+		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 		
 		assertVariousPathsForProperty(contentObject, "allPropertyTypeContainerMultiple", "simpleString", 3);
@@ -373,8 +372,8 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath");
 		contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath[1]");
 		
-		((ContentObjectProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath.simpleContentObject")).addSimpleTypeValue(firstSimpleContentObject);
-		((ContentObjectProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath[1].simpleContentObject")).addSimpleTypeValue(secondSimpleContentObject);
+		((ObjectReferenceProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath.simpleContentObject")).addSimpleTypeValue(firstSimpleContentObject);
+		((ObjectReferenceProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultipleForLabelElementPath[1].simpleContentObject")).addSimpleTypeValue(secondSimpleContentObject);
 		
 		contentService.save(contentObject, false, true, null);
 		
@@ -1343,7 +1342,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 
 		((StringProperty)contentObject.getCmsProperty("departments.department[0].name")).setSimpleTypeValue("Test department");
 		
-		contentObject = contentService.saveContentObject(contentObject, false);
+		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 
 		String propertyPath = "departments.department[0].jobPositions.jobPosition";
@@ -1364,7 +1363,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 			}
 		
 			//Save content object to persist changes	
-			contentObject = contentService.saveContentObject(contentObject, false);
+			contentObject = contentService.save(contentObject, false, true, null);
 			
 			//	Check that property is removed without reloading object
 			for (int j=0;j<4;j++){
@@ -1374,7 +1373,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 			}
 
 			//Reload object
-			contentObject = contentService.getContentObjectById(contentObject.getId(), null);
+			contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
 			
 			//	Check that property is removed after reloading object
 			for (int j=0;j<4;j++){
@@ -1399,10 +1398,10 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		coCriteria.doNotCacheResults();
 		coCriteria.setOffsetAndLimit(0, 1);
 		
-		final CmsOutcome<CmsRankedOutcome<ContentObject>> outcome = contentService.searchContentObjects(coCriteria);
+		final CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(coCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		if (outcome.getCount() >= 1){
-			return outcome.getResults().get(0).getCmsRepositoryEntity();
+			return outcome.getResults().get(0);
 		}
 		
 		return null;
@@ -1442,16 +1441,16 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 				contentObject.removeCmsProperty(propertyPath);
 			}
 			
-			contentObject = contentService.saveContentObject(contentObject, false);	
+			contentObject = contentService.save(contentObject, false, true, null);	
 		}
 		//Add complex cms property
 		for (int i=0;i<5;i++){
 			ComplexCmsProperty<?,?> property = (ComplexCmsProperty<?, ?>) contentObject.getCmsProperty(propertyPath+"["+i+"]");
 			((StringProperty)property.getChildProperty(simpleChildPropertyName)).setSimpleTypeValue("comment-"+i);
-			((ContentObjectProperty)property.getChildProperty(propertyNameOfTypeContentObjectReference)).setSimpleTypeValue(referencedContentObject);
+			((ObjectReferenceProperty)property.getChildProperty(propertyNameOfTypeContentObjectReference)).setSimpleTypeValue(referencedContentObject);
 		}
 		
-		contentObject = contentService.saveContentObject(contentObject, false);
+		contentObject = contentService.save(contentObject, false, true, null);
 		
 		//Assert save
 		for (int i=0;i<5;i++){

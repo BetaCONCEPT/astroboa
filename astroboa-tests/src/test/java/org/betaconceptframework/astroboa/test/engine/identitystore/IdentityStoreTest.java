@@ -31,7 +31,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -121,7 +121,7 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 				Assert.assertEquals(roleContentObject.getSystemName(), cmsRepositoryEntityUtils.fixSystemName(roleAffiliation), "Invalid system name for role object "+ cmsRole.toString());
 
 				if (cmsRole == CmsRole.ROLE_ADMIN){
-					ContentObjectProperty memberOfProperty = (ContentObjectProperty)roleContentObject.getCmsProperty("isMemberOf");
+					ObjectReferenceProperty memberOfProperty = (ObjectReferenceProperty)roleContentObject.getCmsProperty("isMemberOf");
 					
 					Assert.assertTrue(memberOfProperty != null && memberOfProperty.hasValues(), "Role "+ roleAffiliation + " is member of no other role");
 					
@@ -140,13 +140,13 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 					}
 				}
 				else if (cmsRole == CmsRole.ROLE_CMS_EXTERNAL_VIEWER){
-					ContentObjectProperty memberOfProperty = (ContentObjectProperty)roleContentObject.getCmsProperty("isMemberOf");
+					ObjectReferenceProperty memberOfProperty = (ObjectReferenceProperty)roleContentObject.getCmsProperty("isMemberOf");
 					
 					Assert.assertTrue(memberOfProperty != null && memberOfProperty.hasNoValues(), "Role "+ roleAffiliation + " is member of some other role but it should not be");
 					
 				}
 				else if (cmsRole == CmsRole.ROLE_CMS_INTERNAL_VIEWER){
-					ContentObjectProperty memberOfProperty = (ContentObjectProperty)roleContentObject.getCmsProperty("isMemberOf");
+					ObjectReferenceProperty memberOfProperty = (ObjectReferenceProperty)roleContentObject.getCmsProperty("isMemberOf");
 					
 					Assert.assertTrue(memberOfProperty != null && memberOfProperty.hasValues(), "Role "+ roleAffiliation + " is member of no other role");
 					
@@ -163,7 +163,7 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 					//Must be member of ROLE_CMS_INTERNAL_VIEWER
 
 					Assert.assertEquals(	
-							((StringProperty)((ContentObjectProperty)roleContentObject.getCmsProperty("isMemberOf")).getSimpleTypeValues().get(0).getCmsProperty("name")).getSimpleTypeValue(), 
+							((StringProperty)((ObjectReferenceProperty)roleContentObject.getCmsProperty("isMemberOf")).getSimpleTypeValues().get(0).getCmsProperty("name")).getSimpleTypeValue(), 
 							CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_INTERNAL_VIEWER, repid), 
 							"Invalid is member of entry for role object "+ roleAffiliation);
 				}
@@ -200,7 +200,7 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 
 		//Check roles
 
-		ContentObjectProperty systemPersonRoles = (ContentObjectProperty) systemPerson.getCmsProperty("personAuthorization.role");
+		ObjectReferenceProperty systemPersonRoles = (ObjectReferenceProperty) systemPerson.getCmsProperty("personAuthorization.role");
 
 		Assert.assertTrue(systemPersonRoles.hasValues(), "Found no value for system person roles");
 

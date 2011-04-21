@@ -23,12 +23,12 @@ import java.io.ByteArrayOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -261,7 +261,7 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		topic.setOwner(systemUser);
 		topic.setTaxonomy(subjectTaxonomy);
 		
-		topic = topicService.saveTopic(topic);
+		topic = topicService.save(topic);
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 
 		
@@ -269,17 +269,17 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		ContentObject simpleContentObject = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB", false);
 		
 		((StringProperty)simpleContentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object With references for JAXB test");
-		simpleContentObject = contentService.saveContentObject(simpleContentObject, false);
+		simpleContentObject = contentService.save(simpleContentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(simpleContentObject);
 
 		ContentObject contentObjectWithReferences = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB2", false);
 		
-		((ContentObjectProperty)contentObjectWithReferences.getCmsProperty("profile.hasPart")).addSimpleTypeValue(simpleContentObject);
-		((ContentObjectProperty)contentObjectWithReferences.getCmsProperty("profile.references")).addSimpleTypeValue(simpleContentObject);
+		((ObjectReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.hasPart")).addSimpleTypeValue(simpleContentObject);
+		((ObjectReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.references")).addSimpleTypeValue(simpleContentObject);
 		((StringProperty)contentObjectWithReferences.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object With references for JAXB test 2");
-		((TopicProperty)contentObjectWithReferences.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
-		((TopicProperty)contentObjectWithReferences.getCmsProperty("simpleTopic")).addSimpleTypeValue(topic);
-		contentObjectWithReferences = contentService.saveContentObject(contentObjectWithReferences, false);
+		((TopicReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObjectWithReferences.getCmsProperty("simpleTopic")).addSimpleTypeValue(topic);
+		contentObjectWithReferences = contentService.save(contentObjectWithReferences, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObjectWithReferences);
 
 		
@@ -290,7 +290,7 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		contentObjectCriteria.addSystemNameContainsCriterion("testReferencesAtCmsOutcomeForJAXB*");
 		contentObjectCriteria.doNotCacheResults();
 	
-		String xml =  contentService.searchContentObjectsAndExportToXml(contentObjectCriteria);
+		String xml =  contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.XML);
 
 		String xmlWithoutWhitespaces = removeWhitespacesIfNecessary(contentObjectCriteria, xml);
 		
@@ -312,7 +312,7 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 			throw e;
 		}
 
-		String json =  contentService.searchContentObjectsAndExportToJson(contentObjectCriteria);
+		String json =  contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.JSON);
 
 		String jsonWithoutWhitespaces = removeWhitespacesIfNecessary(contentObjectCriteria, json);
 
@@ -370,8 +370,8 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		
 			//Reference one another
 		
-			((ContentObjectProperty)contentObject2.getCmsProperty("profile.hasPart")).addSimpleTypeValue(contentObject);
-			((ContentObjectProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
+			((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.hasPart")).addSimpleTypeValue(contentObject);
+			((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
 		
 			contentObject2 = contentService.save(contentObject2, false, true, null);
 			addEntityToBeDeletedAfterTestIsFinished(contentObject2);
@@ -386,10 +386,10 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object for JAXB test");
 		((StringProperty)contentObject.getCmsProperty("profile.description")).setSimpleTypeValue("");
 		
-		((TopicProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(childTopic1);
+		((TopicReferenceProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(childTopic1);
 		
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(childTopic1);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(childTopic1);
 		
 		return contentObject;
 	}

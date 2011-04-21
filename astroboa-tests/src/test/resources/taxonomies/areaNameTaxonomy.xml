@@ -23,7 +23,7 @@ Authors
 		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
 		 		    
 -->
-<ns2:taxonomy name="areaNameTaxonomy" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/definition/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns2:taxonomy name="areaNameTaxonomy" xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/model/astroboa-model-3.0.0-SNAPSHOT.xsd" xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model" xmlns:ns4="http://www.betaconceptframework.org/schema/astroboa/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <localization>
         <label xml:lang="el">Διοικητική Γεωγραφική Περιοχή</label>
         <label xml:lang="en">Administrative Geographical Area</label>

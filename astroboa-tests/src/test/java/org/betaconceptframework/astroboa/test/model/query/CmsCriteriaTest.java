@@ -30,7 +30,6 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
-import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
@@ -40,7 +39,6 @@ import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
@@ -59,23 +57,18 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	@Test  
 	public void testContainsCriterion() throws Exception {  
 
-		checkExpression("systemName CONTAINS \"1\"", CriterionFactory.simpleCmsPropertycontains(CmsBuiltInItem.SystemName.getJcrName(), "1"));
 		checkExpression("systemName CONTAINS \"1\"", CriterionFactory.contains(CmsBuiltInItem.SystemName.getJcrName(), "1"));
 		checkExpression("systemName CONTAINS \"1\"", CriterionFactory.createSimpleCriterion(CmsBuiltInItem.SystemName.getJcrName(), "1", QueryOperator.CONTAINS));
 		
-		checkExpression("profile.title CONTAINS \"1\"", CriterionFactory.simpleCmsPropertycontains("profile.title", "1"));
 		checkExpression("profile.title CONTAINS \"1\"", CriterionFactory.contains("profile.title", "1"));
 		checkExpression("profile.title CONTAINS \"1\"", CriterionFactory.createSimpleCriterion("profile.title", "1", QueryOperator.CONTAINS));
 
-		checkExpression("profile CONTAINS \"1\"", CriterionFactory.complexCmsPropertycontains("profile", "1"));
 		checkExpression("profile CONTAINS \"1\"", CriterionFactory.contains("profile", "1"));
 		checkExpression("profile CONTAINS \"1\"", CriterionFactory.createSimpleCriterion("profile", "1", QueryOperator.CONTAINS));
 
-		checkExpression("commentSingle CONTAINS \"1\"", CriterionFactory.complexCmsPropertycontains("commentSingle", "1"));
 		checkExpression("commentSingle CONTAINS \"1\"", CriterionFactory.contains("commentSingle", "1"));
 		checkExpression("commentSingle CONTAINS \"1\"", CriterionFactory.createSimpleCriterion("commentSingle", "1", QueryOperator.CONTAINS));
 
-		checkExpression("comment CONTAINS \"1\"", CriterionFactory.complexCmsPropertycontains("comment", "1"));
 		checkExpression("comment CONTAINS \"1\"", CriterionFactory.contains("comment", "1"));
 		checkExpression("comment CONTAINS \"1\"", CriterionFactory.createSimpleCriterion("comment", "1", QueryOperator.CONTAINS));
 
@@ -347,51 +340,6 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	}
 
 
-	//@Test
-	public void testSystemBuiltInEntityCriterion(){
-
-		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-		topicCriteria.doNotCacheResults();
-
-		CmsOutcome<Topic> allTopics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
-
-		Assert.assertTrue(allTopics != null && allTopics.getCount() > 0, "Did not returned any topic");
-
-		//Now distinguish how may topics are system built in and how many are not
-		int systemBuiltInTopicsCount = 0;
-		int nonSystemBuiltInTopicsCount = 0;
-
-		for (Topic topic : allTopics.getResults()){
-			if (topic.isSystemBuiltinEntity()){
-				systemBuiltInTopicsCount++;
-			}
-			else{
-				nonSystemBuiltInTopicsCount++;
-			}
-		}
-
-		//Now perform the same query for each category
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES);
-		topicCriteria.doNotCacheResults();
-
-		CmsOutcome<Topic> nonSystemBuiltinTopics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
-
-		Assert.assertTrue(nonSystemBuiltinTopics != null && nonSystemBuiltinTopics.getCount() == nonSystemBuiltInTopicsCount,
-				"Non system built in topic count "+ nonSystemBuiltInTopicsCount + " does not match " +
-				" with the topic outcome count "+ nonSystemBuiltinTopics.getCount());
-
-
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES);
-		topicCriteria.doNotCacheResults();
-
-		CmsOutcome<Topic> systemBuiltinTopics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
-
-		Assert.assertTrue(systemBuiltinTopics != null && systemBuiltinTopics.getCount() == systemBuiltInTopicsCount, 
-				"Non system built in topic count "+ systemBuiltInTopicsCount + " does not match " +
-				" with the topic outcome count "+ systemBuiltinTopics.getCount());
-
-	}
 
 	private void checkExpression(String expression, Criterion expectedCriterion) throws Exception {
 

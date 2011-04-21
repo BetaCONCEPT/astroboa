@@ -33,7 +33,7 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -85,7 +85,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		parentTopic.addLocalizedLabel("en", parentTopic.getName()+"-en");
 		parentTopic.setTaxonomy(taxonomy);
-		parentTopic = topicService.saveTopic(parentTopic);
+		parentTopic = topicService.save(parentTopic);
 
 		Topic topic = JAXBTestUtils.createTopic("test-search-topic-using-search-expression", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
@@ -96,7 +96,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.addLocalizedLabel("en", english_label);
 		topic.setParent(parentTopic);
 		topic.setTaxonomy(taxonomy);
-		topic = topicService.saveTopic(topic);
+		topic = topicService.save(topic);
 		
 		//Create criteria
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
@@ -311,7 +311,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 			CriterionFactory.parse(expression, topicCriteria);
 
-			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
+			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 			if (SearchOutcome.ONLY_EXPECTED_TOPIC == searchOutcome){
 				Assert.assertEquals(outcome.getCount(), 1, "Invalid topic outcome count."+ printOutcome(outcome));
@@ -436,7 +436,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic = topicService.save(topic);
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertEquals(topicReloaded.getTaxonomy().getName(),getSubjectTaxonomy().getName(),  "Topic "+topic.getName() + " was not saved under default taxonomy "+Taxonomy.SUBJECT_TAXONOMY_NAME);
 		
@@ -450,7 +450,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topicReloaded.setTaxonomy(taxonomy);
 		topicService.save(topicReloaded);
 		
-		topicReloaded = topicService.getTopic(topicReloaded.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		topicReloaded = topicService.getTopic(topicReloaded.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertEquals(topicReloaded.getTaxonomy().getName(),taxonomy.getName(),  "Topic "+topic.getName() + " was not saved under default taxonomy "+Taxonomy.SUBJECT_TAXONOMY_NAME);
 
@@ -473,7 +473,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.setParent(parentTopic);
 		topic = topicService.save(topic);
 		
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertEquals(topicReloaded.getTaxonomy().getName(),getSubjectTaxonomy().getName(),  "Topic "+topic.getName() + " was not saved under default taxonomy "+Taxonomy.SUBJECT_TAXONOMY_NAME);
 		
@@ -492,7 +492,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topicReloaded.setParent(secondParentTopic);
 		topicReloaded = topicService.save(topicReloaded);
 		
-		topicReloaded = topicService.getTopic(topicReloaded.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		topicReloaded = topicService.getTopic(topicReloaded.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertEquals(topicReloaded.getTaxonomy().getName(),taxonomy.getName(),  "Topic "+topic.getName() + " was not saved under default taxonomy "+Taxonomy.SUBJECT_TAXONOMY_NAME);
 
@@ -509,7 +509,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic = topicService.save(topic);
 		
 		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-delete-mandatory-reference", false);
-		((TopicProperty)contentObject.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 
@@ -532,7 +532,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic = topicService.save(topic);
 		
 		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-delete-reference", false);
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 
@@ -548,7 +548,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		}
 		
 		//Check with Topic entity 
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertNull(topicReloaded, "Topic "+topic.getName() + " was not deleted");
 		
@@ -559,8 +559,8 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		//Check with content object id
 		contentObject =contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 		
-		Assert.assertTrue(((TopicProperty)contentObject.getCmsProperty("profile.subject")).hasNoValues(), "ContentObjct "+contentObject.getSystemName() + " contains values "+
-				((TopicProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues()+ " but it should not have");
+		Assert.assertTrue(((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).hasNoValues(), "ContentObjct "+contentObject.getSystemName() + " contains values "+
+				((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues()+ " but it should not have");
 		
 	}
 	
@@ -580,7 +580,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		parentTopic = topicService.save(parentTopic);
 		
 		ContentObject contentObject = createContentObject(getSystemUser(), "test-child-topic-delete-reference", false);
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 
@@ -604,7 +604,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		}
 		
 		//Check with Topic entity 
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertNull(topicReloaded, "Topic "+topic.getName() + " was not deleted");
 		
@@ -615,8 +615,8 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		//Check with content object id
 		contentObject =contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 		
-		Assert.assertTrue(((TopicProperty)contentObject.getCmsProperty("profile.subject")).hasNoValues(), "ContentObjct "+contentObject.getSystemName() + " contains values "+
-				((TopicProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues()+ " but it should not have");
+		Assert.assertTrue(((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).hasNoValues(), "ContentObjct "+contentObject.getSystemName() + " contains values "+
+				((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).getSimpleTypeValues()+ " but it should not have");
 		
 	}
 	
@@ -631,7 +631,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-save-reference", false);
-		((TopicProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
+		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
 		addEntityToBeDeletedAfterTestIsFinished(contentObject);
 		
@@ -641,7 +641,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		Assert.assertNotNull(topicNode, "Topic "+topic.getName() + " was not saved");
 		
 		//Check with Topic entity 
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
 		Assert.assertNotNull(topicReloaded, "Topic "+topic.getName() + " was not saved");
 		
@@ -873,7 +873,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.addLocalizedLabel("en", english_label);
 		topic.addLocalizedLabel("el", "Όρος ΘΗσαυρού");
 
-		topic = topicService.saveTopic(topic);
+		topic = topicService.save(topic);
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Search specific locale, ignore case and use LIKE operator
@@ -890,7 +890,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		logger.debug("XPATH {}",topicCriteria.getXPathQuery());
 		
-		CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
+		CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		
 		Assert.assertEquals(outcome.getCount(), 1, "Invalid topic outcome count");
 		
@@ -911,7 +911,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		logger.debug("XPATH {}",topicCriteria.getXPathQuery());
 		
-		outcome = topicService.searchTopics(topicCriteria);
+		outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		
 		Assert.assertEquals(outcome.getCount(), 1, "Invalid topic outcome count");
 		
@@ -932,7 +932,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		logger.debug("XPATH {}",topicCriteria.getXPathQuery());
 		
-		outcome = topicService.searchTopics(topicCriteria);
+		outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		
 		Assert.assertEquals(outcome.getCount(), 1, "Invalid topic outcome count");
 		
@@ -973,7 +973,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY), testUser);
+		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), testUser);
 		
 		
 
@@ -1012,7 +1012,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY), getSystemUser());
+		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
 		
 	}
 	
@@ -1055,7 +1055,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY), getSystemUser());
+		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
 		
 	}
 	
@@ -1078,7 +1078,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 		Topic topic =  createRootTopicForSubjectTaxonomy("topicTestExportAsTopicOutcome");
 		
-		CmsOutcome<Topic> outcome = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY);
+		CmsOutcome<Topic> outcome = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY, false);
 		
 		Assert.assertNotNull(outcome, "TopicService.getTopic returned null with Outcome returned type");
 		
@@ -1108,16 +1108,16 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 			
 			for (ResourceRepresentationType<String> output : outputs){
 				//Reload topic without its children
-				topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY);
+				topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 
 				//	First check export of topic only
 				if (output.equals(ResourceRepresentationType.XML)){
 					topicXml = topic.xml(prettyPrint);
-					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY);
+					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY, prettyPrint);
 				}
 				else{
 					topicXml = topic.json(prettyPrint);
-					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY);
+					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY, prettyPrint);
 				}
 				
 				Topic topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE);  
@@ -1128,11 +1128,11 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				topic.getChildren();
 				if (output.equals(ResourceRepresentationType.XML)){
 					topicXml = topic.xml(prettyPrint);
-					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, prettyPrint);
 				}
 				else{
 					topicXml = topic.json(prettyPrint);
-					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
+					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 				}
 
 				topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 

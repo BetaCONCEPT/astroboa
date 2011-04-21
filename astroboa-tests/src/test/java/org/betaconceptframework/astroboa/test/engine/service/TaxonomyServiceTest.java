@@ -61,7 +61,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 	@Test
 	public void testGetTaxonomyAsTaxonomyOutcome() throws Throwable{
 		
-		CmsOutcome<Taxonomy> outcome = taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY);
+		CmsOutcome<Taxonomy> outcome = taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false);
 		
 		Assert.assertNotNull(outcome, "TaxonomyService.getTaxonomy returned null with Outcome returned type");
 		
@@ -85,18 +85,18 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		
 		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
 		
-		Taxonomy taxonomyById = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.TAXONOMY_INSTANCE,FetchLevel.ENTITY);
+		Taxonomy taxonomyById = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.TAXONOMY_INSTANCE,FetchLevel.ENTITY, false);
 		
 		assertTaxonomiesHaveTheSameIds(taxonomy, taxonomyById);
 		
-		Taxonomy taxonomyByName = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+		Taxonomy taxonomyByName = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		
 		assertTaxonomiesHaveTheSameIds(taxonomy, taxonomyByName);
 		assertTaxonomiesHaveTheSameIds(taxonomyByName, taxonomyById);
 		
 		Taxonomy builtInTaxonomy = taxonomyService.getBuiltInSubjectTaxonomy(null);
-		Taxonomy builtInTaxonomyById = taxonomyService.getTaxonomy(builtInTaxonomy.getId(), ResourceRepresentationType.TAXONOMY_INSTANCE,FetchLevel.ENTITY);
-		Taxonomy builtInTaxonomyByName = taxonomyService.getTaxonomy(builtInTaxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+		Taxonomy builtInTaxonomyById = taxonomyService.getTaxonomy(builtInTaxonomy.getId(), ResourceRepresentationType.TAXONOMY_INSTANCE,FetchLevel.ENTITY, false);
+		Taxonomy builtInTaxonomyByName = taxonomyService.getTaxonomy(builtInTaxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		
 		assertTaxonomiesHaveTheSameIds(builtInTaxonomy, builtInTaxonomyById);
 		assertTaxonomiesHaveTheSameIds(builtInTaxonomy, builtInTaxonomyByName);
@@ -117,16 +117,16 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		Taxonomy taxonomy = JAXBTestUtils.createTaxonomy("MyTaxonomy", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
 		
-		taxonomy = taxonomyService.saveTaxonomy(taxonomy);
+		taxonomy = taxonomyService.save(taxonomy);
 		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
 		
 		//Change case
 		taxonomy.setName("myTaxonomy");
-		taxonomy = taxonomyService.saveTaxonomy(taxonomy);
+		taxonomy = taxonomyService.save(taxonomy);
 		
 		Assert.assertEquals(taxonomy.getName(), "myTaxonomy", "Taxonomy Name did not change");
 		
-		taxonomy = taxonomyService.getTaxonomy("myTaxonomy", "en");
+		taxonomy = taxonomyService.getTaxonomy("myTaxonomy", ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		
 		Assert.assertNotNull(taxonomy, "Taxonomy Name did not change case");
 		
@@ -174,16 +174,16 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		
 		addEntityToBeDeletedAfterTestIsFinished(newTaxonomy);
 		
-		CmsOutcome<Taxonomy> outcome = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY);
+		CmsOutcome<Taxonomy> outcome = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false);
 		
 		Assert.assertNotNull(outcome, "TaxonomyService.getTaxonomy returned null with Outcome returned type");
 		
-		String outcomeAsXml = taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY);
+		String outcomeAsXml = taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY, false);
 		
 		Assert.assertEquals(outcome.getOffset(), 0, "TaxonomyService.getTaxonomy returned invalid offset with Outcome returned type\n"+TestUtils.prettyPrintXml(outcomeAsXml));
 		
 		for (Taxonomy tax : outcome.getResults()){
-			final Taxonomy taxReloaded = taxonomyService.getTaxonomy(tax.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+			final Taxonomy taxReloaded = taxonomyService.getTaxonomy(tax.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 			
 			Assert.assertEquals(tax.getId(), taxReloaded.getId(),
 					"TaxonomyService.getTaxonomy returned invalid taxonomy "+taxReloaded.getName()+" with Outcome returned type\n"+TestUtils.prettyPrintXml(outcomeAsXml));
@@ -212,10 +212,10 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				resourceRepresentationTypeForLogger = resourceRepresentationType;
 				
 				if (resourceRepresentationType.equals(ResourceRepresentationType.JSON)){
-					allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.JSON, FetchLevel.ENTITY);
+					allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.JSON, FetchLevel.ENTITY, false);
 				}					
 				else if (resourceRepresentationType.equals(ResourceRepresentationType.XML)){
-					allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY);
+					allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY, false);
 				}
 
 				Assert.assertNotNull(allTaxonomies, "Taxonomies were not exported");
@@ -241,7 +241,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				logger.error(resourceRepresentationTypeForLogger + "Initial \n{}",allTaxonomies);
 			}
 			
-			logger.error("All taxonomies XML \n{}", taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY));
+			logger.error("All taxonomies XML \n{}", taxonomyService.getAllTaxonomies(ResourceRepresentationType.XML, FetchLevel.ENTITY, prettyPrint));
 			
 			throw e;
 		}	
@@ -263,17 +263,17 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 			
 			for (ResourceRepresentationType<String> output : outputs){
 				
-				Taxonomy subjectTaxonomy = taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+				Taxonomy subjectTaxonomy = taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 				String taxonomyName = subjectTaxonomy.getName();
 				
 				//Export taxonomy from JAXB
 				if (output.equals(ResourceRepresentationType.XML)){
 					taxonomyExportFromJAXB =  subjectTaxonomy.xml(prettyPrint);
-					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN,prettyPrint);
 				}
 				else if (output.equals(ResourceRepresentationType.JSON)){
 					taxonomyExportFromJAXB = subjectTaxonomy.json(prettyPrint);
-					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN);
+					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN,prettyPrint);
 				}
 
 				//Create instance from Service export
@@ -287,11 +287,11 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 			
 				if (output.equals(ResourceRepresentationType.XML)){
 					taxonomyExportFromJAXB =  subjectTaxonomy.xml(prettyPrint);
-					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.XML, FetchLevel.FULL);
+					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 				}
 				else if (output.equals(ResourceRepresentationType.JSON)){
 					taxonomyExportFromJAXB = subjectTaxonomy.json(prettyPrint);
-					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.JSON, FetchLevel.FULL);
+					taxonomyExportFromService = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 				}
 
 				//Create instance from Service export
@@ -402,7 +402,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 	private void validateImportedTaxonomy(Taxonomy importedTaxonomy, boolean assertRootTopics) throws Throwable {
 
 		//check that it has been saved
-		Taxonomy checkTaxonomy = taxonomyService.getTaxonomy(importedTaxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+		Taxonomy checkTaxonomy = taxonomyService.getTaxonomy(importedTaxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 
 		Assert.assertNotNull(checkTaxonomy, "Taxonomy "+importedTaxonomy.getName()+ " has not been imported at all");
 
@@ -457,7 +457,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 
 	private void checkExceptionIsThrownIfTaxonomyToBeDeletedIsBuiltIn(String taxonomyName) {
 
-		Taxonomy taxonomyToBeDeleted = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY);
+		Taxonomy taxonomyToBeDeleted = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 
 		try{
 			taxonomyService.deleteTaxonomyTree(taxonomyToBeDeleted.getId());

@@ -194,7 +194,7 @@ public class RepositoryContentValidator {
 
 
 			break;
-		case Topic :
+		case TopicReference :
 
 			Topic sourceTopic = (Topic) source;
 			Topic targetTopic = (Topic) target;
@@ -207,7 +207,7 @@ public class RepositoryContentValidator {
 
 			break;
 
-		case ContentObject :
+		case ObjectReference :
 
 			ContentObject sourceContentObject = (ContentObject) source;
 			ContentObject targetContentObject = (ContentObject) target;
@@ -331,7 +331,7 @@ public class RepositoryContentValidator {
 			return ;
 		}
 		else{
-			Assert.assertNotNull(targetUser, "Source user is not null but target is");
+			Assert.assertNotNull(targetUser, "Source user is "+sourceUser.getExternalId()+" but target user is null");
 		}
 		
 		final String sourceExternalId = sourceUser.getExternalId();
@@ -350,7 +350,7 @@ public class RepositoryContentValidator {
 		}
 
 		if (compareSpaces){
-			compareSpaces(sourceUser.getSpace(), targetUser.getSpace(), true, true, true, ! systemUsers);
+			compareSpaces(sourceUser.getSpace(), targetUser.getSpace(), true, true, true, ! systemUsers, true);
 		}
 	}
 
@@ -395,7 +395,7 @@ public class RepositoryContentValidator {
 
 	}
 
-	public void compareSpaceList(List<Space> source, List<Space> target, boolean compareChildSpace, boolean compareIdentifiers){
+	public void compareSpaceList(List<Space> source, List<Space> target, boolean compareChildSpace, boolean compareIdentifiers, boolean compareParents){
 		assertListSizes(source, target, "Space ");
 
 		Map<String, Space> targetSpacesMap = createMap(target);
@@ -405,10 +405,10 @@ public class RepositoryContentValidator {
 			Assert.assertTrue(targetSpacesMap.containsKey(sourceSpace.getId()) || targetSpacesMap.containsKey(sourceSpace.getName()), "Space "+sourceSpace.getName() + " was not found in target space map");
 
 			if (targetSpacesMap.get(sourceSpace.getId()) != null){
-				compareSpaces(sourceSpace, targetSpacesMap.get(sourceSpace.getId()), compareChildSpace, true, true, compareIdentifiers);
+				compareSpaces(sourceSpace, targetSpacesMap.get(sourceSpace.getId()), compareChildSpace, true, true, compareIdentifiers, compareParents);
 			}
 			else if (targetSpacesMap.get(sourceSpace.getName()) != null){
-				compareSpaces(sourceSpace, targetSpacesMap.get(sourceSpace.getName()), compareChildSpace, true, true, compareIdentifiers);
+				compareSpaces(sourceSpace, targetSpacesMap.get(sourceSpace.getName()), compareChildSpace, true, true, compareIdentifiers, compareParents);
 			}
 
 			targetSpacesMap.remove(sourceSpace.getId());
@@ -467,7 +467,7 @@ public class RepositoryContentValidator {
 		compareLocalization(sourceTopic, targetTopic);
 	}
 
-	public void compareSpaces(Space sourceSpace, Space targetSpace, boolean compareChildSpace, boolean compareOrders, boolean compareOwners, boolean compareIdentifiers) {
+	public void compareSpaces(Space sourceSpace, Space targetSpace, boolean compareChildSpace, boolean compareOrders, boolean compareOwners, boolean compareIdentifiers, boolean compareParents) {
 
 		final String sourceSpaceName = sourceSpace.getName();
 		final String targetSpaceName = targetSpace.getName();
@@ -492,12 +492,17 @@ public class RepositoryContentValidator {
 			Assert.assertEquals(sourceSpace.getNumberOfChildren(), targetSpace.getNumberOfChildren(), "Invalid number of child spaces , source: "+ sourceSpaceName + " target : "+targetSpaceName);
 			
 			if (sourceSpace.getNumberOfChildren() > 0){
-				compareSpaceList(sourceSpace.getChildren(), targetSpace.getChildren(), compareChildSpace,compareIdentifiers);
+				compareSpaceList(sourceSpace.getChildren(), targetSpace.getChildren(), compareChildSpace,compareIdentifiers, false);
 			}
 		}
 
-		if (sourceSpace.getParent() != null){
-			compareSpaces(sourceSpace.getParent(), targetSpace.getParent(), false, false, false,compareIdentifiers);
+		if (compareParents){
+			if (sourceSpace.getParent() != null){
+
+				Assert.assertNotNull(targetSpace.getParent(), "Target space has no parent, source: "+ sourceSpaceName + " target : "+targetSpaceName+ " , Parent of source : "+ sourceSpace.getParent().getName());
+
+				compareSpaces(sourceSpace.getParent(), targetSpace.getParent(), false, false, false,compareIdentifiers, compareParents);
+			}
 		}
 
 	}

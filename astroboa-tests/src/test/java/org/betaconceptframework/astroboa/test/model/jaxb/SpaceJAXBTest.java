@@ -264,7 +264,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Import Space XML in {}, ImportMode {}, ", start, importMode.toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromXML);
 				
-				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, true, true, true, true);
+				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, true, true, true, true, true);
 				
 				start = System.currentTimeMillis();
 				json = space.json(prettyPrint);
@@ -275,8 +275,8 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Import Space JSON in {}, ImportMode {}, ", start, importMode.toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromJSON);
 				
-				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, true,true,true, true);
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSON, true,true,true, true);
+				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, true,true,true, true, true);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSON, true,true,true, true, true);
 				
 				//Now create XML and JSON from Service and compare each other
 				space = spaceService.save(space);
@@ -293,10 +293,10 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromJSONService);
 
 				
-				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSONService, true, true, true, true);
+				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSONService, true, true, true, true, true);
 				//Order of spaces does matter since spaceUnMarshalledFromJSON and spaceUnMarshalledFromXML do not have identifier
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSONService, spaceUnMarshalledFromJSON, true, true, true, false);
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSONService,spaceUnMarshalledFromXML,  true, true, true, false);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSONService, spaceUnMarshalledFromJSON, true, true, true, false, true);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSONService,spaceUnMarshalledFromXML,  true, true, true, false, true);
 
 				start = System.currentTimeMillis();
 				xml = spaceService.getSpace(space.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
@@ -308,12 +308,12 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Import Space XML in {}, ImportMode {}, ", start, importMode.toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromXMLService);
 				
-				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, true, true, true, true);
+				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, true, true, true, true, true);
 				//Order of spaces does matter since spaceUnMarshalledFromJSON and spaceUnMarshalledFromXML do not have identifier
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSON, true, true, true, false);
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromXML, true, true, true, false);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSON, true, true, true, false, true);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromXML, true, true, true, false, true);
 				
-				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSONService, true, true, true, true);
+				repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXMLService, spaceUnMarshalledFromJSONService, true, true, true, true, true);
 				
 			}
 			catch(Throwable e){

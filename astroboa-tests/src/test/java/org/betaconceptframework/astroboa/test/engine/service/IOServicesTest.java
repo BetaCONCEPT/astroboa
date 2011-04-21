@@ -134,9 +134,9 @@ public class IOServicesTest extends AbstractRepositoryTest{
 		assertIOOfEntity(CmsEntityType.CONTENT_OBJECT);
 		
 		//	Now relate eahc other and try to reimport  		
-			/*((ContentObjectProperty)contentObject.getCmsProperty("simpleContentObject")).setSimpleTypeValue(contentObject2);
-			((ContentObjectProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(contentObject2);
-			((ContentObjectProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(contentObject2);
+			/*((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObject")).setSimpleTypeValue(contentObject2);
+			((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(contentObject2);
+			((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(contentObject2);
 			contentObject = contentService.save(contentObject, false, true, null);
 	
 			exportUsingJCR(CmsEntityType.CONTENT_OBJECT);

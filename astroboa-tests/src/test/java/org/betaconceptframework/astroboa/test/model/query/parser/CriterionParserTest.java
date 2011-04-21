@@ -50,7 +50,7 @@ public class CriterionParserTest {
 		//Reserved property paths
 		checkExpressionForTopicCriteria("name=\"1\"", CriterionFactory.equals(CmsBuiltInItem.Name.getJcrName(), "1"));
 		checkExpressionForTopicCriteria("name!=\"1\"", CriterionFactory.notEquals(CmsBuiltInItem.Name.getJcrName(), "1"));
-		checkExpressionForTopicCriteria("name CONTAINS \"1\"", CriterionFactory.simpleCmsPropertycontains(CmsBuiltInItem.Name.getJcrName(), "1"));
+		checkExpressionForTopicCriteria("name CONTAINS \"1\"", CriterionFactory.contains(CmsBuiltInItem.Name.getJcrName(), "1"));
 		checkExpressionForTopicCriteria("name CONTAINS \"1\"", CriterionFactory.createSimpleCriterion(CmsBuiltInItem.Name.getJcrName(), "1",QueryOperator.CONTAINS));
 		checkExpressionForTopicCriteria("name%%\"1%\"", CriterionFactory.like(CmsBuiltInItem.Name.getJcrName(), "1%"));
 		checkExpressionForTopicCriteria("name%%\"1\"", CriterionFactory.like(CmsBuiltInItem.Name.getJcrName(), "1"));

@@ -61,7 +61,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a topic with one child topic "+json);
 			
 			//Retrieve topic from repository
-			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL);
+			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL, false);
 			json  = topic.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"childTopics\":{\"topic\":[{"), 
@@ -90,7 +90,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a topic with 2 child topics "+json);
 			
 			//Retrieve topic from repository
-			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL);
+			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL, false);
 			json  = topic.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"childTopics\":{\"topic\":[{"), 
@@ -124,7 +124,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a topic with 2 localized labels "+json);
 			
 			//Retrieve topic from repository
-			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL);
+			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL, false);
 			json  = topic.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}"), 
@@ -149,7 +149,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a topic with 1 localized label "+json);
 
 			//Retrieve topic from repository
-			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL);
+			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL, false);
 			json  = topic.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\"}}"), 
@@ -217,7 +217,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				addEntityToBeDeletedAfterTestIsFinished(topic);
 				
 				start = System.currentTimeMillis();
-				json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
+				json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 				
 				logTimeElapsed("Export Topic JSON using service in {}", start);
 				
@@ -233,7 +233,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				repositoryContentValidator.compareTopics(topicUnMarshalledFromJSONService,topicUnMarshalledFromXML,  true, true, true, true, false);
 
 				start = System.currentTimeMillis();
-				xml = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+				xml = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 				
 				logTimeElapsed("Export Topic XML using service in {}", start);
 				
@@ -273,10 +273,10 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		String xmlFromApi = topic.xml(prettyPrint);
-		String xmlFromService = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+		String xmlFromService = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 
 		String jsonFromApi = topic.json(prettyPrint);
-		String jsonFromService = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
+		String jsonFromService = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 
 		xmlFromApi = removeWhitespacesIfNecessary(xmlFromApi);
 		jsonFromApi = removeWhitespacesIfNecessary(jsonFromApi);

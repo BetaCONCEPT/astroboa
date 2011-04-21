@@ -80,7 +80,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 
 				boolean compareRootTopics = fetchLevel != FetchLevel.ENTITY;
 
-				taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, fetchLevel);
+				taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, fetchLevel, false);
 				
 				for (ImportMode importMode : ImportMode.values()){
 					
@@ -100,14 +100,14 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromXML, taxonomyUnMarshalledFromJSON, true, compareRootTopics);
 
 					//Now create XML and JSON from Service and compare each other
-					json = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.JSON, fetchLevel);
+					json = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.JSON, fetchLevel, prettyPrint);
 					Taxonomy taxonomyUnMarshalledFromJSONService = importDao.importTaxonomy(json, importMode); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromJSON, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromXML, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 
-					xml = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.XML, fetchLevel);
+					xml = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.XML, fetchLevel, prettyPrint);
 					Taxonomy taxonomyUnMarshalledFromXMLService = importDao.importTaxonomy(xml,importMode); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromXMLService, true, compareRootTopics);
@@ -122,7 +122,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 		catch(Throwable e){
 			logger.error("Fetch Level {}", fetchLevelForLog);
 			logger.error("Import Mode {}", importModeForLog);
-			logPrettyXmlToError(xml, "XML");
+			logger.error("XML {}", xml);
 			logger.error("JSON {}", json);
 
 

@@ -60,7 +60,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a taxonomy with one child topic "+json);
 			
 			//Retrieve taxonomy from repository
-			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL);
+			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, false);
 			json  = taxonomy.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"rootTopics\":{\"topic\":[{"), 
@@ -88,7 +88,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a taxonomy with 2 child topics "+json);
 
 			//Retrieve taxonomy from repository
-			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL);
+			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, false);
 			json  = taxonomy.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"rootTopics\":{\"topic\":[{"), 
@@ -121,7 +121,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a taxonomy with 2 localized labels "+json);
 			
 			//Retrieve taxonomy from repository
-			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL);
+			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, false);
 			json  = taxonomy.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}}"), 
@@ -146,7 +146,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 					"Invalid JSON export of a taxonomy with 1 localized label "+json);
 			
 			//Retrieve taxonomy from repository
-			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL);
+			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, false);
 			json  = taxonomy.json(prettyPrint);
 
 			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\"}}}"), 
@@ -215,7 +215,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				taxonomy = taxonomyService.save(taxonomy);
 				
 				start = System.currentTimeMillis();
-				json = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
+				json = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 				
 				logTimeElapsed("Export Taxonomy JSON using service in {}", start);
 				
@@ -230,7 +230,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromJSONService, taxonomyUnMarshalledFromXML, false, true);
 
 				start = System.currentTimeMillis();
-				xml = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+				xml = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 				
 				logTimeElapsed("Export Taxonomy XML using service in {}", start);
 				
@@ -268,7 +268,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		
 		String xsiNamesplaceDeclaration = "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
 		String xmlNamespaceDeclaration = "xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"";
-		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/definition/astroboa-model");
+		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/model/astroboa-model");
 		String xmlScehmaLocation = removeWhitespacesIfNecessary("http://www.w3.org/XML/1998/namespace http://www.w3.org/2001/03/xml.xsd");
 		
 		String xmlFromApi = taxonomy.xml(prettyPrint);
@@ -282,7 +282,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		Assert.assertFalse(xmlWithoutIndentation.contains(xmlNamespaceDeclaration), "XML Namespace Declaration "+xmlNamespaceDeclaration+" not found in taxonomy xml export from api "+ xmlFromApi);
 		Assert.assertFalse(xmlWithoutIndentation.contains(xmlScehmaLocation), "XML Schema Location "+xmlScehmaLocation+" not found in taxonomy xml export from api "+ xmlFromApi);
 		
-		String xmlFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+		String xmlFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 		
 		jaxbValidationUtils.validateUsingSAX(xmlFromService);
 		
@@ -308,10 +308,10 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
 		
 		String xmlFromApi = taxonomy.xml(prettyPrint);
-		String xmlFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
+		String xmlFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);
 
 		String jsonFromApi = taxonomy.json(prettyPrint);
-		String jsonFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
+		String jsonFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 
 		xmlFromApi = removeWhitespacesIfNecessary(xmlFromApi);
 		jsonFromApi = removeWhitespacesIfNecessary(jsonFromApi);

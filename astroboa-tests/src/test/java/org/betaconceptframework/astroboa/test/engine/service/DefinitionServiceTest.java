@@ -30,6 +30,7 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinit
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.visitor.DefinitionVisitor.VisitType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
@@ -66,14 +67,14 @@ public class DefinitionServiceTest extends AbstractRepositoryTest {
 			List<String> contentTypes = definitionService.getContentObjectTypes();
 			
 			for (String contentType : contentTypes){
-				ContentObjectTypeDefinition typeDefinition = definitionService.getContentObjectTypeDefinition(contentType);
+				ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE, prettyPrint);
 				typeDefinition.accept(definitionVisitor);
 			}
 		}
 		
 		loginToTestRepositoryAsSystem();
 		
-		ContentObjectTypeDefinition typeDefinition = definitionService.getContentObjectTypeDefinition(TEST_CONTENT_TYPE);
+		ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE, prettyPrint);
 
 		String propertyPath = "allPropertyTypeContainer.allPropertyTypeContainer.allPropertyTypeContainer.allPropertyTypeContainer.comment.comment";
 		
@@ -128,7 +129,7 @@ public class DefinitionServiceTest extends AbstractRepositoryTest {
 		
 		String fullPath = contentType+"."+ (pathToPropertyWhichIsTheParentOfTheRecursiveProperty==null? recursiveProperty : pathToPropertyWhichIsTheParentOfTheRecursiveProperty+"."+recursiveProperty);
 		
-		ComplexCmsPropertyDefinition recursiveDefinition = (ComplexCmsPropertyDefinition) definitionService.getCmsPropertyDefinition(fullPath);
+		ComplexCmsPropertyDefinition recursiveDefinition = (ComplexCmsPropertyDefinition) definitionService.getCmsDefinition(fullPath, ResourceRepresentationType.DEFINITION_INSTANCE, prettyPrint);
 		
 		//Now check again depth. 
 		String[]  pathParts = StringUtils.split(recursiveDefinition.getFullPath(), ".");

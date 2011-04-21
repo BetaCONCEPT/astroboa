@@ -126,7 +126,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		spaceService.getCountOfContentObjectIdsWhichResideInSpace(space.getId());
 
 		//Check with Topic entity 
-		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertNotNull(topicReloaded, "Topic "+topic.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 		Assert.assertEquals(topicReloaded.getOwner().getId(), getSystemUser().getId(), 
 				"Topic "+topic.getName() + " owner is not SYSTEM user when user "+user.getExternalId() + " was deleted");
@@ -306,32 +306,32 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		}
 
 		//Check with Topic in Subject Taxonomy 
-		Topic topicInSubjectTaxonomyReloaded = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicInSubjectTaxonomyReloaded = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertNotNull(topicInSubjectTaxonomyReloaded, "Topic "+topicInSubjectTaxonomy.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 
-		CmsOutcome<Topic> topicInSubjectTaxonomyReloadedOutcome = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY_AND_CHILDREN);
+		CmsOutcome<Topic> topicInSubjectTaxonomyReloadedOutcome = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertTrue(topicInSubjectTaxonomyReloadedOutcome != null && topicInSubjectTaxonomyReloadedOutcome.getCount()==1 && 
 				topicInSubjectTaxonomyReloadedOutcome.getResults().size()==1 && 
 				topicInSubjectTaxonomyReloadedOutcome.getResults().get(0).getId().equals(topicInSubjectTaxonomy.getId()), "Topic "+topicInSubjectTaxonomy.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 
-		String topicInSubjectTaxonomyReloadedAsString = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+		String topicInSubjectTaxonomyReloadedAsString = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertNotNull(topicInSubjectTaxonomyReloadedAsString, "Topic "+topicInSubjectTaxonomy.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 
-		topicInSubjectTaxonomyReloadedAsString = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN);
+		topicInSubjectTaxonomyReloadedAsString = topicService.getTopic(topicInSubjectTaxonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertNotNull(topicInSubjectTaxonomyReloadedAsString, "Topic "+topicInSubjectTaxonomy.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 
 		//Check with Topic in User Folksonomy	
-		Topic topicInUserFolksonomyReloaded = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN);
+		Topic topicInUserFolksonomyReloaded = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertNull(topicInUserFolksonomyReloaded, "Topic "+topicInFolksonomy.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 
-		CmsOutcome<Topic> topicInUserFolksonomyReloadedOutcome = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY_AND_CHILDREN);
+		CmsOutcome<Topic> topicInUserFolksonomyReloadedOutcome = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.TOPIC_LIST, FetchLevel.ENTITY_AND_CHILDREN, false);
 		Assert.assertTrue(topicInUserFolksonomyReloadedOutcome != null && topicInUserFolksonomyReloadedOutcome.getCount()==0 && 
 				CollectionUtils.isEmpty(topicInUserFolksonomyReloadedOutcome.getResults()), "Topic "+topicInFolksonomy.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 
-		String topicInUserFolksonomyReloadedAsString = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN);
+		String topicInUserFolksonomyReloadedAsString = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, prettyPrint);
 		Assert.assertNull(topicInUserFolksonomyReloadedAsString, "Topic "+topicInFolksonomy.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 
-		topicInUserFolksonomyReloadedAsString = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN);
+		topicInUserFolksonomyReloadedAsString = topicService.getTopic(topicInFolksonomy.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN,prettyPrint);
 		Assert.assertNull(topicInUserFolksonomyReloadedAsString, "Topic "+topicInFolksonomy.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 
 		/*

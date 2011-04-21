@@ -211,7 +211,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 				
 				Space spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 
 
-				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, false, true, true,true);
+				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, false, true, true,true, true);
 
 				//Now check export of space children
 				space.getChildren();
@@ -226,7 +226,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 
 				spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 
 
-				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, true, true, true,true);
+				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, true, true, true,true, true);
 			
 			}			
 		}

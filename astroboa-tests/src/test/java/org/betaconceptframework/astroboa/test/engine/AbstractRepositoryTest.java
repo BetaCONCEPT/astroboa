@@ -55,16 +55,16 @@ import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
@@ -602,7 +602,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		newSpaceCriteria.addAncestorSpaceIdEqualsCriterion(spaceService.getOrganizationSpace().getId());
 		CmsOutcome<Space> targetSpaces = spaceService.searchSpaces(newSpaceCriteria, ResourceRepresentationType.SPACE_LIST);
 		
-		repositoryContentValidator.compareSpaceList(sourceSpaces.getResults(), targetSpaces.getResults(), true,false);
+		repositoryContentValidator.compareSpaceList(sourceSpaces.getResults(), targetSpaces.getResults(), true,false, false);
 
 		
 	}
@@ -628,10 +628,10 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	private void assertCloneRepositoryContainsExactlyTheSameTaxonomies() {
 		
 		loginToTestRepositoryAsSystem();
-		CmsOutcome<Taxonomy> sourceTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.FULL);
+		CmsOutcome<Taxonomy> sourceTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.FULL, false);
 		
 		loginToCloneRepositoryAsSystem();
-		CmsOutcome<Taxonomy> targetTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.FULL);
+		CmsOutcome<Taxonomy> targetTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.FULL, false);
 		
 		repositoryContentValidator.compareTaxonomyLists(sourceTaxonomies.getResults(), targetTaxonomies.getResults());
 		
@@ -646,7 +646,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		loginToCloneRepositoryAsSystem();
 		Space targetOrganizationSpace = spaceService.getOrganizationSpace();
 		
-		repositoryContentValidator.compareSpaces(sourceOrganizationSpace, targetOrganizationSpace, true, true, true,false);
+		repositoryContentValidator.compareSpaces(sourceOrganizationSpace, targetOrganizationSpace, true, true, true,false, true);
 		
 		
 	}
@@ -767,7 +767,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			provideValueForSimplePropertyWithValueRange((BinaryProperty)cmsProperty, multiple, 
 					Arrays.asList(loadManagedBinaryChannel(logo, cmsProperty.getName()), loadManagedBinaryChannel(logo2, cmsProperty.getName())));
 			break;
-		case ContentObject:
+		case ObjectReference:
 			
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			contentObjectCriteria.doNotCacheResults();
@@ -782,7 +782,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 					results.add(co);
 				}
 				
-				provideValueForSimplePropertyWithValueRange((ContentObjectProperty)cmsProperty, multiple, results);
+				provideValueForSimplePropertyWithValueRange((ObjectReferenceProperty)cmsProperty, multiple, results);
 			}
 			
 			break;
@@ -803,7 +803,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		case String:
 			provideValueForSimplePropertyWithValueRange((StringProperty)cmsProperty, multiple, Arrays.asList("Test<b>Value</b>","TestValue"));
 			break;
-		case Topic:
+		case TopicReference:
 			
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.doNotCacheResults();
@@ -813,7 +813,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			CmsOutcome<Topic> topics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			
 			if (topics.getCount() > 0){
-				provideValueForSimplePropertyWithValueRange((TopicProperty)cmsProperty, multiple, topics.getResults());
+				provideValueForSimplePropertyWithValueRange((TopicReferenceProperty)cmsProperty, multiple, topics.getResults());
 			}
 			
 			break;
@@ -916,16 +916,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		}
 	}
 	
-	protected void logPrettyXmlToError(String xml, String message) {
-		try{
-			logger.error("{} \n {}", message, TestUtils.prettyPrintXml(xml));
-		}
-		catch(Exception e1){
-			logger.error("{} \n {}", message,  xml);
-		}
-	}
-
-
 	protected Space getOrganizationSpace(){
 		return spaceService.getOrganizationSpace();
 	}
