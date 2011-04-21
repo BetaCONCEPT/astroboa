@@ -25,7 +25,7 @@ import java.util.List;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
@@ -210,7 +210,7 @@ public interface ContentObjectCriteria extends CmsCriteria {
 	 * <p>
 	 * In order for the criterion to be valid there must be 
 	 * a complex property named <code>profile</code> defined and which
-	 * will contain a {@link TopicPropertyDefinition topic} property named
+	 * will contain a {@link TopicReferencePropertyDefinition topic} property named
 	 * <code>subject</code>.
 	 * </p>
 	 * 
