@@ -424,7 +424,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> taxonomyOutput, FetchLevel fetchLevel) {
+	public <T> T getTaxonomy(String taxonomyIdOrName, ResourceRepresentationType<T> taxonomyOutput, FetchLevel fetchLevel, boolean prettyPrint) {
 		
 		if (StringUtils.isBlank(taxonomyIdOrName)){
 			return null;
@@ -490,7 +490,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 				
 				os = new ByteArrayOutputStream();
 
-				serializationDao.serializeCmsRepositoryEntity(taxonomyNode, os, taxonomyOutput, CmsEntityType.TAXONOMY, null, fetchLevel, true, false,false);
+				serializationDao.serializeCmsRepositoryEntity(taxonomyNode, os, taxonomyOutput, CmsEntityType.TAXONOMY, null, fetchLevel, true, false,prettyPrint);
 
 				taxonomy = new String(os.toByteArray(), "UTF-8");
 
@@ -523,7 +523,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T serializeAllTaxonomies(ResourceRepresentationType<T> taxonomyOutput, FetchLevel fetchLevel) {
+	public <T> T serializeAllTaxonomies(ResourceRepresentationType<T> taxonomyOutput, FetchLevel fetchLevel, boolean prettyPrint) {
 		
 		ByteArrayOutputStream os = null;
 		
@@ -588,6 +588,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 				os = new ByteArrayOutputStream();
 			
 				TaxonomyCriteria taxonomyCriteria = CmsCriteriaFactory.newTaxonomyCriteria();
+				taxonomyCriteria.getRenderProperties().prettyPrint(prettyPrint);
 				
 				serializationDao.serializeSearchResults(session, taxonomyCriteria, os, fetchLevel, taxonomyOutput, false);
 			
