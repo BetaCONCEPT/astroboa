@@ -169,12 +169,12 @@ public class TopicServiceClientWrapper extends AbstractClientServiceWrapper impl
 
 	@Override
 	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output,
-			FetchLevel fetchLevel) {
+			FetchLevel fetchLevel, boolean prettyPrint) {
 		if (topicServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return topicServiceSecure.getTopic(topicIdOrName, output, fetchLevel, getAuthenticationToken());
+			return topicServiceSecure.getTopic(topicIdOrName, output, fetchLevel, prettyPrint, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException(" TopicService reference was not found");
