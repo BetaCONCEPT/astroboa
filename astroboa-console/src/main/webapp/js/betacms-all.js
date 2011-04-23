@@ -1195,7 +1195,8 @@ function callFunctionOnEnterKey(e, func, arg) {
     		if (!text) {
     			text = 'The field is empty'; 
     		}
-    		bcmslib.jQuery.fancybox(text);
+    		bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
+    	//	bcmslib.jQuery.fancybox({'autoscale' : true, 'scrolling': 'auto', 'content': text, 'type': 'inline'});
     	}
     }
     
