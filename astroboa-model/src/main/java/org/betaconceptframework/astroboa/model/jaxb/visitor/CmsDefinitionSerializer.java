@@ -57,6 +57,8 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 
 	private MarkerSerializer serializer = null;
 	
+	private LocalizableCmsDefinition rootDefinition;
+	
 	public CmsDefinitionSerializer(boolean prettyPrint, boolean jsonOutput) {
 		
 		serializer = new MarkerSerializer(prettyPrint, jsonOutput);
@@ -68,156 +70,228 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		serializer.startElement(contentObjectTypeDefinition.getName(), true, true);
 
-		exportDefinitionObjectAndBasicProperties(contentObjectTypeDefinition,true);
+		rootDefinition = contentObjectTypeDefinition;
+		
+		exportDefinitionObjectAndBasicProperties(contentObjectTypeDefinition);
+		
+		if (!serializer.outputIsJSON()){
+			serializer.endElement(contentObjectTypeDefinition.getName(), true, false);
+		}
+
+		exportDisplayName(contentObjectTypeDefinition);
+
 	
 	}
 
 	@Override
 	public void visitComplexPropertyDefinition(ComplexCmsPropertyDefinition complexPropertyDefinition) {
 
-		serializer.startElement(complexPropertyDefinition.getName(), true, true);
 		
-		exportDefinitionObjectAndBasicProperties(complexPropertyDefinition,true);
+		
+		if (rootDefinition != null){
+			serializer.startElement("property", true, false);
+		}
+		else{
+			serializer.startElement(complexPropertyDefinition.getName(), true, true);
+			rootDefinition = complexPropertyDefinition;
+		}
+		
+		exportDefinitionObjectAndBasicProperties(complexPropertyDefinition);
+		
+		if (!serializer.outputIsJSON()){
+			serializer.endElement("property", true, false);
+		}
+
+		exportDisplayName(complexPropertyDefinition);
+
 	}
 
 	@Override
 	public <T> void visitSimplePropertyDefinition(
 			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
 		
+		
+		
 		if (simplePropertyDefinition != null){
 			
-			serializer.startElement(simplePropertyDefinition.getName(), true, true);
+			if (rootDefinition != null){
+				serializer.startElement("property", true, false);
+			}
+			else{
+				serializer.startElement(simplePropertyDefinition.getName(), true, true);
+				rootDefinition = simplePropertyDefinition;
+			}
+
 			
-			exportDefinitionObjectAndBasicProperties(simplePropertyDefinition, serializer.outputisJSON());
+			exportDefinitionObjectAndBasicProperties(simplePropertyDefinition);
 			
 			switch (simplePropertyDefinition.getValueType()) {
 			case Boolean:
-				BooleanPropertyDefinition booleanDefinition = (BooleanPropertyDefinition)simplePropertyDefinition;
-				
-				if (booleanDefinition.isSetDefaultValue()){
-					serializer.writeAttribute("defaultValue", String.valueOf(booleanDefinition.getDefaultValue()));
-				}
-
+				serializeBooleanPropertyDefinition(simplePropertyDefinition);
 				break;
 			case Date:
-
-				CalendarPropertyDefinition calendarDefinition = (CalendarPropertyDefinition)simplePropertyDefinition;
-				
-				serializer.writeAttribute("pattern",calendarDefinition.getPattern());
-
-				if (calendarDefinition.isSetDefaultValue()){
-					serializer.writeAttribute("defaultValue", DateFormatUtils.format(calendarDefinition.getDefaultValue().getTimeInMillis(), calendarDefinition.getPattern()));
-				}
-
-				
+				serializeDatePropertyDefinition(simplePropertyDefinition);
 				break;
 			case Double:
-				
-				DoublePropertyDefinition doubleDefinition = (DoublePropertyDefinition)simplePropertyDefinition;
-				
-				if (doubleDefinition.isSetDefaultValue()){
-					serializer.writeAttribute("defaultValue", String.valueOf(doubleDefinition.getDefaultValue()));
-				}
-				
-				if (doubleDefinition.getMinValue() != null && doubleDefinition.getMinValue() != Double.MIN_VALUE){
-					serializer.writeAttribute("minValue",String.valueOf(doubleDefinition.getMinValue()));
-					serializer.writeAttribute("minValueIsExclusive",String.valueOf(((DoublePropertyDefinitionImpl)doubleDefinition).isMinValueExclusive()));
-				}
-
-				if (doubleDefinition.getMaxValue() != null && doubleDefinition.getMinValue() != Double.MAX_VALUE){
-					serializer.writeAttribute("maxValue",String.valueOf(doubleDefinition.getMaxValue()));
-					serializer.writeAttribute("maxValueIsExclusive",String.valueOf(((DoublePropertyDefinitionImpl)doubleDefinition).isMaxValueExclusive()));
-				}
-				
+				serializeDoublePropertyDefinition(simplePropertyDefinition);
 				break;
 			case Long:
-				LongPropertyDefinition longDefinition = (LongPropertyDefinition)simplePropertyDefinition;
-				
-				if (longDefinition.isSetDefaultValue()){
-					serializer.writeAttribute("defaultValue",String.valueOf(longDefinition.getDefaultValue()));
-				}
-				
-				if (longDefinition.getMinValue() != null && longDefinition.getMinValue() != Long.MIN_VALUE){
-					serializer.writeAttribute("minValue",String.valueOf(longDefinition.getMinValue()));
-					serializer.writeAttribute("minValueIsExclusive",String.valueOf(((LongPropertyDefinitionImpl)longDefinition).isMinValueExclusive()));
-				}
-
-				if (longDefinition.getMaxValue() != null && longDefinition.getMaxValue() != Long.MAX_VALUE){
-					serializer.writeAttribute("maxValue",String.valueOf(longDefinition.getMaxValue()));
-					serializer.writeAttribute("maxValueIsExclusive",String.valueOf(((LongPropertyDefinitionImpl)longDefinition).isMaxValueExclusive()));
-				}
-				
+				serializeLongPropertyDefinition(simplePropertyDefinition);
 				break;
-
 			case String:
-				StringPropertyDefinition stringDefinition = (StringPropertyDefinition)simplePropertyDefinition;
-				
-				if (stringDefinition.isSetDefaultValue()){
-					serializer.writeAttribute("defaultValue",stringDefinition.getDefaultValue());
-				}
-				
-				if (stringDefinition.getMinLength() != null){
-					serializer.writeAttribute("minLength",String.valueOf(stringDefinition.getMinLength()));
-				}
-
-				if (stringDefinition.getMaxLength() != null){
-					serializer.writeAttribute("maxLength",String.valueOf(stringDefinition.getMaxLength()));
-				}
-				
-				if (stringDefinition.getPattern() != null){
-					serializer.writeAttribute("pattern",String.valueOf(stringDefinition.getPattern()));
-				}
-				
-				serializer.writeAttribute("stringFormat",String.valueOf(stringDefinition.getStringFormat()));
-				
+				serializeStringPropertyDefinition(simplePropertyDefinition);
 				break;
 			case ObjectReference:
-
-				if (CollectionUtils.isNotEmpty(((ObjectReferencePropertyDefinition)simplePropertyDefinition).getExpandedAcceptedContentTypes())){ 
-					serializer.writeAttribute("acceptedContentTypes",StringUtils.join(((ObjectReferencePropertyDefinition)simplePropertyDefinition).getExpandedAcceptedContentTypes(),","));
-				}
-
+				serializeObjectReferencePropertyDefinition(simplePropertyDefinition);
 				break;
-
 			case TopicReference:
-
-				if (CollectionUtils.isNotEmpty(((TopicReferencePropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies())){ 
-					serializer.writeAttribute("acceptedTaxonomies",StringUtils.join(((TopicReferencePropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies(), ","));
-				}
-
+				serializeTopicReferenceDefinition(simplePropertyDefinition);
 				break;
 
 			default:
 				break;
 			}
 			
-			if (! serializer.outputisJSON()){
+			if (!serializer.outputIsJSON()){
+				serializer.endElement("property", true, false);
+			}
 
-				//Display Name
-				exportDisplayName(simplePropertyDefinition);
-				serializer.endElement(simplePropertyDefinition.getName(), false,true);
-			}
-			else{
-				serializer.endElement(simplePropertyDefinition.getName(), true,true);
-			}
+			exportDisplayName(simplePropertyDefinition);
+
+			serializer.endElement("property", false,true);
 			
 		}
 		
+	}
+
+	private <T> void serializeTopicReferenceDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		if (CollectionUtils.isNotEmpty(((TopicReferencePropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies())){ 
+			serializer.writeAttribute("acceptedTaxonomies",StringUtils.join(((TopicReferencePropertyDefinition)simplePropertyDefinition).getAcceptedTaxonomies(), ","));
+		}
+	}
+
+	private <T> void serializeObjectReferencePropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		if (CollectionUtils.isNotEmpty(((ObjectReferencePropertyDefinition)simplePropertyDefinition).getExpandedAcceptedContentTypes())){ 
+			serializer.writeAttribute("acceptedContentTypes",StringUtils.join(((ObjectReferencePropertyDefinition)simplePropertyDefinition).getExpandedAcceptedContentTypes(),","));
+		}
+	}
+
+	private <T> void serializeStringPropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		StringPropertyDefinition stringDefinition = (StringPropertyDefinition)simplePropertyDefinition;
+		
+		if (stringDefinition.isSetDefaultValue()){
+			serializer.writeAttribute("defaultValue",stringDefinition.getDefaultValue());
+		}
+		
+		if (stringDefinition.getMinLength() != null){
+			serializer.writeAttribute("minLength",String.valueOf(stringDefinition.getMinLength()));
+		}
+
+		if (stringDefinition.getMaxLength() != null){
+			serializer.writeAttribute("maxLength",String.valueOf(stringDefinition.getMaxLength()));
+		}
+		
+		if (stringDefinition.getPattern() != null){
+			serializer.writeAttribute("pattern",String.valueOf(stringDefinition.getPattern()));
+		}
+		
+		serializer.writeAttribute("stringFormat",String.valueOf(stringDefinition.getStringFormat()));
+	}
+
+	private <T> void serializeLongPropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		LongPropertyDefinition longDefinition = (LongPropertyDefinition)simplePropertyDefinition;
+		
+		if (longDefinition.isSetDefaultValue()){
+			serializer.writeAttribute("defaultValue",String.valueOf(longDefinition.getDefaultValue()));
+		}
+		
+		if (longDefinition.getMinValue() != null && longDefinition.getMinValue() != Long.MIN_VALUE){
+			serializer.writeAttribute("minValue",String.valueOf(longDefinition.getMinValue()));
+			serializer.writeAttribute("minValueIsExclusive",String.valueOf(((LongPropertyDefinitionImpl)longDefinition).isMinValueExclusive()));
+		}
+
+		if (longDefinition.getMaxValue() != null && longDefinition.getMaxValue() != Long.MAX_VALUE){
+			serializer.writeAttribute("maxValue",String.valueOf(longDefinition.getMaxValue()));
+			serializer.writeAttribute("maxValueIsExclusive",String.valueOf(((LongPropertyDefinitionImpl)longDefinition).isMaxValueExclusive()));
+		}
+	}
+
+	private <T> void serializeDoublePropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		DoublePropertyDefinition doubleDefinition = (DoublePropertyDefinition)simplePropertyDefinition;
+		
+		if (doubleDefinition.isSetDefaultValue()){
+			serializer.writeAttribute("defaultValue", String.valueOf(doubleDefinition.getDefaultValue()));
+		}
+		
+		if (doubleDefinition.getMinValue() != null && doubleDefinition.getMinValue() != Double.MIN_VALUE){
+			serializer.writeAttribute("minValue",String.valueOf(doubleDefinition.getMinValue()));
+			serializer.writeAttribute("minValueIsExclusive",String.valueOf(((DoublePropertyDefinitionImpl)doubleDefinition).isMinValueExclusive()));
+		}
+
+		if (doubleDefinition.getMaxValue() != null && doubleDefinition.getMinValue() != Double.MAX_VALUE){
+			serializer.writeAttribute("maxValue",String.valueOf(doubleDefinition.getMaxValue()));
+			serializer.writeAttribute("maxValueIsExclusive",String.valueOf(((DoublePropertyDefinitionImpl)doubleDefinition).isMaxValueExclusive()));
+		}
+	}
+
+	private <T> void serializeDatePropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		CalendarPropertyDefinition calendarDefinition = (CalendarPropertyDefinition)simplePropertyDefinition;
+		
+		serializer.writeAttribute("pattern",calendarDefinition.getPattern());
+
+		if (calendarDefinition.isSetDefaultValue()){
+			serializer.writeAttribute("defaultValue", DateFormatUtils.format(calendarDefinition.getDefaultValue().getTimeInMillis(), calendarDefinition.getPattern()));
+		}
+	}
+
+	private <T> void serializeBooleanPropertyDefinition(
+			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
+		BooleanPropertyDefinition booleanDefinition = (BooleanPropertyDefinition)simplePropertyDefinition;
+		
+		if (booleanDefinition.isSetDefaultValue()){
+			serializer.writeAttribute("defaultValue", String.valueOf(booleanDefinition.getDefaultValue()));
+		}
 	}
 	
 	@Override
 	public void finishedChildDefinitionsVisit(LocalizableCmsDefinition parentDefinition) {
 		
 		super.finishedChildDefinitionsVisit(parentDefinition);
+		
+		serializer.endArray("propertyList");
+		
+		if (rootDefinition != null && rootDefinition != parentDefinition){
+			serializer.endElement("property", false, true);
+		}
+
+	}
 	
-		serializer.endElement(parentDefinition.getName(), false,true);
+	
+
+	@Override
+	public void startChildDefinitionsVisit(
+			LocalizableCmsDefinition parentDefinition) {
+		
+		super.startChildDefinitionsVisit(parentDefinition);
+		
+		serializer.startArray("propertyList");
 	}
 
 	public String exportOutcome() {
+		
+		serializer.endElement(rootDefinition.getName(), false,true);
+		
 		return serializer.serialize();
+
 	}
 	
-	private void exportDefinitionObjectAndBasicProperties(LocalizableCmsDefinition cmsDefinition, boolean exportDisplayName) {
+	private void exportDefinitionObjectAndBasicProperties(LocalizableCmsDefinition cmsDefinition) {
 
 		//Name
 		exportName(cmsDefinition);
@@ -235,13 +309,6 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 			//Cardinality
 			exportCardinality((CmsPropertyDefinition)cmsDefinition);
 		}
-
-		if (exportDisplayName){
-			//Display Name
-			exportDisplayName(cmsDefinition);
-		}
-		
-
 	}
 
 	private void exportCardinality(CmsPropertyDefinition cmsDefinition) {
@@ -250,15 +317,11 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	}
 
 	private void exportUrl(LocalizableCmsDefinition cmsDefinition) {
-		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputisJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML)); 
+		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML)); 
 	}
 
 	private void exportDisplayName(LocalizableCmsDefinition cmsDefinition) {
 		if (cmsDefinition.getDisplayName() != null && cmsDefinition.getDisplayName().hasLocalizedLabels()){
-
-			if (!serializer.outputisJSON()){
-				serializer.endElement("", true, false);
-			}
 
 			serializer.startElement("label",true,true);
 			
