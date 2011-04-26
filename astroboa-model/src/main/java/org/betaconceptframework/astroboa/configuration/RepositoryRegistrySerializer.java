@@ -44,19 +44,19 @@ public class RepositoryRegistrySerializer extends AbstractSerializer{
 
 	public String serialize(){
 
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			startElement("astroboa", true, true);
 		}
 		
 		writeAttribute("server", RepositoryRegistry.INSTANCE.getDefaultServerURL());
 		
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			endElement("astroboa", true, false);	
 		}
 		
 		exportRepositoryInfo(RepositoryRegistry.INSTANCE.getRepositories().getRepository());
 
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			endElement("astroboa", false, true);
 		}
 		
@@ -66,7 +66,7 @@ public class RepositoryRegistrySerializer extends AbstractSerializer{
 
 	private void exportRepositoryInfo(List<RepositoryType> repositories) {
 			
-		if (outputisJSON()){
+		if (outputIsJSON()){
 			startArray("repository");
 		}
 		
@@ -76,7 +76,7 @@ public class RepositoryRegistrySerializer extends AbstractSerializer{
 				
 				writeAttribute("id", repository.getId());
 				
-				if (! outputisJSON()){
+				if (! outputIsJSON()){
 					endElement("repository", true, false);	
 				}
 				
@@ -88,8 +88,8 @@ public class RepositoryRegistrySerializer extends AbstractSerializer{
 
 			}
 		
-		if (outputisJSON()){
-			endArray();
+		if (outputIsJSON()){
+			endArray("repository");
 		}
 
 	}
