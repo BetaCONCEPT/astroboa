@@ -199,14 +199,20 @@ public enum CmsEntitySerialization {
 
 	public XMLStreamWriter createJsonXmlStreamWriter(Writer writer, boolean stripRoot, boolean prettyPrint) throws IOException{
 		
-        final JsonGenerator jsonGenerator = jsonFactory.createJsonGenerator(writer);
+        final JsonGenerator jsonGenerator = createJsonGenerator(writer,	prettyPrint);
+
+       	return new JSONXmlStreamWriter(jsonGenerator, stripRoot);
+
+	}
+
+	public JsonGenerator createJsonGenerator(Writer writer, boolean prettyPrint)
+			throws IOException {
+		final JsonGenerator jsonGenerator = jsonFactory.createJsonGenerator(writer);
         
         if (prettyPrint){
         	jsonGenerator.useDefaultPrettyPrinter();
         }
-
-       	return new JSONXmlStreamWriter(jsonGenerator, stripRoot);
-
+		return jsonGenerator;
 	}
 
 	public String toJson(CmsDefinition cmsDefinition, boolean prettyPrint) {
