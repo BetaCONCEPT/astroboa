@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="cache-control" content="no-store" />
+<meta http-equiv="cache-control" content="must-revalidate" />
+<meta http-equiv="cache-control" content="pre-check=0" />
+<meta http-equiv="cache-control" content="post-check=0" />
+<meta http-equiv="cache-control" content="private" />
+<meta http-equiv="expires" content="Wed, 09 Aug 2000 08:21:57 GMT" />
+			
+<meta name="generator" content="Astroboa Enterprise Content Management System" />
+<meta name="development" content="BetaCONCEPT LP." />
+			
+<link rel="icon" href="astroboa-resource-api-explorer/images/favico.ico" type="image/x-icon" />
+
+<link rel="apple-touch-icon" href="astroboa-resource-api-explorer/images/icn_iphone.png" />
+
+<title>ASTROBOA Resource Explorer</title>
+
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<link href="css/smoothness/jquery-ui-1.8.12.custom.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery-ui-selectmenu.css" rel="stylesheet" type="text/css" />
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+<link href="css/astroboa.explorer.css" rel="stylesheet" type="text/css" />
+
+<script src="js/jquery-1.4.3.min.js" type="text/javascript"></script>
+<script src="js/jquery-ui-1.8.12.custom.min.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/i18n/jquery-ui-i18n.min.js" type="text/javascript"></script>
+<script src="js/jquery.ui.selectmenu.js" type="text/javascript"></script>
+<script src="js/jquery.peek.min.js" type="text/javascript"></script>
+
+<script src="js/shCore.js" type="text/javascript"></script>
+<script src="js/shBrushXml.js" type="text/javascript"></script>
+<script src="js/shBrushJScript.js" type="text/javascript"></script>
+
+<script src="js/astroboa.explorer.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="main-container">
+	<div class="container">
+    	<div class="top-controls">
+        	<ul>
+                <li class="search"><input type="text" name="search" id="search" value="search betaconcept" /></li>
+                <li class="searchbtn"><input type="button" name="submit" id="submit" value="search" /></li>
+             </ul>                
+        </div><!--top-controls-->
+        <div class="logo-banner">
+        	<div class="logo"><a href="/"><span class="tbrowse">Homepage</span></a></div><!--logo-->
+            <div class="banner">
+            	<table><tr><td><a href="#">Manage &amp; Curate your Data.<br />Conceptualize, Re-purpose, Share.</a></td></tr></table>
+
+            </div><!--banner-->
+        </div><!--logo-banner-->
+        <div class="main-navigation">
+        </div><!--main-navigation-->
+
+        <div class="content">
+            	<h1>Overview</h1>
+<h2>
+	Browse and search your content using the Astroboa Resource Explorer.  Select your repository, build your search criteria and get the results in XML or JSON format.</h2>
+<hr />
+<p>&nbsp;</p>
+
+	<div id="explorer">
+
+	</div>
+
+        </div><!--content-->
+
+        <div class="footer">
+        	<div class="footer-left"><span class="tbrowse">Powered by ASTROBOA</span></div><!--footer-left-->
+
+            <div class="footer-right">
+            	<div class="footer-links">
+                	<ul class="left">
+                		<li>© BetaCONCEPT 2011</li>
+                    </ul>
+                    <ul class="right">
+                    	<li class="text">FOLLOW US ON</li>
+                        <li class="twitter"><a href="http://twitter.com/astroboa" target="_blank"><span class="tbrowse">Twitter</span></a></li>
+                    </ul>
+                </div><!--footer-links-->
+            </div><!--footer-right-->
+        </div><!--footer-->
+    </div><!--container-->
+</div><!--main-container-->
+ <script type="text/javascript">
+	
+ $(document).ready(function (){
+	  
+		$('#explorer').astroboaExplorer();
+		
+	});
+	</script>
+</body>
+</html>

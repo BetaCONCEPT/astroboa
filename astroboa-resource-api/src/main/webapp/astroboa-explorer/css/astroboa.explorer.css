@@ -1,0 +1,86 @@
+
+#mainOptions {float: left; margin-bottom: 20px; height: 30px; width:100%;}
+
+select,.ui-select-menu { float: left; margin-right: 10px; }
+
+select { width: 200px; }
+
+.ui-tabs {margin-bottom: 20px;}
+
+#contentTab { height: 120px; margin-bottom: 20px;}
+
+#criterionBuilder {
+	float:left;
+	width:100%;
+	margin-bottom: 20px;
+}
+.selectorDiv {float:left; margin-right: 10px;}
+
+.ui-button .ui-button-text {
+    line-height: 1.1;
+}
+
+#restrictionValue {width: 220px; height:23px;}
+
+#queryParametersDiv { float:left; width: 100%;  padding: 0.4em; position: relative;}
+
+#offsetAndLimitDiv {float:left;}
+#offsetAndLimitDiv fieldset { padding:0; border:0; }
+#offsetAndLimitDiv input.text { margin-left:15px; margin-right:10px; width:40px; padding: .4em; }
+
+#resultsDiv {float:left; width: 100%; }
+#apiUrlDiv {margin-bottom: 20px;}
+#apiUrlDiv h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
+#apiUrlDiv p { text-align: center; font-weight: bold;}
+
+#resultsBtn {margin-bottom: 20px; margin-right: 10px;}
+#resetBtn {margin-bottom: 20px; margin-right: 10px;}
+
+#resultsContainerLabel h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
+
+#resultsContainer {
+    margin-top: 15px;
+}
+
+/* Activate scroll bar in auto complete component */
+.ui-autocomplete {
+	max-height: 100px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+	width : 500px;
+	
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+	height: 100px;
+}
+
+.ui-autocomplete-category {
+		font-weight: bold;
+		padding: .2em .4em;
+		margin: .8em 0 .2em;
+		line-height: 1.5;
+	}
+
+.ui-autocomplete-loading { background: white url('../assets/ajax-loader.gif') right center no-repeat; }
+	
+/* Comment this , if you want to disable XML/JSON results wrapping */
+.syntaxhighlighter .line {
+        white-space: pre-wrap !important; /* make code wrap */
+}
+/* First line */
+.syntaxhighlighter .line.alt1
+{
+	background-color: #fff !important;
+}
+
+/* Second line */
+.syntaxhighlighter .line.alt2
+{
+	background-color: #F8F8F8 !important;
+}
