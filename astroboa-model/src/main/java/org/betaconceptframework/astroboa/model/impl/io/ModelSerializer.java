@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.betaconceptframework.astroboa.resourceapi.utility;
+package org.betaconceptframework.astroboa.model.impl.io;
 
 import java.util.List;
 
@@ -55,20 +55,20 @@ public class ModelSerializer extends AbstractSerializer{
 	public String serialize(){
 		
 		
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			startElement("astroboa", true, true);
 		}
 		
 		writeAttribute("server", RepositoryRegistry.INSTANCE.getDefaultServerURL());
 		writeAttribute("repository", repository);
 		
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			endElement("astroboa", true, false);	
 		}
 		
 		serializeModel();
 
-		if (! outputisJSON()){
+		if (! outputIsJSON()){
 			endElement("astroboa", false, true);
 		}
 		
@@ -79,23 +79,20 @@ public class ModelSerializer extends AbstractSerializer{
 
 	private void serializeModel() {
 
-		if (outputisJSON()){
-			startArray("model");
-		}
-		else{
-			startElement("model", false, true);
-		}
+		startArray("contentType");
 		
 		List<String> contentTypes = definitionService.getContentObjectTypes();
 
-		ResourceRepresentationType<String> output = outputisJSON() ? ResourceRepresentationType.JSON : ResourceRepresentationType.XML;
+		ResourceRepresentationType<String> output = outputIsJSON() ? ResourceRepresentationType.JSON : ResourceRepresentationType.XML;
 		boolean prettyPrintEnabled = prettyPrintEnabled();
+		
+		boolean firstType = true;
 		
 		for (String contentType : contentTypes){
 			
 			String contentTypeAsXmlorJson = definitionService.getCmsDefinition(contentType, output, prettyPrintEnabled);
 		
-			if (!outputisJSON()){
+			if (!outputIsJSON()){
 				//Remove XML headers
 				contentTypeAsXmlorJson = StringUtils.remove(contentTypeAsXmlorJson, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 			}
@@ -104,18 +101,21 @@ public class ModelSerializer extends AbstractSerializer{
 				contentTypeAsXmlorJson = contentTypeAsXmlorJson.replaceFirst("\\{","").replaceFirst("(.*?):", "");
 				//Remove end
 				contentTypeAsXmlorJson = StringUtils.removeEnd(contentTypeAsXmlorJson, "}");
+				
+				if (!firstType){
+					contentTypeAsXmlorJson = ","+contentTypeAsXmlorJson;
+				}
+				else{
+					firstType = false;
+				}
 			}
+			
 			
 			writeContent(contentTypeAsXmlorJson, false);
 			
 		}
 		
-		if (outputisJSON()){
-			endArray();
-		}
-		else{
-			endElement("model", false, true);
-		}
+		endArray("contentType");
 		
 	}
 }
