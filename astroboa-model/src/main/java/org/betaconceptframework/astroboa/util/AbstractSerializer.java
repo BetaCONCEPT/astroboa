@@ -20,12 +20,6 @@
 package org.betaconceptframework.astroboa.util;
 
 import java.io.StringWriter;
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-import net.sf.json.util.JSONBuilder;
-
-import org.apache.commons.lang.StringEscapeUtils;
 
 
 /**
@@ -35,223 +29,68 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public abstract class AbstractSerializer {
 
-	private boolean prettyPrint = false;
-
-	private Deque<Integer> number_of_spaces_to_use_for_identation = new ArrayDeque<Integer>();
-
 	private StringWriter writer = new StringWriter();
 
-	private JSONBuilder jsonBuilder = null;
-
 	private boolean jsonOutput = true;
+	
+	private Serializer internalSerializer;
 
 	public AbstractSerializer(boolean prettyPrint, boolean jsonOutput) {
 
-		this.prettyPrint = prettyPrint;
-
 		this.jsonOutput = jsonOutput;
-
-		initialize();
-	}
-
-
-	private void initialize() {
-
+		
 		if (jsonOutput){
-
-			jsonBuilder = new JSONBuilder(writer);
-
-			jsonBuilder.object();
+			internalSerializer = new JsonSerializer(writer, prettyPrint);
 		}
 		else{
-			writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+			internalSerializer = new XmlSerializer(writer, prettyPrint);
 		}
 
-		number_of_spaces_to_use_for_identation.push(1);
 	}
-	
-	public void endArray() {
-		jsonBuilder.endArray();
+
+	public void endArray(String name){
+		
+		internalSerializer.endArray(name);
 	}
 	
 	public void startArray(String name) {
-		jsonBuilder.key(name).array();
-		
+
+		internalSerializer.startArray(name);		
 	}
 	
 	public void endElement(String name, boolean closeStartTag, boolean createCloseTag) {
 
-
-		if (jsonOutput){
-			
-			if (prettyPrint){
-				writeIdentation(true);
-			}
-
-			jsonBuilder.endObject();
-
-			if (prettyPrint){
-				number_of_spaces_to_use_for_identation.poll();
-			}
-
-		}
-		else{
-			
-			if (closeStartTag && createCloseTag){
-
-				writer.append("/>");
-				
-				if (prettyPrint){
-					number_of_spaces_to_use_for_identation.poll();
-				}
-
-			}
-			else{
-				//In XML, closing an element can mean either close the start tag or end element
-
-				//When the element needs to end, user must specify if she wants to print a close tag
-
-				if (closeStartTag){
-					writer.append(">");
-				}
-
-				if (createCloseTag){
-
-					if (prettyPrint){
-						writeIdentation(true);
-						number_of_spaces_to_use_for_identation.poll();
-					}
-
-					writer.append("</");
-					writer.append(name);
-					writer.append(">");
-				}
-			}
-
-		}
+		internalSerializer.endElement(name, closeStartTag, createCloseTag);
 	}
 
 	public void writeContent(String content, boolean escape){
 		
-		if (content != null){
-			if (escape){
-				writer.write(StringEscapeUtils.escapeXml(content));
-			}
-			else{
-				writer.write(content);
-			}
-		}
+		internalSerializer.writeContent(content, escape);
 		
 	}
 	
-	private void write(char[] ch, int start, int length, boolean attribute){
-		for (int i = start; i < start + length; i++) {
-			if (ch[i] == '>') {
-				writer.write("&gt;");
-			} else if (ch[i] == '<') {
-				writer.write("&lt;");
-			} else if (ch[i] == '&') {
-				writer.write("&amp;");
-			} else if (attribute && ch[i] == '"') {
-				writer.write("&quot;");
-			} else if (attribute && ch[i] == '\'') {
-				writer.write("&apos;");
-			} else {
-				writer.write(ch[i]);
-			}
-		}
-	}
-
-	private void writeIdentation(boolean addNewLine) {
-
-		if (addNewLine){
-			writer.write("\n");
-		}
-
-		Integer numberOfSpaces = number_of_spaces_to_use_for_identation.peek();
-
-		if (numberOfSpaces == null){
-			writer.write(" ");
-		}
-		else{
-			String spaces = String.format("%"+numberOfSpaces+"s", "");
-			writer.write(spaces);
-		}
-
-	}
-
 	public void writeAttribute(String name, String value){
-
-		if (prettyPrint){
-			writeIdentation(true);
-			writer.write(" ");
-		}
-
-		if (jsonOutput){
-			jsonBuilder.key(name).value(value);
-		}
-		else{
-			writer.write(" ");
-			writer.write(name);
-			writer.write("=\"");
-			char[] ch = value.toCharArray();
-			write(ch, 0, ch.length, true);
-			writer.write("\"");
-
-		}
+		internalSerializer.writeAttribute(name, value);
 	}
 	
 	
 	public void startElement(String name, boolean elementHasAttributes, boolean writeName) {
-
-		if (prettyPrint){
-			increaseNumberOfSpacesToUseForIndentation();
-			writeIdentation(true);
-		}
-
-		if (jsonOutput){
-			if (writeName){
-				jsonBuilder.key(name);
-			}
-
-			jsonBuilder.object();
-		}
-		else{
-			writer.append("<");
-			writer.append(name);
-			
-			if (! elementHasAttributes){
-				writer.append(">");
-			}
-		}
-
+		internalSerializer.startElement(name, elementHasAttributes, writeName);
 	}
 	
-	private void increaseNumberOfSpacesToUseForIndentation() {
-		if (number_of_spaces_to_use_for_identation.isEmpty()){
-			number_of_spaces_to_use_for_identation.push(1);
-		}
-		else{
-			number_of_spaces_to_use_for_identation.push(number_of_spaces_to_use_for_identation.peek()+3);
-		}
-	}
-
-
 	public String serialize() {
-		
-		if (jsonOutput){
-			jsonBuilder.endObject();
-		}
-		
-		return writer.toString();
+		return internalSerializer.serialize();
 	}
 
-	public boolean outputisJSON(){
+	public boolean outputIsJSON(){
 		return jsonOutput;
 	}
 	
 	public boolean prettyPrintEnabled(){
-		return prettyPrint;
+		return internalSerializer.prettyPrintEnabled();
 	}
 
+	public String getCurrentValue(){
+		return internalSerializer.getCurrentValue();
+	}
 }
