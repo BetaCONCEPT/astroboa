@@ -279,6 +279,11 @@ Authors
   		  <artifactId>jackson-core-lgpl</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<scm>
