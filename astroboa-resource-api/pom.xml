@@ -114,6 +114,12 @@
 			<groupId>org.betaconceptframework</groupId>
 			<artifactId>betaconceptframework-commons</artifactId>
 			<version>2.3.0.GA</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>poi</artifactId>
+					<groupId>poi</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
