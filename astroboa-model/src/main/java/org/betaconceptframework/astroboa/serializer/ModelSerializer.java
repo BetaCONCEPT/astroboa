@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.betaconceptframework.astroboa.model.impl.io;
+package org.betaconceptframework.astroboa.serializer;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
-import org.betaconceptframework.astroboa.util.AbstractSerializer;
 
 
 /**

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.betaconceptframework.astroboa.model.jaxb.visitor;
+package org.betaconceptframework.astroboa.serializer;
 
 import java.util.Map.Entry;
 
@@ -41,7 +41,6 @@ import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.RepositoryContext;
 import org.betaconceptframework.astroboa.model.impl.definition.DoublePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LongPropertyDefinitionImpl;
-import org.betaconceptframework.astroboa.util.AbstractSerializer;
 
 /**
  * 

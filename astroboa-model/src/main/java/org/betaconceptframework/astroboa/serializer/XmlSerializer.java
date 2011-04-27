@@ -17,7 +17,7 @@
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.betaconceptframework.astroboa.util;
+package org.betaconceptframework.astroboa.serializer;
 
 import java.io.StringWriter;
 import java.util.ArrayDeque;

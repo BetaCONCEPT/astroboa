@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.betaconceptframework.astroboa.configuration;
+package org.betaconceptframework.astroboa.serializer;
 
 import java.util.List;
 
 import org.betaconceptframework.astroboa.configuration.LocalizationType.Label;
-import org.betaconceptframework.astroboa.util.AbstractSerializer;
+import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
+import org.betaconceptframework.astroboa.configuration.RepositoryType;
 
 
 /**

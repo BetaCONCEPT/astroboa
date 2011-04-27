@@ -47,9 +47,9 @@ import org.betaconceptframework.astroboa.model.jaxb.adapter.ContentObjectAdapter
 import org.betaconceptframework.astroboa.model.jaxb.adapter.LocalizationAdapter;
 import org.betaconceptframework.astroboa.model.jaxb.listener.AstroboaMarshalListener;
 import org.betaconceptframework.astroboa.model.jaxb.type.ContentObjectType;
-import org.betaconceptframework.astroboa.model.jaxb.visitor.CmsDefinitionSerializer;
 import org.betaconceptframework.astroboa.model.jaxb.writer.JSONXmlStreamWriter;
 import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
+import org.betaconceptframework.astroboa.serializer.CmsDefinitionSerializer;
 import org.betaconceptframework.astroboa.util.SchemaUtils;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
