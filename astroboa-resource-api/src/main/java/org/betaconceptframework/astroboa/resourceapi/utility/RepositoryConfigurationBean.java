@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
-import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
 import org.betaconceptframework.astroboa.configuration.Repositories;
+import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
 import org.betaconceptframework.astroboa.configuration.RepositoryType;
 import org.betaconceptframework.astroboa.configuration.SecurityType.PermanentUserKeyList.PermanentUserKey;
 
