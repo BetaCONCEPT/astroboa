@@ -43,6 +43,8 @@ import org.betaconceptframework.astroboa.configuration.SecurityType.PermanentUse
 import org.betaconceptframework.astroboa.configuration.SecurityType.SecretUserKeyList.AdministratorSecretKey;
 import org.betaconceptframework.astroboa.configuration.SecurityType.SecretUserKeyList.SecretUserKey;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Astroboa Repository Registry.
@@ -62,6 +64,8 @@ import org.betaconceptframework.astroboa.util.CmsConstants;
 public enum RepositoryRegistry{
 
 	INSTANCE;
+	
+	private  final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String ASTROBOA_CONFIGURATION_FILE = "astroboa-conf.xml";
 	
@@ -242,6 +246,8 @@ public enum RepositoryRegistry{
 				this.adminUsernamePerRepository = adminUsernamePerRepository;
 				this.permanentKeyPerUserPerRepository = permanentKeyPerUserPerRepository;
 				this.repositories = Repositories;
+				
+				logger.info("Astroboa Configuration {} has been loaded", configuration.getAbsolutePath());
 			}
 		}
 		catch(Exception e){
