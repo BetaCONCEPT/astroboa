@@ -129,7 +129,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 		}
 	}
 
-	public void renderSystemName(Node contentObjectNode,
+	private void renderSystemName(Node contentObjectNode,
 			ContentObject contentObject) throws RepositoryException {
 		if (contentObjectNode != null && contentObjectNode.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
 			contentObject.setSystemName(contentObjectNode.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString());
@@ -137,7 +137,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 		
 	}
 
-	public void renderAspects(Node contentObjectNode, ContentObject contentObject) throws Exception {
+	private void renderAspects(Node contentObjectNode, ContentObject contentObject) throws Exception {
 
 		if (contentObjectNode != null){
 
@@ -154,7 +154,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 		}
 	}
 
-	public void renderContentObjectType(ContentObjectTypeDefinition contentObjectTypeDefinition, Node contentObjectNode, ContentObject contentObject) throws ValueFormatException, RepositoryException, PathNotFoundException {
+	private void renderContentObjectType(ContentObjectTypeDefinition contentObjectTypeDefinition, Node contentObjectNode, ContentObject contentObject) throws ValueFormatException, RepositoryException, PathNotFoundException {
 		if (contentObjectNode != null){
 			//	Normally this would be the same with contentObjectTypeDefinition name
 			String contentObjectTypeNameFromContentObjectNode = contentObjectNode.getProperty(CmsBuiltInItem.ContentObjectTypeName.getJcrName()).getString();
@@ -177,7 +177,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 	}
 
 
-	public void renderContentObjectId(Node contentObjectNode, CmsRepositoryEntity contentObject) throws  RepositoryException  {
+	private void renderContentObjectId(Node contentObjectNode, CmsRepositoryEntity contentObject) throws  RepositoryException  {
 		if (contentObjectNode != null){
 			if (!cmsRepositoryEntityUtils.hasCmsIdentifier(contentObjectNode))
 				throw new CmsException("No Id found for content object "+ contentObjectNode.getPath());
@@ -198,7 +198,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 
 
 
-	public void renderOwner(Node contentObjectNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties, ContentObject contentObject) throws RepositoryException, ValueFormatException, PathNotFoundException {
+	private void renderOwner(Node contentObjectNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties, ContentObject contentObject) throws RepositoryException, ValueFormatException, PathNotFoundException {
 		if (contentObjectNode != null){
 			String contentObjectOwnerId = contentObjectNode.getProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()).getString();
 
