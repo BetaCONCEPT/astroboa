@@ -27,8 +27,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.configuration.RepositoryRegistrySerializer;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
+import org.betaconceptframework.astroboa.serializer.RepositoryRegistrySerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
