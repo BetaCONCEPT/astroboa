@@ -21,6 +21,7 @@ package org.betaconceptframework.astroboa.resourceapi.resource;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
 import org.betaconceptframework.astroboa.api.model.BinaryProperty;
 import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
@@ -54,11 +56,13 @@ import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
+import org.betaconceptframework.astroboa.commons.excelbuilder.WorkbookBuilder;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
 import org.betaconceptframework.astroboa.resourceapi.utility.IndexExtractor;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.betaconceptframework.astroboa.util.DateUtils;
 import org.betaconceptframework.astroboa.util.PropertyExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +156,6 @@ public class ContentObjectResource extends AstroboaResource{
 		
 		return getContentObjectByIdOrName(contentObjectIdOrName, outputEnum, callback,prettyPrintEnabled);
 	}
-	
 	
 	// API URLs for content object properties
 	//The propertyPath at the end of the URL is the full path to a property value.
@@ -410,6 +413,40 @@ public class ContentObjectResource extends AstroboaResource{
 				prettyPrint);		
 	}
 	
+	@GET
+	@Produces("application/vnd.ms-excel")
+	public Response getContentObjectsInXls(
+			@QueryParam("cmsQuery") String cmsQuery, 
+			@QueryParam("offset") Integer offset, 
+			@QueryParam("limit") Integer limit, 
+			@QueryParam("projectionPaths") String commaDelimitedProjectionPaths,
+			@QueryParam("orderBy") String orderBy,
+			@QueryParam("output") String output,
+			@QueryParam("template") String templateIdOrSystemName,
+			@QueryParam("callback") String callback,
+			@QueryParam("prettyPrint") String prettyPrint){
+		
+		// URL-based negotiation overrides any Accept header sent by the client
+		//i.e. if the url specifies the desired response type in the "output" parameter this method
+		// will return the media type specified in "output" request parameter.
+		Output outputEnum = Output.XLS;
+		if (StringUtils.isNotBlank(output)) {
+			outputEnum = Output.valueOf(output.toUpperCase());
+		}
+		
+		return retrieveContentObjects(
+				cmsQuery, 
+				offset, 
+				limit, 
+				commaDelimitedProjectionPaths, 
+				orderBy, 
+				outputEnum, 
+				templateIdOrSystemName, 
+				callback,
+				prettyPrint);		
+	}
+
+	
 	/* Returning html or pdf is based on facelets and seam which have been currently
 	 * removed due to problems with seam resource servlet when multiple seam wars are deployed
 	@GET
@@ -601,6 +638,31 @@ public class ContentObjectResource extends AstroboaResource{
  					ContentApiUtils.generateJSONP(resourceRepresentation, queryResult, callback);
  				}
  				break;
+ 			case XLS :
+ 				
+ 				CmsOutcome<ContentObject> outcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
+ 				
+ 				WorkbookBuilder workbookBuilder = new WorkbookBuilder(astroboaClient.getDefinitionService(), "en");
+ 				
+ 				int rowIndex = 2;
+ 				for (ContentObject object : outcome.getResults()) {
+ 					
+ 					workbookBuilder.addContentObjectToWorkbook(object);
+
+ 					++rowIndex;
+ 					
+ 					//Limit to the first 5000 content objects
+ 					if (rowIndex > 5000){
+ 						break;
+ 					}
+ 				}
+ 				
+ 				String filename = createFilename(workbookBuilder);
+ 				
+ 				return ContentApiUtils.createResponseForExcelWorkbook(
+ 						workbookBuilder.getWorkbook(), 
+ 						ContentDispositionType.ATTACHMENT, 
+ 						filename + ".xls", null);
  			/* This functionality is temporarily removed until the resolution of seam resource servlet problems 
  			 * when multiple wars are deployed	
  			case XHTML:
@@ -970,4 +1032,15 @@ public class ContentObjectResource extends AstroboaResource{
 			}
 		}
 	 
+		private String createFilename(WorkbookBuilder workbookBuilder) {
+			String filename = workbookBuilder.getWorkbookName();
+			
+			if (filename.length()>50){
+				filename = filename.substring(0, 49);
+			}
+			
+			filename = filename + "-"+DateUtils.format(Calendar.getInstance(), "ddMMyyyyHHmm");
+			return filename;
+		}
+
 }

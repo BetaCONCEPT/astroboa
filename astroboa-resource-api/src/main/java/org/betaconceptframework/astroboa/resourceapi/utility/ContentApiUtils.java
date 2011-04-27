@@ -42,6 +42,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
@@ -399,5 +400,19 @@ public class ContentApiUtils {
 	 */
 	public static boolean contentIsXML(String content){
 		return content!= null && content.startsWith("<?xml version=\"1.0\"");
+	}
+	
+	public static Response createResponseForExcelWorkbook(HSSFWorkbook workbook, ContentDispositionType contentDispositionType, String filename, Date lastModified) {
+		ResponseBuilder responseBuilder = null;
+		
+		responseBuilder = Response.ok(workbook, "application/vnd.ms-excel");
+		
+		addContentDispositionHeaderToResponse(responseBuilder, contentDispositionType, filename);
+		if (lastModified == null) {
+			lastModified = Calendar.getInstance().getTime();
+		}
+		addLastModifiedAndETagHeaderToResponse(responseBuilder, lastModified, -1);
+		
+		return responseBuilder.build();
 	}
 }
