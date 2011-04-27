@@ -19,6 +19,7 @@
 package org.betaconceptframework.astroboa.engine.jcr.dao;
 
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
+import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -57,13 +60,13 @@ import org.betaconceptframework.astroboa.engine.jcr.util.JcrNodeUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.PopulateContentObject;
 import org.betaconceptframework.astroboa.engine.jcr.util.QueryUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils;
-import org.betaconceptframework.astroboa.engine.jcr.util.VersionUtils;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.CmsReadOnlyItem;
 import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.query.CmsOutcomeImpl;
+import org.betaconceptframework.astroboa.model.jaxb.MarshalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,8 +283,8 @@ public class ContentObjectDao {
 		return outcome;
 	}
 
-	private void loadProjectedPaths(List<String> projections,
-			ContentObject contentObject) {
+	private void loadProjectedPaths(List<String> projections,	ContentObject contentObject) {
+		
 		for (String projectedPath : projections){
 
 			if (contentObject.getComplexCmsRootProperty().isChildPropertyDefined(projectedPath)) {
@@ -300,8 +303,20 @@ public class ContentObjectDao {
 							"(SystemName / Id / ContentType) ("+
 							contentObject.getSystemName() + " / "+ contentObject.getId() + " / "+contentObject.getContentObjectType()+")");
 				}
-				
+
 				contentObject.getCmsProperty(projectedPath);
+				
+				if (ValueType.Complex == propertyDefinition.getValueType() && 
+						((ComplexCmsPropertyDefinition)propertyDefinition).hasChildCmsPropertyDefinitions()){
+
+					Collection<CmsPropertyDefinition> childPropertyDefinitions = ((ComplexCmsPropertyDefinition)propertyDefinition).getChildCmsPropertyDefinitions().values();
+
+					for (CmsPropertyDefinition childPropertyDefinition : childPropertyDefinitions){
+						if (MarshalUtils.propertyShouldBeMarshalled(projections, childPropertyDefinition.getName(), childPropertyDefinition.getPath())){
+							contentObject.getCmsProperty(childPropertyDefinition.getPath());
+						}
+					}
+				}
 			}
 			else{
 				logger.warn("Cannot pre load property {} for contentObject (SystemName / Id) ({}) as no such property " +
