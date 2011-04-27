@@ -36,6 +36,7 @@ import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
+import org.betaconceptframework.astroboa.commons.excelbuilder.WorkbookBuilder;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectSelectionBean;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapper;
 import org.betaconceptframework.astroboa.util.DateUtils;
