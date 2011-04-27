@@ -10,5 +10,6 @@ package org.betaconceptframework.astroboa.resourceapi.resource;
 		HTML,
 		XHTML,
 		PDF, 
-		XSD
+		XSD,
+		XLS
 	}
