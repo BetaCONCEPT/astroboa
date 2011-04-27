@@ -920,6 +920,10 @@ public interface ContentService {
 	 * apply to each resource.
 	 * </p>
 	 * 
+	 * <p>
+	 * Once this functionality is stable, it will be removed under the {@link #save(Object, boolean, boolean, String)} method.
+	 * Track the progress of this issue at http://jira.betaconceptframework.org/browse/ASTROBOA-118
+	 *</p>
 	 * @param contentSource Xml or JSON  or {@link ResourceRepresentationType#CONTENT_OBJECT_LIST} representation of a collection of {@link ContentObject}s.
 	 * @param version
 	 *            <code>true</code> to create a new version for content
