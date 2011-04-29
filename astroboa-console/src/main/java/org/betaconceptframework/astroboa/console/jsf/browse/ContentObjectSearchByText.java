@@ -100,8 +100,8 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 			
 		
 		// add searched text to the criteria
-		if (StringUtils.deleteWhitespace(searchedText).equals(searchedText) && ! searchedText.contains("\"") && ! searchedText.contains("'")){
-			//Search Text contains only one word.Append with * at the end
+		if (StringUtils.deleteWhitespace(searchedText).equals(searchedText) && ! searchedText.contains("\"") && ! searchedText.contains("'") && ! searchedText.contains("*")){
+			//If Search Text contains only one word and not any special search character then Append * at the end
 			contentObjectCriteria.addFullTextSearchCriterion(searchedText+CmsConstants.ANY_NAME);
 		}
 		else{

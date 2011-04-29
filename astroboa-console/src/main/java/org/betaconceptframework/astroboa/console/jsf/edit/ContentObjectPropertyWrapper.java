@@ -32,6 +32,7 @@ import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -45,6 +46,7 @@ import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapperF
 import org.betaconceptframework.astroboa.console.jsf.clipboard.ContentObjectItem;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 import org.richfaces.event.DropEvent;
 
@@ -163,7 +165,13 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			contentObjectCriteria.reset();
 
 			//Profile Title criterion
-			contentObjectCriteria.addCriterion(CriterionFactory.simpleCmsPropertycontains("profile.title", "*"+selectedContentObjectTitle+"*"));
+			if (StringUtils.deleteWhitespace(selectedContentObjectTitle).equals(selectedContentObjectTitle) && ! selectedContentObjectTitle.contains("\"") && ! selectedContentObjectTitle.contains("'") && ! selectedContentObjectTitle.contains("*")){
+				//If Search Text contains only one word and not any special search character then Append * at the end
+				contentObjectCriteria.addCriterion(CriterionFactory.contains("profile.title", CmsConstants.ANY_NAME + selectedContentObjectTitle + CmsConstants.ANY_NAME));
+			}
+			else{
+				contentObjectCriteria.addCriterion(CriterionFactory.contains("profile.title", selectedContentObjectTitle));
+			}
 
 			//ContentObject Types criterion
 			if (CollectionUtils.isNotEmpty(acceptedContentTypes)){
@@ -172,15 +180,15 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			}
 
 
-			CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
 
 			if (cmsOutcome.getCount() > 0) {
-				List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+				List<ContentObject> objects = cmsOutcome.getResults();
 
-				for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+				for (ContentObject object : objects) {
+					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(object));
 				}
 			}
 
