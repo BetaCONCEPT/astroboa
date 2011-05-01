@@ -29,6 +29,13 @@ select { width: 200px; }
 #offsetAndLimitDiv input.text { margin-left:15px; margin-right:10px; width:40px; padding: .4em; }
 
 #resultsDiv {float:left; width: 100%; }
+
+#criteriaDiv {margin-bottom: 20px;}
+#criteriaDiv h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
+
+#criteriaDiv div {margin-left: 10px; margin-top: 10px; margin-bottom: 10px; width: 70%}
+
+
 #apiUrlDiv {margin-bottom: 20px;}
 #apiUrlDiv h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
 #apiUrlDiv p { text-align: center; font-weight: bold;}
@@ -44,7 +51,7 @@ select { width: 200px; }
 
 /* Activate scroll bar in auto complete component */
 .ui-autocomplete {
-	max-height: 100px;
+	max-height: 300px;
 	overflow-y: auto;
 	/* prevent horizontal scrollbar */
 	overflow-x: hidden;
