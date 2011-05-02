@@ -255,7 +255,7 @@
 						$('#'+repositorySelectorName).empty();
 					}
 
-					var options = '<option value="'+defaultValueForSelector+'"'+ (configuration.repository == undefined ? 'selected="selected"' : '')+'>'+message.repositorySelector[configuration.locale]+'</option>';
+					var options = '<option value="'+defaultValueForSelector+'">'+message.repositorySelector[configuration.locale]+'</option>';
 					
 					var getAllRepositoryURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+"/";
 
