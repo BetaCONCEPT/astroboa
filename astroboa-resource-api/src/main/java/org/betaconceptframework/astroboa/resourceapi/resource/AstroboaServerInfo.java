@@ -25,7 +25,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
 import org.betaconceptframework.astroboa.serializer.RepositoryRegistrySerializer;
@@ -48,73 +47,59 @@ public class AstroboaServerInfo {
 	@GET
 	@Produces("*/*")
 	public Response getAstroboaServerInfoAnyResponse(
-			@QueryParam("showInfo") String showInfo, 
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
 		
-		return procudeAstroboaServerInfo(showInfo, ContentApiUtils.getOutputType(output, Output.XML), callback, prettyPrint);
+		return procudeAstroboaServerInfo(ContentApiUtils.getOutputType(output, Output.XML), callback, prettyPrint);
 	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getAstroboaServerInfoAsJson(
-			@QueryParam("showInfo") String showInfo, 
+	public Response getAstroboaServerInfoAsJson( 
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
 		
-		return procudeAstroboaServerInfo(showInfo, ContentApiUtils.getOutputType(output, Output.JSON), callback, prettyPrint);
+		return procudeAstroboaServerInfo(ContentApiUtils.getOutputType(output, Output.JSON), callback, prettyPrint);
 	}
 
 	@GET
 	@Produces({MediaType.APPLICATION_XML})
-	public Response getAstroboaServerInfoAsXml(
-			@QueryParam("showInfo") String showInfo, 
+	public Response getAstroboaServerInfoAsXml( 
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
 		
-		return procudeAstroboaServerInfo(showInfo, ContentApiUtils.getOutputType(output, Output.XML), callback, prettyPrint);
+		return procudeAstroboaServerInfo(ContentApiUtils.getOutputType(output, Output.XML), callback, prettyPrint);
 	}
 
-	private Response procudeAstroboaServerInfo(String showInfo, Output output, String callback, String prettyPrint){
+	private Response procudeAstroboaServerInfo(Output output, String callback, String prettyPrint){
 		
+		//Produce Astroboa Server Info
+		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//if showInfo is empty then user has provided the query parameter without a value
-		if (showInfo != null && 
-				( showInfo.trim().isEmpty() || BooleanUtils.isTrue(BooleanUtils.toBoolean(showInfo)) )){
-			
-			//Produce Astroboa Server Info
-			boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
-			
-			StringBuilder resourceRepresentation = new StringBuilder();
-			
-			RepositoryRegistrySerializer repositoryRegistrySerializer = new RepositoryRegistrySerializer(prettyPrintEnabled, Output.JSON == output);
-			
-			String result = repositoryRegistrySerializer.serialize();
-			
-			if (StringUtils.isNotBlank(callback)) {
-			
-				if (Output.XML == output){
-					ContentApiUtils.generateXMLP(resourceRepresentation, result, callback);
-				}
-				else{
-					ContentApiUtils.generateJSONP(resourceRepresentation, result, callback);
-				}
-				
-				return ContentApiUtils.createResponse(resourceRepresentation, output, callback, null);
+		StringBuilder resourceRepresentation = new StringBuilder();
+		
+		RepositoryRegistrySerializer repositoryRegistrySerializer = new RepositoryRegistrySerializer(prettyPrintEnabled, Output.JSON == output);
+		
+		String result = repositoryRegistrySerializer.serialize();
+		
+		if (StringUtils.isNotBlank(callback)) {
+		
+			if (Output.XML == output){
+				ContentApiUtils.generateXMLP(resourceRepresentation, result, callback);
 			}
 			else{
-				resourceRepresentation.append(result);
-				return ContentApiUtils.createResponse(resourceRepresentation, output, callback, null);
+				ContentApiUtils.generateJSONP(resourceRepresentation, result, callback);
 			}
-					
+			
+			return ContentApiUtils.createResponse(resourceRepresentation, output, callback, null);
 		}
-		
-		
-		//showInfo is NULL, i.e. user did not provide this query parameter, or has false value
-		return Response.ok().build();
+		else{
+			resourceRepresentation.append(result);
+			return ContentApiUtils.createResponse(resourceRepresentation, output, callback, null);
+		}
 		
 	}
 	
