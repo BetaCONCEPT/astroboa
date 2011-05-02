@@ -32,7 +32,7 @@
 
 	$.fn.astroboaExplorer = function(configuration) {
 		var defaultConfiguration = { 
-				astroboaServer : window.location.hostname , 
+				astroboaServer : window.location.hostname, 
 				locale : "en",
 				resourceApiBaseURL : "/resource-api"
 			};
@@ -255,14 +255,14 @@
 						$('#'+repositorySelectorName).empty();
 					}
 
-					var options = '<option value="'+defaultValueForSelector+'">'+message.repositorySelector[configuration.locale]+'</option>';
+					var options = '<option value="'+defaultValueForSelector+'"'+ (configuration.repository == undefined ? 'selected="selected"' : '')+'>'+message.repositorySelector[configuration.locale]+'</option>';
 					
-					var getAllRepositoryURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL;
+					var getAllRepositoryURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+"/";
 
 					$.ajax({
 						type: "GET",
 						dataType : 'json',
-					 		data: {output : 'json', showInfo: 'true'},
+					 		data: {output : 'json'},
 					 		async : false,
 					 		url : getAllRepositoryURL,
 					 		success : function(data){
@@ -290,6 +290,10 @@
 								buildTabs();
 			    			}
 						});
+					
+					if (configuration.repository == undefined){
+						$("select[name='"+repositorySelectorName+"']").selectmenu("value", defaultValueForSelector);
+					}
 					
 				}
 				
@@ -443,6 +447,11 @@
 
 			    			}
 						});
+					
+					if (contentTypeSelectedValue == defaultValueForSelector){
+						$("select[name='"+contentTypeSelectorName+"']").selectmenu("value", defaultValueForSelector);
+					}
+
 				}
 				
 				//Create a select menu with all properties of a content type
