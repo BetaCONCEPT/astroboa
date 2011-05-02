@@ -32,7 +32,7 @@
 
 	$.fn.astroboaExplorer = function(configuration) {
 		var defaultConfiguration = { 
-				astroboaServer : "localhost:8080", 
+				astroboaServer : window.location.hostname + (window.location.port != null ? ':'+window.location.port : ''), 
 				locale : "en",
 				resourceApiBaseURL : "/resource-api"
 			};
