@@ -43,12 +43,7 @@
 <body>
 <div class="main-container">
 	<div class="container">
-    	<div class="top-controls">
-        	<ul>
-                <li class="search"><input type="text" name="search" id="search" value="search betaconcept" /></li>
-                <li class="searchbtn"><input type="button" name="submit" id="submit" value="search" /></li>
-             </ul>                
-        </div><!--top-controls-->
+	
         <div class="logo-banner">
         	<div class="logo"><a href="/"><span class="tbrowse">Homepage</span></a></div><!--logo-->
             <div class="banner">
@@ -60,9 +55,21 @@
         </div><!--main-navigation-->
 
         <div class="content">
-            	<h1>Overview</h1>
+            	<h1>Astroboa Resource Explorer</h1>
 <h2>
-	Browse and search your content using the Astroboa Resource Explorer.  Select your repository, build your search criteria and get the results in XML or JSON format.</h2>
+	Use the Astroboa Resource Explorer to create and test RESTFul API calls that read content from any repository 
+</h2>
+<p>
+Select your repository, build your search criteria and get the results in XML or JSON format to test your queries
+</p>
+<p>
+When you are done copy the generated RESTful API URL and use it in your favorite language (e.g. use curl with PHP) to mash-up content.
+</p>
+<p>
+Please take into account that currently the Resource Explorer does not allow to use your API key and secret and thus it will show you
+only published (public) content when you test your searches. However if at your code you put the appropriate credentials as explained at the API documentation 
+you will get back not only published content but any resoure that you are authorized to read according to your roles.
+</p>
 <hr />
 <p>&nbsp;</p>
 
