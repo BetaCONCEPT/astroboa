@@ -34,9 +34,11 @@ public abstract class AstroboaResource {
 	protected AstroboaClient astroboaClient;
 	
 	public AstroboaResource(AstroboaClient astroboaClient) {
+		
 		this.astroboaClient=astroboaClient;
+		
 		if (this.astroboaClient == null){
-			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			throw new WebApplicationException(HttpURLConnection.HTTP_FORBIDDEN);
 		}
 	}
 
