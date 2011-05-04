@@ -193,6 +193,18 @@
 		 	<version>1.1.4.1</version>
 		</dependency>
 
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-core-lgpl</artifactId>
+  		  <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-mapper-lgpl</artifactId>
+  		  <scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<scm>
