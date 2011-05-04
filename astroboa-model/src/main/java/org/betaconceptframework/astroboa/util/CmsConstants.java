@@ -251,5 +251,6 @@ public final class CmsConstants {
 	public static final String RESOURCE_API_TOPIC_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
 	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
 	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
+	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
 	
 }
