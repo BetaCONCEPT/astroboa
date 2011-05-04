@@ -307,16 +307,21 @@ Authors
   			 <version>1.0</version>
 		</dependency>
 		
-		
+		<!-- Used when importing content in JSON format -->
 		<dependency>
 		 <groupId>com.sun.jersey</groupId>
 		 <artifactId>jersey-json</artifactId>
-		 <version>1.4</version>
+		 <version>1.6</version>
 		 <exclusions>
 		 	<exclusion>
 		 	  <groupId>org.codehaus.jackson</groupId>
   			  <artifactId>jackson-core-asl</artifactId>
 		 	</exclusion>
+		 	<exclusion>
+		 	  <groupId>org.codehaus.jackson</groupId>
+  			  <artifactId>jackson-mapper-asl</artifactId>
+		 	</exclusion>
+		 	
 		    <exclusion>
 		     <groupId>com.sun.jersey</groupId>
 		 	 <artifactId>jersey-core</artifactId>
