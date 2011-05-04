@@ -148,6 +148,8 @@ public class AstroboaClient {
 
 	private String externalIdentityStoreJNDIName;
 	
+	private boolean anonymousUser = false;
+	
 	public AstroboaClient(){
 
 	}
@@ -390,6 +392,7 @@ public class AstroboaClient {
 		clientContext = null;
 		loggedInUser = null;
 		externalIdentityStoreJNDIName = null;
+		anonymousUser = false;
 	}
 	
 	/**
@@ -415,8 +418,9 @@ public class AstroboaClient {
 		
 		if (loggedInUser != null){
 			clone.loggedInUser = new String(loggedInUser);
-			
 		}
+		
+		clone.anonymousUser = anonymousUser;
 		
 		if (clone.getIdentityStore()!=null){
 			
@@ -624,6 +628,8 @@ public class AstroboaClient {
 	private void keepRepositoryAndUser(String repositoryId, String username){
 		connectedRepositoryId  =repositoryId;
 		loggedInUser = username;
+		
+		anonymousUser = StringUtils.equals(IdentityPrincipal.ANONYMOUS, loggedInUser);
 	}
 
 	public String getConnectedRepositoryId() {
@@ -684,5 +690,13 @@ public class AstroboaClient {
 	public boolean sessionHasExpired(){
 		return authenticationToken == null || 
 		(getRepositoryService() != null && ((RepositoryServiceClientWrapper)getRepositoryService()).tokenHasExpired(authenticationToken));
+	}
+	
+	public String getIdentity(){
+		return loggedInUser;
+	}
+	
+	public boolean isUserAnonymous(){
+		return anonymousUser;
 	}
 }
