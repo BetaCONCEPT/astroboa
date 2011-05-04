@@ -18,6 +18,7 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.utility;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -59,6 +61,9 @@ import org.betaconceptframework.astroboa.security.CmsPrincipal;
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
 import org.betaconceptframework.astroboa.util.UrlProperties;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +109,12 @@ public class ContentApiUtils {
 	public final static Pattern MANAGED_FILE_ACCESS_INFO_PATTERN = Pattern.compile(MANAGED_FILE_ACCESS_INFO_REG_EXP);
 	public final static Pattern UNMANAGED_FILE_ACCESS_INFO_PATTERN = Pattern.compile(UNMANAGED_FILE_ACCESS_INFO_REG_EXP);
 		
+	public static ObjectMapper objectMapper;
+	
+	static {
+		objectMapper = new ObjectMapper();
+	}
+	
 	public static String createETag(long lastModified, long contentLength){
 		return new StringBuilder()
 			.append("\"")
@@ -414,5 +425,9 @@ public class ContentApiUtils {
 		addLastModifiedAndETagHeaderToResponse(responseBuilder, lastModified, -1);
 		
 		return responseBuilder.build();
+	}
+	
+	public static Map<String, Object> parse(String json) throws JsonParseException, IOException{
+		return objectMapper.readValue(json, Map.class);
 	}
 }
