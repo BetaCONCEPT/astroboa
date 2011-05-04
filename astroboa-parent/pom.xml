@@ -670,8 +670,15 @@
 		<dependency>
 		  	  <groupId>org.codehaus.jackson</groupId>
   			  <artifactId>jackson-core-lgpl</artifactId>
-			  <version>1.6.0</version>
+			  <version>1.7.6</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-mapper-lgpl</artifactId>
+		  <version>1.7.6</version>
+		</dependency>
+		
 			
 		</dependencies>
 	</dependencyManagement>
