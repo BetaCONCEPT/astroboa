@@ -330,7 +330,7 @@ public class CmsPropertyValidatorVisitor {
 		//Check all child properties that are mandatory but are not processed at all
 		if (atLeastOnePropertyIsAboutToBeSaved){
 			
-			if (! foundAtLeastOneNonBooleanPropertyWhoseValueMustBeSaved){
+			if (! foundAtLeastOneNonBooleanPropertyWhoseValueMustBeSaved && ! (complexCmsProperty instanceof ComplexCmsRootProperty)) {
 				atLeastOnePropertyIsAboutToBeSaved = false;
 				if (! mandatoryErrorMessagesPerPropertyPath.isEmpty() && mandatoryErrorMessagesPerPropertyPath.peek() != null){
 					mandatoryErrorMessagesPerPropertyPath.peek().clear();
