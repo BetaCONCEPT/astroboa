@@ -21,16 +21,13 @@ package org.betaconceptframework.astroboa.security;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
-import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.CmsPasswordEncryptor;
-import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jasypt.commons.CommonUtils;
 import org.jasypt.digest.StandardStringDigester;
 import org.jasypt.salt.FixedStringSaltGenerator;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -60,6 +57,18 @@ public class AstroboaPasswordEncryptor implements CmsPasswordEncryptor{
 	public static final String DEFAULT_ALGORITHM = "SHA-256";
 
 	private transient StandardStringDigester digester;
+	
+	/*
+	 * This is the default line separator (CRLF ("\r\n")) used by class
+	 * org.apache.commons.codec.binary.Base64 in Apache Commons Codec v1.4
+	 * which is used by the StandardStringDigester.
+	 * 
+	 * There is no method in StandardStringDigester which provides this value
+	 * and therefore we have to define it. See method encrypt() for more info about
+	 * its use. 
+	 * 
+	 */
+	private static final String Base64_LINE_SEPARATOR = new String(new byte[]{'\r', '\n'});
 
 	
 	public AstroboaPasswordEncryptor() {
@@ -134,7 +143,43 @@ public class AstroboaPasswordEncryptor implements CmsPasswordEncryptor{
 		
 		initDigester();
 		
-		return this.digester.digest(password);
+		String encryptedPass = this.digester.digest(password);
+		
+		/* Current setup with StandardStringDigester and Base64 from Apache Commons Codec v1.4
+		 * adds the Base64_LINE_SEPARATOR  (that is a CRLF ("\r\n"))
+		 * at the end of the digested result. 
+		 * 
+		 *  For example, for the value 'myPassword' the digester will produce
+		 *  the following  '2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM=\r\n'
+		 *  
+		 *  If this value is saved as a value of a property, 
+		 *  Jackrabbit (JCR implementation used by Astroboa) truncates the CRLF
+		 *  and thus, when we get the value back, we get  
+		 *  
+		 *  '2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM='
+		 *  
+		 *  However, if we call method checkPassword('myPassword', '2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM='),
+		 *  we get the same result with the call checkPassword('myPassword', '2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM=\r\n'), 
+		 *  which is TRUE.
+		 *  
+		 *  This is happening because the digester silently ignores Base64_LINE_SEPARATOR upon decoding!!!
+		 *  
+		 *  This abnormally, however, may cause problems to every one who wants to check a password (which is a value of a property) 
+		 *  without the use of the method checkPassword(). 
+		 *  
+		 *  In this case, she will get the encrypted value from this method (2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM=\r\n), 
+		 *  she will get the value stored in the property (2rnNFkiLbEDM+S46twlB3VTwtafMOexbQARYRGLb5aM=) and she will get no match.
+		 *  
+		 *  Since the CRLF is ignored and does not play any role to decoding, it is safe to return the encrypted value without the CRLF. 
+		 *  This way, password checking can be done with the use of this digester.     
+		 *  
+		 */
+		
+		if (encryptedPass != null && encryptedPass.endsWith(Base64_LINE_SEPARATOR)){
+			return StringUtils.removeEnd(encryptedPass, Base64_LINE_SEPARATOR);
+		}
+		
+		return encryptedPass;
 	}
 
 	//Override deserialization process to log any exception thrown 
