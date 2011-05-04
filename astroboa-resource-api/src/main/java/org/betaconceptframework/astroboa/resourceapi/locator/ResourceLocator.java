@@ -27,6 +27,7 @@ import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.resourceapi.resource.BinaryChannelResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.ContentObjectResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.DefinitionResource;
+import org.betaconceptframework.astroboa.resourceapi.resource.SecurityResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.TaxonomyResource;
 import org.betaconceptframework.astroboa.resourceapi.resource.TopicResource;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -91,6 +92,13 @@ public class ResourceLocator {
 	public DefinitionResource getDefinitionResourceUsingOldBasePath(){
 		
 		return new DefinitionResource(astroboaClient);
+		
+	}
+
+	@Path(CmsConstants.RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH)
+	public SecurityResource getSecurityResource(){
+		
+		return new SecurityResource(astroboaClient);
 		
 	}
 
