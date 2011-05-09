@@ -152,15 +152,15 @@ public class TopicResource extends AstroboaResource{
 	  @PUT
    	  @Path("/{topicIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
 	  public Response putTopicByIdOrName(
-				@PathParam("topicNameOrId") String topicNameOrId,
+				@PathParam("topicIdOrName") String topicIdOrName,
 				String requestContent){
 		  
-		  if (StringUtils.isBlank(topicNameOrId)){
+		  if (StringUtils.isBlank(topicIdOrName)){
 			  logger.warn("Use HTTP PUT to save topic {} but no id or name was provided ", requestContent);
 			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
 		  }
 		  
-  		  return saveTopicByIdOrName(topicNameOrId, requestContent, HttpMethod.PUT);
+  		  return saveTopicByIdOrName(topicIdOrName, requestContent, HttpMethod.PUT);
   	  }
 
   	  @POST
