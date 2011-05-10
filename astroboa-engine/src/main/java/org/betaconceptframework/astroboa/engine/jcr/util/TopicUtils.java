@@ -167,14 +167,23 @@ public class TopicUtils {
 	private  void updateName(Session session, Topic topic, Node topicJcrNode, Context context) throws     RepositoryException  {
 		
 		if (StringUtils.isBlank(topic.getName())){
-			//Topic name is blank
-			//Search for english localized label
+			//User has provided no name.
+			
+			if (topicJcrNode.hasProperty(CmsBuiltInItem.Name.getJcrName())){
+				//Topic already has a name. Update entity and return. There is no need to check for a duplicate
+				topic.setName(topicJcrNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString());
+				return;
+			}
+				
+			//Topic does not have a name. Search for an english localized label
 			String possibleSystemName = null;
 			
 			if (topic.hasLocalizedLabels()){
+				
 				possibleSystemName = topic.getLocalizedLabelForLocale(Locale.ENGLISH.toString());
 				
 				if (StringUtils.isBlank(possibleSystemName)){
+					
 					//Get the first valid localized label
 					for (String label : topic.getLocalizedLabels().values()){
 						possibleSystemName = cmsRepositoryEntityUtils.fixSystemName(label);
@@ -189,17 +198,20 @@ public class TopicUtils {
 				}
 			}
 			
-			if (StringUtils.isBlank(possibleSystemName)){
-				logger.warn("Topic "+topic.getId()+ " will not be saved with a topic name");
-			}
-			else{
+			if (StringUtils.isNotBlank(possibleSystemName)){
 				topic.setName(possibleSystemName);
 			}
-			
 		}
 		
 		if (topic.getName() != null){
 			
+			if (topicJcrNode.hasProperty(CmsBuiltInItem.Name.getJcrName())){
+				//Topic already has a name. If name has not changed, return
+				if (StringUtils.equals(topicJcrNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString(), topic.getName())){
+					return;
+				}
+			}
+
 			if (!cmsRepositoryEntityUtils.isValidSystemName(topic.getName())){
 				throw new RepositoryException("Topic name '"+topic.getName()+"' is not valid. It should match pattern "+CmsConstants.SYSTEM_NAME_REG_EXP);
 			}
@@ -242,8 +254,6 @@ public class TopicUtils {
 						
 			topicJcrNode.setProperty(CmsBuiltInItem.Name.getJcrName(), topic.getName());
 		}
-		else
-			topicJcrNode.setProperty(CmsBuiltInItem.Name.getJcrName(), JcrValueUtils.getJcrNull());
 	}
 
 	private  void updateOrder(Topic topic, Node topicJcrNode) throws  RepositoryException  {
