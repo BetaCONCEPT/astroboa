@@ -69,6 +69,38 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		NO_EXPECTED_TOPIC_AT_ALL
 	}
 	
+	
+	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-144
+	 */
+	@Test
+	public void testTopicUpdateWithoutName(){
+
+		String topicName = "test-topic-update-without-name";
+		
+		Topic topic = JAXBTestUtils.createTopic(topicName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		
+		topic.getLocalizedLabels().clear();
+		
+		topic = topicService.save(topic);
+		addEntityToBeDeletedAfterTestIsFinished(topic);
+
+		//Remove name and save again
+		topic.setName(null);
+		
+		topic = topicService.save(topic);
+		Assert.assertEquals(topic.getName(), topicName, "Invalid topic name");
+		
+		//Save using XML and JSON
+		topic = topicService.save(topic.xml(false));
+		Assert.assertEquals(topic.getName(), topicName, "Invalid topic name");
+		
+		topic = topicService.save(topic.json(false));
+		Assert.assertEquals(topic.getName(), topicName, "Invalid topic name");
+		
+	}
+
 	@Test
 	public void testTopicSearchUsingSearchExpression() throws Throwable{
 
@@ -1174,21 +1206,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		checkValidSystemNameSave(topic, "090..__--92");
 		checkValidSystemNameSave(topic, "090..92");
 
-		
-		//Save with blank name and check that English label has been used
-		topic.setName(null);
-		topic = topicService.save(topic);
-		
-		Assert.assertEquals(topic.getName(), topic.getLocalizedLabelForLocale("en"), "Topic was saved with blank name but english locale was not used");
-		
-		//remove english locale and check if french locale is used
-		topic.getLocalizedLabels().remove("en");
-		topic.setName(null);
-		topic = topicService.save(topic);
-		
-		Assert.assertEquals(topic.getName(), topic.getLocalizedLabelForLocale("fr"), "Topic was saved with blank name but french locale was not used");
-		
-		
 	}
 
 	private void checkInvalidSystemNameSave(Topic topic,
