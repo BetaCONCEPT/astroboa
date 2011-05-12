@@ -923,7 +923,7 @@
 							
 							if (selectedPropertyType == 'ObjectReference'){
 								if (referenceSelectedName != null){
-									propertyCriterion = selectedPropertyPath +operatorSelectedValue+'"#'+referenceSelectedName+'"';
+									propertyCriterion = selectedPropertyPath +operatorSelectedValue+'"@'+referenceSelectedName+'"';
 								}
 								else{
 									propertyCriterion = null;
