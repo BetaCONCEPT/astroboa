@@ -181,6 +181,10 @@ public class Context {
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(session, topicCriteria);
 				
+				if (nodes.getTotalRowCount() > 1){
+					throw new CmsException("There are "+nodes.getTotalRowCount()+" topics with name "+topicIdOrName);
+				}
+				
 				if (nodes.getTotalRowCount() > 0){
 					return nodes.getNodeIterator().nextNode();
 				}
