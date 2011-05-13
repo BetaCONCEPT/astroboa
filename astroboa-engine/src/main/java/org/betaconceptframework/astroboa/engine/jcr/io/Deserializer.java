@@ -247,6 +247,19 @@ public class Deserializer {
 					((ImportReportImpl)importReport).addContentObjectsImported(1);
 				}
 			}
+			else if (entity instanceof Topic){
+
+				if (shouldSaveEntityTree()){
+					entity = topicDao.saveTopicTree((Topic)entity, null);
+				}
+				else{
+					entity = topicDao.saveTopic((Topic)entity, null);
+				}
+
+				if (importReport != null){
+					((ImportReportImpl)importReport).addTopicsImported(1);
+				}
+			}
 			else if (entity instanceof Taxonomy){
 
 				if (shouldSaveEntityTree()){
@@ -266,19 +279,6 @@ public class Deserializer {
 
 				if (importReport != null){
 					((ImportReportImpl)importReport).addRepositoryUsersImported(1);
-				}
-			}
-			else if (entity instanceof Topic){
-
-				if (shouldSaveEntityTree()){
-					entity = topicDao.saveTopicTree((Topic)entity, null);
-				}
-				else{
-					entity = topicDao.saveTopic((Topic)entity, null);
-				}
-
-				if (importReport != null){
-					((ImportReportImpl)importReport).addTopicsImported(1);
 				}
 			}
 			else if (entity instanceof Space){
