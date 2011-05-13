@@ -360,13 +360,13 @@ public class TopicUtils {
 
 	public  Node updateTopic(Session session, Topic topic, Node parentTopicJcrNode, Context context) throws RepositoryException {
 
-		Node topicJcrNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForTopic(session, topic.getId());
+		Node topicJcrNode = context.retrieveNodeForTopic(topic.getId());
 
 		if (topicJcrNode == null){
 			if (topic.getId() != null){
 				//User has specified an id for TaxonomyNode. Create a new one
 				if(parentTopicJcrNode == null){
-					parentTopicJcrNode = retrieveParentTopicNode(session, topic);
+					parentTopicJcrNode = retrieveParentTopicNode(session, topic, context);
 				}
 
 				return addNewTopicJcrNode(parentTopicJcrNode, topic, session, true, context);
@@ -592,14 +592,25 @@ public class TopicUtils {
 	 * @throws CMSDaoException 
 	 * @throws Exception 
 	 */
-	public  Node retrieveParentTopicNode(Session session, Topic topic) throws RepositoryException {
+	public  Node retrieveParentTopicNode(Session session, Topic topic, Context context) throws RepositoryException {
 
 		Node parentTopicNode = null;
-		if (topic.getParent() != null && topic.getParent().getId() != null){
-			parentTopicNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForTopic(session, topic.getParent().getId());
+		
+		Topic parentTopic = topic.getParent();
+		
+		if (parentTopic != null){
 
+			
+			if (parentTopic.getId()!=null){
+				parentTopicNode = context.retrieveNodeForTopic(parentTopic.getId());
+			}
+			
+			if (parentTopicNode==null && parentTopic.getName()!=null){
+				parentTopicNode = context.retrieveNodeForTopic(parentTopic.getName());
+			}
+			
 			if (parentTopicNode == null){
-				throw new CmsException("Could not find parent taxonomy node with id "+topic.getParent().getId());
+				throw new CmsException("Could not find jcr node for topic "+parentTopic.toString());
 			}
 		}
 

@@ -33,7 +33,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
-import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -356,7 +355,7 @@ public class TopicDao extends JcrDaoSupport {
 			}
 		}
 		
-		Node parentTopicNode = topicUtils.retrieveParentTopicNode(session, topic);
+		Node parentTopicNode = topicUtils.retrieveParentTopicNode(session, topic, context);
 
 		return topicUtils.addNewTopicJcrNode(parentTopicNode, topic, session, false, context);
 	}
