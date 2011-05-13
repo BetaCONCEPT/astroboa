@@ -70,6 +70,39 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 	}
 	
 	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-138
+	 */
+	@Test
+	public void testTopicSaveUsingParentTaxonomy(){
+
+		Taxonomy taxonomy = JAXBTestUtils.createTaxonomy(
+				"test-topic-save-using-parent-taxonomy", CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
+		
+		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
+		taxonomy = taxonomyService.save(taxonomy);
+		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+
+		String topicName = "test-topic-save-using-parent-taxonomy";
+		
+		Topic parentTopic = JAXBTestUtils.createTopic(topicName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		parentTopic.setTaxonomy(taxonomy);
+		
+		parentTopic = topicService.save(parentTopic);
+		
+		Topic topic = JAXBTestUtils.createTopic(topicName+"Child", 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		topic.setParent(parentTopic);
+		
+		topic = topicService.save(topic);
+		
+		topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+		
+		Assert.assertNotNull(topic.getTaxonomy(), "Invalid taxonomy for topic");
+		Assert.assertEquals(parentTopic.getTaxonomy().getName(), topic.getTaxonomy().getName());
+	}
+
+	/*
 	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-137
 	 */
 	@Test
