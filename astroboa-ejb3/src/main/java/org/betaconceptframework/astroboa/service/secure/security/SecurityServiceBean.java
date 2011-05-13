@@ -220,7 +220,7 @@ public class SecurityServiceBean implements SecurityService {
 
 	@Override
 	public boolean tokenHasExpired(String authenticationToken) {
-		return authenticationToken == null || ( authenticationTokenEntries != null && ! authenticationTokenEntries.contains(authenticationToken));
+		return authenticationToken == null || ( authenticationTokenEntries != null && ! authenticationTokenEntries.containsKey(authenticationToken));
 	}
 
 
