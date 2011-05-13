@@ -69,6 +69,78 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		NO_EXPECTED_TOPIC_AT_ALL
 	}
 	
+	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-143
+	 */
+	@Test
+	public void testTopicUpdateWithoutTaxonomy(){
+
+		Taxonomy taxonomy = JAXBTestUtils.createTaxonomy(
+				"test-topic-update-without-taxonomy-test-taxonomy", CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
+		
+		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
+		taxonomy = taxonomyService.save(taxonomy);
+		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+
+		String topicName = "test-topic-update-without-taxonomy";
+		
+		Topic topic = JAXBTestUtils.createTopic(topicName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		topic.setTaxonomy(taxonomy);
+		
+		topic = topicService.save(topic);
+
+		//Remove taxonomy and save again
+		topic.setTaxonomy(null);
+		
+		topic = topicService.save(topic);
+		Assert.assertNull(topic.getTaxonomy(), "Invalid taxonomy for topic");
+		
+		//Save using XML and JSON
+		topic = topicService.save(topic.xml(false));
+		Assert.assertNull(topic.getTaxonomy(), "Invalid taxonomy for topic");
+		
+		topic = topicService.save(topic.json(false));
+		Assert.assertNull(topic.getTaxonomy(), "Invalid taxonomy for topic");
+	
+		//Retrieve topic and check that its taxonomy is not changed
+		topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+		
+		Assert.assertEquals(topic.getTaxonomy().getName(), taxonomy.getName());
+	}
+
+	
+	@Test
+	public void testTopicUpdateAllowReferrerContentObjects(){
+
+		String topicName = "test-topic-update-allowsReferrerContentObjects";
+		
+		boolean allowsReferrerContentObjects = true;
+		
+		Topic topic = JAXBTestUtils.createTopic(topicName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		
+		topic.getLocalizedLabels().clear();
+		
+		topic.setAllowsReferrerContentObjects(true);
+		
+		topic = topicService.save(topic);
+		addEntityToBeDeletedAfterTestIsFinished(topic);
+
+		//Save using XML and JSON
+		String xml = topic.xml(false);
+		xml = StringUtils.remove(xml,"allowsReferrerContentObjects=\""+allowsReferrerContentObjects+"\"");
+		topic = topicService.save(xml);
+		Assert.assertEquals(topic.isAllowsReferrerContentObjects(), allowsReferrerContentObjects, "Invalid topic allowsReferrerContentObjects");
+
+		String json= topic.json(false);
+		json = StringUtils.remove(json, "\"allowsReferrerContentObjects\":\""+allowsReferrerContentObjects+"\",");
+		topic = topicService.save(json);
+		Assert.assertEquals(topic.isAllowsReferrerContentObjects(), allowsReferrerContentObjects, "Invalid topic allowsReferrerContentObjects");
+
+		
+	}
+
 	
 	/*
 	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-144
@@ -1005,7 +1077,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), testUser);
+		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), testUser);
 		
 		
 
@@ -1044,7 +1116,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
+		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
 		
 	}
 	
@@ -1087,20 +1159,20 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Now retrieve topic
-		checkOwnerIsSystemUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
+		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
 		
 	}
 	
 	
-	private void checkOwnerIsSystemUser(Topic topic, RepositoryUser repositoryUser) {
+	private void checkOwnerIsTheProvidedUser(Topic topic, RepositoryUser repositoryUser) {
 		
-		Assert.assertEquals(topic.getOwner().getId(), repositoryUser.getId(), "Topic was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
-		Assert.assertEquals(topic.getOwner().getExternalId(), repositoryUser.getExternalId(), "Topic was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
-		Assert.assertEquals(topic.getOwner().getLabel(), repositoryUser.getLabel(), "Topic was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
+		Assert.assertEquals(topic.getOwner().getId(), repositoryUser.getId(), "Topic "+topic.getName()+" was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
+		Assert.assertEquals(topic.getOwner().getExternalId(), repositoryUser.getExternalId(), "Topic "+topic.getName()+" was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
+		Assert.assertEquals(topic.getOwner().getLabel(), repositoryUser.getLabel(), "Topic "+topic.getName()+" was saved with owner "+topic.getOwner().getExternalId()+" different than user "+ repositoryUser.getExternalId());
 		
 		if (topic.getNumberOfChildren() > 0){
 			for (Topic child : topic.getChildren()){
-				checkOwnerIsSystemUser(child, repositoryUser);
+				checkOwnerIsTheProvidedUser(child, repositoryUser);
 			}
 		}
 	}
