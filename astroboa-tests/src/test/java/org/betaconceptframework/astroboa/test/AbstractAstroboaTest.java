@@ -28,6 +28,8 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.AstroboaCredentials;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
 import org.betaconceptframework.astroboa.api.security.management.IdentityStore;
@@ -241,7 +243,22 @@ public abstract class AbstractAstroboaTest {
 					}
 				}
 				else if (cmsRepositoryEntity instanceof Topic){
-					topicService.deleteTopicTree(((Topic)cmsRepositoryEntity).getId());
+					String id = ((Topic)cmsRepositoryEntity).getId();
+					
+					if (StringUtils.isBlank(id)){
+						String name = ((Topic)cmsRepositoryEntity).getName();
+						
+						if (StringUtils.isNotBlank(name)){
+							Topic topic = topicService.getTopic(name, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+							
+							if (topic!=null){
+								topicService.deleteTopicTree(topic.getId());
+							}
+						}
+					}
+					else{
+						topicService.deleteTopicTree(id);
+					}
 				}
 				else if (cmsRepositoryEntity instanceof ContentObject){
 					contentService.deleteContentObject(((ContentObject)cmsRepositoryEntity).getId());
