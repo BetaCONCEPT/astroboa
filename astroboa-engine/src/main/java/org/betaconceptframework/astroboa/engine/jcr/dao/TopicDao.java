@@ -92,9 +92,6 @@ public class TopicDao extends JcrDaoSupport {
 	private RendererUtils rendererUtils;
 
 	@Autowired
-	private RepositoryUserDao  repositoryUserDao;
-
-	@Autowired
 	private SerializationDao serializationDao;
 
 	@Autowired
@@ -245,21 +242,6 @@ public class TopicDao extends JcrDaoSupport {
 
 			Session session = getSession();
 
-			//Set Default taxonomy
-			if (topic.getTaxonomy() == null){
-				Taxonomy defaultTaxonomy = cmsRepositoryEntityFactoryForActiveClient.newTaxonomy();
-				defaultTaxonomy.setName(CmsBuiltInItem.SubjectTaxonomy.getJcrName());
-				topic.setTaxonomy(defaultTaxonomy);
-			}
-			
-			//Set system user as topic owner
-			if (! StringUtils.equals(topic.getTaxonomy().getName(), Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME)){
-				RepositoryUser systemUser = repositoryUserDao.getSystemRepositoryUser();
-
-				//Set or replace owner
-				topicUtils.setSystemUserAsTopicOwner(topic, systemUser);
-			}
-			
 			if (context == null){
 				context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session);
 			}
@@ -361,6 +343,19 @@ public class TopicDao extends JcrDaoSupport {
 
 	public  Node insertTopicNode(Session session, Topic topic, Context context) throws RepositoryException {
 
+		//Set Default taxonomy if none exists
+		if (topic.getTaxonomy() == null){
+			
+			if (topic.getParent()!= null && topic.getParent().getTaxonomy()!=null){
+				topic.setTaxonomy(topic.getParent().getTaxonomy());
+			}
+			else{
+				Taxonomy defaultTaxonomy = cmsRepositoryEntityFactoryForActiveClient.newTaxonomy();
+				defaultTaxonomy.setName(CmsBuiltInItem.SubjectTaxonomy.getJcrName());
+				topic.setTaxonomy(defaultTaxonomy);
+			}
+		}
+		
 		Node parentTopicNode = topicUtils.retrieveParentTopicNode(session, topic);
 
 		return topicUtils.addNewTopicJcrNode(parentTopicNode, topic, session, false, context);
