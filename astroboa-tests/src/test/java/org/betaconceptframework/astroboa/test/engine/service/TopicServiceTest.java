@@ -70,6 +70,64 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 	}
 	
 	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-137
+	 */
+	@Test
+	public void testSaveANewTopicUsingTopicParentNameOnly(){
+		
+		String topicName = "test-new-topic-save-using-parent-name";
+		
+		Topic topic = JAXBTestUtils.createTopic(topicName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		
+		topic = topicService.save(topic);
+		addEntityToBeDeletedAfterTestIsFinished(topic);
+		
+		Topic newTopic = JAXBTestUtils.createTopic(topicName+"Child", 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+		
+		newTopic.setParent(topic);
+		
+		//Remove topic identifier
+		topic.setId(null);
+		
+		//Save topic using JSON
+		newTopic = topicService.save(newTopic.json(false));
+		
+		//Check parent
+		newTopic = topicService.getTopic(newTopic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+		
+		Assert.assertNotNull(newTopic.getParent(), "Topic "+newTopic.getName()+ " is a root topic but should have been saved under topic "+topic.getName());
+		
+		Assert.assertEquals(newTopic.getParent().getName(), topic.getName() , "Topic "+newTopic.getName()+ " is saved under topic "+ newTopic.getParent().getName() +" but should have been saved under topic "+topic.getName());
+		
+		//Save topic using XML
+		newTopic.getParent().setId(null);
+		newTopic = topicService.save(newTopic.xml(false));
+		
+		//Check parent
+		newTopic = topicService.getTopic(newTopic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+		
+		Assert.assertNotNull(newTopic.getParent(), "Topic "+newTopic.getName()+ " is a root topic but should have been saved under topic "+topic.getName());
+		
+		Assert.assertEquals(newTopic.getParent().getName(), topic.getName() , "Topic "+newTopic.getName()+ " is saved under topic "+ newTopic.getParent().getName() +" but should have been saved under topic "+topic.getName());
+
+		//Save topic using topic instance
+		newTopic.getParent().setId(null);
+		newTopic = topicService.save(newTopic);
+		
+		//Check parent
+		newTopic = topicService.getTopic(newTopic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+		
+		Assert.assertNotNull(newTopic.getParent(), "Topic "+newTopic.getName()+ " is a root topic but should have been saved under topic "+topic.getName());
+		
+		Assert.assertEquals(newTopic.getParent().getName(), topic.getName() , "Topic "+newTopic.getName()+ " is saved under topic "+ newTopic.getParent().getName() +" but should have been saved under topic "+topic.getName());
+
+		
+	}
+	
+	
+	/*
 	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-143
 	 */
 	@Test
@@ -833,18 +891,14 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 			Assert.assertTrue(e.getMessage().contains("Topic name 'same-name-sibling' already exists. Probably you are importing many  topics at once and you have provided more than one topic with name same-name-sibling"),"Invalid exception message "+e.getMessage());
 		}
 		
-		//Use the same instance
+		//Use the same instance. Normally only child topic will be saved once
 		parent.getChildren().clear();
 		parent.addChild(topic);
 		parent.addChild(topic);
 		
-		try{
-			topicService.save(parent);
-			Assert.assertEquals(1,2, "An exception should be thrown with same name siblings");
-		}
-		catch(Exception e){
-			Assert.assertTrue(e.getMessage().contains("Topic name 'same-name-sibling' already exists. Probably you are importing many  topics at once and you have provided more than one topic with name same-name-sibling"),"Invalid exception message "+e.getMessage());
-		}
+		parent = topicService.save(parent);
+			
+		Assert.assertEquals(parent.getNumberOfChildren(),1, "Topic "+ parent.getName()+ " should contain only one topic instead of "+ parent.getChildren());
 	}
 	
 		
@@ -857,6 +911,9 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		Topic topic = JAXBTestUtils.createTopic("detect-cycle", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
 				systemUser);
+		
+		topic = topicService.save(topic);
+		addEntityToBeDeletedAfterTestIsFinished(topic);
 		
 		//Grand child is the same with grand parent
 		Topic neutral = JAXBTestUtils.createTopic("neutral-topic", 
@@ -872,9 +929,14 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 			Assert.assertEquals(1,2, "An exception should be thrown when topic exists more than once in the hierarchy");
 		}
 		catch(Exception e){
-			Assert.assertTrue(e.getMessage().contains("Topic with name neutral-topic exists more than once in topic hierarchy"),"Invalid exception message "+e.getMessage());
+			Assert.assertTrue(e.getMessage().contains("Unable to retrieve jcr node for parent topic TopicImpl [name=neutral-topic] of topic TopicImpl [name=detect-cycle,"),"Invalid exception message "+e.getMessage());
 		}
 		
+		
+		//save neutral
+		topic.setParent(null);
+		neutral = topicService.save(neutral);
+
 		//using other instances
 		neutral.getChildren().clear();
 		topic.setParent(null);
@@ -886,11 +948,11 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		neutral.addChild(topic2);
 		
 		try{
-			topic = topicService.save(topic);
+			topic2 = topicService.save(topic2);
 			Assert.assertEquals(1,2, "An exception should be thrown when topic exists more than once in the hierarchy");
 		}
 		catch(Exception e){
-			Assert.assertTrue(e.getMessage().contains("Topic with name detect-cycle exists more than once in topic hierarchy"), "Invalid exception message "+e.getMessage());
+			Assert.assertTrue(e.getMessage().contains("Topic name 'detect-cycle' is used by the following topic"), "Invalid exception message "+e.getMessage());
 		}
 		
 	}
