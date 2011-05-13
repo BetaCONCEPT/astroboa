@@ -25,11 +25,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.jcr.AccessDeniedException;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -45,6 +48,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
 import org.betaconceptframework.astroboa.engine.database.model.CmsRepositoryEntityAssociation;
 import org.betaconceptframework.astroboa.engine.jcr.dao.ContentDefinitionDao;
+import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryUserDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.TaxonomyDao;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
@@ -84,6 +88,9 @@ public class TopicUtils {
 
 	@Autowired
 	private CmsQueryHandler cmsQueryHandler;
+	
+	@Autowired
+	private RepositoryUserDao  repositoryUserDao;
 
 	public  Node addNewTopicJcrNode(Node parentTopicJcrNode, Topic topic, Session session, boolean useProvidedId, Context context) throws RepositoryException {
 
@@ -100,7 +107,7 @@ public class TopicUtils {
 		updateSystemBuiltin(topic, topicJcrNode);
 
 		//Update OwnerId
-		updateOwner(topic.getOwner(), topicJcrNode, session, context);
+		updateOwner(topic, topicJcrNode, session, context);
 
 		//Update Localized Labels
 		updateLocalizedLabels(topic, topicJcrNode);
@@ -161,7 +168,12 @@ public class TopicUtils {
 
 	private  void updateAllowsReferrerContentObject(Topic topic, Node topicJcrNode) throws  RepositoryException {
 
-		topicJcrNode.setProperty(CmsBuiltInItem.AllowsReferrerContentObjects.getJcrName(),	topic.isAllowsReferrerContentObjects());
+		if ( ((TopicImpl)topic).allowsReferrerContentObjectsHasBeenSet() || ! topicJcrNode.hasProperty(CmsBuiltInItem.AllowsReferrerContentObjects.getJcrName())){
+			topicJcrNode.setProperty(CmsBuiltInItem.AllowsReferrerContentObjects.getJcrName(),	topic.isAllowsReferrerContentObjects());
+		}
+		else{
+			topic.setAllowsReferrerContentObjects(topicJcrNode.getProperty(CmsBuiltInItem.AllowsReferrerContentObjects.getJcrName()).getBoolean());
+		}
 	}
 
 	private  void updateName(Session session, Topic topic, Node topicJcrNode, Context context) throws     RepositoryException  {
@@ -267,14 +279,21 @@ public class TopicUtils {
 		cmsLocalizationUtils.updateCmsLocalization(localization, topicJcrNode);
 	}
 
-	public void updateOwner(RepositoryUser topicOwner, Node topicJcrNode, Session session, Context context) throws RepositoryException {
+	public void updateOwner(Topic topic, Node topicJcrNode, Session session, Context context) throws RepositoryException {
 
-		//Topic Owner is always SYSTEM. If user provide another value
-		
-		//Therefore no further search in repository is necessary
-		//Just update OwnerId value
-		if (topicOwner == null || StringUtils.isBlank(topicOwner.getId())){
-			throw new CmsException("Topic must have an Owner defined");
+		//Topic owner is always System user or a Repository User if topic is under user's folksonomy
+		RepositoryUser topicOwner = retrieveOwnerForTopic(topic, topicJcrNode);
+
+		if (topicOwner == null){
+			setSystemUserAsTopicOwner(topic, repositoryUserDao.getSystemRepositoryUser());
+		}
+		else{
+			//Set or replace owner. We ignore the owner provided by the user.
+			if (! usersAreTheSame(topic.getOwner(), topicOwner)){
+				
+				logger.info("Topic {}'s owner will be replaced with repository user {}", topic.toString(), topicOwner);
+				topic.setOwner(topicOwner);
+			}
 		}
 		
 		//Update owner id only if existing owner id is not the same
@@ -283,13 +302,6 @@ public class TopicUtils {
 		if (!topicJcrNode.hasProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()) ||
 				!topicJcrNode.getProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()).getString().equals(newOwnerId)){
 			
-			//Check that owner id does correspond to existing user
-			if (cmsRepositoryEntityUtils.retrieveUniqueNodeForRepositoryUser(session, newOwnerId) == null){
-
-				throw new CmsException("No repository user found with cms identifier "+ newOwnerId + ". ExternalId : "+ topicOwner.getExternalId() + ", Label : "+
-						topicOwner.getLabel());
-			}
-				
 			EntityAssociationUpdateHelper<RepositoryUser> repositoryUserAssociationUpdateHelper = 
 				new EntityAssociationUpdateHelper<RepositoryUser>(session,cmsRepositoryEntityAssociationDao, context);
 
@@ -298,6 +310,52 @@ public class TopicUtils {
 			repositoryUserAssociationUpdateHelper.setValuesToBeAdded(Arrays.asList(topicOwner));
 			repositoryUserAssociationUpdateHelper.update();
 		}
+	}
+
+
+	private RepositoryUser retrieveOwnerForTopic(Topic topic, Node topicJcrNode)
+			throws ItemNotFoundException, AccessDeniedException,
+			RepositoryException, ValueFormatException, PathNotFoundException {
+		
+		//Locate the taxonomy of the topic. If the taxonomy is a folksonomy then set the owner to be the
+		//repository user of this folksonomy, otherwise set the owner to be the system user
+		Node taxonomyNode = topicJcrNode.getParent();
+		
+		while (taxonomyNode != null){
+
+			if (StringUtils.equals(CmsBuiltInItem.Folksonomy.getJcrName(), taxonomyNode.getName())){
+				//Topic belongs to a repository user's folksonomy
+				Node repositoryUserNode = taxonomyNode.getParent();
+				
+				if (repositoryUserNode == null){
+					throw new CmsException("Topic "+topic.toString()+ " corresponds to jcr node "+topicJcrNode.getPath() + " which belongs to a folksonomy "+
+							taxonomyNode.getPath() + " but cannot retrieve parent node");
+				}
+				
+				if (repositoryUserNode.hasProperty(CmsBuiltInItem.ExternalId.getJcrName())){
+					RepositoryUser topicOwner = repositoryUserDao.getRepositoryUser(repositoryUserNode.getProperty(CmsBuiltInItem.ExternalId.getJcrName()).getString());
+
+					if (topicOwner == null){
+						throw new CmsException("Topic "+topic.toString()+ " corresponds to jcr node "+topicJcrNode.getPath() + " which belongs to a folksonomy "+
+								taxonomyNode.getPath() + " of the user "+ repositoryUserNode.getPath()+ " but could not create a RepositoryUser instance with externalId "+
+								repositoryUserNode.getProperty(CmsBuiltInItem.ExternalId.getJcrName()).getString());
+					}
+					
+					return topicOwner;
+				}
+				else{
+					throw new CmsException("Topic "+topic.toString()+ " corresponds to jcr node "+topicJcrNode.getPath() + " which belongs to a folksonomy "+
+							taxonomyNode.getPath() + " of the user "+ repositoryUserNode.getPath()+ " who does not have an externalId");
+				}
+			}
+			else if (taxonomyNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName())){
+				return repositoryUserDao.getSystemRepositoryUser();
+			}			
+			
+			taxonomyNode = taxonomyNode.getParent();
+		}
+		
+		return null;
 	}
 
 	public  Node updateTopic(Session session, Topic topic, Node parentTopicJcrNode, Context context) throws RepositoryException {
@@ -319,7 +377,7 @@ public class TopicUtils {
 		
 		updateSystemBuiltin(topic, topicJcrNode);
 
-		updateOwner(topic.getOwner(), topicJcrNode, session,context);
+		updateOwner(topic, topicJcrNode, session,context);
 
 		updateLocalizedLabels(topic, topicJcrNode);
 
@@ -334,18 +392,30 @@ public class TopicUtils {
 			updateTopicParent(currentTaxonomyName, topic, topicJcrNode, session, context);
 		}
 		else{
-			//Topic has become a root Node. 
-			//Get taxonomy Node	
-			Node taxonomyNode = retrieveTaxonomyJcrNodeForTopic(session, topic);
+			//Topic has become a root Node.
 			
-			if (taxonomyNode == null){
-				throw new CmsException("Unable to locate JCR node for taxonomy "+ topic.getTaxonomy().getName());
-			}
+			if (topic.getTaxonomy() == null || ( StringUtils.isBlank(topic.getTaxonomy().getId()) && StringUtils.isBlank(topic.getTaxonomy().getName()))){
 
-			//Since topic is a root topic then its parent must be a taxonomy node
-			if (!topicJcrNode.getParent().getUUID().equals(taxonomyNode.getUUID())){
-				checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,topic.getTaxonomy().getName());
-				session.move(topicJcrNode.getPath(), taxonomyNode.getPath()+CmsConstants.FORWARD_SLASH+topicJcrNode.getName());
+				//User provided no taxonomy info. Thus simply check that topic jcr node is under a taxonomy node
+				if (! currentTaxonomyNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName())){
+					throw new CmsException("Topic "+topic.getId()+ ":" + topic.getName() + " cannot be saved under node "+topicJcrNode.getParent().getPath()+ " because this node does not correspond to a taxonomy");
+				}
+				checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,currentTaxonomyName);
+			}
+			else{
+
+				//Get taxonomy Node	
+				Node taxonomyNode = retrieveTaxonomyJcrNodeForTopic(session, topic);
+
+				if (taxonomyNode == null){
+					throw new CmsException("Unable to locate JCR node for taxonomy "+ topic.getTaxonomy().getName());
+				}
+
+				//Since topic is a root topic then its parent must be a taxonomy node
+				if (!topicJcrNode.getParent().getUUID().equals(taxonomyNode.getUUID())){
+					checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,topic.getTaxonomy().getName());
+					session.move(topicJcrNode.getPath(), taxonomyNode.getPath()+CmsConstants.FORWARD_SLASH+topicJcrNode.getName());
+				}
 			}
 
 		}
@@ -595,19 +665,13 @@ public class TopicUtils {
 			
 			//Set system user as topic owner if topic does not have any user
 			//or it happens to have another user which is not permitted
-			if (topic.getOwner() == null || topic.getOwner() != systemUser || 
-					! StringUtils.equals(topic.getOwner().getId(), systemUser.getId())
-					){
+			if (! usersAreTheSame(topic.getOwner(), systemUser)){
 				
 				if (!StringUtils.equals(systemUser.getExternalId(), CmsApiConstants.SYSTEM_REPOSITORY_USER_EXTRENAL_ID)){
 					throw new CmsException("Cannot set topic owner repository User "+systemUser.getExternalId());
 				}
 				
 				topic.setOwner(systemUser);
-				
-				if (topic.getOwner() != null){
-					logger.info("Owner {} of Topic {} will be replaced by SYSTEM user", topic.getOwner().getExternalId()+"/"+topic.getOwner().getLabel(),topic.getName());
-				}
 			}
 
 			if (topic.isChildrenLoaded()){
@@ -635,4 +699,26 @@ public class TopicUtils {
 		}
 	}
 
+	
+	private boolean usersAreTheSame(RepositoryUser user1 , RepositoryUser user2){
+		
+		if (user1 == null || user2 == null){
+			return false;
+		}
+		
+		if (user1 == user2){
+			return true;
+		}
+		
+		if (user1.getId() != null && StringUtils.equals(user1.getId(), user2.getId())){
+			return true;
+		}
+		
+		if (user1.getExternalId() != null && StringUtils.equals(user1.getExternalId(), user2.getExternalId())){
+			return true;
+		}
+		
+		
+		return false;
+	}
 }
