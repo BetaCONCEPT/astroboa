@@ -85,6 +85,13 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 
 	@XmlAttribute
 	private boolean allowsReferrerContentObjects;
+	
+	//Quick and dirty way to know whether allowsReferrerContentObjects
+	//has actually been set by the user or not
+	//In the future this variable should be a Boolean.
+	//For more details check java doc in CmsRepositoryEntityImpl.systemBuiltInEntity
+	@XmlTransient
+	private boolean allowsReferrerContentObjectsHasBeenSet;
 
 	@XmlAttribute
 	@XmlJavaTypeAdapter(type=int.class, value=NumberOfChildrenAdapter.class)
@@ -334,6 +341,7 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 
 	public void setAllowsReferrerContentObjects(
 			boolean allowsReferrerContentObjects) {
+		allowsReferrerContentObjectsHasBeenSet = true;
 		this.allowsReferrerContentObjects = allowsReferrerContentObjects;
 	}
 
@@ -452,5 +460,11 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 	public boolean isNumberOfContentObjectsWhichReferToThisTopicLoaded() {
 		return numberOfContentObjectIdsWhichReferToThisTopic != -1;
 	}
+
+	public boolean allowsReferrerContentObjectsHasBeenSet() {
+		return allowsReferrerContentObjectsHasBeenSet;
+	}
+	
+
 	
 }
