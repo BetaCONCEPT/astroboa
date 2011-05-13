@@ -220,8 +220,12 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 		if (children == null){
 			children = new ArrayList<Topic>();
 		}
-
-		children.add(child);
+		
+		//add child only if it has not been added.
+		if (!children.contains(child)){
+			children.add(child);
+		}
+		
 		child.setParent(this);
 		
 		numberOfChildren = children.size();
