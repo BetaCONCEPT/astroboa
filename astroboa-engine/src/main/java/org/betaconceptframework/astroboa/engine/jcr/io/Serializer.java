@@ -571,13 +571,23 @@ public class Serializer {
 		
 		LocalizableCmsDefinition cmsDefinition = retrieveCmsDefinition(name,false);
 		
+		if (cmsDefinition == null){
+			logger.warn("Could not find definition for property {}. Cannot decide whether this property can have multiple values or not. Serialization will continue and consider this property as a single-value property");
+			return false;
+		}
+		
 		return cmsDefinition instanceof CmsPropertyDefinition && ((CmsPropertyDefinition)cmsDefinition).isMultiple();
 	}
 
 	private boolean propertyDefinitionDefinesCommonAttributes(String name) throws Exception {
 		
 		LocalizableCmsDefinition cmsDefinition = retrieveCmsDefinition(name,false);
-		
+
+		if (cmsDefinition == null){
+			logger.warn("Could not find definition for property {}. Cannot decide whether this property defines common attributes or not. Serialization will continue and consider that this property does not define any common attribute");
+			return false;
+		}
+
 		return cmsDefinition.getValueType() == ValueType.Complex && ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).commonAttributesAreDefined();
 	}
 
@@ -872,6 +882,7 @@ public class Serializer {
 
 	private LocalizableCmsDefinition retrieveCmsDefinition(String name, boolean nameRefersToAContentType)
 			throws Exception {
+		
 		LocalizableCmsDefinition currentDefinition = parentPropertyDefinitionQueue.peek();
 
 		LocalizableCmsDefinition cmsPropertyDefinition = null;
