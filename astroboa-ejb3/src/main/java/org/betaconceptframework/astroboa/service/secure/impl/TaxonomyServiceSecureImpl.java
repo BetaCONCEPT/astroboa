@@ -46,11 +46,6 @@ import org.betaconceptframework.astroboa.service.secure.interceptor.AstroboaSecu
 @Stateless(name="TaxonomyServiceSecure")
 @TransactionManagement(TransactionManagementType.BEAN)
 @Interceptors({AstroboaSecurityAuthenticationInterceptor.class})
-//This annotation will create some interceptors if this module runs inside Jboss
-//but according to Jboss unless @SecutiryDomain is provided
-//these interceptors will not run.Therefore AstroboaSecurityAuthenticationInterceptor
-//performs role base authorization independent of Jboss interceptors
-//@RolesAllowed({"ROLE_CMS_TAXONOMY_EDITOR"})
 public class TaxonomyServiceSecureImpl extends AbstractSecureAstroboaService implements TaxonomyServiceSecure{
 
 	private TaxonomyService taxonomyService;
