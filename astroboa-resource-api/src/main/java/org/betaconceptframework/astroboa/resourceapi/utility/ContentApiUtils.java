@@ -430,4 +430,28 @@ public class ContentApiUtils {
 	public static Map<String, Object> parse(String json) throws JsonParseException, IOException{
 		return objectMapper.readValue(json, Map.class);
 	}
+	
+	/*
+	 * A successful response SHOULD be 200 (OK) if the response includes an entity describing the status, 
+	 * 202 (Accepted) if the action has not yet been enacted, 
+	 * or 204 (No Content) if the action has been enacted but the response does not include an entity. 
+	 */
+	public static Response createResponseForHTTPDelete(boolean entityHasBeenDeleted, String entityIdOrName) {
+		
+		ResponseBuilder responseBuilder = null;
+		
+		if (entityHasBeenDeleted){
+			responseBuilder = Response.status(Status.OK);
+		}
+		else{
+			responseBuilder = Response.status(Status.BAD_REQUEST);
+		}
+		
+		responseBuilder.header("Content-Disposition", "inline");
+		responseBuilder.type(MediaType.TEXT_PLAIN + "; charset=utf-8");
+		
+		responseBuilder.entity(entityIdOrName);
+		
+		return responseBuilder.build();
+	}
 }
