@@ -61,7 +61,14 @@ public enum RoleRegistry {
 		if (methods != null && methods.length > 0){
 			
 			for (Method method: methods){
-				loadRoles(serviceClassName+"."+method.getName(), serviceClass.getAnnotation(RolesAllowed.class), repositoryIds);
+				//Load Roles annotated in Method
+				String methodName = serviceClassName+"."+method.getName();
+				
+				loadRoles(methodName, method.getAnnotation(RolesAllowed.class), repositoryIds);
+				
+				//Load Roles annotated in Class
+				loadRoles(methodName, serviceClass.getAnnotation(RolesAllowed.class), repositoryIds);
+
 			}
 		}
 		
