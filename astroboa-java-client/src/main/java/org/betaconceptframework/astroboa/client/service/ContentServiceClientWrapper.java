@@ -80,13 +80,13 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 		return contentServiceSecure != null;
 	}
 
-	public void deleteContentObject(String contentObjectId) {
+	public boolean deleteContentObject(String objectIdOrSystemName) {
 
 		if (contentServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			contentServiceSecure.deleteContentObject(contentObjectId, getAuthenticationToken());
+			return contentServiceSecure.deleteContentObject(objectIdOrSystemName, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ContentService reference was not found");
