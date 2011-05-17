@@ -70,18 +70,18 @@ public class ImportServiceSecureImpl extends AbstractSecureAstroboaService imple
 		importService = (ImportService) springManagedRepositoryServicesContext.getBean("importService");
 	}
 
-	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_PORTAL_EDITOR","ROLE_TAXONOMY_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
+	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_CMS_PORTAL_EDITOR","ROLE_CMS_TAXONOMY_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
 	public ImportReport importRepositoryContentFromString(String contentSource,String authenticationToken) {
 		return importService.importRepositoryContentFromString(contentSource);
 	}
 
 
-	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_PORTAL_EDITOR","ROLE_TAXONOMY_EDITOR","ROLE_CMS_IDENTITY_STORE_EDITOR"})
+	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_CMS_PORTAL_EDITOR","ROLE_CMS_TAXONOMY_EDITOR","ROLE_CMS_IDENTITY_STORE_EDITOR"})
 	public ImportReport importRepositoryContentFromURL(URL contentSource,	String authenticationToken) {
 		return importService.importRepositoryContentFromURL(contentSource);
 	}
 
-	@RolesAllowed({"ROLE_CMS_EDITOR", "ROLE_PORTAL_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
+	@RolesAllowed({"ROLE_CMS_EDITOR", "ROLE_CMS_PORTAL_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
 	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,
 			String authenticationToken) {
 		return importService.importContentObject(contentSource,version, updateLastModificationDate,save);
