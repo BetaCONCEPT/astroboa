@@ -175,14 +175,14 @@ public class TopicResource extends AstroboaResource{
 		  //Import from xml or json. Topic will not be saved
    		  Topic topicToBeSaved = astroboaClient.getImportService().importTopic(requestContent, false);
 
-   		  boolean entityIsNew = false;
+   		  Topic existingTopic = astroboaClient.getTopicService().getTopic(topicNameOrId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+   		  
+   		  boolean entityIsNew = existingTopic == null;
    		  
    		  if (CmsConstants.UUIDPattern.matcher(topicNameOrId).matches()){
    			  //Save topic by Id
-   			  
    			  if (topicToBeSaved.getId() == null){
    				  topicToBeSaved.setId(topicNameOrId);
-   				  entityIsNew = true;
    			  }
    			  else{
    				  //Payload contains id. Check if they are the same
@@ -195,40 +195,22 @@ public class TopicResource extends AstroboaResource{
    		  else{
    			  //Save content object by SystemName
 
-   			  //Bring topic from repository
-   			  Topic existedTopic  = null;
-   			  TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-   			  topicCriteria.addNameEqualsCriterion(topicNameOrId);
-
-   			  //At most one
-   			  topicCriteria.setOffsetAndLimit(0, 1);
-
-   			  CmsOutcome<Topic> cmsOutcome = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
-   			  
-   			  if (cmsOutcome.getCount() >= 1) {
-   				  existedTopic = (Topic) cmsOutcome.getResults().get(0);
-   			  }
-   			  else{
-   				entityIsNew = true;
-   			  }
-
    			  //Check that payload contains id
    			  if (topicToBeSaved.getId() == null){
-   				  if (existedTopic != null){
+   				  if (existingTopic != null){
    					  //A topic with name 'topicIdOrName' exists, but in payload no id was provided
    					  //Set this id to Topic representing the payload
-   					  topicToBeSaved.setId(existedTopic.getId());
+   					  topicToBeSaved.setId(existingTopic.getId());
    				  }
    			  }
    			  else{
    				  
    				  //Payload contains an id. 
-   				  
-   				  if (existedTopic != null){
+   				  if (existingTopic != null){
    					//if this is not the same with the id returned from repository raise an exception
-   					  if (!StringUtils.equals(existedTopic.getId(), topicToBeSaved.getId())){
+   					  if (!StringUtils.equals(existingTopic.getId(), topicToBeSaved.getId())){
    						logger.warn("Try to "+httpMethod + " topic with name "+topicNameOrId + " which corresponds to an existed topic in repository with id " +
-   								existedTopic.getId()+" but payload contains a different id "+ topicToBeSaved.getId());
+   								existingTopic.getId()+" but payload contains a different id "+ topicToBeSaved.getId());
    						throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
    					  }
    				  }

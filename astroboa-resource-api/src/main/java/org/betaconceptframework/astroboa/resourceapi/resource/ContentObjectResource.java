@@ -933,22 +933,22 @@ public class ContentObjectResource extends AstroboaResource{
 	  private Response saveContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent, String httpMethod){
+		  //Import from xml or json. ContentObject will not be saved
+		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false);
 			
-		  boolean entityIsNew = false;
-		  
-   		  //Import from xml or json. ContentObject will not be saved
-   		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false);
+		  if (logger.isDebugEnabled()){
+			  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
+		  }
 
-   		  if (logger.isDebugEnabled()){
-   			  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
-   		  }
-   		  
+		  ContentObject existingObject = astroboaClient.getContentService().getContentObject(contentObjectIdOrName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+		  
+		  boolean entityIsNew = existingObject == null;
+		  
    		  if (CmsConstants.UUIDPattern.matcher(contentObjectIdOrName).matches()){
    			  //Save content object by Id
    			  
    			  if (contentObjectToBeSaved.getId() == null){
    				  contentObjectToBeSaved.setId(contentObjectIdOrName);
-   				  entityIsNew = true;
    			  }
    			  else{
    				  //Payload contains id. Check if they are the same
@@ -960,41 +960,23 @@ public class ContentObjectResource extends AstroboaResource{
    		  }
    		  else{
    			  //Save content object by SystemName
-
-   			  //Bring contentObject from repository
-   			  ContentObject existedContentObject  = null;
-   			  ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-   			  contentObjectCriteria.addSystemNameEqualsCriterion(contentObjectIdOrName);
-
-   			  //At most one
-   			  contentObjectCriteria.setOffsetAndLimit(0, 1);
-
-   			  CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
-   			  
-   			  if (cmsOutcome.getCount() >= 1) {
-   				  existedContentObject = (ContentObject) cmsOutcome.getResults().get(0);
-   			  }
-   			  else{
-   				  entityIsNew = true;
-   			  }
-
    			  //Check that payload contains id
    			  if (contentObjectToBeSaved.getId() == null){
-   				  if (existedContentObject != null){
+   				  if (existingObject != null){
    					  //A content object with system name 'contentObjectIdOrName' exists, but in payload no id was provided
    					  //Set this id to ContentObject representing the payload
-   					  contentObjectToBeSaved.setId(existedContentObject.getId());
+   					  contentObjectToBeSaved.setId(existingObject.getId());
    				  }
    			  }
    			  else{
    				  
    				  //Payload contains an id. 
    				  
-   				  if (existedContentObject != null){
+   				  if (existingObject != null){
    					//if this is not the same with the id returned from repository raise an exception
-   					  if (!StringUtils.equals(existedContentObject.getId(), contentObjectToBeSaved.getId())){
+   					  if (!StringUtils.equals(existingObject.getId(), contentObjectToBeSaved.getId())){
    						logger.warn("Try to "+httpMethod + " content object with system name "+contentObjectIdOrName + " which corresponds to an existed content object in repository with id " +
-   								existedContentObject.getId()+" but payload contains a different id "+ contentObjectToBeSaved.getId());
+   								existingObject.getId()+" but payload contains a different id "+ contentObjectToBeSaved.getId());
    						throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
    					  }
    				  }

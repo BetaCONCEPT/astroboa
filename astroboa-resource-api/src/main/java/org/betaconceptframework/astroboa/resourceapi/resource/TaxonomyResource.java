@@ -307,7 +307,7 @@ public class TaxonomyResource extends AstroboaResource{
 
 		  boolean taxonomyIdHasBeenProvided = CmsConstants.UUIDPattern.matcher(taxonomyIdOrName).matches();
 		  
-		  boolean entityIsNew = false;
+		  boolean entityIsNew = existedTaxonomy == null;
 		  
 		  if (taxonomyIdHasBeenProvided){
 			  if (taxonomyToBeSaved.getId()==null){
@@ -346,7 +346,6 @@ public class TaxonomyResource extends AstroboaResource{
 						  new Object[]{httpMethod, taxonomyIdOrName, taxonomyToBeSaved.getName()});
 				  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
 			  }
-			  entityIsNew = true;
 		  }
    		  
    		  //Produce xml representation of imported taxonomy and continue with save
