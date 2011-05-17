@@ -531,7 +531,8 @@ public class ContentDao  extends JcrDaoSupport{
 	}
 
 
-	public void deleteContentObject(String objectIdentifer)   {
+	public boolean deleteContentObject(String objectIdOrSystemName)   {
+		
 		Session session = null;
 		Context context = null;
 		try {
@@ -539,7 +540,7 @@ public class ContentDao  extends JcrDaoSupport{
 
 			//Retrieve content object node
 
-			Node contentObjectNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(session, objectIdentifer);
+			Node contentObjectNode = getContentObjectNodeByIdOrSystemName(objectIdOrSystemName); 
 
 			if (contentObjectNode != null){
 				
@@ -549,8 +550,10 @@ public class ContentDao  extends JcrDaoSupport{
 
 				session.save();
 				
+				return true;
 			}
 
+			return false;
 			//Clear cache
 			//jcrQueryCacheRegion.removeRegion();
 
