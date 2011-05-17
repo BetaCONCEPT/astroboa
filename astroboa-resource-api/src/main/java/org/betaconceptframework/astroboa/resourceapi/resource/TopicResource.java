@@ -41,6 +41,7 @@ import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
+import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -249,6 +250,9 @@ public class TopicResource extends AstroboaResource{
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, topicSource, entityIsNew);
 				
 			}
+			catch(CmsUnauthorizedAccessException e){
+				throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
+			}
 			catch(Exception e){
 				logger.error("",e);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -262,6 +266,9 @@ public class TopicResource extends AstroboaResource{
 				
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, requestContent, entityIsNew);
 				
+			}
+			catch(CmsUnauthorizedAccessException e){
+				throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
 			}
 			catch(Exception e){
 				logger.error("",e);
