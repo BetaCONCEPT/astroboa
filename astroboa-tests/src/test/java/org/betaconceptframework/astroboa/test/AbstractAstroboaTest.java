@@ -261,6 +261,11 @@ public abstract class AbstractAstroboaTest {
 					}
 				}
 				else if (cmsRepositoryEntity instanceof ContentObject){
+					
+					if (((ContentObject)cmsRepositoryEntity).getSystemName() != null){
+						contentService.deleteContentObject(((ContentObject)cmsRepositoryEntity).getSystemName());
+					}
+					
 					contentService.deleteContentObject(((ContentObject)cmsRepositoryEntity).getId());
 				}
 				else if (cmsRepositoryEntity instanceof RepositoryUser){
