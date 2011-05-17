@@ -21,17 +21,24 @@ package org.betaconceptframework.astroboa.engine.service.security.aspect;
 import java.util.Set;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.security.RepositoryUserIdPrincipal;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.SecurityContext;
 import org.betaconceptframework.astroboa.engine.jcr.dao.JcrDaoSupport;
+import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
+import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.engine.service.security.exception.NonAuthenticatedOperationException;
+import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +54,9 @@ public abstract class AbstractSecureContentObjectAspect extends JcrDaoSupport{
 
 	@Autowired
 	private CmsRepositoryEntityUtils cmsRepositoryEntityUtils;
+	
+	@Autowired
+	private CmsQueryHandler cmsQueryHandler;
 
 	public static SecurityContext retrieveSecurityContext() {
 		SecurityContext activeSecurityContext = AstroboaClientContextHolder.getActiveSecurityContext();
@@ -102,6 +112,36 @@ public abstract class AbstractSecureContentObjectAspect extends JcrDaoSupport{
 		return cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(getSession(), contentObjectId);
 	}
 
+	public Node getContentObjectNodeByIdOrSystemName(String contentObjectIdOrSystemName){
+		try{
+			Node contentObjectNode = null;
+			
+			if (CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches()){
+				contentObjectNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(getSession(), contentObjectIdOrSystemName);
+
+				if (contentObjectNode != null){
+					return contentObjectNode;
+				}
+			}
+			else{
+				ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
+				contentObjectCriteria.addSystemNameEqualsCriterion(contentObjectIdOrSystemName);
+				contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+				contentObjectCriteria.setOffsetAndLimit(0, 1);
+				
+				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(getSession(), contentObjectCriteria, true);
+				
+				if (nodes.getTotalRowCount() > 0){
+					return ((NodeIterator) nodes.getNodeIterator()).nextNode();
+				}
+			}
+			
+			return null;
+		}
+		catch (Exception e) {
+			throw new CmsException(e);
+		}
+	}
 	protected String retrieveRepositoryUserIdForLoggedInUser(
 			SecurityContext activeSecurityContext, String userId,
 			Node contentObjectNode) throws RepositoryException {
