@@ -211,9 +211,9 @@ public class ContentServiceImpl  implements ContentService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public void deleteContentObject(String objectIdentiifer)   {
+	public boolean deleteContentObject(String objectIdOrSystemName)   {
 		try{
-			contentDao.deleteContentObject(objectIdentiifer);
+			return contentDao.deleteContentObject(objectIdOrSystemName);
 		}
 		catch(CmsException e){
 			throw e;
