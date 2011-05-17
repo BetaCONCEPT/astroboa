@@ -76,9 +76,9 @@ public class ContentServiceSecureImpl extends AbstractSecureAstroboaService impl
 	}
 	
 	@RolesAllowed("ROLE_CMS_EDITOR")
-	public void deleteContentObject(String contentObjectId,String authenticationToken) {
+	public boolean deleteContentObject(String objectIdOrSystemName,String authenticationToken) {
 		
-		contentService.deleteContentObject(contentObjectId);
+		return contentService.deleteContentObject(objectIdOrSystemName);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
