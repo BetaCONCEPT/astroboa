@@ -34,9 +34,7 @@ import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
-import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
@@ -405,28 +403,16 @@ public class LazyLoader  {
 		
 		activateClientContextForAuthenticationToken(authenticationToken);
 		
-		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.addNameEqualsCriterion(topicName);
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-		topicCriteria.doNotCacheResults();
-		topicCriteria.setOffsetAndLimit(0,2);
-
-		CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria);
+		Topic topic = topicService.getTopic(topicName, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 		
-		List<Topic> results = topicsFound.getResults();
-		
-		if (CollectionUtils.isNotEmpty(results)) {
-			// if more than one topics correspond to the same name then we choose the first one but we generate a warning
-			if (topicsFound.getResults().size() > 1){
-				LoggerFactory.getLogger(getClass()).warn("More than one topics found with name: " + topicName + " The first from  list will be returned. Topic names should be unique");
-			}
-
-			return topicsFound.getResults().get(0); 
-		}
-		else {
-			LoggerFactory.getLogger(getClass()).info("The provided topic name "+topicName+" does not exist.");
+		if (topic == null ){
+			
+			LoggerFactory.getLogger(getClass()).warn("No topic found with name "+topicName);
+			
 			return null;
 		}
+		
+		return topic;
 		
 	}
 
@@ -434,31 +420,15 @@ public class LazyLoader  {
 		
 		activateClientContextForAuthenticationToken(authenticationToken);
 		
-		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-		contentObjectCriteria.addSystemNameEqualsCriterion(systemName);
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-		contentObjectCriteria.doNotCacheResults();
-		contentObjectCriteria.setOffsetAndLimit(0,2);
-
-		CmsOutcome<CmsRankedOutcome<ContentObject>> contentObjectsFound = contentService.searchContentObjects(contentObjectCriteria);
+		ContentObject object = contentService.getContentObject(systemName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 		
-		List<CmsRankedOutcome<ContentObject>> results = contentObjectsFound.getResults();
-		
-		if (CollectionUtils.isNotEmpty(results)) {
-			
-			// if more than one content objects correspond to the same name then we choose the first one but we generate a warning
-			//Normally this should never happen
-			if (contentObjectsFound.getResults().size() > 1){
-				LoggerFactory.getLogger(getClass()).warn("More than one content objects found with name: " + systemName + " The first from  list will be returned. ContentObjetc system name should be unique");
-			}
-
-			return contentObjectsFound.getResults().get(0).getCmsRepositoryEntity();
-		}
-		else {
+		if (object == null ){
 			LoggerFactory.getLogger(getClass()).info("No content object found with system name "+systemName);
 			
 			return null;
 		}
+		
+		return object;
 		
 	}
 
