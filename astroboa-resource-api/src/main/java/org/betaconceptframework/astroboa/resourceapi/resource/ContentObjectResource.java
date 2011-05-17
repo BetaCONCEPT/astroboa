@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
@@ -55,6 +56,7 @@ import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
+import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.commons.excelbuilder.WorkbookBuilder;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -903,6 +905,31 @@ public class ContentObjectResource extends AstroboaResource{
 
   	  }
 
+  	  @DELETE
+   	  @Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
+	  public Response deleteContentObjectByIdOrName(
+				@PathParam("contentObjectIdOrName") String contentObjectIdOrName){
+  		  
+  		  
+  		  if (StringUtils.isBlank(contentObjectIdOrName)){
+  			  logger.warn("Use HTTP DELETE to delete an object but no id or system name was provided ");
+  			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+  		  }
+  		  
+  		  try{
+  			  boolean objectDeleted = astroboaClient.getContentService().deleteContentObject(contentObjectIdOrName);
+  			  
+  			  return ContentApiUtils.createResponseForHTTPDelete(objectDeleted);
+  		  }
+  		  catch(CmsUnauthorizedAccessException e){
+			throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
+  		  }
+  		  catch(Exception e){
+  			logger.error("",e);
+  			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+  		  }
+  	  }
+
 	  private Response saveContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent, String httpMethod){
@@ -1012,6 +1039,9 @@ public class ContentObjectResource extends AstroboaResource{
 			}
 			
 		}
+		catch(CmsUnauthorizedAccessException e){
+			throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
+		}
 		catch(Exception e){
 			logger.error("",e);
 			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -1025,6 +1055,9 @@ public class ContentObjectResource extends AstroboaResource{
 				
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, requestContent, entityIsNew);
 				
+			}
+			catch(CmsUnauthorizedAccessException e){
+				throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
 			}
 			catch(Exception e){
 				logger.error("",e);
