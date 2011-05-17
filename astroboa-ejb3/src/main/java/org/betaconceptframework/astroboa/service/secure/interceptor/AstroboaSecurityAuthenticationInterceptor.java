@@ -25,6 +25,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.SecurityContext;
 import org.betaconceptframework.astroboa.service.secure.impl.AbstractSecureAstroboaService;
@@ -96,18 +97,12 @@ public class AstroboaSecurityAuthenticationInterceptor {
 					return ctx.proceed();
 				}
 				catch(CmsException e){
-					
-					//Log exception only if it is a generic CmsException
-					//All CmsException subclasses are not logged in
-					if (e.getClass().isAssignableFrom(CmsException.class)){
-						logger.error("",e);
-					}
-					
+					logger.error("",e);
 					throw e;
 				}
 				catch(Exception ex){
 					logger.error("",ex);
-					throw ex;
+					throw new CmsException(ex);
 				}
 			}
 			
@@ -175,7 +170,7 @@ public class AstroboaSecurityAuthenticationInterceptor {
 				}
 			}
 			
-			throw new SecurityException("User "+securityContext.getIdentity()+ " is not authorized to access method "+ methodName + 
+			throw new CmsUnauthorizedAccessException("User "+securityContext.getIdentity()+ " is not authorized to access method "+ methodName + 
 					" Roles "+ securityContext.getAllRoles()+ " Repository "+AstroboaClientContextHolder.getActiveRepositoryId());
 		}
 	}
