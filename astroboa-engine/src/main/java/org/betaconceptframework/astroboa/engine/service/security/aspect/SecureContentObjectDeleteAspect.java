@@ -147,19 +147,19 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 	 * 
 	 *   
 	 * 
-	 *  1. ContentObjectId is not null
+	 *  1. ContentObject Id or SystemName is not null
 	 *  2. User has ROLE_ADMIN or is SYSTEM user (It is supposed that user SYSTEM has all roles)
 	 *  3. User is the owner of the object
 	 *  4. User is not the owner of the object but content object has accessibility.canBeDeletedBy
 	 *    whose value is REPOSITORY, or contains at least one of the roles user possesses, or explicitly contains user's id
 	 */
-	private void checkIfUserIsAuthorizedToDeleteContentObject(String contentObjectId)
+	private void checkIfUserIsAuthorizedToDeleteContentObject(String contentObjectIdOrSystemName)
 	{
 		SecurityContext activeSecurityContext = retrieveSecurityContext();
 		String userId = activeSecurityContext.getIdentity();
 
 		//1. ContentObjectId is not null
-		checkContentObjectIdIsNotNull(contentObjectId, userId);
+		checkObjectIdOrNameIsNotNull(contentObjectIdOrSystemName, userId);
 
 
 		//2. User has ROLE_ADMIN
@@ -167,20 +167,20 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 		
 		if (userHasRole(activeSecurityContext, roleAdminForActiveRepository))
 		{
-			logger.debug("User {} is authorized to delete contentObject with id {} because she has role {}", 
-					new Object[]{userId, contentObjectId, roleAdminForActiveRepository});
+			logger.debug("User {} is authorized to delete contentObject with id/name '{}' because she has role {}", 
+					new Object[]{userId, contentObjectIdOrSystemName, roleAdminForActiveRepository});
 			return;
 		}
 
 
 		try{
-			Node contentObjectNode = retrieveContentObjectNodeForContentObject(contentObjectId);
+			Node contentObjectNode = getContentObjectNodeByIdOrSystemName(contentObjectIdOrSystemName);
 
 			if (contentObjectNode==null)
 			{
-				logger.debug("Jcr node corresponding to contentObject with id {} was not found. Deletion cannot procceed", contentObjectId);
+				logger.debug("Jcr node corresponding to contentObject with id/name '{}' was not found. Deletion cannot procceed", contentObjectIdOrSystemName);
 
-				throw new CmsException("ContentObject with identifier "+contentObjectId+" could not be deleted because no such content object exists");
+				throw new CmsException("ContentObject with identifier/name '"+contentObjectIdOrSystemName+"' could not be deleted because no such content object exists");
 			}
 
 			/*
@@ -194,8 +194,8 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 
 			if ( StringUtils.equals(ownerIdFoundInRepository, repositoryUserIdOfLoggedInUser))
 			{
-				logger.debug("User {} is authorized to delete contentObject with id {} because she owns contentObject", 
-						new Object[]{userId, contentObjectId});
+				logger.debug("User {} is authorized to delete contentObject with id/name '{}' because she owns contentObject", 
+						new Object[]{userId, contentObjectIdOrSystemName});
 
 				return;	
 			}
@@ -209,9 +209,9 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 
 			if (!contentObjectNode.hasProperty("accessibility/canBeDeletedBy"))
 			{
-				logger.debug("User {} is not authorized to delete contentObject with id {} because she does not own contentObject " +
+				logger.debug("User {} is not authorized to delete contentObject with id/name '{}' because she does not own contentObject " +
 						" and property 'accessibility.canBeDeletedBy' does not have any values at all", 
-						new Object[]{userId, contentObjectId});
+						new Object[]{userId, contentObjectIdOrSystemName});
 
 				isUserAuthorized = false;
 			}
@@ -226,9 +226,9 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 					
 					if (ContentAccessMode.ALL.toString().equals(userOrRoleAuthorizedToDelete)){
 						isUserAuthorized=true;
-						logger.debug("User {} is authorized to delete contentObject with id {} because she does not own contentObject " +
+						logger.debug("User {} is authorized to delete contentObject with id/name '{}' because she does not own contentObject " +
 								" but property 'accessibility.canBeDeletedBy' contains value {}", 
-								new Object[]{userId, contentObjectId, ContentAccessMode.ALL});
+								new Object[]{userId, contentObjectIdOrSystemName, ContentAccessMode.ALL});
 
 						break;
 					}
@@ -236,17 +236,17 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 					{
 						//Check if authorizedCanBeDeletedBy value corresponds to user id
 						if (StringUtils.equals(userOrRoleAuthorizedToDelete, userId)){ //User Id has been saved as is to canBeDeletedBy property 
-							logger.debug("User {} is authorized to delete contentObject with id {} because she does not own contentObject " +
+							logger.debug("User {} is authorized to delete contentObject with id/name '{}' because she does not own contentObject " +
 									" but property 'accessibility.canBeDeletedBy' contains value {} which is user's Id {}",  
-									new Object[]{userId, contentObjectId, userOrRoleAuthorizedToDelete, userId});
+									new Object[]{userId, contentObjectIdOrSystemName, userOrRoleAuthorizedToDelete, userId});
 
 							isUserAuthorized= true;
 							break;
 						}
 						else if (userHasRole(activeSecurityContext, userOrRoleAuthorizedToDelete)){ //User Role has been saved as is to canBeDeletedBy property 
-							logger.debug("User {} is authorized to delete contentObject with id {} because she does not own contentObject " +
+							logger.debug("User {} is authorized to delete contentObject with id/name '{}' because she does not own contentObject " +
 									" but property 'accessibility.canBeDeletedBy' contains role {} which is assigned to user as well. " , 
-									new Object[]{userId, contentObjectId, userOrRoleAuthorizedToDelete});
+									new Object[]{userId, contentObjectIdOrSystemName, userOrRoleAuthorizedToDelete});
 
 							isUserAuthorized= true;
 							break;
@@ -262,10 +262,10 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 						canBeDeletedList.add(authorizedCanBeDeletedByValue.getString());
 					}
 					
-					logger.warn("User {} is not authorized to delete contentObject with id {} because she does not own contentObject " +
+					logger.warn("User {} is not authorized to delete contentObject with id/name '{}' because she does not own contentObject " +
 							" and property 'accessibility.canBeDeletedBy' has values {}. \nThese values do not include value {} " +
 							" or user's id {} or any of user's assigned roles {}", 
-							new Object[]{userId, contentObjectId, canBeDeletedList, 
+							new Object[]{userId, contentObjectIdOrSystemName, canBeDeletedList, 
 							ContentAccessMode.ALL.toString(), userId, activeSecurityContext.getAllRoles()});
 
 					throw new CmsUnauthorizedAccessException("User "+ userId + " is not authorized to delete content object "+ contentObjectNode.getPath());
@@ -281,9 +281,9 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 
 	}
 
-	private void checkContentObjectIdIsNotNull(String contentObjectId, String userId) {
-		if (StringUtils.isBlank(contentObjectId)){
-			throw new CmsException("Content object id not provided. User "+ userId);
+	private void checkObjectIdOrNameIsNotNull(String objectIdOrName, String userId) {
+		if (StringUtils.isBlank(objectIdOrName)){
+			throw new CmsException("No object id or name provided. User "+ userId);
 		}
 	}
 
