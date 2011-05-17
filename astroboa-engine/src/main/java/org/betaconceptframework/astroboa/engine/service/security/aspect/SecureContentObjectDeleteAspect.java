@@ -85,10 +85,10 @@ public class SecureContentObjectDeleteAspect extends AbstractSecureContentObject
 	 * 
 	 * 
 	 */
-	private void miscallenuousRestrictions(String contentObjectId) 
+	private void miscallenuousRestrictions(String objectIdOrSystemName) 
 	{
 		try{
-			Node contentObjectNode = retrieveContentObjectNodeForContentObject(contentObjectId);
+			Node contentObjectNode = getContentObjectNodeByIdOrSystemName(objectIdOrSystemName);
 
 			if (contentObjectNode==null)
 			{
