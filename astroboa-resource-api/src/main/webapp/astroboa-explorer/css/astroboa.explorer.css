@@ -7,7 +7,7 @@ select { width: 200px; }
 
 .ui-tabs {margin-bottom: 20px;}
 
-#contentTab { height: 120px; margin-bottom: 20px;}
+#contentTab { height: 60px; margin-top: 20px;}
 
 #criterionBuilder {
 	float:left;
@@ -22,18 +22,34 @@ select { width: 200px; }
 
 #restrictionValue {width: 220px; height:23px;}
 
-#queryParametersDiv { float:left; width: 100%;  padding: 0.4em; position: relative;}
-
-#offsetAndLimitDiv {float:left;}
-#offsetAndLimitDiv fieldset { padding:0; border:0; }
-#offsetAndLimitDiv input.text { margin-left:15px; margin-right:10px; width:40px; padding: .4em; }
-
 #resultsDiv {float:left; width: 100%; }
 
 #criteriaDiv {margin-bottom: 20px;}
 #criteriaDiv h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
 
 #criteriaDiv div {margin-left: 10px; margin-top: 10px; margin-bottom: 10px; width: 70%}
+
+#queryParametersDiv {margin-bottom: 20px;}
+#queryParametersDiv h3 { margin: 0; padding: 0.4em; text-align: center; font-weight: normal;}
+
+#queryParametersContainerDiv {
+	display: inline-block;
+	position: relative;
+	padding: 0;
+	margin-right: .1em;
+	text-decoration: none !important;
+	cursor: pointer;
+	text-align: center;
+	zoom: 1;
+	overflow: visible;
+	margin-left: 60px;;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	width: 70%;
+}
+
+#queryParametersContainerDiv fieldset {margin-top: 5px; padding:0; border:0; float: right; font-size: 13pt;}
+#queryParametersContainerDiv input.text { margin-left:15px; margin-right:10px; width:40px; height: 17px;}
 
 
 #apiUrlDiv {margin-bottom: 20px;}

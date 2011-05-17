@@ -32,7 +32,6 @@
 
 	$.fn.astroboaExplorer = function(configuration) {
 		var defaultConfiguration = { 
-				astroboaServer : window.location.hostname, 
 				locale : "en",
 				resourceApiBaseURL : "/resource-api"
 			};
@@ -62,8 +61,14 @@
 			//http://server/resource-api/repositoty-id/contentObject
 			//Its value is updated each time user selects a repository
 			baseContentSearchURL,
-			queryParameter,
+			baseModelURL,
+			baseTopicSearchURL,
+			getAllRepositoriesURL,
+			
 			contentSearchURL,
+			topicSearchURL,
+			
+			queryParameter,
 			
 			//Array holding the restrictions
 			criteria = new Array(),
@@ -95,9 +100,8 @@
 			idOfCriterionDiv = "criterionDiv",
 			idOfButtonForAddingNewCriterion = "addCriterionBtn",
 			idOfQueryParametersDiv = "queryParametersDiv",
+			idOfQueryParametersContainerDiv = "queryParametersContainerDiv",
 			idOfCriteriaDiv = "criteriaDiv",
-			idOfOutputSelectorDiv = "outputSelectDiv",
-			idOfOffsetAndLimitDiv = "offsetAndLimitDiv",
 			idOfResultsDiv = "resultsDiv",
 			idOfButtonForGeneratingResults = "resultsBtn",
 			idOfButtonForResetingResults = "resetBtn",
@@ -134,6 +138,7 @@
 				    reset : {el:"Καθαρισμός", en:"Reset"},
 				    criteriaDivLabel : {el:"Κριτήρια (Καντε κλικ για να το διαγραψετε)", en:"Criteria (Click on the criterion to remove it)"},
 				    resourceApiUrlDivLabel : {el:"Resource Api URL", en:"Resource Api URL"},
+				    queryParametersDivLabel : {el:"Πρόσθετες Επιλογές", en:"Search Options"},
 				    resultsPanelLabel : {el:"Αποτελέσματα", en:"Results"},
 				    anyContentTypeCategory : {el:"Αντικείμενα από όλους τους τύπους", en:"Objects of any content type"},
 				    anyTaxonomyCategory : {el:"Όροι από όλους τους θησαυρούς", en:"Topics of any taxonomy"}
@@ -227,8 +232,8 @@
 							
 							buildQueryParametersDiv();
 							
-							$('#'+idOfOffsetAndLimitDiv + ' fieldset label:nth-child(1)').text(message.offset[configuration.locale]);
-							$('#'+idOfOffsetAndLimitDiv + ' fieldset label:nth-child(2)').text(message.limit[configuration.locale]);
+							$('#'+idOfQueryParametersContainerDiv + ' fieldset label:nth-child(1)').text(message.offset[configuration.locale]);
+							$('#'+idOfQueryParametersContainerDiv + ' fieldset label:nth-child(2)').text(message.limit[configuration.locale]);
 
 							if (elementExists(idOfButtonForGeneratingResults)){
 								$('#'+idOfButtonForGeneratingResults+' span').text(message.results[configuration.locale]);
@@ -257,14 +262,13 @@
 
 					var options = '<option value="'+defaultValueForSelector+'">'+message.repositorySelector[configuration.locale]+'</option>';
 					
-					var getAllRepositoryURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+"/";
 
 					$.ajax({
 						type: "GET",
 						dataType : 'json',
 					 		data: {output : 'json'},
 					 		async : false,
-					 		url : getAllRepositoryURL,
+					 		url : getAllRepositoriesURL,
 					 		success : function(data){
 
 					 			$.each(data.repository, function(i, repository){
@@ -309,12 +313,27 @@
 					
 					repositoryModel = {};
 					
-					baseContentSearchURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/contentObject';
+					resetURLs();
 					
 					resetQueryParameters();
 					
 					criteria = new Array();
 					criteriaDSL = new Array();
+
+				}
+				
+				function resetURLs(){
+					
+					baseURL = (configuration.astroboaServer ? 'http://'+configuration.astroboaServer : '')+configuration.resourceApiBaseURL;
+					
+					getAllRepositoriesURL = baseURL+"/";
+
+					baseRepositoryURL = baseURL+'/'+configuration.repository;
+
+					baseContentSearchURL = baseRepositoryURL+'/contentObject';
+				    baseTopicSearchURL = baseRepositoryURL+'/topic';
+					baseTaxonomySearchURL = baseRepositoryURL+'/taxonomy';
+					baseModelURL = baseRepositoryURL+'/model';
 
 				}
 				
@@ -359,7 +378,11 @@
 						$('#'+idOfTabs).append('<div id="'+idOfTagTab+'"></div>');
 						
 						//Activate tabs
-						$( '#'+idOfTabs ).tabs();
+						$( '#'+idOfTabs ).tabs({
+							   select: function(event, ui) { 
+								   $( '#'+idOfButtonForResetingResults).click();
+							   }
+						});
 						
 					}
 					
@@ -392,8 +415,6 @@
 					
 					buildOperatorSelector();
 					
-					buildQueryParametersDiv();
-
 				}
 				
 				function buildContentTypeSelector(){
@@ -408,14 +429,12 @@
 					
 					var options = '<option value="'+defaultValueForSelector+'">'+message.contentTypeSelector[configuration.locale]+'</option>';
 					
-					var getRepositoryModelURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/model';
-
 					$.ajax({
 						type: "GET",
 						dataType : 'json',
 					 		data: {output : 'json'},
 					 		async : false,
-					 		url : getRepositoryModelURL,
+					 		url : baseModelURL,
 					 		success : function(data){
 					 			
 					 			$.each(data.contentType, function(i, contentType){
@@ -471,8 +490,8 @@
 						//No content type selected. Load only profile
 						var contentType = 'administrativeMetadataType';
 						
-						var getContentTypeModelURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/model/'+contentType;
-	
+						var getContentTypeModelURL = baseModelURL+'/'+contentType;
+						
 						$.ajax({
 							type: "GET",
 							dataType : 'json',
@@ -715,22 +734,25 @@
 				function buildQueryParametersDiv(){
 					
 					if (! elementExists(idOfQueryParametersDiv)){
-						$('#'+idOfContentTab).append('<div id="'+idOfQueryParametersDiv+'"></div>');
+						
+						$('#'+idOfResultsDiv).append('<div id="'+idOfQueryParametersDiv+'" class="ui-widget-content ui-corner-all"></div>');
+						$('#'+idOfQueryParametersDiv).append('<h3 class="ui-widget-header ui-corner-all">'+message.queryParametersDivLabel[configuration.locale]+'</h3><div id="'+idOfQueryParametersContainerDiv+'"></div>');
+
 					}
 					else{
-						$('#'+idOfQueryParametersDiv).empty();
+						$('#'+idOfQueryParametersContainerDiv).empty();
 					}
 					
 					buildOutputSelector();
 					
 					buildOffsetAndLimitComponents();
+					
 				}
 				
 				function buildOutputSelector(){
 					
 					if (! elementExists(outputSelectorName)){
-						$('#'+idOfQueryParametersDiv).append('<div id="'+idOfOutputSelectorDiv+'" class="'+css.selectorDiv+'"></div>');
-						$('#'+idOfOutputSelectorDiv).append('<select name="'+outputSelectorName+'" id="'+outputSelectorName+'"></select>');
+						$('#'+idOfQueryParametersContainerDiv).append('<div class="selectorDiv"><select name="'+outputSelectorName+'" id="'+outputSelectorName+'"></select><div>');
 					}
 					else{
 						$('#'+outputSelectorName).empty();
@@ -753,17 +775,16 @@
 				
 				function buildOffsetAndLimitComponents(){
 					
-					if (! elementExists(idOfOffsetAndLimitDiv)){
-						$('#'+idOfQueryParametersDiv).append('<div id="'+idOfOffsetAndLimitDiv+'"></div>');
+					if ( $('#'+idOfQueryParametersContainerDiv + ' div fieldset')){
 
-						var html = '<fieldset>';
+						var html = '<div class="selectorDiv"><fieldset>';
 						html += '<label for="offset">'+message.offset[configuration.locale]+'</label>';
 						html += '<input type="text" name="offset" id="offset" class="text ui-widget-content ui-corner-all" value="'+queryParameter.offset+'" />';
 						html += '<label for="limit">'+message.limit[configuration.locale]+'</label>';
 						html += '<input type="text" name="limit" id="limit" class="text ui-widget-content ui-corner-all" value="'+queryParameter.limit+'"/>';
-						html += '</fieldset>';
+						html += '</fieldset></div>';
 						
-						$('#'+idOfOffsetAndLimitDiv).append(html);
+						$('#'+idOfQueryParametersContainerDiv).append(html);
 					}
 					
 				}
@@ -820,6 +841,8 @@
 					$('#'+idOfCriteriaDiv).append('<h3 class="ui-widget-header ui-corner-all">'+message.criteriaDivLabel[configuration.locale]+'</h3>');
 					$('#'+idOfCriteriaDiv).hide();
 
+					buildQueryParametersDiv();
+
 					$('#'+idOfResultsDiv).append('<div id="'+idOfResourseApiURLDiv+'" class="ui-widget-content ui-corner-all"></div>');
 					$('#'+idOfResourseApiURLDiv).append('<h3 class="ui-widget-header ui-corner-all">'+message.resourceApiUrlDivLabel[configuration.locale]+'</h3><p></p>');
 
@@ -862,7 +885,16 @@
 					$('#'+idOfResultsContainerLabelDiv).css('display', 'none');
 					$('#'+idOfResultsContainerDiv).css('display', 'none');
 
-					var result = getContentSearchResponse();
+					var selected = $( '#'+idOfTabs ).tabs('option', 'selected');
+					
+					var result = '';
+					
+					if (selected == 1){
+						result = getTopicSearchResponse();
+					}
+					else{
+						result = getContentSearchResponse();
+					}
 					
 					var html = '<pre class=\"brush: ' + (outputSelectedValue == 'xml'? 'xml' : 'js') + ' gutter: false; tab-size: 4;\">' +  result + '</pre>';
 					
@@ -883,6 +915,33 @@
 					 $.ajax({  
 				   			type: "GET",
 				   			url : baseContentSearchURL,
+					   		dataType : 'text', 
+					   		data: (queryParameter),				   		
+					   		async : false,
+					   		beforeSend: function() {
+					   			$('#'+idOfResultsDiv).append('<div id="thedialog"><img src="assets/ajax-loader.gif"/></div>');
+					   		},
+					   		complete: function(){
+					   			$('#thedialog').remove();
+					   		},
+						   	success : function(data){
+					   			response = data;
+						   	}
+					 });
+
+					 return response;
+					
+				}
+				
+				function getTopicSearchResponse(){
+					
+					updateResourceApiURL();
+					
+					var response = '';
+					
+					 $.ajax({  
+				   			type: "GET",
+				   			url : baseTopicSearchURL,
 					   		dataType : 'text', 
 					   		data: (queryParameter),				   		
 					   		async : false,
@@ -1018,9 +1077,24 @@
 						$('#'+idOfResourseApiURLDiv + ' p').empty();
 					}
 					
-					buildQueryForContentSearch(); 
+					var host ='';
 					
-					$('#'+idOfResourseApiURLDiv +' p').append(contentSearchURL);
+					if (!configuration.astroboaServer){
+						//Astroboa Server is the server hosting Astoboa explorer.
+						//Append search URL with server name and (if any) port
+						host = 'http://'+window.location.hostname + ( ! isBlank(window.location.port) ? ':'+window.location.port : '');
+					}
+					
+					var selected = $( '#'+idOfTabs ).tabs('option', 'selected');
+					
+					if (selected == 1){
+						buildQueryForTopicSearch(); 
+						$('#'+idOfResourseApiURLDiv +' p').append(host+topicSearchURL);
+					}
+					else{
+						buildQueryForContentSearch(); 
+						$('#'+idOfResourseApiURLDiv +' p').append(host+contentSearchURL);
+					}
 					
 					
 				}
@@ -1059,6 +1133,40 @@
 
 				}
 				
+				function buildQueryForTopicSearch(){
+					
+					var params = '';
+					
+					if (criteria.length > 0){
+						var crit = buildCriteria();
+						params += '&cmsQuery='+ crit;
+						queryParameter.cmsQuery = crit;
+						
+					}
+					
+					var offset = $('#offset').val(); 
+					if (! isNaN(offset) && offset > 0){
+						params += '&offset='+offset;
+						queryParameter.offset = offset;
+					}
+					
+					var limit = $('#limit').val(); 
+					if (! isNaN(limit) && limit > 0 && limit < 10000){
+						params += '&limit='+limit;
+						queryParameter.limit = limit;
+					}
+					
+					queryParameter.output = outputSelectedValue;
+					
+					params += '&output='+outputSelectedValue;
+					params += '&prettyPrint='+queryParameter.prettyPrint;
+					
+					params = params.substring(1, params.length);
+					
+					topicSearchURL = baseTopicSearchURL + '?'+ params;
+
+				}
+				
 				function buildCriteria(){
 					
 					var cmsQuery = '';
@@ -1093,7 +1201,6 @@
 					$( '#'+idOfRestrictionValueComponent ).catcomplete({
 						source: function( request, response ) {
 							
-							 var getContentObjectURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/contentObject';
 
 							 var acceptedContentTypes = extractPropertyAcceptedTaxonomiesOrContentTypes(propertySelectedValue);
 
@@ -1118,7 +1225,7 @@
 								 
 									$.ajax({
 										type : 'GET',
-										url: getContentObjectURL,
+										url: baseContentSearchURL,
 										dataType: "json",
 										async : false,
 								   		data: {
@@ -1215,8 +1322,6 @@
 					$( '#'+idOfRestrictionValueComponent ).catcomplete({
 						source: function( request, response ) {
 							
-							 var getTopicURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/topic';
-
 							 var acceptedTaxonomies = extractPropertyAcceptedTaxonomiesOrContentTypes(propertySelectedValue);
 
 							 if (acceptedTaxonomies == undefined && acceptedTaxonomies == null){
@@ -1240,7 +1345,7 @@
 								 
 									$.ajax({
 										type : 'GET',
-										url: getTopicURL,
+										url: baseTopicSearchURL,
 										dataType: "json",
 										async : false,
 								   		data: {
@@ -1333,11 +1438,10 @@
 					
 					var label = '';
 					
-					var getTaxonomyURL = 'http://'+configuration.astroboaServer+configuration.resourceApiBaseURL+'/'+configuration.repository+'/taxonomy';
 					
 					$.ajax({  
 			   			type: "GET",
-			   			url : getTaxonomyURL+'/'+taxonomy,
+			   			url : baseTaxonomySearchURL+'/'+taxonomy,
 				   		dataType : 'json', 
 				   		data: {output : 'json'},				   		
 				   		async : false,
@@ -1427,6 +1531,11 @@
 					}));
 		
 				}
+				
+				function isBlank(str) {
+				    return (!str || /^\s*$/.test(str));
+				}
+
 		  }); 
 		
 	};
