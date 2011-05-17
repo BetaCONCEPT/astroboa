@@ -360,13 +360,15 @@ public interface ContentServiceSecure {
 	 * token.
 	 *</p>
 	 *
-	 * @param contentObjectId
-	 *            {@link ContentObject#getId() content object id}.
+	 * @param objectIdOrSystemName
+	 *            Object {@link ContentObject#getId() id} or {@link ContentObject#getSystemName() system name}.
+	 *            
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to a Astroboa repository.
 	 * 
+	 * @return <code>true</code> if object has been successfully deleted, <code>false</code> otherwise
 	 */
-	void deleteContentObject(
-			String contentObjectId, String authenticationToken);
+	boolean deleteContentObject(
+			String objectIdOrSystemName, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link ContentService#getContentObjectByVersionName(String, String, String, CacheRegion)}

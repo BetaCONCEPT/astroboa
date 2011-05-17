@@ -366,11 +366,13 @@ public interface ContentService {
 	/**
 	 * Delete a content object from content repository.
 	 * 
-	 * @param contentObjectId
-	 *            {@link ContentObject#getId() content object id}.
+	 * @param objectIdOrSystemName 
+	 *            Object {@link ContentObject#getId() id} or {@link ContentObject#getSystemName() system name}.
+	 *            
+	 * @return <code>true</code> if object has been successfully deleted, <code>false</code> otherwise
 	 */
-	void deleteContentObject(
-			String contentObjectId);
+	boolean deleteContentObject(
+			String objectIdOrSystemName);
 
 	/**
 	 * Retrieves a specific version of a content object.
