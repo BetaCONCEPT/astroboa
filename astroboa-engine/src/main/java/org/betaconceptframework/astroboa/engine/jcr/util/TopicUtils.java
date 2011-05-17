@@ -402,7 +402,11 @@ public class TopicUtils {
 				if (! currentTaxonomyNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName())){
 					throw new CmsException("Topic "+topic.getId()+ ":" + topic.getName() + " cannot be saved under node "+topicJcrNode.getParent().getPath()+ " because this node does not correspond to a taxonomy");
 				}
-				checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,currentTaxonomyName);
+				
+				//At this point topic has not changed its taxonomy, therefore there is no need
+				//to search all objects which relate to this topic if their property accepts 
+				//topic's taxonomy
+				//checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,currentTaxonomyName);
 			}
 			else{
 
