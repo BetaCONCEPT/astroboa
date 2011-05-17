@@ -95,8 +95,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			addRoleToActiveSubject(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EDITOR));
 
 			//User should be able to save content object as she belongs to the same GROUP
-			contentObject = executeMethodOnContentService(methodName, contentObject.getId(), true,
-					methodArgumentsApartFromContentObject, parameterTypes);
+			 Assert.assertTrue((Boolean) executeMethodOnContentService(methodName, contentObject.getId(), true, 	methodArgumentsApartFromContentObject, parameterTypes), "Object "+contentObject+ " has not been deleted");
 
 		}
 	}
@@ -116,7 +115,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			}
 			catch(CmsException e)
 			{
-				Assert.assertEquals(e.getMessage(), "Content object id not provided. User "+AstroboaClientContextHolder.getActiveSecurityContext().getIdentity(), "Invalid exception thrown "+ e.getMessage());
+				Assert.assertEquals(e.getMessage(), "No object id or name provided. User "+AstroboaClientContextHolder.getActiveSecurityContext().getIdentity(), "Invalid exception thrown "+ e.getMessage());
 			} catch (Throwable e) {
 				throw new CmsException(e);
 			}
@@ -530,7 +529,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 	}
 
 	
-	private ContentObject executeMethodOnContentService(String methodName,
+	private Object executeMethodOnContentService(String methodName,
 			String contentObjectId, boolean logException,
 			Object[] methodArgumentsApartFromContentObjectId,
 			Class<?>... parameterTypes 
@@ -551,7 +550,9 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			if (! logException){
 				TestLogPolicy.setLevelForLogger(Level.FATAL, SecureContentObjectDeleteAspect.class.getName());
 			}
-			return (ContentObject) method.invoke(contentService, objectParameters.toArray());
+			
+			return method.invoke(contentService, objectParameters.toArray());
+			
 		}
 		catch(Exception t)
 		{
