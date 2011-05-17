@@ -41,6 +41,7 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
+import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
@@ -363,6 +364,9 @@ public class TaxonomyResource extends AstroboaResource{
 			
 			return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(taxonomy,httpMethod, taxonomySource, entityIsNew);
 			
+		}
+		catch(CmsUnauthorizedAccessException e){
+			throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
 		}
 		catch(Exception e){
 			logger.error("",e);
