@@ -1266,12 +1266,17 @@ public class CriterionFactory  {
 				referenceIdOrSystemName  =StringUtils.substringBeforeLast(referenceIdOrSystemName, CmsConstants.INCLUDE_CHILDREN_EXPRESSION);
 			}
 
-			//2. If value represents a system name , add the proper prefix
-			if  (CmsConstants.SystemNamePattern.matcher(referenceIdOrSystemName).matches()){
-				referenceCriterion.addValue(expectedPrefix+referenceIdOrSystemName);
+			//2. In all other cases, add value as is
+			if (! referenceIdOrSystemName.startsWith(expectedPrefix)){
+				if  (CmsConstants.UUIDPattern.matcher(referenceIdOrSystemName).matches()){
+					referenceCriterion.addValue(referenceIdOrSystemName);
+				}
+				//3. If value represents a system name , add the proper prefix
+				else {
+					referenceCriterion.addValue(expectedPrefix+referenceIdOrSystemName);
+				}
 			}
-			//3. In all other cases, add value as is
-			else {
+			else{
 				referenceCriterion.addValue(referenceIdOrSystemName);
 			}
 		}
