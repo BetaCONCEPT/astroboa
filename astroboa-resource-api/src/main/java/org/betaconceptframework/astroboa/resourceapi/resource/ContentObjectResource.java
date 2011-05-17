@@ -912,14 +912,14 @@ public class ContentObjectResource extends AstroboaResource{
   		  
   		  
   		  if (StringUtils.isBlank(contentObjectIdOrName)){
-  			  logger.warn("Use HTTP DELETE to delete an object but no id or system name was provided ");
+  			  logger.warn("No id or system name was provided. Delete request cannot proceed");
   			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
   		  }
   		  
   		  try{
   			  boolean objectDeleted = astroboaClient.getContentService().deleteContentObject(contentObjectIdOrName);
   			  
-  			  return ContentApiUtils.createResponseForHTTPDelete(objectDeleted);
+  			  return ContentApiUtils.createResponseForHTTPDelete(objectDeleted,contentObjectIdOrName);
   		  }
   		  catch(CmsUnauthorizedAccessException e){
 			throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
