@@ -289,8 +289,10 @@ public class TopicUtils {
 		}
 		else{
 			//Set or replace owner. We ignore the owner provided by the user.
-			if (! usersAreTheSame(topic.getOwner(), topicOwner)){
-				
+			if (topic.getOwner() == null){
+				topic.setOwner(topicOwner);
+			}
+			else if (! usersAreTheSame(topic.getOwner(), topicOwner)){
 				logger.info("Topic {}'s owner will be replaced with repository user {}", topic.toString(), topicOwner);
 				topic.setOwner(topicOwner);
 			}
