@@ -74,9 +74,12 @@ public class CmsQueryHandler  {
 			//how many nodes match criteria
 			int totalNumberOfNodesMatchingQueryCriteria = JackrabbitDependentUtils.getTotalNumberOfRowsForQueryResult(queryResultForAllNodes);
 			
-			logger.debug("Found {} nodes matching criteria. Offset :{}, Limit : {}",
-					new Object[]{totalNumberOfNodesMatchingQueryCriteria,
-					offset,limit});
+			if (logger.isDebugEnabled()){
+				logger.debug("Found {} nodes matching criteria. Offset :{}, Limit : {}",
+						new Object[]{totalNumberOfNodesMatchingQueryCriteria, offset,limit});
+				
+				JackrabbitDependentUtils.logCacheManagerSettings(logger, session.getRepository());
+			}
 			
 			//Wrap results
 			if (retrieveNodeIterator){
