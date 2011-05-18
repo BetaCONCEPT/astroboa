@@ -49,6 +49,10 @@ import org.apache.jackrabbit.util.ISO9075;
 import org.apache.jackrabbit.uuid.UUID;
 import org.apache.jackrabbit.value.ValueHelper;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
+import org.betaconceptframework.astroboa.configuration.JcrCacheType;
+import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
+import org.betaconceptframework.astroboa.configuration.RepositoryType;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
 import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
 import org.slf4j.Logger;
@@ -64,13 +68,42 @@ import org.slf4j.LoggerFactory;
 public class JackrabbitDependentUtils {
 
 	private static  final Logger logger = LoggerFactory.getLogger(JackrabbitDependentUtils.class);
+
+	//The maximum amount of memory in MB to distribute across the caches.  JCR implementatiom (Jackrabbit) Default is 16MB
+	public static final int defaultMaxMemory = 256;
 	
+	//The maximum memory per cache in MB JCR implementatiom (Jackrabbit) Default is 4MB
+	public static final int defaultMaxMemoryPerCache = 4;
+
+	//The minimum memory per cache in KB  JCR implementatiom (Jackrabbit)  Default is 128KB
+	public static final int defaultMinMemoryPerCache = 128;
+
 	public static String getRepositoryHomeDir(Repository repository){
 		return ((RepositoryImpl)repository).getConfig().getHomeDir();
 	}
 	
-	public static void setupCacheManager(Repository repository, int maxMemory, int maxMemoryPerCache, int minMemoryPerCache) {
+	public static void setupCacheManager(Repository repository, String repositoryId) {
+		
+		int maxMemory = defaultMaxMemory;
+		int maxMemoryPerCache = defaultMaxMemoryPerCache;
+		int minMemoryPerCache = defaultMinMemoryPerCache;
+		
+		if (repositoryId != null){
+			RepositoryType repositoryConfig = RepositoryRegistry.INSTANCE.getRepositoryConfiguration(repositoryId);
+			
+			if (repositoryConfig!=null){
+				JcrCacheType jcrCacheConfig = repositoryConfig.getJcrCache();
+				
+				if (jcrCacheConfig != null){
+					maxMemory = jcrCacheConfig.getMaxMemory();
+					maxMemoryPerCache = jcrCacheConfig.getMaxMemoryPerCache();
+					minMemoryPerCache = jcrCacheConfig.getMinMemoryPerCache();
+				}
+			}
+			
+		}	
 		CacheManager manager = ((RepositoryImpl) repository).getCacheManager();
+		
 		if (maxMemory > 0){
 			manager.setMaxMemory(maxMemory * 1024L * 1024L);
 		}
@@ -247,6 +280,46 @@ public class JackrabbitDependentUtils {
 	
 	public static String serializeBinaryValue(Value value) throws Exception{
 		return ValueHelper.serialize(value, false);
+	}
+
+	public static void logCacheManagerSettings(Logger externalLogger,	Repository repository) {
+
+		if (repository != null){
+			CacheManager manager = ((RepositoryImpl) repository).getCacheManager();
+			
+			if (manager != null){
+				externalLogger.debug("Repository {} : Cache Manager : Max Memory {} MB, Max Memory Per Cache: {} MB, Min Memory Per Cache: {} KB", 
+						new Object[]{AstroboaClientContextHolder.getActiveRepositoryId(), manager.getMaxMemory()/1024/1024, manager.getMaxMemoryPerCache()/1024/1024, manager.getMinMemoryPerCache()/1024});
+			}
+		}
+
+		
+	}
+
+	public static boolean cacheManagerSettingsHaveChanged(
+			RepositoryType repositoryConfig, Repository repository) {
+		
+		CacheManager manager = ((RepositoryImpl) repository).getCacheManager();
+		
+		int currentMaxMemory = (int) manager.getMaxMemory();
+		
+		int currentMaxMemoryPerCache = (int) manager.getMaxMemoryPerCache();
+
+		int currentMinMemoryPerCache = (int) manager.getMinMemoryPerCache();
+
+		if (repositoryConfig!=null){
+			
+			JcrCacheType jcrCacheConfig = repositoryConfig.getJcrCache();
+				
+			if (jcrCacheConfig == null){
+				return currentMaxMemory != defaultMaxMemory || currentMaxMemoryPerCache != defaultMaxMemoryPerCache || currentMinMemoryPerCache != defaultMinMemoryPerCache;
+			}
+			else{
+				return currentMaxMemory != jcrCacheConfig.getMaxMemory() || currentMaxMemoryPerCache != jcrCacheConfig.getMaxMemoryPerCache() || currentMinMemoryPerCache != jcrCacheConfig.getMinMemoryPerCache();
+			}
+		}
+		
+		return false;
 	}
 
 }
