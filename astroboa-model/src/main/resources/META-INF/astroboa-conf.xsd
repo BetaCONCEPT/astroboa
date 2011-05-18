@@ -23,7 +23,7 @@
 	version="${project.version}"
 	elementFormDefault="unqualified">
 	
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>   
 
 	<xs:element name="repositories">
 		<xs:complexType>
@@ -89,6 +89,9 @@
 				minOccurs="0" maxOccurs="1" />
 			<xs:element name="security" type="tns:SecurityType"
 				minOccurs="1" maxOccurs="1" />
+			<xs:element name="jcrCache" type="tns:JcrCacheType"
+				minOccurs="0" maxOccurs="1"/>	
+				
 		</xs:sequence>
 
 		<!-- Repository identifier -->
@@ -250,5 +253,19 @@
 					value="(.{8,})?" />
 			</xs:restriction>
 	</xs:simpleType>
+
+	<!-- Jcr Cache Configuration -->
+	<xs:complexType name="JcrCacheType">
+
+		<!-- The maximum amount of memory in MB to distribute across the caches.  Default is 256MB -->
+		<xs:attribute name="maxMemory" use="optional" type="xs:int" default="256"/>
+
+		<!-- The maximum memory per cache in MB.Default is 4MB -->
+		<xs:attribute name="maxMemoryPerCache" use="optional" type="xs:int" default="4"/>
+
+		<!--  The minimum memory per cache in KB. Default is 128KB -->
+		<xs:attribute name="minMemoryPerCache" use="optional" type="xs:int" default="128"/>
+		
+	</xs:complexType>
 
 </xs:schema>

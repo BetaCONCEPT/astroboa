@@ -418,7 +418,7 @@ public enum RepositoryRegistry{
 	}
 
 
-	public boolean isCheckConsistency() {
+	public boolean isConsistencyCheckEnabled() {
 
 		if (repositories != null){
 			return repositories.isCheckConsistency();
