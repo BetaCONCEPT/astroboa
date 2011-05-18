@@ -138,7 +138,7 @@ public class RepositoryDao implements ApplicationListener{
 	private Map<String, SessionFactory> jcrSessionFactoriesPerRepository = new HashMap<String, SessionFactory>();
 
 
-	private void loadRepositoryFromConfiguration(String repositoryId, boolean fullReload)  {
+	private void loadRepositoryFromConfiguration(String repositoryId)  {
 
 		if (!RepositoryRegistry.INSTANCE.isRepositoryRegistered(repositoryId)){
 			logger.warn("Found no configuration for repository "+repositoryId);
@@ -181,53 +181,32 @@ public class RepositoryDao implements ApplicationListener{
 				}
 			}
 
-			if (repositories.containsKey(repositoryId) && ! fullReload){
-
-				//We expect that the repository has already been initialized.
-				CmsRepository existingInfo = repositories.get(repositoryId);
-				
-				if (existingInfo != null && StringUtils.isNotBlank(existingInfo.getRepositoryHomeDirectory())){
-					CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
-							existingInfo.getRepositoryHomeDirectory(), 
-							repositoryServerURL,
-							restfulApiBasePath,
-							repositoryApplicationPolicyName, 
-							repositoryIdentityStoreId, 
-							externalIdentityStoreJndiName, 
-							repositoryConfiguration.getSecurity().getSecretUserKeyList().getAdministratorSecretKey().getUserid());
-	
-					repositories.put(repositoryId, cmsRepository);
-					
-					return;
-				}
-			}
-
 			//Create JcrSessionFactory
-				SessionFactory jcrSessionFactory = createJcrSessionFactory(currentJcrRepositoryJndiName);
-	
-				//Create CmsRepository
-				//Since this is not in transaction context
-				//Session must be forced to be created
-				//and then logged out
-				//This is the only way to retrieve Repository in a manner that
-				//repository home directory is accessible
-				Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
-	
-				String repositoryHomeDirPath = JackrabbitDependentUtils.getRepositoryHomeDir(session.getRepository());
-	
-				CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
-						repositoryHomeDirPath, 
-						repositoryServerURL,
-						restfulApiBasePath,
-						repositoryApplicationPolicyName, 
-						repositoryIdentityStoreId, 
-						externalIdentityStoreJndiName, 
-						repositoryConfiguration.getSecurity().getSecretUserKeyList().getAdministratorSecretKey().getUserid());
+			SessionFactory jcrSessionFactory = createJcrSessionFactory(currentJcrRepositoryJndiName);
 
-				//Add values to maps
-				repositories.put(repositoryId, cmsRepository);
-				jcrSessionFactoriesPerRepository.put(repositoryId, jcrSessionFactory);
+			//This is the only wat to retrieve repositoy home dir.
+			//Open a session, create one if none exists and retrieve the Repository object 
+			//related to that session.
+			Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
+			Repository repository = session.getRepository();
+			String repositoryHomeDirPath = JackrabbitDependentUtils.getRepositoryHomeDir(repository);
+			session.logout();
 	
+			CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
+					repositoryHomeDirPath, 
+					repositoryServerURL,
+					restfulApiBasePath,
+					repositoryApplicationPolicyName, 
+					repositoryIdentityStoreId, 
+					externalIdentityStoreJndiName, 
+					repositoryConfiguration.getSecurity().getSecretUserKeyList().getAdministratorSecretKey().getUserid());
+
+			//Add values to maps
+			repositories.put(repositoryId, cmsRepository);
+			jcrSessionFactoriesPerRepository.put(repositoryId, jcrSessionFactory);
+			
+			if (fullReloadRepository(repositoryId, repositoryConfiguration, repository)){
+				
 				//Initialize repository and load definition to cache
 				SecurityContext securityContext = new SecurityContext(repositoryId, null, 30, null);
 				RepositoryContext repositoryContext = new RepositoryContext(cmsRepository, securityContext);
@@ -235,10 +214,10 @@ public class RepositoryDao implements ApplicationListener{
 				
 				try{
 					cmsRepositoryInitializationManager.initialize(cmsRepository);
-					
+						
 					contentDefinitionConfiguration.loadDefinitionToCache();
-	
-					if (repositoryConfiguration.isCheckConsistency() || RepositoryRegistry.INSTANCE.isCheckConsistency()){
+		
+					if (repositoryConfiguration.isCheckConsistency() || RepositoryRegistry.INSTANCE.isConsistencyCheckEnabled()){
 						consistencyCheckerDao.performReferentialIntegrityCheck();
 					}
 				}
@@ -250,27 +229,27 @@ public class RepositoryDao implements ApplicationListener{
 				}
 				
 				AstroboaClientContextHolder.clearContext();
-				session.logout();
 	
-				//Create unmanaged datastore if not there
-					try{
-							File repositoryHomeDir = new File(cmsRepository.getRepositoryHomeDirectory());
+				//	Create unmanaged datastore if not there
+				try{
+					File repositoryHomeDir = new File(cmsRepository.getRepositoryHomeDirectory());
 	
-							if (repositoryHomeDir.exists()){
-								File unmanagedDataStoreDirectory = new File(repositoryHomeDir, CmsConstants.UNMANAGED_DATASTORE_DIR_NAME);
+					if (repositoryHomeDir.exists()){
+						File unmanagedDataStoreDirectory = new File(repositoryHomeDir, CmsConstants.UNMANAGED_DATASTORE_DIR_NAME);
 	
-								if (!unmanagedDataStoreDirectory.exists()){
-									if (!unmanagedDataStoreDirectory.mkdir()){
-										throw new Exception("Could not create UnmanagedDataStore directory. File.mkdir() returned false");
-									}
-	
-									logger.debug("Created UnmanagedDataStore directory for repository {} in path {}",cmsRepository.getId(),	unmanagedDataStoreDirectory.getAbsolutePath());
-								}
+						if (!unmanagedDataStoreDirectory.exists()){
+							if (!unmanagedDataStoreDirectory.mkdir()){
+								throw new Exception("Could not create UnmanagedDataStore directory. File.mkdir() returned false");
 							}
+	
+							logger.debug("Created UnmanagedDataStore directory for repository {} in path {}",cmsRepository.getId(),	unmanagedDataStoreDirectory.getAbsolutePath());
 						}
-						catch(Error e){
-							logger.warn("Could not create UnmanagedDataStore directory", e);
-						}
+					}
+				}
+				catch(Error e){
+					logger.warn("Could not create UnmanagedDataStore directory", e);
+				}
+			}
 		}
 		catch(Exception e){
 			logger.error("",e);
@@ -347,7 +326,7 @@ public class RepositoryDao implements ApplicationListener{
 
 				//For the moment initialize only the repositories which have not yet been initialized
 				if (initializeRepository){
-					loadRepositoryFromConfiguration(repositoryId, ! repositories.containsKey(repositoryId));
+					loadRepositoryFromConfiguration(repositoryId);
 				}
 			}
 
@@ -379,6 +358,22 @@ public class RepositoryDao implements ApplicationListener{
 					initializeIdentityStoreForRepository(cmsRepository);
 			}
 		}
+	}
+
+
+	private boolean fullReloadRepository(String repositoryId,	RepositoryType repositoryConfiguration, Repository repository) {
+		
+		//Reload repository if repository has not been loaded
+		if (! repositories.containsKey(repositoryId)){
+			return true;
+		}
+		
+		//Check if cache manager settings have changed
+		if (JackrabbitDependentUtils.cacheManagerSettingsHaveChanged(repositoryConfiguration, repository)){
+			return true;
+		}
+		
+		return false;
 	}
 
 
@@ -678,7 +673,7 @@ public class RepositoryDao implements ApplicationListener{
 
 		if (! jcrSessionFactoriesPerRepository.containsKey(associatedRepositoryId)){
 			if (!repositories.containsKey(associatedRepositoryId)){
-				loadRepositoryFromConfiguration(associatedRepositoryId, true);
+				loadRepositoryFromConfiguration(associatedRepositoryId);
 
 				if (! jcrSessionFactoriesPerRepository.containsKey(associatedRepositoryId)){
 					throw new CmsException("Found no jcr session factory for associated repository "+ associatedRepositoryId);
