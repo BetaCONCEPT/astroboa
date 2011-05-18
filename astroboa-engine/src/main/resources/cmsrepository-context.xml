@@ -177,15 +177,6 @@ Authors
 		<property name="jackrabbitDefinitionDao">
 			<bean
 				class="org.betaconceptframework.astroboa.engine.jcr.nodetypeconfig.jackrabbit.JackrabbitNodeTypeDefinitionDao">
-				<!-- The maximum amount of memory in MB to distribute across the caches.
-	 			  Default is 16MB -->
-				<property name="maxMemory" value="256" />
-				<!-- The maximum memory per cache in MB 
-	 				Default is 4MB -->
-				<property name="maxMemoryPerCache" value="4" />
-				<!--  The minimum memory per cache in KB
-					 Default is 128KB -->
-				<property name="minMemoryPerCache" value="128" />
 				<property name="cmsLocalizationUtils" ref="cmsLocalizationUtils"/>
 				<property name="repositoryUserDao" ref="repositoryUserDao"/>
 				<property name="repositoryNodeTypeDefinitionFile" value="classpath:/META-INF/repository.cnd"/>
