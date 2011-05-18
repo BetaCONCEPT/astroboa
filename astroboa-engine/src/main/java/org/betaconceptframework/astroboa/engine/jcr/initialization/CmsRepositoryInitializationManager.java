@@ -48,7 +48,7 @@ public class CmsRepositoryInitializationManager {
 		logger.info("Initializing repository {}", cmsRepository.getId() );
 				
 		//	Initialize Jcr Repository
-		cmsNodeTypeDefinitionManager.saveOrUpdateTypeAndNodeHierarchy();
+		cmsNodeTypeDefinitionManager.saveOrUpdateTypeAndNodeHierarchy(cmsRepository.getId());
 	}
 
 	

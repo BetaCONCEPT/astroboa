@@ -26,6 +26,6 @@ package org.betaconceptframework.astroboa.engine.jcr.nodetypeconfig;
  */
 public interface CmsNodeTypeDefinitionDao {
 
-	void saveOrUpdateTypeAndNodeHierarchy();
+	void saveOrUpdateTypeAndNodeHierarchy(String repositoryId);
 	
 }

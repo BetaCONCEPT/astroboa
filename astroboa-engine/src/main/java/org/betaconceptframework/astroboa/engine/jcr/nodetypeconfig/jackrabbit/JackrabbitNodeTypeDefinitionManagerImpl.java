@@ -43,8 +43,8 @@ class JackrabbitNodeTypeDefinitionManagerImpl implements CmsNodeTypeDefinitionMa
 	}
 
 	@Transactional(readOnly=false, rollbackFor = CmsException.class, propagation = Propagation.REQUIRED)
-	public void saveOrUpdateTypeAndNodeHierarchy() {
-		jackrabbitDefinitionDao.saveOrUpdateTypeAndNodeHierarchy();
+	public void saveOrUpdateTypeAndNodeHierarchy(String repositoryId) {
+		jackrabbitDefinitionDao.saveOrUpdateTypeAndNodeHierarchy(repositoryId);
 		
 	}
 }
