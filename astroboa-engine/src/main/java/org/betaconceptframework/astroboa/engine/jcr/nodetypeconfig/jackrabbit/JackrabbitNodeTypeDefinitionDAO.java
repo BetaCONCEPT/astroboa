@@ -43,7 +43,6 @@ import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
-import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.JcrDaoSupport;
 import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryUserDao;
 import org.betaconceptframework.astroboa.engine.jcr.nodetypeconfig.CmsNodeTypeDefinitionDao;
@@ -86,22 +85,6 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 	
 	private RepositoryUserDao repositoryUserDao;
 	
-	/*
-	 * Jackrabbit Cache Manager settings
-	 */
-	/** The maximum amount of memory in MB to distribute across the caches.
-	 *  Default is 16MB */
-	private int maxMemory;
-
-	/** The maximum memory per cache in MB 
-	 * Default is 4MB*/
-	private int maxMemoryPerCache;
-
-	/** The minimum memory per cache in KB
-	 *  
-	 * Default is 128KB*/
-	private int minMemoryPerCache;
-
 	/**
 	 * Provides localized labels for Astroboa System taxonomy
 	 */
@@ -126,20 +109,6 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 		this.subjectTaxonomyLocalization = subjectTaxonomyLocalization;
 	}
 	
-	
-	public void setMaxMemory(int maxMemory) {
-		this.maxMemory = maxMemory;
-	}
-
-
-	public void setMaxMemoryPerCache(int maxMemoryPerCache) {
-		this.maxMemoryPerCache = maxMemoryPerCache;
-	}
-
-
-	public void setMinMemoryPerCache(int minMemoryPerCache) {
-		this.minMemoryPerCache = minMemoryPerCache;
-	}
 
 	public void setCmsLocalizationUtils(CmsLocalizationUtils cmsLocalizationUtils) {
 		this.cmsLocalizationUtils = cmsLocalizationUtils;
@@ -162,7 +131,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 	}
 
 
-	public void saveOrUpdateTypeAndNodeHierarchy(){
+	public void saveOrUpdateTypeAndNodeHierarchy(String repositoryId){
 
 
 		try{
@@ -170,7 +139,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 			//Create or update node type hierarchy 
 			Session session = getSession();
 
-			JackrabbitDependentUtils.setupCacheManager(session.getRepository(), maxMemory, maxMemoryPerCache, minMemoryPerCache);
+			JackrabbitDependentUtils.setupCacheManager(session.getRepository(), repositoryId);
 
 			Workspace workspace = session.getWorkspace();
 			NamespaceRegistry namespaceRegistry = workspace.getNamespaceRegistry();
