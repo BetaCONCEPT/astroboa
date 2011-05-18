@@ -21,12 +21,15 @@ package org.betaconceptframework.astroboa.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
@@ -37,12 +40,12 @@ import org.xml.sax.SAXException;
 
 /**
  * When the repository registry is initialized, Astroboa configuration file is loaded and validated
- * against the configuration Xml Schema. 
+ * against the configuration XML Schema. 
  * 
  * During the validation process, XSDs are validated by the parser. Part of the validation process 
  * is to import all necessary XSDs or DTDs dependencies.
- * Some of these XSDs (Xml Schema's XSD, etc) or DTDs are located externally and thus, can be imported 
- * only when an internet access
+ * Some of these XSDs (XML Schema's XSD, etc) or DTDs are located externally and thus, can be imported 
+ * only when an Internet access
  * is available. When this is not the case, XSD parser cannot complete validation and throws an exception.
  *
  * To avoid this situation (which causes a build to fail or even worse does not allow Astroboa to run), 
@@ -57,8 +60,11 @@ public class W3CRelatedSchemaEntityResolver implements EntityResolver, LSResourc
 
 	
 	private String xmlSchemaHomeDir =  "META-INF"+File.separator+"xml-schema-dtd";
+	
+	
 	private DOMImplementationRegistry registry;
 	
+	private Map<String, URL> schemaURLsPerPublicId = new HashMap<String, URL>();
 	
 	
 	public W3CRelatedSchemaEntityResolver(){
@@ -108,47 +114,48 @@ public class W3CRelatedSchemaEntityResolver implements EntityResolver, LSResourc
 
 	private InputSource locateEntity(String systemId, String publicId) throws IOException{
 		
-			if (systemId == null){
-				return null;
-			}
+		URL xsdOrDtdLocation = null;
+
+		if (publicId != null && schemaURLsPerPublicId.containsKey(publicId)){
+			xsdOrDtdLocation = schemaURLsPerPublicId.get(publicId);
+		}
+
+		if (systemId == null){
+			return null;
+		}
 			
-			//Check if schema is available
-			URL xsdOrDtdLocation = null;
-			try {
-				xsdOrDtdLocation = new URL(systemId);
+		//Check if schema is available locally
+		if (xsdOrDtdLocation == null){
+			String pathToXsdOrDtd = xmlSchemaHomeDir+File.separator+ 
+				(systemId.contains(CmsConstants.FORWARD_SLASH) ? StringUtils.substringAfterLast(systemId, CmsConstants.FORWARD_SLASH) : systemId);
+	
+			xsdOrDtdLocation = this.getClass().getClassLoader().getResource(pathToXsdOrDtd); 
+		}
+		
+		//Try on the WEB
+		if (xsdOrDtdLocation == null){
+			xsdOrDtdLocation = new URL(systemId);
+		}
+		
+		try {
+			InputSource is = new InputSource( xsdOrDtdLocation.openStream() );
 				
-				InputSource is = new InputSource( xsdOrDtdLocation.openStream() );
+			//System Id is the path of this URL
+			is.setSystemId(xsdOrDtdLocation.toString());
+			is.setPublicId(publicId);
+			
+			schemaURLsPerPublicId.put(publicId, xsdOrDtdLocation);
+
+			return is;
+		}
+		catch (Throwable isEx) {
 				
-					//System Id is the path of this URL
-					is.setSystemId(xsdOrDtdLocation.toString());
-					is.setPublicId(publicId);
+			//Log a warning and let the Xerces parser to locate the schema
+			LoggerFactory.getLogger(getClass()).warn("Unable to resolve schema for "+publicId + " "+ systemId + " in URL "+xsdOrDtdLocation.toString(), isEx);
 
-				return is;
-			}
-			catch (Throwable isEx) {
-				//Probably XML location is not reachable. Load Schema from package
-				try{
-					String pathToXsdOrDtd = xmlSchemaHomeDir+File.separator+ 
-						(systemId.contains(CmsConstants.FORWARD_SLASH) ? StringUtils.substringAfterLast(systemId, CmsConstants.FORWARD_SLASH) : systemId);
-					
-					xsdOrDtdLocation = this.getClass().getClassLoader().getResource(pathToXsdOrDtd); 
-						
-					if (xsdOrDtdLocation != null){
-
-						InputSource is = new InputSource( xsdOrDtdLocation.openStream() );
-						//System Id is the path of this URL
-						is.setSystemId(xsdOrDtdLocation.toString());
-						is.setPublicId(publicId);
-
-						return is;
-					}
-				}
-				catch(Exception e){
-					throw new IOException(e);
-				}
-				
-				return null;
-			}
+			//continue with parser provided by Java. If schema cannot be located, an exception will be thrown
+			return null;
+		}
 	}
 
 	@Override
