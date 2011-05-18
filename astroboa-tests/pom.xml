@@ -212,11 +212,13 @@ Authors
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>  
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- Due to http://jira.opensymphony.com/browse/TESTNG-401
@@ -239,6 +241,7 @@ Authors
 	 		<groupId>jotm</groupId>
 			<artifactId>jotm</artifactId>
 			<version>2.0.10</version>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 				  <groupId>javax.activation</groupId>
@@ -250,15 +253,17 @@ Authors
 		<dependency>
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>
+			<version>5</version>
 			<!-- Since in betaconcept-parent has provided scope we must
 			explicitly specify here the runtime scope in order to be available
 			to any module that depends on this one -->
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
   			
 		<dependency>
 			<groupId>org.springmodules</groupId>
 			<artifactId>spring-modules-jcr</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>
