@@ -1032,7 +1032,7 @@
 					if (selectedPropertyType == 'Date'){
 						restrictionLabel = $.datepicker.formatDate('dd/mm/yy', $( '#'+idOfRestrictionValueComponent ).datepicker('getDate'));
 					}
-					else{
+					else if ($('#'+idOfRestrictionValueComponent).val() != undefined){
 						restrictionLabel = $('#'+idOfRestrictionValueComponent).val();
 					}
 
