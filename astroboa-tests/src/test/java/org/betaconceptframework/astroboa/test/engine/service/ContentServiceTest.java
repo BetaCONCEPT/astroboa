@@ -102,6 +102,33 @@ import org.testng.annotations.Test;
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
 
+	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-148
+	 */
+	@Test
+	public void testUpdateWithNoSystemName(){
+		
+		String systemName = "testUpdateWithNoSystemName";
+		String title = "testUpdateWithNoSystemNameTitle";
+
+		ContentObject object = cmsRepositoryEntityFactory.newObjectForType(TEST_CONTENT_TYPE);
+		object.setOwner(getSystemUser());
+		object.setSystemName(systemName);
+		
+		((StringProperty)object.getCmsProperty("profile.title")).setSimpleTypeValue(title);
+		((StringProperty)object.getCmsProperty("profile.language")).addSimpleTypeValue("en");
+		
+		object = contentService.save(object, false, true, null);
+		addEntityToBeDeletedAfterTestIsFinished(object);
+
+		//remove system name and save again
+		object.setSystemName(null);
+		
+		object = contentService.save(object, false, true, null);
+		
+		Assert.assertEquals(object.getSystemName(), systemName);
+	}
+	
 	@Test
 	public void testSavePersonObjectFromJSON(){
 
@@ -1452,7 +1479,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		checkValidSystemNameSave(contentObject, "090..92");
 		checkValidSystemNameSave(contentObject, "090.92");
 		checkValidSystemNameSave(contentObject, "090..__--92");
-		checkValidSystemNameSave(contentObject, "090..92");
+		checkValidSystemNameSave(contentObject, "090...92");
 
 		checkSystemNameTransformation(contentObject, "+leading dash   in  system name  ","leading-dash-in-system-name");
 		checkSystemNameTransformation(contentObject, "trailing dash   in  system name  +","trailing-dash-in-system-name");
@@ -1478,7 +1505,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		checkSystemNameTransformation(contentObject, "090..92","090..92");
 		checkSystemNameTransformation(contentObject, "090.92","090.92");
 		checkSystemNameTransformation(contentObject, "090..__--92","090..__-92");
-		checkSystemNameTransformation(contentObject, "090..92","090..92");
 		checkSystemNameTransformation(contentObject, "a{{{{{{{{{l","a-l");
 		checkSystemNameTransformation(contentObject, "È,É,Ê,Ë,Û,Ù,Ï,Î,À,Â,Ô,è,é,ê,ë,û,ù,ï,î,à,â,ô,ç","E-E-E-E-U-U-I-I-A-A-O-e-e-e-e-u-u-i-i-a-a-o-c");
 		
@@ -1498,6 +1524,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	private void checkSystemNameTransformation(ContentObject contentObject,
 			String systemName, String systemNameAfterSave) {
 		
+		//transformation is enabled only in newly created objects
+		contentObject.setId(null);
 		contentObject.setSystemName(null);
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(systemName);
 		contentObject = contentService.save(contentObject, false, true, null);
