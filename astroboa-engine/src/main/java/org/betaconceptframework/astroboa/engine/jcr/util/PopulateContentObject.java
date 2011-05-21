@@ -166,9 +166,25 @@ public class PopulateContentObject {
 		//Validate system name first
 		String systemName = contentObject.getSystemName();
 		
-		if (StringUtils.isBlank(systemName))
-		{
-			//User has not provided system name. Try to generate one
+		//User has not provided system name. 
+		if (StringUtils.isBlank(systemName)){
+			
+			//Object already contains one
+			if (contentObjectNode.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
+				//Update object with existing system name and return
+				systemName = contentObjectNode.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString();
+				
+				//Maybe unnecessary check.
+				if (! context.getCmsRepositoryEntityUtils().isValidSystemName(systemName)){
+					throw new RepositoryException("Existing Object system name "+systemName+" is not valid. It should match pattern "+CmsConstants.SYSTEM_NAME_REG_EXP);
+				}
+
+				contentObject.setSystemName(systemName);
+				
+				return;
+			}
+			
+			//Generate a system name
 			//1. Check profile.title property
 			systemName = retrieveContentObjectProfileTitle();
 			
