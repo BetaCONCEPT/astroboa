@@ -127,6 +127,17 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		object = contentService.save(object, false, true, null);
 		
 		Assert.assertEquals(object.getSystemName(), systemName);
+		
+		//Check with xml and json
+		object.setSystemName(null);
+		object = contentService.save(object.xml(false), false, true, null);
+		Assert.assertEquals(object.getSystemName(), systemName);
+
+		object.setSystemName(null);
+		object = contentService.save(object.json(false), false, true, null);
+		Assert.assertEquals(object.getSystemName(), systemName);
+
+		
 	}
 	
 	@Test
