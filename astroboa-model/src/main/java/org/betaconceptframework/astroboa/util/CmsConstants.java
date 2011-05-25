@@ -212,8 +212,13 @@ public final class CmsConstants {
 	
 	public final static String UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY = UUID_REG_EXP + "|" + SYSTEM_NAME_REG_EXP_FOR_RESTEASY;
 	public final static Pattern UUIDorSystemNamePatternForResteasy = Pattern.compile(UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY);
+
+	public final static String INDEX_REG_EXP = "[0-9]+";
+	public final static String UUID_REG_EXP_OR_INDEX_REG_EXP = "(("+UUID_REG_EXP + ")|"+ INDEX_REG_EXP + ")";
 	
-	public final static String PROPERTY_PATH_WITH_ID_REG_EXP_FOR_RESTEASY = "[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+"+%5D)?(\\.[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+"+%5D)?)*(\\.[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+ "|" + "[0-9]++%5D)?)";
+	public final static String PROPERTY_PATH_WITH_ID_REG_EXP_FOR_RESTEASY = "[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP_OR_INDEX_REG_EXP+"%5D)?(\\.[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP_OR_INDEX_REG_EXP+"%5D)?)*";
+	
+	//public final static String PROPERTY_PATH_WITH_ID_REG_EXP_FOR_RESTEASY = "[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+"+%5D)?(\\.[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+"+%5D)?)*(\\.[A-Za-z0-9_\\-]+(%5B"+UUID_REG_EXP+ "|" + "[0-9]++%5D)?)";
 	
 	
 //	public final static String TOPIC_PATH_WITH_UUIDS_OR_SYSTEM_NAMES_REG_EXP = UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "(/" + UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + ")*";
