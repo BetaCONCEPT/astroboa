@@ -543,7 +543,7 @@ public class TopicResource extends AstroboaResource{
 					topicAsXMLOrJSONBuilder.append(topicJSON);
 				}
 				else {
-					ContentApiUtils.generateXMLP(topicAsXMLOrJSONBuilder, topicJSON, callback);
+					ContentApiUtils.generateJSONP(topicAsXMLOrJSONBuilder, topicJSON, callback);
 				}
 				break;
 			}
@@ -594,7 +594,7 @@ public class TopicResource extends AstroboaResource{
 					topicAsXMLOrJSONBuilder.append(topic.json(prettyPrint));
 				}
 				else {
-					ContentApiUtils.generateXMLP(topicAsXMLOrJSONBuilder, topic.json(prettyPrint), callback);
+					ContentApiUtils.generateJSONP(topicAsXMLOrJSONBuilder, topic.json(prettyPrint), callback);
 				}
 				break;
 			}

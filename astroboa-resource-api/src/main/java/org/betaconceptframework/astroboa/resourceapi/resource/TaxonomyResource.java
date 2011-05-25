@@ -404,7 +404,7 @@ public class TaxonomyResource extends AstroboaResource{
 					topicAsXMLOrJSON.append(topic.json(prettyPrint));
 				}
 				else {
-					ContentApiUtils.generateXMLP(topicAsXMLOrJSON, topic.json(prettyPrint), callback);
+					ContentApiUtils.generateJSONP(topicAsXMLOrJSON, topic.json(prettyPrint), callback);
 				}
 				break;
 			}
