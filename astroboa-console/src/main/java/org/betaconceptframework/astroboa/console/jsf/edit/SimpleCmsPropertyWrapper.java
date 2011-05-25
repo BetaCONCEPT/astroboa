@@ -27,6 +27,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.CropPolicy;
@@ -198,12 +199,18 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 					// if the user has selected "top" as the crop policy we choose not to explicitly specify it in the URL since "top" is the default crop policy 
 					// can be ommited from the URL. We choose to do so to produce simpler URLs
 					CropPolicy cropPolicy = null;
-					if (selectedCropPolicy != null) {
+					if (StringUtils.isNotBlank(selectedCropPolicy)) {
 						if(selectedCropPolicy.equals("top")) {
 							cropPolicy = null;
 						}
 						else {
-							cropPolicy = CropPolicy.valueOf(selectedCropPolicy);
+							try{
+								cropPolicy = CropPolicy.valueOf(selectedCropPolicy);
+							}
+							catch(Exception e){
+								//Just log the exception 
+								logger.warn("Invalid selected crop policy value '"+selectedCropPolicy+"'. No crop policy will be defined", e);
+							}
 						}
 					}
 					
