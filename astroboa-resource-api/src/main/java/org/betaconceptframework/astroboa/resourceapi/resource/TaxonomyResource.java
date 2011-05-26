@@ -20,6 +20,7 @@ package org.betaconceptframework.astroboa.resourceapi.resource;
 
 import java.net.HttpURLConnection;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
@@ -295,6 +296,16 @@ public class TaxonomyResource extends AstroboaResource{
   		  return saveTaxonomyByIdOrName(taxonomyIdOrName, requestContent, HttpMethod.PUT);
   	  }
 
+  	  @DELETE
+  	  @Path("/{taxonomyIdOrName:" + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}") 
+  	  public Response deleteTaxonomy(@PathParam("taxonomyIdOrName") String taxonomyIdOrName) {
+  		  if (StringUtils.isEmpty(taxonomyIdOrName)){
+  			  throw new WebApplicationException(Response.Status.BAD_REQUEST);
+  		  }
+  		  boolean taxonomyDeleted = astroboaClient.getTaxonomyService().deleteTaxonomyTree(taxonomyIdOrName);
+  		  return ContentApiUtils.createResponseForHTTPDelete(taxonomyDeleted, taxonomyIdOrName);	 
+  	  }
+  	  
 	  private Response saveTaxonomyByIdOrName(
 				@PathParam("taxonomyIdOrName") String taxonomyIdOrName,
 				String requestContent, String httpMethod){
@@ -404,7 +415,7 @@ public class TaxonomyResource extends AstroboaResource{
 					topicAsXMLOrJSON.append(topic.json(prettyPrint));
 				}
 				else {
-					ContentApiUtils.generateJSONP(topicAsXMLOrJSON, topic.json(prettyPrint), callback);
+					ContentApiUtils.generateXMLP(topicAsXMLOrJSON, topic.json(prettyPrint), callback);
 				}
 				break;
 			}
