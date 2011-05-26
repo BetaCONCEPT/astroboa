@@ -56,9 +56,9 @@ public class TaxonomyServiceSecureImpl extends AbstractSecureAstroboaService imp
 	}
 
 	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
-	public void deleteTaxonomyTree(String taxonomyId, String authenticationToken) {
+	public boolean deleteTaxonomyTree(String taxonomyIdOrName, String authenticationToken) {
 		
-		taxonomyService.deleteTaxonomyTree(taxonomyId);
+		return taxonomyService.deleteTaxonomyTree(taxonomyIdOrName);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")

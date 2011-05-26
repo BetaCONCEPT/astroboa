@@ -69,13 +69,13 @@ public class TaxonomyServiceClientWrapper extends AbstractClientServiceWrapper i
 		return taxonomyServiceSecure != null;
 	}
 
-	public void deleteTaxonomyTree(String taxonomyId) {
+	public boolean deleteTaxonomyTree(String taxonomyIdOrName) {
 
 		if (taxonomyServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			taxonomyServiceSecure.deleteTaxonomyTree(taxonomyId, getAuthenticationToken());
+			return taxonomyServiceSecure.deleteTaxonomyTree(taxonomyIdOrName, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("TaxonomyService reference was not found");

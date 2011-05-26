@@ -92,9 +92,9 @@ public class TaxonomyDao extends JcrDaoSupport{
 	private CmsQueryHandler cmsQueryHandler;
 
 
-	public void deleteTaxonomy(String taxonomyId) {
-		if (StringUtils.isBlank(taxonomyId))
-			throw new CmsException("Undefined taxonomy id");
+	public boolean deleteTaxonomy(String taxonomyIdOrName) {
+		if (StringUtils.isBlank(taxonomyIdOrName))
+			throw new CmsException("Undefined taxonomy id or name");
 
 		Session session = null;
 
@@ -105,10 +105,11 @@ public class TaxonomyDao extends JcrDaoSupport{
 
 
 			//Retrieve taxonomy node with provided identifier
-			Node taxonomyNode =	cmsRepositoryEntityUtils.retrieveUniqueNodeForCmsRepositoryEntityId(session, taxonomyId);
+			//Node taxonomyNode =	cmsRepositoryEntityUtils.retrieveUniqueNodeForCmsRepositoryEntityId(session, taxonomyId);
 
+			Node taxonomyNode = getTaxonomyNodeByIdOrName(session, taxonomyIdOrName);
 			if (taxonomyNode == null){
-				throw new CmsException("Could not find taxonomy with id "+taxonomyId+ " in order to delete it");
+				throw new CmsException("Could not find taxonomy with id or name "+taxonomyIdOrName+ " in order to delete it");
 			}
 
 			//Check taxonomy node found is a custom taxonomy and not a built in folksonomy
@@ -137,7 +138,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 			taxonomyNode.remove();
 
 			session.save();
-
+			return true;
 		}
 		catch (Throwable e) {
 			throw new CmsException(e);
@@ -148,8 +149,6 @@ public class TaxonomyDao extends JcrDaoSupport{
 				context = null;
 			}
 		}
-
-
 	}
 
 	private boolean isTaxonomyNameAReservedName(String taxonomyName){

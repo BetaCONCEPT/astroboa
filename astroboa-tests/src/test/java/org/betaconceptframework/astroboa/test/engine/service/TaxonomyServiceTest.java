@@ -428,9 +428,96 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		checkExceptionIsThrownIfTaxonomyToBeDeletedIsBuiltIn(Taxonomy.SUBJECT_TAXONOMY_NAME);
 		checkExceptionIsThrownIfTaxonomyToBeDeletedIsAFolksonomy();
 
+		// create new taxonomy & delete it using its id 
+		// also verify that taxonomy is deleted
+		Taxonomy aNewTaxonomy = JAXBTestUtils.createTaxonomy("aTaxonomyToDelete", 
+				cmsRepositoryEntityFactory.newTaxonomy());
+		aNewTaxonomy = taxonomyService.save(aNewTaxonomy);
+		
+		try {
+			boolean isTaxonomyDeleted = taxonomyService
+					.deleteTaxonomyTree(aNewTaxonomy.getId());
 
-
-
+			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(
+					aNewTaxonomy.getName(),
+					ResourceRepresentationType.TAXONOMY_INSTANCE,
+					FetchLevel.ENTITY, false);
+			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted
+					&& (retrievedTaxonomy == null);
+			Assert.assertTrue(taxonomySuccessfullyDeleted);
+		} catch (CmsException e) {
+			String errorMsg = "Could not find taxonomy with id or name "+ aNewTaxonomy.getId() + " in order to delete it";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		// create another new taxonomy & delete it with using its name
+		// also verify that taxonomy is deleted
+		
+		Taxonomy anotherNewTaxonomy = JAXBTestUtils.createTaxonomy("anotherTaxonomyToDelete", 
+				cmsRepositoryEntityFactory.newTaxonomy());
+		anotherNewTaxonomy = taxonomyService.save(anotherNewTaxonomy);
+		
+		try {
+			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
+		
+			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
+					ResourceRepresentationType.TAXONOMY_INSTANCE, 
+					FetchLevel.ENTITY, false);
+			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null); 
+			Assert.assertTrue(taxonomySuccessfullyDeleted);
+		} catch (CmsException e) {
+			String errorMsg = "Could not find taxonomy with id or name "+ anotherNewTaxonomy.getName() + " in order to delete it";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		// try to delete an already deleted taxonomy
+		try {
+			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
+		
+			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
+					ResourceRepresentationType.TAXONOMY_INSTANCE, 
+					FetchLevel.ENTITY, false);
+			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null); 
+			Assert.assertTrue(taxonomySuccessfullyDeleted);
+		} catch (CmsException e) {
+			String errorMsg = "Could not find taxonomy with id or name "+ anotherNewTaxonomy.getName() + " in order to delete it";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		
+		// create a taxonomy, add a topic, and then delete the taxonomy by its name
+		// verify that both the taxonomy and topic are deleted 
+		
+		Taxonomy taxonomyWithTopic = JAXBTestUtils.createTaxonomy("taxonomyWithTopic", 
+				cmsRepositoryEntityFactory.newTaxonomy());
+		taxonomyWithTopic = taxonomyService.save(taxonomyWithTopic);
+		
+		
+		Topic aTopic = JAXBTestUtils.createTopic("aTopicOfTaxonomy", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aTopic.setTaxonomy(taxonomyWithTopic);
+		aTopic = topicService.save(aTopic);
+		
+		try {
+			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(taxonomyWithTopic.getName());
+		
+			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(taxonomyWithTopic.getName(), 
+					ResourceRepresentationType.TAXONOMY_INSTANCE, 
+					FetchLevel.ENTITY, false);
+			
+			Topic retrievedTopic = topicService.getTopic(aTopic.getName(), ResourceRepresentationType.TOPIC_INSTANCE,
+					FetchLevel.ENTITY, false);
+			
+			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null) && (retrievedTopic == null); 
+			Assert.assertTrue(taxonomySuccessfullyDeleted);
+		} catch (CmsException e) {			
+			String errorMsg = "Could not find taxonomy with id or name "+ taxonomyWithTopic.getName() + " in order to delete it";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		
+		
+		
+		
 	}
 
 	private void checkExceptionIsThrownIfTaxonomyToBeDeletedIsAFolksonomy() {

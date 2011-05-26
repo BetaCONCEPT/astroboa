@@ -94,9 +94,10 @@ public interface TaxonomyService {
 	 * This method does not delete {@link Taxonomy#SUBJECT_TAXONOMY_NAME Astroboa Subject taxonomy}
 	 * and  {@link RepositoryUser repository users} folksonomies.
 	 *   
-	 * @param taxonomyId Taxonomy identifier
+	 * @param taxonomyIdOrName Taxonomy identifier or name
+	 * @return <code>true</code> if taxonomy has been successfully deleted, <code>false</code> otherwise
 	 */
-	void deleteTaxonomyTree(String taxonomyId);
+	boolean deleteTaxonomyTree(String taxonomyIdOrName);
 	
 	/**
 	 * Return  taxonomy with specified name.

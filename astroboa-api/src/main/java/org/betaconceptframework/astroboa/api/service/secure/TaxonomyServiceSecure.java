@@ -82,11 +82,12 @@ public interface TaxonomyServiceSecure {
 	 * token.
 	 *</p>
 	 *
-	 * @param taxonomyId Taxonomy identifier
+	 * @param taxonomyIdOrName Taxonomy identifier or name
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
+	 * @return <code>true</code> if taxonomy has been successfully deleted, <code>false</code> otherwise
 	 */
-	void deleteTaxonomyTree(String taxonomyId, String authenticationToken);
+	boolean deleteTaxonomyTree(String taxonomyIdOrName, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link TaxonomyService#getTaxonomy(String, String)}

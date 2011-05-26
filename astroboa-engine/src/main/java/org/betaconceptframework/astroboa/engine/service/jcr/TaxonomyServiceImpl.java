@@ -94,9 +94,9 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public void deleteTaxonomyTree(String taxonomyId) {
+	public boolean deleteTaxonomyTree(String taxonomyId) {
 		try{
-			taxonomyDao.deleteTaxonomy(taxonomyId);
+			return taxonomyDao.deleteTaxonomy(taxonomyId);
 		}
 		catch(CmsException e){
 			throw e;
