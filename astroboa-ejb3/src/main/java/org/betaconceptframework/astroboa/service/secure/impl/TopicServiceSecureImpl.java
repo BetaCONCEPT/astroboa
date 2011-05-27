@@ -64,8 +64,8 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 
 
 	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
-	public void deleteTopicTree(String topicId, String authenticationToken) {
-		topicService.deleteTopicTree(topicId);
+	public boolean deleteTopicTree(String topicIdOrName, String authenticationToken) {
+		return topicService.deleteTopicTree(topicIdOrName);
 	}
 	
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")

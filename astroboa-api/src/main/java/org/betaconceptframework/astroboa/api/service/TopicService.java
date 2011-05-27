@@ -109,15 +109,16 @@ public interface TopicService {
 	Topic saveTopic(Topic topic);
 
 	/**
-	 * Delete all {@link Topic topics} recursively starting from specified <code>topicId</code>.
+	 * Delete all {@link Topic topics} recursively starting from specified <code>topicIdOrName</code>.
 	 * 
 	 * Deletes also all {@link ContentObject content object} references
 	 * to deleted topics.
 	 * 
-	 * @param topicId
+	 * @param topicIdOrName
 	 *            {@link Topic#getId() Topic's id}.
+	 * @<code>true</code> if topic has been successfully deleted, <code>false</code> otherwise
 	 */
-	void deleteTopicTree(String topicId);
+	boolean deleteTopicTree(String topicIdOrName);
 
 	/**
 	 * Returns a topic for the specified <code>topicId</code>.

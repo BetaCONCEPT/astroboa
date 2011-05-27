@@ -96,8 +96,8 @@ public class TopicDao extends JcrDaoSupport {
 	@Autowired
 	private ImportDao importDao;
 
-	public void deleteTopicTree(String topicId) {
-		if (StringUtils.isBlank(topicId))
+	public boolean deleteTopicTree(String topicIdOrName) {
+		if (StringUtils.isBlank(topicIdOrName))
 			throw new CmsException("Blank (empty or null) topic id. Could not delete topic tree. ");
 
 		Context context = null;
@@ -106,10 +106,9 @@ public class TopicDao extends JcrDaoSupport {
 
 			Session session = getSession(); 
 
-			Node topicNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForTopic(session, topicId);
-
+			Node topicNode = getTopicNodeByIdOrName(topicIdOrName);
 			if (topicNode == null){
-				throw new CmsException("Topic "+ topicId + " does not exist");
+				throw new CmsException("Topic "+ topicIdOrName + " does not exist");
 			}
 
 			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session);
@@ -117,7 +116,7 @@ public class TopicDao extends JcrDaoSupport {
 			removeTopicTree(topicNode, context);
 
 			session.save();
-
+			return true;
 			//jcrQueryCacheRegion.removeRegion();
 
 		}

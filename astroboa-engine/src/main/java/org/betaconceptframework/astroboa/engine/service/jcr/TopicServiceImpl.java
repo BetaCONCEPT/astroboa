@@ -94,9 +94,9 @@ class TopicServiceImpl  implements TopicService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public void deleteTopicTree(String topicId) {
+	public boolean deleteTopicTree(String topicIdOrName) {
 		try{
-			topicDao.deleteTopicTree(topicId);
+			return topicDao.deleteTopicTree(topicIdOrName);
 		}
 		catch(CmsException e){
 			throw e;

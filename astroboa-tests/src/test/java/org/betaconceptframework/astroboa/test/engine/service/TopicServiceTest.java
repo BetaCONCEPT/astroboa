@@ -694,6 +694,101 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 	}
 	
 	
+	@Test 
+	public void testDeleteTopic() {
+		
+		Taxonomy aTaxonomy = JAXBTestUtils.createTaxonomy("aTaxonomy", cmsRepositoryEntityFactory.newTaxonomy());
+		aTaxonomy = taxonomyService.save(aTaxonomy);
+		addEntityToBeDeletedAfterTestIsFinished(aTaxonomy);
+		
+		
+		// create a topic and delete it by its name
+		// verify that topic is deleted 
+		Topic aTopic = JAXBTestUtils.createTopic("aTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aTopic.setTaxonomy(aTaxonomy);
+		aTopic = topicService.save(aTopic);
+		try { 		
+			boolean isTopicDeleted = topicService.deleteTopicTree(aTopic.getName());
+			Topic retrievedTopic = topicService.getTopic(aTopic.getName(), ResourceRepresentationType.TOPIC_INSTANCE,
+					FetchLevel.ENTITY, false);
+			boolean topicSuccessfullyDeleted = isTopicDeleted && (retrievedTopic == null);
+			Assert.assertTrue(topicSuccessfullyDeleted);
+		} catch(CmsException e) {
+			String errorMsg = "Topic "+ aTopic.getName() + " does not exist";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		// create a topic, add a subtopic and delete parent topic by its name
+		// verify that both topics are deleted 
+		aTopic = JAXBTestUtils.createTopic("aTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aTopic.setTaxonomy(aTaxonomy);
+		aTopic = topicService.save(aTopic);
+		
+		Topic aSubTopic = JAXBTestUtils.createTopic("aSubTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aSubTopic.setTaxonomy(aTaxonomy);
+		aSubTopic.setParent(aTopic);
+		aSubTopic = topicService.save(aSubTopic);
+		
+		try {
+			boolean isTopicDeleted = topicService.deleteTopicTree(aTopic.getName());
+			Topic retrievedTopic = topicService.getTopic(aTopic.getName(), ResourceRepresentationType.TOPIC_INSTANCE,
+					FetchLevel.ENTITY, false);
+			Topic retrievedSubTopic = topicService.getTopic(aSubTopic.getName(), 
+					ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+			
+			boolean topicSuccessfullyDeleted = isTopicDeleted && (retrievedTopic == null) && (retrievedSubTopic == null);
+			Assert.assertTrue(topicSuccessfullyDeleted);
+		} catch (CmsException e) {
+			String errorMsg = "Topic "+ aTopic.getName() + " does not exist";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+		
+		// create a topic, add a subtopic and delete topic by its id
+		// verify that subtopic is deleted
+		aTopic = JAXBTestUtils.createTopic("aTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aTopic.setTaxonomy(aTaxonomy);
+		aTopic = topicService.save(aTopic);
+		
+		aSubTopic = JAXBTestUtils.createTopic("aSubTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aSubTopic.setTaxonomy(aTaxonomy);
+		aSubTopic.setParent(aTopic);
+		
+		aSubTopic = topicService.save(aSubTopic);
+		
+		try {
+			boolean isSubTopicDeleted = topicService.deleteTopicTree(aSubTopic.getId());
+			Topic retrievedSubTopic = topicService.getTopic(aSubTopic.getId(), 
+					ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+			boolean subTopicSuccessfullyDeleted = isSubTopicDeleted && (retrievedSubTopic == null);
+			Assert.assertTrue(subTopicSuccessfullyDeleted);						
+		}catch (CmsException e) {
+			String errorMsg = "Topic "+ aSubTopic.getId() + " does not exist";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		} finally {			
+			// delete parent topic of subtopic
+			topicService.deleteTopicTree(aTopic.getName());
+		}
+		
+		// create a topic and delete it by its id
+		// try to delete the same topic again by its name
+		aTopic = JAXBTestUtils.createTopic("aTopic", cmsRepositoryEntityFactory.newTopic(), getSystemUser());
+		aTopic.setTaxonomy(aTaxonomy);
+		aTopic = topicService.save(aTopic);
+		
+		try { 
+			boolean isTopicDeleted = topicService.deleteTopicTree(aTopic.getId());
+			Topic retrievedTopic = topicService.getTopic(aTopic.getId(), 
+					ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+			boolean subTopicSuccessfullyDeleted = isTopicDeleted && (retrievedTopic == null);
+			Assert.assertTrue(subTopicSuccessfullyDeleted);
+			// delete once again
+			topicService.deleteTopicTree(aTopic.getId());
+		}catch (CmsException e) {
+			String errorMsg = "Topic "+ aTopic.getId() + " does not exist";
+			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
+		}
+	}
+	
 	@Test
 	public void testDeleteTopicWhichIsUsedByAMandatoryCmsProperty() throws ItemNotFoundException, RepositoryException{
 		

@@ -73,12 +73,12 @@ public class TopicServiceClientWrapper extends AbstractClientServiceWrapper impl
 	}
 
 
-	public void deleteTopicTree(String topicId) {
+	public boolean deleteTopicTree(String topicIdOrName) {
 		if (topicServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			topicServiceSecure.deleteTopicTree(topicId, getAuthenticationToken());
+			return topicServiceSecure.deleteTopicTree(topicIdOrName, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException(" TopicService reference was not found");
