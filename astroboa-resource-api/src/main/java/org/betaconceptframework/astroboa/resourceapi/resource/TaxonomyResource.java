@@ -302,8 +302,15 @@ public class TaxonomyResource extends AstroboaResource{
   		  if (StringUtils.isEmpty(taxonomyIdOrName)){
   			  throw new WebApplicationException(Response.Status.BAD_REQUEST);
   		  }
-  		  boolean taxonomyDeleted = astroboaClient.getTaxonomyService().deleteTaxonomyTree(taxonomyIdOrName);
-  		  return ContentApiUtils.createResponseForHTTPDelete(taxonomyDeleted, taxonomyIdOrName);	 
+  		  try {
+  			  boolean taxonomyDeleted = astroboaClient.getTaxonomyService().deleteTaxonomyTree(taxonomyIdOrName);
+  			  return ContentApiUtils.createResponseForHTTPDelete(taxonomyDeleted, taxonomyIdOrName);
+  		  } catch(CmsUnauthorizedAccessException e){
+  			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+  		  } catch(Exception e){
+  			  logger.error("",e);
+  			  throw new WebApplicationException(Response.Status.BAD_REQUEST);
+  		  }
   	  }
   	  
 	  private Response saveTaxonomyByIdOrName(
