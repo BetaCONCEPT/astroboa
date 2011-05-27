@@ -20,6 +20,7 @@ package org.betaconceptframework.astroboa.resourceapi.resource;
 
 import java.net.HttpURLConnection;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
@@ -221,6 +222,22 @@ public class TopicResource extends AstroboaResource{
    		  return saveTopic(topicToBeSaved, httpMethod, requestContent, entityIsNew);
   	 }
 
+	  @DELETE
+	  @Path("/{topicIdOrName: " +  CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY  +"}")
+	  public Response deleteTopicResource(@PathParam("topicIdOrName") String topicIdOrName) {
+		  if (StringUtils.isEmpty(topicIdOrName)){
+  			  throw new WebApplicationException(Response.Status.BAD_REQUEST);
+  		  }
+		  try {
+			  boolean topicDeleted = astroboaClient.getTopicService().deleteTopicTree(topicIdOrName);
+			  return ContentApiUtils.createResponseForHTTPDelete(topicDeleted, topicIdOrName);
+		  }catch(CmsUnauthorizedAccessException e){
+  			throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
+		  } catch(Exception e){
+			  logger.error("",e);
+			  throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+		  }
+	  }
 
 	 private Response saveTopicSource(String topicSource, String httpMethod, boolean entityIsNew) {
 		 
