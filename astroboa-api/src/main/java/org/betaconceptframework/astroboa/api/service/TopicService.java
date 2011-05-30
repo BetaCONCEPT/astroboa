@@ -115,8 +115,8 @@ public interface TopicService {
 	 * to deleted topics.
 	 * 
 	 * @param topicIdOrName
-	 *            {@link Topic#getId() Topic's id}.
-	 * @<code>true</code> if topic has been successfully deleted, <code>false</code> otherwise
+	 *            {@link Topic#getId() Topic's id} or {@link Topic#getName() Topic's name} .
+	 * @return <code>true</code> if topic has been successfully deleted, <code>false</code> otherwise
 	 */
 	boolean deleteTopicTree(String topicIdOrName);
 
