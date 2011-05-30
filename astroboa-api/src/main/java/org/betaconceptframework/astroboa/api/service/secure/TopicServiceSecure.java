@@ -86,10 +86,10 @@ public interface TopicServiceSecure {
 	 *</p>
 	 *
 	 * @param topicIdOrName
-	 *            {@link Topic#getId() Topic's id}.
+	 *            {@link Topic#getId() Topic's id} or {@link Topic#getName() Topic's name}.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
 	 *  to an Astroboa repository.
-	 * @return <code>true</code> if taxonomy has been successfully deleted, <code>false</code> otherwise
+	 * @return <code>true</code> if topic has been successfully deleted, <code>false</code> otherwise
 	 */
 	boolean deleteTopicTree(String topicIdOrName, String authenticationToken);
 
