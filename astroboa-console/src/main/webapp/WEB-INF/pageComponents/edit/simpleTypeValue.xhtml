@@ -213,21 +213,21 @@ Authors
 								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}">
 								
 				<div class="editableParent" style="width: 70%; float: left;">
-					<h:inputTextarea styleClass="editable" value="#{simpleCmsPropertyValueWrapper.value}" style="width:95%;" rows="1"/>
+					<h:inputTextarea styleClass="editable" value="#{simpleCmsPropertyValueWrapper.value}" style="width:95%;" rows="5"/>
 				</div>
 				
-				<a href="#" onclick="openTextEditor(this);">
+				<a href="#" onclick="openTextEditor(this);" title="Edit in Html Editor">
 					<img 
 						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--plus.png"
 						alt="open editor"/>
 				</a>
 					
-				<a href="#" onclick="destroyTextEditor();" style="display: none;">
+				<a href="#" onclick="destroyTextEditor();" style="display: none;" title="Close Html Editor">
 					<img 
 						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/pencil--minus.png"
 						alt="close editor"/>
 				</a>
-				<a href="#" onclick="previewTextArea(this);">
+				<a href="#" onclick="previewTextArea(this);" title="Preview">
 					<img 
 						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/magnifier.png"
 						alt="preview text"/>

@@ -56,7 +56,7 @@ Authors
 						<a4j:commandLink title="#{messages['entity.action.viewEditForm']}"
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
-							onclick="showTab('objectEditorTab');">
+							onclick="resetEditors(); showTab('objectEditorTab');">
 								
 							<h:outputText
 								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />

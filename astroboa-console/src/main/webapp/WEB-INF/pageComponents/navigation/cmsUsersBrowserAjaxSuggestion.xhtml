@@ -35,13 +35,9 @@ Authors
 	<body>
 		<ui:composition>
 			
-			<ui:remove>
-				#{messages['navigation.menu.users.suggestion.box.message']}
-			</ui:remove>
-			
 			<h:inputText id="suggestRepositoryUserExtrenalIdOrLabel"
 				value="#{repositoryNavigation.selectedRepositoryUserExternalIdOrLabel}" 
-				size="25" 
+				size="20" 
 				style="font-size: 90%;"/>
 			<rich:suggestionbox for="suggestRepositoryUserExtrenalIdOrLabel"
 				suggestionAction="#{repositoryNavigation.getRepositoryUsersUIAction}" 
@@ -60,7 +56,8 @@ Authors
 					oncomplete="showTab('searchResultsTab');"
 					action="#{contentObjectSearchByOwner.findContentObjectsByOwnerAndPresent_UIAction(suggestedRepositoryUser)}" />
 			</rich:suggestionbox>
-
+			
+			<div style="font-size: 10px; margin-top: 5px;">#{messages['navigation.menu.users.suggestion.box.message']}</div>
 		</ui:composition>
 	</body>
 

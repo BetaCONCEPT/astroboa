@@ -111,8 +111,11 @@ Authors
 					
 					<rich:column>
 						<center>
+							<input type="radio" name="#{rowKey +1}" />
+							<ui:remove>
 							<jdt:multipleRowsSelector id="selectedContentObjects"
 									selectionList="#{contentObjectStatefulSearchService.contentObjectSelection.selectedContentObjects}"/>
+							</ui:remove>
 						</center>
 					</rich:column>
 								
@@ -188,7 +191,8 @@ Authors
 							<rich:dndParam name="label"
 								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue}" />
 						</rich:dragSupport>
-						<a4j:commandLink 
+						<a4j:commandLink
+							onclick="resetEditors();"
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
 							oncomplete="showTab('objectEditorTab');"
@@ -224,6 +228,7 @@ Authors
 							<a4j:commandLink
 								ajaxSingle="true"
 								reRender="objectEditorAjaxPanel"
+								onclick="resetEditors();"
 								oncomplete="showTab('objectEditorTab');"
 								action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}">
 									

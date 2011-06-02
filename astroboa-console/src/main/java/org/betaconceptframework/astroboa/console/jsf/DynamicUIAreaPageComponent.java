@@ -32,15 +32,15 @@ import org.apache.commons.collections.CollectionUtils;
  * 
  */
 public enum DynamicUIAreaPageComponent {
-	BINARY_CHANNEL_VIEWER("/WEB-INF/pageComponents/binaryChannelViewer.xhtml","betaCMSPage"),
-	SHARED_SPACE_NAVIGATOR("/WEB-INF/pageComponents/space/sharedSpaceNavigator.xhtml", "betaCMSPage","sharedSpaceNavigation"),
-	TAG_EDITOR("/WEB-INF/pageComponents/taxonomy/tagEditor.xhtml","betaCMSPage","taxonomyEdit", "tagEdit"),
-	OBJECT_TYPE_SELECTOR("/WEB-INF/pageComponents/contentObjectTypeSelector.xhtml","betaCMSPage", "contentTypeEditor"),
-	ADVANCED_SEARCH("/WEB-INF/pageComponents/search/advancedSearch.xhtml","betaCMSPage"),
-	PERSON_PROFILE_EDITOR("/WEB-INF/pageComponents/identity/personInfoEditor.xhtml" ,"betaCMSPage", "personInfoEditor"),
-	TAXONOMY_EDIT("/WEB-INF/pageComponents/taxonomy/taxonomyEdit.xhtml","betaCMSPage", "taxonomyEdit", "tagEdit", "taxonomyEditor"),
-	SCRIPT_ENGINE("/WEB-INF/pageComponents/scriptEngine/scriptEngine.xhtml","betaCMSPage","scriptEngine"),
-	REPOSITORY_EDITOR("/WEB-INF/pageComponents/admin/repositoryEditor.xhtml","betaCMSPage");
+	BINARY_CHANNEL_VIEWER("/WEB-INF/pageComponents/binaryChannelViewer.xhtml","console"),
+	SHARED_SPACE_NAVIGATOR("/WEB-INF/pageComponents/space/sharedSpaceNavigator.xhtml", "console","sharedSpaceNavigation"),
+	TAG_EDITOR("/WEB-INF/pageComponents/taxonomy/tagEditor.xhtml","console","taxonomyEdit", "tagEdit"),
+	OBJECT_TYPE_SELECTOR("/WEB-INF/pageComponents/contentObjectTypeSelector.xhtml","console", "contentTypeEditor"),
+	ADVANCED_SEARCH("/WEB-INF/pageComponents/search/advancedSearch.xhtml","console"),
+	PERSON_PROFILE_EDITOR("/WEB-INF/pageComponents/identity/personInfoEditor.xhtml" ,"console", "personInfoEditor"),
+	TAXONOMY_EDIT("/WEB-INF/pageComponents/taxonomy/taxonomyEdit.xhtml","console", "taxonomyEdit", "tagEdit", "taxonomyEditor"),
+	SCRIPT_ENGINE("/WEB-INF/pageComponents/scriptEngine/scriptEngine.xhtml","console","scriptEngine"),
+	REPOSITORY_EDITOR("/WEB-INF/pageComponents/admin/repositoryEditor.xhtml","console");
 
 	private String dynamicUIAreaPageComponent;	
 	private String[] relatedBackingBeanNames;

@@ -120,16 +120,25 @@ a img {
 	font-style: italic;
 }
 
+.object {
+	margin-bottom: 5px;
+	border-bottom: 1px dotted #999999;
+}
+
+.object h2 {
+	font-size: 1.2em;	
+}
+
 .text p.date span {
-	color: #ee4123;
+	color: #999999;
 }
 
 .image p.date span {
-	color: #00d397;
+	color: #999999;
 }
 
 .textFile p.date span {
-	color: #00acee;
+	color: #999999;
 }
 
 .singleModeCol {width: 260px;}
@@ -161,10 +170,12 @@ a img {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-.scaledImage {
-	width: 128px;
-	height: 128px;
-	border: 1px solid black;	
+#showMore {
+	font-size: 1.4em; 
+	color: #777777; 
+	text-align: center; 
+	cursor: pointer;
+	margin-bottom: 20px;
 }
 
 .info {

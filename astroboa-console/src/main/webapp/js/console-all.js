@@ -309,30 +309,6 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
     
     
-    /* Text Editor Dialog */
-    function createTextEditorDialog() {
-    	bcmslib.jQuery('#textEditorDialog').dialog(
-    			{ 
-    				autoOpen: false,
-    				modal: true,
-    				width: 960,
-    				resizable: false,
-    				draggable: false,
-    				open: function(event, ui) 
-    				{	
-    					bcmslib.jQuery(this).parent().children().children('.ui-dialog-titlebar-close').hide();
-    				}
-    			 }
-    		);
-    }
-    
-    function openTextEditorDialog() {
-    	bcmslib.jQuery('#textEditorDialog').dialog('open');
-    }
-    
-    function closeTextEditorDialog() {
-    	bcmslib.jQuery('#textEditorDialog').dialog('close');
-    }
     
     /* functions that create object and object property URLs */
     function generateObjectPropertyUrl(friendlyUrlSelected) {
@@ -1070,7 +1046,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     var textEditorOpenButton;
     var editor;
     
-    function resetEditorGlobalVars() {
+    function resetEditors() {
     	textEditorArea = null;
         textEditorCloseButton = null;
         textEditorOpenButton =null;
@@ -1198,6 +1174,31 @@ function callFunctionOnEnterKey(e, func, arg) {
     		bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
     	//	bcmslib.jQuery.fancybox({'autoscale' : true, 'scrolling': 'auto', 'content': text, 'type': 'inline'});
     	}
+    }
+    
+    function initObjectProfileForm() {
+    	var profileProperty = bcmslib.jQuery('.profileProperty')
+			.addClass("more")
+			.css({'height' : "220px", 'overflow' : 'hidden'})
+			.append('<a id="profilePropertyMore" class="more" href="#">show all fields...</a>');
+			
+			bcmslib.jQuery("#profilePropertyMore").click(function() {
+				if (bcmslib.jQuery(profileProperty).hasClass('more')) {
+					bcmslib.jQuery(profileProperty).css('height', "100%");
+					
+					bcmslib.jQuery(this).html("show less fields...");
+					
+					bcmslib.jQuery(profileProperty).removeClass('more')
+					.addClass('less');
+				}
+				else {
+					bcmslib.jQuery(profileProperty).css('height', "220px");
+					
+					bcmslib.jQuery(this).html("show all fields...");
+					
+					bcmslib.jQuery(profileProperty).removeClass('less').addClass("more");
+				}
+			});
     }
     
     /*HTTP SESSION CHECKER */

@@ -128,9 +128,11 @@ Authors
 				<div id="usersToggleContainer">
 					<ui:include
 					src="/WEB-INF/pageComponents/navigation/cmsUsersBrowserAjaxSuggestion.xhtml" />
-
-					<ui:include
-						src="/WEB-INF/pageComponents/navigation/cmsUsersBrowser.xhtml" />	
+					
+					<ui:remove>
+						<ui:include
+							src="/WEB-INF/pageComponents/navigation/cmsUsersBrowser.xhtml" />
+					</ui:remove>
 				</div>
 			</div>
 			<script type="text/javascript">

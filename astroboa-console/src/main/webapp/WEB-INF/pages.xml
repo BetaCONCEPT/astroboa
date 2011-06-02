@@ -26,23 +26,13 @@ Authors
 <pages xmlns="http://jboss.com/products/seam/pages"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd"
-       no-conversation-view-id="/betaCMSPage.xhtml"
+       no-conversation-view-id="/console.xhtml"
        login-view-id="/login.xhtml">
        
     
-	<page view-id="/betaCMSPage.xhtml" login-required="true">
+	<page view-id="/console.xhtml" login-required="true">
 		<restrict>#{s:hasRole('ROLE_CMS_INTERNAL_VIEWER')}</restrict>
 		<begin-conversation join="true"/>
-    </page>
-    
-    <page view-id="/portalEditPage.xhtml" login-required="true">
-    	<restrict>#{s:hasRole('ROLE_CMS_PORTAL_EDITOR')}</restrict>
-    </page>
-    <page view-id="/taxonomyEditPage.xhtml" login-required="true">
-    	<restrict>#{s:hasRole('ROLE_CMS_TAXONOMY_EDITOR')}</restrict>
-    </page>
-    <page view-id="/scriptEnginePage.xhtml" login-required="true">
-    	<restrict>#{s:hasRole('ROLE_ADMIN')}</restrict>
     </page>
     
     <page view-id="/error.xhtml" login-required="true"/>
@@ -50,28 +40,13 @@ Authors
 	<page view-id="*" >
 		 <navigation>
 			<rule if-outcome="loggedIn">  
-				<redirect view-id="/betaCMSPage.xhtml"/>
+				<redirect view-id="/console.xhtml"/>
 			</rule>
 			<rule if-outcome="LOGOUT">  
 				<redirect view-id="/login.xhtml"/>
 			</rule>
-			<rule if-outcome="betaCMSPage">
-				<redirect view-id="/betaCMSPage.xhtml"/>
-			</rule>
-			<rule if-outcome="textEditorPage">
-				<redirect view-id="/textEditorPage.xhtml"/>
-			</rule>
-			
-			<rule if-outcome="taxonomyEditPage">
-				<redirect view-id="/taxonomyEditPage.xhtml"/>
-			</rule>
-			
-			<rule if-outcome="portalEditPage">
-				<redirect view-id="/portalEditPage.xhtml"/>
-			</rule>
-			
-			<rule if-outcome="scriptEnginePage">
-				<redirect view-id="/scriptEnginePage.xhtml"/>
+			<rule if-outcome="console">
+				<redirect view-id="/console.xhtml"/>
 			</rule>
 
 			<rule if-outcome="clearContentObjectEditAndLoadAgain">
@@ -90,8 +65,8 @@ Authors
 	 <page view-id="/clearContentObjectEditAndLoadAgain.xhtml" action="#{pageController.simulateOpenContentObjectTypeSelectorAction_PageAction}">
 		<action execute="#{contentObjectEdit.editContentObject_UIAction}"/>
 		 <navigation>
-			<rule if-outcome="betaCMSPage">
-				<redirect view-id="/betaCMSPage.xhtml"/>
+			<rule if-outcome="console">
+				<redirect view-id="/console.xhtml"/>
 			</rule>
 		</navigation>
     </page>

@@ -121,6 +121,8 @@ Authors
 									ajaxSingle="true"
 									rendered="#{spaceItem.type eq 'CONTENTOBJECT'}"
 									reRender="sharedWorkSpaceTabAjaxPanel"
+									onclick="resetEditors();"
+									oncomplete="showTab('objectEditorTab');"
 									action="#{objectEditInit.editObject_UIAction(spaceItem.spaceItemObject.contentObject.id)}">
 										
 											<h:graphicImage
@@ -146,7 +148,8 @@ Authors
 									
 									<a4j:commandLink
 										ajaxSingle="true"
-										onclick="showTab('objectEditorTab');"
+										onclick="resetEditors();"
+										oncomplete="showTab('objectEditorTab');"
 										rendered="#{spaceItem.type eq 'CONTENTOBJECT'}"
 										value="#{spaceItem.localizedLabel}"
 										reRender="objectEditorAjaxPanel"

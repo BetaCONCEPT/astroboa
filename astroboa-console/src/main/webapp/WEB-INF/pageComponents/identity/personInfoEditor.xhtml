@@ -43,7 +43,7 @@ Authors
 				style="padding-left: 20px; background: url(images/cms-icons/16/fugue/user--pencil.png) no-repeat 0px center;"
 				action="#{objectEditInit.editObject_UIAction(loggedInRepositoryUser.personId)}" 
 				reRender="objectEditorAjaxPanel"
-				onclick="showTab('objectEditorTab');"
+				onclick="resetEditors(); showTab('objectEditorTab');"
 				rendered="#{loggedInRepositoryUser.identityStoredInThisRepository}"
 				ajaxSingle="true"/>
 				

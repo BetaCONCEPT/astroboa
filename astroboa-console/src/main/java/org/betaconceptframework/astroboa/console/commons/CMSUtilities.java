@@ -413,10 +413,10 @@ public class CMSUtilities {
 		RepositoryUserCriteria repositoryUserCriteria = CmsCriteriaFactory.newRepositoryUserCriteria();
 		
 		
-		Criterion externalIdCriterion = CriterionFactory.simpleCmsPropertycontains(CmsBuiltInItem.ExternalId.getJcrName(), 
+		Criterion externalIdCriterion = CriterionFactory.contains(CmsBuiltInItem.ExternalId.getJcrName(), 
 				CmsConstants.ANY_NAME + externalIdOrLabel + CmsConstants.ANY_NAME);
 		
-		Criterion labelCriterion = CriterionFactory.simpleCmsPropertycontains(CmsBuiltInItem.Label.getJcrName(), 
+		Criterion labelCriterion = CriterionFactory.contains(CmsBuiltInItem.Label.getJcrName(), 
 				CmsConstants.ANY_NAME + externalIdOrLabel + CmsConstants.ANY_NAME);
 		
 		repositoryUserCriteria.addCriterion(CriterionFactory.or(externalIdCriterion, labelCriterion));
@@ -428,7 +428,7 @@ public class CMSUtilities {
 		repositoryUserCriteria.doNotCacheResults();
 		
 		if (locale != null)
-			repositoryUserCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		return repositoryUserService.searchRepositoryUsers(repositoryUserCriteria);
 		
@@ -440,7 +440,7 @@ public class CMSUtilities {
 		repositoryUserCriteria.addExternalIdEqualsCriterion(userId);
 		
 		if (locale != null)
-			repositoryUserCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		resultRepositoryUsers = repositoryUserService.searchRepositoryUsers(repositoryUserCriteria);
 		

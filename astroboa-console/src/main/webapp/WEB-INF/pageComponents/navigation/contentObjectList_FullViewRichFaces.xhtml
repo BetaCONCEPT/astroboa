@@ -122,7 +122,7 @@ Authors
 						<a4j:commandLink 
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
-							onclick="showTab('objectEditorTab');">
+							onclick="resetEditors(); showTab('objectEditorTab');">
 				
 							<h:outputText
 								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
@@ -429,7 +429,7 @@ Authors
 							styleClass="topmenuLink"
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
-							onclick="showTab('objectEditorTab');">
+							onclick="resetEditors(); showTab('objectEditorTab');">
 							
 						</a4j:commandLink>
 						

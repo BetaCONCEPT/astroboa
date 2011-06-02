@@ -264,57 +264,7 @@ Authors
         </param-value>
     </context-param>
     -->
-    
-    <!-- Trinidad specific contect params 
-	<context-param>
-    	<param-name>org.apache.myfaces.trinidad.ALTERNATE_VIEW_HANDLER</param-name>
-    	<param-value>com.sun.facelets.FaceletViewHandler</param-value>
-	</context-param>
-	-->
-	
-	<!-- Trinidad also supports an optimized strategy for caching some
-		view state at an application level, which significantly improves
-		scalability.  However, it makes it harder to develop (updates to
-		pages will not be noticed until the server is restarted), and in
-		some rare cases cannot be used for some pages (see Trinidad
-		documentation for more information) 
-	<context-param>
-		<param-name>
-			org.apache.myfaces.trinidad.USE_APPLICATION_VIEW_CACHE
-		</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	-->
-	
-	<!-- If this parameter is enabled, Trinidad will automatically
-		check the modification date of your JSPs, and discard saved
-		state when they change;  this makes development easier,
-		but adds overhead that should be avoided when your application
-		is deployed 
-	<context-param>
-		<param-name>
-			org.apache.myfaces.trinidad.CHECK_FILE_MODIFICATION
-		</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	-->
-	
-	<!-- Enables Change Persistence at a session scope.  By default,
-		Change Persistence is entirely disabled. The ChangeManager is
-		an API, which can persist component modifications (like,
-		is a showDetail or tree expanded or collapsed). For providing
-		a custom Change Persistence implementation inherit from the 
-		Trinidad API's ChangeManager class. As the value you have 
-		to use the fullqualified class name. 
-	<context-param>
-		<param-name>
-			org.apache.myfaces.trinidad.CHANGE_PERSISTENCE
-		</param-name>
-		<param-value>session</param-value>
-	</context-param>
-	-->
-
-
+   
 	<!-- Rich Faces specific parameters 
 	<context-param>
 		<param-name>org.richfaces.SKIN</param-name> 
@@ -326,6 +276,12 @@ Authors
  	<context-param>
       <param-name>org.ajax4jsf.VIEW_HANDLERS</param-name>
       <param-value>com.sun.facelets.FaceletViewHandler</param-value>
+    </context-param>
+    
+    <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
+    <context-param>
+        <param-name>resteasy.scan</param-name>
+        <param-value>true</param-value>
     </context-param>
 	
 	<!-- This filter make sure that Repository Context with the necessary information about connected repository is available to
@@ -345,6 +301,19 @@ Authors
 		<filter-name>httpSessionRepositoryContextIntegrationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- RestEasy as a Filter -->
+	 <filter>
+        <filter-name>Resteasy</filter-name>
+        <filter-class>
+        	org.betaconceptframework.astroboa.console.filter.ResourceApiProxyFilter
+        </filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Resteasy</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 	<!-- Rich Faces filter it is automatically installed by seam
 	<filter> 
@@ -417,58 +386,6 @@ components.xml debugging must be disabled ( <core:init debug=false .../>)
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- MYFACES Extensions Filter 
- 	
-    <filter>
-    		<description>
-			Set the path where the intermediary files will be stored.
-		</description>  
-        <filter-name>extensionsFilter</filter-name>
-        <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
-        <init-param>
-            <param-name>uploadMaxFileSize</param-name>
-            <param-value>100m</param-value>
-        </init-param>
-        <init-param>
-            <param-name>uploadThresholdSize</param-name>
-            <param-value>100k</param-value>
-        </init-param>
-        <init-param>
-            <param-name>repositoryPath</param-name>
-            <param-value>/tmp</param-value> 
-        </init-param>
-    </filter>
-
-	 <filter-mapping>
-        <filter-name>extensionsFilter</filter-name>
-        <url-pattern>*.jsf</url-pattern>
-    </filter-mapping>
-    
-	extension mapping for serving page-independent resources (javascript, stylesheets, images, etc.)  
- 	<filter-mapping>
-		<filter-name>extensionsFilter</filter-name>
-		<url-pattern>/faces/*</url-pattern>
-	</filter-mapping>
-	
-	-->
-	
-	<!-- Shale Framework filter 
-	<filter>
-		<filter-name>shale</filter-name>
-		<filter-class>
-			org.apache.shale.application.faces.ShaleApplicationFilter
-		</filter-class>
-	</filter>
-	-->
-	
-	<!--Shale filter mapping 
-    <filter-mapping>
-		<filter-name>shale</filter-name>
-		<url-pattern>*.jsf</url-pattern>
-	</filter-mapping>
-	 -->
-	
-	
 	<!--  
 		  BinaryChannel dynamic loader filter. Filter class is a Spring bean and use of 
 		  DelegatingFilterProxy provides the eas to instantiate Filter using Spring context
@@ -499,6 +416,10 @@ components.xml debugging must be disabled ( <core:init debug=false .../>)
 		<url-pattern>/binaryChannel/*</url-pattern>
 	</filter-mapping>
 	-->
+	
+	<listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
 	
 	<!-- Seam Framework
 	!!!!!! SEAM LISTENER SHOULD BE LOADED BEFORE SPRING CONTEXT LOADER LISTENER (possibly this is only required if spring beans are injected through @In)

@@ -296,10 +296,11 @@ clone.title.prefix=(Αντίγραφο)
 
 #Navigation Menu
 navigation.menu.taxonomies  = Θησαυροί Όρων
+navigation.menu.taxonomies.suggestion.box.message = Εισάγετε δύο ή περισσότερα γράμματα για να βρείτε σχετικούς όρους
 navigation.menu.mytags  = Οι Ετικέτες μου
 navigation.menu.most.popular.tags  = Οι πιο Δημοφιλείς Ετικέτες
-navigation.menu.users  = Χρήστες / Ρόλοι
-navigation.menu.users.suggestion.box.message = Επιλέξτε ένα χρήστη για να δείτε όλα τα αντικείμενα περιεχομένου που του ανήκουν.
+navigation.menu.users  = Αντικείμενα ανά Χρήστη 
+navigation.menu.users.suggestion.box.message = Βρείτε τα αντικείμενα που ανήκουν σε ένα χρήστη. Εισάγετε ένα ή περισσότερα γράμματα από το όνομα του για να δείτε επιλογές.
 navigation.menu.content.objects  = Αντικείμενα στο χρόνο
 navigation.menu.websites = Ιστότοποι
 navigation.menu.webPages = Ιστοσελίδες

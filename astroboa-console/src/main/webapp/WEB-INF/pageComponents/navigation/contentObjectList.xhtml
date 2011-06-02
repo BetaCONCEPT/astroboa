@@ -257,6 +257,54 @@ Authors
 				//<![CDATA[
 					bcmslib.jQuery(document).ready(function(){
 						createSlideshow('.objectListSlideshow');
+						
+						
+						
+						var tableMany = bcmslib.jQuery(".listViewContentObjectTable").tableSelectMany(/*{
+		                    listeners : {
+		                        beforerowselect   : function(event) {
+		                            this.preventChange = (this.target === "a") ? true : false;
+		                        },
+		                        beforerowdeselect : function(event) {
+		                            this.preventChange = (this.target === "a") ? true : false;
+		                        },
+		                        afterrowselect    : function(event) {
+		                            if(this.parentThis.allSelected()) $("input#tableSelectListenersCbAll").attr('checked', 'checked');
+		                            var toggle = $(this).find('input');
+		                            if(toggle.not(":checked")) toggle.attr('checked', 'checked');
+		                        },
+		                        afterrowdeselect  : function(event) {
+		                            if(!this.parentThis.allSelected()) $("input#tableSelectListenersCbAll").removeAttr('checked');
+		                            var toggle = $(this).find('input');
+		                            if(toggle.is(":checked")) toggle.removeAttr('checked');
+		                        }
+		                    }
+		                }*/);
+						
+						bcmslib.jQuery(".listViewContentObjectTable input").each(function() { this.checked = null; });
+
+		                // Select/Deselect all rows
+		                bcmslib.jQuery("input#tableManyCbAll").bind("click", function() {
+		                    this.checked ? tableMany.selectAll() : tableMany.clearSelections();
+		                });
+
+		                // Do something once a row has changed
+		                bcmslib.jQuery(document).bind('rowchange', function(event, table) {
+		                    if(tableMany == table) {
+		                        var row = table.getFocusedRow();
+		                        table.isSelected(row) ?
+									bcmslib.jQuery(row).find('input').attr('checked', 'checked') :
+									bcmslib.jQuery(row).find('input').removeAttr('checked');
+
+		                        table.allSelected() ?
+		                        	bcmslib.jQuery("input#tableManyCbAll").attr('checked', 'checked') :
+		                        	bcmslib.jQuery("input#tableManyCbAll").removeAttr('checked');
+		                    }
+		                });
+		                
+						
+
+
 					});
 				//]]>
 				</script>

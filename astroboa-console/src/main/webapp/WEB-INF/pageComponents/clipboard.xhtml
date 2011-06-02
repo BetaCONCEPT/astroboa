@@ -90,7 +90,8 @@ Authors
 											value="#{contentObjectPropertyUrlItem.title}"
 											action="#{objectEditInit.editObject_UIAction(contentObjectPropertyUrlItem.id)}"
 											reRender="objectEditorAjaxPanel"
-											onclick="showTab('objectEditorTab');"
+											onclick="resetEditors();"
+											oncomplete="showTab('objectEditorTab');"
 											title="#{messages['entity.action.viewEditForm']}"/>
 								</rich:column>
 								
@@ -165,7 +166,8 @@ Authors
 										value="#{contentObjectItem.title}"
 										action="#{objectEditInit.editObject_UIAction(contentObjectItem.id)}"
 										reRender="objectEditorAjaxPanel"
-										onclick="showTab('objectEditorTab');"
+										onclick="resetEditors();"
+										oncomplete="showTab('objectEditorTab');"
 										title="#{messages['entity.action.viewEditForm']}"/>
 										<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-out.png" alt="Drag and Drop Indicator" title="you can drag and drop this object"/>
 								</rich:column>

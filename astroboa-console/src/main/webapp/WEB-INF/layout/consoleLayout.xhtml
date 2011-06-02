@@ -40,6 +40,13 @@ Authors
 				
 	<body>
 		
+		<!-- Present loading screen -->
+		<script type="text/javascript">
+		//<![CDATA[
+			bcmslib.jQuery.loading(true , { text: 'Please Wait. Astroboa console loads...', align:'center', mask:true});
+		//]]>
+		</script>
+				
 		<a4j:status id="a4jStatus">
 			<f:facet name="start">
 				<div class="ajaxActivityIndicator"><img src="#{facesContext.externalContext.requestContextPath}/images/ajax-loader.gif" alt="ajax activity image"/> Loading...</div>
@@ -266,7 +273,6 @@ Authors
 				createObjectPropertyUrlCreationDialog();
 				createTopicSelectionDialog();
 				createImportTaxonomyXmlDialog();
-				createTextEditorDialog();
 				
 				createObjectTypeSelectionMenuInFolderTab();
 				
@@ -285,6 +291,8 @@ Authors
 				startSessionTimeoutCheck();
 				Seam.Remoting.displayLoadingMessage = function() {};
 			    Seam.Remoting.hideLoadingMessage = function() {};
+			    // remove page loading screen
+				bcmslib.jQuery.loading(false);
 			});
 		//]]>
 		</script>

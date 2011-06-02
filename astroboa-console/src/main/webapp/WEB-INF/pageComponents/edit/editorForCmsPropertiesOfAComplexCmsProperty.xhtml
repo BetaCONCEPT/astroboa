@@ -563,32 +563,8 @@ Authors
 				bcmslib.jQuery(document).ready(function(){
 					createPropertyHelpMessage();
 					createTopicReferenceHelpMessage();
-					var profileProperty = bcmslib.jQuery('.profileProperty')
-					.addClass("more")
-					.css({'height' : "220px", 'overflow' : 'hidden'})
-					.append('<a id="profilePropertyMore" class="more" href="#">show all fields...</a>');
-					
-					bcmslib.jQuery("#profilePropertyMore").click(function() {
-						if (bcmslib.jQuery(profileProperty).hasClass('more')) {
-							bcmslib.jQuery(profileProperty).css('height', "100%");
-							
-							bcmslib.jQuery(this).html("show less fields...");
-							
-							bcmslib.jQuery(profileProperty).removeClass('more')
-							.addClass('less');
-						}
-						else {
-							bcmslib.jQuery(profileProperty).css('height', "220px");
-							
-							bcmslib.jQuery(this).html("show all fields...");
-							
-							bcmslib.jQuery(profileProperty).removeClass('less').addClass("more");
-						}
-					});
 					
 					createSlideshow('.objectPhotosSlideshow');
-					
-					resetEditorGlobalVars();
 
 				});
 			//]]>

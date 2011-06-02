@@ -53,11 +53,13 @@ Authors
 		
 		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/loginPage.css" />
 		<link href="#{facesContext.externalContext.requestContextPath}/css/slide.css" rel="stylesheet" type="text/css" />
+		<link href="#{facesContext.externalContext.requestContextPath}/css/smoothness/jquery-ui-1.8.4.custom.css" rel="stylesheet" type="text/css" />
+		<link href="#{facesContext.externalContext.requestContextPath}/css/jquery.pnotify.default.css" rel="stylesheet" type="text/css" />
+		<link href="#{facesContext.externalContext.requestContextPath}/css/jquery.pnotify.default.icons.css" rel="stylesheet" type="text/css" />
 		
-		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.masonry.min.js"></script>
-		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.scale.js"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-1.6.1.min.js"></script>
 		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.showMessage.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.pnotify.min.js" charset="utf-8"></script>
 		
 		<script type="text/javascript">
 		//<![CDATA[
@@ -66,7 +68,7 @@ Authors
 		//]]>
 		</script>
 		
-		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/betacms-login.js"></script>
+		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/console-login.js"></script>
 		
 	</head>
 
@@ -99,7 +101,7 @@ Authors
 							<h1 class="padlock">Login</h1>
 							
 							<h:inputHidden id="defaultViewId"
-								value="betaCMSPage">
+								value="console">
 								<f:attribute name="forceId" value="true" />
 							</h:inputHidden>
 							<h:inputHidden id="requiredUserRoleToAccessDefaultStartPage"
@@ -207,8 +209,8 @@ Authors
     				<div>
     					<img src="#{facesContext.externalContext.requestContextPath}/images/astroboa_logo_black_128x128.png" style="margin-bottom: 10px;"/>
     				</div>
-    				<input type="text" name="searchedText" id="searchedText" value="" size="50" 
-    					style="font-size: 1.6em; padding: 5px; color: #777777;"/>
+    				<input type="text" name="searchedText" id="searchedText" value="type any word or phrase" size="50" 
+    					style="font-size: 1.6em; padding: 5px; color: #777777;" onkeypress="return callFunctionOnEnterKey(event, textSearch, null);"/>
     			</div>
     			<div id="searchResultsHeader" style="margin-top: 30px;">
     				<h1>Recently Published Content</h1>
@@ -217,7 +219,7 @@ Authors
     			<div id="searchResults" style="margin-top: 10px;">
     				
     			</div>
-    			<div id="showMore" style="font-size: 1.4em; color: #777777; text-align: center; cursor: pointer;">Show More...</div>
+    			<div id="showMore">Show More...</div>
     		</div>
     		
     		<div id="ajaxActivityIndicator"><img src="#{facesContext.externalContext.requestContextPath}/images/ajax-loader.gif" alt="ajax activity image"/> Loading...</div>
