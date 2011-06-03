@@ -18,7 +18,6 @@
  */
 package org.betaconceptframework.astroboa.engine.jcr.io.contenthandler;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -28,6 +27,7 @@ import javax.xml.XMLConstants;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryProperty;
@@ -506,6 +506,9 @@ public class ImportContentHandler<T> implements ContentHandler{
 					//Repository or Resource Collection import under way. Send entity to importer in order to be saved accordingly
 					cmsRepositoryEntity = deserializer.save(cmsRepositoryEntity);
 				}
+				else if (cmsRepositoryEntity instanceof BinaryChannel){
+					deserializer.loadBinaryChannelContent((BinaryChannel)cmsRepositoryEntity);
+				}
 				
 				importContext.cacheEntity(cmsRepositoryEntity);
 			}
@@ -695,13 +698,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 	private void addContentToBinaryChannel(String content) {
 		
 		if (content != null){
-			
-			try {
-				((BinaryChannel)cmsRepositoryEntityQueue.peek().getEntity()).setContent(content.getBytes("UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				logger.error("Error adding content {} to binaryChannel {}", content,cmsRepositoryEntityQueue.peek().getName() );
-			}
-
+			((BinaryChannel)cmsRepositoryEntityQueue.peek().getEntity()).setContent(Base64.decodeBase64(content));
 		} 
 		
 	}
