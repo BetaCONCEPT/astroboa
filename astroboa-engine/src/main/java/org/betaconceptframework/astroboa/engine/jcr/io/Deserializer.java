@@ -21,14 +21,17 @@ package org.betaconceptframework.astroboa.engine.jcr.io;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Session;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.sax.SAXSource;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -46,6 +49,7 @@ import org.betaconceptframework.astroboa.engine.jcr.dao.TopicDao;
 import org.betaconceptframework.astroboa.engine.jcr.io.contenthandler.ImportContentHandler;
 import org.betaconceptframework.astroboa.engine.jcr.io.contenthandler.JsonImportContentHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
+import org.betaconceptframework.astroboa.engine.jcr.util.BinaryChannelUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.Context;
 import org.betaconceptframework.astroboa.engine.model.jaxb.Repository;
@@ -93,6 +97,8 @@ public class Deserializer {
 
 	private Session session;
 
+	private BinaryChannelUtils binaryChannelUtils;
+
 	public void setRepositoryEntityResolver(
 			RepositoryEntityResolver repositoryEntityResolver) {
 		this.repositoryEntityResolver = repositoryEntityResolver;
@@ -130,9 +136,13 @@ public class Deserializer {
 	public void setSession(Session session) {
 		this.session = session;
 	}
+	
+	public void setBinaryChannelUtils(BinaryChannelUtils binaryChannelUtils){
+		this.binaryChannelUtils = binaryChannelUtils;
+	}
 
 	public <T> T deserializeContent(InputStream source, boolean jsonSource, ImportMode importMode, Class<T> classWhoseContentIsImported, 
-			boolean version, boolean updateLastModificationDate){
+			boolean version, boolean updateLastModificationDate, Map<String, byte[]> binaryContent){
 
 		this.importMode = importMode;
 		this.version = version;
@@ -147,8 +157,8 @@ public class Deserializer {
 			}
 		}
 		
-		if (classWhoseContentIsImported == Repository.class || List.class.isAssignableFrom(classWhoseContentIsImported)){
-			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session);
+		if (MapUtils.isNotEmpty(binaryContent) || classWhoseContentIsImported == Repository.class || List.class.isAssignableFrom(classWhoseContentIsImported)){
+			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session, binaryContent);
 		}
 
 
@@ -315,5 +325,16 @@ public class Deserializer {
 	public void setImportReport(ImportReport importReport) {
 		this.importReport = importReport;
 
+	}
+
+	public void loadBinaryChannelContent(BinaryChannel binaryChannel) {
+		
+		//In cases where entity is not to be saved load content of binary channel if necessary 
+		//so that it will be available. Otherwise, content will be loaded upon save
+		if (!shouldSaveEntity()){
+			binaryChannelUtils.loadContentFromExternalLocation(context, binaryChannel);
+		}
+
+		
 	}
 }
