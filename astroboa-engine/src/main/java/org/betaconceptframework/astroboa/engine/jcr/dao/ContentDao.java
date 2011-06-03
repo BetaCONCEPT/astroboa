@@ -166,7 +166,7 @@ public class ContentDao  extends JcrDaoSupport{
 			//and will pass it to ContentServiceImpl to save it. 
 			//It will end up in this method again as a ContentObject
 			//if it passes the check of SecureContentObjectSaveAspect
-			return importDao.importContentObject((String)contentSource,version, updateLastModificationTime, ImportMode.SAVE_ENTITY_TREE);
+			return importDao.importContentObject((String)contentSource,version, updateLastModificationTime, ImportMode.SAVE_ENTITY_TREE, null);
 		}
 		
 		
