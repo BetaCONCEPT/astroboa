@@ -19,6 +19,7 @@
 package org.betaconceptframework.astroboa.client.service;
 
 import java.net.URL;
+import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -101,12 +102,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save) {
+	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,Map<String, byte[]> binaryContent) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importContentObject(contentSource, version, updateLastModificationDate, save,getAuthenticationToken());
+			return importServiceSecure.importContentObject(contentSource, version, updateLastModificationDate, save,binaryContent, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
