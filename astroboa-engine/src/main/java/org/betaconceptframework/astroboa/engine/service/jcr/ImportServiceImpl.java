@@ -22,6 +22,7 @@ package org.betaconceptframework.astroboa.engine.service.jcr;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -75,9 +76,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save) {
+	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,Map<String, byte[]> binaryContent) {
 		try{ 
-			return importDao.importContentObject(contentSource, version, updateLastModificationDate, save ? ImportMode.SAVE_ENTITY_TREE :ImportMode.DO_NOT_SAVE);
+			return importDao.importContentObject(contentSource, version, updateLastModificationDate, save ? ImportMode.SAVE_ENTITY_TREE :ImportMode.DO_NOT_SAVE, binaryContent);
 		}
 		catch(CmsException e){
 			throw e;
