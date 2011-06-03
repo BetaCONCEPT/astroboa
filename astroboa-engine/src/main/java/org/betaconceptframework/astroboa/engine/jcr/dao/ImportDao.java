@@ -21,6 +21,7 @@ package org.betaconceptframework.astroboa.engine.jcr.dao;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
@@ -91,7 +92,7 @@ public class ImportDao {
 			
 			@Override
 			public void run() {
-				importBean.importContentFromString(contentSource, importReport, ImportMode.SAVE_ENTITY_TREE, Repository.class, clientContext, false, true);
+				importBean.importContentFromString(contentSource, importReport, ImportMode.SAVE_ENTITY_TREE, Repository.class, clientContext, false, true, null);
 			}
 		}).start();
 		
@@ -100,11 +101,11 @@ public class ImportDao {
 	}
 
 	public ContentObject importContentObject(String contentSource,
-			boolean version, boolean updateLastModificationDate, ImportMode importMode) {
+			boolean version, boolean updateLastModificationDate, ImportMode importMode, Map<String, byte[]> binaryContent) {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(contentSource, importReport, importMode,ContentObject.class, null, version, updateLastModificationDate);
+		return importBean.importContentFromString(contentSource, importReport, importMode,ContentObject.class, null, version, updateLastModificationDate, binaryContent);
 
 	}
 	
@@ -113,7 +114,7 @@ public class ImportDao {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(contentSource, importReport, importMode, List.class, null, version, updateLastModificationDate);
+		return importBean.importContentFromString(contentSource, importReport, importMode, List.class, null, version, updateLastModificationDate, null);
 
 	}
 	
@@ -122,7 +123,7 @@ public class ImportDao {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(repositoryUserSource, importReport, importMode, RepositoryUserImpl.class, null, false, true);
+		return importBean.importContentFromString(repositoryUserSource, importReport, importMode, RepositoryUserImpl.class, null, false, true, null);
 
 	}
 	
@@ -131,7 +132,7 @@ public class ImportDao {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(topicSource, importReport, importMode,TopicImpl.class, null, false, true);
+		return importBean.importContentFromString(topicSource, importReport, importMode,TopicImpl.class, null, false, true, null);
 
 	}
 
@@ -141,7 +142,7 @@ public class ImportDao {
 	
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(taxonomySource, importReport, importMode,TaxonomyImpl.class, null, false, true);
+		return importBean.importContentFromString(taxonomySource, importReport, importMode,TaxonomyImpl.class, null, false, true, null);
 
 	}
 
@@ -150,7 +151,7 @@ public class ImportDao {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(spaceSource, importReport, importMode,SpaceImpl.class, null, false, true);
+		return importBean.importContentFromString(spaceSource, importReport, importMode,SpaceImpl.class, null, false, true, null);
 
 	}
 
