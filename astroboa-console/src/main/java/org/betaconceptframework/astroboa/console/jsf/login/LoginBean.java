@@ -24,6 +24,8 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.ConfigurationException;
@@ -60,6 +62,8 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.security.Identity;
+import org.jboss.seam.web.ServletContexts;
+import org.jboss.seam.web.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,6 +192,16 @@ public class LoginBean {
 					RepositoryUser repositoryUser = loggedInRepositoryUser.getRepositoryUser();
 					if (repositoryUser != null) {
 						JSFUtilities.addMessage(null,"login.welcome", null, FacesMessage.SEVERITY_INFO);
+						
+						// save the password encrypted in the session
+						// this is required by the ResourceApiProxy in order to construct secured API calls to the Resource API.
+						// This is a temporary solution until the new security framework is implemented (through URL signining)
+						HttpServletRequest httpServletRequest = ServletContexts.instance().getRequest();
+						if (httpServletRequest != null && httpServletRequest.getSession() != null) {
+							httpServletRequest.getSession().setAttribute("repositoryPassword", passWord);
+						}
+						
+						
 						return loginOutcome;
 					}
 					else {

@@ -132,7 +132,7 @@ Authors
 							</ui:remove>
 							
 							<ui:fragment rendered="#{contentObjectUIWrapper.isJPGorPNGorGIFImageFile()}">
-								<a href="#{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+								<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/content"
 									class="objectListSlideshow" rel="objectListGallery"
 									title="#{contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.sourceFilename}">
 
@@ -142,7 +142,7 @@ Authors
 										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
 		
 									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
-								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail"
 								 	  	width="32" height="32"/>
 									</a4j:outputPanel>
 									
