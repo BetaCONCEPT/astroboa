@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -88,6 +89,8 @@ public class BinaryChannelAdapter extends XmlAdapter<BinaryChannelType,BinaryCha
 				byte[] content = binaryChannel.getContent();
 				
 				if (content != null){
+					//No need to encode since it is done automatically from JAXB
+					//binaryChannelType.setContent(Base64.encodeBase64(content));
 					binaryChannelType.setContent(content);
 				}
 			}
@@ -117,10 +120,9 @@ public class BinaryChannelAdapter extends XmlAdapter<BinaryChannelType,BinaryCha
 			binaryChannel.setSystemBuiltinEntity(binaryChannelType.isSystemBuiltinEntity());
 			
 			final byte[] content = binaryChannelType.getContent();
-			binaryChannel.setContent(content);
 			
 			if (content != null){
-				binaryChannel.setSize(content.length);
+				binaryChannel.setContent(Base64.decodeBase64(content));
 			}
 
 			if (! binaryChannel.isNewContentLoaded()){
