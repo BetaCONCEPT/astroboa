@@ -19,6 +19,8 @@
 package org.betaconceptframework.astroboa.engine.jcr.util;
 
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.ValueType;
@@ -56,7 +59,7 @@ public class BinaryChannelUtils {
 	@Autowired
 	private CmsRepositoryEntityUtils cmsRepositoryEntityUtils;
 
-	public  void populateBinaryChannelToNode(BinaryChannel binaryChannel, Node binaryParentNode, Session session, SaveMode saveMode, Context context) throws Exception{
+	public  void populateBinaryChannelToNode(BinaryChannel binaryChannel, Node binaryParentNode, Session session, SaveMode saveMode, Context context, boolean binaryContentIsNew) throws Exception{
 		if (binaryChannel == null){
 			throw new CmsException("No BinaryChannel to populate");
 		}
@@ -89,11 +92,51 @@ public class BinaryChannelUtils {
 				binaryChannelNode = createNewBinaryChannelNode(binaryChannel,binaryParentNode, name, false);
 			}
 
-			populateNodeWithBinary(saveMode, binaryChannel, binaryChannelNode, session);
+			//Get content from external location if necessary
+			loadContentFromExternalLocation(context, binaryChannel);
+				
+
+			populateNodeWithBinary(saveMode, binaryChannel, binaryChannelNode, session, binaryContentIsNew);
 
 		} catch (RepositoryException e) {
 			throw new CmsException(e);
 		} 
+	}
+
+	public void loadContentFromExternalLocation(Context context, BinaryChannel binaryChannel) {
+		
+		String externalLocationOfTheContent = ((BinaryChannelImpl)binaryChannel).getExternalLocationOfTheContent();
+
+		if (! binaryChannel.isNewContentLoaded() && StringUtils.isNotBlank(externalLocationOfTheContent)){
+
+			//Check context first
+			byte[] content = context.getBinaryContentForKey(externalLocationOfTheContent);
+			
+			//try to download
+			if (content == null){
+				InputStream inputStream = null;
+				try {
+					URL urlResource = new URL(externalLocationOfTheContent);
+					
+					inputStream = urlResource.openStream();
+					
+					binaryChannel.setContent(IOUtils.toByteArray(inputStream));
+	
+				} catch (Throwable e) {
+					//Log exception but continue with unmarshaling
+					//BinaryChannle will be created without content
+					logger.warn("Invalid external location {} of the content for binary channel {}",externalLocationOfTheContent, binaryChannel.getName() );
+				}
+				finally{
+					if (inputStream != null){
+						IOUtils.closeQuietly(inputStream);
+					}
+				}
+			}
+			else{
+				binaryChannel.setContent(content);
+			}
+		}
 	}
 
 	private Node createNewBinaryChannelNode(BinaryChannel binaryChannel,
@@ -107,7 +150,7 @@ public class BinaryChannelUtils {
 		return binaryChannelNode;
 	}
 
-	private  void populateNodeWithBinary(SaveMode saveMode,BinaryChannel binaryChannel, Node binaryChannelNode, Session session) throws Exception {
+	private  void populateNodeWithBinary(SaveMode saveMode,BinaryChannel binaryChannel, Node binaryChannelNode, Session session, boolean binaryContentIsNew) throws Exception {
 
 		ValueFactory valueFactory = session.getValueFactory();
 
@@ -119,11 +162,11 @@ public class BinaryChannelUtils {
 
 		JcrNodeUtils.addSimpleProperty(saveMode, binaryChannelNode, CmsBuiltInItem.Size, binaryChannel.getSize(), valueFactory,ValueType.Long);
 
-		populateBinaryData(saveMode, binaryChannel, binaryChannelNode, session);
+		populateBinaryData(saveMode, binaryChannel, binaryChannelNode, session,binaryContentIsNew);
 
 	}
 
-	private void populateBinaryData(SaveMode saveMode, BinaryChannel binaryChannel, Node binaryChannelNode,Session session) throws Exception  {
+	private void populateBinaryData(SaveMode saveMode, BinaryChannel binaryChannel, Node binaryChannelNode,Session session, boolean binaryContentIsNew) throws Exception  {
 		ValueFactory valueFactory = session.getValueFactory();
 
 		/*Node binaryDataNode;
@@ -138,7 +181,7 @@ public class BinaryChannelUtils {
 		JcrNodeUtils.addSimpleProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrMimeType, binaryChannel.getMimeType(), valueFactory, ValueType.String);
 
 		//Update binary data only if value is new
-		if (binaryChannel.isNewContentLoaded()){
+		if (binaryContentIsNew){
 			JcrNodeUtils.addBinaryProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrData, binaryChannel.getContent(), valueFactory);
 
 			//Create new path for binary content file
