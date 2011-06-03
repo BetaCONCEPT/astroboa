@@ -21,12 +21,14 @@ package org.betaconceptframework.astroboa.api.service.secure;
 
 
 import java.net.URL;
+import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.security.AstroboaCredentials;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
@@ -115,11 +117,14 @@ public interface ImportServiceSecure {
 	 * @param updateLastModificationDate <code>true</code> to change last modification date, <code>false</code> otherwise
 	 * @param save
 	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param binaryContent Map containing the binary content of one or more properties of type {@link ValueType#Binary}. 
+	 * 	The key of the map must match the value of the 'url' attribute of the property in the XML/JSON representation of the
+	 * content.  
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Imported {@link ContentObject}
 	 */
-	ContentObject importContentObject(String contentSource, boolean version, boolean updateLastModificationDate, boolean save, String authenticationToken);
+	ContentObject importContentObject(String contentSource, boolean version, boolean updateLastModificationDate, boolean save, Map<String, byte[]> binaryContent,  String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link ImportService#importRepositoryUser(String)}

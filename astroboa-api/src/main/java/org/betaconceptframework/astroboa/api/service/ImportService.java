@@ -21,12 +21,14 @@ package org.betaconceptframework.astroboa.api.service;
 
 
 import java.net.URL;
+import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 
 /**
@@ -102,11 +104,14 @@ public interface ImportService {
 	 *            object, <code>false</code> otherwise. Taken into account only if <code>save</code> is <code>true</code>
 	 * @param updateLastModificationDate <code>true</code> to change last modification date, <code>false</code> otherwise. 
 	 * Taken into account only if <code>save</code> is <code>true</code>
+	 * @param binaryContent Map containing the binary content of one or more properties of type {@link ValueType#Binary}. 
+	 * 	The key of the map must match the value of the 'url' attribute of the property in the XML/JSON representation of the
+	 * content.  
 	 * @param save
 	 *            <code>true</code> to save content object, <code>false</code> otherwise.
 	 * @return Imported {@link ContentObject}
 	 */
-	ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationTime, boolean save);
+	ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationTime, boolean save, Map<String, byte[]> binaryContent);
 	
 	/**
 	 * Import repository user to Astroboa repository from XML or JSON. 
