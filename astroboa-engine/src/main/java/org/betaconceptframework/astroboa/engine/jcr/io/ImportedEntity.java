@@ -18,13 +18,10 @@
  */
 package org.betaconceptframework.astroboa.engine.jcr.io;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
@@ -42,6 +39,7 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.engine.model.jaxb.Repository;
+import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
@@ -63,8 +61,6 @@ public class ImportedEntity{
 	private String locale;
 	
 	private DatatypeFactory df ;
-	
-	private String urlOfBinaryContentToDownload;
 	
 	private boolean entityRepresentsAContentObjectReference;
 	
@@ -111,13 +107,10 @@ public class ImportedEntity{
 		}
 		else if (StringUtils.equals(attributeName, CmsConstants.URL_ATTRIBUTE_NAME)){
 			if (entity instanceof BinaryChannel){
-				urlOfBinaryContentToDownload = attributeValue;
+				((BinaryChannelImpl)entity).setExternalLocationOfTheContent(attributeValue);
 			}
-			
-			//No need to import value for url attribute since it
-			//is not saved in repository.
+			//Attribute URL is ignored
 			return true;
-			//entity.setURL(attributeValue);
 		}
 		else if (StringUtils.equals(attributeName, CmsBuiltInItem.Name.getLocalPart())){
 			
@@ -357,30 +350,6 @@ public class ImportedEntity{
 			
 			}
 		}
-		else if (entity instanceof BinaryChannel &&
-				! ((BinaryChannel)entity).isNewContentLoaded() &&
-				urlOfBinaryContentToDownload != null){
-
-				InputStream inputStream = null;
-					try {
-						URL urlResource = new URL(urlOfBinaryContentToDownload);
-						
-						inputStream = urlResource.openStream();
-						
-						((BinaryChannel)entity).setContent(IOUtils.toByteArray(inputStream));
-
-					} catch (Throwable e) {
-						//Log exception but continue with unmarshaling
-						//BinaryChannle will be created without content
-						logger.warn("Invalid URL {} for binary channel {}",urlOfBinaryContentToDownload, ((BinaryChannel)entity).getName() );
-					}
-					finally{
-						if (inputStream != null){
-							IOUtils.closeQuietly(inputStream);
-						}
-						urlOfBinaryContentToDownload = null;
-					}
-			}
 	}
 
 	@Override
