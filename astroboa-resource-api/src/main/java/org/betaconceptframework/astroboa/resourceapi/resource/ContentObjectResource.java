@@ -18,13 +18,18 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.resource;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
@@ -36,10 +41,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -66,6 +73,9 @@ import org.betaconceptframework.astroboa.resourceapi.utility.IndexExtractor;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.DateUtils;
 import org.betaconceptframework.astroboa.util.PropertyExtractor;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartRelatedInput;
+import org.jboss.resteasy.util.GenericType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,10 +85,6 @@ import org.slf4j.LoggerFactory;
  * 
  */
 
-/*
-@Name("org.betaconceptframework.astroboa.resourceapi.resource.contentObjectResource")
-@Scope(ScopeType.EVENT)
-*/
 public class ContentObjectResource extends AstroboaResource{
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -704,8 +710,7 @@ public class ContentObjectResource extends AstroboaResource{
 			
 		}
 		catch(Exception e){
-			logger.error("Cms query "+cmsQuery,e);
-			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+			return ContentApiUtils.createResponseForException(Response.Status.BAD_REQUEST, e, true, "Cms Query "+cmsQuery);
 		}	
 	}
 	
@@ -871,6 +876,7 @@ public class ContentObjectResource extends AstroboaResource{
 	}
 	
 	 @POST
+	 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	 public Response postContentObject(String requestContent) {
 	
 		long start = System.currentTimeMillis();
@@ -885,6 +891,7 @@ public class ContentObjectResource extends AstroboaResource{
 
   	  @PUT
    	  @Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
+   	  @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	  public Response putContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent){
@@ -930,18 +937,197 @@ public class ContentObjectResource extends AstroboaResource{
   		  }
   	  }
 
-	  private Response saveContentObjectByIdOrName(
+	  	@POST
+		@Consumes("multipart/related")
+		public Response postObjectMultipartRelated(MultipartRelatedInput multipartRelatedInput){
+			return saveContentFromMultipartRelatedRequest(null, multipartRelatedInput, HttpMethod.POST);
+	  	}
+
+	  	@PUT
+		@Consumes("multipart/related")
+		@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
+		public Response putObjectMultipartRelated(
+				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
+				MultipartRelatedInput multipartRelatedInput){
+	  		
+			return saveContentFromMultipartRelatedRequest(contentObjectIdOrName, multipartRelatedInput, HttpMethod.PUT);
+	  	}
+
+		private Response saveContentFromMultipartRelatedRequest(String contentObjectIdOrName, 	MultipartRelatedInput multipartRelatedInput, String httpMethod) {
+			
+			try {
+				
+				//Obtain the part which contains the object's JSON/XML
+				InputPart partWhichContainsObjectSource = getMessagePartWithObjectSource(multipartRelatedInput);
+
+				//Check that mime type of the content is a valid one
+				ResourceRepresentationType resourceRepresentationType = checkMediaTypeIsValid(partWhichContainsObjectSource);
+
+				ContentObject contentObjectToBeSaved = retrieveObjectSourceFromMessageAndImportWithoutSave(multipartRelatedInput, partWhichContainsObjectSource);
+
+				boolean entityIsNew = objectIsNew(contentObjectIdOrName, httpMethod, contentObjectToBeSaved);
+		   		  
+		   		//Save content object
+				try{
+					contentObjectToBeSaved = astroboaClient.getContentService().save(
+							contentObjectToBeSaved, false, true, null);
+					
+					return ContentApiUtils.createSuccessfulResponseForPUTOrPOST(contentObjectToBeSaved, httpMethod, resourceRepresentationType, entityIsNew);
+					
+				}
+				catch(CmsUnauthorizedAccessException e){
+					throw new WebApplicationException(HttpURLConnection.HTTP_UNAUTHORIZED);
+				}
+				catch(Exception e){
+					logger.error("",e);
+					throw new WebApplicationException(e, HttpURLConnection.HTTP_INTERNAL_ERROR);
+				}
+
+
+			}
+			catch (WebApplicationException e) {	
+				throw e;
+			}
+			catch (Exception e) {
+				throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.INTERNAL_SERVER_ERROR, e, true, 
+						"A problem occured while saving form data for object with id or system name: " + contentObjectIdOrName));
+			}
+		}
+
+		private ContentObject retrieveObjectSourceFromMessageAndImportWithoutSave(
+				MultipartRelatedInput multipartRelatedInput, InputPart partWhichContainsObjectSource) throws IOException {
+			
+			Map<String, byte[]> binaryContentMap= new HashMap<String, byte[]>();
+			
+			//Iterate through the input parts to collect binary data
+			for (Entry<String, InputPart> inputPartEntry : multipartRelatedInput.getRelatedMap().entrySet()){
+				
+				String partId = inputPartEntry.getKey();
+				
+				if (StringUtils.equals(partId, multipartRelatedInput.getStart())){
+					//Do not process root part
+					continue;
+				}
+				
+
+				InputPart inputPart = inputPartEntry.getValue();
+				
+				boolean base64Encoded = partIsBase64Encoded(inputPart.getHeaders());
+				
+				byte[] binaryContent = inputPart.getBody(new GenericType<byte[]>() {});
+				
+				if (base64Encoded){
+					binaryContent = Base64.decodeBase64(binaryContent);
+				}
+				
+				binaryContentMap.put(partId, binaryContent);
+			}
+			
+			//Import content but do not save it 
+			 ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(partWhichContainsObjectSource.getBodyAsString(), false, true, false, binaryContentMap);
+				
+			 if (logger.isDebugEnabled()){
+				  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
+			 }
+			 
+			 
+			 
+			return contentObjectToBeSaved;
+		}
+
+		private boolean partIsBase64Encoded(MultivaluedMap<String, String> headers) {
+			
+			if (headers!=null && headers.isEmpty()){
+				for (Entry<String, List<String>> headerEntry: headers.entrySet()){
+					if (StringUtils.equalsIgnoreCase(headerEntry.getKey(), "Content-Transfer-Encoding")){
+						
+						if (headerEntry.getValue() != null && headerEntry.getValue().contains("base64")){
+							return true	;
+						}
+					}
+				}
+			}
+			
+			return false;
+		}
+
+		private ResourceRepresentationType checkMediaTypeIsValid(InputPart partWhichContainsObjectSource) {
+			
+			MediaType mediaType = partWhichContainsObjectSource.getMediaType();
+			
+			if (mediaType == null ){
+				throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.BAD_REQUEST, 
+						null, false, "No Content-Type Header found for object content"));
+			}
+
+			if (mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)){
+				return ResourceRepresentationType.JSON;
+			}
+			else if (mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)){
+				return ResourceRepresentationType.XML;
+			}
+			else if (mediaType.isCompatible(MediaType.TEXT_PLAIN_TYPE)){
+				return null;
+			}
+			else{
+				throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.BAD_REQUEST, 
+						null, false, "Invalid Content-Type Header "+mediaType.toString()+" found for object content"));
+			}
+		}
+
+		//According to the RestEASY API, method getRootPart()
+		//returns the root part of the message. 
+		//If a start parameter was set in the message header 
+		//the part with that id is returned. 
+		//If no start parameter was set the first part is returned.
+		private InputPart getMessagePartWithObjectSource(
+				MultipartRelatedInput multipartRelatedInput) {
+			
+			
+			InputPart partWhichContainsObjectSource = multipartRelatedInput.getRootPart();
+			
+			if (partWhichContainsObjectSource == null){
+				if (StringUtils.isBlank(multipartRelatedInput.getStart())){
+					throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.BAD_REQUEST, 
+							null, false, "'start' parameter in Content-Type header is not provided. There is no way ot determine which part of the message contains the object's content"));
+				}
+				else{
+					throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.BAD_REQUEST, 
+						null, false, "Could not locate message part with id "+ multipartRelatedInput.getStart()  
+						+". Object's content is not provided"));
+				}
+			}
+			
+			return partWhichContainsObjectSource;
+		}
+  	  
+	private Response saveContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 				String requestContent, String httpMethod){
+		
+		
 		  //Import from xml or json. ContentObject will not be saved
-		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false);
+		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false, null);
 			
 		  if (logger.isDebugEnabled()){
 			  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
 		  }
 
+		  boolean entityIsNew = objectIsNew(contentObjectIdOrName, httpMethod,	contentObjectToBeSaved);
+   		  
+   		  //Save content object
+   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent, entityIsNew);
+  	 }
+
+	private boolean objectIsNew(String contentObjectIdOrName,
+			String httpMethod, ContentObject contentObjectToBeSaved) {
+		
+		if (contentObjectIdOrName == null){
+			return true;
+		}
+		
 		  ContentObject existingObject = astroboaClient.getContentService().getContentObject(contentObjectIdOrName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
-		  
+
 		  boolean entityIsNew = existingObject == null;
 		  
    		  if (CmsConstants.UUIDPattern.matcher(contentObjectIdOrName).matches()){
@@ -982,10 +1168,8 @@ public class ContentObjectResource extends AstroboaResource{
    				  }
    			  }
    		  }
-   		  
-   		  //Save content object
-   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent, entityIsNew);
-  	 }
+		return entityIsNew;
+	}
 
 
 	 
