@@ -57,11 +57,25 @@ public class Context {
 	
 	private Session session;
 	
+	
+	private Map<String, byte[]> binaryContent = new HashMap<String, byte[]>();
+	
 	public Context(CmsRepositoryEntityUtils cmsRepositoryEntityUtils, CmsQueryHandler cmsQueryHandler,
 			Session session) {
 		this.cmsRepositoryEntityUtils = cmsRepositoryEntityUtils;
 		this.cmsQueryHandler = cmsQueryHandler;
 		this.session = session;
+	}
+
+	public Context(CmsRepositoryEntityUtils cmsRepositoryEntityUtils,
+			CmsQueryHandler cmsQueryHandler, Session session,
+			Map<String, byte[]> binaryContent) {
+		
+		this(cmsRepositoryEntityUtils, cmsQueryHandler, session);
+		
+		if (binaryContent!=null){
+			this.binaryContent.putAll(binaryContent);
+		}
 	}
 
 	public CmsRepositoryEntityUtils getCmsRepositoryEntityUtils() {
@@ -218,5 +232,21 @@ public class Context {
 
 	public Session getSession() {
 		return session;
+	}
+	
+	public void addBinaryContent(String key, byte[] content){
+		
+		if (key != null && content != null && content.length>0){
+			binaryContent.put(key, content);
+		}
+	}
+	
+	public byte[] getBinaryContentForKey(String key){
+		
+		if (key == null){
+			return null;
+		}
+		
+		return binaryContent.get(key);
 	}
 }
