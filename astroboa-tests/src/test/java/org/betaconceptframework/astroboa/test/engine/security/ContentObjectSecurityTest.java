@@ -496,7 +496,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 				if (result instanceof String){
 					//Method may return string. 
 					//Create ContentObject from import
-					return importDao.importContentObject((String)result, false, true, ImportMode.DO_NOT_SAVE);
+					return importDao.importContentObject((String)result, false, true, ImportMode.DO_NOT_SAVE, null);
 				}
 				else if (result instanceof CmsOutcome){
 					final long count = ((CmsOutcome)result).getCount();

@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.jcr.ItemNotFoundException;
@@ -33,6 +36,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.log4j.Level;
@@ -101,6 +105,128 @@ import org.testng.annotations.Test;
  * 
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
+	
+	@Test
+	public void testSaveXMLorJSONWithBinaryContent() throws Exception{
+		
+		//Create object
+		RepositoryUser systemUser = getSystemUser();
+
+		//Add binary channel to object
+		ContentObject contentObject = createContentObject(systemUser, "test-save-xml-json-with-binary-content", true);
+
+		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "image");
+		BinaryProperty imageProperty = (BinaryProperty)contentObject.getCmsProperty("image");
+		imageProperty.addSimpleTypeValue(logoBinaryChannel);
+		
+		contentObject = contentService.save(contentObject, false, true, null);
+		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+
+		//Save XML which contains binary content
+		String xml = contentObject.xml(false, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "image", null);
+
+		//Save JSON which contains binary content
+		String json = contentObject.json(false, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "image", null);
+
+		//Use XML/JSON exported from API
+		xml = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, CacheRegion.NONE, null, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "image", null);
+		
+		json = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL, CacheRegion.NONE, null, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "image", null);
+
+		
+		//Get binary channel content
+		Map<String, byte[]> binaryContent = new HashMap<String, byte[]>();
+		String imageURL = logoBinaryChannel.buildResourceApiURL(null, null, null, null, null, false, false);
+		byte[] contentCopy = Arrays.copyOf(logoBinaryChannel.getContent(), logoBinaryChannel.getContent().length);
+		binaryContent.put(imageURL, contentCopy);
+		
+		//Nullify content in binary channel
+		logoBinaryChannel.setContent(null);
+		
+		//Resave with external content
+		xml = contentObject.xml(false, false);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "image", binaryContent);
+		
+		json = contentObject.json(false, false);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "image", binaryContent);
+		
+		//Set custom value to 'url' attribute
+		xml = contentObject.xml(false, false).replaceAll(Pattern.quote(imageURL), "external-content-id");
+		binaryContent.put("external-content-id", contentCopy);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "image", binaryContent);
+		
+		json = contentObject.json(false, false).replaceAll(Pattern.quote(imageURL), "external-content-id");
+		binaryContent.put("external-content-id", contentCopy);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "image", binaryContent);
+		
+		
+		
+	}
+
+	private ContentObject saveAndAssertBinaryContentIsSaved(ContentObject contentObject, String contentSource, File fileWhichContainsContent, String property, Map<String, byte[]> binaryContent) throws Exception {
+		try{
+
+			contentObject = importService.importContentObject(contentSource, false, true, true, binaryContent);
+			
+			//reload object 
+			ContentObject object = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
+					FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+			
+			BinaryProperty imageProperty = (BinaryProperty)object.getCmsProperty(property);
+
+			Assert.assertTrue(imageProperty.hasValues(), "No binary channel saved for "+property+" property");
+
+			for (BinaryChannel imageBinaryChannel : imageProperty.getSimpleTypeValues()){
+				
+				String sourceFilename = imageBinaryChannel.getSourceFilename();
+				
+				Assert.assertTrue(StringUtils.isNotBlank(sourceFilename), " BinaryChannel "+ imageBinaryChannel.getName() + " does not have a source file name");
+				
+				File fileWhoseContentsAreSavedInBinaryChannel = null;
+				
+				if (sourceFilename.equals(fileWhichContainsContent.getName())){
+					fileWhoseContentsAreSavedInBinaryChannel = fileWhichContainsContent;
+				}
+				else {
+					throw new Exception("BnaryChannel contains an invalid source file name "+ sourceFilename);
+				}
+				
+				String mimeType = new MimetypesFileTypeMap().getContentType(fileWhoseContentsAreSavedInBinaryChannel);
+				
+				Assert.assertEquals(imageBinaryChannel.getName(), property);
+				Assert.assertEquals(imageBinaryChannel.getMimeType(), mimeType);
+				Assert.assertEquals(imageBinaryChannel.getSourceFilename(), sourceFilename);
+				Assert.assertEquals(imageBinaryChannel.getSize(), FileUtils.readFileToByteArray(fileWhoseContentsAreSavedInBinaryChannel).length);
+				Assert.assertEquals(imageBinaryChannel.getModified().getTimeInMillis(), fileWhoseContentsAreSavedInBinaryChannel.lastModified());
+
+
+				//Now test in jcr to see if the proper node is created
+				Node binaryChannelNode = getSession().getNodeByUUID(imageBinaryChannel.getId()); 
+
+				//If node is not found then exception has already been thrown
+				Assert.assertEquals(binaryChannelNode.getName(), imageBinaryChannel.getName(), " Invalid name for binary data jcr node "+ binaryChannelNode.getPath());
+
+				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString(), property);
+				Assert.assertEquals(binaryChannelNode.getProperty(JcrBuiltInItem.JcrMimeType.getJcrName()).getString(), mimeType);
+				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.SourceFileName.getJcrName()).getString(), sourceFilename);
+				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Size.getJcrName()).getLong(), fileWhoseContentsAreSavedInBinaryChannel.length());
+				Assert.assertEquals(binaryChannelNode.getProperty(JcrBuiltInItem.JcrLastModified.getJcrName()).getDate().getTimeInMillis(), fileWhoseContentsAreSavedInBinaryChannel.lastModified());
+
+			}
+
+			
+		}
+		catch(Exception e){
+			logger.error("Initial \n{}",contentSource);
+			throw e;
+		}
+		
+		return contentObject;
+	}
 
 	/*
 	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-148
@@ -812,7 +938,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				
 				contentObjectStringFromServiceUsingId = contentService.getContentObject(contentObject.getId(), output, FetchLevel.FULL,CacheRegion.NONE, null, true);
 
-				ContentObject contentObjectFromServiceWithId = importDao.importContentObject(contentObjectStringFromServiceUsingId, false, false, ImportMode.DO_NOT_SAVE);
+				ContentObject contentObjectFromServiceWithId = importDao.importContentObject(contentObjectStringFromServiceUsingId, false, false, ImportMode.DO_NOT_SAVE, null);
 				
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectFromServiceWithId, true);
 			
@@ -2631,12 +2757,12 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				
 				String coXml = co.xml(prettyPrint);
 
-				ContentObject coFromXml = importDao.importContentObject(coXml, false, true, importMode);
+				ContentObject coFromXml = importDao.importContentObject(coXml, false, true, importMode, null);
 
 				String coXmlFromServiceWithId = contentService.getContentObject(co.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, 
 						CacheRegion.NONE, null, false);
 
-				ContentObject coFromServiceWithId = importDao.importContentObject(coXmlFromServiceWithId, false, false, importMode);
+				ContentObject coFromServiceWithId = importDao.importContentObject(coXmlFromServiceWithId, false, false, importMode, null);
 
 				try{
 					repositoryContentValidator.compareContentObjects(coFromXml, coFromServiceWithId, true);
@@ -2658,7 +2784,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 	}
 
-	//@Test
+	@Test
 	public void testBinaryChannelURLs() throws Exception{
 		
 		//Create content objects for test

@@ -128,9 +128,9 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	
 	protected final String TEST_CONTENT_TYPE = "test";
 	protected final String EXTENDED_TEST_CONTENT_TYPE = "extendedTest";
-	protected JAXBValidationUtils jaxbValidationUtils;
 	protected final String DIRECT_EXTENDED_TEST_CONTENT_TYPE = "extendedTestDirectlyUsingType";
 	
+	protected JAXBValidationUtils jaxbValidationUtils;
 	protected SerializationDao serializationDao;
 	protected ImportDao importDao;
 	protected RepositoryEntityResolver repositoryEntityResolver;
@@ -202,7 +202,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 
 			testUserXml = StringUtils.replace(testUserXml, "USERNAME", username);
 			
-			ContentObject testUser = importDao.importContentObject(testUserXml, false, true, ImportMode.SAVE_ENTITY_TREE);
+			ContentObject testUser = importDao.importContentObject(testUserXml, false, true, ImportMode.SAVE_ENTITY_TREE, null);
 			logger.debug("Created "+testUser.getContentObjectType() + " with id "+ 
 					testUser.getId() + " and system name "+testUser.getSystemName() +" representing user "+username + " in " +
 							" repository "+AstroboaClientContextHolder.getActiveRepositoryId());
@@ -257,8 +257,8 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	protected BinaryChannel loadManagedBinaryChannel(File resource, String binaryChannelName) throws IOException {
 		BinaryChannel image = cmsRepositoryEntityFactory.newBinaryChannel();
 		image.setName(binaryChannelName);
+		//image.setSize(resource.length());
 		image.setContent(FileUtils.readFileToByteArray(resource));
-		image.setSize(resource.length());
 
 		image.setSourceFilename(resource.getName());
 
@@ -676,7 +676,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		final String xml = IOUtils.toString(contentSourceExtractor.extractXmlFromSourceURL(exportURL));
 		
 		try{
-			System.out.println(TestUtils.prettyPrintXml(xml));
+			logger.info(TestUtils.prettyPrintXml(xml));
 		}
 		catch(Exception e)
 		{

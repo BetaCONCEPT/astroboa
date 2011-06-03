@@ -430,12 +430,12 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			try{
 				xml = contentObject.xml(prettyPrint, false, "accessibility");
 
-				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode);
+				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode, null);
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXML, true);
 
 				json = contentObject.json(prettyPrint, false,"accessibility");
-				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode); 
+				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode, null); 
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSON, true);
 				repositoryContentValidator.compareContentObjects(contentObjectUnMarshalledFromXML, contentObjectUnMarshalledFromJSON, true);
@@ -454,7 +454,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsPropertyImpl.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsRootPropertyImpl.class.getName());
-					importDao.importContentObject(xml, false, false, importMode);
+					importDao.importContentObject(xml, false, false, importMode, null);
 					TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ComplexCmsPropertyImpl.class.getName());
@@ -472,7 +472,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsPropertyImpl.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsRootPropertyImpl.class.getName());
-					importDao.importContentObject(json, false, false, importMode);
+					importDao.importContentObject(json, false, false, importMode, null);
 					TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ComplexCmsPropertyImpl.class.getName());
@@ -734,7 +734,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject XML using xml() method in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode);
+				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode, null);
 				logTimeElapsed("Import ContentObject XML in {}, ImportMode {}, ", start, importMode.toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXML, true);
@@ -745,7 +745,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject JSON using json() method in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode); 
+				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode, null); 
 				logTimeElapsed("Import ContentObject JSON in {}, ImportMode {}, ", start, importMode.toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSON, true);
@@ -759,7 +759,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject JSON using service in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromJSONService = importDao.importContentObject(json, false, false, importMode); 
+				ContentObject contentObjectUnMarshalledFromJSONService = importDao.importContentObject(json, false, false, importMode, null); 
 				logTimeElapsed("Import ContentObject JSON in {}, ImportMode {}, ", start, importMode.toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSONService, true);
@@ -773,7 +773,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject XML using service in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromXMLService = importDao.importContentObject(xml, false, false, importMode); 
+				ContentObject contentObjectUnMarshalledFromXMLService = importDao.importContentObject(xml, false, false, importMode, null); 
 				logTimeElapsed("Import ContentObject XML in {}, ImportMode {}, ", start, importMode.toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXMLService, true);
