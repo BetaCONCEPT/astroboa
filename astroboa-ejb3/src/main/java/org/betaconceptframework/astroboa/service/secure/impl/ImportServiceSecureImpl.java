@@ -20,6 +20,7 @@
 package org.betaconceptframework.astroboa.service.secure.impl;
 
 import java.net.URL;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Local;
@@ -82,9 +83,10 @@ public class ImportServiceSecureImpl extends AbstractSecureAstroboaService imple
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR", "ROLE_CMS_PORTAL_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,
+	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save, 
+			Map<String, byte[]> binaryContent,
 			String authenticationToken) {
-		return importService.importContentObject(contentSource,version, updateLastModificationDate,save);
+		return importService.importContentObject(contentSource,version, updateLastModificationDate,save, binaryContent);
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR"})
