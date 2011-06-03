@@ -588,7 +588,7 @@ public class Serializer {
 			return false;
 		}
 
-		return cmsDefinition.getValueType() == ValueType.Complex && ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).commonAttributesAreDefined();
+		return cmsDefinition.getValueType() == ValueType.Binary || (cmsDefinition.getValueType() == ValueType.Complex && ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).commonAttributesAreDefined());
 	}
 
 	private void serializeBinaryChannelNode(Node node, boolean multiple, String propertyName) throws Exception {
