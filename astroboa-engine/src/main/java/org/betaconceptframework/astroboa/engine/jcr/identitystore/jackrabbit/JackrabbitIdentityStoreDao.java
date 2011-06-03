@@ -368,7 +368,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 
 					//Obtain content object
-					systemPersonObject = importDao.importContentObject(systemPersonXml, false, false, ImportMode.DO_NOT_SAVE);
+					systemPersonObject = importDao.importContentObject(systemPersonXml, false, false, ImportMode.DO_NOT_SAVE, null);
 
 					if (systemPersonObject == null){
 						throw new CmsException("Could not create a content object from provided source");
@@ -549,7 +549,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 				
 				//Obtain content object
-				ContentObject roleObject = importDao.importContentObject(roleXml, false, false,ImportMode.DO_NOT_SAVE); 
+				ContentObject roleObject = importDao.importContentObject(roleXml, false, false,ImportMode.DO_NOT_SAVE, null); 
 					
 				if (roleObject == null){
 					throw new CmsException("Could not create a content object from provided source");
