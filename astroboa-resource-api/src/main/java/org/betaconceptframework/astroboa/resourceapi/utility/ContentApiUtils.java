@@ -62,7 +62,6 @@ import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
 import org.betaconceptframework.astroboa.util.UrlProperties;
 import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -344,7 +343,9 @@ public class ContentApiUtils {
 		responseBuilder.type(MediaType.TEXT_PLAIN + "; charset=utf-8");
 		
 		//TODO: It should clarified whether entity identifier or entity's system name is provided 
-		responseBuilder.entity(entity.getId());
+		if (entity != null){
+			responseBuilder.entity(entity.getId());
+		}
 
 		
 		return responseBuilder.build();
@@ -453,5 +454,44 @@ public class ContentApiUtils {
 		responseBuilder.entity(entityIdOrName);
 		
 		return responseBuilder.build();
+	}
+	
+	/*
+	 * This method creates a response with the provided status and the provided exception message.
+	 * 
+	 * User may log this exception (on the server) as well. Log level is ERROR
+	 * 
+	 * This response can be returned as is or can be used as a parameter of a WebApplicationException, like
+	 * 
+	 * throw new WebApplicationException(ContentApiUtils.createResponseForException(Status.BAD_REQUEST, t, true, "Additional Message"));
+	 * 
+	 */
+	public static Response createResponseForException(Status status, Throwable t, boolean logException, String additionalMessage){
+		
+		ResponseBuilder response =  Response.status(status);
+		response.header("Content-Type", "text/plain; charset=UTF-8");
+		
+		StringBuilder message = new StringBuilder();
+		
+		if (additionalMessage != null){
+			message.append(additionalMessage);
+		}
+		
+		if (t != null){
+			
+			if (t.getMessage() != null){
+				message.append("-").append(t.getMessage());
+			}
+			
+			if (logException){
+				logger.error("",t);
+			}
+		}
+		
+		response.entity(message.toString());
+		
+		return response.build();
+
+		
 	}
 }
