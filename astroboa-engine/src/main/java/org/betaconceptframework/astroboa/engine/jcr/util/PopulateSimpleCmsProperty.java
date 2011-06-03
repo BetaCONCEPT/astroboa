@@ -49,6 +49,7 @@ import org.betaconceptframework.astroboa.api.model.definition.TopicReferenceProp
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.TopicDao;
+import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
 import org.betaconceptframework.astroboa.model.impl.BinaryPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.ItemQName;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
@@ -567,8 +568,8 @@ public class PopulateSimpleCmsProperty {
 					String  binaryChannelIdentifier = binaryChannel.getId();
 
 					//Populate BinaryChannel only if Content exists
-					if (binaryChannel.isNewContentLoaded()){
-						binaryChannelUtils.populateBinaryChannelToNode(binaryChannel, propertyContainerNode, session, saveMode, context);
+					if (binaryChannel.isNewContentLoaded() || shouldGetContentFromExternalLocation(binaryChannel)){
+						binaryChannelUtils.populateBinaryChannelToNode(binaryChannel, propertyContainerNode, session, saveMode, context, true);
 					}
 
 					if (binaryChannelIdentifier != null)
@@ -587,5 +588,26 @@ public class PopulateSimpleCmsProperty {
 		for (Node binaryChannelNode : binaryChannelsPerCmsIdentifier.values()){
 			binaryChannelNode.remove();
 		}
+	}
+
+	private boolean shouldGetContentFromExternalLocation(BinaryChannel binaryChannel) {
+		
+		String externalLocationOfTheContent = ((BinaryChannelImpl)binaryChannel).getExternalLocationOfTheContent();
+		
+		boolean externalLocationFound = StringUtils.isNotBlank(externalLocationOfTheContent);
+		
+		boolean binaryChannelIsNew = StringUtils.isBlank(binaryChannel.getId());
+		
+		String binaryFriendlyUrl = null;
+		String binaryPermanentUrl = null;
+		
+		if (!binaryChannelIsNew){
+			binaryFriendlyUrl = binaryChannel.buildResourceApiURL(null, null, null, null, null, true, false);
+			binaryPermanentUrl = binaryChannel.buildResourceApiURL(null, null, null, null, null, false, false);
+		}
+		
+		return externalLocationFound && (binaryChannelIsNew || 
+				( ! StringUtils.equals(externalLocationOfTheContent, binaryFriendlyUrl) && ! StringUtils.equals(externalLocationOfTheContent, binaryPermanentUrl)));
+		
 	}
 }
