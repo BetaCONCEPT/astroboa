@@ -93,6 +93,56 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 	private boolean unmanaged = false;
 
 	private boolean binaryPropertyIsMultiValued;
+	
+	/*
+	 * This variable represents the external location of the content
+	 * of the binary channel. This location can either be a URI or a simple
+	 * key which makes sense only in the context of the module (in this
+	 * case the PopulateSimpleCmsProperty class) which is 
+	 * responsible to populate the binary channel (and its content) to the repository.
+	 * 
+	 * The value of this variable is used primarily when saving an object which 
+	 * contains one or more properties of type Binary, using  XML or JSON format.
+	 * 
+	 * According to Astroboa model, the binary channel type defines an attribute named 'url'
+	 * which represents the URI location of the content of the binary channel and an
+	 * element of type xs:base64Binary, named 'content', which represents the actual content 
+	 * of the binary channel.
+	 * 
+	 * When importing an object in XML/JSON format, it is practically unrealistic to require that 
+	 * binary content must exist inside the XML/JSON source under the 'content' element. 
+	 * A more practical way would be to allow users
+	 * to define the URI location of the content so that Astroboa could download it upon save 
+	 * or to allow users to provide the actual content along with the XML/JSON
+	 * source but not inside the source. (see more in 
+	 * ImportService.importContentObject(String contentSource,boolean version, boolean updateLastModificationTime, boolean save, Map<String, byte[]> binaryContentMap); 
+	 * 
+	 * In either cases, users must simply supply a value to the 'url' attribute of the element which represents the binary property
+	 * and Astroboa will then discover where to go to get the actual content
+	 * 
+	 * This is an example (in JSON) where user specifies an external location for the content
+	 * 
+	 * "image" : {
+	 *  "lastModificationDate" : "2008-12-17T16:33:02.474+02:00",
+	 *	"mimeType" : "image/jpeg",
+	 *	"sourceFileName" : "image1.jpg",
+	 *  "url" : "http://myserver/temp/images/image1.jpg"
+	 *  }
+	 * 
+	 * 
+	 * and this is an example (in JSON) where user specifies a key as the location of the content
+	 * 
+	 * "image" : {
+	 *  "lastModificationDate" : "2008-12-17T16:33:02.474+02:00",
+	 *	"mimeType" : "image/jpeg",
+	 *	"sourceFileName" : "image1.jpg",
+	 *  "url" : "image1"
+	 *  }
+	 *  
+	 *  In this case, user must also provide Astroboa with a binary content map
+	 * 
+	 */
+	private String externalLocationOfTheContent;
 
 	/**
 	 * @return Returns the content.
@@ -733,6 +783,15 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 	public void setBinaryPropertyPermanentPath(String binaryPropertyPermanentPath) {
 		this.binaryPropertyPermanentPath = binaryPropertyPermanentPath;
 	}
+
+	public void setExternalLocationOfTheContent(String externalLocationOfTheContent) {
+		this.externalLocationOfTheContent = externalLocationOfTheContent;
+	}
+
+	public String getExternalLocationOfTheContent() {
+		return externalLocationOfTheContent;
+	}
 	
+
 	
 }
