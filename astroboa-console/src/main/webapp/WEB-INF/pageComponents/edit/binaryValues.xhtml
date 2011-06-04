@@ -87,13 +87,18 @@ Authors
 										<ui:fragment 
 											rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
 											<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}">
-												<a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+												<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
 										 			class="objectPhotosSlideshow" rel="defaultGallery"
 										 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}">
+													
+													<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}?width=150"/>
+													
+													<ui:remove>
 													<seam:graphicImage
 														value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.content}">
 														<seam:transformImageSize width="150" maintainRatio="true" />
 													</seam:graphicImage>
+													</ui:remove>
 												</a>
 												<br/><span style="font-size: 0.8em;">#{messages['content.object.edit.action.viewFileInline']}</span>
 											</ui:fragment>
@@ -184,7 +189,7 @@ Authors
 							  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
 							 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
 							 
-							 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}?contentDispositionType=attachment"
 							 	title="#{messages['content.object.edit.action.downloadFile']}">
 											<h:graphicImage value="/images/cms-icons/16/fugue/drive-download.png" />
 							</a>
@@ -194,7 +199,7 @@ Authors
 							<!-- Action: View File Inline if it is an image-->
 							<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
 							 
-								 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
 								 	class="slideshow"
 								 	title="#{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename} : #{messages['content.object.edit.action.viewFileInline']}">
 										<h:graphicImage
@@ -208,7 +213,7 @@ Authors
 								  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
 								 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
 								 
-								 <a href="#{simpleCmsPropertyValueWrapper.binaryChannelValue.getCustomizedContentApiURL(null, null, 'INLINE')}"
+								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
 								 target="_blank"
 								 	title="#{messages['content.object.edit.action.viewFileInline']}">
 												<h:graphicImage

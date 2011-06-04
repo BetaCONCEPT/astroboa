@@ -87,7 +87,7 @@ Authors
 							</ui:remove>
 							
 							<ui:fragment rendered="isJPGorPNGorGIFImageFile()">
-								<a href="#{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.getCustomizedDirectURL(null, null, 'INLINE')}"
+								<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/content"
 									class="objectListSlideshow" rel="objectListGallery"
 									title="#{contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{contentObjectUIWrapper.contentObject.getCmsProperty('content').simpleTypeValue.sourceFilename}">
 									<h:graphicImage
@@ -96,7 +96,7 @@ Authors
 										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
 			
 									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
-								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail"
 								 	  	width="64" height="64" />
 								 	  </a4j:outputPanel>
 							 	  </a>
@@ -109,7 +109,7 @@ Authors
 									rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
 		
 								<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
-							 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+							 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail"
 							 	  	width="64" height="64" />
 							 	  </a4j:outputPanel>
 							</ui:fragment>
@@ -465,7 +465,7 @@ Authors
 							<div id="contentObjectPreviewArea">
 								<div id="binaryDataPreviewAreaInContentObjectList">
 
-								<img src="#{contentObjectUIWrapper.contentObjectProperty['previewBinaryChannel'].simpleTypeValue.directURL}"/>
+								<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/previewBinaryChannel}"/>
 								
 									<ui:remove>
 									<h:panelGrid id="audioAndVideoPreviewPanel" columns="1"

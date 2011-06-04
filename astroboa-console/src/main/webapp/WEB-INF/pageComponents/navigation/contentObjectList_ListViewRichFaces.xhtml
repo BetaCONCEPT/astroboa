@@ -157,7 +157,7 @@ Authors
 										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
 		
 									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
-								 		<img src="#{contentObjectUIWrapper.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+								 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail"
 								 	  	width="32" height="32"/>
 									</a4j:outputPanel>
 							</ui:fragment>
