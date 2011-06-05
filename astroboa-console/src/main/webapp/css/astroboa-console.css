@@ -2,9 +2,10 @@ body {
 	/*font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-family:  Arial, Helvetica, sans-serif;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-	font-family: Tahoma, Geneva, sans-serif;*/
-	font-family: Verdana, Geneva, sans-serif;
-	font-size: 75%;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-family: Verdana, Geneva, sans-serif;*/
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 70%;
 	background-color: #FFFFFF;
 	color: #333333;
 	margin: 0;
@@ -75,7 +76,7 @@ hr {
 }
 
 tr.selected > * {
-	background-color: #FFFF00;
+	background-color: #DDDDDD;
 }
 
 
@@ -122,6 +123,7 @@ div#contentArea {
 div#navigationMenuArea {
 	margin: 5px 0 0 0;
 	padding: 0;
+	font-size: 1.0em;
 	/*position: absolute;
 	width: 270px;
 	left: 0px;
@@ -1208,15 +1210,16 @@ li.formElement {
 	float: left;    
 	clear: left;    
 	width: 100%;    
-	padding-bottom: 1em;
+	padding-bottom: 3px;
 	color: #777777;  
 }
 
 ol.formElementList label,  ol.childProperties label{
 	float: left;    
 	width: 20%;    
-	margin-right: 1em;    
-	text-align: right;
+	margin-right: 1em;
+	text-align: left;   
+/*	text-align: right; */
 	color: #777777;
 }
 li.singleValueComplexProperty > label{
@@ -1345,7 +1348,7 @@ table.objectTypeSelectorTable td.actionIcon {
 	text-align: center;
 	font-weight: bold;
 	font-size: 1.3em;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 	z-index: 9000;
 }
 

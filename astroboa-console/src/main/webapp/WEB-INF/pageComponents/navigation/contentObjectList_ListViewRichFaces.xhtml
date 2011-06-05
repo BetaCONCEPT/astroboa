@@ -39,7 +39,7 @@ Authors
 			<div style="padding: 5px 5px 5px 5px;">
 
 				<rich:dataTable id="listViewContentObjectTable"
-					styleClass="listViewContentObjectTable"
+					styleClass="listViewContentObjectTable resultsTableSelectable"
 					binding="#{uiComponentBinding.listViewContentObjectTableComponent}"
 					rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
 					rows="#{pageController.rowsPerDataTablePage}"
@@ -55,7 +55,9 @@ Authors
 						<rich:columnGroup>
 							<rich:column>#</rich:column>
 							<rich:column>
-							
+								<input id="tableManyCbAll" type="checkbox" name="all" />
+								
+								<ui:remove>
 								<h:panelGrid columns="1">
 								<a4j:commandLink value="#{messages['content.search.selected.all.page.rows']}" 
 									ajaxSingle="true"
@@ -71,6 +73,7 @@ Authors
 												contentObjectStatefulSearchService.returnedContentObjects,
 												uiComponentBinding.listViewContentObjectTableComponent)}"/>
 									</h:panelGrid>
+									</ui:remove>
 							</rich:column>
 										
 							<rich:column>
@@ -111,7 +114,7 @@ Authors
 					
 					<rich:column>
 						<center>
-							<input type="radio" name="#{rowKey +1}" />
+							<input type="checkbox" name="row#{rowKey +1}" />
 							<ui:remove>
 							<jdt:multipleRowsSelector id="selectedContentObjects"
 									selectionList="#{contentObjectStatefulSearchService.contentObjectSelection.selectedContentObjects}"/>

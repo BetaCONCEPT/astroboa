@@ -83,58 +83,60 @@ Authors
 
 						<a4j:outputPanel id="#{typeOfAccessRight}UserAndGroupListPanel"
 							keepTransient="true">
-							<rich:panel
+							<ui:fragment
 								rendered="#{contentObjectEdit.radioButtonSelectionMap[typeOfAccessRight] == 3}">
-								<f:facet name="header">
-							#{messages[tabPanelHeaderKey]}
-						</f:facet>
-
-								<rich:dataTable value="#{contentObjectEdit.userListByAccessRight[typeOfAccessRight]}"
-									var="personOrGroupWithAccessRight" style="color: #333;"
-									width="100%">
-
-									<rich:column>
-										<h:outputText
-											value="#{personOrGroupWithAccessRight['userOrGroupName']}" />
-									</rich:column>
-
-									<rich:column>
-										<a4j:commandLink
-											action="#{contentObjectEdit.removeUserOrGroupFromAccessRightList_UIAction(contentObjectEdit.userListByAccessRight[typeOfAccessRight], personOrGroupWithAccessRight)}"
-											title="#{messages['content.object.edit.accessibility.editor.tab.remove.value.from.list']}"
-											reRender="#{typeOfAccessRight}UserAndGroupListPanel">
-
-											<h:graphicImage value="images/delete.jpg" width="16"
-												height="16" styleClass="imageMiddleAlign" />
-										</a4j:commandLink>
-
-									</rich:column>
-							</rich:dataTable>
-
-							<rich:spacer height="7"/>
-							
-								<a4j:outputPanel>
-									<div style="border: 1px solid #AAA; padding: 4px; color: #333;">
+								<div class="ui-widget" style="margin: 5px 10px 20px 10px;">
+									<div class="ui-widget-header ui-corner-tl ui-corner-tr" style="padding: 5px 5px 5px 5px;">#{messages[tabPanelHeaderKey]}</div>
+								
+									<div class="ui-widget-content ui-corner-bl ui-corner-br" style="padding: 10px 10px 10px 10px;">
+										<rich:dataTable value="#{contentObjectEdit.userListByAccessRight[typeOfAccessRight]}"
+											var="personOrGroupWithAccessRight" style="color: #333; margin-bottom:5px;"
+											width="100%">
+		
+											<rich:column>
+												<h:outputText
+													value="#{personOrGroupWithAccessRight['userOrGroupName']}" />
+											</rich:column>
+		
+											<rich:column>
+												<a4j:commandLink
+													action="#{contentObjectEdit.removeUserOrGroupFromAccessRightList_UIAction(contentObjectEdit.userListByAccessRight[typeOfAccessRight], personOrGroupWithAccessRight)}"
+													title="#{messages['content.object.edit.accessibility.editor.tab.remove.value.from.list']}"
+													reRender="#{typeOfAccessRight}UserAndGroupListPanel">
+		
+													<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-button.png"/>
+												</a4j:commandLink>
+		
+											</rich:column>
+										</rich:dataTable>
+	
+								
+										<ui:remove>
+											<a4j:outputPanel>
+												<div style="border: 1px solid #AAA; padding: 4px; color: #333;">
+												
+													<h:outputText
+														value="#{messages[tabDragHeaderKey]}" />
+													<br />
+												</div>
+												
+												<rich:dropSupport acceptedTypes="user,role"
+													ajaxSingle="true"
+													dropValue="#{typeOfAccessRight}"
+													dropListener="#{contentObjectEdit.grantAccessRightToDraggedAndDroppedUserOrRole_Listener}"
+													reRender="#{typeOfAccessRight}UserAndGroupListPanel">
+												</rich:dropSupport>
+												
+											</a4j:outputPanel>
+										</ui:remove>
 									
-										<h:outputText
-											value="#{messages[tabDragHeaderKey]}" />
-										<br />
+										<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/cmsUsersBrowserAjaxSuggestionForAccessibilityEditor.xhtml">
+											<ui:param name="typeOfAccessRight" value="#{typeOfAccessRight}"/>									
+										</ui:include>
 									</div>
 									
-									<rich:dropSupport acceptedTypes="user,role"
-										ajaxSingle="true"
-										dropValue="#{typeOfAccessRight}"
-										dropListener="#{contentObjectEdit.grantAccessRightToDraggedAndDroppedUserOrRole_Listener}"
-										reRender="#{typeOfAccessRight}UserAndGroupListPanel">
-									</rich:dropSupport>
-									
-								</a4j:outputPanel>
-								
-								<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/cmsUsersBrowserAjaxSuggestionForAccessibilityEditor.xhtml">
-									<ui:param name="typeOfAccessRight" value="#{typeOfAccessRight}"/>									
-								</ui:include>
-								
-							</rich:panel>
+								</div>
+							</ui:fragment>
 						</a4j:outputPanel>
 
 					</rich:tab>

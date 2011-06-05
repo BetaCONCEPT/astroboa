@@ -80,26 +80,32 @@ public class ContentObjectSelectionBean {
 		return CollectionUtils.isEmpty(selectedContentObjects)? 0: selectedContentObjects.size();
 	}
 
-	public void selectContentObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
+	public void selectObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
 		
 		allContentObjectAreSelected = false;
 		
-		if (selectedContentObjects == null){
-			selectedContentObjects	= new ArrayList<ContentObjectUIWrapper>();
-		}
 		
+	//	selectedContentObjects = (List<ContentObjectUIWrapper>)
+	//		getSubWrappedDataFromHtmlDataTable(
+	//		pagedListDataModel, htmlDataTable);
 		
-		Collection<ContentObjectUIWrapper> subWrappedDataFromHtmlDataTable =
-			(Collection<ContentObjectUIWrapper>)getSubWrappedDataFromHtmlDataTable(
-					pagedListDataModel, htmlDataTable);
-
-		//Get union of two sets in order to avoid duplicates
-		selectedContentObjects = (List<ContentObjectUIWrapper>) CollectionUtils.union(selectedContentObjects, subWrappedDataFromHtmlDataTable);
+		selectedContentObjects = (List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData();
+		
 		atLeastOneContentObjectIsSelected = true;
 
 	}
 	
-	public void clearSelectedContentObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
+	public void addSelectObject_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
+		
+		allContentObjectAreSelected = false;
+		
+		selectedContentObjects = (List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData();
+		
+		atLeastOneContentObjectIsSelected = true;
+
+	}
+	
+	public void deSelectObjectsOfCurrentPage_UIAction(){
 		
 		allContentObjectAreSelected = false;
 		
@@ -107,16 +113,9 @@ public class ContentObjectSelectionBean {
 			return ;
 		}
 		
-		Collection<ContentObjectUIWrapper> subWrappedDataFromHtmlDataTable =
-			(Collection<ContentObjectUIWrapper>)getSubWrappedDataFromHtmlDataTable(
-					pagedListDataModel, htmlDataTable);
-
-		//Get union of two sets in order to avoid duplicates
-		selectedContentObjects = (List<ContentObjectUIWrapper>) CollectionUtils.disjunction(selectedContentObjects, subWrappedDataFromHtmlDataTable);
+		selectedContentObjects = null;
 		
-		if (CollectionUtils.isEmpty(selectedContentObjects)){
-			atLeastOneContentObjectIsSelected = false;
-		}
+		atLeastOneContentObjectIsSelected = false;
 	}
 	
 	public Object getSubWrappedDataFromHtmlDataTable(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable ){

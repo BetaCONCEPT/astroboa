@@ -139,6 +139,7 @@ Authors
 		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
 		<property name="contentObjectList">#{contentObjectList}</property>
 		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	
 	<component name="contentObjectSpecificSearchQueries">

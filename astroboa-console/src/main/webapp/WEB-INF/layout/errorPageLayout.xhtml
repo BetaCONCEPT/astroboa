@@ -48,10 +48,6 @@ Authors
 		<link rel="Shortcut Icon" type="image/x-icon"
 			href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
 			
-		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/niftyCorners.css" />
-
-		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/niftyPrint.css" media="print" />
-		
 		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/styles/loginPage.css" />
 
 		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/nifty.js"></script>
@@ -87,12 +83,6 @@ Authors
 		<script type="text/javascript">
 		//<![CDATA[
 			stopContentObjectAutoSave();
-				window.onload=function(){
-					if(!NiftyCheck())
-						return;
-					RoundedTop("div#wrapperArea","#FFF","#8395CB");
-					RoundedBottom("div#wrapperArea", "#FFF" ,"#8395CB");
-				}
 		//]]>
 		</script>
 	</body>

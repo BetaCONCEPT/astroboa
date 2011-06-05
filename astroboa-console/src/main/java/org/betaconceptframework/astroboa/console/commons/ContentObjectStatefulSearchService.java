@@ -25,6 +25,7 @@ import javax.faces.application.FacesMessage;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -105,16 +106,16 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 			boolean useDefaultRenderProperties, String locale) throws CmsException {
 		if (useDefaultRenderProperties)
 			setDefaultRenderPropertiesToContentObjectCriteria(contentObjectCriteria, locale);
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService
-				.searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService
+				.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		if (cmsOutcome.getCount() > 0) {
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+			List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 			
-			for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
+			for (ContentObject contentObject : cmsOutcomeRowList) {
 				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(
-						cmsOutcomeRow.getCmsRepositoryEntity()));
+						contentObject));
 			}
 			setNonPagedReturnedContentObjects(wrappedContentObjects);
 		} else
@@ -138,14 +139,14 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		if (useDefaultRenderProperties)
 			setDefaultRenderPropertiesToContentObjectCriteria(contentObjectCriteria, locale);
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		if (cmsOutcome.getCount() > 0) {
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+			List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 			
-			for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+			for (ContentObject contentObject : cmsOutcomeRowList) {
+				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(contentObject));
 			}
 			
 			return wrappedContentObjects;
@@ -241,7 +242,7 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		if (useDefaultRenderProperties)
 			setDefaultRenderPropertiesToContentObjectCriteria(localContentObjectCriteria, locale);
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(localContentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(localContentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		
 		if (cmsOutcome.getCount() > 0) { // create the Lazy loading Data
@@ -258,11 +259,11 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 			searchResultSetSize = (int) cmsOutcome.getCount();
 			
 			
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+			List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 	
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-			for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+			for (ContentObject contentObject : cmsOutcomeRowList) {
+				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(contentObject));
 			}
 			
 			DataPage<ContentObjectUIWrapper> dataPage = new DataPage<ContentObjectUIWrapper>(getSearchResultSetSize(), 0, wrappedContentObjects);
@@ -286,7 +287,7 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		 * the localized labels are retrieved according to the provided locale
 		 */
 		contentObjectCriteria.getRenderProperties().resetRenderInstructions();
-		contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+		contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 	}
 
@@ -299,6 +300,9 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		public DataPage<ContentObjectUIWrapper> fetchPage(int startRow,
 				int pageSize) {
 			try {
+				// remove all selected objects
+				contentObjectSelection.clearAllSelectedContentObjects_UIAction();
+				
 				List<ContentObjectUIWrapper> wrappedContentObjects;
 				//Limit now is always the same
 				//getLocalContentObjectCriteria().getResultRowRange().setRange(startRow, startRow + pageSize - 1);
@@ -306,15 +310,15 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 				localContentObjectCriteria.setOffsetAndLimit(startRow, pageSize);
 
 				long startTime = System.currentTimeMillis();
-				CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService
-						.searchContentObjects(localContentObjectCriteria);
+				CmsOutcome<ContentObject> cmsOutcome = contentService
+						.searchContentObjects(localContentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				long endTime = System.currentTimeMillis();
 				getLogger().debug(
 						"Content Object Results Pager fetched the next 100 objects in: "
 								+ (endTime - startTime) + "ms");
 
 				if (cmsOutcome.getCount() > 0) {
-					List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome
+					List<ContentObject> cmsOutcomeRowList = cmsOutcome
 							.getResults();
 					// List<ContentObject> contentObjects =
 					// getContentManager().getContentObjectByTopicUUID(selectedTopics,
@@ -322,9 +326,9 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 					// pageSize -1), false, getOwnerUUIDsFilterList(),
 					// Condition.OR, getLocaleAsString()).getResults();
 					wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-					for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
+					for (ContentObject contentObject : cmsOutcomeRowList) {
 						wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(
-								cmsOutcomeRow.getCmsRepositoryEntity()));
+								contentObject));
 					}
 					DataPage<ContentObjectUIWrapper> dataPage = new DataPage<ContentObjectUIWrapper>(
 							getSearchResultSetSize(), startRow,
@@ -368,15 +372,15 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 				localContentObjectCriteria.setOffsetAndLimit(startRow, pageSize);
 
 				long startTime = System.currentTimeMillis();
-				CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService
-						.searchContentObjects(localContentObjectCriteria);
+				CmsOutcome<ContentObject> cmsOutcome = contentService
+						.searchContentObjects(localContentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				long endTime = System.currentTimeMillis();
 				getLogger().debug(
 						"Content Object Results Pager fetched the next 100 objects in: "
 								+ (endTime - startTime) + "ms");
 
 				if (cmsOutcome.getCount() > 0) {
-					List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome
+					List<ContentObject> cmsOutcomeRowList = cmsOutcome
 							.getResults();
 					// List<ContentObject> contentObjects =
 					// getContentManager().getContentObjectByTopicUUID(selectedTopics,
@@ -384,9 +388,9 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 					// pageSize -1), false, getOwnerUUIDsFilterList(),
 					// Condition.OR, getLocaleAsString()).getResults();
 					wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-					for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
+					for (ContentObject contentObject : cmsOutcomeRowList) {
 						wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(
-								cmsOutcomeRow.getCmsRepositoryEntity()));
+								contentObject));
 					}
 					DataPage<ContentObjectUIWrapper> dataPage = new DataPage<ContentObjectUIWrapper>(
 							getSearchResultSetSize(), startRow,

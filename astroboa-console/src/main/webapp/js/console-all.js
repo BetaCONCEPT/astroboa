@@ -477,12 +477,71 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
     
     
-    /* CHECK if any Check box is checked */
+    /* Selection Checkboxes in Result Table */
+    var tableMany;
+    
+    function initializeTableSelect() {
+    	tableMany = null;
+	    tableMany = bcmslib.jQuery(".resultsTableSelectable").tableSelectMany({
+	    	listeners : {
+	                beforerowselect   : function(event) {
+	                    this.preventChange = (this.target === "a") ? true : false;
+	                },
+	                beforerowdeselect : function(event) {
+	                    this.preventChange = (this.target === "a") ? true : false;
+	                },
+	                afterrowselect    : function(event) {
+	                    if (bcmslib.jQuery("input#tableManyCbAll").not(":checked")) {
+	                    	alert("row " + this.rowIndex + " selected");
+	                    }
+	                    
+	                	if(this.parentThis.allSelected()) {
+	                    	bcmslib.jQuery("input#tableManyCbAll").attr('checked', 'checked');
+	                    }
+	                    var toggle = bcmslib.jQuery(this).find('input');
+	                    if(toggle.not(":checked")) toggle.attr('checked', 'checked');
+	                },
+	                afterrowdeselect  : function(event) {
+	                    if(!this.parentThis.allSelected()) bcmslib.jQuery("input#tableManyCbAll").removeAttr('checked');
+	                    var toggle = bcmslib.jQuery(this).find('input');
+	                    if(toggle.is(":checked")) toggle.removeAttr('checked');
+	                }
+	            }
+	        });
+    
+	    bcmslib.jQuery(".resultsTableSelectable input").each(function() { this.checked = null; });
+	    
+	    // Select/Deselect all rows
+	    bcmslib.jQuery("input#tableManyCbAll").bind("click", function() {
+	        this.checked ? addAllRows() : removeAllRows();
+	    });
+    }
+     
+    
+    function addSelectedRow(table, row) {
+    	bcmslib.jQuery(row).find('input').attr('checked', 'checked');
+    	if (!table.allSelected()) {
+    		alert(bcmslib.jQuery(row).find('input').attr('name'));
+    	}
+    }
+    
+    function addAllRows() {
+    	tableMany.selectAll(); 
+    	selectAllObjectsInResultPage();
+    }
+    
+    function removeAllRows() {
+    	tableMany.clearSelections(); 
+    	deSelectAllObjectsInResultPage();
+    }
+    
+    /*
     function atLeastOneCheckBoxIsChecked() {
     	return	bcmslib.jQuery("input[type='checkbox']:checked").length > 0;
     }
+    */
     
-    /*bind a monitoring function when check boxes of content object list are clicked */
+    /*bind a monitoring function when check boxes of content object list are clicked 
     function monitorCheckboxChange() {
     	bcmslib.jQuery("input[type='checkbox']").bind('click',
     			function() {
@@ -499,7 +558,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     			}
     	);
     } 
-    
+    */
     
     /* create layout */
     var betacmsConsoleLayout;

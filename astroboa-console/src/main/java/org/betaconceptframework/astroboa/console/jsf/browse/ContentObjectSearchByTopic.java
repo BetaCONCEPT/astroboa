@@ -46,6 +46,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.Se
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -77,8 +78,8 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
+	private PageController pageController;
 
-	
 	// Dynamically Injected Beans
 	@In(required=false)
 	UIComponentBinding uiComponentBinding;
@@ -141,7 +142,7 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 			*/
 			//contentObjectCriteria.getResultRowRange().setRange(0,100);
 			//It should be 99 as it is zero based
-			contentObjectCriteria.setOffsetAndLimit(0,99);
+			contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 			contentObjectCriteria.doNotCacheResults();
 			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
@@ -161,7 +162,7 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 			// now we are ready to run the query
 			long startTime = System.currentTimeMillis();
 			int resultSetSize = contentObjectStatefulSearchService
-				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 			long endTime = System.currentTimeMillis();
 			getLogger().info("Find Content Objects by Topic UUID:FIRST EXECUTION to get object count took: " + (endTime - startTime) + "ms");
 							
@@ -222,6 +223,9 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 	public void setSelectedTopicTaxonomy(String selectedTopicTaxonomy) {
 		this.selectedTopicTaxonomy = selectedTopicTaxonomy;
 	}
-
+	
+	public void setPageController(PageController pageController) {
+		this.pageController = pageController;
+	}
 	
 }

@@ -8,7 +8,7 @@ BODY {
 	width:100%;
 	min-width: 970px;
 	height:100%;
-	font: 85%/0.9 Arial, Helvetica, Tahoma, sans-serif;
+	font: 75% "Helvetica Neue", Arial, Helvetica, sans-serif;
 	line-height: 130%;
 }
 
@@ -167,7 +167,7 @@ a img {
 	text-align: center;
 	font-weight: bold;
 	font-size: 1.3em;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 #showMore {
