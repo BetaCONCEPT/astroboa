@@ -44,6 +44,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.Se
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -73,6 +74,7 @@ public class ContentObjectSearchByOwner extends AbstractUIBean {
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
+	private PageController pageController;
 	
 	// Dynamically Injected Beans
 	@In(required=false)
@@ -108,11 +110,7 @@ public class ContentObjectSearchByOwner extends AbstractUIBean {
 		// We add the selected owner into search criteria
 		contentObjectCriteria.addOwnerIdEqualsCriterion(selectedRepositoryUserId);
 		
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		*/
-		//contentObjectCriteria.getResultRowRange().setRange(0, 99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		contentObjectCriteria.doNotCacheResults();
 		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
@@ -132,7 +130,7 @@ public class ContentObjectSearchByOwner extends AbstractUIBean {
 		try {
 			long startTime = System.currentTimeMillis();
 			int resultSetSize = contentObjectStatefulSearchService
-				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 			long endTime = System.currentTimeMillis();
 			getLogger().debug(
 					"Find Content Objects by OWNER UUID:FIRST EXECUTION to get object count took: "
@@ -142,14 +140,14 @@ public class ContentObjectSearchByOwner extends AbstractUIBean {
 				
 				contentObjectList
 					.setContentObjectListHeaderMessage(
-							JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByOwner", 
+							JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByOwner", 
 									new String[] {selectedRepositoryUser.getLabel(), String.valueOf(resultSetSize)}));
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(selectedRepositoryUser.getLabel());
 			}
-			else JSFUtilities.addMessage(null, "content.search.noContentObjectsOwnedByThisRepositoryUser", null, FacesMessage.SEVERITY_INFO);
+			else JSFUtilities.addMessage(null, "object.list.message.noContentObjectsOwnedByThisRepositoryUser", null, FacesMessage.SEVERITY_INFO);
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ", e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
 		}
 		
 		return null;
@@ -189,6 +187,9 @@ public class ContentObjectSearchByOwner extends AbstractUIBean {
 			SearchResultsFilterAndOrdering searchResultsFilterAndOrdering) {
 		this.searchResultsFilterAndOrdering = searchResultsFilterAndOrdering;
 	}
-
+	
+	public void setPageController(PageController pageController) {
+		this.pageController = pageController;
+	}
 
 }

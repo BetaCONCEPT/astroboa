@@ -29,8 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CalendarProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectSelectionBean;
@@ -67,7 +67,7 @@ public class DeleteContentObjectBean {
 	public void deleteContentObjectSelection(ContentObjectSelectionBean contentObjectSelection) {
 		
 		if (contentObjectSelection == null || CollectionUtils.isEmpty(contentObjectSelection.getSelectedContentObjects())) {
-			JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.no.content.object.selected", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.bulk.delete.message.no.object.selected", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -98,7 +98,7 @@ public class DeleteContentObjectBean {
 		}
 		catch(Exception e) 
 		{
-			JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.bulk.delete.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 	}
 
@@ -122,28 +122,28 @@ public class DeleteContentObjectBean {
 	public void deleteContentObjectsInList(ContentObjectCriteria contentObjectCriteria) {
 			
 			// run the query
-			CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			
 			if (cmsOutcome.getCount() == 0) {
-				JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.no.content.object.selected", null, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.bulk.delete.message.no.object.selected", null, FacesMessage.SEVERITY_WARN);
 				return;
 			}
 			
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+			List<ContentObject> contentObjectList = cmsOutcome.getResults();
 			
 			ContentObjectUIWrapper contentObjectUIWrapper = null;
 			
 			DeletionContext deletionContext = new DeletionContext();
 			
-			for (CmsRankedOutcome<ContentObject> cmsRankedOutcome : cmsOutcomeRowList)
+			for (ContentObject contentObject : contentObjectList)
 			{
 				if (contentObjectUIWrapper == null)
 				{
-					contentObjectUIWrapper = contentObjectUIWrapperFactory.getInstanceWithoutProxies(cmsRankedOutcome.getCmsRepositoryEntity());
+					contentObjectUIWrapper = contentObjectUIWrapperFactory.getInstanceWithoutProxies(contentObject);
 				}
 				else
 				{
-					contentObjectUIWrapper.setContentObject(cmsRankedOutcome.getCmsRepositoryEntity());
+					contentObjectUIWrapper.setContentObject(contentObject);
 				}
 				
 				deleteContentObject(contentObjectUIWrapper, deletionContext);
@@ -162,7 +162,7 @@ public class DeleteContentObjectBean {
 		if (CollectionUtils.isNotEmpty(deletionContext.getContentObjectsWhichWereNotDeletedDueToUnauthorizedAccess()))
 		{
 			
-			JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.unauthorized.delete.message",null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.bulk.delete.message.unauthorized.delete.message",null, FacesMessage.SEVERITY_WARN);
 			
 			for (String title : deletionContext.getContentObjectsWhichWereNotDeletedDueToUnauthorizedAccess())
 			{
@@ -173,7 +173,7 @@ public class DeleteContentObjectBean {
 		if (CollectionUtils.isNotEmpty(deletionContext.getContentObjectsWhichWereNotDeletedDueToError()))
 		{
 			
-			JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.error",null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.bulk.delete.message.theFollowingObjectsNotDeletedDueToError",null, FacesMessage.SEVERITY_WARN);
 			
 			for (String title : deletionContext.getContentObjectsWhichWereNotDeletedDueToError())
 			{
@@ -185,11 +185,11 @@ public class DeleteContentObjectBean {
 		{
 			if (deletionContext.atLeastOneContentObjectWasNotDeleted())
 			{
-				JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.partial.success.info.message", null, FacesMessage.SEVERITY_INFO);
+				JSFUtilities.addMessage(null, "object.action.bulk.delete.message.partial.success.info.message", null, FacesMessage.SEVERITY_INFO);
 			}
 			else
 			{
-				JSFUtilities.addMessage(null, "content.search.drop.down.menu.delete.all.success.info.message",null, FacesMessage.SEVERITY_INFO);
+				JSFUtilities.addMessage(null, "object.action.bulk.delete.message.all.success.info.message",null, FacesMessage.SEVERITY_INFO);
 			}
 		}
 	}

@@ -134,7 +134,7 @@ Authors
 							<div>
 								<h:outputText
 									styleClass="contentObjectPropertyLabelInContentObjectList"
-									value="#{messages['content.object.list.full.view.profile.description']}: " />
+									value="#{messages['object.list.full.view.profile.description']}: " />
 								<h:outputText
 									value="#{contentObjectUIWrapper.contentObjectProperty['profile.description'].simpleTypeValue}"
 									styleClass="contentObjectDescription" />
@@ -147,12 +147,12 @@ Authors
 
 							<div>
 								<h:outputText
-									value="#{messages['content.object.list.full.view.profile.hasVersion']}: #{contentObjectUIWrapper.contentObjectProperty['profile.hasVersion'].simpleTypeValue}"
+									value="#{messages['object.list.full.view.profile.hasVersion']}: #{contentObjectUIWrapper.contentObjectProperty['profile.hasVersion'].simpleTypeValue}"
 									styleClass="contentObjectPropertyLabelInContentObjectList" />
 							</div>
 
 							<div>
-								<h:outputText value="#{messages['content.object.list.full.view.other.versions']}: "
+								<h:outputText value="#{messages['object.list.full.view.other.versions']}: "
 									styleClass="contentObjectPropertyLabelInContentObjectList" />
 								<ui:repeat
 									value="#{contentObjectUIWrapper.contentObjectProperty['profile.versions'].simpleTypeValues}"
@@ -181,7 +181,7 @@ Authors
 									<div>
 										<h:outputText
 											styleClass="contentObjectPropertyLabelInContentObjectList"
-											value="#{messages['content.object.list.full.view.profile.status']}: " />
+											value="#{messages['object.list.full.view.profile.status']}: " />
 										<h:outputText
 											style="font-size: 10px; font-weight: bold; color: red;"
 											value="#{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}" />
@@ -194,7 +194,7 @@ Authors
 
 										<h:outputText
 											styleClass="contentObjectPropertyLabelInContentObjectList"
-											value="#{messages['content.object.list.full.view.profile.workflow']}: " />
+											value="#{messages['object.list.full.view.profile.workflow']}: " />
 										<h:outputText
 											style="font-size: 10px; font-weight: bold; color: red;"
 											value="#{messages[contentObjectUIWrapper.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue]}" />
@@ -252,13 +252,13 @@ Authors
 								<h:outputText styleClass="contentObjectOwner"
 									value="#{contentObjectUIWrapper.contentObject.owner.label} " />
 								<br />
-								<span class="contentObjectCreatorLabel">#{messages['content.object.list.full.view.profile.creator']}:
+								<span class="contentObjectCreatorLabel">#{messages['object.list.full.view.profile.creator']}:
 								</span>
 								<span class="contentObjectCreator">#{contentObjectUIWrapper.contentObjectProperty['profile.creator'].simpleTypeValues[0]}
 								</span>
 								<br />
 								<h:outputText styleClass="contentObjectOwnerLabel"
-									value="#{messages['content.object.list.full.view.profile.publisher']}: " />
+									value="#{messages['object.list.full.view.profile.publisher']}: " />
 								<h:outputText styleClass="contentObjectOwner"
 									value="#{contentObjectUIWrapper.contentObjectProperty['profile.publisher'].simpleTypeValue}" />
 							</h:panelGroup>
@@ -266,7 +266,7 @@ Authors
 							<h:graphicImage value="images/cms-icons/dates.png" width="16"
 								height="16" styleClass="imageMiddleAlign" />
 							<h:panelGroup>
-								<span class="contentObjectCreatedLabel">#{messages['content.object.list.full.view.profile.created']}:
+								<span class="contentObjectCreatedLabel">#{messages['object.list.full.view.profile.created']}:
 								</span>
 								<h:outputText styleClass="contentObjectCreated"
 									value="#{contentObjectUIWrapper.contentObjectProperty['profile.created'].simpleTypeValue.time}">
@@ -274,7 +274,7 @@ Authors
 										timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
 								</h:outputText>
 								<br />
-								<span class="contentObjectModifiedLabel">#{messages['content.object.list.full.view.profile.modified']}:
+								<span class="contentObjectModifiedLabel">#{messages['object.list.full.view.profile.modified']}:
 								</span>
 								<h:outputText styleClass="contentObjectCreated"
 									value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
@@ -293,7 +293,7 @@ Authors
 								<h:panelGroup>
 									<div
 										style="margin-bottom: 0px; display: #{(! empty contentObjectUIWrapper.systemTags)? 'block' : 'none'}">
-										<h:outputText value="#{messages['content.object.list.full.view.profile.subject']} : "
+										<h:outputText value="#{messages['object.list.full.view.profile.subject']} : "
 											styleClass="contentObjectPropertyLabelInContentObjectList" />
 										<rich:dataList id="contentObjectSystemTagsList"
 											value="#{contentObjectUIWrapper.systemTags}" var="topic">
@@ -322,7 +322,7 @@ Authors
 									<div
 										style="margin-bottom: 0px; display: #{(empty contentObjectUIWrapper.systemTags)? 'block' : 'none'}">
 										<h:outputText 
-											value="#{messages['content.object.list.full.view.no.subject.added']}"									
+											value="#{messages['object.list.full.view.no.subject.added']}"									
 											style="color: #777;" />
 									</div>
 									
@@ -371,7 +371,7 @@ Authors
 									
 									<div style="display: #{(empty contentObjectUIWrapper.tagsAddedByLoggedInUser) ? 'block' : 'none'}">
 										<h:outputText 
-										value="#{messages['content.object.list.full.view.no.tags.added']}"
+										value="#{messages['object.list.full.view.no.tags.added']}"
 										style="color: #777;" />
 									</div>
 									
@@ -413,7 +413,7 @@ Authors
 						<rich:separator height="1" />
 						<h:panelGrid columns="3" cellpadding="4px;">
 						<a4j:commandLink reRender="ajaxDynamicAreaPanel"
-							value="#{messages['content.object.list.full.view.content.object.view']}"
+							value="#{messages['object.list.full.view.content.object.view']}"
 							style="background: url(images/cms-icons/16/viewContentObject.png) no-repeat;"
 							styleClass="topmenuLink"
 							action="#{contentObjectViewAsTree.presentContentObject_UIAction}">
@@ -424,7 +424,7 @@ Authors
 						</a4j:commandLink>
 
 						<a4j:commandLink reRender="ajaxDynamicAreaPanel"
-							value="#{messages['content.object.list.full.view.content.object.edit']}"
+							value="#{messages['object.list.full.view.content.object.edit']}"
 							style="background: url(images/cms-icons/16/editContentObject.png) no-repeat;"
 							styleClass="topmenuLink"
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
@@ -434,7 +434,7 @@ Authors
 						</a4j:commandLink>
 						
 						<a4j:commandLink
-							value="#{messages['content.object.list.full.view.tag.edit']}"
+							value="#{messages['object.list.full.view.tag.edit']}"
 							style="background: url(images/cms-icons/16/add_remove_tags.png) no-repeat;"
 							styleClass="topmenuLink"
 							action="#{contentObjectUIWrapper.toggleUserTagsInputFormRendered}"

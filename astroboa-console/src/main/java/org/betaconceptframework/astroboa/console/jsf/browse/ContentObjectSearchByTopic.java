@@ -74,7 +74,7 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 	
 	private static final long serialVersionUID = 1L;
 	
-	// Injected objects
+	// Statically Injected objects
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
@@ -121,27 +121,14 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 		try {
 			
 			if (selectedTopicId == null) {
-				throw new Exception("Δεν ήταν δυνατόν να ανακτηθεί το id της θεματικής ενότητας που επιλέξατε. Πρόκειται για σφάλμα της Διεπαφής Χρήστη");
+				throw new Exception("It was not possible to retrieve the topic id. This indicates a possible error at the UI.");
 			}
 						
 			// We add the selected topic into search criteria
-			//Criterion topicCriterion = CriterionFactory.equals("profile.subject", selectedTopicId);
-			//contentObjectCriteria.addCriterion(topicCriterion);
 			contentObjectCriteria.addCriterion(CriterionFactory.newTopicReferenceCriterion(null, selectedTopicId, QueryOperator.EQUALS, false));
 			
 			logger.debug("Looking for content object which relate to topic {} and belong to taxonomy {}", selectedTopicId, selectedTopicTaxonomy);
 			
-			// We add a date range for searching back in order to minimize search time.
-			// if thousand content objects refer to the selected topic then ordering them will add a very high time cost.
-			// The common case is that the user requires to see just a few of the most recently added or modified objects.
-			// So we use a default number of days to look back and let the user decide if she wants to go more days back adding more overhead in the query.
-			// Criterion dateCriterion = CriterionFactory.greaterThanOrEquals("profile.modified", date);
-
-			/* we set the result set size so that the fist 100 objects are returned.
-			 * We do this search to get the number of matched content objects and fill the first page of results. 
-			*/
-			//contentObjectCriteria.getResultRowRange().setRange(0,100);
-			//It should be 99 as it is zero based
 			contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 			contentObjectCriteria.doNotCacheResults();
 			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
@@ -170,16 +157,16 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 				//JSFUtilities.addMessage(null, "contentSearch.searchByTopicInfo", new String[] {getSelectedTopicLabel(), String.valueOf(numberOfReturnedContentObjects)}, FacesMessage.SEVERITY_INFO);
 				contentObjectList
 				.setContentObjectListHeaderMessage(
-						JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByTopic", 
+						JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByTopic", 
 								new String[] {selectedTopicLabel, String.valueOf(resultSetSize)}));
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(selectedTopicLabel);
 			}
 			else {
-				JSFUtilities.addMessage(null, "content.search.noContentObjectsRelatedToThisTopicInfo", null, FacesMessage.SEVERITY_INFO);
+				JSFUtilities.addMessage(null, "object.list.message.noContentObjectsRelatedToThisTopicInfo", null, FacesMessage.SEVERITY_INFO);
 			}
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ",e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
 		}
 		
 		

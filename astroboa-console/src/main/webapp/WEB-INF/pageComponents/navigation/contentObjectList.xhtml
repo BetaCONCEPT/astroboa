@@ -35,36 +35,33 @@ Authors
 
 	<body>
 		<ui:composition>
-		
-			<a4j:jsFunction 
-					name="setAtLeastOneContentObjectIsSelected"
-					reRender="actionsOnSelectedObjects"
-					ajaxSingle="true">
-					
-					<a4j:actionparam name="atLeastOneContentObjectIsSelected" assignTo="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}"/>
-			</a4j:jsFunction>
 			
 			<a4j:jsFunction 
-				name="selectAllObjectsInResultPage"
+				name="addAllObjectsOfCurrentPage"
 				ajaxSingle="true"
-				reRender="actionsOnSelectedObjects" 
-				action="#{contentObjectStatefulSearchService.contentObjectSelection.selectObjectsOfCurrentPage_UIAction(
+				action="#{contentObjectStatefulSearchService.contentObjectSelection.addAllObjectsOfCurrentPage_UIAction(
 					contentObjectStatefulSearchService.returnedContentObjects,
 					uiComponentBinding.listViewContentObjectTableComponent)}"/>
 									
 			<a4j:jsFunction 
-				name="deSelectAllObjectsInResultPage"
+				name="removeAllObjectsOfCurrentPage"
 				ajaxSingle="true"
-				reRender="actionsOnSelectedObjects" 
-				action="#{contentObjectStatefulSearchService.contentObjectSelection.deSelectObjectsOfCurrentPage_UIAction()}"/>
+				action="#{contentObjectStatefulSearchService.contentObjectSelection.removeAllObjectsOfCurrentPage_UIAction()}"/>
 						
 			<a4j:jsFunction 
 				name="addSelectedObject"
 				ajaxSingle="true"
-				reRender="actionsOnSelectedObjects" 
-				action="#{contentObjectStatefulSearchService.contentObjectSelection.addSelectObject_UIAction(
-						contentObjectStatefulSearchService.returnedContentObjects,
-						uiComponentBinding.listViewContentObjectTableComponent)}">
+				action="#{contentObjectStatefulSearchService.contentObjectSelection.addSelectedObject_UIAction(
+						contentObjectStatefulSearchService.returnedContentObjects)}">
+				
+				<a4j:actionparam name="selectedObjectIndex" assignTo="#{contentObjectStatefulSearchService.contentObjectSelection.selectedObjectIndex}"/>
+			</a4j:jsFunction>
+			
+			<a4j:jsFunction 
+				name="removeDeselectedObject"
+				ajaxSingle="true"
+				action="#{contentObjectStatefulSearchService.contentObjectSelection.removeDeselectedObject_UIAction(
+						contentObjectStatefulSearchService.returnedContentObjects)}">
 				
 				<a4j:actionparam name="selectedObjectIndex" assignTo="#{contentObjectStatefulSearchService.contentObjectSelection.selectedObjectIndex}"/>
 			</a4j:jsFunction>
@@ -91,60 +88,60 @@ Authors
 						<ui:fragment rendered="#{! empty contentObjectList.labelForFileGeneratedWhenExportingListToXml}">
 							<div style="float:left; margin: 0 10px 0 0;">
 								<ul class="horizontalList rowsPerPage">
-									<li>#{messages['content.search.drop.down.menu.export.to.xml']}:</li>
+									<li>#{messages['object.action.export.to.xml']}:</li>
 									<li>
 										<a4j:htmlCommandLink 
-											value="#{messages['content.search.drop.down.menu.all.option']}"
+											value="#{messages['object.action.bulk.option.all']}"
 											action="#{xmlExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, 
 												contentObjectList.labelForFileGeneratedWhenExportingListToXml)}"/>
 												
 									</li>
 									
-									<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
-										<li>|</li>
-										
-										<li>
-											<a4j:htmlCommandLink 
-												value="#{messages['content.search.drop.down.menu.selected.option']}"
-												action="#{xmlExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
-													contentObjectList.labelForFileGeneratedWhenExportingListToXml)}"/>
-										</li>
-									</ui:fragment>
+									<ui:remove><ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}"></ui:fragment></ui:remove>
+									<li class="bulkActionOnselected">|</li>
+									
+									<li class="bulkActionOnselected">
+										<a4j:htmlCommandLink 
+											value="#{messages['object.action.bulk.option.selected']}"
+											action="#{xmlExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+												contentObjectList.labelForFileGeneratedWhenExportingListToXml)}"/>
+									</li>
+									
 								</ul>
 							</div>
 						</ui:fragment>
 							
 						<div style="float:left; margin: 0 10px 0 0;">
 							<ul class="horizontalList rowsPerPage">
-								<li>#{messages['content.search.drop.down.menu.export.to.excel']}:</li>
+								<li>#{messages['object.action.export.to.excel']}:</li>
 								<li>
 									<a4j:htmlCommandLink 
-										value="#{messages['content.search.drop.down.menu.all.option']}"
+										value="#{messages['object.action.bulk.option.all']}"
 										action="#{excelExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, localeSelector.localeString)}"/>
 											
 								</li>
 								
-								<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
-									<li>|</li>
-									
-									<li>
-										<a4j:htmlCommandLink
-											value="#{messages['content.search.drop.down.menu.selected.option']}"
-											action="#{excelExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
-											localeSelector.localeString)}"/>
-									</li>
-								</ui:fragment>
+								
+								<li class="bulkActionOnselected">|</li>
+								
+								<li class="bulkActionOnselected">
+									<a4j:htmlCommandLink
+										value="#{messages['object.action.bulk.option.selected']}"
+										action="#{excelExportBean.exportContentObjectSelection(contentObjectStatefulSearchService.contentObjectSelection,
+										localeSelector.localeString)}"/>
+								</li>
+								
 							</ul>
 						</div>
 						
 						<div style="float:left; margin: 0 10px 0 0;">
 							<ul class="horizontalList rowsPerPage">
-								<li>#{messages['content.search.drop.down.menu.delete']}:</li>
+								<li>#{messages['object.action.bulk.delete']}:</li>
 								<li>
 									<a4j:commandLink 
-										value="#{messages['content.search.drop.down.menu.all.option']}"
+										value="#{messages['object.action.bulk.option.all']}"
 										ajaxSingle="true"
-										action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
+										action="#{confirmationBean.initiateConfirmation('object.action.bulk.delete.message.confirmation',
 												deleteContentObjectBean, 
 												'deleteContentObjectsInList',
 												null, 
@@ -156,31 +153,29 @@ Authors
 											
 								</li>
 								
-								<ui:fragment rendered="#{contentObjectStatefulSearchService.contentObjectSelection.atLeastOneContentObjectIsSelected}">
-									<li>|</li>
+								<li class="bulkActionOnselected">|</li>
 									
-									<li>
-										<a4j:commandLink
-											value="#{messages['content.search.drop.down.menu.selected.option']}"
-											ajaxSingle="true"
-											action="#{confirmationBean.initiateConfirmation('content.search.drop.down.menu.delete.panel.message',
-													deleteContentObjectBean, 
-													'deleteContentObjectSelection',
-													null, 
-													'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
-													null,
-													contentObjectStatefulSearchService.contentObjectSelection)}"
-											onclick="openConfirmationDialog();"
-											reRender="confirmationDialogPanel"/>
-									</li>
-								</ui:fragment>
+								<li class="bulkActionOnselected">
+									<a4j:commandLink
+										value="#{messages['object.action.bulk.option.selected']}"
+										ajaxSingle="true"
+										action="#{confirmationBean.initiateConfirmation('object.action.bulk.delete.message.confirmation',
+												deleteContentObjectBean, 
+												'deleteContentObjectSelection',
+												null, 
+												'topicTreePanel,cmsTree,portalTree,clipboardPanel,dashboardAjaxPanel,searchResultsAjaxPanel',
+												null,
+												contentObjectStatefulSearchService.contentObjectSelection)}"
+										onclick="openConfirmationDialog();"
+										reRender="confirmationDialogPanel"/>
+								</li>
 							</ul>
 						</div>
 					</a4j:outputPanel>
 					
 					<div style="position: absolute; top: 140px; left: 25px;">
 						<ul class="horizontalList rowsPerPage">
-							<li>#{messages['content.search.drop.down.menu.rowsPerPage.option']}:</li>
+							<li>#{messages['object.list.option.rowsPerPage']}:</li>
 							<li>
 								<a4j:commandLink
 									value="10" 
@@ -250,6 +245,7 @@ Authors
 					<div style="position: absolute; top: 140px; left: 300px;">
 					
 						<rich:datascroller id="listViewContentObjectTableDataScroller"
+							onclick="hideBulkActionsOnSelected();"
 							ajaxSingle="true"
 							oncomplete="createSlideshow('.objectListSlideshow');"
 							for="listViewContentObjectTable" 
@@ -258,7 +254,7 @@ Authors
 							renderIfSinglePage="false"
 							rendered="#{!empty contentObjectStatefulSearchService.returnedContentObjects}"
 							binding="#{uiComponentBinding.listViewContentObjectTableScrollerComponent}"
-							reRender="actionsOnSelectedObjects,contentObjectList_ViewArea"/>
+							reRender="contentObjectList_ViewArea"/>
 					</div>	
 						
 					<div id="objectListScrollableArea">

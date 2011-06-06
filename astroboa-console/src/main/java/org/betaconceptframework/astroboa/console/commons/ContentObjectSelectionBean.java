@@ -19,7 +19,6 @@
 package org.betaconceptframework.astroboa.console.commons;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,47 +46,58 @@ public class ContentObjectSelectionBean {
 
 	private List<ContentObjectUIWrapper> selectedContentObjects;
 	
-	//Convenient variable representing the state where
-	//all content objects are selected and thus would be 
-	//inflexible to store all content objects in the list
-	private boolean allContentObjectAreSelected;
-	
 	// Convenient variable that is set when at least one row is selected
 	// It is used from xhtml page to show or hide actions on selected rows
 	private boolean atLeastOneContentObjectIsSelected;
 	
-	//In cases where all content objects are selected
-	//it may be useful to know the size since these are not stored
-	//in the list
+	//In cases where all objects in result set are selected (i.e. not all in current page but all in query result set)
+	// it is useful to know the total result size. Since we do not actually copy objects in 
+	// "selectedContentObjects" list when ALL are selected we cannot get the total result count from the "selectedContentObjects" list
 	private int countOfAllPossibleContentObjects;
 	
+	private int selectedObjectIndex;
+	
+
 	public void clearAllSelectedContentObjects_UIAction(){
 		selectedContentObjects = null;
-		allContentObjectAreSelected = false;
 		atLeastOneContentObjectIsSelected = false;
 	}
 	
-	public void selectAllContentObjects_UIAction(){
-		allContentObjectAreSelected = true;
-		selectedContentObjects = null;
+
+	public void addSelectedObject_UIAction(PagedListDataModel pagedListDataModel){
+		
+		ContentObjectUIWrapper selectedObject= ((List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData()).get(selectedObjectIndex);
+		
+		if (selectedContentObjects == null) {
+			selectedContentObjects = new ArrayList<ContentObjectUIWrapper>();
+		}
+		
+		selectedContentObjects.add(selectedObject);
+		
 		atLeastOneContentObjectIsSelected = true;
+
 	}
 	
-	public int getNumberOfSelectedContentObjects(){
-		if (allContentObjectAreSelected)
-			return countOfAllPossibleContentObjects;
+	public void removeDeselectedObject_UIAction(PagedListDataModel pagedListDataModel){
 		
-		return CollectionUtils.isEmpty(selectedContentObjects)? 0: selectedContentObjects.size();
+		ContentObjectUIWrapper deSelectedObject= ((List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData()).get(selectedObjectIndex);
+		
+		if (CollectionUtils.isNotEmpty(selectedContentObjects)) {
+			selectedContentObjects.remove(deSelectedObject);
+			
+			if (selectedContentObjects.isEmpty()) {
+				atLeastOneContentObjectIsSelected = false;
+			}
+			else {
+				atLeastOneContentObjectIsSelected = true;
+			}
+		
+		}
+
 	}
 
-	public void selectObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
-		
-		allContentObjectAreSelected = false;
-		
-		
-	//	selectedContentObjects = (List<ContentObjectUIWrapper>)
-	//		getSubWrappedDataFromHtmlDataTable(
-	//		pagedListDataModel, htmlDataTable);
+	
+	public void addAllObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
 		
 		selectedContentObjects = (List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData();
 		
@@ -95,19 +105,7 @@ public class ContentObjectSelectionBean {
 
 	}
 	
-	public void addSelectObject_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
-		
-		allContentObjectAreSelected = false;
-		
-		selectedContentObjects = (List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData();
-		
-		atLeastOneContentObjectIsSelected = true;
-
-	}
-	
-	public void deSelectObjectsOfCurrentPage_UIAction(){
-		
-		allContentObjectAreSelected = false;
+	public void removeAllObjectsOfCurrentPage_UIAction(){
 		
 		if (CollectionUtils.isEmpty(selectedContentObjects)){
 			return ;
@@ -117,6 +115,7 @@ public class ContentObjectSelectionBean {
 		
 		atLeastOneContentObjectIsSelected = false;
 	}
+	
 	
 	public Object getSubWrappedDataFromHtmlDataTable(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable ){
 		if (pagedListDataModel == null || htmlDataTable == null)
@@ -160,5 +159,8 @@ public class ContentObjectSelectionBean {
 		this.atLeastOneContentObjectIsSelected = atLeastOneContentObjectIsSelected;
 	}
 	
+	public void setSelectedObjectIndex(int selectedObjectIndex) {
+		this.selectedObjectIndex = selectedObjectIndex;
+	}
 	
 }

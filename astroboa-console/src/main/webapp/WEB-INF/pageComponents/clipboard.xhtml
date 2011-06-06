@@ -92,7 +92,7 @@ Authors
 											reRender="objectEditorAjaxPanel"
 											onclick="resetEditors();"
 											oncomplete="showTab('objectEditorTab');"
-											title="#{messages['entity.action.viewEditForm']}"/>
+											title="#{messages['object.action.viewEditForm']}"/>
 								</rich:column>
 								
 								<rich:column>
@@ -168,7 +168,7 @@ Authors
 										reRender="objectEditorAjaxPanel"
 										onclick="resetEditors();"
 										oncomplete="showTab('objectEditorTab');"
-										title="#{messages['entity.action.viewEditForm']}"/>
+										title="#{messages['object.action.viewEditForm']}"/>
 										<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-out.png" alt="Drag and Drop Indicator" title="you can drag and drop this object"/>
 								</rich:column>
 								
@@ -251,7 +251,7 @@ Authors
 									<a4j:commandLink
 										ajaxSingle="true" 
 										action="#{draft.deleteDraftItem_UIAction(loggedInRepositoryUser.repositoryUser.id, draftItem.id)}"
-										reRender="draftPanel, logoutPanel" title="#{messages['entity.action.delete']}">
+										reRender="draftPanel, logoutPanel" title="#{messages['object.action.delete']}">
 										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
 									</a4j:commandLink>
 									</h:panelGrid>

@@ -232,7 +232,7 @@ public class ContentObjectList extends AbstractUIBean {
 		// generate a success message, reset the browsing trees to accomodate the change and finally change the view to show the conentObjectListPanel 
 		JSFUtilities.addMessage(null, "content.object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO);
 		
-		//contentObjectListHeaderMessage = JSFUtilities.getStringI18n("content.search.contentObjectListHeaderMessageAfterContentObjectRemoval");
+		//contentObjectListHeaderMessage = JSFUtilities.getStringI18n("object.list.message.contentObjectListHeaderMessageAfterContentObjectRemoval");
 		contentObjectListHeaderMessage = null;
 		
 		// remove object from table

@@ -42,6 +42,8 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -93,10 +95,10 @@ public class XmlExportBean {
 				ServletOutputStream servletOutputStream = response.getOutputStream();
 
 				
-				Taxonomy taxonomyToBeExported = astroboaClient.getTaxonomyService().getTaxonomy(taxonomy.getName(), taxonomy.getCurrentLocale());
+				Taxonomy taxonomyToBeExported = astroboaClient.getTaxonomyService().getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, true);
 				
 				//Currently this is not supported at back end. 
-				loadTree(taxonomyToBeExported.getRootTopics());
+				//loadTree(taxonomyToBeExported.getRootTopics());
 				
 				//Remove all unnecessary info. mostly identifiers
 				removeUnnecessaryInfo(taxonomyToBeExported);
@@ -110,7 +112,7 @@ public class XmlExportBean {
 		}
 		catch(Exception e){
 			logger.error("An error occurred while writing xml to servlet output stream", e);
-			JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 	}
 	
@@ -181,7 +183,7 @@ public class XmlExportBean {
 	public void exportContentObjectSelection(ContentObjectSelectionBean contentObjectSelection, String zipFilename) {
 		
 		if (contentObjectSelection == null || CollectionUtils.isEmpty(contentObjectSelection.getSelectedContentObjects())) {
-			JSFUtilities.addMessage(null, "content.search.exportResults.nullList", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.nullList", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -265,7 +267,7 @@ public class XmlExportBean {
 			}
 			catch (IOException e) {
 				logger.error("An error occurred while writing xmlto servlet output stream", e);
-				JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 			}	
 			finally{
 				if (fos !=null){
@@ -287,7 +289,7 @@ public class XmlExportBean {
 
 		}
 		else {
-			JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 	}
 	
@@ -295,10 +297,10 @@ public class XmlExportBean {
 	public void exportContentObjectList(ContentObjectCriteria contentObjectCriteria, String zipFilename) {
 		
 		// run the query
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		if (cmsOutcome == null || cmsOutcome.getCount() == 0) {
-			JSFUtilities.addMessage(null, "content.search.exportResults.nullList", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.nullList", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -330,7 +332,7 @@ public class XmlExportBean {
 				fos =  new FileOutputStream(tempZip);
 				zipOutputStream = new ZipOutputStream(fos);
 
-				List<CmsRankedOutcome<ContentObject>> results = cmsOutcome.getResults();
+				List<ContentObject> results = cmsOutcome.getResults();
 				
 				//Keep all filenames created to catch duplicate
 				List<String> filenameList = new ArrayList<String>();
@@ -340,18 +342,18 @@ public class XmlExportBean {
 				
 				long now = System.currentTimeMillis();
 				
-				for (CmsRankedOutcome<ContentObject> rankedContentObject : results){
+				for (ContentObject contentObject : results){
 					
 					if (numbreOfContentObjects == 0){
 						break;
 					}
-					ContentObject contentObject = rankedContentObject.getCmsRepositoryEntity();
+
 					Calendar created = ((CalendarProperty)contentObject.getCmsProperty("profile.created")).getSimpleTypeValue();
 					
 					String folderPath = DateUtils.format(created, "yyyy/MM/dd");
 					
 					long nowXml = System.currentTimeMillis();
-					String xml = contentObject.toXml();
+					String xml = contentObject.xml(true);
 					
 					//Build filename
 					String finalName = buildFilename(folderPath, created, contentObject, filenameList);
@@ -382,7 +384,7 @@ public class XmlExportBean {
 			}
 			catch (IOException e) {
 				logger.error("An error occurred while writing xmlto servlet output stream", e);
-				JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 			}	
 			finally{
 				if (fos !=null){
@@ -404,7 +406,7 @@ public class XmlExportBean {
 
 		}
 		else {
-			JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 
 	}

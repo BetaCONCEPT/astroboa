@@ -750,7 +750,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				//	resetViewAndState();
 
 				// change the header message of the content object list panel
-				contentObjectList.setContentObjectListHeaderMessage(JSFUtilities.getStringI18n("content.search.contentObjectListHeaderMessageAfterContentObjectSave")); 
+				contentObjectList.setContentObjectListHeaderMessage(JSFUtilities.getStringI18n("object.list.message.contentObjectListHeaderMessageAfterContentObjectSave")); 
 				
 				// Update the accessibility UI components in the case the pre-save actions 
 				// (any code triggered by the CONTENT_OBJECT_READY_FOR_SAVE event) have altered accessibility property

@@ -90,7 +90,7 @@ public class RecentlyAddedOrModifiedContentObjectsDashboardItem extends ContentO
 
 			} catch (Exception e) {
 				logger.error("Error while loading content objects ",e);
-				JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", new String[] {e.toString()}, FacesMessage.SEVERITY_ERROR);
+				JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", new String[] {e.toString()}, FacesMessage.SEVERITY_ERROR);
 			}
 		}
 		return super.getReturnedContentObjects();

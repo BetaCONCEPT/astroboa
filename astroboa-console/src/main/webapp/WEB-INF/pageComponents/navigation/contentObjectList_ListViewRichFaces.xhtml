@@ -56,24 +56,6 @@ Authors
 							<rich:column>#</rich:column>
 							<rich:column>
 								<input id="tableManyCbAll" type="checkbox" name="all" />
-								
-								<ui:remove>
-								<h:panelGrid columns="1">
-								<a4j:commandLink value="#{messages['content.search.selected.all.page.rows']}" 
-									ajaxSingle="true"
-									reRender="searchResultsAjaxPanel" 
-									action="#{contentObjectStatefulSearchService.contentObjectSelection.selectContentObjectsOfCurrentPage_UIAction(
-									contentObjectStatefulSearchService.returnedContentObjects,
-									uiComponentBinding.listViewContentObjectTableComponent)}"/>
-								
-								
-									<a4j:commandLink value="#{messages['content.search.clear.selected.page.rows']}" ajaxSingle="true"
-										reRender="searchResultsAjaxPanel" 
-											action="#{contentObjectStatefulSearchService.contentObjectSelection.clearSelectedContentObjectsOfCurrentPage_UIAction(
-												contentObjectStatefulSearchService.returnedContentObjects,
-												uiComponentBinding.listViewContentObjectTableComponent)}"/>
-									</h:panelGrid>
-									</ui:remove>
 							</rich:column>
 										
 							<rich:column>
@@ -199,7 +181,7 @@ Authors
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
 							oncomplete="showTab('objectEditorTab');"
-							title="#{messages['entity.action.viewEditForm']}">
+							title="#{messages['object.action.viewEditForm']}">
 							<h:outputText
 								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
 						</a4j:commandLink>
@@ -237,7 +219,7 @@ Authors
 									
 								<img 
 									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-									title="#{messages['entity.action.viewEditForm']}" alt="#{messages['entity.action.viewEditForm']}"/>
+									title="#{messages['object.action.viewEditForm']}" alt="#{messages['object.action.viewEditForm']}"/>
 							</a4j:commandLink>
 							
 							<ui:remove>
@@ -248,7 +230,7 @@ Authors
 
 								<img 
 									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document-tree.png"
-									title="#{messages['entity.action.treePreview']}" alt="#{messages['entity.action.treePreview']}"/>
+									title="#{messages['object.action.treePreview']}" alt="#{messages['object.action.treePreview']}"/>
 							</a4j:commandLink>
 							</ui:remove>
 							
@@ -259,7 +241,7 @@ Authors
 								reRender="searchResultsAjaxPanel">
 								<img 
 									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-split.png"
-									title="#{messages['entity.action.clone']}" alt="#{messages['entity.action.clone']}"/>
+									title="#{messages['object.action.clone']}" alt="#{messages['object.action.clone']}"/>
 							</a4j:commandLink>
 							
 							<!-- Copy content object to clipboard action -->
@@ -274,7 +256,7 @@ Authors
 								reRender="clipboardPanel">
 								<img 
 									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/clipboard-paste.png"
-									title="#{messages['entity.action.copyToClipboard']}" alt="#{messages['entity.action.copyToClipboard']}"/>
+									title="#{messages['object.action.copyToClipboard']}" alt="#{messages['object.action.copyToClipboard']}"/>
 							</a4j:commandLink>
 							
 							<a4j:commandLink
@@ -290,7 +272,7 @@ Authors
 								 reRender="confirmationDialogPanel">
 								<img 
 									src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-button.png"
-									title="#{messages['entity.action.delete']}" alt="#{messages['entity.action.delete']}"/>
+									title="#{messages['object.action.delete']}" alt="#{messages['object.action.delete']}"/>
 	
 							</a4j:commandLink>
  

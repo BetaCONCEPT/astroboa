@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Responsible to create and save a copy of the specified ContentObject
+ * Responsible to create and save a copy of the specified Object
  * 
  * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -73,14 +73,14 @@ public class Copier {
 		try{
 			
 			if (StringUtils.isBlank(contentObjectId)){
-				JSFUtilities.addMessage(null, "Δεν έχει επιλεχθεί αντικείμενο για να αντιγραφεί ", FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.clone.message.noObjectSelected ", null, FacesMessage.SEVERITY_WARN);
 				return;
 			}
 
 			ContentObject copy = astroboaClient.getContentService().copyContentObject(contentObjectId);
 			
 			if (copy == null){
-				JSFUtilities.addMessage(null, "Το αντικείμενο δεν αντιγράφηκε", FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.clone.message.cloningWasUnsuccessful", null, FacesMessage.SEVERITY_WARN);
 				return ;
 			}
 			
@@ -94,9 +94,9 @@ public class Copier {
 			
 			copy.setOwner(loggedInRepositoryUser.getRepositoryUser());
 			
-			copy = astroboaClient.getContentService().saveContentObject(copy, false);
+			copy = astroboaClient.getContentService().save(copy, false, false, null);
 			
-			JSFUtilities.addMessage(null, "Το Αντ. Περιεχομένου αντιγράφηκε με επιτυχία", FacesMessage.SEVERITY_INFO);
+			JSFUtilities.addMessage(null, "object.action.clone.message.success", null, FacesMessage.SEVERITY_INFO);
 
 			Events.instance().raiseEvent(SeamEventNames.CONTENT_OBJECT_ADDED, new Object[]{
 					copy.getContentObjectType(), copy.getId(), 
@@ -120,7 +120,7 @@ public class Copier {
 		}
 		catch (Exception e){
 			logger.error("",e);
-			JSFUtilities.addMessage(null, "Σφάλμα κατά την αντιγραφή του αντικειμένου ", FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.action.clone.message.error", null, FacesMessage.SEVERITY_ERROR);
 		}
 	}
 }

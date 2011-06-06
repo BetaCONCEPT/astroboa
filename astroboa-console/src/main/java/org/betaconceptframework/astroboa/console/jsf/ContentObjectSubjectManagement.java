@@ -225,7 +225,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 			//repositoryNavigation.setTopicTreeNodeData(null);
 			
 			// generate success message
-			JSFUtilities.addMessage(null, "content.search.contentObjectSuccessfulyTaggedInfo", null , FacesMessage.SEVERITY_INFO);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectSuccessfulyTaggedInfo", null , FacesMessage.SEVERITY_INFO);
 		}
 		catch (Exception e) {
 			logger.error("content object could not be tagged. The error was:", e);

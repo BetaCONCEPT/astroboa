@@ -43,6 +43,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectC
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -73,6 +74,7 @@ public class ContentObjectSpecificSearchQueries extends AbstractUIBean {
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
+	private PageController pageController;
 	
 	// Dynamically Injected Beans
 	@In(required=false)
@@ -97,11 +99,7 @@ public class ContentObjectSpecificSearchQueries extends AbstractUIBean {
 		// we would like to sort returned articles according to view counter in descending order
 		contentObjectCriteria.addOrderProperty("viewCounter", Order.descending);
 		
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		*/
-		//contentObjectCriteria.getResultRowRange().setRange(0,99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		
 		// set required ordering
 		if (searchResultsFilterAndOrdering.getSelectedResultsOrder() != null) {
@@ -119,7 +117,7 @@ public class ContentObjectSpecificSearchQueries extends AbstractUIBean {
 		try {
 			long startTime = System.currentTimeMillis();
 			int resultSetSize = contentObjectStatefulSearchService
-				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 			long endTime = System.currentTimeMillis();
 			getLogger().debug(
 					"Return Content Objects ordered by View Counter: FIRST EXECUTION to get object count took: "
@@ -129,13 +127,13 @@ public class ContentObjectSpecificSearchQueries extends AbstractUIBean {
 				//JSFUtilities.addMessage(null, "contentSearch.searchByTopicInfo", new String[] {getSelectedTopicLabel(), String.valueOf(numberOfReturnedContentObjects)}, FacesMessage.SEVERITY_INFO);
 				contentObjectList
 				.setContentObjectListHeaderMessage(
-						JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForOrderByViewCounter", 
+						JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForOrderByViewCounter", 
 								new String[] {String.valueOf(resultSetSize)}));
 			}
-			else JSFUtilities.addMessage(null, "content.search.noContentObjectswhichHaveBeenViewedAtLeastOneTime", null, FacesMessage.SEVERITY_INFO);
+			else JSFUtilities.addMessage(null, "object.list.message.noContentObjectswhichHaveBeenViewedAtLeastOneTime", null, FacesMessage.SEVERITY_INFO);
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ",e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
 		}
 		
 		return null;
@@ -157,6 +155,10 @@ public class ContentObjectSpecificSearchQueries extends AbstractUIBean {
 	public void setSearchResultsFilterAndOrdering(
 			SearchResultsFilterAndOrdering searchResultsFilterAndOrdering) {
 		this.searchResultsFilterAndOrdering = searchResultsFilterAndOrdering;
+	}
+	
+	public void setPageController(PageController pageController) {
+		this.pageController = pageController;
 	}
 
 }

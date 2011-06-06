@@ -188,7 +188,7 @@ public class ContentObjectSearchByStatus extends AbstractUIBean {
 			
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ",e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
 		}
 		
 		

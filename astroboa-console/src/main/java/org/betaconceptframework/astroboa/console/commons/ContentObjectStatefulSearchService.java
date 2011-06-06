@@ -314,7 +314,7 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 						.searchContentObjects(localContentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				long endTime = System.currentTimeMillis();
 				getLogger().debug(
-						"Content Object Results Pager fetched the next 100 objects in: "
+						"Content Object Results Pager fetched the next " + pageSize + " objects in: "
 								+ (endTime - startTime) + "ms");
 
 				if (cmsOutcome.getCount() > 0) {
@@ -376,7 +376,7 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 						.searchContentObjects(localContentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				long endTime = System.currentTimeMillis();
 				getLogger().debug(
-						"Content Object Results Pager fetched the next 100 objects in: "
+						"Content Object Results Pager fetched the next " + pageSize + " objects in: "
 								+ (endTime - startTime) + "ms");
 
 				if (cmsOutcome.getCount() > 0) {

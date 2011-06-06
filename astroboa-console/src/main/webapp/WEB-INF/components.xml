@@ -113,12 +113,14 @@ Authors
 		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
 		<property name="contentObjectList">#{contentObjectList}</property>
 		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	
 	<component name="contentObjectSearchByOwner">
 		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
 		<property name="contentObjectList">#{contentObjectList}</property>
-		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property> 
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	
 	<!-- <component name="contentObjectSearchByStatus">
@@ -126,13 +128,15 @@ Authors
 		
 		<property name="contentService">#{contentService}</property>
 		<property name="contentObjectUIWrapperFactory">#{contentObjectUIWrapperFactory}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	-->
 	
 	<component name="contentObjectSearchByText">
 		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
 		<property name="contentObjectList">#{contentObjectList}</property>
-		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property> 
+		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	
 	<component name="contentObjectSearchByTopic">
@@ -146,6 +150,7 @@ Authors
 		<property name="contentObjectStatefulSearchService">#{contentObjectStatefulSearchService}</property>
 		<property name="contentObjectList">#{contentObjectList}</property>
 		<property name="searchResultsFilterAndOrdering">#{searchResultsFilterAndOrdering}</property>
+		<property name="pageController">#{pageController}</property>
 	</component>
 	
 	

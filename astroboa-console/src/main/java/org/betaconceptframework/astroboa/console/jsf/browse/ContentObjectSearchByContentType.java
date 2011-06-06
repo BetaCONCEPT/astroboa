@@ -31,6 +31,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.Se
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingContentObjectFolderTreeNodeRichFaces;
@@ -66,6 +67,7 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
+	private PageController pageController;
 	
 	// Dynamically Injected Beans
 	@In(required=false)
@@ -119,7 +121,7 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 
 			if ( dateComponents == null || dateComponents.length == 0 || dateComponents.length > 3){
 				logger.error("Error while loading content objects. Invalid path for content object folder {}",  fullContentObjectFolderPath);
-				JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError",null, FacesMessage.SEVERITY_ERROR);
+				JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError",null, FacesMessage.SEVERITY_ERROR);
 				return null;
 			}
 
@@ -183,14 +185,7 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 
 		}
 		
-		
-		
-		
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		*/
-		//contentObjectCriteria.getResultRowRange().setRange(0, 99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		
 		// set required ordering
 		if (searchResultsFilterAndOrdering.getSelectedResultsOrder() != null) {
@@ -209,10 +204,10 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 		try {
 			long startTime = System.currentTimeMillis();
 			int resultSetSize = contentObjectStatefulSearchService
-				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 			long endTime = System.currentTimeMillis();
 			getLogger().debug(
-					"Find Content Objects by ContentObject Type and Date: FIRST EXECUTION to get total object count and render the first 100 objects took: "
+					"Find Objects by ContentObject Type and Date: "
 							+ (endTime - startTime) + "ms");
 
 			if (resultSetSize > 0) {
@@ -221,21 +216,21 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 				String localisedNameOfBrowsedContentType = selectedNode.getLocalizedLabelOfContentType();
 				if ("".equals(message)) {
 					contentObjectList
-						.setContentObjectListHeaderMessage(JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByContentTypeWithoutDate", 
+						.setContentObjectListHeaderMessage(JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByContentTypeWithoutDate", 
 							new String[] {localisedNameOfBrowsedContentType, String.valueOf(resultSetSize)}));
 				}
 				else {
 					contentObjectList
-						.setContentObjectListHeaderMessage(JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByContentType", 
+						.setContentObjectListHeaderMessage(JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByContentType", 
 								new String[] {localisedNameOfBrowsedContentType, message, String.valueOf(resultSetSize)}));
 				}
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(localisedNameOfBrowsedContentType);
 			}
 			else
-				JSFUtilities.addMessage(null, "content.search.noContentObjectsInThisContentObjectFolderInfo", null, FacesMessage.SEVERITY_INFO);
+				JSFUtilities.addMessage(null, "object.list.message.noContentObjectsInThisContentObjectFolderInfo", null, FacesMessage.SEVERITY_INFO);
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ", e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError",null,FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError",null,FacesMessage.SEVERITY_ERROR);
 		}
 		
 		return null;
@@ -257,6 +252,10 @@ public class ContentObjectSearchByContentType extends AbstractUIBean {
 	public void setContentObjectStatefulSearchService(
 			ContentObjectStatefulSearchService contentObjectStatefulSearchService) {
 		this.contentObjectStatefulSearchService = contentObjectStatefulSearchService;
+	}
+	
+	public void setPageController(PageController pageController) {
+		this.pageController = pageController;
 	}
 
 }

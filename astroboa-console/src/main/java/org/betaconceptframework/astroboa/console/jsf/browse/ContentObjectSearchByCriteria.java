@@ -241,11 +241,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 			return ;
 		}
 
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		 */
-		//contentObjectCriteria.getResultRowRange().setRange(0,99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		contentObjectCriteria.doNotCacheResults();
 
 		// set required ordering only if no other order property has been specified
@@ -253,7 +249,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 
 
 		//Create contentObject
-		ContentObject queryContentObject = cmsRepositoryEntityFactory.newContentObjectForType("queryObject", JSFUtilities.getLocaleAsString());
+		ContentObject queryContentObject = cmsRepositoryEntityFactory.newObjectForType("queryObject");
 
 		try{
 			queryContentObject.setOwner(loggedInRepositoryUser.getRepositoryUser());
@@ -300,7 +296,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 			
 			((StringProperty)queryContentObject.getCmsProperty("queryString")).addSimpleTypeValue(queryString);
 
-			queryContentObject = contentService.saveContentObject(queryContentObject, false);
+			queryContentObject = contentService.save(queryContentObject, false, true, null);
 
 			JSFUtilities.addMessage(null,"Τα κριτήρια αποθηκεύτηκαν. Μπορείτε να εμπλουτίσετε με περισσότερα στοιχεία το καινούριο αντικείμενο, " +
 					"επιλέγοντας επεξεργασία αντικειμένου. (Αντικείμενα περιεχομένου > "+
@@ -346,19 +342,19 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 		
 		contentObjectCriteria.setXPathQuery(queryString);
 		
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		
 		// now we are ready to run the query
 		int resultSetSize = 0;
 		try {
 			resultSetSize = contentObjectStatefulSearchService
-			.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+			.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 
 			if (resultSetSize > 0) {
 
 				contentObjectList
 				.setContentObjectListHeaderMessage(
-						JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByCriteria",
+						JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByCriteria",
 								new String[]{String.valueOf(resultSetSize)}));
 				
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(JSFUtilities.getLocalizedMessage("advancedSearch.search.panel.header", null));
@@ -376,7 +372,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 			}
 		} catch (Exception e) {
 			getLogger().error("Error while loading content objects ", e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null,FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null,FacesMessage.SEVERITY_ERROR);
 			clearResults();
 		}
 
@@ -404,11 +400,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 			return null;
 		}
 
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		 */
-		//contentObjectCriteria.getResultRowRange().setRange(0,99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 
 		// set required ordering only if no other order property has been specified
 		setOrderToCriteria();
@@ -417,13 +409,13 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 		int resultSetSize = 0;
 		try {
 			resultSetSize = contentObjectStatefulSearchService
-			.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+			.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 
 			if (resultSetSize > 0) {
 
 				contentObjectList
 				.setContentObjectListHeaderMessage(
-						JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForSearchByCriteria",
+						JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForSearchByCriteria",
 								new String[]{String.valueOf(resultSetSize)}));
 				
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(JSFUtilities.getLocalizedMessage("advancedSearch.search.panel.header", null));
@@ -434,14 +426,14 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 
 			}
 			else{
-				JSFUtilities.addMessage(null,"content.search.noContentObjectsRelatedToCriteria",
+				JSFUtilities.addMessage(null,"object.list.message.noContentObjectsRelatedToCriteria",
 						null,
 						FacesMessage.SEVERITY_INFO);
 				clearResults();
 			}
 		} catch (Exception e) {
 			getLogger().error("Error while loading content objects ", e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null,FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null,FacesMessage.SEVERITY_ERROR);
 			clearResults();
 		}
 
@@ -643,7 +635,7 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 //						JSFUtilities
 //						.addMessage(
 //								null,
-//								"content.search.contentObjectRetrievalError",
+//								"object.list.message.contentObjectRetrievalError",
 //								new String[] { "No users belonging to the same group(s) as the logged in user found. This is a potencial problem since at least your account should be in your cms user groups. Please report this to help desk." },
 //								FacesMessage.SEVERITY_WARN);
 //					}

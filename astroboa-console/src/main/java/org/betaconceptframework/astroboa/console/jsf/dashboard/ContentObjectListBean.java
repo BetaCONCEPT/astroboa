@@ -217,7 +217,7 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 
 			} catch (Exception e) {
 				JSFUtilities.addMessage(null,
-						"content.search.contentObjectRetrievalError",
+						"object.list.message.contentObjectRetrievalError",
 						null,
 						FacesMessage.SEVERITY_WARN);
 				logger.error("Error while loading content objects ",e);

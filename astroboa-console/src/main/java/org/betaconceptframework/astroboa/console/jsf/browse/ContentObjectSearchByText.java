@@ -31,6 +31,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.Se
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -62,6 +63,7 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 	private ContentObjectStatefulSearchService contentObjectStatefulSearchService;
 	private ContentObjectList contentObjectList;
 	private SearchResultsFilterAndOrdering searchResultsFilterAndOrdering;
+	private PageController pageController;
 	
 	
 	// Dynamically Injected Beans
@@ -108,11 +110,7 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 			contentObjectCriteria.addFullTextSearchCriterion(searchedText);
 		}
 		
-		/* we set the result set size so that the fist 100 objects are returned.
-		 * We do this search to get the number of matched content objects and fill the first page of results. 
-		*/
-		//contentObjectCriteria.getResultRowRange().setRange(0,99);
-		contentObjectCriteria.setOffsetAndLimit(0,99);
+		contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 		contentObjectCriteria.doNotCacheResults();
 		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
@@ -134,7 +132,7 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 		try {
 			long startTime = System.currentTimeMillis();
 			int resultSetSize = contentObjectStatefulSearchService
-				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
+				.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), pageController.getRowsPerDataTablePage());
 			long endTime = System.currentTimeMillis();
 			getLogger().debug("Find Content Objects by Topic UUID:FIRST EXECUTION to get object count took: " + (endTime - startTime) + "ms");
 			
@@ -142,14 +140,14 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 				
 				contentObjectList
 				.setContentObjectListHeaderMessage(
-						JSFUtilities.getParameterisedStringI18n("content.search.contentObjectListHeaderMessageForTextSearch", 
+						JSFUtilities.getParameterisedStringI18n("object.list.message.contentObjectListHeaderMessageForTextSearch", 
 								new String[] {searchedText, String.valueOf(resultSetSize)}));
 				contentObjectList.setLabelForFileGeneratedWhenExportingListToXml(searchedText);
 			}
-			else JSFUtilities.addMessage(null, "content.search.noContentObjectsContainingThisTextInfo", null, FacesMessage.SEVERITY_INFO);
+			else JSFUtilities.addMessage(null, "object.list.message.noContentObjectsContainingThisTextInfo", null, FacesMessage.SEVERITY_INFO);
 		} catch (Exception e) {
 			logger.error("Error while loading content objects ", e);
-			JSFUtilities.addMessage(null, "content.search.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.list.message.contentObjectRetrievalError", null, FacesMessage.SEVERITY_ERROR);
 			return null;
 		}
 		
@@ -188,5 +186,8 @@ public class ContentObjectSearchByText extends AbstractUIBean {
 			SearchResultsFilterAndOrdering searchResultsFilterAndOrdering) {
 		this.searchResultsFilterAndOrdering = searchResultsFilterAndOrdering;
 	}
-
+	
+	public void setPageController(PageController pageController) {
+		this.pageController = pageController;
+	}
 }

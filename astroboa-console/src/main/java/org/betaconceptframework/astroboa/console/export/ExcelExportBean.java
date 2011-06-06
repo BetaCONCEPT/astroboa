@@ -64,7 +64,7 @@ public class ExcelExportBean {
 	public void exportContentObjectSelection(ContentObjectSelectionBean contentObjectSelection, String locale) {
 		
 		if (contentObjectSelection == null || CollectionUtils.isEmpty(contentObjectSelection.getSelectedContentObjects())) {
-			JSFUtilities.addMessage(null, "content.search.exportResults.nullList", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.nullList", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -118,7 +118,7 @@ public class ExcelExportBean {
 			}
 			catch (IOException e) {
 				logger.error("An error occurred while writing excel workbook to servlet output stream", e);
-				JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 			}	
 			finally{
 				workbookBuilder.clear();
@@ -128,7 +128,7 @@ public class ExcelExportBean {
 
 		}
 		else {
-			JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 
 	}
@@ -156,7 +156,7 @@ public class ExcelExportBean {
 		CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		if (cmsOutcome.getCount() == 0) {
-			JSFUtilities.addMessage(null, "content.search.exportResults.nullList", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.nullList", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -206,7 +206,7 @@ public class ExcelExportBean {
 			}
 			catch (IOException e) {
 				logger.error("An error occurred while writing excel workbook to servlet output stream", e);
-				JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 			}	
 			finally{
 				workbookBuilder.clear();
@@ -216,7 +216,7 @@ public class ExcelExportBean {
 
 		}
 		else {
-			JSFUtilities.addMessage(null, "content.search.exportResults.error", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 
 	}

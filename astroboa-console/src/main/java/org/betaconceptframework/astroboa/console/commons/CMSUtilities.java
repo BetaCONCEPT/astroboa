@@ -348,8 +348,6 @@ public class CMSUtilities {
 	
 	public List<Topic> findMostPopularTags(String locale) throws Exception {
 		try{
-			//RowRange rowRange = CmsCriteriaFactory.newRowRange();
-			//rowRange.setRange(0,100);
 			return topicService.getMostlyUsedTopics(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME, locale, 0,100).getResults();
 		}
 		catch (Exception e) {

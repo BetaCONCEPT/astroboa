@@ -33,9 +33,10 @@ errors.creditcard=Το πεδίο "{0}" δεν είναι έγκυρος αρι�
 errors.email=Το πεδίο "{0}" δεν είναι έγκυρη διεύθυνση e-mail.
 errors.pattern=Το πεδίο "{0}" είναι μη έγκυρο. Η τιμή του δεν ακολουθεί το πρότυπο {1}
 
+console.title= Astroboa - Κονσόλα Διαχείρισης Δομημένων Πληροφοριών
+
 # Login
-login.title= Astroboa - ΚΟΝΣΟΛΑ ΔΙΑΧΕΙΡΙΣΗΣ ΕΠΙΧΕΙΡΗΣΙΑΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ (ΕCMS ADMIN CONSOLE) ~ Καλώς Ήλθατε
-login.header = Astroboa - ΠΛΑΤΦΟΡΜΑ ΔΙΑΧΕΙΡΙΣΗΣ ΕΠΙΧΕΙΡΗΣΙΑΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ
+login.header = ASTROBOA - ΠΛΑΤΦΟΡΜΑ ΔΙΑΧΕΙΡΙΣΗΣ ΔΟΜΗΜΕΝΩΝ ΠΛΗΡΟΦΟΡΙΩΝ (STRUCTURED INFORMATION)
 login.loginFormTitle=Καλώς ήρθατε. Παρακαλώ συμπληρώστε τα στοιχεία σας για την εισαγωγή στο σύστημα
 login.greek=Ελληνικά
 login.english=English
@@ -57,7 +58,7 @@ login.invalidRoles=Δεν επιτρέπεται η πρόσβαση στην ε
 login.enterRepositoryToConnect=Αποθήκη περιεχομένου
 login.enterServer=Astroboa Server
 login.nonExistentUserDisplayName=Ονοματεπώνυμο  μη  διαθέσιμο
-login.welcome=Είστε ο χρήστης  {0}. Καλωσήρθατε στην εφαρμογή Διαχείρισης Επιχειρησιακού Περιεχομένου ASTROBOA 
+login.welcome=Είστε ο χρήστης  {0}. Καλωσήρθατε στην Κονσόλα Διαχείρισης Δομημένων Πληροφοριών του ASTROBOA 
 
 # Entities
 ContentObject = Αντικείμενο
@@ -83,15 +84,6 @@ content.object.profile.status.temporarilyRejectedForReauthoring=Το Αντικ�
 content.object.profile.status.scheduledForPublication=Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
 content.object.profile.status.published=Το Αντικείμενο είναι Δημοσιευμένο στο web
 content.object.profile.status.submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web από εξωτερικό χρήστη (εν αναμονή έγγρισης)
-authored=Το Αντικείμενο είναι υπό Δημιουργία
-submitted=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγγρισης)
-approved=Το Αντικείμενο έχει εγγριθεί για Δημοσίευση στο web
-rejected=Το Αντικείμενο έχει απορριφθεί μόνιμα για Δημοσίευση στο web
-temporarilyRejectedForReauthoring=Το Αντικείμενο έχει απορριφθεί προσωρινά για Δημοσίευση στο web (απαιτούνται διορθώσεις)
-scheduledForPublication=Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
-published=Το Αντικείμενο είναι Δημοσιευμένο στο web
-submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί  από εξωτερικό χρήστη (εν αναμονή έγγρισης)
-publishedAndArchived=Το Αντικείμενο είναι Δημοσιευμένο στο web και αρχειοθετημένο
 
 # Workflows
 workflow.none = Καμία Ροή Εργασίας
@@ -224,74 +216,86 @@ topMenu.edit.webSites = Ιστότοποι
 topMenu.edit.security = Ασφάλεια
 topMenu.edit.scriptEngine = Εκτέλεση Scripts
 
-#Content Object List Full View
-content.object.list.full.view.no.tags.added = Δεν έχετε προσθέσει Ετικέτες. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τις Ετικέτες σας προς το εικονίδιο του αντικειμένου. Ή επιλέξτε 'Προσθήκη/Αφαίρεση Ετικετών' 
-content.object.list.full.view.no.subject.added = Δεν έχουν προστεθεί Λέξεις Κλειδιά. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τους διαθέσιμους Θησαυρούς Όρων προς το εικονίδιο του αντικειμένου"
-content.object.list.full.view.content.object.view = Πλήρης Επισκόπηση
-content.object.list.full.view.content.object.edit = Αλλαγή / Διόρθωση
-content.object.list.full.view.tag.edit = Προσθήκη / Αφαίρεση Ετικετών
-content.object.list.full.view.other.versions =  Προηγούμενες Εκδόσεις
-content.object.list.full.view.profile.description = Περιγραφή
-content.object.list.full.view.profile.subject = Θέμα / Λέξεις Κλειδιά
-content.object.list.full.view.profile.creator = Δημιουργός
-content.object.list.full.view.profile.publisher = Εκδότης
-content.object.list.full.view.profile.created = Ημ/νια Δημιουργίας
-content.object.list.full.view.profile.modified = Ημ/νια Τελευταίας Αλλαγής
-content.object.list.full.view.profile.hasVersion = Έκδοση
-content.object.list.full.view.profile.status = Κατάσταση Αντικειμένου
-content.object.list.full.view.profile.workflow = Ενεργή Ροή Εργασίας
 
-#Content Search
-content.search.result.header = Αποτελέσματα Αναζήτησης 
-content.search.noContentObjectsContainingThisTextInfo=Δεν υπάρχουν Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις που επιλέξατε
-content.search.noContentObjectsRelatedToCriteria=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τα κριτήρια που θέσατε
-content.search.noContentObjectsInThisContentObjectFolderInfo=Δεν υπάρχουν Αντικείμενα στο φάκελο που διαλέξατε
-content.search.noContentObjectsRelatedToThisTopicInfo=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τον Όρο που διαλέξατε
-content.search.noContentObjectsOwnedByThisRepositoryUser=Δεν υπάρχουν Αντικείμενα που να ανήκουν στον χρήστη που διαλέξατε
-content.search.noContentObjectswhichHaveBeenViewedAtLeastOneTime=Δεν βρέθηκαν Αντικείμενα που να έχουν διαβαστεί τουλάχιστον 1 φορά
-content.search.contentObjectSuccessfulyTaggedInfo=Οι Ετικέτες σας για αυτό το Αντικείμενο ανανεώθηκαν
-content.search.contentObjectListHeaderMessageForTextSearch=Παρουσιάζονται τα Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις: "{0}". Αριθμός Αντικειμένων: {1}
-content.search.contentObjectListHeaderMessageForSearchByOwner=Παρουσιάζονται {1} Αντικείμενα που ανήκουν στον χρήστη: {0}. 
-content.search.contentObjectListHeaderMessageForSearchByTopic=Αναζήτηση Αντικειμένων με βάση τον Όρο: {0}. Αριθμός Αντικειμένων που χρησιμοποιούν τον Όρο σε κάποιο πεδίο τους: {1}
-content.search.contentObjectListHeaderMessageForSearchByContentType=Παρουσιάζονται {2} Αντικείμενα τύπου "{0}", που έχουν δημιουργηθεί τις ημερομηνίες {1}.
-content.search.contentObjectListHeaderMessageForSearchByContentTypeWithoutDate=Παρουσιάζονται {1} Αντικείμενα τύπου "{0}"
-content.search.contentObjectListHeaderMessageForOrderByViewCounter=Παρουσιάζονται τα Αντικείμενα ταξινομημένα σύμφωνα με τον αριθμό αναγνώσεων. Αριθμός Αντικειμένων που έχουν αναγνωστεί τουλάχιστον 1 φορά: {0}
-content.search.contentObjectListHeaderMessageAfterContentObjectRemoval=Μετά την διαγραφή ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
-content.search.contentObjectListHeaderMessageAfterContentObjectSave=Μετά την αποθήκευση ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
-content.search.contentObjectRetrievalError=Συνέβη κάποιο σφάλμα κατά την ανάκτηση των Αντικειμένων. \n Παρακαλώ δοκιμάστε πάλι και αν συμβεί το ίδιο σφάλμα επικοινωνήστε με το γραφείο υποστήριξης 
-content.search.contentObjectListHeaderMessageForSearchByCriteria = Παρουσιάζονται {0} αντικείμενα που πληρούν τα κριτήρια της αναζήτησης
+# Object List Options
+object.list.option.fullView = Πλήρης Απεικόνιση
+object.list.option.listView = Λίστα
+object.list.option.rowsPerPage=αποτελέσματα ανά σελίδα
 
-content.search.selected.all.page.rows=Επιλογή Όλων
-content.search.clear.selected.page.rows=Καθαρισμός Επιλεγμένων
-content.search.drop.down.menu.label=Περισσότερες Ενέργειες
-content.search.drop.down.menu.view.options=Προβολή
-content.search.drop.down.menu.fullView.option = Πλήρης Απεικόνιση
-content.search.drop.down.menu.listView.option = Λίστα
-content.search.drop.down.menu.rowsPerPage.option=αποτελέσματα ανά σελίδα
-content.search.drop.down.menu.export.to.xml=Εξαγωγή σε XML
-content.search.drop.down.menu.export.to.excel=Εξαγωγή σε Excel
-content.search.drop.down.menu.all.option=Όλα
-content.search.drop.down.menu.selected.option=Επιλεγμένα
-content.search.drop.down.menu.clear.selected.option=Καθαρισμός όλων των επιλεγμένων αντικειμένων
-content.search.drop.down.menu.delete=Διαγραφή
-content.search.drop.down.menu.delete.no.content.object.selected=Δεν έχει επιλεχθεί κανένα αντικείμενο. Η διαγραφή δεν μπορεί να συνεχιστεί
-content.search.drop.down.menu.delete.error=Η διαγραφή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
-content.search.drop.down.menu.delete.unauthorized.delete.message=Δεν είσαστε εξουσιοδοτημένος να διαγράψετε τα παρακατω αντικείμενα
-content.search.drop.down.menu.delete.error=Τα παρακατω αντικείμενα δεν διαγράτηκαν λόγω λάθους
-content.search.drop.down.menu.delete.panel.message=Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα;
-content.search.drop.down.menu.delete.all.success.info.message=Τα Αντ. Περιεχομένου διαγράφτηκαν από την Αποθήκη Περιεχομένου με επιτυχία
-content.search.drop.down.menu.delete.partial.success.info.message=Τα υπόλοιπα Αντ. Περιεχομένου διαγράφτηκαν από την Αποθήκη Περιεχομένου με επιτυχία
+# Object List - Messages Presented in Results Header
+object.list.message.result.header = Αποτελέσματα Αναζήτησης 
+object.list.message.noContentObjectsContainingThisTextInfo=Δεν υπάρχουν Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις που επιλέξατε
+object.list.message.noContentObjectsRelatedToCriteria=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τα κριτήρια που θέσατε
+object.list.message.noContentObjectsInThisContentObjectFolderInfo=Δεν υπάρχουν Αντικείμενα στο φάκελο που διαλέξατε
+object.list.message.noContentObjectsRelatedToThisTopicInfo=Δεν υπάρχουν Αντικείμενα που να σχετίζονται με τον Όρο που διαλέξατε
+object.list.message.noContentObjectsOwnedByThisRepositoryUser=Δεν υπάρχουν Αντικείμενα που να ανήκουν στον χρήστη που διαλέξατε
+object.list.message.noContentObjectswhichHaveBeenViewedAtLeastOneTime=Δεν βρέθηκαν Αντικείμενα που να έχουν διαβαστεί τουλάχιστον 1 φορά
+object.list.message.contentObjectSuccessfulyTaggedInfo=Οι Ετικέτες σας για αυτό το Αντικείμενο ανανεώθηκαν
+object.list.message.contentObjectListHeaderMessageForTextSearch=Παρουσιάζονται τα Αντικείμενα που περιέχουν σε πεδία κειμένου (Τίτλος, Περιγραφή, Όνομα Αρχείου) ή σε συνδεδεμένα αρχεία τις λέξεις: "{0}". Αριθμός Αντικειμένων: {1}
+object.list.message.contentObjectListHeaderMessageForSearchByOwner=Παρουσιάζονται {1} Αντικείμενα που ανήκουν στον χρήστη: {0}. 
+object.list.message.contentObjectListHeaderMessageForSearchByTopic=Αναζήτηση Αντικειμένων με βάση τον Όρο: {0}. Αριθμός Αντικειμένων που χρησιμοποιούν τον Όρο σε κάποιο πεδίο τους: {1}
+object.list.message.contentObjectListHeaderMessageForSearchByContentType=Παρουσιάζονται {2} Αντικείμενα τύπου "{0}", που έχουν δημιουργηθεί τις ημερομηνίες {1}.
+object.list.message.contentObjectListHeaderMessageForSearchByContentTypeWithoutDate=Παρουσιάζονται {1} Αντικείμενα τύπου "{0}"
+object.list.message.contentObjectListHeaderMessageForOrderByViewCounter=Παρουσιάζονται τα Αντικείμενα ταξινομημένα σύμφωνα με τον αριθμό αναγνώσεων. Αριθμός Αντικειμένων που έχουν αναγνωστεί τουλάχιστον 1 φορά: {0}
+object.list.message.contentObjectListHeaderMessageAfterContentObjectRemoval=Μετά την διαγραφή ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
+object.list.message.contentObjectListHeaderMessageAfterContentObjectSave=Μετά την αποθήκευση ενός αντικειμένου η προηγούμενη λίστα αντικειμένων αρχικοποιείται. Παρακαλώ κάντε πάλι την αναζήτησή σας.
+object.list.message.contentObjectRetrievalError=Συνέβη κάποιο σφάλμα κατά την ανάκτηση των Αντικειμένων. \n Παρακαλώ δοκιμάστε πάλι και αν συμβεί το ίδιο σφάλμα επικοινωνήστε με το γραφείο υποστήριξης 
+object.list.message.contentObjectListHeaderMessageForSearchByCriteria = Παρουσιάζονται {0} αντικείμενα που πληρούν τα κριτήρια της αναζήτησης
 
-content.search.exportResults.error = Η εξαγωγή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
-content.search.exportResults.nullList = Δεν μπορεί να γίνει εξαγωγή. Η λίστα αποτελεσμάτων είναι κενή
+# Object List Full View
+object.list.full.view.no.tags.added = Δεν έχετε προσθέσει Ετικέτες. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τις Ετικέτες σας προς το εικονίδιο του αντικειμένου. Ή επιλέξτε 'Προσθήκη/Αφαίρεση Ετικετών' 
+object.list.full.view.no.subject.added = Δεν έχουν προστεθεί Λέξεις Κλειδιά. Μπορείτε να προσθέσετε εύκολα κάνοντας 'drag and drop' από τους διαθέσιμους Θησαυρούς Όρων προς το εικονίδιο του αντικειμένου"
+object.list.full.view.content.object.view = Πλήρης Επισκόπηση
+object.list.full.view.content.object.edit = Αλλαγή / Διόρθωση
+object.list.full.view.tag.edit = Προσθήκη / Αφαίρεση Ετικετών
+object.list.full.view.other.versions =  Προηγούμενες Εκδόσεις
+object.list.full.view.profile.description = Περιγραφή
+object.list.full.view.profile.subject = Θέμα / Λέξεις Κλειδιά
+object.list.full.view.profile.creator = Δημιουργός
+object.list.full.view.profile.publisher = Εκδότης
+object.list.full.view.profile.created = Ημ/νια Δημιουργίας
+object.list.full.view.profile.modified = Ημ/νια Τελευταίας Αλλαγής
+object.list.full.view.profile.hasVersion = Έκδοση
+object.list.full.view.profile.status = Κατάσταση Αντικειμένου
+object.list.full.view.profile.workflow = Ενεργή Ροή Εργασίας
 
 
-#Entity Actions (Actions on Content Objects and their properties)
-entity.action.viewEditForm=Επεξεργασία
-entity.action.delete=Διαγραφή
-entity.action.clone=Δημιουργία Κλώνου
-entity.action.copyToClipboard= Αντιγραφή στο Πρόχειρο
-entity.action.treePreview=Επισκόπηση (Read Only)
+
+#Actions on Objects
+object.action.viewEditForm=Επεξεργασία
+object.action.delete=Διαγραφή Αντικειμένου
+object.action.clone=Δημιουργία Κλώνου
+object.action.copyToClipboard= Αντιγραφή στο Πρόχειρο
+object.action.treePreview=Επισκόπηση (Read Only)
+object.action.export.to.xml=Εξαγωγή σε XML
+object.action.export.to.excel=Εξαγωγή σε Excel
+object.action.bulk.delete=Διαγραφή
+
+# Bulk Action Options
+object.action.bulk.option.all=Όλα
+object.action.bulk.option.selected=Επιλεγμένα
+
+# Export Action Messages
+object.action.export.message.error = Η εξαγωγή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
+object.action.export.message.nullList = Δεν μπορεί να γίνει εξαγωγή. Η λίστα αποτελεσμάτων είναι κενή
+
+# Bulk Delete Action Messages
+object.action.bulk.delete.message.no.object.selected=Δεν έχει επιλεχθεί κανένα αντικείμενο. Η διαγραφή δεν μπορεί να συνεχιστεί
+object.action.bulk.delete.message.error=Η διαγραφή απέτυχε. Παρακαλώ δοκιμάστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης
+object.action.bulk.delete.message.unauthorized.delete.message=Δεν είσαστε εξουσιοδοτημένος να διαγράψετε τα παρακατω αντικείμενα:
+object.action.bulk.delete.message.theFollowingObjectsNotDeletedDueToError=Τα παρακατω αντικείμενα δεν διαγράτηκαν λόγω λάθους:
+object.action.bulk.delete.message.confirmation=Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα;
+object.action.bulk.delete.message.all.success.info.message=Τα Αντικείμενα διαγράφτηκαν με επιτυχία
+object.action.bulk.delete.message.partial.success.info.message=Τα υπόλοιπα Αντικείμενα διαγράφτηκαν με επιτυχία
+
+# Clone Action Messages
+object.action.clone.message.noObjectSelected=Δεν έχει επιλεχθεί αντικείμενο για να αντιγραφεί
+object.action.clone.message.success=Το Αντικείμενο αντιγράφηκε με επιτυχία
+object.action.clone.message.cloningWasUnsuccessful=Το αντικείμενο δεν αντιγράφηκε. Παρακαλώ προσπαθήστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης.
+object.action.clone.message.error=Συνέβη κάποιο σφάλμα κατά την Αντιγραφή. Παρακαλώ προσπαθήστε πάλι ή επικοινωνήστε με το γραφείο υποστήριξης.
+
+
+# Prefix to put in Object Titles when they are cloned
 clone.title.prefix=(Αντίγραφο)
 
 #Navigation Menu

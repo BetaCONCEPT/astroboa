@@ -91,7 +91,12 @@ function resetContentObjectAutoSave() {
 
 function triggerSaveAsDraft()
 {
-	editAreaLoader.prepare_areas_for_betacms_submit("dynamicAreaForm");
+	// editAreaLoader.prepare_areas_for_betacms_submit("dynamicAreaForm");
+	
+	// we should first copy the active editor data in the form field
+	if ( editor && textEditorArea) {
+		bcmslib.jQuery(textEditorArea).val(editor.getData());
+	}
 	autoSaveContentObject();
 }
 
@@ -479,8 +484,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     
     /* Selection Checkboxes in Result Table */
     var tableMany;
+    var selectAllIsCheckedByUser = false;
     
     function initializeTableSelect() {
+    	hideBulkActionsOnSelected();
     	tableMany = null;
 	    tableMany = bcmslib.jQuery(".resultsTableSelectable").tableSelectMany({
 	    	listeners : {
@@ -491,8 +498,9 @@ function callFunctionOnEnterKey(e, func, arg) {
 	                    this.preventChange = (this.target === "a") ? true : false;
 	                },
 	                afterrowselect    : function(event) {
-	                    if (bcmslib.jQuery("input#tableManyCbAll").not(":checked")) {
-	                    	alert("row " + this.rowIndex + " selected");
+	                    if (!selectAllIsCheckedByUser) {
+	                    	addSelectedObject(this.rowIndex - 1);
+	                    	showBulkActionsOnSelected();
 	                    }
 	                    
 	                	if(this.parentThis.allSelected()) {
@@ -502,6 +510,13 @@ function callFunctionOnEnterKey(e, func, arg) {
 	                    if(toggle.not(":checked")) toggle.attr('checked', 'checked');
 	                },
 	                afterrowdeselect  : function(event) {
+	                	if (!selectAllIsCheckedByUser) {
+	                		removeDeselectedObject(this.rowIndex - 1);
+	                		if (this.parentThis.getSelections().length == 0) {
+	                			hideBulkActionsOnSelected();
+	                		}
+	                    }
+	                	
 	                    if(!this.parentThis.allSelected()) bcmslib.jQuery("input#tableManyCbAll").removeAttr('checked');
 	                    var toggle = bcmslib.jQuery(this).find('input');
 	                    if(toggle.is(":checked")) toggle.removeAttr('checked');
@@ -516,49 +531,30 @@ function callFunctionOnEnterKey(e, func, arg) {
 	        this.checked ? addAllRows() : removeAllRows();
 	    });
     }
-     
-    
-    function addSelectedRow(table, row) {
-    	bcmslib.jQuery(row).find('input').attr('checked', 'checked');
-    	if (!table.allSelected()) {
-    		alert(bcmslib.jQuery(row).find('input').attr('name'));
-    	}
-    }
     
     function addAllRows() {
+    	selectAllIsCheckedByUser = true;
     	tableMany.selectAll(); 
-    	selectAllObjectsInResultPage();
+    	addAllObjectsOfCurrentPage();
+    	showBulkActionsOnSelected();
+    	selectAllIsCheckedByUser = false;
     }
     
     function removeAllRows() {
+    	selectAllIsCheckedByUser = true;
     	tableMany.clearSelections(); 
-    	deSelectAllObjectsInResultPage();
+    	removeAllObjectsOfCurrentPage();
+    	hideBulkActionsOnSelected();
+    	selectAllIsCheckedByUser = false;
     }
     
-    /*
-    function atLeastOneCheckBoxIsChecked() {
-    	return	bcmslib.jQuery("input[type='checkbox']:checked").length > 0;
+    function showBulkActionsOnSelected() {
+    	bcmslib.jQuery('.bulkActionOnselected').show();
     }
-    */
     
-    /*bind a monitoring function when check boxes of content object list are clicked 
-    function monitorCheckboxChange() {
-    	bcmslib.jQuery("input[type='checkbox']").bind('click',
-    			function() {
-    				if (atLeastOneCheckBoxIsChecked()) {
-    					if (!beanVariable_atLeastOneContentObjectIsSelected_HasAlreadyBeenSetToTrue) {
-    						setAtLeastOneContentObjectIsSelected(true);
-    						beanVariable_atLeastOneContentObjectIsSelected_HasAlreadyBeenSetToTrue = true;
-    					}
-    				}
-    				else {
-    					setAtLeastOneContentObjectIsSelected(false);
-    					beanVariable_atLeastOneContentObjectIsSelected_HasAlreadyBeenSetToTrue = false;
-    				}
-    			}
-    	);
-    } 
-    */
+    function hideBulkActionsOnSelected() {
+    	bcmslib.jQuery('.bulkActionOnselected').hide();
+    }
     
     /* create layout */
     var betacmsConsoleLayout;
