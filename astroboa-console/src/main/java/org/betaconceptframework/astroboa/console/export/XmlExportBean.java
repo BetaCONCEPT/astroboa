@@ -182,6 +182,7 @@ public class XmlExportBean {
 
 	public void exportContentObjectSelection(ContentObjectSelectionBean contentObjectSelection, String zipFilename) {
 		
+		
 		if (contentObjectSelection == null || CollectionUtils.isEmpty(contentObjectSelection.getSelectedContentObjects())) {
 			JSFUtilities.addMessage(null, "object.action.export.message.nullList", null, FacesMessage.SEVERITY_WARN);
 			return;
@@ -194,12 +195,9 @@ public class XmlExportBean {
 			response.setContentType("application/zip");
 			response.setCharacterEncoding("UTF-8");
 
-			if (StringUtils.isBlank(zipFilename)){
-				zipFilename = "listOfContentObjects";
-			}
+			zipFilename = generateValidZipFilename(zipFilename);
 			
-			response.setHeader("Content-Disposition", "attachment;filename=" + 
-					FilenameUtils.convertFilenameGreekCharactersToEnglishAndReplaceInvalidCharacters(zipFilename.trim())+ ".zip");
+			response.setHeader("Content-Disposition", "attachment;filename=" + zipFilename+ ".zip");
 			
 			File tempZip = null;
 			
@@ -292,6 +290,16 @@ public class XmlExportBean {
 			JSFUtilities.addMessage(null, "object.action.export.message.error", null, FacesMessage.SEVERITY_WARN);
 		}
 	}
+
+	private String generateValidZipFilename(String zipFilename) {
+		if (StringUtils.isBlank(zipFilename)){
+			zipFilename = "listOfContentObjects";
+		}
+		else{
+			zipFilename = FilenameUtils.convertFilenameGreekCharactersToEnglishAndReplaceInvalidCharacters(zipFilename.trim()); 
+		}
+		return zipFilename;
+	}
 	
 	
 	public void exportContentObjectList(ContentObjectCriteria contentObjectCriteria, String zipFilename) {
@@ -311,12 +319,9 @@ public class XmlExportBean {
 			response.setContentType("application/zip");
 			response.setCharacterEncoding("UTF-8");
 
-			if (StringUtils.isBlank(zipFilename)){
-				zipFilename = "listOfContentObjects";
-			}
+			zipFilename = generateValidZipFilename(zipFilename);
 			
-			response.setHeader("Content-Disposition", "attachment;filename=" + 
-					FilenameUtils.convertFilenameGreekCharactersToEnglishAndReplaceInvalidCharacters(zipFilename.trim())+ ".zip");
+			response.setHeader("Content-Disposition", "attachment;filename=" +zipFilename+ ".zip");
 			
 			File tempZip = null;
 			
