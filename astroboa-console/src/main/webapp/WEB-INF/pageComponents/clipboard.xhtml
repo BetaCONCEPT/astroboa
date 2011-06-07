@@ -242,7 +242,8 @@ Authors
 											rendered="#{draftItem.isAContentObject()}"   
 											action="#{objectEditInit.editObjectFromDraft_UIAction(draftItem.cmsRepositoryEntity)}"
 											reRender="objectEditorAjaxPanel"
-											onclick="showTab('objectEditorTab');"
+											onclick="resetEditors();"
+											oncomplete="showTab('objectEditorTab');"
 											title="Click to load draft object">
 											<h:graphicImage value="/images/cms-icons/16/reload.png" />
 									</a4j:commandLink>
