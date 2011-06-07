@@ -29,6 +29,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Space;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.SpaceService;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapper;
@@ -103,7 +105,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 	}
 	
 	public String showSpace_UIAction(String spaceId) {
-		return showSpace_UIAction(spaceService.getSpace(spaceId, localeSelector.getLocaleString()));
+		return showSpace_UIAction(spaceService.getSpace(spaceId, ResourceRepresentationType.SPACE_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN));
 	}
 
 	@Factory("breadCrumbForSharedSpaces")
@@ -139,7 +141,11 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 
 	private void createSpaceItems() {
 		sharedSpaceItems = new ArrayList<SpaceItem>();
-
+		
+		if (currentSpace == null) {
+			return;
+		}
+		
 		//Load all child spaces
 		List<Space> childSpaces = currentSpace.getChildren();
 		if (CollectionUtils.isNotEmpty(childSpaces)){
@@ -153,7 +159,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 
 		if (CollectionUtils.isNotEmpty(contentObjectReferencesInCurrentSpace)) {
 			for (String contentObjectReference : contentObjectReferencesInCurrentSpace) {
-				ContentObject contentObject = contentService.getContentObjectByIdAndLocale(contentObjectReference, localeSelector.getLocaleString(), null);
+				ContentObject contentObject = contentService.getContentObject(contentObjectReference, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
 				
 				if (contentObject != null) {
 					addNewSpaceIemForObject(contentObject);
@@ -196,7 +202,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 			if (CollectionUtils.isNotEmpty(contentObjectReferences) && contentObjectReferences.contains(selectedObjectId)){
 				contentObjectReferences.remove(selectedObjectId);
 				
-				spaceService.saveSpace(currentSpace);
+				spaceService.save(currentSpace);
 				
 				// recreate spaceItems
 				createSpaceItems();
@@ -268,7 +274,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 
 			currentSpace.addChild(newSpace);
 
-			spaceService.saveSpace(newSpace);
+			spaceService.save(newSpace);
 
 			addNewSpaceItemForSpace(newSpace);
 
@@ -295,7 +301,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 						Space space = (Space) spaceItem.getSpaceItemObject();
 						if (space.getId().equals(selectedSpaceId)) {
 							space.addLocalizedLabel(localeSelector.getLocaleString(), newSpaceName);
-							space = spaceService.saveSpace(space);
+							space = spaceService.save(space);
 							spaceItem.setLocalizedLabel(newSpaceName);
 							sortSpaceItems();
 							// the event allows the folder tree to be updated too
@@ -347,7 +353,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 				spaceIdList.add(newSpaceParent.getId());
 				
 				spaceToBeMoved.setParent(newSpaceParent);
-				spaceService.saveSpace(spaceToBeMoved);
+				spaceService.save(spaceToBeMoved);
 				
 				// the event allows the folder tree to be updated
 				Events.instance().raiseEvent(SeamEventNames.RELOAD_SPACE_TREE_NODES, spaceIdList);
@@ -388,14 +394,14 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 			spaceIdList.add(spaceIntoWhichObjectIsCopied.getId());
 			
 			spaceIntoWhichObjectIsCopied.addContentObjectReference(objectToBeCopiedInSpace.getContentObject().getId());
-			spaceService.saveSpace(spaceIntoWhichObjectIsCopied);
+			spaceService.save(spaceIntoWhichObjectIsCopied);
 				
 			// the event allows the folder tree to be updated
 			Events.instance().raiseEvent(SeamEventNames.RELOAD_SPACE_TREE_NODES, spaceIdList);
 				
 			// we will also update the folder tab in the case that the user is currently viewing
 			// the space into which we copied the object
-			if (spaceIntoWhichObjectIsCopied.getId().equals(currentSpace.getId())) {
+			if (currentSpace != null && spaceIntoWhichObjectIsCopied.getId().equals(currentSpace.getId())) {
 				createBreadCrumbSpaces();
 				createSpaceItems();
 			}

@@ -165,6 +165,7 @@ Authors
 										value="#{contentType.label}"
 										action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
 										reRender="objectEditorAjaxPanel"
+										onclick="resetEditors();"
 										oncomplete="showTab('objectEditorTab');"
 										disabled="#{contentType.disabled}"
 										ajaxSingle="true"/> 

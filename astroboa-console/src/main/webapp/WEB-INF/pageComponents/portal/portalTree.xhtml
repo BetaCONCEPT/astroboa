@@ -41,6 +41,7 @@ Authors
 						action="#{portalEditor.addNewPortal_UIAction}"
 						value="#{messages['portal.administration.panel.add.portal']}"
 						reRender="objectEditorAjaxPanel"
+						onclick="resetEditors();"
 						oncomplete="showTab('objectEditorTab');"
 						ajaxSingle="true" 
 						style="padding-left: 30px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 10px center;"/>
@@ -56,6 +57,7 @@ Authors
 						<a4j:commandLink id="portalTreeNodeLink"
 									ajaxSingle="true"
 									reRender="objectEditorAjaxPanel"
+									onclick="resetEditors();"
 									oncomplete="showTab('objectEditorTab');"
 									action="#{portalEditor.editPortal_UIAction(portalTreeNode.portalContentObjectId)}"
 									title="Click to edit web site configuration">
@@ -72,6 +74,7 @@ Authors
 							<rich:menuItem ajaxSingle="true"
 								action="#{portalEditor.addNewPortalSectionToPortal_UIContextMenuAction(portalTreeNode.portalContentObjectId)}"
 								reRender="objectEditorAjaxPanel"
+								onclick="resetEditors();"
 								oncomplete="showTab('objectEditorTab');">
 										Προσθήκη Νέας Ιστοσελίδας
 							</rich:menuItem>
@@ -87,6 +90,7 @@ Authors
 							<rich:menuItem ajaxSingle="true"
 								action="#{portalEditor.addNewPortalSubSectionToPortalSection_UIContextMenuAction(portalTreeNode.portalContentObjectId, portalTreeNode.portalSectionObjectId)}"
 								reRender="objectEditorAjaxPanel"
+								onclick="resetEditors();"
 								oncomplete="showTab('objectEditorTab');">
 										Προσθήκη Νέας Ιστοσελίδας
 							</rich:menuItem>
@@ -109,6 +113,7 @@ Authors
 						<a4j:commandLink id="portalSectionTreeNodeLink"
 									ajaxSingle="true"
 									reRender="objectEditorAjaxPanel"
+									onclick="resetEditors();"
 									oncomplete="showTab('objectEditorTab');"
 									action="#{portalEditor.editPortalSection_UIAction(portalTreeNode.portalContentObjectId,portalTreeNode.portalSectionObjectId)}"
 									title="Click to Edit Web Page">
