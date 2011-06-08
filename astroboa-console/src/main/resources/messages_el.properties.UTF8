@@ -77,13 +77,13 @@ content.object.contentObjectType=Τύπος Αντικ. Περιεχομένου
 # Content Object status
 content.object.profile.status.not.defined = Κατάσταση Αντικειμένου ΜΗ Ορισμένη
 content.object.profile.status.authored=Το Αντικείμενο είναι υπό Δημιουργία
-content.object.profile.status.submitted=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγγρισης)
-content.object.profile.status.approved=Το Αντικείμενο έχει εγγριθεί για Δημοσίευση στο web
+content.object.profile.status.submitted=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web (εν αναμονή έγκρισης)
+content.object.profile.status.approved=Το Αντικείμενο έχει εγκριθεί για Δημοσίευση στο web
 content.object.profile.status.rejected=Το Αντικείμενο έχει απορριφθεί μόνιμα για Δημοσίευση στο web
 content.object.profile.status.temporarilyRejectedForReauthoring=Το Αντικείμενο έχει απορριφθεί προσωρινά για Δημοσίευση στο web (απαιτούνται διορθώσεις)
 content.object.profile.status.scheduledForPublication=Το Αντικείμενο έχει προγραμματιστεί για Δημοσίευση στο web
 content.object.profile.status.published=Το Αντικείμενο είναι Δημοσιευμένο στο web
-content.object.profile.status.submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web από εξωτερικό χρήστη (εν αναμονή έγγρισης)
+content.object.profile.status.submittedByExternalUser=Το Αντικείμενο έχει υποβληθεί για Δημοσίευση στο web από εξωτερικό χρήστη (εν αναμονή έγκρισης)
 
 # Workflows
 workflow.none = Καμία Ροή Εργασίας
@@ -438,7 +438,7 @@ content.object.edit.actions.cancelPublication = ΑΚΥΡΩΣΗ ΔΗΜΟΣΙΕΥ�
 content.object.edit.actions.save = ΑΠΟΘΗΚΕΥΣΗ
 content.object.edit.actions.publish = ΔΗΜΟΣΙΕΥΣΗ
 content.object.edit.workflowActions.activatePublicationScheduling = ΕΝΕΡΓΟΠΟΙΗΣΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΗΣ ΔΗΜΟΣΙΕΥΣΗΣ
-content.object.edit.workflowActions.submitForApproval = content.object.edit.workflowActions.submitForApproval = ΥΠΟΒΟΛΗ ΓΙΑ ΕΓΓΡΙΣΗ
+content.object.edit.workflowActions.submitForApproval = ΥΠΟΒΟΛΗ ΓΙΑ ΕΓΚΡΙΣΗ
 content.object.edit.workflowActions.reject = ΑΠΟΡΡΙΨΗ
 content.object.edit.html.editor.panel.header = Εισαγωγή κειμένου
 content.object.edit.html.editor.save.link.label = Αποθήκευση και Κλείσιμο κειμενογράφου
