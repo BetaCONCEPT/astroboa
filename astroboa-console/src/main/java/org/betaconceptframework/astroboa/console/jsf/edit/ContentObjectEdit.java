@@ -1729,7 +1729,8 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			else {
 				// the save was successful
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("submitted", null)}, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", 
+						new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.submitted", null)}, FacesMessage.SEVERITY_INFO); 
 			}
 		}
 		catch(Exception e){
