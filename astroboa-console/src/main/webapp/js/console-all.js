@@ -1107,6 +1107,7 @@ function callFunctionOnEnterKey(e, func, arg) {
         textEditorOpenButton =null;
         if (editor) {
         	editor.destroy();
+        	editor = null;
         }
     }
     
@@ -1205,6 +1206,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     		bcmslib.jQuery(textEditorArea).val(editor.getData());
     		textEditorArea = null;
     		editor.destroy();
+    		editor = null;
     	}
     	
     	if (textEditorCloseButton) {
