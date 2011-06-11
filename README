@@ -7,13 +7,13 @@ With Astroboa you can store and search "any thing" without having to cope with d
 It hadles automatically everything for you (almost).   
 
 You can easily and dynamically create and adjust the schema of the stored entities and Astroboa automatically generates the input forms for your users to fill in data.
-Astroboa continuously interprets your data schema changes and automatically adjusts the REST API through which you can create, update, read, search and delete entities. You may even use the API to learn about the schema of your Entities and dyamically generate UIs and web pages.
+Astroboa continuously interprets your data schema changes and automatically adjusts the REST API through which you can create, update, read, search and delete entities. You may even use the API to learn about the schema of your Entities in order to dynamically generate UIs and web pages.
 
-Astroboa automatically validates and stores the JSON or XML that you sent through the REST API. It allows you to define security at the level of individual entity instances or entity properties so that you can easily control who can read and write data to your repository.
+Astroboa automatically validates and stores the JSON or XML that you send through the REST API. It allows you to define security at the level of individual entity instances or entity properties so that you can easily control who can read and write data to your repository.
 
-It offers strong Internationalization support supporting multilingual Taxonomies (hierarchical vocabularies of terms to be used for categorization or as values of entity properties), multilingual names for entity and entity property names, and multilingual documentation of your schema.
+It offers strong Internationalization support through multilingual Taxonomies (hierarchical vocabularies of terms to be used for categorization or as values of entity properties), multilingual names for entity and entity property names, and multilingual documentation directly stored inside your schema.
 
-And if you require Enterprise features like Transactions then the Java API can be used to access your repositories localy or remotely.
+And if you require strong typing and enterprise features like Transactions then the Java API can be used to access your repositories localy or remotely.
 
 If you want to learn more about Astroboa, to find extensive documentation and download available packages please visit the community site at http://www.astroboa.org
    
