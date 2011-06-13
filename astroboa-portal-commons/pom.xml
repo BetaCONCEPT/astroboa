@@ -269,13 +269,13 @@ Authors
       
 	<scm>
 		<connection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-portal-commons
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-portal-commons
 		</url>
 	</scm>
 </project>

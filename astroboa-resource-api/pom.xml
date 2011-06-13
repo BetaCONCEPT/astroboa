@@ -221,13 +221,13 @@
 
 	<scm>
 		<connection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-resource-api
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-resource-api
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-resource-api
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-resource-api
 		</url>
 	</scm>
 </project>

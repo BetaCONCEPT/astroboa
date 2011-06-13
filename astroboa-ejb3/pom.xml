@@ -42,6 +42,7 @@ Authors
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ejb-plugin</artifactId>
+				<version>2.3</version>
 				<configuration>
 					<archive>
               				<manifest>
@@ -126,13 +127,13 @@ Authors
 
 	<scm>
 		<connection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-ejb3
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-ejb3
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-ejb3
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-ejb3
 		</url>
 	</scm>
 

@@ -36,19 +36,19 @@ Authors
 		This modules holds all the interfaces to Astroboa services and
 		model objects, i.e the astroboa repository facade. This module
 		produces the jar required by those building applications that
-		utilize the astroboa engine
+		utilize the astroboa engine.
 	</description>
 
 
 	<scm>
 		<connection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-api
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-api
 		</url>
 	</scm>
 

@@ -72,9 +72,15 @@
 
 	
 	<scm>
-    	<connection>scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</connection>
-		<developerConnection>scm:svn:http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</developerConnection>
-		<url>http://svn.betaconcept.eu/repos/betaconcept/astroboa/trunk/astroboa-build</url>
+    <connection>
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
+		</connection>
+		<developerConnection>
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
+		</developerConnection>
+		<url>
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-build
+		</url>
 	</scm>
 	
 </project>

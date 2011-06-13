@@ -116,6 +116,7 @@
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-install-plugin</artifactId>
+			    <version>2.3.1</version>
 			    <executions>
 			        <execution>
 			            <phase>install</phase>
@@ -185,13 +186,13 @@
 	</dependencies>
 	<scm>
 		<connection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:svn:http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			http://svn.betaconcept.eu/repos/betaconceptframework/astroboa/trunk/astroboa-jaas
+			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-jaas
 		</url>
 	</scm>
 </project>
