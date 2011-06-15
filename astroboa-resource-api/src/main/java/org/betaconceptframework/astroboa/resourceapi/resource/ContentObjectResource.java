@@ -814,7 +814,7 @@ public class ContentObjectResource extends AstroboaResource{
 				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL, null);
 			}
 			else {
-				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL, commaDelimitedProjectionPaths);
+				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.ENTITY, commaDelimitedProjectionPaths);
 			}
 
 			if (contentObject == null) {
