@@ -103,7 +103,8 @@ public class ContentObjectResource extends AstroboaResource{
 	@Produces("*/*")
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
 	public Response getContentObjectByIdOrNameAnyResponse(
-			@PathParam("contentObjectIdOrName") String contentObjectIdOrName, 
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
+			@QueryParam("projectionPaths") String commaDelimitedProjectionPaths,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
@@ -116,7 +117,7 @@ public class ContentObjectResource extends AstroboaResource{
 
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
 
-		return getContentObjectByIdOrName(contentObjectIdOrName, outputEnum, callback,prettyPrintEnabled);
+		return getContentObjectByIdOrName(contentObjectIdOrName, commaDelimitedProjectionPaths, outputEnum, callback,prettyPrintEnabled);
 	}
 
 	@GET
@@ -124,6 +125,7 @@ public class ContentObjectResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
 	public Response getContentObjectByIdAsJson(
 			@PathParam("contentObjectIdOrName") String contentObjectIdOrName, 
+			@QueryParam("projectionPaths") String commaDelimitedProjectionPaths,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
@@ -139,7 +141,7 @@ public class ContentObjectResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		return getContentObjectByIdOrName(contentObjectIdOrName, outputEnum, callback, prettyPrintEnabled);
+		return getContentObjectByIdOrName(contentObjectIdOrName, commaDelimitedProjectionPaths, outputEnum, callback, prettyPrintEnabled);
 	}
 	
 	@GET
@@ -147,6 +149,7 @@ public class ContentObjectResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
 	public Response getContentObjectByIdAsXml(
 			@PathParam("contentObjectIdOrName") String contentObjectIdOrName, 
+			@QueryParam("projectionPaths") String commaDelimitedProjectionPaths,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
 			@QueryParam("prettyPrint") String prettyPrint){
@@ -162,7 +165,7 @@ public class ContentObjectResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		return getContentObjectByIdOrName(contentObjectIdOrName, outputEnum, callback,prettyPrintEnabled);
+		return getContentObjectByIdOrName(contentObjectIdOrName, commaDelimitedProjectionPaths, outputEnum, callback,prettyPrintEnabled);
 	}
 	
 	// API URLs for content object properties
@@ -177,7 +180,7 @@ public class ContentObjectResource extends AstroboaResource{
 		
 		try {
 
-			ContentObject contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrName, FetchLevel.ENTITY);
+			ContentObject contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrName, FetchLevel.ENTITY, null);
 
 			if (contentObject == null) {
 				logger.warn("The provided content object id / system name {} does not correspond to a content object or you do not have permission to access the requested object", contentObjectIdOrName);
@@ -275,7 +278,7 @@ public class ContentObjectResource extends AstroboaResource{
 		
 		try {
 
-			ContentObject contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrName, FetchLevel.ENTITY);
+			ContentObject contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrName, FetchLevel.ENTITY, null);
 
 			if (contentObject == null) {
 				logger.warn("The provided content object id / system name {} does not correspond to a content object or you do not have permission to access the requested object", contentObjectIdOrName);
@@ -556,7 +559,7 @@ public class ContentObjectResource extends AstroboaResource{
 	}
 	
 	
-	private Response getContentObjectByIdOrName(String contentObjectIdOrSystemName, Output output, String callback, boolean prettyPrint){
+	private Response getContentObjectByIdOrName(String contentObjectIdOrSystemName, String commaDelimitedProjectionPaths, Output output, String callback, boolean prettyPrint){
 		
 		if (StringUtils.isBlank(contentObjectIdOrSystemName)){
 			logger.warn("No contentObjectId provided");
@@ -564,7 +567,7 @@ public class ContentObjectResource extends AstroboaResource{
 		}
 		
 		Date lastModified = null;
-		String contentObjectXmlorJson  = retrieveContentObjectXMLorJSONByIdOrSystemName(contentObjectIdOrSystemName, output, lastModified, prettyPrint);
+		String contentObjectXmlorJson  = retrieveContentObjectXMLorJSONByIdOrSystemName(contentObjectIdOrSystemName, commaDelimitedProjectionPaths, output, lastModified, prettyPrint);
 		
 		if (StringUtils.isBlank(contentObjectXmlorJson)) {
 			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -789,18 +792,30 @@ public class ContentObjectResource extends AstroboaResource{
 
 	}
 	
-	private ContentObject retrieveContentObjectByIdOrSystemName(String contentObjectIdOrSystemName, FetchLevel fetchLevel) {
+	private ContentObject retrieveContentObjectByIdOrSystemName(String contentObjectIdOrSystemName, FetchLevel fetchLevel, String commaDelimitedProjectionPaths) {
 		try {
-			return astroboaClient.getContentService().getContentObject(contentObjectIdOrSystemName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, fetchLevel, CacheRegion.NONE, null, false);
+			
+			List<String> propertyPaths = null;
+			if (StringUtils.isNotBlank(commaDelimitedProjectionPaths)) {
+				String[] propertyPathsArray = commaDelimitedProjectionPaths.split(",");
+				propertyPaths = Arrays.asList(propertyPathsArray);
+			}
+			return astroboaClient.getContentService().getContentObject(contentObjectIdOrSystemName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, fetchLevel, CacheRegion.NONE, propertyPaths, false);
 		}
 		catch (Exception e) {
 			return null;
 		}
 	}
 
-	private String retrieveContentObjectXMLorJSONByIdOrSystemName(String contentObjectIdOrSystemName, Output output, Date lastModified, boolean prettyPrint) {
+	private String retrieveContentObjectXMLorJSONByIdOrSystemName(String contentObjectIdOrSystemName, String commaDelimitedProjectionPaths, Output output, Date lastModified, boolean prettyPrint) {
 		try {
-			ContentObject contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL);
+			ContentObject contentObject = null;
+			if (StringUtils.isBlank(commaDelimitedProjectionPaths)) {
+				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL, null);
+			}
+			else {
+				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL, commaDelimitedProjectionPaths);
+			}
 
 			if (contentObject == null) {
 				return null;
