@@ -792,14 +792,9 @@ public class ContentObjectResource extends AstroboaResource{
 
 	}
 	
-	private ContentObject retrieveContentObjectByIdOrSystemName(String contentObjectIdOrSystemName, FetchLevel fetchLevel, String commaDelimitedProjectionPaths) {
+	private ContentObject retrieveContentObjectByIdOrSystemName(String contentObjectIdOrSystemName, FetchLevel fetchLevel, List<String> propertyPaths) {
 		try {
 			
-			List<String> propertyPaths = null;
-			if (StringUtils.isNotBlank(commaDelimitedProjectionPaths)) {
-				String[] propertyPathsArray = commaDelimitedProjectionPaths.split(",");
-				propertyPaths = Arrays.asList(propertyPathsArray);
-			}
 			return astroboaClient.getContentService().getContentObject(contentObjectIdOrSystemName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, fetchLevel, CacheRegion.NONE, propertyPaths, false);
 		}
 		catch (Exception e) {
@@ -810,11 +805,15 @@ public class ContentObjectResource extends AstroboaResource{
 	private String retrieveContentObjectXMLorJSONByIdOrSystemName(String contentObjectIdOrSystemName, String commaDelimitedProjectionPaths, Output output, Date lastModified, boolean prettyPrint) {
 		try {
 			ContentObject contentObject = null;
+			String[] propertyPathsArray = null;
+			
 			if (StringUtils.isBlank(commaDelimitedProjectionPaths)) {
 				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.FULL, null);
 			}
 			else {
-				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.ENTITY, commaDelimitedProjectionPaths);
+				propertyPathsArray = commaDelimitedProjectionPaths.split(",");
+				List<String> propertyPaths = Arrays.asList(propertyPathsArray);
+				contentObject = retrieveContentObjectByIdOrSystemName(contentObjectIdOrSystemName, FetchLevel.ENTITY, propertyPaths);
 			}
 
 			if (contentObject == null) {
@@ -830,11 +829,11 @@ public class ContentObjectResource extends AstroboaResource{
 
 			switch (output) {
 			case XML:
-				return contentObject.xml(prettyPrint);
+				return contentObject.xml(prettyPrint, false, propertyPathsArray);
 			case JSON:
-				return contentObject.json(prettyPrint);
+				return contentObject.json(prettyPrint, false, propertyPathsArray);
 			default:
-				return contentObject.xml(prettyPrint);
+				return contentObject.xml(prettyPrint, false, propertyPathsArray);
 			}
 		}
 		catch (Exception e) {
