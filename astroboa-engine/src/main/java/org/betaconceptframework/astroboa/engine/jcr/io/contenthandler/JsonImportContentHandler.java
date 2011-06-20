@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import javax.xml.XMLConstants;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
