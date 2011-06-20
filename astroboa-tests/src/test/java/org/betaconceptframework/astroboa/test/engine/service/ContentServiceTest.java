@@ -19,6 +19,7 @@
 package org.betaconceptframework.astroboa.test.engine.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -106,6 +107,65 @@ import org.testng.annotations.Test;
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
 	
+	
+	/*
+	 * Test for saving XML of JSON with binary content of a property whose name
+	 * is 'content' like arrayOfFileResourceTypeObject.fileResource.content
+	 */
+	@Test
+	public void testSaveXMLorJSONWithBinaryContentSpecialCase() throws Exception{
+		
+		//Create object
+		RepositoryUser systemUser = getSystemUser();
+
+		//Save XML which contains binary content
+		ContentObject contentObject = createArrayOfFileResources(0, systemUser);
+		String xml = contentObject.xml(false, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "fileResource.content", null);
+		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		
+		//Check that update is also working
+		xml = contentObject.xml(false, true);
+		saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "fileResource.content", null);
+
+		//Save JSON which contains binary content
+		contentObject = createArrayOfFileResources(1, systemUser);
+		String json = contentObject.json(false, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "fileResource.content", null);
+		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+
+		//Check that update is also working
+		json = contentObject.json(false, true);
+		saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "fileResource.content", null);
+
+		//Use XML/JSON exported from API
+		xml = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, CacheRegion.NONE, null, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "fileResource.content", null);
+		
+		json = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL, CacheRegion.NONE, null, true);
+		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "fileResource.content", null);
+		
+		
+	}
+	
+	
+	private ContentObject createArrayOfFileResources(int index, RepositoryUser systemUser) throws IOException{
+		
+		ContentObject contentObject = createContentObjectForType("arrayOfFileResourceTypeObject", systemUser, "test-save-xml-json-with-binary-content-arrayOfFileResourceTypeObject-"+index, true);
+
+		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "content");
+		
+		((StringProperty)contentObject.getCmsProperty("fileResource.title")).setSimpleTypeValue("Test Title");
+		BinaryProperty imageProperty = (BinaryProperty)contentObject.getCmsProperty("fileResource.content");
+		imageProperty.addSimpleTypeValue(logoBinaryChannel);
+
+		((StringProperty)contentObject.getCmsProperty("fileResource[1].title")).setSimpleTypeValue("Test Title2");
+		BinaryProperty imageProperty2 = (BinaryProperty)contentObject.getCmsProperty("fileResource[1].content");
+		imageProperty2.addSimpleTypeValue(logoBinaryChannel);
+
+		return contentObject;
+	}
+	
 	@Test
 	public void testSaveXMLorJSONWithBinaryContent() throws Exception{
 		
@@ -113,7 +173,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		RepositoryUser systemUser = getSystemUser();
 
 		//Add binary channel to object
-		ContentObject contentObject = createContentObject(systemUser, "test-save-xml-json-with-binary-content", true);
+		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE, systemUser, "test-save-xml-json-with-binary-content", true);
 
 		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "image");
 		BinaryProperty imageProperty = (BinaryProperty)contentObject.getCmsProperty("image");
@@ -197,7 +257,12 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				
 				String mimeType = new MimetypesFileTypeMap().getContentType(fileWhoseContentsAreSavedInBinaryChannel);
 				
-				Assert.assertEquals(imageBinaryChannel.getName(), property);
+				if (property.contains(".")){
+					Assert.assertEquals(imageBinaryChannel.getName(), StringUtils.substringAfterLast(property, "."));
+				}
+				else{
+					Assert.assertEquals(imageBinaryChannel.getName(), property);
+				}
 				Assert.assertEquals(imageBinaryChannel.getMimeType(), mimeType);
 				Assert.assertEquals(imageBinaryChannel.getSourceFilename(), sourceFilename);
 				Assert.assertEquals(imageBinaryChannel.getSize(), FileUtils.readFileToByteArray(fileWhoseContentsAreSavedInBinaryChannel).length);
@@ -210,7 +275,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				//If node is not found then exception has already been thrown
 				Assert.assertEquals(binaryChannelNode.getName(), imageBinaryChannel.getName(), " Invalid name for binary data jcr node "+ binaryChannelNode.getPath());
 
-				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString(), property);
+				if (property.contains(".")){
+					Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString(), StringUtils.substringAfterLast(property, "."));
+				}
+				else{
+					Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Name.getJcrName()).getString(), property);
+				}
+
 				Assert.assertEquals(binaryChannelNode.getProperty(JcrBuiltInItem.JcrMimeType.getJcrName()).getString(), mimeType);
 				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.SourceFileName.getJcrName()).getString(), sourceFilename);
 				Assert.assertEquals(binaryChannelNode.getProperty(CmsBuiltInItem.Size.getJcrName()).getLong(), fileWhoseContentsAreSavedInBinaryChannel.length());

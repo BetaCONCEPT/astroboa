@@ -64,6 +64,9 @@ public class ImportedEntity{
 	
 	private boolean entityRepresentsAContentObjectReference;
 	
+	//Useful when entity is a binary channel and element 'content' is being processed
+	private boolean rawDataAreBeingProcessed = false;
+	
 	public ImportedEntity(String name, Object entity, DatatypeFactory df, boolean entityRepresentsAContentObjectReference) {
 		this.name = name;
 		this.entity = entity;
@@ -374,5 +377,12 @@ public class ImportedEntity{
 		return entityRepresentsAContentObjectReference;
 	}
 	
+	public void processingRawData(boolean start){
+		this.rawDataAreBeingProcessed = start;
+	}
+	
+	public boolean entityIsABinaryChannelAndRawDataElementIsBeingProcessed(){
+		return rawDataAreBeingProcessed && entity != null && entity instanceof BinaryChannel;
+	}
 }
 

@@ -29,6 +29,7 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
@@ -255,6 +256,8 @@ public class ImportContentHandler<T> implements ContentHandler{
 			else if (currentEntity instanceof BinaryChannel && 
 					CmsConstants.CONTENT_ELEMENT_NAME.equals(localName)){
 				//Element is content , which is defined in context of BinaryChannel
+				//It will be processed when closing this element
+				cmsRepositoryEntityQueue.peek().processingRawData(true);
 				return;
 			}
 			else if (CmsConstants.LOCALIZED_LABEL_ELEMENT_NAME.equals(localName)){
@@ -478,14 +481,16 @@ public class ImportContentHandler<T> implements ContentHandler{
 			return ;
 			
 		}
-		else if (StringUtils.equals(CmsConstants.CONTENT_ELEMENT_NAME, localName) && 
+		else if (StringUtils.equals(CmsConstants.CONTENT_ELEMENT_NAME, localName) &&
 				! cmsRepositoryEntityQueue.isEmpty() && 
-				cmsRepositoryEntityQueue.peek().getEntity() instanceof BinaryChannel){
+				cmsRepositoryEntityQueue.peek().entityIsABinaryChannelAndRawDataElementIsBeingProcessed()){
 			
 			//Content element is ending. Add content to binaryChannel
 			addContentToBinaryChannel(retrieveElementContentValue());
 
 			clearElementContent();
+			
+			cmsRepositoryEntityQueue.peek().processingRawData(false);
 			
 			return;
 		}
