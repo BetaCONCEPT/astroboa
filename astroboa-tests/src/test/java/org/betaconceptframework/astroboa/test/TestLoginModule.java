@@ -51,7 +51,6 @@ import org.betaconceptframework.astroboa.security.CmsGroup;
 import org.betaconceptframework.astroboa.security.CmsPrincipal;
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.astroboa.security.management.CmsPerson;
-import org.betaconceptframework.astroboa.test.AstroboaTestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
