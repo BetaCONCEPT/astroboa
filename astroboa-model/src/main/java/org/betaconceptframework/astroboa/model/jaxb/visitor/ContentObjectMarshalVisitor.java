@@ -360,19 +360,6 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 		}
 	}
 
-	/*private boolean complexCmsPropertyHasChildProperty(
-			CmsPropertyInfo complexCmsPropertyInfo, String childPropertyName) {
-		
-		if (complexCmsPropertyInfo != null && complexCmsPropertyInfo.getCmsProperty() != null){
-			
-			if (complexCmsPropertyInfo.getCmsProperty() instanceof ComplexCmsProperty){
-				return ((ComplexCmsProperty)complexCmsPropertyInfo.getCmsProperty()).isChildPropertyLoaded(childPropertyName);
-			}
-		}
-		
-		return false;
-	}*/
-
 	protected List<CmsPropertyInfo> loadComplexCmsPropertyInfos(CmsPropertyDefinition complexPropertyDefinition) {
 		
 		List<CmsPropertyInfo> complexCmsPropertyInfos = new ArrayList<CmsPropertyInfo>();
@@ -396,8 +383,7 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 			//Check if any value exists in the repository
 			if (parentComplexCmsProperty.hasValueForChildProperty(complexPropertyDefinition.getName())){
 				//Try usual method using getChildProperty or getChildPropertyList
-				//methods. In case properties returned are new (i.e have no identifier) then there is no point 
-				//in marshaling them
+				//methods. 
 				if (complexPropertyDefinition.isMultiple()){
 					complexCmsProperties = parentComplexCmsProperty.getChildPropertyList(complexPropertyDefinition.getName());
 				}
@@ -412,26 +398,16 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 			}
 		}
 		
-		if (CollectionUtils.isNotEmpty(complexCmsProperties))
-		{
+		if (CollectionUtils.isNotEmpty(complexCmsProperties)){
 			for (CmsProperty<?,?> complexCmsProperty : complexCmsProperties){
-				if (StringUtils.isBlank(complexCmsProperty.getId())){
-					
-					if (logger.isDebugEnabled()){
-						logger.debug("\t\t Complex cms property {} was lazy loaded but has no identifier thus there is no point in continue marshaling this property", complexCmsProperty.getFullPath());
-					}
-					continue;
-				}
-				else
-				{
-					CmsPropertyInfo complexCmsPropertyInfo = new CmsPropertyInfo();
-					complexCmsPropertyInfo.setId(complexCmsProperty.getId());
-					complexCmsPropertyInfo.setFullPath(complexCmsProperty.getFullPath());
-					complexCmsPropertyInfo.setCmsProperty(complexCmsProperty);
-					complexCmsPropertyInfo.setName(complexCmsProperty.getName());
+
+				CmsPropertyInfo complexCmsPropertyInfo = new CmsPropertyInfo();
+				complexCmsPropertyInfo.setId(complexCmsProperty.getId());
+				complexCmsPropertyInfo.setFullPath(complexCmsProperty.getFullPath());
+				complexCmsPropertyInfo.setCmsProperty(complexCmsProperty);
+				complexCmsPropertyInfo.setName(complexCmsProperty.getName());
 				
-					complexCmsPropertyInfos.add(complexCmsPropertyInfo);
-				}
+				complexCmsPropertyInfos.add(complexCmsPropertyInfo);
 			}
 		}
 		
