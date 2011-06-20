@@ -656,7 +656,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		InputStream sourceInputStream = null;
 		
 		try{
-			sourceInputStream = contentSourceExtractor.extractXmlFromSourceURL(exportURL);
+			sourceInputStream = contentSourceExtractor.extractStream(exportURL);
 
 			jaxbValidationUtils.validateUsingSAX(sourceInputStream);
 
@@ -673,7 +673,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	private void logExportXml(URL exportURL) throws IOException, Exception
 		{
 		
-		final String xml = IOUtils.toString(contentSourceExtractor.extractXmlFromSourceURL(exportURL));
+		final String xml = IOUtils.toString(contentSourceExtractor.extractStream(exportURL));
 		
 		try{
 			logger.info(TestUtils.prettyPrintXml(xml));

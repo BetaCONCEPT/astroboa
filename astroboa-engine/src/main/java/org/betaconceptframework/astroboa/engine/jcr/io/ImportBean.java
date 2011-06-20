@@ -99,7 +99,7 @@ public class ImportBean extends JcrDaoSupport{
 			throw new CmsException("Astroboa client context is not provided. Export failed");
 		}
 
-		InputStream xml = null; 
+		InputStream streamSource = null; 
 		ContentSourceExtractor contentSourceExtractor = null;
 		try{
 
@@ -109,13 +109,13 @@ public class ImportBean extends JcrDaoSupport{
 			if (contentSource != null){
 				contentSourceExtractor = new ContentSourceExtractor();
 				
-				xml = contentSourceExtractor.extractXmlFromSourceURL(contentSource);
+				streamSource = contentSourceExtractor.extractStream(contentSource);
 				
-				if (xml == null){
+				if (streamSource == null){
 					throw new Exception("Could not locate xml content source in URL "+contentSource.toString());
 				}
 				
-				performImport(importReport, xml, false, ImportMode.SAVE_ENTITY_TREE, Repository.class, false, false, getSession(), null);
+				performImport(importReport, streamSource, false, ImportMode.SAVE_ENTITY_TREE, Repository.class, false, false, getSession(), null);
 			}
 
 		}
@@ -128,7 +128,7 @@ public class ImportBean extends JcrDaoSupport{
 			throw new CmsException(e);
 		}
 		finally{
-			completeImport(importReport, start, xml);			
+			completeImport(importReport, start, streamSource);			
 			
 			if (contentSourceExtractor != null){
 				contentSourceExtractor.dispose();

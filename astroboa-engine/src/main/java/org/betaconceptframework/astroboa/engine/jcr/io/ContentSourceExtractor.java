@@ -46,7 +46,7 @@ public class ContentSourceExtractor {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public InputStream extractXmlFromSourceURL(URL contentSource) throws Exception
+	public InputStream extractStream(URL contentSource) throws Exception
 	{
 		dispose();
 		
