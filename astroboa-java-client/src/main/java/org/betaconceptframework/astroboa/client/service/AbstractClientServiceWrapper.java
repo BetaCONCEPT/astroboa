@@ -27,6 +27,7 @@ import javax.naming.InitialContext;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
+import org.jnp.interfaces.NamingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -210,7 +211,15 @@ public abstract class AbstractClientServiceWrapper {
 					}
 					
 					try{
-						return context.lookup(jndiName);
+						Object serviceReference = context.lookup(jndiName);
+						
+						if (serviceReference instanceof NamingContext && ! jndiName.endsWith("/local")){
+							//JNDIName is provided by the user and the object it references is an instance of NamingContext
+							//Since JNDIName does not end with "/local" , try to locate the local service under the returned NamingContext
+							return ((NamingContext)serviceReference).lookup("local");
+						}
+						
+						return  serviceReference;
 					}
 					catch (Exception e){
 						logger.warn("Could not connect to local service "+ serviceClass.getSimpleName(), e);
@@ -305,7 +314,15 @@ public abstract class AbstractClientServiceWrapper {
 			
 			//Enable this when astroboa.ear is used
 			//return (R) context.lookup(ASTROBOA_EAR_CONTEXT+"/"+serviceClass.getSimpleName()+"/remote");
-			return  context.lookup(jndiName);
+			Object serviceReference = context.lookup(jndiName);
+			
+			if (serviceReference instanceof NamingContext && ! jndiName.endsWith("/remote")){
+				//JNDIName is provided by the user and the object it references is an instance of NamingContext
+				//Since JNDIName does not end with "/remote" , try to locate the remote service under the returned NamingContext
+				return ((NamingContext)serviceReference).lookup("remote");
+			}
+			
+			return  serviceReference;
 			
 		} catch (Exception e) {
 			logger.error("",e);
