@@ -46,7 +46,7 @@ Authors
 
 						<!-- Show Action -->
 						<a4j:commandLink
-							onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 							action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(complexCmsPropertyBreadCrumb.path)}"
 							reRender="complexCmsPropertyChildPropertiesTable, complexCmsPropertyBreadCrumbs">
 

@@ -39,6 +39,7 @@ Authors
             <a4j:outputPanel layout="block">
             	
             	<rich:dropSupport 
+            		ondrop="destroyTextEditor();"
 					rendered="#{cmsPropertyWrapper.writeGranted}"
 					acceptedTypes="#{cmsPropertyWrapper.acceptedContentTypes}"
 					reRender="complexCmsPropertyChildPropertiesTable"
@@ -86,8 +87,9 @@ Authors
 						<h:outputText value="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}" />
 					</h:column>
 					<a4j:support event="onselect" 
-							reRender="complexCmsPropertyChildPropertiesTable"
-							action="#{cmsPropertyWrapper.addSelectedContentObject_UIAction(suggestedContentObject.contentObject, false)}" />
+						onsubmit="destroyTextEditor();"
+						reRender="complexCmsPropertyChildPropertiesTable"
+						action="#{cmsPropertyWrapper.addSelectedContentObject_UIAction(suggestedContentObject.contentObject, false)}" />
 				</rich:suggestionbox>
 			</a4j:outputPanel>
 			

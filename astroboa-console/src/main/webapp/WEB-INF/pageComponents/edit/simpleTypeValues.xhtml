@@ -62,6 +62,7 @@ Authors
 				
 				<!-- "Add one more value" Action for a Property with multiple simple values -->
 				<a4j:commandLink
+					onclick="destroyTextEditor();"
 					action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
 					reRender="complexCmsPropertyChildPropertiesTable"
 					title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
@@ -86,6 +87,7 @@ Authors
 								
 								<!-- Delete action -->
 								<a4j:commandLink
+									onclick="destroyTextEditor();"
 									rendered="#{cmsPropertyWrapper.writeGranted}"
 									action="#{cmsPropertyWrapper.deleteValueFromSelectedSimpleCmsProperty_UIAction}"
 									reRender="complexCmsPropertyChildPropertiesTable">

@@ -53,6 +53,7 @@ Authors
 					<li class="inlineFormElementValue">
 					 	<a4j:outputPanel >
 							<rich:dropSupport 
+								ondrop="destroyTextEditor();"
 								acceptedTypes="topicReference#{topicPropertyWrapper.cmsProperty.name}"
 								reRender="complexCmsPropertyChildPropertiesTable"
 								dropListener="#{topicPropertyWrapper.addDraggedAndDroppedReference_Listener}"
@@ -89,7 +90,7 @@ Authors
 							
 						<!-- MoveUp action 
 						<a4j:commandLink
-							onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 							rendered="#{topicPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper gt 0}"
 							action="#{topicPropertyWrapper.moveUp_UIAction(simpleCmsPropertyValueWrapper)}"
 							reRender="complexCmsPropertyChildPropertiesTable"
@@ -100,7 +101,7 @@ Authors
 						
 						<!-- MoveDown action 
 						<a4j:commandLink
-							onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 							rendered="#{topicPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper lt topicPropertyWrapper.simpleCmsPropertyValueWrappers.size()-1}"
 							action="#{topicPropertyWrapper.moveDown_UIAction(simpleCmsPropertyValueWrapper)}"
 							reRender="complexCmsPropertyChildPropertiesTable"
@@ -111,6 +112,7 @@ Authors
 						
 						<!-- Delete action -->
 						<a4j:commandLink
+							onclick="destroyTextEditor();"
 							value="Delete Topic"
 							styleClass="delete"
 							rendered="#{topicPropertyWrapper.writeGranted}"

@@ -39,6 +39,7 @@ Authors
             <a4j:outputPanel layout="block">
             	
             	<rich:dropSupport 
+            		ondrop="destroyTextEditor();"
 					acceptedTypes="topic"
 					reRender="complexCmsPropertyChildPropertiesTable"
 					dropListener="#{topicPropertyWrapper.addDraggedAndDroppedTopicToTopicProperty_Listener}">
@@ -70,8 +71,9 @@ Authors
 						<h:outputText value="#{suggestedTopic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 					</h:column>
 					<a4j:support event="onselect" 
-							reRender="complexCmsPropertyChildPropertiesTable"
-							action="#{topicPropertyWrapper.addSelectedTopic_UIAction(suggestedTopic, false)}"/>
+						onsubmit="destroyTextEditor();"
+						reRender="complexCmsPropertyChildPropertiesTable"
+						action="#{topicPropertyWrapper.addSelectedTopic_UIAction(suggestedTopic, false)}"/>
 				</rich:suggestionbox>
 		
 			</a4j:outputPanel>

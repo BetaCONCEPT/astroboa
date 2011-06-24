@@ -53,6 +53,7 @@ Authors
 						<li class="inlineFormElementValue">
 							<a4j:outputPanel>
 								<rich:dropSupport 
+									ondrop="destroyTextEditor();"
 									acceptedTypes="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}"
 									reRender="complexCmsPropertyChildPropertiesTable"
 									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
@@ -61,7 +62,7 @@ Authors
 								</rich:dropSupport>
 				
 								<a4j:commandLink
-									onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+									onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 									action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childComplexCmsPropertyWrapper.path)}"
 									reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs">
 					
@@ -91,7 +92,7 @@ Authors
 						
 							<!-- MoveUp action
 							<a4j:commandLink
-								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index gt 0}"
 								action="#{cmsPropertyWrapper.moveUp_UIAction(childComplexCmsPropertyWrapper)}"
 								reRender="complexCmsPropertyChildPropertiesTable">
@@ -100,7 +101,7 @@ Authors
 								
 							MoveDown action 
 							<a4j:commandLink
-								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index lt cmsPropertyWrapper.childComplexCmsPropertyWrappers.size()-1}"
 								action="#{cmsPropertyWrapper.moveDown_UIAction(childComplexCmsPropertyWrapper)}"
 								reRender="complexCmsPropertyChildPropertiesTable">
@@ -114,7 +115,7 @@ Authors
 							<a4j:commandLink
 								value="Delete Complex Property"
 								styleClass="delete"
-								onclick="codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 								action="#{cmsPropertyWrapper.deleteComplexCmsProperty_UIAction(childComplexCmsPropertyWrapper.pathRelativeToCmsPropertyParent)}"
 								reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs"
 								rendered="#{cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted}">

@@ -30,7 +30,8 @@ bcmslib.jQuery(document).ready (function(){
 	//initMasonry();
 	
 	var lastPublishedObjectsQuery = "";
-	var projectionPaths = "thumbnail,profile.title,profile.description,profile.modified,content,body,summary,plot,about,aboutMe";
+	//var projectionPaths = "thumbnail,profile.title,profile.description,profile.modified,content,body,summary,plot,about,aboutMe";
+	var projectionPaths = "thumbnail,profile.title,profile.description,profile.modified,content";
 	var orderBy= "profile.modified desc";
 	
 	bcmslib.jQuery.each(repositories, function(i, repository) {
@@ -137,7 +138,8 @@ function renderElementsFromResults(objectList, repository) {
 		var textFileBoxClass = columnClass +  ' textFile';
 
 		var appendedTitle = '<h2>' + object.profile.title + '</h2>';
-		var objectText = getObjectText(object);
+		//var objectText = getObjectText(object);
+		var objectText = object.profile.description;
 		if (objectText == undefined) {
 			objectText = '';
 		}
@@ -203,7 +205,10 @@ function getObjectTypeLabel(objectType) {
 	}
 }
 function getObjectText(object) {
-
+	
+	if (object.profile.description != undefined) {	
+		return object.profile.description;
+	}
 	if (object.about != undefined) {
 		return object.about;
 	}
@@ -215,9 +220,6 @@ function getObjectText(object) {
 	}
 	else if (object.summary != undefined) {
 		return object.summary;
-	}
-	else if (object.profile.description != undefined) {	
-		return object.profile.description;
 	}
 	else if (object.body != undefined) {
 		// strip html tags and return the first 300 chars

@@ -1011,7 +1011,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     /* Ajax Activity Indicator*/
     function createAjaxActivityIndicator() {
     	
-    	bcmslib.jQuery(document).ajaxStart(function() {
+    	bcmslib.jQuery(document).ajaxStart(function() {	
     		bcmslib.jQuery("#ajaxActivityIndicator").hide();
     		bcmslib.jQuery("#ajaxActivityIndicator").show();
     	});

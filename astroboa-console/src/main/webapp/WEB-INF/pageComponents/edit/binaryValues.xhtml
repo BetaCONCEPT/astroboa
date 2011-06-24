@@ -161,6 +161,7 @@ Authors
 							<div style="margin: 0 0 10px 0;">
 							<!-- Action: Upload File -->	
 							<a4j:commandLink id="uploadCommnad"
+								onclick="destroyTextEditor();"
 								rendered="#{cmsPropertyWrapper.writeGranted 
 									and cmsPropertyWrapper.valueType eq 'Binary' 
 									and ! cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged}"
@@ -238,6 +239,7 @@ Authors
 							
 								<!-- Action: Create Thumbnail-->
 							<a4j:commandLink
+								onclick="destroyTextEditor();"
 								action="#{contentObjectEdit.generateThumbnailFromSelectedBinaryChannel_UIAction(indexOfCmsPropertyWrapper, indexOfSimpleCmsPropertyValueWrapper)}"
 								reRender="complexCmsPropertyChildPropertiesTable"
 								title="#{messages['content.object.edit.action.createThumbnail']}"
@@ -252,6 +254,7 @@ Authors
 							
 							<!-- Delete action -->
 							<a4j:commandLink
+								onclick="destroyTextEditor();"
 								action="#{cmsPropertyWrapper.deleteValueFromSelectedSimpleCmsProperty_UIAction}"
 								reRender="complexCmsPropertyChildPropertiesTable"
 								title="#{messages['content.object.edit.action.deleteFile']}"
