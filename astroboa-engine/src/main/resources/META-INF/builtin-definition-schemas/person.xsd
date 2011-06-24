@@ -655,7 +655,41 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
+	
+	
+	<xs:complexType name="auditType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Audit</bccmsmodel:displayName>
+				<bccmsmodel:description>Audit Data concerning the user account activity such as console logins, api calls, etc.</bccmsmodel:description>
+			</xs:documentation>
+			<xs:documentation xml:lang="el">
+				<bccmsmodel:displayName>Στοιχεία Ελέγχου</bccmsmodel:displayName>
+				<bccmsmodel:description>Αυτός ο σύνθετος τύπος περιέχει στοιχεία σχετικά με τη δραστηριότητα του λογαριασμού όπως την είσοδο του χρήστη στην κονσόλα διαχείρισης, τις κλήσεις στις προγραμματιστικές διεπαφές, κλπ.</bccmsmodel:description>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="consoleLoginLog">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>Console Login Log</bccmsmodel:displayName>
+						<bccmsmodel:description>A log of user console logins and logouts. Each log entry contains the network ip of user's machine and a timestamp</bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">
+						<bccmsmodel:displayName>Ημερολόγιο Εισόδου στην Κονσόλα</bccmsmodel:displayName>
+						<bccmsmodel:description>Στο ημερολόγιο καταγράφεται η είσοδος και η έξοδος του χρήστη απο την κονσόλα διαχείρισης. Κάθε εγγραφή περιέχει την διέυθυνση δικτύου του μηχανήματος του χρήστη και την ημερομηνία και ώρα που έγινε η ενέργεια</bccmsmodel:description>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="0"/>                                    
+						<xs:maxLength value="0"/>
+						</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="bccmsmodel:commonEntityAttributes"/>
+	</xs:complexType>
 
 	<xs:complexType name="personType">
 
@@ -1021,7 +1055,20 @@
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-
+					
+					<xs:element name="audit"
+						type="tns:auditType" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								<bccmsmodel:displayName>Audit</bccmsmodel:displayName>
+								<bccmsmodel:description>Audit Data concerning the user account activity such as console logins, api calls, etc.</bccmsmodel:description>
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								<bccmsmodel:displayName>Στοιχεία Ελέγχου Λογαριασμού</bccmsmodel:displayName>
+								<bccmsmodel:description>Αυτός ο σύνθετος τύπος περιέχει στοιχεία σχετικά με τη δραστηριότητα του λογαριασμού όπως την είσοδο του χρήστη στην κονσόλα διαχείρισης, τις κλήσεις στις προγραμματιστικές διεπαφές, κλπ.</bccmsmodel:description>
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
