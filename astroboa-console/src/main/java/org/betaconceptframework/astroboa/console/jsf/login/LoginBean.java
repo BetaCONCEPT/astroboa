@@ -25,7 +25,6 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.ConfigurationException;
@@ -48,6 +47,7 @@ import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.console.security.CmsCredentials;
 import org.betaconceptframework.astroboa.console.security.IdentityStoreRunAsSystem;
 import org.betaconceptframework.astroboa.console.security.LoggedInRepositoryUser;
+import org.betaconceptframework.astroboa.console.security.LoggedInRepositoryUser.UserActivityType;
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.SecurityContext;
@@ -63,7 +63,6 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.web.ServletContexts;
-import org.jboss.seam.web.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,7 +124,7 @@ public class LoginBean {
 			if (clientContext == null || clientContext.getRepositoryContext() == null ||
 					clientContext.getRepositoryContext().getCmsRepository() == null ||
 					StringUtils.isBlank(clientContext.getRepositoryContext().getCmsRepository().getApplicationPolicyName())){
-				logout();
+				logout(false);
 				throw new Exception("No JAAS application policy name is provided for repository "+ repositoryIdToConnectTo);
 			}
 			else{
@@ -193,7 +192,7 @@ public class LoginBean {
 					if (repositoryUser != null) {
 						JSFUtilities.addMessage(null,"login.welcome", null, FacesMessage.SEVERITY_INFO);
 						
-						// save the password encrypted in the session
+						// save the password in the session
 						// this is required by the ResourceApiProxy in order to construct secured API calls to the Resource API.
 						// This is a temporary solution until the new security framework is implemented (through URL signining)
 						HttpServletRequest httpServletRequest = ServletContexts.instance().getRequest();
@@ -201,13 +200,15 @@ public class LoginBean {
 							httpServletRequest.getSession().setAttribute("repositoryPassword", passWord);
 						}
 						
+						// write audit log if identity store is local, i.e. there is a local Person Object connected to the loggedin repository user
+						loggedInRepositoryUser.updateConsloleLoginLog(UserActivityType.login);
 						
 						return loginOutcome;
 					}
 					else {
 						//facesMessages.addFromResourceBundle(StatusMessage.Severity.ERROR, "login.authenticationServiceFailure", (Object[]) null);
 						JSFUtilities.addMessage(null,"login.authenticationServiceFailure", null, FacesMessage.SEVERITY_ERROR);
-						logout();
+						logout(false);
 						return null;
 					}
 				}
@@ -219,49 +220,64 @@ public class LoginBean {
 		catch (CmsLoginInvalidUsernameException e) {
 			JSFUtilities.addMessage(null,"login.invalidCredentials",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User performed a login with invalid user name");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch (CmsInvalidPasswordException e) {
 			JSFUtilities.addMessage(null,"login.invalidCredentials",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User performed a login with invalid password");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch (CmsLoginAccountExpiredException e) {
 			JSFUtilities.addMessage(null,"login.accountExpired",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User performed a login with an account that has expired");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch (CmsLoginAccountLockedException e) {
 			JSFUtilities.addMessage(null,"login.accountLocked",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User performed a login with an account that is locked");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch (CmsLoginPasswordExpiredException e) {
 			JSFUtilities.addMessage(null,"login.passwordExpired",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User performed a login with a password that has expired");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch (CmsUnauthorizedRepositoryUseException e) {
 			JSFUtilities.addMessage(null,"login.unauthorizedRepositoryAccess",null, FacesMessage.SEVERITY_WARN);
 			logger.info("User tried to login into a repository to which she is not authorized");
-			logout();
+			logout(false);
 			return null;
 		}
 		catch(Exception e){
 			logger.error("An error occured during user authentication",e);
 			JSFUtilities.addMessage(null,"login.authenticationServiceFailure", null, FacesMessage.SEVERITY_ERROR);
-			logout();
+			logout(false);
 			return null;
 		}
 
 	}
 	
+	// this is used by page actions so we want logging to be enabled
 	public void logout() {
+		logout(true);
+	}
+	
+	private void logout(boolean updateConsoleLoginLog) {
+		
+		if (updateConsoleLoginLog) {
+			try {
+				loggedInRepositoryUser.updateConsloleLoginLog(UserActivityType.logout);
+			}
+			catch (Exception e) {
+				logger.error("An error occured during the update of conslole login log to record user logout. The logout will proceed normally without any notification to the user.", e);
+			}
+		}	
+		
 		Identity.instance().logout();
 		
 		identityStoreRunAsSystem.reset();

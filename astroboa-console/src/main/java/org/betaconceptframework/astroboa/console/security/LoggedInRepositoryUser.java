@@ -22,16 +22,26 @@ package org.betaconceptframework.astroboa.console.security;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
+import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.DisplayNamePrincipal;
 import org.betaconceptframework.astroboa.api.security.PersonUserIdPrincipal;
+import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.RepositoryUserService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
 import org.betaconceptframework.astroboa.console.commons.TopicComparator;
@@ -43,7 +53,10 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.bean.AbstractBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.TimeZoneSelector;
 import org.jboss.seam.security.Identity;
+import org.jboss.seam.web.ServletContexts;
 
 /**
  * 
@@ -58,6 +71,7 @@ public class LoggedInRepositoryUser extends AbstractBean {
 	// injected beans
 	private CMSUtilities cmsUtilities;
 	private RepositoryUserService repositoryUserService;
+	private ContentService contentService;
 
 	private String displayName;
 	private String personId;
@@ -66,6 +80,11 @@ public class LoggedInRepositoryUser extends AbstractBean {
 	private RepositoryUser repositoryUser;
 
 	private String identity;
+	
+	public enum UserActivityType {
+		login,
+		logout
+	}
 	
 	public void reset(){
 		displayName = null;
@@ -174,7 +193,70 @@ public class LoggedInRepositoryUser extends AbstractBean {
 		return displayName;
 
 	}
-
+	
+	public void updateConsloleLoginLog(UserActivityType userActivityType) throws Exception {
+		if (isIdentityStoredInThisRepository() && getPersonId() != null) {
+			// we need Admin rights to read and write the Person Object so we will temporarily add this role to Security Context and remove it 
+			// when the update has finished
+			boolean roleAdminHasBeenAdded = false;
+			SecurityContext securityContext = AstroboaClientContextHolder.getActiveSecurityContext();
+			String roleAdminForActiveRepository = CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_ADMIN);
+			
+			if (securityContext !=null && ! securityContext.hasRole(roleAdminForActiveRepository))
+			{
+				//Use method provided by the SecurityContext
+				roleAdminHasBeenAdded = securityContext.addRole(roleAdminForActiveRepository);
+			}
+			
+			try{
+				ContentObject person = contentService.getContentObject(getPersonId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, Arrays.asList("audit.consoleLoginLog"), false);
+				
+				if (person != null) {
+					StringProperty consoleLoginLogProperty = ((StringProperty) person.getCmsProperty("audit.consoleLoginLog"));
+					String consoleLoginLog = consoleLoginLogProperty.getSimpleTypeValue();
+					
+					String remoteServerAddr = null;
+					
+					HttpServletRequest httpServletRequest = ServletContexts.instance().getRequest();
+					if (httpServletRequest != null) {
+						remoteServerAddr = httpServletRequest.getRemoteAddr();
+					}
+					
+					Calendar loginTimestamp = new GregorianCalendar(TimeZoneSelector.instance().getTimeZone(), LocaleSelector.instance().getLocale());
+					// Timestamp format is [Mon Jun 20 06:24:55 +0200 2011]
+					String loginTimestampAsString = String.format("%1$ta %1$tb  %1$td %1$tT %1$tz %1$tY", loginTimestamp);
+					
+					if (remoteServerAddr == null) {
+						remoteServerAddr = "not available";
+					}
+					
+					// add a new line
+					consoleLoginLog += "\n";
+					
+					if (userActivityType.equals(UserActivityType.login)) {
+						consoleLoginLog += "Login ";
+					}
+					else if (userActivityType.equals(UserActivityType.logout)) {
+						consoleLoginLog += "Logout ";
+					}
+					
+					consoleLoginLogProperty.setSimpleTypeValue(consoleLoginLog + "[client " + remoteServerAddr + "] [" + loginTimestampAsString + "]");
+					
+					contentService.save(person, false, false, null);
+				}
+			}
+			catch(Exception e) {
+				throw e;
+			}
+			finally {
+				if (roleAdminHasBeenAdded)
+				{
+					securityContext.removeRole(roleAdminForActiveRepository);
+				}
+			}
+		}
+	}
+	
 	private void saveRepositoryUser(RepositoryUser userToBeCreated) throws Exception {
 		/*
 		 * In order to be able to save repository user, logged in user must have ROLE_CMS_EDITOR@repositoryId
@@ -192,30 +274,10 @@ public class LoggedInRepositoryUser extends AbstractBean {
 		{
 			//Use method provided by the SecurityContext
 			roleCmsEditorHasBeenAdded = securityContext.addRole(roleCmsEditorForActiveRepository);
-			/*
-			Subject subject = securityContext.getSubject();
-			
-			if (subject != null){
-				Set<Group> groups = subject.getPrincipals(Group.class);
-
-				if (groups != null){
-					for (Group group : groups){
-						if (group.getName() != null && AstroboaPrincipalName.Roles.toString().equals(group.getName())){
-
-							rolePrincipal = new CmsPrincipal(roleCmsEditorForActiveRepository);
-							group.addMember(rolePrincipal);
-							rolesGroup = group;
-							
-							roleCmsEditorHasBeenAdded = true;
-							break;
-						}
-					}
-				}
-			}*/
 		}
 		
 		try{
-			repositoryUserService.saveRepositoryUser(userToBeCreated);
+			repositoryUserService.save(userToBeCreated);
 		}
 		catch(Exception e)
 		{
@@ -307,6 +369,10 @@ public class LoggedInRepositoryUser extends AbstractBean {
 
 	public void setRepositoryUserService(RepositoryUserService repositoryUserService) {
 		this.repositoryUserService = repositoryUserService;
+	}
+
+	public void setContentService(ContentService contentService) {
+		this.contentService = contentService;
 	}
 
 	public boolean isExternallyManagedIdentity() {

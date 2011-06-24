@@ -50,6 +50,7 @@ Authors
 		<aop:scoped-proxy/>
 		<property name="cmsUtilities" ref="cmsUtilities"/>
 		<property name="repositoryUserService" ref="repositoryUserService"/>
+		<property name="contentService" ref="contentService"/>
 	</bean>
 	
 	<bean id="contentObjectStatefulSearchService" class="org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService" scope="session" autowire="byName" >
