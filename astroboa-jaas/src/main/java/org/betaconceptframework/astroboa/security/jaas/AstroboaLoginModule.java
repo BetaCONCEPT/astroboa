@@ -256,8 +256,22 @@ public class AstroboaLoginModule implements LoginModule{
 
 					if (StringUtils.isNotBlank(initialContextFactoryName)){
 
-						identityStore = (IdentityStore) context.lookup(identityStoreLocation);
-
+						Object serviceReference = context.lookup(identityStoreLocation);
+						
+						if (! (serviceReference instanceof IdentityStore)){
+							if (! identityStoreLocation.endsWith("/local")){
+								//JNDIName is provided by the user and the object it references is not an instance of IdentityStore.
+								//It is probably an instance of NamingContext which is on top of a local or remote service
+								//Since JNDIName does not end with "/local" , try to locate the local service under the returned NamingContext
+								identityStore = (IdentityStore) context.lookup(identityStoreLocation+"/local");
+							}
+							else{
+								throw new Exception("JNDI Name "+identityStoreLocation+ " refers to an object whose type is not IdentityStore. Unable to locate. External Identity Store ");
+							}
+						}
+						else{
+							identityStore = (IdentityStore) serviceReference;
+						}
 						//TODO: It may also be the case another login to the identity store must be done
 
 					}
