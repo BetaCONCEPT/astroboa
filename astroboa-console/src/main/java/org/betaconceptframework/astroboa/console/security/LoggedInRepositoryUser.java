@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
@@ -219,7 +220,15 @@ public class LoggedInRepositoryUser extends AbstractBean {
 					
 					HttpServletRequest httpServletRequest = ServletContexts.instance().getRequest();
 					if (httpServletRequest != null) {
-						remoteServerAddr = httpServletRequest.getRemoteAddr();
+						//The client address can be read from httpServletRequest.remoteAddr if the console is directly accessed through JBoss otherwise if a proxy is in front of jboss
+						// we can find the client address in "x-forwarded-for" header. Be aware that the proxy should be configured to appropriately set the "x-forwarded-for" header.
+						// For example if apache with mod_proxy is used then the mod_proxy_http module should be activated.
+						
+						// So lets try first the "x-forwarded-for" header which is the most reasonable default if the repository is in production
+						remoteServerAddr = httpServletRequest.getHeader("x-forwarded-for");
+						if (StringUtils.isBlank(remoteServerAddr)) {
+							remoteServerAddr = httpServletRequest.getRemoteAddr();
+						}
 					}
 					
 					Calendar loginTimestamp = new GregorianCalendar(TimeZoneSelector.instance().getTimeZone(), LocaleSelector.instance().getLocale());
