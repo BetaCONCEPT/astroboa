@@ -87,11 +87,11 @@ Authors
 										<ui:fragment 
 											rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
 											<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}">
-												<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
+												<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}"
 										 			class="objectPhotosSlideshow" rel="defaultGallery"
 										 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}">
 													
-													<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}?width=150"/>
+													<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}?width=150"/>
 													
 													<ui:remove>
 													<seam:graphicImage
@@ -190,7 +190,7 @@ Authors
 							  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
 							 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
 							 
-							 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}?contentDispositionType=attachment"
+							 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}?contentDispositionType=attachment"
 							 	title="#{messages['content.object.edit.action.downloadFile']}">
 											<h:graphicImage value="/images/cms-icons/16/fugue/drive-download.png" />
 							</a>
@@ -200,7 +200,7 @@ Authors
 							<!-- Action: View File Inline if it is an image-->
 							<ui:fragment rendered="#{simpleCmsPropertyValueWrapper.isJPGorPNGorGIFImage() and simpleCmsPropertyValueWrapper.contentAvailable}">
 							 
-								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
+								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}"
 								 	class="slideshow"
 								 	title="#{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename} : #{messages['content.object.edit.action.viewFileInline']}">
 										<h:graphicImage
@@ -214,7 +214,7 @@ Authors
 								  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
 								 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
 								 
-								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.definitionName}"
+								 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}"
 								 target="_blank"
 								 	title="#{messages['content.object.edit.action.viewFileInline']}">
 												<h:graphicImage
