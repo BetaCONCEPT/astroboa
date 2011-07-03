@@ -494,4 +494,25 @@ public class ContentApiUtils {
 
 		
 	}
+	
+   public static FetchLevel getFetchLevel(String depth, FetchLevel defaultValue){
+	   
+	   if (StringUtils.isBlank(depth)){
+		   return defaultValue;
+	   }
+	   
+	   if (StringUtils.equalsIgnoreCase(depth, "0")){
+		   return FetchLevel.ENTITY;
+	   }
+
+	   if (StringUtils.equalsIgnoreCase(depth, "1")){
+		   return FetchLevel.ENTITY_AND_CHILDREN;
+	   }
+	   
+	   if (StringUtils.equalsIgnoreCase(depth, "-1")){
+		   return FetchLevel.FULL;
+	   }
+
+	   return defaultValue;
+   }
 }

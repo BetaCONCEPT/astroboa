@@ -38,7 +38,6 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
@@ -94,7 +93,8 @@ public class TopicResource extends AstroboaResource{
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
-			@QueryParam("prettyPrint") String prettyPrint){
+			@QueryParam("prettyPrint") String prettyPrint,
+			@QueryParam("depth") String depth){
 		
 		/*if (output == null)
 		{
@@ -103,7 +103,9 @@ public class TopicResource extends AstroboaResource{
 
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
+		FetchLevel fetchLevel = ContentApiUtils.getFetchLevel(depth, FetchLevel.ENTITY_AND_CHILDREN);
+		
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint,fetchLevel);
 
 	}
 	
@@ -114,7 +116,8 @@ public class TopicResource extends AstroboaResource{
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
-			@QueryParam("prettyPrint") String prettyPrint) {
+			@QueryParam("prettyPrint") String prettyPrint,
+			@QueryParam("depth") String depth) {
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -126,7 +129,9 @@ public class TopicResource extends AstroboaResource{
 		
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.JSON);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
+		FetchLevel fetchLevel = ContentApiUtils.getFetchLevel(depth, FetchLevel.ENTITY_AND_CHILDREN);
+		
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint,fetchLevel);
 	}
 	
 	@GET
@@ -136,7 +141,8 @@ public class TopicResource extends AstroboaResource{
 			@PathParam("topicIdOrName") String topicIdOrName,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback,
-			@QueryParam("prettyPrint") String prettyPrint) {
+			@QueryParam("prettyPrint") String prettyPrint,
+			@QueryParam("depth") String depth) {
 		
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
@@ -148,7 +154,9 @@ public class TopicResource extends AstroboaResource{
 		
 		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
 		
-		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint);
+		FetchLevel fetchLevel = ContentApiUtils.getFetchLevel(depth, FetchLevel.ENTITY_AND_CHILDREN);
+		
+		return getTopicInternal(topicIdOrName, outputEnum, callback, prettyPrint,fetchLevel);
 	}
 	
 	  @PUT
@@ -523,7 +531,7 @@ public class TopicResource extends AstroboaResource{
 
 	}
 	
-	private Response getTopicInternal(String topicIdOrName, Output output, String callback, String prettyPrint){
+	private Response getTopicInternal(String topicIdOrName, Output output, String callback, String prettyPrint, FetchLevel fetchLevel){
 		
 		//OLD Method
 		//return generateTopicResponseUsingTopicInstance(topicIdOrName, output,	callback);
@@ -536,7 +544,7 @@ public class TopicResource extends AstroboaResource{
 			
 			switch (output) {
 			case XML:{
-				String topicXML = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.XML, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
+				String topicXML = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.XML, fetchLevel, prettyPrintEnabled);
 
 				if (StringUtils.isBlank(topicXML)){
 					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
@@ -551,7 +559,7 @@ public class TopicResource extends AstroboaResource{
 				break;
 			}
 			case JSON:{
-				String topicJSON = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.JSON, FetchLevel.ENTITY_AND_CHILDREN, prettyPrintEnabled);
+				String topicJSON = astroboaClient.getTopicService().getTopic(topicIdOrName, ResourceRepresentationType.JSON, fetchLevel, prettyPrintEnabled);
 
 				if (StringUtils.isBlank(topicJSON)){
 					throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
