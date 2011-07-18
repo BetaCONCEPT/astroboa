@@ -166,26 +166,32 @@ public class PopulateContentObject {
 		//Validate system name first
 		String systemName = contentObject.getSystemName();
 		
-		//User has not provided system name. 
+		//System name is NULL or an empty string 
 		if (StringUtils.isBlank(systemName)){
-			
-			//Object already contains one
-			if (contentObjectNode.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
-				//Update object with existing system name and return
-				systemName = contentObjectNode.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString();
-				
-				//Maybe unnecessary check.
-				if (! context.getCmsRepositoryEntityUtils().isValidSystemName(systemName)){
-					throw new RepositoryException("Existing Object system name "+systemName+" is not valid. It should match pattern "+CmsConstants.SYSTEM_NAME_REG_EXP);
-				}
 
-				contentObject.setSystemName(systemName);
+			// User did not specify a system name. Do not create one if object already has one
+			if (systemName == null){
 				
-				return;
+				//If object already has a system name, retrieve value from the repository and update object
+				if (contentObjectNode.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
+					//Update object with existing system name and return
+					systemName = contentObjectNode.getProperty(CmsBuiltInItem.SystemName.getJcrName()).getString();
+
+					//Maybe unnecessary check.
+					if (! context.getCmsRepositoryEntityUtils().isValidSystemName(systemName)){
+						throw new RepositoryException("Existing Object system name "+systemName+" is not valid. It should match pattern "+CmsConstants.SYSTEM_NAME_REG_EXP);
+					}
+
+					contentObject.setSystemName(systemName);
+
+					return;
+				}
 			}
 			
+			//System name is empty. This way user specifies that she wants a new system name to be created 
 			//Generate a system name
-			//1. Check profile.title property
+			//1. Check profile.title property from the object and if none if found, check 
+			//if title
 			systemName = retrieveContentObjectProfileTitle();
 			
 			if (StringUtils.isBlank(systemName)){
