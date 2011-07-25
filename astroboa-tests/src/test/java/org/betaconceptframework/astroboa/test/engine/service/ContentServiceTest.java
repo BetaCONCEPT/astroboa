@@ -655,7 +655,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		ContentObject contentObject = createContentObject(systemUser,"testContains", false);
 
 		//Add text in a first level property
-		((StringProperty)contentObject.getCmsProperty("stringEnum")).addSimpleTypeValue("BLUE");
+		((StringProperty)contentObject.getCmsProperty("simpleString")).addSimpleTypeValue("Text in first level property");
 		
 		//Add text in a second level property
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Title for contains search");
@@ -671,7 +671,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
 		
-		assertContainsInSearch(contentObject, contentObjectNode, "blu");
+		assertContainsInSearch(contentObject, contentObjectNode, "firs");
 
 		assertContainsInSearch(contentObject, contentObjectNode, "conta");
 
