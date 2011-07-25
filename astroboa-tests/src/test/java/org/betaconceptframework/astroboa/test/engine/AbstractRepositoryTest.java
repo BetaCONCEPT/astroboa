@@ -757,7 +757,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		
 	}
 	
-	private void addValueForProperty(ContentObject contentObject, String propertyPath) throws Exception{
+	protected void addValueForProperty(ContentObject contentObject, String propertyPath) throws Exception{
 		CmsProperty<?, ?> cmsProperty = contentObject.getCmsProperty(propertyPath);
 		
 		boolean multiple = cmsProperty.getPropertyDefinition().isMultiple();
@@ -773,6 +773,10 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			contentObjectCriteria.doNotCacheResults();
 			contentObjectCriteria.setOffsetAndLimit(0, 2);
 			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+			
+			if (contentObject.getId()!=null){
+				contentObjectCriteria.addIdNotEqualsCriterion(contentObject.getId());
+			}
 			
 			CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			
