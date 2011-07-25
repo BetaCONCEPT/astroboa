@@ -80,7 +80,7 @@ implements ComplexCmsRootProperty,AspectDefinitionManager, Serializable{
 			
 			if (lazyLoader !=null){
 				lazyLoader.activateClientContextForAuthenticationToken(authenticationToken);
-				aspectDefinition = (ComplexCmsPropertyDefinition) getLazyLoader().getDefinitionService().getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+				aspectDefinition = (ComplexCmsPropertyDefinition) lazyLoader.getDefinitionService().getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 			}
 
 			if (aspectDefinition == null){
