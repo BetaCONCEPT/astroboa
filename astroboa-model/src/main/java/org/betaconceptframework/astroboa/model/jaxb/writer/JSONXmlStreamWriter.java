@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.model.impl.item.CmsDefinitionItem;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.codehaus.jackson.JsonGenerationException;
@@ -210,7 +211,7 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 		try {
 			
 			if (! objectQueue.isEmpty()){
-				objectQueue.peek().addChild(localName, null);
+				objectQueue.peek().addChild(localName, new NullJsonObject(localName));
 			}
 			else{
 				logger.warn("Cannot find Json Object to write empty element {}", localName);
@@ -360,7 +361,7 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 
 	private class JsonObject{
 		
-		private String name;
+		protected String name;
 		
 		private Map<String,String> attributes = new LinkedHashMap<String, String>();
 		
@@ -393,7 +394,6 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 					child.exportAsAnArray = true;
 				}
 			}
-			
 		}
 
 		public void dispose(){
@@ -413,8 +413,10 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 			
 			
 			//Element has no attributes, no child elements and no values do not serialize
+			//It is an empty element and therefore it should have a null value
 			if (hasNoAttributeNorAnyChildNorAnyValueToSerialize()){
-				return ;
+				new NullJsonObject(name).toJson(exportName);
+				return;
 			}
 			
 			if (exportName){
@@ -506,7 +508,7 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 			return  ! hasAttributes() && childObjects.isEmpty() && values.size() == 0;
 		}
 
-		private boolean objectIsTheParentOfASingleChildObjectWhichRepresentsAnArray() {
+		protected boolean objectIsTheParentOfASingleChildObjectWhichRepresentsAnArray() {
 			return StringUtils.equals(CmsConstants.ROOT_TOPICS, name) ||
 			StringUtils.equals(CmsConstants.CHILD_TOPICS, name) ||
 			StringUtils.equals(CmsConstants.CHILD_SPACES, name) ||
@@ -530,5 +532,38 @@ public class JSONXmlStreamWriter implements XMLStreamWriter{
 			return ! attributes.isEmpty();
 		}
 	}
-	
+
+	private class NullJsonObject extends JsonObject {
+		private NullJsonObject(String name) {
+			super(name);
+		}
+
+		@Override
+		public void addChild(String localName, JsonObject child) {
+			throw new CmsException("Null Json Object cannot have child objects");
+		}
+
+		@Override
+		public void dispose() {
+			super.dispose();
+		}
+
+		@Override
+		public void addValue(String text) {
+			throw new CmsException("Null Json Object cannot have value");
+		}
+
+		@Override
+		public void addAttribute(String localName, String value) {
+			throw new CmsException("Null Json Object cannot have Attributes");
+		}
+
+		@Override
+		public void toJson(boolean exportName) throws Exception {
+
+			if (exportName && ! objectIsTheParentOfASingleChildObjectWhichRepresentsAnArray()){
+				generator.writeNullField(name);
+			}
+		}
+	}
 }
