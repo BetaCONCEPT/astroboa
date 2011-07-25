@@ -54,6 +54,7 @@ import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyD
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
+import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.jaxb.AstroboaMarshaller;
 import org.betaconceptframework.astroboa.model.jaxb.CmsEntitySerialization;
@@ -250,7 +251,11 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 						complexPropertyDefinition.url(ResourceRepresentationType.XSD));
 			}
 
-			
+			if (propertyHasBeenMarkedForRemoval(complexPropertyDefinition)){
+				marshallNullValueForComplexProperty(complexPropertyDefinition);
+				return ;
+			}
+
 			List<CmsPropertyInfo> complexCmsPropertyInfos = loadComplexCmsPropertyInfos(complexPropertyDefinition);
 
 			if (CollectionUtils.isNotEmpty(complexCmsPropertyInfos)){
@@ -261,7 +266,7 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 						logger.debug("\t Current context {}", contentObjectMarshalContext.getContextInfo());
 					}
 
-					CmsPropertyTypeJAXBElement<ComplexCmsPropertyType> complexCmsPropertyType = new CmsPropertyTypeJAXBElement(
+					CmsPropertyTypeJAXBElement<ComplexCmsPropertyType> complexCmsPropertyTypeJAXBElement = new CmsPropertyTypeJAXBElement(
 							//If aspects are marshaled then we need namespace and local part info.
 							//Otherwise only local part info is adequate for the element
 							aspectsAreVisited() ? complexPropertyDefinition.getQualifiedName():
@@ -270,11 +275,11 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 					);
 					
 					if (marshalOutputTypeIsJSON() && complexPropertyDefinition.isMultiple()){
-						complexCmsPropertyType.getValue().setExportAsAnArray(true);
+						complexCmsPropertyTypeJAXBElement.getValue().setExportAsAnArray(true);
 					}
 
 					if (((ComplexCmsPropertyDefinitionImpl)complexPropertyDefinition).commonAttributesAreDefined()){
-						complexCmsPropertyType.getValue().setCmsIdentifier(complexCmsPropertyInfo.getId());
+						complexCmsPropertyTypeJAXBElement.getValue().setCmsIdentifier(complexCmsPropertyInfo.getId());
 					}
 
 					//When aspects are added to a content object xml
@@ -287,15 +292,15 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 						if (logger.isDebugEnabled()){
 							logger.debug("Created JAXBElement for complex property {} with qualified name {}",
 								complexCmsPropertyInfo.getFullPath(), 
-								complexCmsPropertyType.getName().getPrefix() + " " +complexCmsPropertyType.getName().toString());
+								complexCmsPropertyTypeJAXBElement.getName().getPrefix() + " " +complexCmsPropertyTypeJAXBElement.getName().toString());
 						}
 						
-						complexCmsPropertyType.getValue().setXsiType(complexPropertyDefinition.getQualifiedName().getPrefix()+":"+
+						complexCmsPropertyTypeJAXBElement.getValue().setXsiType(complexPropertyDefinition.getQualifiedName().getPrefix()+":"+
 								complexPropertyDefinition.getQualifiedName().getLocalPart());
 					}
 
 					//Add complexCmsPropertyType to its parent
-					addJaxbElementToCurrentParentComplexCmsPropertyType(complexCmsPropertyType);
+					addJaxbElementToCurrentParentComplexCmsPropertyType(complexCmsPropertyTypeJAXBElement);
 
 
 					if (complexPropertyDefinition.hasChildCmsPropertyDefinitions()){
@@ -305,7 +310,7 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 						//Change current parent
 
 						contentObjectMarshalContext.pushComplexCmsPropertyInfo(complexCmsPropertyInfo);
-						contentObjectMarshalContext.pushComplexCmsPropertyType(complexCmsPropertyType.getValue());
+						contentObjectMarshalContext.pushComplexCmsPropertyType(complexCmsPropertyTypeJAXBElement.getValue());
 						
 						
 						//When aspects are visited we are interested only on root elements and not 
@@ -339,13 +344,13 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 					}
 
 					//In case complex property is empty and no ID is defined there is no point in showing in xml
-					if (StringUtils.isBlank(complexCmsPropertyType.getValue().getCmsIdentifier()) && 
-							CollectionUtils.isEmpty(complexCmsPropertyType.getValue().getCmsProperties())){
+					if (StringUtils.isBlank(complexCmsPropertyTypeJAXBElement.getValue().getCmsIdentifier()) && 
+							CollectionUtils.isEmpty(complexCmsPropertyTypeJAXBElement.getValue().getCmsProperties())){
 						if (contentObjectMarshalContext.getFirstComplexCmsPropertyType() == null){
-							contentObjectMarshalContext.getContentObjectType().getCmsProperties().remove(complexCmsPropertyType);
+							contentObjectMarshalContext.getContentObjectType().getCmsProperties().remove(complexCmsPropertyTypeJAXBElement);
 						}
 						else{
-							contentObjectMarshalContext.getFirstComplexCmsPropertyType().getCmsProperties().remove(complexCmsPropertyType);
+							contentObjectMarshalContext.getFirstComplexCmsPropertyType().getCmsProperties().remove(complexCmsPropertyTypeJAXBElement);
 						}
 					}
 				}
@@ -358,6 +363,21 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 			}
 
 		}
+	}
+
+	private void marshallNullValueForComplexProperty(ComplexCmsPropertyDefinition complexPropertyDefinition) {
+		
+		//Although this is a complex property we use the simple property type in order to generate an emtpy tag
+		//which is what we really want
+		final SimpleCmsPropertyType simpleCmsPropertyType = new SimpleCmsPropertyType();
+		
+		CmsPropertyTypeJAXBElement<SimpleCmsPropertyType> simpleCmsPropertyTypeJaxbElement = new CmsPropertyTypeJAXBElement(
+				aspectsAreVisited() ? complexPropertyDefinition.getQualifiedName():
+					new QName(complexPropertyDefinition.getQualifiedName().getLocalPart()),
+				SimpleCmsPropertyType.class, null, simpleCmsPropertyType);
+		
+		addJaxbElementToCurrentParentComplexCmsPropertyType(simpleCmsPropertyTypeJaxbElement);
+
 	}
 
 	protected List<CmsPropertyInfo> loadComplexCmsPropertyInfos(CmsPropertyDefinition complexPropertyDefinition) {
@@ -469,6 +489,11 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 				return;
 			}
 			
+			if (propertyHasBeenMarkedForRemoval(simplePropertyDefinition)){
+				marshallNullValueForSimpleProperty(simplePropertyDefinition);
+				return ;
+			}
+			
 			//First retrieve CmsProperty
 			CmsPropertyInfo simpleCmsProperty = getCmsPropertyInfoForChildProperty(simplePropertyDefinition);
 
@@ -496,6 +521,17 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 		}
 	}
 
+	protected void marshallNullValueForSimpleProperty(SimpleCmsPropertyDefinition simpleCmsPropertyDefinition){
+		
+		final SimpleCmsPropertyType simpleCmsPropertyType = new SimpleCmsPropertyType();
+		
+		CmsPropertyTypeJAXBElement<SimpleCmsPropertyType> simpleCmsPropertyTypeJaxbElement = new CmsPropertyTypeJAXBElement(
+				new QName(simpleCmsPropertyDefinition.getQualifiedName().getLocalPart()),
+				SimpleCmsPropertyType.class, null, simpleCmsPropertyType);
+		
+		addJaxbElementToCurrentParentComplexCmsPropertyType(simpleCmsPropertyTypeJaxbElement);
+	}
+	
 	protected <T> void marshallValueForSimpleProperty(
 			SimpleCmsPropertyDefinition<T> simplePropertyDefinition,
 			CmsPropertyInfo simpleCmsProperty, Object value) {
@@ -669,6 +705,12 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 		return getTopicAdapter().marshal((Topic)value, retrieveOutput());
 	}
 
+	protected boolean propertyHasBeenMarkedForRemoval(CmsPropertyDefinition cmsPropertyDefinition){
+		
+		return ((ComplexCmsPropertyImpl)contentObjectMarshalContext.getFirstComplexCmsPropertyInfo().getCmsProperty()).cmsPropertyHasBeenLoadedAndRemoved(cmsPropertyDefinition.getName());
+		
+	}
+	
 	protected <T> CmsPropertyInfo getCmsPropertyInfoForChildProperty(
 			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
 		
