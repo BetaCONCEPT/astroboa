@@ -56,6 +56,9 @@ import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsProperty
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
+import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
 import org.betaconceptframework.astroboa.model.jaxb.AstroboaValidationEventHandler;
 import org.betaconceptframework.astroboa.model.jaxb.type.BinaryChannelType;
 import org.betaconceptframework.astroboa.model.jaxb.type.CmsPropertyType;
@@ -64,6 +67,7 @@ import org.betaconceptframework.astroboa.model.jaxb.type.ContentObjectType;
 import org.betaconceptframework.astroboa.model.jaxb.type.SimpleCmsPropertyType;
 import org.betaconceptframework.astroboa.model.jaxb.type.TopicType;
 import org.betaconceptframework.astroboa.model.jaxb.visitor.ContentObjectMarshalVisitor;
+import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.betaconceptframework.astroboa.util.SchemaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,8 +118,10 @@ public class ContentObjectAdapter extends XmlAdapter<ContentObjectType, ContentO
 
 		marshallerVisitor.initialize(contentObject, contentObjectType, marshaller, serializeBinaryContent,exportAllProperties);
 
+		//Marshal object properties defined by its content type
 		contentObjectTypeDefinition.accept(marshallerVisitor);
 
+		//Marshal object's aspects
 		if (CollectionUtils.isNotEmpty(contentObject.getComplexCmsRootProperty().getAspects())){
 
 			marshallerVisitor.enableAspectDefinitionVisit();
@@ -126,7 +132,46 @@ public class ContentObjectAdapter extends XmlAdapter<ContentObjectType, ContentO
 				aspectDefinition.accept(marshallerVisitor);
 			}
 		}
+		
+		// Check if one or more aspects have been removed.
+		// If this is the case then a null value for them must be marshalled
+		List<String> pathsOfPropertiesMarkedForRemoval = ((ComplexCmsPropertyImpl)contentObject.getComplexCmsRootProperty()).getPathsOfPropertiesMarkedForRemoval();
+		
+		if (pathsOfPropertiesMarkedForRemoval!=null && ! pathsOfPropertiesMarkedForRemoval.isEmpty()){
 
+			LazyLoader lazyLoader = AstroboaClientContextHolder.getLazyLoaderForActiveClient();
+			
+			for (String pathOfPropertyMarkedForRemoval : pathsOfPropertiesMarkedForRemoval){
+				//We are interested only for aspects, therefore we are looking only for simple property paths
+				if (pathOfPropertyMarkedForRemoval.contains(".")){
+					continue;
+				}
+				
+				//If this property is not defined in the object's type definition, then it is an aspect
+				if (!contentObjectTypeDefinition.hasCmsPropertyDefinition(pathOfPropertyMarkedForRemoval)){
+					
+					ComplexCmsPropertyDefinition aspectDefinition = null;
+					
+					if (lazyLoader !=null){
+						aspectDefinition = (ComplexCmsPropertyDefinition) lazyLoader.getDefinitionService().getCmsDefinition(pathOfPropertyMarkedForRemoval, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+					}
+
+					if (aspectDefinition == null){
+						logger.warn("Definition for aspect "+ pathOfPropertyMarkedForRemoval+ " was not found. Unable to marshal NULL value for this property which has been marked for removal.");
+						continue;
+					}
+					
+					marshallerVisitor.enableAspectDefinitionVisit();
+					
+					aspectDefinition.accept(marshallerVisitor);
+
+				}
+				
+			}
+		}
+
+
+		
 		appendSchemaLocationToMarshaller();
 
 
