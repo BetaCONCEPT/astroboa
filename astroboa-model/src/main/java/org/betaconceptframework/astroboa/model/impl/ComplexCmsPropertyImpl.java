@@ -1647,6 +1647,13 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 		}
 
 	}
-	
+
+	public List<String> getPathsOfPropertiesMarkedForRemoval(){
+		if ( cmsPropertyNamesWhichHaveBeenLoadedAndRemoved == null || cmsPropertyNamesWhichHaveBeenLoadedAndRemoved.isEmpty())
+			return new ArrayList<String>();
+		
+		return Collections.unmodifiableList(cmsPropertyNamesWhichHaveBeenLoadedAndRemoved);
+		
+	}
 	
 }
