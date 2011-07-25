@@ -114,6 +114,10 @@ public class PopulateComplexCmsProperty{
 	public boolean atLeastOneChildPropertySaved() {
 		return atLeastOneChildPropertySaved;
 	}
+	
+	public void propertyIsPopulated(String propertyName) throws RepositoryException{
+		atLeastOneChildPropertySaved = true;
+	}
 
 	public void setSession(Session session) {
 		this.session = session;
@@ -463,7 +467,7 @@ public class PopulateComplexCmsProperty{
 					}
 				}
 				else{
-					atLeastOneChildPropertySaved = true;
+					propertyIsPopulated(childPropertyName);
 				}
 			}
 	}
