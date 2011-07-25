@@ -329,6 +329,16 @@ public class PopulateSimpleCmsProperty {
 					Node topicNode = retrieveTopicNode(topic);
 
 					if (topicNode == null){
+						
+						//Very special case
+						//Provided topic has no id, no name and no localized labels
+						//Ignore it
+						if (StringUtils.isBlank(topic.getId()) && 
+								StringUtils.isBlank(topic.getName()) && 
+								! topic.hasLocalizedLabels()){
+							continue;
+						}
+						
 						topicNode = createJcrNodeForTopicAndCacheJcrNode(topic);
 					}
 					else{
