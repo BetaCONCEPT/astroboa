@@ -28,13 +28,14 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryProperty;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
+import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -180,7 +181,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 			
 		}
 		else if (ContentObject.class.isAssignableFrom(resultType)){
-			importResult = (T) createNewContentObject(atts, rootElementName, uri);
+			importResult = (T) createNewContentObject(atts, rootElementName, uri, null);
 
 		}
 		else if (List.class.isAssignableFrom(resultType)){
@@ -384,7 +385,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 						return;
 					}
 					else{
-						ContentObject contentObject = createNewContentObject(atts, localName, uri);
+						ContentObject contentObject = createNewContentObject(atts, localName, uri, null);
 						pushEntity(localName, contentObject, atts);
 						return ;
 					}
@@ -415,7 +416,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 						return;
 					}
 					else{
-						ContentObject contentObject = createNewContentObject(atts, localName, uri);
+						ContentObject contentObject = createNewContentObject(atts, localName, uri, null);
 						((List)currentEntity).add(contentObject);
 						pushEntity(localName, contentObject, atts);
 						return ;
@@ -504,6 +505,7 @@ public class ImportContentHandler<T> implements ContentHandler{
 			if (entityWhoseImportHasFinished.getEntity() instanceof CmsRepositoryEntity){
 				CmsRepositoryEntity cmsRepositoryEntity = (CmsRepositoryEntity)entityWhoseImportHasFinished.getEntity();
 				
+				boolean cacheEntity = true;
 				
 				if (! cmsRepositoryEntityQueue.isEmpty() && 
 						( cmsRepositoryEntityQueue.peek().getEntity() instanceof Repository ||
@@ -514,8 +516,26 @@ public class ImportContentHandler<T> implements ContentHandler{
 				else if (cmsRepositoryEntity instanceof BinaryChannel){
 					deserializer.loadBinaryChannelContent((BinaryChannel)cmsRepositoryEntity);
 				}
+				else{
+					//Special case. If entity currently imported is a complex property but has no child properties
+					//then remove this property as user has specified a NULL value (in JSON) or an empty tag (in XML), 
+					//marking this property for removal.
+					if ( (cmsRepositoryEntity instanceof ComplexCmsProperty) && (!(cmsRepositoryEntity instanceof ComplexCmsRootProperty))){
+						
+						ComplexCmsProperty complexProperty = ((ComplexCmsProperty)cmsRepositoryEntity);
+						
+						if (complexProperty.getChildProperties() == null || complexProperty.getChildProperties().isEmpty()){
+							((ComplexCmsProperty)complexProperty).getParentProperty().removeChildProperty(complexProperty.getPath());
+							cacheEntity = false;
+						}
+						
+					}
+
+				}
 				
-				importContext.cacheEntity(cmsRepositoryEntity);
+				if (cacheEntity){
+					importContext.cacheEntity(cmsRepositoryEntity);
+				}	
 			}
 		}
 		
@@ -647,24 +667,32 @@ public class ImportContentHandler<T> implements ContentHandler{
 		}
 	}
 
-	private ContentObject createNewContentObject(Attributes atts, String localName, String uri) {
+	private ContentObject createNewContentObject(Attributes atts, String localName, String uri, String expectedContentType) {
 		
 		String contentType = getValueForAttribute(CmsBuiltInItem.ContentObjectTypeName.getLocalPart(), atts);
 		
-		if (StringUtils.isBlank(contentType)){
-			contentType = localName;
-		}
-		
-		ContentObject contentObject = CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newObjectForType(contentType);
-		
-		if (contentType == null){
-				throw new CmsException("Element {"+ uri+"}"+localName+" does not correspond to a known content type");
+		if (StringUtils.isBlank(contentType) && StringUtils.isNotBlank(expectedContentType)){
+				contentType = expectedContentType;
 		}
 
-		contentObject.setContentObjectType(getValueForAttribute(CmsBuiltInItem.ContentObjectTypeName.getLocalPart(), atts));
-		contentObject.setSystemName(getValueForAttribute(CmsBuiltInItem.SystemName.getLocalPart(), atts));
+		if (contentType == null){
+			logger.info("Could not identify the type of the object reference of the element "+localName+".");
+			return null;
+		}
 		
-		return contentObject;
+		try{
+			ContentObject contentObject = CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newObjectForType(contentType);
+
+			contentObject.setContentObjectType(getValueForAttribute(CmsBuiltInItem.ContentObjectTypeName.getLocalPart(), atts));
+			contentObject.setSystemName(getValueForAttribute(CmsBuiltInItem.SystemName.getLocalPart(), atts));
+			
+			return contentObject;
+		}
+		catch(Exception e){
+			logger.warn("Element "+localName+"'s corresponds to an unknown content type  "+contentType+".", e);
+			return null;
+		}
+
 		
 	}
 
@@ -904,7 +932,9 @@ public class ImportContentHandler<T> implements ContentHandler{
 		}
 		else if (cmsProperty.getValueType() == ValueType.ObjectReference){
 			ContentObject contentObject = populateContentObjectProperty(((ObjectReferenceProperty)cmsProperty), atts, localName, uri);
-			pushEntity(localName, contentObject, atts, true);
+			if (contentObject!=null){
+				pushEntity(localName, contentObject, atts, true);
+			}
 		}
 		else {
 			pushEntity(localName, cmsProperty, atts);
@@ -915,9 +945,18 @@ public class ImportContentHandler<T> implements ContentHandler{
 			ObjectReferenceProperty contentObjectProperty, Attributes atts,
 			String localName, String uri) {
 		
-		ContentObject contentObject = createNewContentObject(atts, localName, uri);
+		String expectedContentType = null;
+		if (contentObjectProperty != null && contentObjectProperty.getPropertyDefinition() != null && 
+				CollectionUtils.isNotEmpty(contentObjectProperty.getPropertyDefinition().getExpandedAcceptedContentTypes()) && 
+				contentObjectProperty.getPropertyDefinition().getExpandedAcceptedContentTypes().size() == 1){
+			expectedContentType = contentObjectProperty.getPropertyDefinition().getExpandedAcceptedContentTypes().get(0);
+		}
 		
-		contentObjectProperty.addSimpleTypeValue(contentObject);
+		ContentObject contentObject = createNewContentObject(atts, localName, uri, expectedContentType);
+		
+		if (contentObject!=null){
+			contentObjectProperty.addSimpleTypeValue(contentObject);
+		}
 		
 		return contentObject;
 	}
