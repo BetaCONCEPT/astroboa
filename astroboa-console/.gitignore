@@ -2,3 +2,5 @@
 /target
 /.classpath
 /.project
+/bin
+/src/main/resources/messages_el.properties
