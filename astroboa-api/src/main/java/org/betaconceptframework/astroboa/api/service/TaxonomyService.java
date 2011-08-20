@@ -109,7 +109,7 @@ public interface TaxonomyService {
 	 *            where <code>locale</code> is blank (empty or null), all
 	 *            localized labels will be rendered.
 	 *            
-	 * @deprecated User {@link #getTaxonomy(String, ResourceRepresentationType, FetchLevel)}
+	 * @deprecated Use {@link #getTaxonomy(String, ResourceRepresentationType, FetchLevel)}
 	 * @return {@link Taxonomy} with the specified name or null if not found.
 	 */
 	@Deprecated
