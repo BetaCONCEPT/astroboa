@@ -46,6 +46,7 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicProperty;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.exception.CmsConcurrentModificationException;
 import org.betaconceptframework.astroboa.api.model.exception.CmsNonUniqueContentObjectSystemNameException;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
@@ -741,7 +742,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 					}
 				}
 				
-				contentService.saveContentObject(selectedContentObjectForEdit.getContentObject(), loggedInRepositoryUserSettings.isCreateVersionUponSuccessfulSave());
+				contentService.save(selectedContentObjectForEdit.getContentObject(), loggedInRepositoryUserSettings.isCreateVersionUponSuccessfulSave(), true, null);
 
 				//Flag indicating that object was saved in repository
 				contentObjectWasSavedInRepository = true;
@@ -802,6 +803,17 @@ public class ContentObjectEdit extends AbstractUIBean {
 				if (newContentObject) {
 					selectedContentObjectForEdit.getContentObject().setId(null);
 				}
+			}
+			
+			return "error"; 
+			
+		}
+		catch(CmsConcurrentModificationException e)
+		{
+			JSFUtilities.addMessage(null, "content.object.edit.save.concurrentModificationError", null, FacesMessage.SEVERITY_WARN); 
+
+			if (newContentObject) {
+				selectedContentObjectForEdit.getContentObject().setId(null);
 			}
 			
 			return "error"; 
