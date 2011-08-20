@@ -37,12 +37,9 @@ Authors
 			
 			<ui:define name="content">
 				<div style="background-color: #FFF; margin: 0 150px 0 150px;">
-					Συνέβη κάποιο σφάλμα στην εφαρμογή.
-					Πατήστε 
-					<h:commandLink id="logoutButton" value=" εδώ "
+					#{messages['application.unknown.error.message']}
+					<h:commandLink id="logoutButton" value="#{messages['application.uncaught.exception.error.message']}"
 						action="#{login.logout}" immediate="true" />
-					για να τερματίσετε την σύνδεσή σας στην εφαρμογή και να μεταφερθείτε στην σελίδα εισόδου.
-					Αν το σφάλμα επιμένει παρακαλώ αναφέρετε το πρόβλημα στο incidents@betaconcept.com
 				</div>
 			</ui:define>		
 		</ui:composition>
