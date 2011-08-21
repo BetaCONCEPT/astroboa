@@ -1,9 +1,12 @@
 
-// keep all all object property descriptions in a map (js object actually) in order to minimize server traffic
+// keep all object property descriptions in a map (js object actually) in order to minimize server traffic
 var objectPropertyDescriptionMap = {};
 
-//keep all all topic property help messages in a map (js object actually) in order to minimize server traffic
+//keep all topic property help messages in a map (js object actually) in order to minimize server traffic
 var topicPropertyHelpMessageMap = {};
+
+//keep help messages for all Object Reference Properties in a map (js object actually) in order to minimize server traffic
+var objectRefPropertyHelpMessageMap = {};
 
 // here we copy the label of the currently edited taxonomy or topic (through the context menus) so 
 // that we can add the label to the tab when the ajax call returns
@@ -614,7 +617,7 @@ function callFunctionOnEnterKey(e, func, arg) {
  	}
     
     /* set the ajax request status indicator in the middle of the screen */
-    function positionAjaxLoaderOnSreenCenter() {
+    function positionAjaxLoaderOnScreenCenter() {
     	var loaderImageWidth = 128;
     	var loaderImageHeight = 128;
     	var document_height = bcmslib.jQuery(document).height(); 
@@ -814,8 +817,67 @@ function callFunctionOnEnterKey(e, func, arg) {
 		});
     }
     
-						
-	function createtObjectReferenceHelpMessage(tooltipTextSelector, tooltipImageSelector) {
+    function generateObjectRefPropertyHelpElement(allowedObjectTypes) {
+    	var escapedTipDivClassSelector = ".objectRefTip_" + allowedObjectTypes[0].replace(/\./g, "\\.");
+    	bcmslib.jQuery(escapedTipDivClassSelector).hide()
+    	.append(allowedObjectTypes[1] + "<hr /><br/>")
+    	.append(objectSelectionHelpMessage);
+    	
+    	if (objectRefPropertyHelpMessageMap[allowedObjectTypes[0]] == null) {
+    		objectRefPropertyHelpMessageMap[allowedObjectTypes[0]] = allowedObjectTypes;
+    	}
+    }
+    
+    function getObjectRefPropertyHelpMessage(fullPropertyPath) {
+    	if (objectRefPropertyHelpMessageMap[fullPropertyPath] != null) {
+    		generateObjectRefPropertyHelpElement(objectRefPropertyHelpMessageMap[fullPropertyPath]);
+    	}
+    	else {
+    		schemaServiceAsync.getObjectRefPropertyAllowedObjectTypes(fullPropertyPath, generateObjectRefPropertyHelpElement);
+    	}
+    }
+    
+    function createtObjectReferenceHelpMessage() {
+		bcmslib.jQuery(".objectRefTipImg").each(function(){
+				
+				var fullPropertyPath =  bcmslib.jQuery(this).attr('id');
+				var escapedTipDivClassSelector = ".objectRefTip_" + fullPropertyPath.replace(/\./g, "\\\\.");
+				
+				bcmslib.jQuery(this).bt(
+						{
+							closeWhenOthersOpen: true,
+							killTitle: false,
+							preBuild: getObjectRefPropertyHelpMessage(fullPropertyPath),
+							contentSelector: 'bcmslib.jQuery("' + escapedTipDivClassSelector + '").html()',
+							offsetParent: "#tipArea",
+							width: 400,
+							shrinkToFit: true,
+							fill: '#FFF',
+							strokeStyle: '#ABABAB',
+							strokeWidth: 1, /*no stroke*/
+							spikeLength: 15,
+							spikeGirth: 5,
+							positions: ['most'],
+							padding: 20,
+							cornerRadius: 15,
+							cssStyles:	{
+							    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
+							    			fontSize: '11px'
+										},
+							shadow: true,
+						    shadowOffsetX: 3,
+						    shadowOffsetY: 3,
+						    shadowBlur: 8,
+						    shadowColor: 'rgba(0,0,0,.9)',
+						    shadowOverlap: false,
+						    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
+						}
+					);
+		});
+    }
+    
+    /* create property help message boxes OLD Implementation*/
+	function createtObjectReferenceHelpMessageOLD(tooltipTextSelector, tooltipImageSelector) {
     	bcmslib.jQuery(tooltipTextSelector).hide();
 		bcmslib.jQuery(tooltipImageSelector).bt(
 			{
