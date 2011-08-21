@@ -37,9 +37,13 @@ Authors
 			
 			<ui:define name="content">
 				<div style="background-color: #FFF; margin: 0 150px 0 150px;">
-					#{messages['application.unknown.error.message']}
-					<h:commandLink id="logoutButton" value="#{messages['application.uncaught.exception.error.message']}"
+					<p>
+					#{messages['application.uncaught.exception.error.message']}
+					</p>
+					<p>
+					<h:commandLink id="logoutButton" value="#{messages['application.uncaught.exception.reset.link']}"
 						action="#{login.logout}" immediate="true" />
+					</p>
 				</div>
 			</ui:define>		
 		</ui:composition>
