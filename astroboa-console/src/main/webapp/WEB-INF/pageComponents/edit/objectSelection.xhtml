@@ -50,33 +50,9 @@ Authors
 					value="#{cmsPropertyWrapper.contentObjectTitlePattern}" 
 					size="35"/>
 				
-				<img id="objectRefTipImg#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}" src="images/cms-icons/12/info.png"/>
-				<ui:remove>			
-				<div id="objectRefTooltipText#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}">
-					<h:outputText style="text-align:center" value="#{messages['content.object.edit.content.object.selection.accepted.values.allObjectTypes']}" rendered="#{empty cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}"/>
-		 			<ui:fragment rendered="#{! empty cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}">
-						#{messages['content.object.edit.content.object.selection.accepted.values.specificObjectTypes']} 
-						<b/>
-						<strong>#{cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}</strong>
-					</ui:fragment>
-					<hr />
-					<br/>
-					#{messages['content.object.edit.content.object.selection.helpMessage']}
-					<ul>
-						<li>
-							#{messages['content.object.edit.content.object.selection.suggestion.box.helpMessage']}
-						</li>
-						<li>
-							#{messages['content.object.edit.content.object.selection.drag.and.drop.helpMessage']}	
-						</li>
-					</ul>
-				</div>
-				<script type="text/javascript" >
-					//<![CDATA[
-					createtObjectReferenceHelpMessage("#objectRefTooltipText#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}", "#objectRefTipImg#{indexOfCmsPropertyWrapper}#{indexOfChildPropertyWrapper}");
-					//]]>
-				</script> 
-				</ui:remove>
+				<img id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="objectRefTipImg" src="images/cms-icons/12/info.png"/>
+				<div class="objectRefTip_#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+				
 				<rich:suggestionbox for="contentObjectTitlePattern"
 					suggestionAction="#{cmsPropertyWrapper.findContentObjects_UIAction}" 
 					var="suggestedContentObject"
