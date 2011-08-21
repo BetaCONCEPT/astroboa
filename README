@@ -1,4 +1,4 @@
-Astroboa is a Structured Information Management Platform.
+Astroboa is a Semi-Structured Information Management Platform.
 
 It allows you to create and manage multiple repositories of arbitrarily nested data structures (documents, entities) that are available to your applications from anywhere in the world through a powerful REST API.
 
