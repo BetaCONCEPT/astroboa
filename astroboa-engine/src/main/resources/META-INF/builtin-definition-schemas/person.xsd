@@ -669,7 +669,7 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="consoleLoginLog">
+			<xs:element name="consoleLoginLog" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						<bccmsmodel:displayName>Console Login Log</bccmsmodel:displayName>
