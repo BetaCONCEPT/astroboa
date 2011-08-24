@@ -48,6 +48,7 @@ import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsConcurrentModificationException;
 import org.betaconceptframework.astroboa.api.model.exception.CmsNonUniqueContentObjectSystemNameException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
@@ -462,7 +463,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 		}
 
-		contentObject = cmsRepositoryEntityFactory.newContentObjectForType(contentObjectTypeForNewObject, JSFUtilities.getLocaleAsString());
+		contentObject = cmsRepositoryEntityFactory.newObjectForType(contentObjectTypeForNewObject);
 
 
 		selectedContentObjectForEdit = contentObjectUIWrapperFactory.getInstance(contentObject);
@@ -960,7 +961,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			portalCriteria.doNotCacheResults();
 			portalCriteria.setOffsetAndLimit(0, 1);
 			
-			CmsOutcome<CmsRankedOutcome<ContentObject>> portalOutcome = contentService.searchContentObjects(portalCriteria);
+			CmsOutcome<ContentObject> portalOutcome = contentService.searchContentObjects(portalCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			
 			if (portalOutcome !=null && portalOutcome.getCount() > 0){
 				JSFUtilities.addMessage(null, "content.object.edit.already.existing.portal.system.name", new String[]{portalSystemName}, FacesMessage.SEVERITY_WARN); 
@@ -1005,7 +1006,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	private void validateProperties() {
 
-		ContentObjectTypeDefinition contentObjectTypeDefinition = definitionService.getContentObjectTypeDefinition(selectedContentObjectForEdit.getContentObject().getContentObjectType());
+		ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(selectedContentObjectForEdit.getContentObject().getContentObjectType(), ResourceRepresentationType.DEFINITION_INSTANCE, false);
 
 		cmsPropertyValidatorVisitor.reset(false);
 
