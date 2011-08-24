@@ -56,6 +56,7 @@ import org.betaconceptframework.astroboa.api.model.definition.DoublePropertyDefi
 import org.betaconceptframework.astroboa.api.model.definition.LongPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.jsf.edit.SimpleCmsPropertyValueWrapper;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -150,10 +151,10 @@ public class CmsPropertyValidatorVisitor {
 	 * @param simpleCmsProperty
 	 */
 	private void validateStringProperty(List<Object> values,SimpleCmsProperty simpleCmsProperty) {
-		
+		int valueIndex = -1;
 		for (Object value : values){
+			++valueIndex;
 			if (value != null){
-				//Blank strings are passed to backend which ignores them
 				if (value instanceof String){
 					if (StringUtils.isNotBlank((String)value)){
 						
@@ -179,8 +180,23 @@ public class CmsPropertyValidatorVisitor {
 				}
 			}
 			else {
-				addErrorMessage(simpleCmsProperty.getFullPath(), "errors.invalid", 
-						getLocalizedLabelOfFullPathFromCmsProperty(simpleCmsProperty));
+				// There is a case that the property is multi-value and its list of values contains nulls. 
+				// This may happen if the user deletes one or more values from the object form by cutting the text instead of using the (X) button to remove the field. 
+				// In such a case when the user submits the form (i.e. save the object) then the property will contain an ArrayList one or more null values. 
+				// We should identify such case and not raise an error but instead remove the null value from the list.
+				if (simpleCmsProperty.getPropertyDefinition().isMultiple()) {
+					if (values.size() == 1) { // if there is only one value and is null remove the list itself 
+						simpleCmsProperty.removeValues();
+					}
+					else {
+						simpleCmsProperty.removeSimpleTypeValue(valueIndex);
+					}
+				}
+				else {
+					addErrorMessage(simpleCmsProperty.getFullPath(), "errors.invalid", 
+							getLocalizedLabelOfFullPathFromCmsProperty(simpleCmsProperty));
+					
+				}
 			}
 		}
 		
@@ -234,7 +250,7 @@ public class CmsPropertyValidatorVisitor {
 					//Check if this is an aspect, if an aspect list is provided
 					if (CollectionUtils.isNotEmpty(aspects) && aspects.contains(childCmsPropertyName)){
 						//Load aspect definition
-						childCmsPropertyDefinition = definitionService.getAspectDefinition(childCmsPropertyName);
+						childCmsPropertyDefinition = (CmsPropertyDefinition) definitionService.getCmsDefinition(childCmsPropertyName, ResourceRepresentationType.DEFINITION_INSTANCE, false);
 
 						//Still is null
 						if (childCmsPropertyDefinition == null){
@@ -569,12 +585,13 @@ public class CmsPropertyValidatorVisitor {
 	}
 
 	private void validateLongProperty(List<Object> values,
-			CmsProperty cmsProperty) {
-		//Probably all items in list are Strings coming directly from
-		//UI.Check that all Longs can be converted
-		for (Object value : values){
+			SimpleCmsProperty cmsProperty) {
+		int valueIndex = -1;
+		for ( Object value : values){
+			++valueIndex;
 			if (value != null){
-				//Blank strings are passed to backend which ignores them
+				//usually all values are Strings if they are coming from UI forms. 
+				// So we should check if we can convert them to longs
 				if (value instanceof String){
 					if (StringUtils.isNotBlank((String)value)){
 						try{
@@ -582,37 +599,61 @@ public class CmsPropertyValidatorVisitor {
 							Long.valueOf((String)value);
 						}
 						catch(Exception e){
-							addErrorMessage(cmsProperty.getFullPath(), "errors.long", 
+							addErrorMessage(cmsProperty.getFullPath(), "errors.integerNumber", 
 									getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+							return;
 						}
-						
-						if (cmsProperty.getPropertyDefinition() != null && 
-								! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
-							addErrorMessage(cmsProperty.getFullPath(), "errors.range",
-									getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
-									String.valueOf(((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
-									String.valueOf(((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).getMaxValue()));
-						}
+
 
 					}
 				}
-			}
-			else if ( ! (value instanceof Long))
-				addErrorMessage(cmsProperty.getFullPath(), "errors.long", 
-						getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+				else if ( ! (value instanceof Long)) {
+					addErrorMessage(cmsProperty.getFullPath(), "errors.integerNumber", 
+							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+				}
+				
+				// check if the number is within range
+				if (cmsProperty.getPropertyDefinition() != null && 
+						! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
+					addErrorMessage(cmsProperty.getFullPath(), "errors.range",
+							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
+							String.valueOf(((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
+							String.valueOf(((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).getMaxValue()));
+				}
 
+			}
+			else {
+				// There is a case that the property is multi-value and its list of values contains nulls. 
+				// This may happen if the user deletes one or more values from the object form by cutting the number digits instead of using the (X) button to remove the field. 
+				// In such a case when the user submits the form (i.e. save the object) then the property will contain an ArrayList one or more null values. 
+				// We should identify such case and not raise an error but instead remove the null value from the list.
+				if (cmsProperty.getPropertyDefinition().isMultiple()) {
+					if (values.size() == 1) { // if there is only one value and is null remove the list itself 
+						cmsProperty.removeValues();
+					}
+					else {
+						cmsProperty.removeSimpleTypeValue(valueIndex);
+					}
+				}
+				else {
+					addErrorMessage(cmsProperty.getFullPath(), "errors.invalid", 
+							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+					
+				}
+			}
 		}
+			
 	}
 
 	private void validateDoubleProperty(List<Object> values,
-			CmsProperty cmsProperty) {
+			SimpleCmsProperty cmsProperty) {
 
-		//Probably all items in list are Strings coming directly from
-		//UI.Check that all Strings can be converted
+		int valueIndex = -1;
 		for (Object value : values){
-
+			++valueIndex;
 			if (value != null){
-				//Blank strings are passed to backend which ignores them
+				//usually all values are Strings if they are coming from UI forms. 
+				// So we should check if we can convert them to doubles
 				if (value instanceof String){
 					if (StringUtils.isNotBlank((String)value)){
 						try{
@@ -620,23 +661,45 @@ public class CmsPropertyValidatorVisitor {
 							Double.valueOf((String)value);
 						}
 						catch(Exception e){
-							addErrorMessage(cmsProperty.getFullPath(), "errors.double",
+							addErrorMessage(cmsProperty.getFullPath(), "errors.decimalNumber",
 									getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+							return;
 						}
 						
-						if (cmsProperty.getPropertyDefinition() != null && 
-								! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
-							addErrorMessage(cmsProperty.getFullPath(), "errors.range",
-									getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
-									String.valueOf(((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
-									String.valueOf(((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).getMaxValue()));
-						}
-
 					}
 				}
-				else if ( ! (value instanceof Double))
-					addErrorMessage(cmsProperty.getFullPath(), "errors.double", 
+				else if ( ! (value instanceof Double)) {
+					addErrorMessage(cmsProperty.getFullPath(), "errors.decimalNumber", 
 							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+				}
+				
+				// check if number is within range
+				if (cmsProperty.getPropertyDefinition() != null && 
+						! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
+					addErrorMessage(cmsProperty.getFullPath(), "errors.range",
+							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
+							String.valueOf(((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
+							String.valueOf(((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).getMaxValue()));
+				}
+			}
+			else {
+				// There is a case that the property is multi-value and its list of values contains nulls. 
+				// This may happen if the user deletes one or more values from the object form by cutting the number digits instead of using the (X) button to remove the field. 
+				// In such a case when the user submits the form (i.e. save the object) then the property will contain an ArrayList one or more null values. 
+				// We should identify such case and not raise an error but instead remove the null value from the list.
+				if (cmsProperty.getPropertyDefinition().isMultiple()) {
+					if (values.size() == 1) { // if there is only one value and is null remove the list itself 
+						cmsProperty.removeValues();
+					}
+					else {
+						cmsProperty.removeSimpleTypeValue(valueIndex);
+					}
+				}
+				else {
+					addErrorMessage(cmsProperty.getFullPath(), "errors.invalid", 
+							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+					
+				}
 			}
 		}
 
