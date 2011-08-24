@@ -167,7 +167,9 @@ public class SimpleCmsPropertyValueWrapper {
 		if (simpleCmsProperty != null){
 
 			if (value != null){
-
+				
+				valueIsNull = false;
+				
 				if (value instanceof Date){
 
 					//Special case. Must create calendar instances
@@ -179,6 +181,7 @@ public class SimpleCmsPropertyValueWrapper {
 
 					if (StringUtils.isBlank((String)value)){
 						value = null;
+						valueIsNull = true;
 					}
 					else{
 						if (ValueType.Long == simpleCmsProperty.getValueType()){
@@ -202,24 +205,24 @@ public class SimpleCmsPropertyValueWrapper {
 					}
 				}
 				
-				valueIsNull = false;
 			}
 			else{
 				valueIsNull = true;
 			}
 
-			//
 			if (simpleCmsProperty.getPropertyDefinition().isMultiple()){
 				if (valueIndex >= simpleCmsProperty.getSimpleTypeValues().size()){
 					//User has added a new value to list. Append list regardless of value index
 					//This is done to cover the following case
 					//Suppose list has already two values with indexes 0 and 1 and user
-					//adds a blank value. List remains with two values but 
-					//value index becomes 2.
-					//If user provides a value calling method list.set(index, value)
-					//will throw an exception. Thus it is safe to just add value to the
-					//end of the list
-					simpleCmsProperty.addSimpleTypeValue(value);
+					//adds a new value. The property value list has two values (index = 1) but 
+					//value index of the value wrapper becomes 2.
+					//If we call method list.set(index, value)
+					//it will throw an exception. Thus it is safe to just add value to the
+					//end of the list if the value is not null
+					if (value != null) {
+						simpleCmsProperty.addSimpleTypeValue(value);
+					}
 				}
 				else{
 					simpleCmsProperty.getSimpleTypeValues().set(valueIndex, value);
