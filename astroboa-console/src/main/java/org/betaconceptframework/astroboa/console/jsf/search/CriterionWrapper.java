@@ -171,10 +171,10 @@ public class CriterionWrapper {
 					 if (QueryOperator.CONTAINS == queryOperator && value != null){  
 						 if (ValueType.Binary == propertyValueType){
 							 //Build a new criterion 
-							 return CriterionFactory.complexCmsPropertycontains(simpleCriterion.getProperty(), value.toString());
+							 return CriterionFactory.contains(simpleCriterion.getProperty(), value.toString());
 						 }
 						 else{
-							 return CriterionFactory.simpleCmsPropertycontains(simpleCriterion.getProperty(), value.toString());
+							 return CriterionFactory.contains(simpleCriterion.getProperty(), value.toString());
 						 }
 					 }
 					 else{
@@ -186,7 +186,7 @@ public class CriterionWrapper {
 								 simpleCriterion.addValue(Long.valueOf((String)value));
 							 }catch(Exception e){
 								 throw new InvalidInputForCmsPropertyTypeException(
-					    					 JSFUtilities.getLocalizedMessage("errors.long", new String[]{propertyLocalizedLabel}) ,e);
+					    					 JSFUtilities.getLocalizedMessage("errors.integerNumber", new String[]{propertyLocalizedLabel}) ,e);
 							 }
 						 }
 						 else if (ValueType.Double == propertyValueType){
@@ -194,7 +194,7 @@ public class CriterionWrapper {
 								 simpleCriterion.addValue(Double.valueOf((String)value));
 							 }catch(Exception e){
 								 throw new InvalidInputForCmsPropertyTypeException(
-					    					 JSFUtilities.getLocalizedMessage("errors.double", new String[]{propertyLocalizedLabel}) ,e);
+					    					 JSFUtilities.getLocalizedMessage("errors.decimalNumber", new String[]{propertyLocalizedLabel}) ,e);
 							 }
 						 }
 						
