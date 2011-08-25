@@ -21,6 +21,7 @@ package org.betaconceptframework.astroboa.model.impl.definition;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -56,8 +57,8 @@ public  abstract class LocalizableCmsDefinitionImpl extends CmsDefinitionImpl im
 			this.displayName = displayName;
 		}
 		
-		if (! this.displayName.hasLocalizedLabels() && description != null && description.hasLocalizedLabels()){
-			this.displayName.getLocalizedLabels().putAll(description.getLocalizedLabels());
+		if (! this.displayName.hasLocalizedLabels()){
+			this.displayName.addLocalizedLabel(Locale.ENGLISH.toString(), getName());
 		}
 		
 		if (description == null){
@@ -67,8 +68,13 @@ public  abstract class LocalizableCmsDefinitionImpl extends CmsDefinitionImpl im
 			this.description = description;
 		}
 		
-		if (! this.description.hasLocalizedLabels() && this.displayName != null && this.displayName.hasLocalizedLabels()){
-			this.description.getLocalizedLabels().putAll(this.displayName.getLocalizedLabels());
+		if (! this.description.hasLocalizedLabels()){
+			if (this.displayName != null && this.displayName.hasLocalizedLabels()) {
+				this.description.getLocalizedLabels().putAll(this.displayName.getLocalizedLabels());
+			}
+			else {
+				this.description.addLocalizedLabel(Locale.ENGLISH.toString(), getName());
+			}
 		}
 		
 		
