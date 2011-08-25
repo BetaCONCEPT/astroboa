@@ -35,7 +35,7 @@ errors.decimalNumber=Το πεδίο "{0}" πρέπει να συμπληρωθ�
 errors.range=Το πεδίο "{0}" δέχεται τιμές στο διάστημα {1} έως {2}.
 errors.creditcard=Το πεδίο "{0}" δεν είναι έγκυρος αριθμός πιστωτικής κάρτας.
 errors.email=Το πεδίο "{0}" δεν είναι έγκυρη διεύθυνση e-mail.
-errors.pattern=Το πεδίο "{0}" είναι μη έγκυρο. Η τιμή του δεν ακολουθεί το πρότυπο {1}
+errors.pattern=Το πεδίο "{0}" είναι μη έγκυρο. Έγκυρες είμαι μονό οι τιμές που ακολουθούν το πρότυπο {1}
 
 console.title= Astroboa - Semi-Structured Information Management Console
 
