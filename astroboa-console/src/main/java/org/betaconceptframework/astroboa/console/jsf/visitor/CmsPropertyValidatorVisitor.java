@@ -592,11 +592,12 @@ public class CmsPropertyValidatorVisitor {
 			if (value != null){
 				//usually all values are Strings if they are coming from UI forms. 
 				// So we should check if we can convert them to longs
+				Long longValue = null;
 				if (value instanceof String){
 					if (StringUtils.isNotBlank((String)value)){
 						try{
 							//If value is not a valid long then an exception is thrown
-							Long.valueOf((String)value);
+							longValue = Long.valueOf((String)value);
 						}
 						catch(Exception e){
 							addErrorMessage(cmsProperty.getFullPath(), "errors.integerNumber", 
@@ -610,11 +611,20 @@ public class CmsPropertyValidatorVisitor {
 				else if ( ! (value instanceof Long)) {
 					addErrorMessage(cmsProperty.getFullPath(), "errors.integerNumber", 
 							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+					return;
 				}
 				
+				if (longValue == null) {
+					longValue = (Long) value;
+				}
 				// check if the number is within range
 				if (cmsProperty.getPropertyDefinition() != null && 
-						! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
+						! ((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(longValue)){
+					// the isValueValid checks for both range and out of enumerated values errors. 
+					// Here we assume without checking that it is a range error. 
+					// If there is an enumeration in property definition then 
+					// it could be an error because the value is outside the enumerated ones but the interface always
+					// provides selection lists for enumerated values and thus this type of error is not possible
 					addErrorMessage(cmsProperty.getFullPath(), "errors.range",
 							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
 							String.valueOf(((LongPropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
@@ -654,11 +664,12 @@ public class CmsPropertyValidatorVisitor {
 			if (value != null){
 				//usually all values are Strings if they are coming from UI forms. 
 				// So we should check if we can convert them to doubles
+				Double doubleValue = null;
 				if (value instanceof String){
 					if (StringUtils.isNotBlank((String)value)){
 						try{
 							//If value is not a valid double then an exception is thrown
-							Double.valueOf((String)value);
+							doubleValue = Double.valueOf((String)value);
 						}
 						catch(Exception e){
 							addErrorMessage(cmsProperty.getFullPath(), "errors.decimalNumber",
@@ -671,11 +682,21 @@ public class CmsPropertyValidatorVisitor {
 				else if ( ! (value instanceof Double)) {
 					addErrorMessage(cmsProperty.getFullPath(), "errors.decimalNumber", 
 							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty));
+					return;
 				}
 				
+				
+				if (doubleValue == null) {
+					doubleValue = (Double) value;
+				}
 				// check if number is within range
 				if (cmsProperty.getPropertyDefinition() != null && 
-						! ((SimpleCmsPropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(value)){
+						! ((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).isValueValid(doubleValue)){
+					// the isValueValid checks for both range and out of enumerated values errors. 
+					// Here we assume without checking that it is a range error. 
+					// If there is an enumeration in property definition then 
+					// it could be an error because the value is outside the enumerated ones but the interface always
+					// provides selection lists for enumerated values and thus this type of error is not possible
 					addErrorMessage(cmsProperty.getFullPath(), "errors.range",
 							getLocalizedLabelOfFullPathFromCmsProperty(cmsProperty),
 							String.valueOf(((DoublePropertyDefinition)cmsProperty.getPropertyDefinition()).getMinValue()),
