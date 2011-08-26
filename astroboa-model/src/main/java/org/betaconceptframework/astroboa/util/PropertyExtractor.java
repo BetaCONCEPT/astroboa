@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
+import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
@@ -94,11 +95,26 @@ public class PropertyExtractor {
 					//We are in the middle of the path.
 					String identifierOfTheChildProperty = retrieveIdentifierOrIndexFromPath(pathPart);
 
+					boolean childPropertyIsDefined = ((ComplexCmsProperty)property).isChildPropertyDefined(childPropertyName);
+					
+					if (! childPropertyIsDefined){
+						throw new Exception("Could not locate definition  for property "+ childPropertyName);
+					}
+					
+					//Retrieve definition
 					CmsPropertyDefinition childPropertyDefinition = ((ComplexCmsProperty)property).getPropertyDefinition().getChildCmsPropertyDefinition(childPropertyName);
+					
+					if (childPropertyDefinition == null){
+						//Property has been defined. Since no definition is found check if this property is an aspect
+						if (property instanceof ComplexCmsRootProperty && ((ComplexCmsRootProperty)property).hasAspect(childPropertyName)){
+							childPropertyDefinition = ((ComplexCmsRootProperty)property).getAspectDefinitions().get(childPropertyName);
+						}
+					}
 					
 					if (childPropertyDefinition == null){
 						throw new Exception("Could not locate definition  for property "+ childPropertyName);
 					}
+					
 					
 					if (childPropertyDefinition.getValueType() == ValueType.Complex){
 						//Child property is a multiple value property
