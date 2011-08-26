@@ -52,7 +52,9 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.definition.BinaryPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CalendarPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
@@ -636,7 +638,7 @@ public class Serializer {
 		}
 	}
 
-	private String createResourceApiURLForBinaryChannel(Node contentObjectNode, Node binaryChannelNode, boolean multiple, String propertyName) throws RepositoryException {
+	private String createResourceApiURLForBinaryChannel(Node contentObjectNode, Node binaryChannelNode, boolean multiple, String propertyName) throws Exception {
 		
 		//Create a fake BinaryChannel and use its method
 		BinaryChannelImpl binaryChannel = new BinaryChannelImpl();
@@ -656,7 +658,7 @@ public class Serializer {
 		}
 		
 		
-		binaryChannel.setBinaryPropertyPermanentPath(retrievePermanentPathForBinaryNode(binaryChannelNode, propertyName, multiple));
+		binaryChannel.setBinaryPropertyPermanentPath(retrievePermanentPathForBinaryNode(binaryChannelNode, propertyName));
 		
 		if (multiple){
 			binaryChannel.binaryPropertyIsMultiValued();
@@ -666,23 +668,55 @@ public class Serializer {
 		
 	}
 
-	private String retrievePermanentPathForBinaryNode(Node binaryChannelNode, String propertyName, boolean multiple) throws RepositoryException {
+	private String retrievePermanentPathForBinaryNode(Node binaryChannelNode, String propertyName) throws Exception {
 		
 		String permanentPath = propertyName;
 		
-		binaryChannelNode = binaryChannelNode.getParent();
+		LocalizableCmsDefinition binaryPropertyDefinition = retrieveCmsDefinition(propertyName,false);
+
+		if (binaryPropertyDefinition == null || ! (binaryPropertyDefinition instanceof BinaryPropertyDefinition)){
+			logger.warn("Could not find definition for property {}. " +
+					" Permanent path will be calculated based on binary channel node path");
+		}
 		
-		while (binaryChannelNode != null && ! binaryChannelNode.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName())){
-			
-			if (binaryChannelNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
-				permanentPath = binaryChannelNode.getName()+CmsConstants.LEFT_BRACKET+ binaryChannelNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString() + CmsConstants.RIGHT_BRACKET+ CmsConstants.FORWARD_SLASH+ permanentPath;
+		Node complexPropertyNode = binaryChannelNode.getParent();
+		CmsDefinition complexPropertyDefinition = (binaryPropertyDefinition != null && binaryPropertyDefinition instanceof BinaryPropertyDefinition) ?((BinaryPropertyDefinition)binaryPropertyDefinition).getParentDefinition() : null;
+		boolean complexPropertyDefinitionIsMultiple = complexPropertyDefinition != null && complexPropertyDefinition instanceof CmsPropertyDefinition && ((CmsPropertyDefinition)complexPropertyDefinition).isMultiple();
+		
+		while (complexPropertyNode != null && ! complexPropertyNode.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName())){
+				
+			if (! complexPropertyDefinitionIsMultiple){
+				permanentPath = complexPropertyNode.getName()+ CmsConstants.PERIOD_DELIM+ permanentPath;
 			}
 			else{
-				permanentPath = binaryChannelNode.getName()+CmsConstants.LEFT_BRACKET+ binaryChannelNode.getIndex() + CmsConstants.RIGHT_BRACKET+ CmsConstants.FORWARD_SLASH+ permanentPath;
+					//Must provide identifier or index 
+					if (complexPropertyNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+						permanentPath = complexPropertyNode.getName()+CmsConstants.LEFT_BRACKET+ complexPropertyNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString() + CmsConstants.RIGHT_BRACKET+ CmsConstants.PERIOD_DELIM+ permanentPath;
+					}
+					else{
+						//Get its index. Check for order property
+						long index = 0;
+						
+						if (complexPropertyNode.hasProperty(CmsBuiltInItem.Order.getJcrName())){
+							index = complexPropertyNode.getProperty(CmsBuiltInItem.Order.getJcrName()).getLong();
+						}
+						else {
+							index = complexPropertyNode.getIndex();
+						}
+						
+						if (index > 0){
+							permanentPath = complexPropertyNode.getName()+CmsConstants.LEFT_BRACKET+ index + CmsConstants.RIGHT_BRACKET+ CmsConstants.PERIOD_DELIM+ permanentPath;
+						}
+						else{
+							permanentPath = complexPropertyNode.getName()+ CmsConstants.PERIOD_DELIM+ permanentPath;
+						}
+					}
 			}
-			
-			binaryChannelNode = binaryChannelNode.getParent();
-			
+
+			complexPropertyNode = complexPropertyNode.getParent();
+			complexPropertyDefinition = (complexPropertyDefinition != null && complexPropertyDefinition instanceof CmsPropertyDefinition) ?((CmsPropertyDefinition)complexPropertyDefinition).getParentDefinition() : null;
+			complexPropertyDefinitionIsMultiple = complexPropertyDefinition != null && complexPropertyDefinition instanceof CmsPropertyDefinition && ((CmsPropertyDefinition)complexPropertyDefinition).isMultiple();
+					
 		}
 		
 		return permanentPath;
@@ -1437,7 +1471,28 @@ public class Serializer {
 			LocalizableCmsDefinition currentDefinition = parentPropertyDefinitionQueue.peek();
 
 			if (currentDefinition instanceof CmsPropertyDefinition){
-				return PropertyPath.createFullPropertyPath(((CmsPropertyDefinition)currentDefinition).getPath(), propertyName);
+				
+				CmsPropertyDefinition rootDefinition = (CmsPropertyDefinition) currentDefinition;
+				
+				boolean rootDefinitionIsATypeDefinition = false;
+				
+				while (rootDefinition != null){
+					
+					if (rootDefinition.getParentDefinition() instanceof ContentObjectTypeDefinition){
+						rootDefinitionIsATypeDefinition = true;
+						break;
+					}
+					
+					rootDefinition = (CmsPropertyDefinition) rootDefinition.getParentDefinition();
+					
+				}
+				
+				if (rootDefinitionIsATypeDefinition){
+					return PropertyPath.createFullPropertyPath(((CmsPropertyDefinition)currentDefinition).getPath(), propertyName);
+				}
+				else {
+					return PropertyPath.createFullPropertyPath(((CmsPropertyDefinition)currentDefinition).getFullPath(), propertyName);
+				}
 			}
 		}
 
