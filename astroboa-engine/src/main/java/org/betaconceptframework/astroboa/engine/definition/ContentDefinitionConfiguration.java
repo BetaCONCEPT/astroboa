@@ -62,7 +62,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
  * Class responsible to load Content Definition Configuration settings.
  * Content Definition configuration contains xml file for content definition information
  * and a properties file containing flags for action on content definition information.
- * For now content definition information is reloaded only if appropriate flag is set ot true and
+ * For now content definition information is reloaded only if appropriate flag is set to true and
  * at the same time content definition file has been Modified
  * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
