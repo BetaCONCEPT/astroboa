@@ -39,6 +39,7 @@ import org.betaconceptframework.astroboa.model.impl.item.JcrNamespaceConstants;
 import org.betaconceptframework.astroboa.model.impl.query.xpath.XPathUtils;
 import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.betaconceptframework.astroboa.util.PropertyPath;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -207,12 +208,24 @@ public class SimpleCriterionImpl implements SimpleCriterion, Serializable{
 				QueryOperator.GREATER == operator || QueryOperator.GREATER_EQUAL == operator ||
 				QueryOperator.LESS == operator || QueryOperator.LESS_EQUAL == operator){
 			
-			if (property == null || property.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":") || 
-					property.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||
-					property.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||
-					property.startsWith(JcrNamespaceConstants.NT_PREFIX+":") ||
+			if (property == null || property.trim().length() == 0 ||  //Property is blank
+					property.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":") || 
+					property.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||  // All JCR native properties that are used are not of type long or double
+					property.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||  // All mixin properties that are used are not of type long or double
+					property.startsWith(JcrNamespaceConstants.NT_PREFIX+":") ||   // All properties with nt: prefix that are used are not of type long or double
 					property.startsWith(CmsConstants.FN_LOWER_CASE) ||
 					property.startsWith(CmsConstants.FN_UPPER_CASE)){
+				return value;
+			}
+
+			String propertyLastPart = PropertyPath.getLastDescendant(property);
+
+			if (propertyLastPart!=null && 
+					! propertyLastPart.equals(property) && 
+					propertyLastPart.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||  // All JCR native properties that are used are not of type long or double
+					propertyLastPart.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||  // All mixin properties that are used are not of type long or double
+					propertyLastPart.startsWith(JcrNamespaceConstants.NT_PREFIX+":")  // All properties with nt: prefix that are used are not of type long or double
+				){
 				return value;
 			}
 			
