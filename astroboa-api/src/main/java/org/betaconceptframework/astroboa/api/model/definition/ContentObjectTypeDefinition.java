@@ -296,4 +296,17 @@ public interface ContentObjectTypeDefinition extends
 	 * @return Number of the levels of the definition hierarchy tree.
 	 */
 	int getDepth();
+	
+	/**
+	 * Returns a comma delimited string which contains one or more 
+	 * {@link SimpleCmsProperty simple property} paths whose
+	 * value can be used as a label for an {@link ContentObject object}
+	 * of this definition instead of its system name or its display name which is provided
+	 * in the annotation tag in its schema. 
+	 * 
+	 * @return Value provided in XML schema for attribute
+	 * bccsmodel:labelElementPath, <code>null</code> if no value is provided
+	 */
+	String getPropertyPathsWhoseValuesCanBeUsedAsALabel();
+
 }
