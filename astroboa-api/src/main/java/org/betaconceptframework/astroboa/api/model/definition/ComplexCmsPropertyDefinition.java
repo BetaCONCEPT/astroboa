@@ -230,15 +230,20 @@ public interface ComplexCmsPropertyDefinition extends CmsPropertyDefinition {
 	boolean hasChildCmsPropertyDefinition(String childCmsPropertyPath);
 	
 	/**
-	 * Returns path of a {@link SimpleCmsProperty simple property} whose
+	 * Returns a comma delimited string which contains one or more 
+	 * {@link SimpleCmsProperty simple property} paths whose
 	 * value can be used as a label for {@link ComplexCmsProperty complex property}
-	 * of this definition instead of its system name or its annotation value 
+	 * of this definition instead of its system name or its display name which is provided
+	 * in the annotation tag in its schema. 
 	 * 
 	 * @return Value provided in XML schema for attribute
 	 * bccsmodel:labelElementPath, <code>null</code> if no value is provided
 	 */
-	String getPropertyPathWhoseValueCanBeUsedAsALabel();
+	String getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 
+	@Deprecated
+	String getPropertyPathWhoseValueCanBeUsedAsALabel();
+	
 	/**
 	 * Checks if this definition represents a system complex type.
 	 * 
