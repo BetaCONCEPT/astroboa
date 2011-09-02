@@ -40,6 +40,8 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -358,6 +360,11 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	
 	@Test
 	public void testLabelElementPath(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE, false);
+		
+		Assert.assertEquals(testDefinition.getPropertyPathsWhoseValuesCanBeUsedAsALabel(), "allPropertyTypeContainerMultipleForLabelElementPath.simpleContentObject.profile.title,allPropertyTypeContainerMultiple.simpleString");
+		
 		ContentObject contentObject = createContentObjectToTestForPropertyPath("testLabelPath", getSystemUser());
 		ContentObject firstSimpleContentObject = createContentObjectToTestForPropertyPath("testLabelPathSimpleContentObjectFirst", getSystemUser());
 		ContentObject secondSimpleContentObject = createContentObjectToTestForPropertyPath("testLabelPathSimpleContentObjectSecond", getSystemUser());
@@ -383,11 +390,12 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		assertPropertyLabel(contentObject, "allPropertyTypeContainerMultiple[1]", "simpleStringSecondValue");
 		assertPropertyLabel(contentObject, "allPropertyTypeContainerMultipleForLabelElementPath[0]", "testLabelPathSimpleContentObjectFirst");
 		assertPropertyLabel(contentObject, "allPropertyTypeContainerMultipleForLabelElementPath[1]", "testLabelPathSimpleContentObjectSecond");
-		
+	
+		Assert.assertEquals(contentObject.getLabel("en"), "testLabelPathSimpleContentObjectFirst , simpleStringFirstValue", "Invalid label for object "+contentObject.toString());
 		
 	}
 	
-	
+
 	/**
 	 * @param contentObject 
 	 * @param string
