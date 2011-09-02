@@ -216,4 +216,9 @@ public class ContentObjectImpl extends CmsRepositoryEntityImpl implements Conten
 	public boolean hasValueForProperty(String relativePropertyPath) {
 		return complexCmsRootProperty.hasValueForChildProperty(relativePropertyPath);
 	}
+	
+	@Override
+	public String getLabel(String locale) {
+		return complexCmsRootProperty.getPropertyLabel(locale);
+	}
 }
