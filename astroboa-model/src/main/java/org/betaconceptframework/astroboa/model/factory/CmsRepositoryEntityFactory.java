@@ -258,7 +258,7 @@ public abstract class CmsRepositoryEntityFactory {
 					new ComplexCmsPropertyDefinitionImpl(contentObjectTypeDefinition.getQualifiedName(),
 					description,displayName, false,false,true, null, null, null, null, complexPropertyDefinitionHelper, 
 					((ContentObjectTypeDefinitionImpl)contentObjectTypeDefinition).getDefinitionFileURI(),  
-					null, contentObjectTypeDefinition.isSystemTypeDefinition(), true,  
+					contentObjectTypeDefinition.getPropertyPathsWhoseValuesCanBeUsedAsALabel(), contentObjectTypeDefinition.isSystemTypeDefinition(), true,  
 					null, contentObjectTypeDefinition.getName(), true));
 
 			//Provide values that will be used for lazy rendering

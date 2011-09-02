@@ -274,7 +274,7 @@ implements ComplexCmsRootProperty,AspectDefinitionManager, Serializable{
 						 ((LocalizableCmsDefinitionImpl)contentTypeDefinition).cloneDisplayName(), false,false,true, null, null, null, null, 
 						 ((ContentObjectTypeDefinitionImpl)contentTypeDefinition).getComplexPropertyDefinitionHelper(),
 						 ((ContentObjectTypeDefinitionImpl)contentTypeDefinition).getDefinitionFileURI(), 
-						 null, contentTypeDefinition.isSystemTypeDefinition(), true, 
+						 contentTypeDefinition.getPropertyPathsWhoseValuesCanBeUsedAsALabel(), contentTypeDefinition.isSystemTypeDefinition(), true, 
 						 null, contentTypeDefinition.getName(), true));
 			 }
 

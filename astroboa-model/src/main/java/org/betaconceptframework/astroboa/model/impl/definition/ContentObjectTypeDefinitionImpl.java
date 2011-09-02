@@ -54,12 +54,14 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 	
 	private List<String> superTypes;
 	
-	
+	private String propertyPathsWhoseValuesCanBeUsedAsALabel;
+
 	public ContentObjectTypeDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName,
 			ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper,
 			URI definitionFileURI, boolean systemTypeDefinition, 
-			List<String> superTypes) {
+			List<String> superTypes, 
+			String propertyPathsWhoseValuesCanBeUsedAsALabel) {
 		
 		super(qualifiedName, description, displayName);
 
@@ -70,6 +72,8 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 		this.systemTypeDefinition = systemTypeDefinition;
 		
 		this.superTypes = superTypes;
+		
+		this.propertyPathsWhoseValuesCanBeUsedAsALabel = propertyPathsWhoseValuesCanBeUsedAsALabel;
 	}
 
 
@@ -180,6 +184,11 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 			complexPropertyDefinitionHelper.resetDepth();
 		}
 	}
-	
+
+
+	@Override
+	public String getPropertyPathsWhoseValuesCanBeUsedAsALabel(){
+		return propertyPathsWhoseValuesCanBeUsedAsALabel;
+	}
 	
 }

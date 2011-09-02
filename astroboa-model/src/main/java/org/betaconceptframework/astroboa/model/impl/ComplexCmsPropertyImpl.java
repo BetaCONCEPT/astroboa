@@ -1041,7 +1041,7 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 	public String getPropertyLabel(String locale) {
 
 		try{
-			String propertyPathWhoseValueCorrespondsToLabel = getPropertyDefinition().getPropertyPathWhoseValueCanBeUsedAsALabel();
+			String propertyPathWhoseValueCorrespondsToLabel = getPropertyDefinition().getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 
 			if (StringUtils.isBlank(propertyPathWhoseValueCorrespondsToLabel)){
 				return null;
