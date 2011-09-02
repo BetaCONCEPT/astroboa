@@ -42,6 +42,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.util.XMLChar;
+import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
@@ -266,16 +267,16 @@ public class CmsPropertyVisitor  implements XSVisitor{
 					
 					if (StringUtils.isBlank(labelElementPath)){
 						if (complexDefinitionReference != null){
-							labelElementPath =  complexDefinitionReference.getPropertyPathWhoseValueCanBeUsedAsALabel();
+							labelElementPath =  complexDefinitionReference.getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 						}
 						else if (definitionRefersToItsParent){
-							labelElementPath =  ((ComplexCmsPropertyDefinition)parentDefinition).getPropertyPathWhoseValueCanBeUsedAsALabel();
+							labelElementPath =  ((ComplexCmsPropertyDefinition)parentDefinition).getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 						}
 						else{
 							ComplexCmsPropertyDefinition ancestorDefinition = locateParentDefinintionWithSameType();
 							
 							if (ancestorDefinition != null){
-								labelElementPath =  ((ComplexCmsPropertyDefinition)ancestorDefinition).getPropertyPathWhoseValueCanBeUsedAsALabel();
+								labelElementPath =  ((ComplexCmsPropertyDefinition)ancestorDefinition).getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 							}
 						}
 					}
@@ -328,7 +329,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				contentTypePropertyDefinitionHelper3.setChildPropertyDefinitions(childPropertyDefinitions);
 
 				definition = new ContentObjectTypeDefinitionImpl(generatedQNameForDefinition(), description, displayName,	
-						contentTypePropertyDefinitionHelper3,definitionFileURI, systemType, superTypes);
+						contentTypePropertyDefinitionHelper3,definitionFileURI, systemType, superTypes, labelElementPath);
 				
 				logger.debug("Created definition for content type '{}'",name);
 				
@@ -926,10 +927,10 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 
 		//Attributes defined by repository
-		if (CollectionUtils.isNotEmpty(component.getForeignAttributes()) && MapUtils.isNotEmpty(builtInAttributes)){
+		if (CollectionUtils.isNotEmpty(component.getForeignAttributes())){
 			
 			//Process attributes specified in the context of the types and not in the context of CmsDefinitionItem.contentObjectPropertyAttGroup
-			if (ValueType.Complex == valueType){
+			if (ValueType.Complex == valueType || ValueType.ContentType == valueType){
 				//Retrieve value from schema
 				String labelElementPathFromSchema = component.getForeignAttribute(CmsDefinitionItem.labelElementPath.getNamespaceURI(), CmsDefinitionItem.labelElementPath.getLocalPart());
 				
@@ -937,6 +938,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 					labelElementPath = labelElementPathFromSchema;
 				}
 			}
+			
+			if (MapUtils.isNotEmpty(builtInAttributes)){
 			
 			for (Entry<ItemQName, XSAttributeUse> builtInAttribute: builtInAttributes.entrySet())
 			{
@@ -977,7 +980,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 						//Attributes corresponds only to Simple ContentObject Property
 						if ( isDefinitionSimple()){
 
-							//Not used for now. Needs further modelling
+							//Not used for now. Needs further modeling
 //							if (CmsDefinitionItem.repositoryObjectRestriction.getJcrName().equals(attributeJcrName))
 //							((SimpleCmsPropertyDefinition)definition).setRepositoryObjectRestriction(valueToBeSet);
 
@@ -1046,6 +1049,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 						}
 					}
 				}
+			}
 			}
 		}
 	}
