@@ -29,7 +29,7 @@
 		schemaLocation="organization-${project.version}.xsd" />
 
 
-	<xs:element name="test">
+	<xs:element name="test" bccmsmodel:labelElementPath="allPropertyTypeContainerMultipleForLabelElementPath.simpleContentObject.profile.title,allPropertyTypeContainerMultiple.simpleString">
 
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
