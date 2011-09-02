@@ -59,11 +59,13 @@ import org.testng.annotations.Test;
 public class RepositoryServiceTest extends AbstractRepositoryTest{
 	
 	@Test 
-	public void testRepositoryConfigurationReloading() throws IOException{
+	public void testRepositoryConfigurationReloading() throws Exception{
 	
 		File configuration = retrieveConfigurationFile();
 		
 		FileUtils.touch(configuration);
+		
+		Thread.sleep(10000); //Sleep 10 seconds 
 		
 		Assert.assertTrue(RepositoryRegistry.INSTANCE.configurationHasChanged(), "Configuration file "+ configuration.getAbsolutePath() + " was not reloaded. Parent directory "+ System.getProperty("jboss.server.config.url"));
 		
@@ -75,6 +77,8 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		configurationContent = configurationContent.replaceFirst(currentServerURL, newServerURL);
 		
 		FileUtils.writeStringToFile(configuration, configurationContent);
+		
+		Thread.sleep(10000); //Sleep 10 seconds
 		
 		Assert.assertTrue(RepositoryRegistry.INSTANCE.configurationHasChanged());
 		
