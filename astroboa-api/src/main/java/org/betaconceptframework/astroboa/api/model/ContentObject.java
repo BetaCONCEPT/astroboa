@@ -21,8 +21,11 @@ package org.betaconceptframework.astroboa.api.model;
 
 
 import java.util.List;
+import java.util.Locale;
 
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.MultipleOccurenceException;
 
 /**
@@ -338,4 +341,50 @@ public interface ContentObject extends CmsRepositoryEntity {
 	 * @return <code>true</code> if <code>propertyPath</code> has a value, <code>false</code> otherwise.
 	 */
 	boolean hasValueForProperty(String relativePropertyPath);
+	
+	/**
+	 * Auxiliary method which allows users to retrieve a unique (most of the times) label 
+	 * for this object other than object's title or system name or its identifier.
+	 * 
+	 * <p>
+	 * The label is a concatenation of the values of one or more properties of this object. 
+	 * The paths of these properties are defined in the schema of the object's type
+	 * (see more in {@link ContentObjectTypeDefinition#getPropertyPathsWhoseValuesCanBeUsedAsALabel()}).
+	 * Comma (,) is used to separate each value.
+	 * </p>
+	 * 
+	 * <p>
+	 *  For each path provided, if the corresponding property has at least 
+	 *  one value then if the type of the property is:
+	 * 
+	 * <ul>
+	 *  <li>a 'primitive' type ({@link ValueType#Boolean}, {@link ValueType#Long},{@link ValueType#Date},{@link ValueType#Double}
+	 *  {@link ValueType#String}), the first (if property has multiple values) value is used.
+	 *  <li>a {@link ValueType#Topic topic reference}, {@link Topic reference topic}'s localized label for provided locale is used.
+	 *  <li>a {@link ValueType#Space space reference}, {@link Space reference space}'s localized label for provided locale is used.
+	 *  <li>an {@link ValueType#ContentObject object reference}, {@link ContentObject Content object}'s <code>profile.title</code> value is used.
+	 *  If no <code>profile.title</code> is provided then objetc's localized label for its {@link ContentObjectTypeDefinition  type} is provided.
+	 *  <li>{@link ValueType#Binary binary},  {@link BinaryChannel binaryChanel}'s {@link BinaryChannel#getSourceFilename()  source file name}, is used.
+	 *  If no source file name is provided, its url is used instead. If the latter is  null, {@link BinaryChannel#getName() name} is used.
+	 *  <li>a {@link ValueType#RepositoryUser repository user}, its {@link RepositoryUser#getLabel() label} is used or its 
+	 *  {@link RepositoryUser#getExternalId() external Id}, if no label is provided.
+	 *  <li> {@link ValueType#Complex complex}, an empty string is returned. In this case a warning is issued as well.
+	 * <ul>
+	 * </p>
+	 * 
+	 * <p>
+	 * It may be the case that provided property path has the keyword {locale}. In this case {locale}
+	 * is replaced by provided <code>locale</code> parameter, and then a search for a specific simple property 
+	 * is conducted.For example if path is <code>localizedLabels.{locale}</code> and <code>locale</code>
+	 * parameter has value <code>en</code> then property with path <code>localizedLabels.en</code> will be searched.
+	 * </p>
+	 * @param locale 
+	 * 			Locale value as defined in {@link Localization}. In case
+	 *            where <code>locale</code> is blank (empty or null),
+	 *            {@link Locale#ENGLISH English} locale will be
+	 *            used.
+	 * @return String representation of this object's label according to value type of property found under
+	 * specified property path, <code>null</code> if no property path is provided.
+	 */
+	String getLabel(String locale);
 }
