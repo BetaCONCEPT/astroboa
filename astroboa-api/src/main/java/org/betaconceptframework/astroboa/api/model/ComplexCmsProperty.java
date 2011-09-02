@@ -269,33 +269,35 @@ public interface ComplexCmsProperty<D extends ComplexCmsPropertyDefinition,P ext
 	List<CmsProperty<?,?>> getAllChildProperties(String relativePropertyPath);
 	
 	/**
-	 * This methods returns the value of a child {@link SimpleCmsProperty property}
-	 * whose path is provided by {@link ComplexCmsPropertyDefinition#getPropertyPathWhoseValueCanBeUsedAsALabel()}.
+	 * 	Auxiliary method which allows users to retrieve a unique (most of the times) label 
+	 * for this complex property other than proeprty's identifier.
 	 * 
 	 * <p>
-	 * This value, if child property is found, is the following according to child property's type:
-	 * (Note that if child property has multiple values its FIRST value is processed)
-	 * 
-	 * <ul>
-	 *  <li>value provided by method {@link SimpleCmsProperty#getSimpleTypeValue()} or the first value from list 
-	 *  {@link SimpleCmsProperty#getSimpleTypeValues()} for  
-	 *  'primitive' types ({@link ValueType#Boolean}, {@link ValueType#Long},{@link ValueType#Date},{@link ValueType#Double}
-	 *  {@link ValueType#String}).
-	 *  <li>{@link Topic Topic}'s localized label for provided locale, if child property is a {@link ValueType#Topic}.
-	 *  <li>{@link Space Space}'s localized label for provided locale, if child property is a {@link ValueType#Space}.
-	 *  <li>{@link ContentObject Content object}'s <code>profile.title</code> value if child property is a {@link ValueType#ContentObject}
-	 *  and property <code>profile.title</code> is defined. If no <code>profile.title</code> is provided then content
-	 *  objetc's localized label for its {@link ContentObjectTypeDefinition  type} is provided.
-	 *  <li>BinaryChannel's {@link BinaryChannel#getSourceFilename()  source file name}, if child property is a {@link ValueType#Binary}.
-	 *  If no source file name is provided, {@link BinaryChannel#getRelativeDirectURL()  relative URL} is returned instead. If the latter is
-	 *  null, {@link BinaryChannel#getName() name} is returned.
-	 *  <li>Repository user {@link RepositoryUser#getLabel() label}, if child property is a {@link ValueType#RepositoryUser}, or
-	 *  {@link RepositoryUser#getExternalId() external Id}, if no label is provided.
-	 *  <li><code>null</code>, if child property is a {@link ValueType#ContentType} or if child property is a {@link ValueType#Complex}. Also a warning
-	 *  is issued
-	 * <ul>
+	 * The label is a concatenation of the values of one or more child properties of this object. 
+	 * The paths of these properties are defined in the schema of the complex type
+	 * (see more in {@link ComplexCmsPropertyDefinition#getPropertyPathsWhoseValuesCanBeUsedAsALabel()}).
+	 * Comma (,) is used to separate each value.
 	 * </p>
 	 * 
+	 * <p>
+	 *  For each path provided, if the corresponding property has at least 
+	 *  one value then if the type of the property is:
+	 * 
+	 * <ul>
+	 *  <li>a 'primitive' type ({@link ValueType#Boolean}, {@link ValueType#Long},{@link ValueType#Date},{@link ValueType#Double}
+	 *  {@link ValueType#String}), the first (if property has multiple values) value is used.
+	 *  <li>a {@link ValueType#Topic topic reference}, {@link Topic reference topic}'s localized label for provided locale is used.
+	 *  <li>a {@link ValueType#Space space reference}, {@link Space reference space}'s localized label for provided locale is used.
+	 *  <li>an {@link ValueType#ContentObject object reference}, {@link ContentObject Content object}'s <code>profile.title</code> value is used.
+	 *  If no <code>profile.title</code> is provided then objetc's localized label for its {@link ContentObjectTypeDefinition  type} is provided.
+	 *  <li>{@link ValueType#Binary binary},  {@link BinaryChannel binaryChanel}'s {@link BinaryChannel#getSourceFilename()  source file name}, is used.
+	 *  If no source file name is provided, its url is used instead. If the latter is  null, {@link BinaryChannel#getName() name} is used.
+	 *  <li>a {@link ValueType#RepositoryUser repository user}, its {@link RepositoryUser#getLabel() label} is used or its 
+	 *  {@link RepositoryUser#getExternalId() external Id}, if no label is provided.
+	 *  <li> {@link ValueType#Complex complex}, an empty string is returned. In this case a warning is issued as well.
+	 * <ul>
+	 * </p>
+	 *  
 	 * <p>
 	 * It may be the case that provided property path has the keyword {locale}. In this case {locale}
 	 * is replaced by provided <code>locale</code> parameter, and then a search for a specific simple property 
