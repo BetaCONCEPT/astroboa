@@ -298,6 +298,24 @@ public interface ContentObjectTypeDefinition extends
 	int getDepth();
 	
 	/**
+	 * Check if the schema of this definition or any of its super types extend Astroboa's 
+	 * base object type.
+	 * 
+	 * An Object type definition may or may not extend Astroboa's base object type
+	 * (contentObjectType) which is provided in 
+	 * <a href="http://www.betaconceptframework.org/schema/astroboa/astroboa-model-{version}.xsd">
+	 * Astroboa model XML schema</a>.
+	 * 
+	 *
+	 * This method checks whether the schema of this definition extends 
+	 * base object type or not.
+	 * 
+	 * @return <code>true</code> if this type extends base object type, <code>false</code>
+	 * otherwise. 
+	 */
+	boolean schemaExtendsBaseObjectTypeDefinition();
+
+	/**
 	 * Returns a comma delimited string which contains one or more 
 	 * {@link SimpleCmsProperty simple property} paths whose
 	 * value can be used as a label for an {@link ContentObject object}
