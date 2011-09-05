@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
@@ -29,12 +30,14 @@ import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.BinaryPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.DoublePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LongPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.security.AstroboaPasswordEncryptor;
@@ -50,12 +53,60 @@ import org.testng.annotations.Test;
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
+	//@Test
+	public void testIndependentContentTypes(){
+	
+		for (String typeName : getIndependentContentTypes()){
+
+			ContentObjectTypeDefinition independentDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(typeName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+			
+			Assert.assertFalse(independentDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+typeName+ " faulty specifies  that the schema of the type extends contentObjectType");
+
+			checkPropertyExistsAndIsOfType(independentDefinition, "profile", ComplexCmsPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "accessibility", ComplexCmsPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "resourceRepresentationTemplateObjectReference", ObjectReferencePropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "resourceRepresentationTemplateName", TopicReferencePropertyDefinition.class);
+			
+			//These properties  are assumed to be provided in all independent types
+			//Normal properties
+			checkPropertyExistsAndIsOfType(independentDefinition, "simpleString", StringPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "simpleStringFromAttribute", StringPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "mandatorySimpleStringFromAttribute", StringPropertyDefinition.class);
+			
+			//Properties which are defined using 'attribute' tag
+			Assert.assertTrue(independentDefinition.hasCmsPropertyDefinition("simpleStringFromAttribute"), "Property simpleStringFromAttribute is found in type "+typeName);
+			Assert.assertTrue(independentDefinition.hasCmsPropertyDefinition("mandatorySimpleStringFromAttribute"), "Property simpleStringFromAttribute is found in type "+typeName);
+			
+			CmsPropertyDefinition simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("simpleStringFromAttribute");
+			Assert.assertFalse(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is mandatory");
+			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+
+			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
+					"String <b>Property</b> defined by Attribute", "String Property defined by Attribute");
+
+			simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("mandatorySimpleStringFromAttribute");
+			Assert.assertTrue(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is optional");
+			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+			
+			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
+					"mandatorySimpleStringFromAttribute", "mandatorySimpleStringFromAttribute");
+			
+			
+			if (StringUtils.equals(typeName, EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME) || 
+					StringUtils.equals(typeName, DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME)){
+				Assert.assertTrue(independentDefinition.isTypeOf("independentBaseType"), "Independent type "+ typeName +" does not extend super type independentBaseType");
+			}
+		}
+	}
+	
+	
 	@Test
 	public void testExtendedContentTypes()
 	{
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		Assert.assertFalse(testDefinition.hasCmsPropertyDefinition("simpleExtendedString"), "Property simpleExtendedString is found in type "+TEST_CONTENT_TYPE);		
 		Assert.assertTrue(testDefinition.isTypeOf("testType"), "Test content type does not have super type testType");
+		Assert.assertTrue(testDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
 		
 		ContentObjectTypeDefinition extendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(extendedTestDefinition, "simpleExtendedString", StringPropertyDefinition.class);
@@ -65,13 +116,17 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		
 		Assert.assertTrue(extendedTestDefinition.isTypeOf("testType"), "Extended Test Type does not have super type testType");
 		Assert.assertTrue(extendedTestDefinition.isTypeOf("extendedTestType"), "Extended Test Type does not have super type extendedTestType");
-		
+
+		Assert.assertTrue(extendedTestDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+EXTENDED_TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
+
 		ContentObjectTypeDefinition directExtendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(DIRECT_EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(directExtendedTestDefinition, "simpleExtendedString", StringPropertyDefinition.class);
 		
 		Assert.assertTrue(directExtendedTestDefinition.isTypeOf("testType"), "Extended Test Type does not have super type testType");
 		Assert.assertTrue(directExtendedTestDefinition.isTypeOf("extendedTestType"), "Extended Test Type does not have super type extendedTestType");
-		
+
+		Assert.assertTrue(directExtendedTestDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+DIRECT_EXTENDED_TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
+
 		ContentObjectTypeDefinition personDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("personObject", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(personDefinition, "name.familyName", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(personDefinition, "thumbnail", BinaryPropertyDefinition.class);
@@ -79,7 +134,10 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertNull(definitionService.getCmsDefinition("personType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type personType was loaded");
 		
 		Assert.assertTrue(personDefinition.isTypeOf("personType"), "PersonObject Type does not have super type personType");
-		
+
+		Assert.assertTrue(personDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type personType faulty specifies  that the schema of the type does not extend contentObjectType");
+
+
 		ContentObjectTypeDefinition organizationDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("organizationObject", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "about", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "thumbnail", BinaryPropertyDefinition.class);
@@ -87,6 +145,9 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertNull(definitionService.getCmsDefinition("organizationType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type organizationType was loaded");
 		
 		Assert.assertTrue(organizationDefinition.isTypeOf("organizationType"), "OrganizationObject Type does not have super type organizationType");
+		
+		Assert.assertTrue(organizationDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type organizationType faulty specifies  that the schema of the type does not extend contentObjectType");
+
 	}
 	
 	@Test
@@ -105,7 +166,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 			}
 			else if (EXTENDED_TEST_CONTENT_TYPE.equals(testContentType))
 			{
-				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "en", "This type represents an extension of extended test content type" , "This type represents an extension of extended test content type");
+				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "en", "This type represents an extension of extendedTestType" , "This type represents an extension of extendedTestType");
 				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "el", "Extended Test" , "Extended Test");
 			}
 			
@@ -125,13 +186,15 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 	private void assertDescriptionAndDisplayNameExistsForPropertyAndLocale(LocalizableCmsDefinition definition, String property, String locale, String expectedDescription, String expectedDisplayName)
 	{
-		Assert.assertNotNull(definition.getDescription(), "'"+property+"' does not have a description");
-		Assert.assertTrue(definition.getDescription().hasLocalizedLabels(), "'"+property+"' has a description but has no localized labels");
-		Assert.assertEquals(definition.getDescription().getLocalizedLabelForLocale(locale),expectedDescription, "Invalid description for "+property+" for locale '"+locale+"'");
+		String fullPath = (definition instanceof CmsPropertyDefinition ? ((CmsPropertyDefinition)definition).getFullPath() : definition.getName());
+		
+		Assert.assertNotNull(definition.getDescription(), "'"+fullPath+"' does not have a description");
+		Assert.assertTrue(definition.getDescription().hasLocalizedLabels(), "'"+fullPath+"' has a description but has no localized labels");
+		Assert.assertEquals(definition.getDescription().getLocalizedLabelForLocale(locale),expectedDescription, "Invalid description for "+fullPath+" for locale '"+locale+"'");
 
 		Assert.assertNotNull(definition.getDisplayName(), "'"+property+"' does not have a display name");
-		Assert.assertTrue(definition.getDisplayName().hasLocalizedLabels(), "'"+property+"' does not have a display name at all");
-		Assert.assertEquals(definition.getDisplayName().getLocalizedLabelForLocale(locale),expectedDisplayName, "Invalid display name for "+property+" for locale '"+locale+"'");
+		Assert.assertTrue(definition.getDisplayName().hasLocalizedLabels(), "'"+fullPath+"' does not have a display name at all");
+		Assert.assertEquals(definition.getDisplayName().getLocalizedLabelForLocale(locale),expectedDisplayName, "Invalid display name for "+fullPath+" for locale '"+locale+"'");
 	}
 
 	@Test
