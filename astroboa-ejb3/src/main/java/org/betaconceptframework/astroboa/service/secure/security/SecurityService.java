@@ -23,7 +23,8 @@ import org.jboss.ejb3.annotation.Management;
 
 
 /**
- * This interface provides various methods for authentication token
+ * This interface provides various methods for managing security contexts
+ * based on an authentication token which is created during login.
  * 
  * @Management This annotation will wrap the bean as an MBean and install 
  * it in the JBoss MBean Server. The operations and attributes defined in the @Management 
