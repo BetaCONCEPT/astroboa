@@ -163,7 +163,7 @@ Authors
 		<dependency>
 			<groupId>org.betaconceptframework</groupId>
 			<artifactId>betaconceptframework-commons</artifactId>
-			<version>2.2.0.GA</version>
+			<version>2.3.1.GA</version>
 		</dependency>
 		
 		<dependency>
