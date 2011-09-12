@@ -69,7 +69,16 @@
 		<module>../astroboa-console</module>
 		<module>../astroboa-portal-commons</module>
 	</modules>
-
+	
+	<build>
+		<plugins>
+	  		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.2.1</version>
+	  		</plugin>
+		</plugins>
+	</build>
 	
 	<scm>
     <connection>
