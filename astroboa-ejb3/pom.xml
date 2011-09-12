@@ -28,7 +28,7 @@ Authors
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.0.0b1</version>
 	</parent>
 	<artifactId>astroboa-ejb3</artifactId>
 	<name>Astroboa EJB3 Services</name>
@@ -88,14 +88,14 @@ Authors
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.0b1</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.0b1</version>
 			<scope>provided</scope>
 		</dependency>
 		
