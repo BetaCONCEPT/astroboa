@@ -49,10 +49,12 @@ input.email,
 input.password,
 textarea.uniform {
   font-size: 11px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
   font-weight: normal;
   padding: 3px;
-  color: #777;
+  /*color: #777;*/
+  color: #444444;
   background: url('../images/bg-input-focus.png') repeat-x 0px 0px;
   background: url('../images/bg-input.png') repeat-x 0px 0px;
   border-top: solid 1px #aaa;
@@ -383,7 +385,8 @@ div.button span {
   height: 22px;
   padding-top: 8px;
   font-weight: bold;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -399,7 +402,8 @@ div.selector {
 
 div.selector select {
   min-width: 190px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
   font-size: 12px;
   border: solid 1px #fff;
 }

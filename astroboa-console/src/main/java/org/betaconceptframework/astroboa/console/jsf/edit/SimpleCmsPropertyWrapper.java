@@ -19,7 +19,10 @@
 package org.betaconceptframework.astroboa.console.jsf.edit;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
@@ -44,7 +49,11 @@ import org.betaconceptframework.astroboa.console.jsf.clipboard.ContentObjectProp
 import org.betaconceptframework.astroboa.console.jsf.visitor.CmsPropertyValidatorVisitor;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactory;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
+import org.betaconceptframework.utility.ImageUtils;
 import org.jboss.seam.contexts.Contexts;
+import org.richfaces.event.UploadEvent;
+import org.richfaces.model.UploadItem;
+import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -65,11 +74,14 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	private String selectedCropPolicy;
 	private boolean friendlyUrlSelected;
 	
+	
 	public SimpleCmsPropertyWrapper(SimpleCmsProperty simpleCmsProperty, 
 			CmsPropertyDefinition definition, String parentCmsPropertyPath,CmsRepositoryEntityFactory cmsRepositoryEntityFactory, 
 			CmsPropertyValidatorVisitor cmsPropertyValidatorVisitor,
-			ContentObject contentObject) {
-		super(definition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject);
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
+		super(definition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject, wrapperIndex, complexCmsPropertyEdit);
 		
 		this.cmsProperty = simpleCmsProperty;
 		this.cmsPropertyValidatorVisitor = cmsPropertyValidatorVisitor;
@@ -81,7 +93,9 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	 * Adds a blank value to selected simple cms property
 	 */
 	public void addBlankValue_UIAction(){
-
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		//Check that content object has property and that this property is a simple one.
 		if (cmsProperty == null || ! (cmsProperty instanceof SimpleCmsProperty)){
 			logger.error("Invalid selected simple property.Unable to add blank value."+ 
@@ -252,7 +266,10 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	 * Otherwise an exception is thrown
 	 */
 	public void deleteValueFromSelectedSimpleCmsProperty_UIAction(){
-		//Remove value only it has not already been deleted in case of null value
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
+		//Remove value only if it has not already been deleted in case of null value
 		if (indexOfValueToBeDeleted != -1){
 
 			//Remove value from simple cms property
@@ -348,7 +365,112 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 			logger.warn("Could not retrieve clipboard from session context.");
 		}
 	}
+	
+	
+	public void fileUpload_Listener(UploadEvent event) {
+		try {
+			processUploadedFile(event.getUploadItem());
 
+			//	resetAfterDialogueCompletion();
+		}
+		catch (Exception e) {
+			JSFUtilities.addMessage(null, "Συνέβη κάποιο σφάλμα. Δεν μεταφορτώθηκε το αρχείο", FacesMessage.SEVERITY_WARN);
+		}
+	}
+
+	private void processUploadedFile(UploadItem uploadItem) throws IOException{
+
+		String filename = null;
+		byte[] filedata = null;
+		GregorianCalendar lastModified;
+		String mimeType = null;
+		
+		ConfigurableMimeFileTypeMap mimeTypesMap = (ConfigurableMimeFileTypeMap) JSFUtilities.getBeanFromSpringContext("mimeTypesMap");
+		
+		// add a new value wrapper
+		addBlankValue_UIAction();
+		SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper = 
+				simpleCmsPropertyValueWrappers.get(simpleCmsPropertyValueWrappers.size()-1);
+		
+		if (uploadItem.isTempFile()) { // if upload was set to use temp files
+			filename = FilenameUtils.getName(uploadItem.getFileName());
+			filedata = FileUtils.readFileToByteArray(uploadItem.getFile());
+			lastModified = new GregorianCalendar(JSFUtilities.getLocale()); 
+			lastModified.setTimeInMillis(uploadItem.getFile().lastModified());
+			mimeType = mimeTypesMap.getContentType(filename);
+			logger.debug("file uploaded " + filename);
+		}
+		else if (uploadItem.getData() != null){ // if upload was done in memory
+			filename = uploadItem.getFileName();
+			filedata = uploadItem.getData();
+			lastModified = (GregorianCalendar) GregorianCalendar.getInstance(JSFUtilities.getLocale());
+			mimeType = mimeTypesMap.getContentType(filename);
+			logger.debug("file uploaded " + filename);
+		}
+
+
+		if (StringUtils.isBlank(mimeType)){
+			mimeType = "application/octet-stream";
+		}
+		
+		if (filedata == null || filename == null){
+			JSFUtilities.addMessage(null, "Δεν μεταφορτώθηκε σωστά το αρχείο. Προσπαθήστε πάλι", FacesMessage.SEVERITY_WARN);
+			return;
+		}
+
+		//Check if this property is the 'thumbnail' property
+		try {
+			byte[] thumbnailContent = null;
+			if (simpleCmsPropertyValueWrapper.isThumbnailPropertyValueWrapper() ){
+				//Generate thumbnail
+				if (mimeType != null && 
+						( mimeType.equals("image/jpeg")	|| mimeType.equals("image/gif")	|| mimeType.equals("image/png") ||
+								mimeType.equals("image/x-png"))){
+					thumbnailContent = ImageUtils.generateJpegThumbnailHQ(filedata, 128, 256);
+				}
+				else{
+					JSFUtilities.addMessage(null, "Επιτρεπτά φορμά εικόνας JPEG / PNG / GIF", FacesMessage.SEVERITY_WARN);
+					return;
+				}
+			}
+
+			BinaryChannel binaryChannelValue = simpleCmsPropertyValueWrapper.getOrCreateNewBinaryChannelValue();
+
+
+			//Copy byte[] to a new byte[]
+			byte[] newContent = null;
+			if (thumbnailContent == null){
+				newContent = new byte[filedata.length];
+				System.arraycopy(filedata, 0, newContent, 0, filedata.length);
+			}
+			else{
+				newContent = new byte[thumbnailContent.length];
+				System.arraycopy(thumbnailContent, 0, newContent, 0, thumbnailContent.length);
+			}
+
+			binaryChannelValue.setContent(newContent);
+			binaryChannelValue.setMimeType(new String(mimeType));
+			binaryChannelValue.setSize(filedata.length);
+			binaryChannelValue.setSourceFilename(new String(filename));
+			binaryChannelValue.setModified(GregorianCalendar.getInstance(JSFUtilities.getLocale()));
+
+			simpleCmsPropertyValueWrapper.setValue(binaryChannelValue);
+
+
+		}
+		catch (Exception e) {
+			JSFUtilities.addMessage(null, "Σφάλμα κατά την ανάγνωση των ιδιοτήτων του ψηφιακού καναλιού:" + e.toString(), FacesMessage.SEVERITY_ERROR);
+			logger.error("", e);
+		}
+		finally
+		{
+			simpleCmsPropertyValueWrapper.setMimeTypeIconFilePath(null);
+
+		}
+	}
+
+	
+	
 	public String getSelectedDispositionType() {
 		return selectedDispositionType;
 	}

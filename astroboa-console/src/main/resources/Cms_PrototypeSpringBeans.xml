@@ -38,4 +38,8 @@ Authors
     		class="org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapper">
     </bean>
     
+    <bean id="complexCmsPropertyEdit" scope="prototype" autowire="byName"
+    		class="org.betaconceptframework.astroboa.console.jsf.edit.ComplexCmsPropertyEdit">
+    </bean>
+    
 </beans>

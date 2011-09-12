@@ -32,12 +32,13 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.commons.comparator.TopicLocalizedLabelComparator;
@@ -73,8 +74,10 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 			TaxonomyService taxonomyService,
 			TopicService topicService,
 			CmsRepositoryEntityFactory cmsRepositoryEntityFactory,
-			ContentObject contentObject) {
-		super(cmsPropertyDefinition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject);
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
+		super(cmsPropertyDefinition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject, wrapperIndex, complexCmsPropertyEdit);
 
 		cmsProperty = topicProperty;
 		this.topicService = topicService;
@@ -90,7 +93,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 				List<String> localizedLabels = new ArrayList<String>();
 				//Load localized Labels for all taxonomies
 				for (String acceptedTaxonomyName : acceptedTaxonomies){
-					Taxonomy acceptedTaxonomy = taxonomyService.getTaxonomy(acceptedTaxonomyName, JSFUtilities.getLocaleAsString());
+					Taxonomy acceptedTaxonomy = taxonomyService.getTaxonomy(acceptedTaxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 					
 					if (acceptedTaxonomy == null){
 						logger.warn("Try to load accepted taxonomy {} but was not found", acceptedTaxonomyName);
@@ -112,7 +115,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 			}
 		}
 		
-		this.topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+		this.topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		//this.topicCriteria.getResultRowRange().setRange(0, 30);
 		this.topicCriteria.setOffsetAndLimit(0,30);
 		this.topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
@@ -134,6 +137,9 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 	}
 
 	public void deleteValueFromTopicProperty_UIAction(){
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		//Remove value only it has not already been deleted in case of null value
 		if (indexOfValueToBeDeleted != -1){
 			
@@ -210,7 +216,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 					topicCriteria.addCriterion(localizationCriterion);
 					topicCriteria.addTaxonomyNameEqualsCriterion(acceptedTaxonomies.get(0));
 					
-					CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+					CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 					results = cmsOutcome.getResults();
 				}
@@ -224,7 +230,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 						topicCriteria.addCriterion(localizationCriterion);
 						topicCriteria.addTaxonomyNameEqualsCriterion(acceptedTaxonomy);
 						
-						CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+						CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 						
 						if (cmsOutcome != null && cmsOutcome.getCount() > 0){
 							results.addAll(cmsOutcome.getResults());
@@ -243,7 +249,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 				topicCriteria.addCriterion(localizationCriterion);
 				
 				//No taxonomy criterion proceed normally
-				CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+				CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 				results = cmsOutcome.getResults();
 			}
@@ -267,6 +273,8 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 
 	
 	public void addSelectedTopic_UIAction(Topic selectedTopic, boolean checkTaxonomy){
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
 		
 		//Check that taxonomy is valid
 		if (CollectionUtils.isNotEmpty(acceptedTaxonomies) && checkTaxonomy){
@@ -299,11 +307,11 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 			return;
 		}
 		
-		// check if selected topic is already in subject
+		// check if selected topic is already in value list
 		boolean topicExists = false;
-		for (Topic subjectTopic : topics) {
+		for (Topic topic : topics) {
 			// we check first if topic Id exists because there may be new user tags in the list and new tags do not have an id yet 
-			if (subjectTopic.getId() != null && subjectTopic.getId().equals(selectedTopicId)) {
+			if (topic.getId() != null && topic.getId().equals(selectedTopicId)) {
 				topicExists = true;
 				break;
 			}

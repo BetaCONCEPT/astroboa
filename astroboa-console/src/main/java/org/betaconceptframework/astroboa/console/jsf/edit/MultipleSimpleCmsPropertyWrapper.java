@@ -45,11 +45,13 @@ public abstract class MultipleSimpleCmsPropertyWrapper<T extends SimpleCmsProper
 			CmsPropertyDefinition cmsPropertyDefinition,
 			String parentCmsPropertyPath,
 			CmsRepositoryEntityFactory cmsRepositoryEntityFactory,
-			ContentObject contentObject) {
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 		super(cmsPropertyDefinition,
 				parentCmsPropertyPath, 
 				cmsRepositoryEntityFactory,
-				contentObject);
+				contentObject, wrapperIndex, complexCmsPropertyEdit);
 	}
 	
 	private void swapPropertyValuePositions(Integer fromIndex, Integer toIndex) {
@@ -105,6 +107,8 @@ public abstract class MultipleSimpleCmsPropertyWrapper<T extends SimpleCmsProper
 	}
 	
 	public void addDraggedAndDroppedReference_Listener(DropEvent dropEvent){
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
 		
 		Integer fromIndex = (Integer) dropEvent.getDragValue();
 		

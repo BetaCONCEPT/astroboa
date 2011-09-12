@@ -371,7 +371,8 @@ function callFunctionOnEnterKey(e, func, arg) {
     /* TABS */
     function initTabs() {
     	bcmslib.jQuery("#tabs").tabs(
-    			{ 	fx: 	{ opacity: 'toggle' },
+    			{ 	//fx: 	{ opacity: 'toggle' },
+    				//event: "mouseover",
     				select: function(event, ui) {
     					if (ui.index == 1) { //user space tab selected
     						reRenderFolder();
@@ -450,6 +451,33 @@ function callFunctionOnEnterKey(e, func, arg) {
     	bcmslib.jQuery("#tabSelectors").children().css("display","none");
     }
     
+    
+    function createObjectTabs() {
+    	bcmslib.jQuery("#objectTabs").tabs(
+    			{ 	//fx: 	{ opacity: 'toggle' },
+    				//event: "mouseover",
+    				//select: function(event, ui) {
+    				//	if (ui.index == 1) { //user space tab selected
+    				//		reRenderFolder();
+    				//	}
+    					//else if (ui.index == 0) { // dashboard panel selected
+    					//	refreshLoggedInUserRecentlyAddedOrModifiedContent();
+    					//	refreshRecentlyAddedOrModifiedContent();
+    					//	refreshRecentlyAddedOrModifiedPublishedContent();
+    					//	refreshContentObjectsSubmittedForWebPublishing();
+    					//	refreshContentObjectsSubmittedByExternalUserForWebPublishing();
+    					//	refreshContentObjectsTemporarilyRejectedForReauthoring();
+    					//}
+    				//}
+
+				}
+		);
+    		
+    	// show the tabs div
+    //	bcmslib.jQuery("#objectTabs").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
+    //	bcmslib.jQuery("#objectTabs li").removeClass('ui-corner-top').addClass('ui-corner-left');
+    	bcmslib.jQuery("#objectTabs").css("display","block");
+    }
     
     // SET BUTTON IN SCRIPT ENGINE CONSOLE TO TOGGLE DIV TO FULLSCREEN
     function toggleScriptEngineConsoleFullscreen(elementToResizeId, parentElementId) {
@@ -1120,12 +1148,17 @@ function callFunctionOnEnterKey(e, func, arg) {
     	.end()
     	.find(".portlet-content");
 
-    	bcmslib.jQuery(".portlet-header .ui-icon-plus").click(function() {
+    	bcmslib.jQuery(".portlet-header .ui-icon-plus").click(function(event) {
+    		event.stopPropagation();
     		bcmslib.jQuery(this).toggleClass("ui-icon-minus");
     		bcmslib.jQuery(this).parents(".portlet:first").find(".portlet-content").toggle("slow");
     	});
 
-
+    	bcmslib.jQuery(".portlet-header").click(function() {
+    		bcmslib.jQuery(this).toggleClass("ui-icon-minus");
+    		bcmslib.jQuery(this).parents(".portlet:first").find(".portlet-content").toggle("slow");
+    	});
+    	
     	bcmslib.jQuery(".loggedInUserRecentlyAddedOrModifiedContent .portlet-header .ui-icon-refresh").click(function() {
     		refreshLoggedInUserRecentlyAddedOrModifiedContent();
     	});

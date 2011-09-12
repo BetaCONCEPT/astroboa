@@ -8,7 +8,8 @@ BODY {
 	width:100%;
 	min-width: 970px;
 	height:100%;
-	font: 75% "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 80%;
 	line-height: 130%;
 }
 
@@ -35,13 +36,11 @@ a img {
 }
 
 #toppanel h1 {
-	font-size: 1.6em;
 	height: 20px;
 	padding-top: 0;
 }
 
 # toppanel h2{
-	font-size: 1.2em;
 	height: 20px;
 	padding-top: 0;
 }
@@ -167,7 +166,7 @@ a img {
 	text-align: center;
 	font-weight: bold;
 	font-size: 1.3em;
-	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 }
 
 #showMore {

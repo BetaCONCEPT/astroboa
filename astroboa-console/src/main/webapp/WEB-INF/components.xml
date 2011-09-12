@@ -184,6 +184,9 @@ Authors
 		<property name="pageController">#{pageController}</property>
 		<property name="topicService">#{topicService}</property>
 		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
+		<property name="complexCmsPropertyEdit">#{complexCmsPropertyEdit}</property>
+		<property name="profilePropertyEdit">#{complexCmsPropertyEdit}</property>
+		<property name="accessibilityPropertyEdit">#{complexCmsPropertyEdit}</property>
 	</component>
 	
 	<component name="tagEdit">
@@ -251,6 +254,7 @@ Authors
 	    <property name="cmsUtilities">#{cmsUtilities}</property>
 	</component>
 	
+	<!-- 
 	<component name="complexCmsPropertyEdit">
 		<property name="definitionService">#{definitionService}</property>
 		<property name="contentService">#{contentService}</property>
@@ -259,6 +263,7 @@ Authors
 		<property name="topicService">#{topicService}</property>
 		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
 	</component>
+	-->
 	
 	<component name="contentObjectsSubmittedForWebPublishingDashboardItem">
 		<property name="contentService">#{contentService}</property>
