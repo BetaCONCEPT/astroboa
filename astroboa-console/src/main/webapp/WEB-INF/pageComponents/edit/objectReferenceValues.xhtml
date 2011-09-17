@@ -60,6 +60,9 @@ Authors
 									dropValue="#{indexOfSimpleCmsPropertyValueWrapper}">
 									
 								</rich:dropSupport>
+
+								<h:outputText rendered="#{!empty simpleCmsPropertyValueWrapper.value and ! empty simpleCmsPropertyValueWrapper.value.getLabel(localeSelector.localeString)}"
+									value="#{simpleCmsPropertyValueWrapper.value.getLabel(localeSelector.localeString)} - "/>
 				
 								<h:outputText rendered="#{!empty simpleCmsPropertyValueWrapper.value}"
 									value="#{simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}"/>
