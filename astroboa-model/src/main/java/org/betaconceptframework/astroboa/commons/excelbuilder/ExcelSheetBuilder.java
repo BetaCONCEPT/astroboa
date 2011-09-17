@@ -388,16 +388,22 @@ public class ExcelSheetBuilder{
 		return topicPathAsString;*/
 	}
 
-	private String getContentObjectTitle(ContentObject propertyValue, String locale) {
-		if (propertyValue == null){
+	private String getContentObjectTitle(ContentObject object, String locale) {
+		
+		if (object == null){
 			return "";
 		}
 		
-		StringProperty titleProperty = (StringProperty) propertyValue.getCmsProperty("profile.title");
+		String label = object.getLabel(locale);
+		if (StringUtils.isNotBlank(label)){
+			return label;
+		}
+		
+		StringProperty titleProperty = (StringProperty) object.getCmsProperty("profile.title");
 		
 		if (titleProperty == null || titleProperty.hasNoValues()){
 			//this should never happen 
-			return propertyValue.getSystemName();
+			return object.getSystemName();
 		}
 		
 		return titleProperty.getFirstValue();
