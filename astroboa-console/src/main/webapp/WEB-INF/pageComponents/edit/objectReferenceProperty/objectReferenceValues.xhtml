@@ -53,20 +53,33 @@ Authors
 						<li class="inlineFormElementValue">
 							<a4j:outputPanel>
 								<rich:dropSupport 
+									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}"
 									ondrop="destroyTextEditor();"
 									acceptedTypes="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}"
-									reRender="complexCmsPropertyChildPropertiesTable"
+									reRender="objectProperty"
 									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
-									dropValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+									dropValue="#{indexOfSimpleCmsPropertyValueWrapper}"
+									ajaxSigle="true">
 									
 								</rich:dropSupport>
-				
+								
+								<rich:dragSupport 
+									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}"
+									dragIndicator="propertyReferenceIndicator"
+									dragType="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}" 
+									dragValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+	
+									<rich:dndParam name="label" type="drag"
+										value="#{ empty simpleCmsPropertyValueWrapper.value ? ' ' : simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}" />
+								</rich:dragSupport>
+								
 								<h:outputText rendered="#{!empty simpleCmsPropertyValueWrapper.value}"
 									value="#{simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}"/>
 			
 							</a4j:outputPanel>
 							
 							<!-- Grab action -->
+							<ui:remove>
 							 <a4j:outputPanel 
 						 		styleClass="dragElementValue"
 							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
@@ -80,7 +93,8 @@ Authors
 								</rich:dragSupport>
 								Drag to another position
 							</a4j:outputPanel>
-						
+							</ui:remove>
+							
 							<!-- MoveUp action 
 							<a4j:commandLink
 								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
@@ -110,7 +124,8 @@ Authors
 								styleClass="delete"
 								rendered="#{cmsPropertyWrapper.writeGranted}"
 								action="#{cmsPropertyWrapper.deleteValueFromContentObjectProperty_UIAction}"
-								reRender="complexCmsPropertyChildPropertiesTable">
+								reRender="objectProperty"
+								ajaxSingle="true">
 								<a4j:actionparam name="valueIndex"
 									value="#{indexOfSimpleCmsPropertyValueWrapper}"
 									assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />

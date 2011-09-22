@@ -374,13 +374,13 @@ advancedSearch.criteria.query.save = ΑΠΟΘΗΚΕΥΣΗ
 
 # Dashboard
 dashboard = Πίνακας Επισκόπησης
-dashboard.recently.added.or.modified.published.content.objects.dashboard.item.label = Τελευταίες Εισαγωγές / Αλλαγές που έχουν δημοσιευτεί
-dashboard.most.read.published.content.objects.dashboard.item.label = Τα Πιο Δημοφιλή Δημοσιευμένα Αντικείμενα
-dashboard.content.objects.submitted.for.web.publishing.dashboard.item.label = Αντικείμενα προς Δημοσίευση
-dashboard.content.objects.submitted.by.external.user.for.web.publishing.dashboard.item.label =	Αντικείμενα Από Εξωτερικούς Χρήστες προς Δημοσίευση  
-dashboard.content.objects.temporarily.rejected.for.reauthoring.dashboard.item.label = Αντικείμενα για Διόρθωση (Προσωρινή απόρριψη δημοσίευσης)
-dashboard.loggedInUser.recently.added.or.modified.content.objects.dashboard.item.label= Τα Αντικείμενά μου (Τελευταίες Εισαγωγές / Αλλαγές) 
-dashboard.recently.added.or.modified.content.objects.dashboard.item.label = Οι πιο πρόσφατες εισαγωγές & αλλαγές
+dashboard.widget.label.recentlyPublished = Πρόσφατα Δημοσιευμένα
+dashboard.widget.label.mostReadPublished = Τα Πιο Δημοφιλή Δημοσιευμένα
+dashboard.widget.label.waitingApprovalForPublication = Εν Αναμονή έγγρισης για Δημοσίευση
+dashboard.widget.label.externallySubmittedWaitingApprovalForPublication =	Από Εξωτερικούς Χρήστες - Εν Αναμονή έγγρισης για Δημοσίευση  
+dashboard.widget.label.temporarilyRejectedForReauthoring = Για Διόρθωση (Προσωρινή απόρριψη δημοσίευσης)
+dashboard.widget.label.myObjects = Τα Αντικείμενά μου 
+dashboard.widget.label.recentUpdates = Οι πιο πρόσφατες αλλαγές 
 
 # Footer
 footer.developed.by  = Ανάπτυξη από
@@ -425,7 +425,7 @@ content.object.edit.content.object.selection.accepted.values.allObjectTypes = Μ
 content.object.edit.content.object.selection.accepted.values.specificObjectTypes = Μπορείτε να προσθέσετε αντικείμενα που έχουν τύπο: 
 content.object.edit.binary.channel.no.value = Παρακαλώ μεταφορτώστε ένα αρχείο
 content.object.edit.rich.text.no.value = Παρακαλώ ανοίξτε τον κειμενογράφο για να εισάγετε κείμενο
-content.object.edit.breadcrumb.label = ΒΛΕΠΕΤΕ ΤΗ ΦΟΡΜΑ:
+content.object.edit.breadcrumb.label = ΠΕΔΙΟ:
 content.object.edit.aspect.panel.label = ΠΡΟΣΘΕΣΘΕ ΠΕΔΙΑ
 content.object.edit.actions.panel.label = ΕΝΕΡΓΕΙΕΣ
 content.object.edit.actions.instructions = Κατα την Αποθήκευση το Αντικείμενο μπορεί αυτόματα να προσαρτηθεί σε κάποιο Φάκελο. Έχετε τις παρακάτω επιλογές:

@@ -3,8 +3,9 @@ body {
 	font-family:  Arial, Helvetica, sans-serif;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	font-family: Tahoma, Geneva, sans-serif;
-	font-family: Verdana, Geneva, sans-serif;*/
-	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-family: Verdana, Geneva, sans-serif;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;*/
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size: 70%;
 	background-color: #FFFFFF;
 	color: #333333;
@@ -165,7 +166,7 @@ div#footerArea {
 }
 
 
-div#formHeader, div#formEditorScrollableArea, div#formActions, 
+div#formHeader, div#formActions, 
 div#dynPropTrigger, div#dynPropToggleContainer, div#spaces, div#objectListScrollableArea,
 div#cmsDefinitionTreeForSearch, div#systemTopicsTrigger, div#systemTopicsToggleContainer,
 div#objectsTrigger, div#objectsToggleContainer, div#usersTrigger, div#usersToggleContainer, 
@@ -182,6 +183,17 @@ div#objectTypeSelectorScrollableArea, div#scriptsTrigger, div#scriptsToggleConta
 	-webkit-border-bottom-left-radius:5px;
 	-moz-box-shadow:#999 2px 2px 5px;
   	-webkit-box-shadow:#999 2px 2px 5px;
+}
+
+.formEditorScrollableArea {
+	border: 1px solid #EBE8E4;
+	margin: 0 20px 20px 20px;
+	padding: 20px;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-top-right-radius:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
 }
 
 .roundedPanelHeader, .roundedMessageBox {
@@ -429,19 +441,71 @@ div#dynPropList {
 	bottom: 0px; 
 	overflow: hidden; 
 	width: 99%;	
+	
+	padding: 0px;
+	background: none;
+	border-width: 0px;
 }
+
+#tabs .ui-tabs-nav {
+	padding-left: 0px;
+	background: transparent;
+	border-width: 0px 0px 1px 0px;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+}
+#tabs .ui-tabs-panel {
+	/*border-width: 0px 1px 1px 1px;
+	border-color: #AAAAAA;*/
+	margin: 0em 0.2em 0.2em 0.2em;
+	
+}
+
+#objectTabs {
+	position:absolute; 
+	left: 5px; 
+	top: 35px; 
+	bottom: 0px; 
+	overflow: hidden; 
+	width: 99%;	
+	
+	padding: 0px;
+	background: none;
+	border-width: 0px;
+}
+
+#objectTabs .ui-tabs-nav {
+	padding-left: 100px;
+}
+
 
 #tabSelectors {
 	font-size: 11px;
 }
 
-div#formEditorScrollableArea {
+#objectTabSelectors {
+	font-size: 10px;
+}
+
+.formEditorScrollableArea {
 	margin: 0 20px 0 20px;
 	padding: 10px;
-	position: absolute; 
+	position: absolute;
 	left: 0px;
 	right: 0px; 
-	top: 125px; 
+	top: 60px;
+	bottom: 55px; 
+	overflow: auto;
+}
+
+.otherFormEditorScrollableArea {
+	margin: 0 20px 0 20px;
+	padding: 10px;
+	position: absolute;
+	left: 0px;
+	right: 0px; 
+	top: 30px;
 	bottom: 55px; 
 	overflow: auto;
 }
@@ -541,7 +605,7 @@ div#myAccountFormScrollableArea {
 	padding-left: 10px; 
 	font-size: 90%; 
 	font-weight: normal; 
-	color: gray;
+	color: #444444;
 }
 .portlet-header .ui-icon { 
 	float: right; 
@@ -556,43 +620,6 @@ div#myAccountFormScrollableArea {
 }
 .ui-sortable-placeholder * { 
 	visibility: hidden; 
-}
-
-.editorTableClass {
-	width: 100%; 
-	border: 0px;
-}
-
-
-.editorTableRowClass {
-	border: 0px;
-/*	background-color: #DDDDEE; 
-	background-color: #EBE8E4;*/
-	background-color: #FFF;
-}
-
-.editorTableColumnClass {
-	border: 0px;
-	color: #111;
-}
-
-
-.editorSubTableColumnClass {
-	border-top: 1px solid #BBB;
-	border-bottom: 1px solid #BBB;
-	border-left: 0px;
-	border-right: 0px;
-	border-collapse: collapse;
-	color: #333;
-}
-
-.editorSubTableRowClass {
-	border-left: 1px solid #BBB;
-	border-right: 1px solid #BBB;
-	border-collapse: collapse;
-/*	background-color: #DDDDEE; 
-	background-color: #EBE8E4;*/
-	background-color: #FFF;
 }
 
 
@@ -769,8 +796,9 @@ ul#nav li.active a,ul#nav a:hover {
 
 table.listViewContentObjectTable th, 
 table.contentObjectTypeTable th {
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size: 95%;
-	color:			#333333;
+	color: #333333;
 	overflow: auto;
 }
 
@@ -781,7 +809,7 @@ table.contentObjectTypeTable a,
 table.contentObjectTypeTable a.selected,
 table.contentObjectTypeTable a.active
 		{ 
-		color:			#555555;
+		color: #444444;
 		text-decoration: none;
 		font-weight: normal;
 		cursor:			pointer;
@@ -794,8 +822,9 @@ table.contentObjectTypeTable a:hover {
 
 table.listViewContentObjectTable td, 
 table.contentObjectTypeTable td {
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size: 90%;
-	color:			#333333;
+	color: #444444;
 }
 
 table.listViewContentObjectTable th.actions,
@@ -835,8 +864,8 @@ table.contentObjectTypeTable td.typeName {
 	vertical-align:middle;
 	background-color:transparent;
 	width:120px;
-	font-family:Arial,Helvetica,sans-serif;
-	color: gray;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	color: #444444;
 	font-size:1em;
 	line-height:12px;
 	padding:8px;
@@ -895,7 +924,7 @@ table.contentObjectTypeTable td.typeName {
 }
 .menuContainer .line.title {
 	background-color:#B23305;
-	font-family:Arial,Helvetica,sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size:1em;
 	border-bottom:1px solid darkred;
 }
@@ -907,7 +936,7 @@ table.contentObjectTypeTable td.typeName {
 	color: #f3f3f3;
 }
 .menuContainer td.voice{
-	font-family:Arial,Helvetica,sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size:1em;
 	padding:7px;
 }
@@ -916,7 +945,7 @@ table.contentObjectTypeTable td.typeName {
 	height:1px;
 }
 .menuContainer td.img{
-	font-family:Arial,Helvetica,sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	text-align:center;
 	font-size:1em;
 	color: #c3c3c3;
@@ -929,7 +958,7 @@ table.contentObjectTypeTable td.typeName {
 }
 .menuContainer .textBox{
 	padding: 10px;
-	font-family:Arial,Helvetica,sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size:1em;
 	color: #c3c3c3;
 }
@@ -987,7 +1016,7 @@ button{
 	padding-left: 20px; 
 	background: url(../images/cms-icons/16/fugue/plus.png) no-repeat 0px center;
 	width:160px;
-	font-family:Arial,Helvetica,sans-serif;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size:1em;
 	line-height:18px;
 	cursor: pointer;
@@ -1165,7 +1194,8 @@ fieldset {
 	border-style: none;      
 	border-top: 1px solid #BBB8B4;      
 	background-color: #FFF; 
-	color: #777777;   
+	/*color: #777777;*/
+	color: #444444;   
 }
 legend {  
 	padding: 0;  
@@ -1199,8 +1229,8 @@ ol.childProperties {
 	-webkit-border-top-left-radius:5px;
 	-webkit-border-bottom-right-radius:5px;
 	-webkit-border-bottom-left-radius:5px;
-	-moz-box-shadow:#999 2px 2px 4px;
-  	-webkit-box-shadow:#999 2px 2px 4px;
+/*	-moz-box-shadow:#999 2px 2px 4px;
+  	-webkit-box-shadow:#999 2px 2px 4px; */
 }
 
 fieldset ol.formElementList {  
@@ -1211,7 +1241,8 @@ li.formElement {
 	clear: left;    
 	width: 100%;    
 	padding-bottom: 3px;
-	color: #777777;  
+	/*color: #777777;*/  
+	color: #444444;
 }
 
 ol.formElementList label,  ol.childProperties label{
@@ -1220,7 +1251,8 @@ ol.formElementList label,  ol.childProperties label{
 	margin-right: 1em;
 	text-align: left;   
 /*	text-align: right; */
-	color: #777777;
+/*	color: #777777; */
+	color: #444444;
 }
 li.singleValueComplexProperty > label{
 	font-weight: bold;	
@@ -1239,13 +1271,13 @@ div.formElementValuesLabelSpacer, div.childPropertiesLabelSpacer {
 	float: left;    
 	width: 20%;    
 	margin-right: 1em;    
-	text-align: right;
+	text-align: left;
 	color: #FFF;
 }
 
 ol.formElementValues {
 	float: left;
-	width: 70%;
+	width: 75%;
 	margin: 0 0 0 0;
 	padding: 5px 0 0 0;
 	list-style-type: none;
@@ -1262,11 +1294,11 @@ li.inlineFormElementValue {
 	-webkit-border-top-left-radius:6px;
 	-webkit-border-bottom-right-radius:6px;
 	-webkit-border-bottom-left-radius:6px;  
-	background-color: #359AFF;
+	background-color: #EEEEEE;
 	opacity: 0.8;
 	filter: alpha(opacity=80); 
 	-moz-opacity:0.8;
-	color: #FFF;
+	color: #333333;
 	font-size: 0.9em;
 }  
 
@@ -1277,7 +1309,7 @@ li.inlineFormElementValue a.delete {
 	padding: 0;
 	width: 16px;
 	text-indent:-9999px;
-	background: #359AFF url(../images/cms-icons/16/fugue/cross-octagon-frame.png) no-repeat center;
+	background: #EEEEEE url(../images/cms-icons/16/fugue/cross-octagon-frame.png) no-repeat center;
 }
 
 .dragElementValue {
@@ -1303,8 +1335,12 @@ fieldset.submit {
 }
 
 
-#formEditorScrollableArea input, #formHeader input, #formEditorScrollableArea select {
+.formEditorScrollableArea input, .otherFormEditorScrollableArea input, #formHeader input, .formEditorScrollableArea select, .otherFormEditorScrollableArea select {
 	width: 70%;
+}
+
+li.inColumnFormElementValue input, li.inColumnFormElementValue select {
+	width: 93.5%;
 }
 
 #topicPropertiesForm input, #taxonomyNameForm input {
@@ -1316,17 +1352,39 @@ fieldset.submit {
 	width: 50%;
 }
 
-#formEditorScrollableArea textarea.plainText {
+.formEditorScrollableArea textarea.plainText, .otherFormEditorScrollableArea textarea.plainText {
 	width: 70%;
 	white-space: nowrap;
 }
 
-/*
-select {
-	font-size: 1em;
-	color: #333333;	
+textarea, input {
+/*	background: #EEEEEE;
+	border: none;*/
+	border: 1px solid #CCCCCC;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	border-radius: 3px;
+	font-size: 11px;
+	outline: none;
+	padding: 5px;
+	color:#444444;
 }
-*/
+
+textarea:hover, input:hover {
+	background: #EEEEEE;
+}
+
+textarea:focus, input:focus {
+	background: #EEEEEE;
+}
+
+
+select {
+	font-size: 11px;
+	color: #444444	;	
+}
+
 
 table.objectTypeSelectorTable td {
 	padding: 0 20px 10px 0;
@@ -1348,13 +1406,25 @@ table.objectTypeSelectorTable td.actionIcon {
 	text-align: center;
 	font-weight: bold;
 	font-size: 1.3em;
-	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	/*font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;*/
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	z-index: 9000;
 }
 
-#profilePropertyMore {
-	position: absolute;
-	top: 5px;
-	left: 20px;
-	font-size: 0.9em;
+.vspacer-5px {
+	margin: 5px 0 0 0;
+	visibility: hidden;
+  	clear: both;
+}
+
+.vspacer-10px {
+	margin: 10px 0 0 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.vspacer-15px {
+	margin: 15px 0 0 0;
+	visibility: hidden;
+	clear: both;
 }

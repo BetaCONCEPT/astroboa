@@ -55,9 +55,10 @@ Authors
 							<rich:dropSupport 
 								ondrop="destroyTextEditor();"
 								acceptedTypes="topicReference#{topicPropertyWrapper.cmsProperty.name}"
-								reRender="complexCmsPropertyChildPropertiesTable"
+								reRender="objectProperty"
 								dropListener="#{topicPropertyWrapper.addDraggedAndDroppedReference_Listener}"
-								dropValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+								dropValue="#{indexOfSimpleCmsPropertyValueWrapper}"
+								ajaxSingle="true">
 								
 							</rich:dropSupport>
 							
@@ -67,10 +68,24 @@ Authors
 							
 							<h:outputText rendered="#{simpleCmsPropertyValueWrapper.simpleCmsProperty.path ne 'profile.subject'}" 
 								value="#{simpleCmsPropertyValueWrapper.value.getAvailableLocalizedLabel(localeSelector.localeString)}"/>
+								
+							<rich:dragSupport 
+								rendered="#{topicPropertyWrapper.writeGranted and topicPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}"
+								dragIndicator="propertyReferenceIndicator"
+								dragType="topicReference#{topicPropertyWrapper.cmsProperty.name}" 
+								dragValue="#{indexOfSimpleCmsPropertyValueWrapper}">
+	
+								<rich:dndParam name="label" type="drag"
+									value="#{ empty simpleCmsPropertyValueWrapper.value ? ' ' : 
+									empty simpleCmsPropertyValueWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString) ? 
+										simpleCmsPropertyValueWrapper.value.name : 
+										simpleCmsPropertyValueWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString)}" />
+							</rich:dragSupport>
 							
 						</a4j:outputPanel>
 						
 						<!-- Grab action -->
+						<ui:remove>
 						 <a4j:outputPanel 
 						 	styleClass="dragElementValue"
 						 	rendered="#{topicPropertyWrapper.writeGranted and topicPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
@@ -87,7 +102,8 @@ Authors
 							</rich:dragSupport>
 							Drag to another position
 						</a4j:outputPanel>
-							
+						</ui:remove>
+						
 						<!-- MoveUp action 
 						<a4j:commandLink
 							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
@@ -117,7 +133,8 @@ Authors
 							styleClass="delete"
 							rendered="#{topicPropertyWrapper.writeGranted}"
 							action="#{topicPropertyWrapper.deleteValueFromTopicProperty_UIAction}"
-							reRender="complexCmsPropertyChildPropertiesTable">
+							reRender="objectProperty"
+							ajaxSingle="true">
 							<a4j:actionparam name="valueIndex"
 								value="#{indexOfSimpleCmsPropertyValueWrapper}"
 								assignTo="#{topicPropertyWrapper.indexOfValueToBeDeleted}" />

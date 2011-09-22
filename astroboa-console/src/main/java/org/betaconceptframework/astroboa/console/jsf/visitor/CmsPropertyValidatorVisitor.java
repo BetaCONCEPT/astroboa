@@ -635,7 +635,7 @@ public class CmsPropertyValidatorVisitor {
 			else {
 				// There is a case that the property is multi-value and its list of values contains nulls. 
 				// This may happen if the user deletes one or more values from the object form by cutting the number digits instead of using the (X) button to remove the field. 
-				// In such a case when the user submits the form (i.e. save the object) then the property will contain an ArrayList one or more null values. 
+				// In such a case when the user submits the form (i.e. save the object) then the property will contain an ArrayList with one or more null values. 
 				// We should identify such case and not raise an error but instead remove the null value from the list.
 				if (cmsProperty.getPropertyDefinition().isMultiple()) {
 					if (values.size() == 1) { // if there is only one value and is null remove the list itself 

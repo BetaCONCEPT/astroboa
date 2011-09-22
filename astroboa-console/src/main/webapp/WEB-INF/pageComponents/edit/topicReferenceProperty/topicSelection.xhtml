@@ -34,39 +34,50 @@ Authors
 
 	<body>
 		<ui:composition>
-
-			<!-- Content Object Selection can be accomplished either by using drag and drop or suggestion box -->
+		
+			<!-- Topic Selection can be accomplished either by using drag and drop or suggestion box -->
             <a4j:outputPanel layout="block">
             	
             	<rich:dropSupport 
             		ondrop="destroyTextEditor();"
-					rendered="#{cmsPropertyWrapper.writeGranted}"
-					acceptedTypes="#{cmsPropertyWrapper.acceptedContentTypes}"
-					reRender="complexCmsPropertyChildPropertiesTable"
-					dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedContentObject_Listener}">
+					acceptedTypes="topic"
+					reRender="objectProperty"
+					dropListener="#{topicPropertyWrapper.addDraggedAndDroppedTopicToTopicProperty_Listener}"
+					ajaxSingle="true">
 				</rich:dropSupport>
 				
-				<h:inputText id="contentObjectTitlePattern"
-					value="#{cmsPropertyWrapper.contentObjectTitlePattern}" 
+				<h:inputText id="topicLabelPattern"
+					value="#{topicPropertyWrapper.topicLabelPattern}" 
 					size="35"/>
+					
+				<img id="#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}" class="topicTipImg" src="images/cms-icons/12/info.png"/>
 				
-				<img id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="objectRefTipImg" src="images/cms-icons/12/info.png"/>
-				<div class="objectRefTip_#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+				<a4j:commandLink
+					action="#{taxonomyTree.setAcceptedTaxonomies(topicPropertyWrapper.acceptedTaxonomies)}"
+					oncomplete="openTopicSelectionDialog();"
+					reRender="topicSelectionDialogPanel"
+					ajaxSingle="true">
+					<img src="images/cms-icons/16/fugue/tag--plus.png"
+						alt="show topic selection dialog"/>
+				</a4j:commandLink>
 				
-				<rich:suggestionbox for="contentObjectTitlePattern"
-					suggestionAction="#{cmsPropertyWrapper.findContentObjects_UIAction}" 
-					var="suggestedContentObject"
-					fetchValue="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}"
-					zindex="200"
-					minChars="3">
+				<div class="topicTip_#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+				
+				<rich:suggestionbox for="topicLabelPattern"
+					suggestionAction="#{topicPropertyWrapper.findTopics_UIAction}" 
+					var="suggestedTopic"
+					fetchValue="#{suggestedTopic.getAvailableLocalizedLabel(localeSelector.localeString)}"
+					zindex="200">
 					<h:column>
-						<h:outputText value="#{suggestedContentObject.contentObjectProperty['profile.title'].simpleTypeValue}" />
+						<h:outputText value="#{suggestedTopic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 					</h:column>
 					<a4j:support event="onselect" 
 						onsubmit="destroyTextEditor();"
-						reRender="complexCmsPropertyChildPropertiesTable"
-						action="#{cmsPropertyWrapper.addSelectedContentObject_UIAction(suggestedContentObject.contentObject, false)}" />
+						reRender="objectProperty"
+						action="#{topicPropertyWrapper.addSelectedTopic_UIAction(suggestedTopic, false)}"
+						ajaxSingle="true"/>
 				</rich:suggestionbox>
+		
 			</a4j:outputPanel>
 			
 		</ui:composition>
