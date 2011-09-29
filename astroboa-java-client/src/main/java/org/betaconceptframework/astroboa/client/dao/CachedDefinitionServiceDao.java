@@ -18,12 +18,17 @@
  */
 package org.betaconceptframework.astroboa.client.dao;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.cache.DefinitionCacheManager;
 import org.betaconceptframework.astroboa.cache.region.AstroboaDefinitionCacheRegion;
 import org.betaconceptframework.astroboa.service.dao.DefinitionServiceDao;
@@ -38,6 +43,12 @@ import org.slf4j.LoggerFactory;
 public class CachedDefinitionServiceDao extends DefinitionServiceDao {
 
 	protected  final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	//key is comprised of the following values
+	// path#output#prettyPrint For example
+	// eventObject.profile.title#XML#true
+	private ConcurrentMap<String, Object> definitionsPerPath = new ConcurrentHashMap<String, Object>();
+	
 	
 	public CachedDefinitionServiceDao(){
 		AstroboaDefinitionCacheRegion definitionCacheRegion = new AstroboaDefinitionCacheRegion();
@@ -85,5 +96,35 @@ public class CachedDefinitionServiceDao extends DefinitionServiceDao {
 				}
 			}
 		}
+	}
+	
+	public <T> T getCmsDefinition(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, boolean prettyPrint){
+	
+		if (StringUtils.isBlank(fullPropertyDefinitionPath) || output == null){
+			return null;
+		}
+		
+		String key = constructKey(fullPropertyDefinitionPath, output, prettyPrint);
+		
+		return (T) definitionsPerPath.get(key);
+	}
+	
+	public <T> void cacheCmsDefinition(String fullPropertyDefinitionPath, T cmsDefinition, ResourceRepresentationType<T> output, boolean prettyPrint){
+
+		if (StringUtils.isBlank(fullPropertyDefinitionPath) || cmsDefinition == null || output == null){
+			return;
+		}
+		
+		String key = constructKey(fullPropertyDefinitionPath, output, prettyPrint);
+		
+		if (!definitionsPerPath.containsKey(key)){
+			definitionsPerPath.put(key, cmsDefinition);
+		}
+		
+		
+	}
+	
+	private <T> String constructKey(String fullPropertyDefinitionPath, ResourceRepresentationType<T> output, boolean prettyPrint){
+		return fullPropertyDefinitionPath+"#"+output.toString()+"#"+prettyPrint;
 	}
 }
