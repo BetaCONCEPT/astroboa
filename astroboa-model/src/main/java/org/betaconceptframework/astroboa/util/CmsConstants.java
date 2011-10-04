@@ -163,6 +163,10 @@ public final class CmsConstants {
 	public static final String CONTENT_OBJECTS_ELEMENT_NAME ="contentObjects";
 	public static final String TITLE_ELEMENT_NAME = "title";
 	public static final String PROFILE_ELEMENT_NAME = "profile";
+	public static final String ARRAY_OF_OBJECT_TYPE_ELEMENT_NAME = "arrayOfObjectTypes";
+	public static final String OBJECT_TYPE_ELEMENT_NAME = "objectType";
+	public static final String ARRAY_OF_PROPERTIES_ELEMENT_NAME = "arrayOfProperties";
+	public static final String PROPERTY_ELEMENT_NAME = "property";
 	//This flag is used when exporting content to JSON format to indicate whether exported json object should be 
 	//exported as an array or not. This is mostly useful in cases where json object contains only one value
 	//abut must be exported as an array which has a single item rather than a single value object.
