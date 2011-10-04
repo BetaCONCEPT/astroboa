@@ -225,13 +225,6 @@ public class ResourceApiURLUtils {
 	private static void addOutput(ResourceRepresentationType<?>  resourceRepresentationType,
 			StringBuilder sb, Class<?> type) {
 		
-		//XSD is considered default value and therefore it is not added
-		//if type is CmsDefinition
-		if (CmsDefinition.class.isAssignableFrom(type) && 
-				resourceRepresentationType != null && resourceRepresentationType == ResourceRepresentationType.XSD){
-			return ;
-		}
-		
 		//Add output. XML is considered default value and therefore it is not added
 		if (resourceRepresentationType != null && resourceRepresentationType != ResourceRepresentationType.XML){
 			sb.append("?output=");
