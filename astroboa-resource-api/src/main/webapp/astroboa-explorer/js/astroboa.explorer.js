@@ -542,7 +542,7 @@
 
 		 				var label=retrieveLabelForProperty(property, configuration.locale);
 		 				
-		 				if (property.valueType == 'Complex'){
+		 				if (property.valueType == 'Complex' || property.arrayOfProperties != undefined || property.arrayOfProperties != null){
 		 					
 		 					options[label] = buildOptionsForComplexProperty(property);
 		 					labelsForComplexProperty.push(label);
