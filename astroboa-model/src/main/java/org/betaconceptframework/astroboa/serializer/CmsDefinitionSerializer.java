@@ -18,6 +18,7 @@
  */
 package org.betaconceptframework.astroboa.serializer;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -39,6 +40,7 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.RepositoryContext;
+import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.DoublePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LongPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -333,7 +335,20 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	}
 
 	private void exportValueType(LocalizableCmsDefinition cmsDefinition) {
-		serializer.writeAttribute("valueType",cmsDefinition.getValueType().toString());
+		
+		if (cmsDefinition instanceof ComplexCmsPropertyDefinition && 
+				StringUtils.isNotBlank(((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getTypeName())){
+			serializer.writeAttribute("valueType",((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getTypeName());
+		}
+		else if (cmsDefinition instanceof ContentObjectTypeDefinition && 
+				CollectionUtils.isNotEmpty(((ContentObjectTypeDefinition)cmsDefinition).getSuperContentTypes())) {
+			//Object type is always the last element of the list
+			List<String> objectTypes = ((ContentObjectTypeDefinition)cmsDefinition).getSuperContentTypes();
+			serializer.writeAttribute("valueType",objectTypes.get(objectTypes.size()-1));
+		}
+		else{
+			serializer.writeAttribute("valueType",cmsDefinition.getValueType().toString());
+		}
 	}
 
 	private void exportName(LocalizableCmsDefinition cmsDefinition) {
