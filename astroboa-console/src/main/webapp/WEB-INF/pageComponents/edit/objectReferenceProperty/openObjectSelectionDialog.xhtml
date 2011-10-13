@@ -25,45 +25,37 @@ Authors
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" 
-	xmlns:ui="http://java.sun.com/jsf/facelets"  
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jstl/core">
 
-
-<!-- Parameters
-
-	 typeOfAccessRight : one of canBeReadBy, canBeUpdatedBy, canBeDeletedBy, canBeTaggedBy
- -->
 	<body>
-	
-	
 		<ui:composition>
-			<label for="suggestPersonOrRoleTextFilter#{typeOfAccessRight}">Add User or Group: </label>
-			<h:inputText id="suggestPersonOrRoleTextFilter#{typeOfAccessRight}"
-				value="#{contentObjectEdit.selectedPersonOrRoleTextFilter}" 
-				size="30" 
-				style="font-size: 90%;"/>
-			<rich:suggestionbox for="suggestPersonOrRoleTextFilter#{typeOfAccessRight}"
-				suggestionAction="#{contentObjectEdit.getMatchedPersonsOrRolesUIAction}" 
-				var="suggestedValue"
-				fetchValue="#{suggestedValue['label']}"
-				width="200"
-				height="200"
-				frame="box"
-				zindex="1000"
-				minChars="3">
-				<h:column>
-					<h:outputText value="#{suggestedValue['label']}" />
-				</h:column>
-				<a4j:support event="onselect" ajaxSingle="true"
-						reRender="#{typeOfAccessRight}Table"
-						action="#{contentObjectEdit.grantAccessRightToPersonOrRole(typeOfAccessRight, suggestedValue)}" />
-			</rich:suggestionbox>
+		
+			<!-- Object Reference Property with single or multiple values -->
+			<ui:fragment
+				rendered="#{cmsPropertyWrapper.writeGranted and 
+				cmsPropertyWrapper.valueType eq 'ObjectReference'}"
+				keepTransient="true">
+				
+				<ui:include
+					src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectSelection.xhtml">
+					<!--  Need to pass property wrapper to xhtml -->
+					<ui:param name="cmsPropertyWrapper"
+						value="#{cmsPropertyWrapper}" />
+				</ui:include>
+			</ui:fragment>
+			<!-- Object Reference Values -->
+			<ui:include
+				src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceValues.xhtml">
+				<!--  Need to pass valueWrapper to xhtml to render its value -->
+				<ui:param name="cmsPropertyWrapper"
+					value="#{cmsPropertyWrapper}" />
+			</ui:include>
 			
-			<div>#{messages['content.object.edit.accessibility.editor.tab.search.user.label']}</div>
 		</ui:composition>
 	</body>
 

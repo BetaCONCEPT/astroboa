@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 
 
 /**
@@ -78,15 +79,20 @@ public class ModelSerializer extends AbstractSerializer{
 
 	private void serializeModel() {
 
-		startArray("contentType");
-		
-		List<String> contentTypes = definitionService.getContentObjectTypes();
-
 		ResourceRepresentationType<String> output = outputIsJSON() ? ResourceRepresentationType.JSON : ResourceRepresentationType.XML;
 		boolean prettyPrintEnabled = prettyPrintEnabled();
 		
 		boolean firstType = true;
+
 		
+		startElement(CmsConstants.ARRAY_OF_OBJECT_TYPE_ELEMENT_NAME, false, true);
+		
+		if (outputIsJSON()){
+			startArray(CmsConstants.OBJECT_TYPE_ELEMENT_NAME);
+		}
+		
+		List<String> contentTypes = definitionService.getContentObjectTypes();
+
 		for (String contentType : contentTypes){
 			
 			String contentTypeAsXmlorJson = definitionService.getCmsDefinition(contentType, output, prettyPrintEnabled);
@@ -97,9 +103,9 @@ public class ModelSerializer extends AbstractSerializer{
 			}
 			else{
 				//Remove root element
-				contentTypeAsXmlorJson = contentTypeAsXmlorJson.replaceFirst("\\{","").replaceFirst("(.*?):", "");
+				//contentTypeAsXmlorJson = contentTypeAsXmlorJson.replaceFirst("\\{","").replaceFirst("(.*?):", "");
 				//Remove end
-				contentTypeAsXmlorJson = StringUtils.removeEnd(contentTypeAsXmlorJson, "}");
+				//contentTypeAsXmlorJson = StringUtils.removeEnd(contentTypeAsXmlorJson, "}");
 				
 				if (!firstType){
 					contentTypeAsXmlorJson = ","+contentTypeAsXmlorJson;
@@ -114,7 +120,11 @@ public class ModelSerializer extends AbstractSerializer{
 			
 		}
 		
-		endArray("contentType");
+		if (outputIsJSON()){
+			endArray(CmsConstants.OBJECT_TYPE_ELEMENT_NAME);
+		}
+
+		endElement(CmsConstants.ARRAY_OF_OBJECT_TYPE_ELEMENT_NAME, false, true);
 		
 	}
 }

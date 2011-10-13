@@ -64,7 +64,8 @@ Authors
 				<a4j:commandLink
 					onclick="destroyTextEditor();"
 					action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
-					reRender="complexCmsPropertyChildPropertiesTable"
+					reRender="objectProperty"
+					ajaxSingle="true"
 					title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
 					<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/plus.png" 
 						width="16"
@@ -90,7 +91,8 @@ Authors
 									onclick="destroyTextEditor();"
 									rendered="#{cmsPropertyWrapper.writeGranted}"
 									action="#{cmsPropertyWrapper.deleteValueFromSelectedSimpleCmsProperty_UIAction}"
-									reRender="complexCmsPropertyChildPropertiesTable">
+									reRender="objectProperty"
+									ajaxSingle="true">
 									<a4j:actionparam name="valueIndex"
 										value="#{indexOfSimpleCmsPropertyValueWrapper}"
 										assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />

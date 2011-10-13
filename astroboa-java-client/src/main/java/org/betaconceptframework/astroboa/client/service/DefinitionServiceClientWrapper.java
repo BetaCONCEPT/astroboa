@@ -411,8 +411,37 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			//This method does not require caching since only a map will be serialized
-			return definitionServiceSecure.getCmsDefinition(fullPropertyDefinitionPath, output, prettyPrint, getAuthenticationToken());
+			
+			T cmsDefinition = null;
+			try {
+
+				if (cachedDefinitionServiceDao != null){
+					
+					logger.debug("Looking in cache for definition {}", fullPropertyDefinitionPath);
+					
+					cmsDefinition = cachedDefinitionServiceDao.getCmsDefinition(fullPropertyDefinitionPath,output, prettyPrint);
+				}
+
+				if (cmsDefinition == null){
+					
+					logger.debug("Definition Service is used to retrieve definition {} ", fullPropertyDefinitionPath);
+					
+					cmsDefinition = definitionServiceSecure.getCmsDefinition(fullPropertyDefinitionPath, output, prettyPrint, getAuthenticationToken());
+
+					if (cmsDefinition != null && cachedDefinitionServiceDao != null){
+						
+						logger.debug("Caching definition {} since client is connected to a remote server", fullPropertyDefinitionPath);
+						
+						//Cache its parent which is either a complex cms property definition or a content typ definition
+						cachedDefinitionServiceDao.cacheCmsDefinition(fullPropertyDefinitionPath, cmsDefinition, output, prettyPrint);
+					}
+				}
+
+			} catch (Exception e) {
+				throw new CmsException(e);
+			}
+
+			return cmsDefinition;
 		}
 		else{
 			throw new CmsException("DefinitionService reference was not found");

@@ -45,9 +45,11 @@ import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicProperty;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsConcurrentModificationException;
 import org.betaconceptframework.astroboa.api.model.exception.CmsNonUniqueContentObjectSystemNameException;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
@@ -177,8 +179,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 	
 	private List<SelectItem> selectedLanguages;
 
-	@In(create=true)
+	//Three instances of the same Spring Prototype Bean injected
 	private ComplexCmsPropertyEdit complexCmsPropertyEdit;
+	private ComplexCmsPropertyEdit profilePropertyEdit;
+	private ComplexCmsPropertyEdit accessibilityPropertyEdit;
 
 	private String newTagLabel;
 
@@ -330,9 +334,11 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	private String initializeContentObjectEdit() {
 		complexCmsPropertyEdit.setEditedContentObject(selectedContentObjectForEdit.getContentObject());
+		profilePropertyEdit.setEditedContentObject(selectedContentObjectForEdit.getContentObject());
 
 		loadComplexCmsPropertyToComplexCmsPropertyEditor(selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty());
-
+		
+		profilePropertyEdit.editComplexCmsProperty((ComplexCmsProperty<ComplexCmsPropertyDefinition, ComplexCmsProperty<?,?>>)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile"));
 
 		listOfTopicIdsWhoseNumberOfContentObjectReferrersShouldBeUpdated.clear();
 
@@ -345,6 +351,8 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 		complexCmsPropertyEdit.setCmsPropertyValidatorVisitor(cmsPropertyValidatorVisitor);
 		
+		profilePropertyEdit.setCmsPropertyValidatorVisitor(cmsPropertyValidatorVisitor);
+		
 		return null;
 	}
 
@@ -354,7 +362,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			return explicitlySetContentObjectForEdit;
 		}
 		else{
-			return (ContentObject) contentService.getContentObjectByIdAndLocale(selectedContentObjectIdentifier, JSFUtilities.getLocaleAsString(), null);
+			return (ContentObject) contentService.getContentObject(selectedContentObjectIdentifier, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, true);
 		}
 	}
 
@@ -859,7 +867,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				String contentObjectId = selectedContentObjectForEdit.getContentObject().getId();
 				
 				spaceToCopyNewObject.addContentObjectReference(contentObjectId);
-				spaceService.saveSpace(spaceToCopyNewObject);
+				spaceService.save(spaceToCopyNewObject);
 				// recreate space items
 				userSpaceNavigation.getUserSpaceItems();
 				
@@ -1891,12 +1899,15 @@ public class ContentObjectEdit extends AbstractUIBean {
 			if (CollectionUtils.isNotEmpty(persons)){
 			
 				for (Person user : persons){
-					Map<String,String> userOrGroupMap = new HashMap<String,String>();
-					userOrGroupMap.put("userOrGroupId", user.getUsername()); 
-					userOrGroupMap.put("userOrGroupName", StringUtils.isBlank(user.getDisplayName())? user.getUsername() : user.getDisplayName());
-					userOrGroupMap.put("label", user.getDisplayName() + " ( "+ user.getUsername() + " ) ");
-					
-					userOrGroupListMap.add(userOrGroupMap);
+					// check if user has an account, i.e. if a username exists
+					if (user.getUsername() != null) {
+						Map<String,String> userOrGroupMap = new HashMap<String,String>();
+						userOrGroupMap.put("userOrGroupId", user.getUsername()); 
+						userOrGroupMap.put("userOrGroupName", StringUtils.isBlank(user.getDisplayName())? user.getUsername() : user.getDisplayName());
+						userOrGroupMap.put("label", user.getDisplayName() + " ( "+ user.getUsername() + " ) ");
+						
+						userOrGroupListMap.add(userOrGroupMap);
+					}
 				}
 			}
 			
@@ -2058,6 +2069,11 @@ public class ContentObjectEdit extends AbstractUIBean {
 		return complexCmsPropertyEdit;
 	}
 
+
+
+	public ComplexCmsPropertyEdit getProfilePropertyEdit() {
+		return profilePropertyEdit;
+	}
 
 
 	public void setPageController(PageController pageController) {

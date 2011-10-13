@@ -36,8 +36,6 @@ Authors
 	<body>
 		<ui:composition>
 
-			<div id="formFieldArea">
-
 				<h:panelGroup
 					rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id}">
 					<h:outputText
@@ -62,30 +60,21 @@ Authors
 						value="#{messages['content.object.edit.accessibility.editor.empty.content.object.default.settings.instructions']}" />
 				</h:panelGroup>
 
-				<rich:tabPanel id="contentObjectAccessibilityPropertiesTabPanel"
-					switchType="ajax" style="width: 100%">
-
-
-					<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-tab.xhtml">
-							<ui:param name="typeOfAccessRight" value="canBeReadBy"/>									
-					</ui:include>
-					
-					<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-tab.xhtml">
-							<ui:param name="typeOfAccessRight" value="canBeUpdatedBy"/>									
-					</ui:include>
-									
-					<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-tab.xhtml">
-							<ui:param name="typeOfAccessRight" value="canBeDeletedBy"/>									
-					</ui:include>
-					
-					<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-tab.xhtml">
-							<ui:param name="typeOfAccessRight" value="canBeTaggedBy"/>									
-					</ui:include>
-					
-				</rich:tabPanel>
-
-			</div>
-
+				<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-right.xhtml">
+						<ui:param name="typeOfAccessRight" value="canBeReadBy"/>									
+				</ui:include>
+				
+				<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-right.xhtml">
+						<ui:param name="typeOfAccessRight" value="canBeUpdatedBy"/>									
+				</ui:include>
+								
+				<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-right.xhtml">
+						<ui:param name="typeOfAccessRight" value="canBeDeletedBy"/>									
+				</ui:include>
+				
+				<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-right.xhtml">
+						<ui:param name="typeOfAccessRight" value="canBeTaggedBy"/>									
+				</ui:include>
 
 		</ui:composition>
 	</body>

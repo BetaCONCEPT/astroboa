@@ -110,7 +110,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}")
 	public Response getBinaryFileInBinaryChannelProperty(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath
 			) {
 
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, ContentDispositionType.INLINE.toString());
@@ -138,7 +138,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}")
 	public Response getBinaryFileInBinaryChannelProperty(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType) {
 
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, "-1", "-1");
@@ -148,7 +148,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{width}")
 	public Response getBinaryFileInBinaryChannelPropertyWithContentDispositionAndWidth(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("width") String width) {
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, width, "-1");
@@ -158,7 +158,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithContentDispositionAndHeight(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("height") String height) {
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, "-1", height);
@@ -168,7 +168,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithHeight(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("height") String height) {
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, "-1", height);
 	}
@@ -177,7 +177,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{width}")
 	public Response getBinaryFileInBinaryChannelPropertyWithWidth(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("width") String width) {
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, width, "-1");
 	}
@@ -186,7 +186,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{width}/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithWidthAndHeight(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("width") String width,
 			@PathParam("height") String height) {
 		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, width, height);
@@ -197,7 +197,7 @@ public class BinaryChannelResource extends AstroboaResource{
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{width}/{height}")
 	public Response getBinaryFileInBinaryChannelProperty(
 			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
-			@PathParam("binaryChannelPropertyValuePath") String binaryChannelPropertyValuePath,
+			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("width") String width,
 			@PathParam("height") String height) {

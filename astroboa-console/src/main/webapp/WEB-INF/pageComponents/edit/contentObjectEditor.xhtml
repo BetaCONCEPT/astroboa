@@ -55,22 +55,88 @@ Authors
 						reRender="objectEditorAjaxPanel,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" >
 					</a4j:jsFunction>
 					
+					<ui:remove>
 					<ui:include src="/WEB-INF/pageComponents/edit/complexCmsPropertyFormHeader.xhtml"/>
+					</ui:remove>
 					
-					<div id="formEditorScrollableArea">
-		
-						<a4j:outputPanel id="complexCmsPropertyChildPropertiesTable">
+					<div id="objectTabs" style="display:none;">
+						<ul id="objectTabSelectors">
+							<li id="adminMetadataTabSelector"><a href="#adminMetadataTab"><span><strong>Admin</strong></span></a></li>
+							<li id="staticPropertiesTabSelector"><a href="#staticPropertiesTab"><span><strong>Properties</strong></span></a></li>
+							<li id="extraPropertiesTabSelector"><a href="#extraPropertiesTab"><span><strong>Extra Properties</strong></span></a></li>
+							<li id="shareTabSelector"><a href="#shareTab"><span><strong>Share</strong></span></a></li>
+						</ul>
+						<div id="adminMetadataTab">
+							<a4j:outputPanel id="profilePropertiesPanel">
+								<div class="formEditorScrollableArea">
+									<rich:dragIndicator id="profilePropertyReferenceIndicator" />
+									<ol class="formElementList">
+										<li class="formElement">
+											<label>		
+												#{messages['content.object.owner']}
+											</label>
+											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.owner.label}
+										</li>
+										<li class="formElement">
+											<label>		
+												#{messages['content.object.identifier']}
+											</label>
+											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.id}
+										</li>
+										<li class="formElement">
+											<label>		
+												#{messages['content.object.edit.system.name']}
+											</label>
+											<h:inputText value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemName}" />
+										</li>
+										<li class="formElement">
+											<label>		
+												#{messages['content.object.edit.system.entity']}
+											</label>
+											<h:selectBooleanCheckbox
+												value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemBuiltinEntity}"/>
+										</li>
+										
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/propertyTemplates/profile-editor.xhtml" >
+											<ui:param name="complexCmsPropertyEdit" 
+												value="#{contentObjectEdit.profilePropertyEdit}"/>
+										</ui:include>
+									</ol>
+								</div>
+							</a4j:outputPanel>
+						</div>
+						<div id="staticPropertiesTab">
 							<ui:include
-								src="#{contentObjectEdit.complexCmsPropertyEditorPagePath}" />
+								src="/WEB-INF/pageComponents/edit/contentObjectEditCmsPropertyBreadCrumbs.xhtml" />
+							<div class="formEditorScrollableArea">
+								<a4j:outputPanel id="complexCmsPropertyChildPropertiesTable">
+									<ui:include
+										src="#{contentObjectEdit.complexCmsPropertyEditorPagePath}" >
+										<ui:param name="complexCmsPropertyEdit" 
+											value="#{contentObjectEdit.complexCmsPropertyEdit}"/>
+									</ui:include>
+									
+									<ui:remove>
+									<script type="text/javascript">
+										bcmslib.jQuery(function(){
+											bcmslib.jQuery("#staticPropertiesTab input, #staticPropertiesTab textarea, #staticPropertiesTab select").uniform();
+										});
+									</script>
+									</ui:remove>
+								</a4j:outputPanel>
+							</div>
+						</div>
+						<div id="extraPropertiesTab">
 							
-							<script type="text/javascript">
-								bcmslib.jQuery(function(){
-									bcmslib.jQuery("#formEditorScrollableArea input, #formEditorScrollableArea textarea, #formEditorScrollableArea select").uniform();
-								});
-							</script>
-						</a4j:outputPanel>
-						
+						</div>
+						<div id="shareTab">
+							<div class="otherFormEditorScrollableArea">
+								<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-editor.xhtml"/>
+							</div>
+						</div>
 					</div>
+					
 						
 						
 						<!-- Show common actions on content object. These actions are allowed if there is no active workflow for the object 
@@ -98,11 +164,14 @@ Authors
 											
 				
 					<script type="text/javascript">
+						createObjectTabs();
 						// tweaking of the editors is required besides the script because they block the events (do not bubble them)
 						//activateSaveHotKeyInsideEditors();
-						bcmslib.jQuery(function(){
-							bcmslib.jQuery("#formActions input[type=button]").uniform();
-						});
+						
+						//bcmslib.jQuery(function(){
+						//	bcmslib.jQuery("#adminMetadataTab input, #adminMetadataTab textarea, #adminMetadataTab select, #formActions input[type=button]").uniform();
+						//});
+						
 						resetContentObjectAutoSave();
 					</script>
 				

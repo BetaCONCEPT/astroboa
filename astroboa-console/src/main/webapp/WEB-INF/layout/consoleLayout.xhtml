@@ -58,7 +58,7 @@ Authors
 		<a4j:log popup="true" level="ALL" style="width: 800px; height: 300px;"/>
 		
 		<div id="wrapperArea">
-			
+		
 			<a4j:outputPanel id="applicationMessages" ajaxRendered="true" >
 					<ui:include
 						src="/WEB-INF/pageComponents/applicationMessages.xhtml" />
@@ -93,10 +93,10 @@ Authors
 								<ul id="tabSelectors">
 									<li id="dashboardTabSelector"><a href="#dashboardTab"><span><strong>#{messages['tabs.dashboardTab.label']}</strong></span></a></li>
 									<li id="personalWorkSpaceTabSelector"><a href="#personalWorkSpaceTab"><span><strong>#{messages['tabs.personalWorkSpaceTab.label']}</strong></span></a></li>
-									<li id="searchResultsTabSelector"><a href="#searchResultsTab"><span>#{messages['tabs.searchResultsTab.label']}</span></a></li>
-									<li id="objectEditorTabSelector"><a href="#objectEditorTab"><span>#{messages['tabs.objectEditorTab.label']}</span></a></li>
-									<li id="objectViewerTabSelector"><a href="#objectViewerTab"><span>#{messages['tabs.objectViewerTab.label']}</span></a></li>
-									<li id="dynamicTabSelector"><a href="#dynamicTab"><span>Dynamic Tab</span></a></li>
+									<li id="searchResultsTabSelector"><a href="#searchResultsTab"><span><strong>#{messages['tabs.searchResultsTab.label']}</strong></span></a></li>
+									<li id="objectEditorTabSelector"><a href="#objectEditorTab"><span><strong>#{messages['tabs.objectEditorTab.label']}</strong></span></a></li>
+									<li id="objectViewerTabSelector"><a href="#objectViewerTab"><span><strong>#{messages['tabs.objectViewerTab.label']}</strong></span></a></li>
+									<li id="dynamicTabSelector"><a href="#dynamicTab"><span><strong>Dynamic Tab</strong></span></a></li>
 								</ul>
 								<div id="dashboardTab">
 									<ui:include
@@ -111,16 +111,6 @@ Authors
 										src="/WEB-INF/pageComponents/navigation/contentObjectList.xhtml" />
 								</div>
 								<div id="objectEditorTab">
-									<rich:editor 
-				                     configuration="textEditorConfig"
-                                        width="1"
-                                        height="1"
-                                        viewMode="visual" 
-                                        value=" " 
-                                        useSeamText="false"
-                                        id="fakeEditor"
-                                        rendered="false">
-                                     </rich:editor>
 									<ui:include
 										src="/WEB-INF/pageComponents/edit/contentObjectEditor.xhtml" />
 								</div>
@@ -164,7 +154,7 @@ Authors
 		<ui:include src="/WEB-INF/pageComponents/confirmationDialog.xhtml" />
 		
 		<ui:include src="/WEB-INF/pageComponents/objectPropertyUrlCreationDialog.xhtml" />
-		<ui:include src="/WEB-INF/pageComponents/edit/topicSelectionDialog.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicSelectionDialog.xhtml" />
 		
 		<ui:include src="/WEB-INF/pageComponents/taxonomy/importTaxonomyXmlDialog.xhtml" />
 		

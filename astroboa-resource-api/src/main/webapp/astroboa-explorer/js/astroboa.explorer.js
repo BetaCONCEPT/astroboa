@@ -437,7 +437,7 @@
 					 		url : baseModelURL,
 					 		success : function(data){
 					 			
-					 			$.each(data.contentType, function(i, contentType){
+					 			$.each(data.arrayOfObjectTypes.objectType, function(i, contentType){
 					 				
 					 				repositoryModel[contentType.name] = contentType;
 					 				
@@ -499,7 +499,7 @@
 						 		async : false,
 						 		url : getContentTypeModelURL,
 						 		success : function(data){
-									options = options +buildOptionsForComplexProperty(data[contentType], css.contentType);
+									options = options +buildOptionsForComplexProperty(data, css.contentType);
 								}
 	  
 						});
@@ -538,11 +538,11 @@
 					var labelsForSimpleProperty = [];
 					var labelsForComplexProperty = [];
 					
-					$.each(complexProperty.propertyList, function(i, property){
+					$.each(complexProperty.arrayOfProperties.property, function(i, property){
 
 		 				var label=retrieveLabelForProperty(property, configuration.locale);
 		 				
-		 				if (property.valueType == 'Complex'){
+		 				if (property.valueType == 'Complex' || property.arrayOfProperties != undefined || property.arrayOfProperties != null){
 		 					
 		 					options[label] = buildOptionsForComplexProperty(property);
 		 					labelsForComplexProperty.push(label);

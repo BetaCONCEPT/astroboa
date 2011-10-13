@@ -56,6 +56,7 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 	private String definitionName;
 	private ValueType valueType;
 	private String path;
+	protected int wrapperIndex;
 	
 	private CmsPropertyDefinition cmsPropertyDefinition;
 	private String parentCmsPropertyPath;
@@ -64,8 +65,14 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 	
 	private ContentObject contentObject;
 	
+	protected ComplexCmsPropertyEdit complexCmsPropertyEdit; 
+	
 	public CmsPropertyWrapper(CmsPropertyDefinition cmsPropertyDefinition,
-			String parentCmsPropertyPath,CmsRepositoryEntityFactory cmsRepositoryEntityFactory, ContentObject contentObject) {
+			String parentCmsPropertyPath, 
+			CmsRepositoryEntityFactory cmsRepositoryEntityFactory, 
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 		
 		this.cmsPropertyDefinition = cmsPropertyDefinition;
 		this.parentCmsPropertyPath = parentCmsPropertyPath;
@@ -75,6 +82,9 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 		
 		this.cmsRepositoryEntityFactory = cmsRepositoryEntityFactory;
 		this.contentObject = contentObject;
+		this.wrapperIndex = wrapperIndex;
+		
+		this.complexCmsPropertyEdit = complexCmsPropertyEdit;
 		
 	}
 	
@@ -254,5 +264,9 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 
 	public void setContentObject(ContentObject contentObject) {
 		this.contentObject = contentObject;
+	}
+
+	public int getWrapperIndex() {
+		return wrapperIndex;
 	}
 }

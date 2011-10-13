@@ -42,8 +42,10 @@ public class ComplexCmsPropertyWrapper extends CmsPropertyWrapper<ComplexCmsProp
 			CmsPropertyDefinition definition, 
 			String parentCmsPropertyPath,
 			CmsRepositoryEntityFactory cmsRepositoryEntityFactory,
-			ContentObject contentObject) {
-		super(definition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject);
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
+		super(definition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject, wrapperIndex, complexCmsPropertyEdit);
 
 		this.cmsProperty = (ComplexCmsProperty) complexCmsProperty;
 		this.aspect = aspect;
