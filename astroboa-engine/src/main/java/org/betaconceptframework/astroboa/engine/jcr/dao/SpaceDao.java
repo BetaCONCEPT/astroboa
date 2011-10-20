@@ -39,14 +39,15 @@ import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
@@ -113,7 +114,11 @@ public class SpaceDao extends JcrDaoSupport {
 			//and to save it as well.
 			//What is happened is that importDao will create a Space
 			//and will pass it here again to save it. 
-			return importDao.importSpace((String)spaceSource, ImportMode.SAVE_ENTITY);
+			ImportConfiguration configuration = ImportConfiguration.space()
+					  .persist(PersistMode.PERSIST_MAIN_ENTITY)
+					  .build();
+
+			return importDao.importSpace((String)spaceSource, configuration);
 		}
 		
 		if (! (spaceSource instanceof Space)){
@@ -139,7 +144,7 @@ public class SpaceDao extends JcrDaoSupport {
 			//Save Space
 			switch (saveMode) {
 
-			case UPDATE_ALL:
+			case UPDATE:
 				spaceUtils.updateSpace(session, space, null, context);
 				break;
 			case INSERT:
@@ -176,7 +181,7 @@ public class SpaceDao extends JcrDaoSupport {
 
 
 
-	public void deleteSpace(String spaceId) {
+	public boolean deleteSpace(String spaceId) {
 		if (StringUtils.isBlank(spaceId)){
 			throw new CmsException("Undefined space id ");
 		}
@@ -189,7 +194,8 @@ public class SpaceDao extends JcrDaoSupport {
 			Node spaceNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForSpace(session, spaceId);
 
 			if (spaceNode == null){
-				throw new CmsException("Space with id "+ spaceId + " does not exist");
+				logger.info("Space {} does not exist and therefore cannot be deleted", spaceId);
+				return false;
 			}
 			
 			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session);
@@ -197,6 +203,8 @@ public class SpaceDao extends JcrDaoSupport {
 			removeSpaceNode(spaceNode, context);
 
 			session.save();
+			
+			return true;
 		}
 		catch(CmsException e){
 			throw e;
@@ -500,7 +508,12 @@ public class SpaceDao extends JcrDaoSupport {
 				
 				os = new ByteArrayOutputStream();
 
-				serializationDao.serializeCmsRepositoryEntity(spaceNode, os, spaceOutput, CmsEntityType.SPACE, null, fetchLevel, true, false,false);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.space()
+						.prettyPrint(false)
+						.representationType(spaceOutput)
+						.build();
+						
+				serializationDao.serializeCmsRepositoryEntity(spaceNode, os, CmsEntityType.SPACE, null, fetchLevel, true, serializationConfiguration);
 
 				space = new String(os.toByteArray(), "UTF-8");
 
@@ -630,7 +643,12 @@ public class SpaceDao extends JcrDaoSupport {
 				//User requested output to be XML or JSON
 				os = new ByteArrayOutputStream();
 
-				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), spaceCriteria, os, FetchLevel.ENTITY, spaceOutput, false);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.space()
+						.prettyPrint(spaceCriteria.getRenderProperties().isPrettyPrintEnabled())
+						.representationType(spaceOutput)
+						.build();
+
+				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), spaceCriteria, os, FetchLevel.ENTITY, serializationConfiguration);
 
 				queryReturnedAtLeastOneResult = numberOfResutls > 0;
 
@@ -682,7 +700,6 @@ public class SpaceDao extends JcrDaoSupport {
 			else{
 				SpaceCriteria spaceCriteria = CmsCriteriaFactory.newSpaceCriteria();
 				spaceCriteria.addNameEqualsCriterion(spaceIdOrName);
-				spaceCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				spaceCriteria.setOffsetAndLimit(0, 1);
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(getSession(), spaceCriteria);
