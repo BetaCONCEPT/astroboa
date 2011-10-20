@@ -72,13 +72,13 @@ public class SpaceServiceClientWrapper extends AbstractClientServiceWrapper impl
 	}
 
 
-	public void deleteSpace(String spaceId) {
+	public boolean deleteSpace(String spaceId) {
 
 		if (spaceServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			spaceServiceSecure.deleteSpace(spaceId, getAuthenticationToken());
+			return spaceServiceSecure.deleteSpace(spaceId, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("SpaceService reference was not found");
