@@ -41,6 +41,7 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
+import org.betaconceptframework.astroboa.model.jaxb.adapter.BooleanAdapter;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.NumberOfChildrenAdapter;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.RepositoryUserAdapter;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.TaxonomyAdapter;
@@ -84,15 +85,9 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 
 
 	@XmlAttribute
-	private boolean allowsReferrerContentObjects;
+	@XmlJavaTypeAdapter(type=int.class, value=BooleanAdapter.class)
+	private Boolean allowsReferrerContentObjects;
 	
-	//Quick and dirty way to know whether allowsReferrerContentObjects
-	//has actually been set by the user or not
-	//In the future this variable should be a Boolean.
-	//For more details check java doc in CmsRepositoryEntityImpl.systemBuiltInEntity
-	@XmlTransient
-	private boolean allowsReferrerContentObjectsHasBeenSet;
-
 	@XmlAttribute
 	@XmlJavaTypeAdapter(type=int.class, value=NumberOfChildrenAdapter.class)
 	private int numberOfChildren=-1;
@@ -340,12 +335,11 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 	}
 
 	public boolean isAllowsReferrerContentObjects() {
-		return allowsReferrerContentObjects;
+		return allowsReferrerContentObjects != null && allowsReferrerContentObjects;
 	}
 
 	public void setAllowsReferrerContentObjects(
 			boolean allowsReferrerContentObjects) {
-		allowsReferrerContentObjectsHasBeenSet = true;
 		this.allowsReferrerContentObjects = allowsReferrerContentObjects;
 	}
 
@@ -466,7 +460,7 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 	}
 
 	public boolean allowsReferrerContentObjectsHasBeenSet() {
-		return allowsReferrerContentObjectsHasBeenSet;
+		return allowsReferrerContentObjects != null;
 	}
 	
 
