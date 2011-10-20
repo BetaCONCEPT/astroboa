@@ -36,7 +36,6 @@ import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -87,7 +86,7 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	@Test
 	public void testSearchText(){
 		ContentObject testContentObject = createContentObject(repositoryUserService.getRepositoryUser(CmsApiConstants.SYSTEM_REPOSITORY_USER_EXTRENAL_ID), 
-				"testSearchText", true); 
+				"testSearchText"); 
 			
 		((StringProperty)testContentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Test Content Object 3");
 
@@ -101,12 +100,11 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 		
 		testContentObject = contentService.save(testContentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(testContentObject);
+		markObjectForRemoval(testContentObject);
 
 		ContentObjectCriteria criteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
 
 		criteria.doNotCacheResults();
-		criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		criteria.addCriterion(CriterionFactory.equals("profile.title", "Test Content Object 3"));
 		criteria.addFullTextSearchCriterion("*comment*");
 
@@ -167,7 +165,6 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 		ContentObjectCriteria criteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
 
 			criteria.doNotCacheResults();
-			criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			criteria.addFullTextSearchCriterion(textSearch);
 
 			CmsOutcome<ContentObject> results = contentService.searchContentObjects(criteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -190,17 +187,17 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	public void testQueryForNullAndNotNullSimpleAndComplexProperties() throws Throwable{
 
 		ContentObject testContentObject = createContentObject(repositoryUserService.getRepositoryUser(CmsApiConstants.SYSTEM_REPOSITORY_USER_EXTRENAL_ID), 
-		"testQueryForNullAndNotNull", true); 
+		"testQueryForNullAndNotNull"); 
 
 
-		long value = (long)999999;
+		long value = (long)9999999;
 		((LongProperty)testContentObject.getCmsProperty("simpleLong")).addSimpleTypeValue(value);
 
 		((StringProperty)testContentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Test Content Object 2");
 
 		testContentObject = contentService.save(testContentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(testContentObject);
+		markObjectForRemoval(testContentObject);
 
 		ContentObject testContent2Object = contentService.getContentObject(testContentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
 				FetchLevel.ENTITY, CacheRegion.NONE, null, false);
@@ -236,7 +233,6 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 		ContentObjectCriteria criteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
 
 		criteria.doNotCacheResults();
-		criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		criteria.addCriterion(CriterionFactory.equals("profile.title", "Test Content Object 2"));
 
 		if (notNull){
@@ -299,7 +295,7 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	public void testQueryUsingLongAndStringAsPropertyValues(){
 
 		ContentObject testContentObject = createContentObject(repositoryUserService.getRepositoryUser(CmsApiConstants.SYSTEM_REPOSITORY_USER_EXTRENAL_ID), 
-		"testQueryUsingLongAndStringAsPropertyValues", false); 
+		"testQueryUsingLongAndStringAsPropertyValues"); 
 		
 		long value = (long)999999;
 		((LongProperty)testContentObject.getCmsProperty("simpleLong")).addSimpleTypeValue(value);
@@ -308,7 +304,7 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 
 		testContentObject = contentService.save(testContentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(testContentObject);
+		markObjectForRemoval(testContentObject);
 
 		ContentObjectCriteria criteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
 

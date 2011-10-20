@@ -24,10 +24,11 @@ import javax.xml.bind.JAXBException;
 
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.testng.annotations.Test;
@@ -78,7 +79,7 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 			String json = null;
 
 			FetchLevel fetchLevelForLog = null;
-			ImportMode importModeForLog = null;
+			PersistMode persistModeForLog = null;
 
 			try{
 				for (FetchLevel fetchLevel : FetchLevel.values()){
@@ -94,19 +95,23 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 
 					boolean compareChildSpaces = fetchLevel != FetchLevel.ENTITY;
 
-					for (ImportMode importMode : ImportMode.values()){
+					for (PersistMode persistMode : PersistMode.values()){
 
-						importModeForLog = importMode;
+						persistModeForLog = persistMode;
+
+						ImportConfiguration configuration = ImportConfiguration.space()
+								.persist(persistMode)
+								.build();
 
 						xml = space.xml(prettyPrint);
 
-						Space spaceUnMarshalledFromXML = importDao.importSpace(xml, importMode); 
+						Space spaceUnMarshalledFromXML = importDao.importSpace(xml, configuration); 
 
 						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, compareChildSpaces, compareChildSpaces, true,true, true);
 
 						json = space.json(prettyPrint);
 
-						Space spaceUnMarshalledFromJSON = importDao.importSpace(json, importMode); 
+						Space spaceUnMarshalledFromJSON = importDao.importSpace(json, configuration); 
 
 						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, compareChildSpaces, compareChildSpaces, true,true, true);
 						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromXML, spaceUnMarshalledFromJSON, compareChildSpaces,compareChildSpaces, true,true, true);
@@ -114,7 +119,7 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 						//Now create XML and JSON from Service and compare each other
 						json = spaceService.getSpace(space.getId(), ResourceRepresentationType.JSON, fetchLevel);
 
-						Space spaceUnMarshalledFromJSONService = importDao.importSpace(json, importMode); 
+						Space spaceUnMarshalledFromJSONService = importDao.importSpace(json, configuration); 
 
 						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
 						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromJSONService, compareChildSpaces, compareChildSpaces, true,true, true);
@@ -122,7 +127,7 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 
 						xml = spaceService.getSpace(space.getId(), ResourceRepresentationType.XML, fetchLevel);
 
-						Space spaceUnMarshalledFromXMLService = importDao.importSpace(xml, importMode); 
+						Space spaceUnMarshalledFromXMLService = importDao.importSpace(xml, configuration); 
 
 						repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true, true);
 						repositoryContentValidator.compareSpaces(spaceUnMarshalledFromJSON, spaceUnMarshalledFromXMLService, compareChildSpaces, compareChildSpaces, true,true, true);
@@ -135,7 +140,7 @@ public class SpaceIOTest extends AbstractRepositoryTest{
 			catch(Throwable e){
 
 				logger.error("Fetch Level {}", fetchLevelForLog);
-				logger.error("Import Mode {}", importModeForLog);
+				logger.error("Import Mode {}", persistModeForLog);
 				logger.error("xml {}", space.xml(true));
 				logger.error("JSON {}", space.json(true));
 				

@@ -20,8 +20,9 @@ package org.betaconceptframework.astroboa.test.model.jaxb;
 
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
@@ -47,7 +48,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 		space.addChild(childSpace1);
 		
 		childSpace1 = spaceService.save(childSpace1);
-		addEntityToBeDeletedAfterTestIsFinished(childSpace1);
+		markSpaceForRemoval(childSpace1);
 
 		//Space has one child space
 		String json  = space.json(prettyPrint);
@@ -116,7 +117,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 		space.setParent(getOrganizationSpace());
 		
 		space = spaceService.save(space);
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 
 		//Space has one child space
 		String json  = space.json(prettyPrint);
@@ -180,7 +181,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 		space.setParent(getOrganizationSpace());
 		
 		space = spaceService.save(space);
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 
 		//Space has 2 localized labels
 		String json  = space.json(prettyPrint);
@@ -249,8 +250,10 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 		String xml = null;
 		String json = null;
 		
-		ImportMode importMode = ImportMode.DO_NOT_SAVE;
-		
+		ImportConfiguration configuration = ImportConfiguration.space()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
+
 		long start = System.currentTimeMillis();
 		
 			try{
@@ -260,8 +263,8 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Space XML using xml() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Space spaceUnMarshalledFromXML = importDao.importSpace(xml, importMode);
-				logTimeElapsed("Import Space XML in {}, ImportMode {}, ", start, importMode.toString());
+				Space spaceUnMarshalledFromXML = importDao.importSpace(xml, configuration);
+				logTimeElapsed("Import Space XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromXML);
 				
 				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXML, true, true, true, true, true);
@@ -271,8 +274,8 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Space JSON using json() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Space spaceUnMarshalledFromJSON = importDao.importSpace(json, importMode); 
-				logTimeElapsed("Import Space JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Space spaceUnMarshalledFromJSON = importDao.importSpace(json, configuration); 
+				logTimeElapsed("Import Space JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromJSON);
 				
 				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromJSON, true,true,true, true, true);
@@ -280,7 +283,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				
 				//Now create XML and JSON from Service and compare each other
 				space = spaceService.save(space);
-				addEntityToBeDeletedAfterTestIsFinished(space);
+				markSpaceForRemoval(space);
 				
 				start = System.currentTimeMillis();
 				json = spaceService.getSpace(space.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
@@ -288,8 +291,8 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Space JSON using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Space spaceUnMarshalledFromJSONService = importDao.importSpace(json, importMode); 
-				logTimeElapsed("Import Space JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Space spaceUnMarshalledFromJSONService = importDao.importSpace(json, configuration); 
+				logTimeElapsed("Import Space JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromJSONService);
 
 				
@@ -304,8 +307,8 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Space XML using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Space spaceUnMarshalledFromXMLService = importDao.importSpace(xml, importMode); 
-				logTimeElapsed("Import Space XML in {}, ImportMode {}, ", start, importMode.toString());
+				Space spaceUnMarshalledFromXMLService = importDao.importSpace(xml, configuration); 
+				logTimeElapsed("Import Space XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentSpaceIsTheSameObjectAmongSpaceChildren(spaceUnMarshalledFromXMLService);
 				
 				repositoryContentValidator.compareSpaces(space, spaceUnMarshalledFromXMLService, true, true, true, true, true);
@@ -335,7 +338,7 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 
 		space = spaceService.save(space);
 		
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 		
 		String xmlFromApi = space.xml(prettyPrint);
 		String xmlFromService = spaceService.getSpace(space.getId(), ResourceRepresentationType.XML, FetchLevel.FULL);
