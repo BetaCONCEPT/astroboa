@@ -245,17 +245,6 @@ public interface ComplexCmsPropertyDefinition extends CmsPropertyDefinition {
 	String getPropertyPathWhoseValueCanBeUsedAsALabel();
 	
 	/**
-	 * Checks if this definition represents a system complex type.
-	 * 
-	 * <p>
-	 * System types are used mainly by Astroboa infrastructure. 
-	 * </p>
-	 * 
-	 * @return <code>true</code> if this definition is a system one, <code>false</code> otherwise
-	 */
-	boolean isSystemTypeDefinition();
-
-	/**
 	 * Checks if this definition is a global one, that is can be attached at runtime to any
 	 * content object.
 	 * 

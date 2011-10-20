@@ -51,7 +51,6 @@ public class TaxonomyAdapter extends XmlAdapter<TaxonomyType, Taxonomy>{
 			TaxonomyType taxonomyType = new TaxonomyType();
 			taxonomyType.setId(taxonomy.getId());
 			taxonomyType.setName(taxonomy.getName());
-			taxonomyType.setSystemBuiltinEntity(taxonomy.isSystemBuiltinEntity());
 			taxonomyType.getLocalizedLabels().putAll(taxonomy.getLocalizedLabels());
 			
 			//TODO: Check whether user may have more control on whether a friendly url is generated or not
@@ -91,7 +90,6 @@ public class TaxonomyAdapter extends XmlAdapter<TaxonomyType, Taxonomy>{
 
 			taxonomy.setId(taxonomyType.getId());
 			taxonomy.setName(taxonomyType.getName());
-			taxonomy.setSystemBuiltinEntity(taxonomyType.isSystemBuiltinEntity());
 			taxonomy.getLocalizedLabels().putAll(taxonomyType.getLocalizedLabels());
 
 			taxonomyType.registerCmsRepositoryEntityToContext(taxonomy);

@@ -216,18 +216,6 @@ public interface ContentObjectTypeDefinition extends
 	boolean hasCmsPropertyDefinition(String cmsPropertyPath);
 	
 	/**
-	 * Checks if this definition represents a system content type.
-	 * 
-	 * <p>
-	 * System types are used mainly by Astroboa infrastructure. Moreover all instances
-	 * of these types are marked as system built in {@link ContentObject#isSystemBuiltinEntity()}.
-	 * </p>
-	 * 
-	 * @return <code>true</code> if this definition is a system one, <code>false</code> otherwise
-	 */
-	boolean isSystemTypeDefinition();
-
-	/**
 	 * Indicates whether this content type is of the specified content type.
 	 * 
 	 * <p>
