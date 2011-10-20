@@ -70,10 +70,18 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				
+				<xs:element maxOccurs="1" minOccurs="0" name="topics">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="topic"
+								type="bccmsmodel:topicType" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 
 
-				<!-- This element represent content objects -->
-				<xs:element maxOccurs="1" minOccurs="0" name="contentObjects">
+				<xs:element maxOccurs="1" minOccurs="0" name="objects">
 					<xs:complexType>
 						<xs:sequence>
 							<xs:any maxOccurs="unbounded" minOccurs="0"

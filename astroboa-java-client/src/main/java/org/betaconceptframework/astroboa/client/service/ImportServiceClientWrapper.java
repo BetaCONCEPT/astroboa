@@ -18,8 +18,8 @@
  */
 package org.betaconceptframework.astroboa.client.service;
 
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
+import java.util.concurrent.Future;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -27,6 +27,7 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.service.ImportService;
 import org.betaconceptframework.astroboa.api.service.secure.ImportServiceSecure;
@@ -75,12 +76,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public ImportReport importRepositoryContentFromString(String contentSource) {
+	public Future<ImportReport> importRepositoryContentFromString(String contentSource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importRepositoryContentFromString(contentSource, getAuthenticationToken());
+			return importServiceSecure.importRepositoryContentFromString(contentSource, configuration, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -89,12 +90,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public ImportReport importRepositoryContentFromURL(URL contentSource) {
+	public Future<ImportReport> importRepositoryContentFromURI(URI contentSource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importRepositoryContentFromURL(contentSource, getAuthenticationToken());
+			return importServiceSecure.importRepositoryContentFromURI(contentSource, configuration, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -102,12 +103,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,Map<String, byte[]> binaryContent) {
+	public ContentObject importContentObject(String contentSource,ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importContentObject(contentSource, version, updateLastModificationDate, save,binaryContent, getAuthenticationToken());
+			return importServiceSecure.importContentObject(contentSource, configuration, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -115,12 +116,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public RepositoryUser importRepositoryUser(String repositoryUserSource, boolean save) {
+	public RepositoryUser importRepositoryUser(String repositoryUserSource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importRepositoryUser(repositoryUserSource, save, getAuthenticationToken());
+			return importServiceSecure.importRepositoryUser(repositoryUserSource, configuration, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -129,12 +130,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public Space importSpace(String spaceSource, boolean save) {
+	public Space importSpace(String spaceSource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importSpace(spaceSource, save,getAuthenticationToken());
+			return importServiceSecure.importSpace(spaceSource, configuration,getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -142,12 +143,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public Taxonomy importTaxonomy(String taxonomySource, boolean save) {
+	public Taxonomy importTaxonomy(String taxonomySource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importTaxonomy(taxonomySource, save, getAuthenticationToken());
+			return importServiceSecure.importTaxonomy(taxonomySource, configuration, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");
@@ -155,12 +156,12 @@ public class ImportServiceClientWrapper extends AbstractClientServiceWrapper imp
 	}
 
 	@Override
-	public Topic importTopic(String topicSource, boolean save) {
+	public Topic importTopic(String topicSource, ImportConfiguration configuration) {
 		if (importServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return importServiceSecure.importTopic(topicSource, save,getAuthenticationToken());
+			return importServiceSecure.importTopic(topicSource, configuration,getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("ImportService reference was not found");

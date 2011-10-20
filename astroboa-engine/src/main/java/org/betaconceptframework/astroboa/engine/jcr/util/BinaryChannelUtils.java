@@ -21,8 +21,10 @@ package org.betaconceptframework.astroboa.engine.jcr.util;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -31,6 +33,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
@@ -59,6 +62,8 @@ public class BinaryChannelUtils {
 	@Autowired
 	private CmsRepositoryEntityUtils cmsRepositoryEntityUtils;
 
+	private final static Pattern Astroboa_Resource_Api_Pattern = Pattern.compile("http://.*?/resource-api/.*");
+	
 	public  void populateBinaryChannelToNode(BinaryChannel binaryChannel, Node binaryParentNode, Session session, SaveMode saveMode, Context context, boolean binaryContentIsNew) throws Exception{
 		if (binaryChannel == null){
 			throw new CmsException("No BinaryChannel to populate");
@@ -118,14 +123,30 @@ public class BinaryChannelUtils {
 				try {
 					URL urlResource = new URL(externalLocationOfTheContent);
 					
-					inputStream = urlResource.openStream();
+					if (Astroboa_Resource_Api_Pattern.matcher(externalLocationOfTheContent).matches() && 
+							context.getImportConfiguration() != null && 
+							context.getImportConfiguration().credentialsOfUserWhoHasAccessToBinaryContent() != null && 
+							context.getImportConfiguration().credentialsOfUserWhoHasAccessToBinaryContent().getUsername() != null && 
+							context.getImportConfiguration().credentialsOfUserWhoHasAccessToBinaryContent().getPassword() != null){
+
+						String username = context.getImportConfiguration().credentialsOfUserWhoHasAccessToBinaryContent().getUsername();
+						String password = context.getImportConfiguration().credentialsOfUserWhoHasAccessToBinaryContent().getPassword();
+						
+						URLConnection uc = urlResource.openConnection();
+						uc.setRequestProperty ("Authorization", "Basic " + new String(Base64.encodeBase64(((username + ":" + password).getBytes()))));
+						inputStream = (InputStream)uc.getInputStream();
+
+					}
+					else{
+						inputStream = urlResource.openStream();
+					}
 					
 					binaryChannel.setContent(IOUtils.toByteArray(inputStream));
 	
 				} catch (Throwable e) {
 					//Log exception but continue with unmarshaling
 					//BinaryChannle will be created without content
-					logger.warn("Invalid external location {} of the content for binary channel {}",externalLocationOfTheContent, binaryChannel.getName() );
+					logger.warn("Invalid external location "+externalLocationOfTheContent+ " of the content for binary channel "+ binaryChannel.getName(), e);
 				}
 				finally{
 					if (inputStream != null){

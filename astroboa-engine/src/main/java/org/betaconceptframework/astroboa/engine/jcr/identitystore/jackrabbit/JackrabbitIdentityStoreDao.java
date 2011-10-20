@@ -35,7 +35,9 @@ import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -45,7 +47,6 @@ import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.engine.jcr.dao.ImportDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.JcrDaoSupport;
 import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryUserDao;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -326,7 +327,6 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 			personCriteria.addCriterion(CriterionFactory.equalsCaseInsensitive("personAuthentication.username",IdentityPrincipal.SYSTEM));
 			personCriteria.setOffsetAndLimit(0, 1);
 			personCriteria.doNotCacheResults();
-			personCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(personCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 
@@ -368,7 +368,11 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 
 					//Obtain content object
-					systemPersonObject = importDao.importContentObject(systemPersonXml, false, false, ImportMode.DO_NOT_SAVE, null);
+				  ImportConfiguration configuration = ImportConfiguration.object()
+						  .persist(PersistMode.DO_NOT_PERSIST)
+						  .build();
+
+					systemPersonObject = importDao.importContentObject(systemPersonXml, configuration);
 
 					if (systemPersonObject == null){
 						throw new CmsException("Could not create a content object from provided source");
@@ -549,7 +553,11 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 				
 				//Obtain content object
-				ContentObject roleObject = importDao.importContentObject(roleXml, false, false,ImportMode.DO_NOT_SAVE, null); 
+				ImportConfiguration configuration = ImportConfiguration.object()
+					  .persist(PersistMode.DO_NOT_PERSIST)
+					  .build();
+
+				ContentObject roleObject = importDao.importContentObject(roleXml, configuration); 
 					
 				if (roleObject == null){
 					throw new CmsException("Could not create a content object from provided source");
@@ -575,7 +583,6 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 		personCriteria.addCriterion(CriterionFactory.equals("name",roleName));
 		personCriteria.setOffsetAndLimit(0, 1);
 		personCriteria.doNotCacheResults();
-		personCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		personCriteria.addPropertyPathWhoseValueWillBePreLoaded("name");
 		personCriteria.addPropertyPathWhoseValueWillBePreLoaded("isMemberOf");
 
