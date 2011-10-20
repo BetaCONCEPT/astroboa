@@ -129,8 +129,8 @@ public class CmsDefinitionVisitor implements XSVisitor{
 			String targetNamespace = complexDecl.getValue().getTargetNamespace();
 
 			if (StringUtils.isNotBlank(targetNamespace) && 
-					! BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_URI.equals(targetNamespace) &&
-					! BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_URI.equals(targetNamespace) && 
+					! BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI.equals(targetNamespace) &&
+					! BetaConceptNamespaceConstants.ASTROBOA_API_URI.equals(targetNamespace) && 
 					! definitionCacheRegion.hasComplexTypeDefinition(complexDecl.getKey())){
 					complexDecl.getValue().visit(this);
 				}
@@ -219,7 +219,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 				String name = attributeUse.getDecl().getName();
 
 				//Use default prefix
-				ItemQName attribute = ItemUtils.createNewItem(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX, targetNameSpace, name);
+				ItemQName attribute = ItemUtils.createNewItem(BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX, targetNameSpace, name);
 				builtInAttributes.put(attribute, attributeUse);
 
 			}
@@ -314,7 +314,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 					definitionsUnderProcess.remove(typeQName);
 				}
 				
-				xmlSchemaDefinitionURLsPerQName.put(definition.getQualifiedName(), definition.url(ResourceRepresentationType.XML));
+				xmlSchemaDefinitionURLsPerQName.put(definition.getQualifiedName(), definition.url(ResourceRepresentationType.XSD));
 				
 				//Get base content types
 				if (ValueType.ContentType == definition.getValueType()){
