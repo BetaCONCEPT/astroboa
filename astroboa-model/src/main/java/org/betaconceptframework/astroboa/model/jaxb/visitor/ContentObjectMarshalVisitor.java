@@ -173,7 +173,6 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 	private ContentObjectType populateContentObjectType(ContentObject contentObject, ContentObjectType contentObjectType){
 		contentObjectType.setId(contentObject.getId());
 		contentObjectType.setContentObjectTypeName(contentObject.getContentObjectType());
-		contentObjectType.setSystemBuiltinEntity(contentObject.isSystemBuiltinEntity());
 		contentObjectType.setSystemName(contentObject.getSystemName());
 		
 		//TODO: Check whether user may have more control on whether a friendly url is generated or not
