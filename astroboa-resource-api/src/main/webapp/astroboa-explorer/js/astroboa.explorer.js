@@ -58,7 +58,7 @@
 			//it is a map whose key is the name of the type and value type's model
 			repositoryModel = {},
 			
-			//http://server/resource-api/repositoty-id/contentObject
+			//http://server/resource-api/repositoty-id/objects
 			//Its value is updated each time user selects a repository
 			baseContentSearchURL,
 			baseModelURL,
@@ -330,10 +330,10 @@
 
 					baseRepositoryURL = baseURL+'/'+configuration.repository;
 
-					baseContentSearchURL = baseRepositoryURL+'/contentObject';
-				    baseTopicSearchURL = baseRepositoryURL+'/topic';
-					baseTaxonomySearchURL = baseRepositoryURL+'/taxonomy';
-					baseModelURL = baseRepositoryURL+'/model';
+					baseContentSearchURL = baseRepositoryURL+'/objects';
+				    baseTopicSearchURL = baseRepositoryURL+'/topics';
+					baseTaxonomySearchURL = baseRepositoryURL+'/taxonomies';
+					baseModelURL = baseRepositoryURL+'/models';
 
 				}
 				
