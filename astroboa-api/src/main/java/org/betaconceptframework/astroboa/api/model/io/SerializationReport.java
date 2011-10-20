@@ -44,13 +44,6 @@ public interface SerializationReport {
 	String getAbsolutePath();
 	
 	/**
-	 * Check if serialization has finished.
-	 * 
-	 * @return <code>true</code> if the file has been created, <code>false</code> otherwise.
-	 */
-	boolean hasSerializationFinished();
-	
-	/**
 	 * Lit of messages for errors occurring during serialization
 	 * 
 	 * @return A list of error messages, if any during serialization
@@ -58,31 +51,89 @@ public interface SerializationReport {
 	List<String> getErrors();
 	
 	/**
-	 * Retrieve number of objects serialized
+	 * Retrieve the number of objects being serialized.
 	 * 
-	 * @return Number of objects successfully serialized
+	 * This value depicts the current status of object serialization 
+	 * and thus changes as more objects are being serialized.
+	 * 
+	 * @return The number of objects successfully serialized until the moment of the request
 	 */
-	int getNumberOfObjectsSerialized();
+	int getNumberOfCompletedSerializedObjects();
 
 	/**
-	 * Retrieve number of repository users serialized
+	 * Retrieve the total number of objects which must be serialized.
 	 * 
-	 * @return Number of repository users successfully serialized
+	 * @return The total number of objects to be serialized
 	 */
-	int getNumberOfRepositoryUsersSerialized();
+	int getTotalNumberOfObjects();
+	
+	/**
+	 * Retrieve the number of repository users being serialized.
+	 * 
+	 * This value depicts the current status of repository user serialization 
+	 * and thus changes as more repository users are being serialized.
+	 * 
+	 * @return The number of repository users successfully serialized until the moment of the request
+	 */
+	int getNumberOfCompletedSerializedRepositoryUsers();
 
 	/**
-	 * Retrieve number of taxonomies serialized
+	 * Retrieve the total number of repository users which must be serialized
 	 * 
-	 * @return Number of taxonomies successfully serialized
+	 * @return Total number of repository users to be serialized
 	 */
-	int getNumberOfTaxonomiesSerialized();
+	int getTotalNumberOfRepositoryUsers();
 
 	/**
-	 * Retrieve number of spaces serialized
+	 * Retrieve the number of taxonomies being serialized.
 	 * 
-	 * @return Number of spaces successfully serialized
+	 * This value depicts the current status of taxonomy serialization 
+	 * and thus changes as more taxonomies are being serialized.
+	 * 
+	 * @return The number of taxonomies successfully serialized until the moment of the request
 	 */
-	int getNumberOfSpacesSerialized();
+	int getNumberOfCompletedSerializedTaxonomies();
+
+	/**
+	 * Retrieve the total number of taxonomies which must be serialized
+	 * 
+	 * @return Total number of taxonomies to be serialized
+	 */
+	int getTotalNumberOfTaxonomies();
+
+	/**
+	 * Retrieve the number of topics being serialized.
+	 * 
+	 * This value depicts the current status of topic serialization 
+	 * and thus changes as more topics are being serialized.
+	 * 
+	 * @return The number of topics successfully serialized until the moment of the request
+	 */
+	int getNumberOfCompletedSerializedTopics();
+
+	/**
+	 * Retrieve the total number of topics which must be serialized
+	 * 
+	 * @return Total number of topics to be serialized
+	 */
+	int getTotalNumberOfTopics();
+	
+	/**
+	 * Retrieve the number of spaces being serialized.
+	 * 
+	 * This value depicts the current status of space serialization 
+	 * and thus changes as more spaces are being serialized.
+	 * 
+	 * @return The number of spaces successfully serialized until the moment of the request
+	 */
+	int getNumberOfCompletedSerializedSpaces();
+
+	/**
+	 * Retrieve the total number of spaces which must be serialized
+	 * 
+	 * @return Total number of spaces to be serialized
+	 */
+	int getTotalNumberOfSpaces();
+
 
 }
