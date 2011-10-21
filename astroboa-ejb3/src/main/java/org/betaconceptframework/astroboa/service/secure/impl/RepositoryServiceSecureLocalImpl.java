@@ -18,7 +18,6 @@
  */
 package org.betaconceptframework.astroboa.service.secure.impl;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -27,11 +26,9 @@ import javax.ejb.TransactionManagementType;
 import javax.security.auth.Subject;
 
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.service.RepositoryService;
 import org.betaconceptframework.astroboa.api.service.secure.RepositoryServiceSecure;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.service.secure.security.SecurityService;
-import org.springframework.context.ApplicationContext;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -43,17 +40,9 @@ import org.springframework.context.ApplicationContext;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class RepositoryServiceSecureLocalImpl extends RepositoryServiceSecureImpl implements RepositoryServiceSecure{
 
-	@Resource(name="astroboa.engine.context", mappedName="astroboa.engine.context")
-	private ApplicationContext springManagedRepositoryServicesContext;
-	
 	@Resource(name="SecurityService", mappedName="SecurityService/local")
 	private SecurityService securityService;
 
-	@PostConstruct
-	public void initialize() {
-		repositoryService = (RepositoryService) springManagedRepositoryServicesContext.getBean("repositoryService");
-	}
-	
 	@Override
 	protected SecurityService getSecurityService() {
 		return securityService;

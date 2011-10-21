@@ -135,6 +135,9 @@ Authors
     	<level value="WARN"/>
    </logger>
    
+   <logger name="org.betaconceptframework.astroboa.test.engine.service.IOServicesTest">
+    	<level value="WARN"/>
+   </logger>
    
     <root>
     	<priority value="WARN"/>

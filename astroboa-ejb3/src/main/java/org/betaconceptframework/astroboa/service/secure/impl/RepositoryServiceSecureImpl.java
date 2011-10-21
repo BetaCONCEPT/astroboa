@@ -35,10 +35,14 @@ import org.betaconceptframework.astroboa.service.secure.security.SecurityService
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-abstract class RepositoryServiceSecureImpl {
+abstract class RepositoryServiceSecureImpl extends AbstractSecureAstroboaService {
 	
 	protected RepositoryService repositoryService;
 	
+	void initializeOtherRemoteServices() {
+		repositoryService = (RepositoryService) springManagedRepositoryServicesContext.getBean("repositoryService");
+	}
+
 	public String login(String repositoryId,
 			AstroboaCredentials credentials, String permanentKey) {
 		

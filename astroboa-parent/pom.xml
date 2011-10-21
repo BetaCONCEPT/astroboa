@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.betaconceptframework</groupId>
 		<artifactId>betaconceptframework</artifactId>
-		<version>4-SNAPSHOT</version>
+		<version>4</version>
 	</parent>
 	<groupId>org.betaconceptframework.astroboa</groupId>
 	<artifactId>astroboa-parent</artifactId>
@@ -678,13 +678,13 @@
 	
 	<scm>
     	<connection>
-			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-parent
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</url>
 	</scm>
 	

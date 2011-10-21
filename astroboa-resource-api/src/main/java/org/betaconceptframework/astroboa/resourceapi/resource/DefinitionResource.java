@@ -104,7 +104,7 @@ public class DefinitionResource extends AstroboaResource{
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
-		Output outputEnum = Output.XML;
+		Output outputEnum = Output.JSON;
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
 		}

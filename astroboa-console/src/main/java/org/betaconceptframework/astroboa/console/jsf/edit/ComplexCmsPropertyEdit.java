@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
@@ -56,10 +57,7 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.security.Identity;
 
 /**
@@ -67,8 +65,7 @@ import org.jboss.seam.security.Identity;
  * a complex cms property of a content object
  *
  */
-@Name("complexCmsPropertyEdit")
-@Scope(ScopeType.CONVERSATION)
+
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
@@ -107,8 +104,13 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 	private CmsPropertyValidatorVisitor cmsPropertyValidatorVisitor;
 	
-	@In("ruleEngine")
-	private RuleEngineBean ruleEngine;
+	// holds the indexes of property wrappers to be updated when form is re-rendered
+	// the indexes of wrappers correspond to indexes of the related UI component that renders the property in the object form. 
+	// So the wrapper indexes are the ajaxKeys in the rich faces a4j:repeat component that renders the form   
+	private Set<Integer> wrapperIndexesToUpdate;
+	
+	//@In("ruleEngine")
+	//private RuleEngineBean ruleEngine;
 	
 	private SelectItemComparator selectItemComparator;
 	
@@ -144,56 +146,44 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 		if (editedCmsProperties == null && editedComplexCmsProperty != null){
 
 			try{
-
+				
+				// We should first assemble a list of all edited properties i.e. the child properties of the edited ComplexCmsProperty 
 				String localeAsString = JSFUtilities.getLocaleAsString();
 
-				//Load available Aspects
-				if (editedComplexCmsProperty instanceof ComplexCmsRootProperty){
-					loadAvailableAspects(localeAsString);
-				}
-
-				//create wrappers for child properties of ComplexCmsProperty
 				Map<String, CmsPropertyDefinition> propertyDefinitions = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinitions();
 
 				editedCmsProperties = new ArrayList<CmsPropertyWrapper<?>>();
 
 				List<CmsPropertyDefinition> propertyDefinitionList = new ArrayList<CmsPropertyDefinition>();
 				
-				CmsPropertyDefinition profileDefinition = null;
 				
-				//Check for aspects
-				List<String> aspects = null;
+				if (MapUtils.isNotEmpty(propertyDefinitions)){
+					propertyDefinitionList.addAll(propertyDefinitions.values());	
+				}
+				
+				// if the root property is edited we should remove the profile and accessibility properties which have dedicated edit forms
 				if (editedComplexCmsProperty instanceof ComplexCmsRootProperty && editedContentObject !=null) {
-					profileDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile");
 					
-					/*
-					// We explicitly add the title, description and subject to the root form although they belong to the profile form
-					if (editedComplexCmsProperty.isChildPropertyDefined("profile.title")) { 
-						propertyDefinitionList.add(editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile.title")); 
-					}
-
-					if (editedComplexCmsProperty.isChildPropertyDefined("profile.description")) { 
-						propertyDefinitionList.add(editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile.description")); 
-					}
-
-					if (editedComplexCmsProperty.isChildPropertyDefined("profile.subject")) { 
-						propertyDefinitionList.add(editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile.subject")); 
-					}
-					*/
+					CmsPropertyDefinition profileDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile");
+					CmsPropertyDefinition accessibilityDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("accessibility");
 					
-					/*Just load all other mandatory profile properties
-					if(editedComplexCmsProperty.isChildPropertyDefined("profile")) { 
-						ComplexCmsPropertyDefinition profileDefinition = (ComplexCmsPropertyDefinition)editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile"); 
+					if (profileDefinition != null) {
+						propertyDefinitionList.remove(profileDefinition);
+					}
 						
-						if (profileDefinition != null && profileDefinition.getChildCmsPropertyDefinitions() != null)
-						for (CmsPropertyDefinition profileChildPropertyDefinition : profileDefinition.getChildCmsPropertyDefinitions().values()){
-							if (profileChildPropertyDefinition.isMandatory()){
-								editedComplexCmsProperty.getChildProperty(profileChildPropertyDefinition.getPath());
-							}
-						}
+					if (accessibilityDefinition != null) {
+						propertyDefinitionList.remove(accessibilityDefinition);
 					}
-					*/
-					// Root element has been chosen to be edited
+				}
+				
+				
+				// if the root property is edited we should also load the dynamic properties (aspects that have been added to this specific object instance)
+				List<String> aspects = null;
+				/*
+				if (editedComplexCmsProperty instanceof ComplexCmsRootProperty && editedContentObject !=null) {
+						
+					// add the dynamic properties
+					loadAvailableAspects(localeAsString);
 					aspects = editedContentObject.getComplexCmsRootProperty().getAspects();
 
 					//Append list with aspect definitions, if any
@@ -210,45 +200,35 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 					}
 
 				}
-				
-				if (MapUtils.isNotEmpty(propertyDefinitions)){
-					propertyDefinitionList.addAll(propertyDefinitions.values());
-					// remove profile in order to add it as the first wrapper
-					if (profileDefinition != null) {
-						propertyDefinitionList.remove(profileDefinition);
-						
-						createCmsPropertyWrapperForCmsPropertyDefinition(
-								aspects,
-								profileDefinition);
-					}
-					
-				}
+				*/
 
 
 				//This is disabled for now
 				//propertyDefinitionList = ruleEngine.filterDefinitionsForEdit(propertyDefinitionList);
 				
-				List<CmsPropertyDefinition> definitionsToDisplayLast = new ArrayList<CmsPropertyDefinition>();
+				// we should create wrappers for each child property of edited ComplexCmsProperty
+				//List<CmsPropertyDefinition> definitionsToDisplayLast = new ArrayList<CmsPropertyDefinition>();
+				
+				// wrapperIndex is used to partially update the related UI component in the object form
+				int wrapperIndex = -1;
 				for (CmsPropertyDefinition cmsPropertyDefinition: propertyDefinitionList){
 					
-					if (! cmsPropertyDefinition.isObsolete())
-					{
-					if ("accessibility".equals(cmsPropertyDefinition.getName())){
-						definitionsToDisplayLast.add(cmsPropertyDefinition);
-					}
-					else{
+					++wrapperIndex;
+					
+					if (! cmsPropertyDefinition.isObsolete()) {
 						createCmsPropertyWrapperForCmsPropertyDefinition(
-								aspects,
-								cmsPropertyDefinition);
-					}
+							aspects,
+							cmsPropertyDefinition, wrapperIndex);
 					}
 				}
 				
+				/*
 				for (CmsPropertyDefinition cmsPropertyDefinition: definitionsToDisplayLast){
 						createCmsPropertyWrapperForCmsPropertyDefinition(
 								aspects,
 								cmsPropertyDefinition);
 				}
+				*/
 
 				//sortCmsPropertyWrappers(localeAsString);   
 
@@ -279,9 +259,9 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 	private void createCmsPropertyWrapperForCmsPropertyDefinition(
 			List<String> aspects,
-			CmsPropertyDefinition cmsPropertyDefinition) {
+			CmsPropertyDefinition cmsPropertyDefinition, int wrapperIndex) {
 
-		//Check if this propert should not be displayed
+		//Check if this property should not be displayed
 		if (! shouldCreateAPropertyWrapper(cmsPropertyDefinition))
 		{
 			return;
@@ -325,19 +305,20 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 								cmsPropertyDefinition, 
 								editedComplexCmsProperty.getPath(), 
 								cmsRepositoryEntityFactory,
-								editedContentObject));
+								editedContentObject, wrapperIndex, this));
 				
 				// create wrappers for child properties
 				Map<String, CmsPropertyDefinition> childPropertyDefinitionsMap = ((ComplexCmsProperty<?,?>)complexCmsProperty).getPropertyDefinition().getChildCmsPropertyDefinitions();
 				List<CmsPropertyWrapper<?>> singleValueComplexPropertyChildPropertyWrappers = new ArrayList<CmsPropertyWrapper<?>>();
 				childPropertiesOfSingleValueComplexProperties.put(complexCmsProperty.getName(), singleValueComplexPropertyChildPropertyWrappers);
+				// the wrapper index will be the parent's wrapper index
 				for (CmsPropertyDefinition childPropertyDefinition : childPropertyDefinitionsMap.values()) {
-					createWrapperForChildPropertyOfSingleValueComplexProperty((ComplexCmsProperty<?,?>)complexCmsProperty, childPropertyDefinition, singleValueComplexPropertyChildPropertyWrappers);
+					createWrapperForChildPropertyOfSingleValueComplexProperty((ComplexCmsProperty<?,?>)complexCmsProperty, childPropertyDefinition, singleValueComplexPropertyChildPropertyWrappers, wrapperIndex);
 				}
 			}
 			else {
 				editedCmsProperties.add(new ComplexCmsPropertyParentWrapper(editedComplexCmsProperty,  
-						cmsPropertyDefinition, cmsRepositoryEntityFactory, editedContentObject));
+						cmsPropertyDefinition, cmsRepositoryEntityFactory, editedContentObject, wrapperIndex, this));
 			}
 			
 			//TODO: Fix this by checking the type of each property not by checking the name
@@ -357,8 +338,6 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 				}
 			}
 			
-			
-				
 			break;
 		}
 		default:{
@@ -400,7 +379,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									taxonomyService, 
 									topicService, 
 									cmsRepositoryEntityFactory,
-									editedContentObject));
+									editedContentObject, wrapperIndex, this));
 				}
 				else if (cmsPropertyDefinition.getValueType() == ValueType.ObjectReference){
 					editedCmsProperties.add(
@@ -413,11 +392,11 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									contentObjectUIWrapperFactory, 
 									definitionService, 
 									cmsRepositoryEntityFactory,
-									editedContentObject));
+									editedContentObject, wrapperIndex, this));
 				}
 				else{
 					editedCmsProperties.add(new SimpleCmsPropertyWrapper((SimpleCmsProperty)simpleCmsProperty,  
-							cmsPropertyDefinition, parentPath, cmsRepositoryEntityFactory, cmsPropertyValidatorVisitor, editedContentObject));
+							cmsPropertyDefinition, parentPath, cmsRepositoryEntityFactory, cmsPropertyValidatorVisitor, editedContentObject, wrapperIndex, this));
 				}
 			}
 			
@@ -439,7 +418,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 	private void createWrapperForChildPropertyOfSingleValueComplexProperty(
 			ComplexCmsProperty<?,?> parentProperty, 
 			CmsPropertyDefinition childPropertyDefinition, 
-			List<CmsPropertyWrapper<?>> singleValueComplexPropertyChildPropertyWrappers) {
+			List<CmsPropertyWrapper<?>> singleValueComplexPropertyChildPropertyWrappers, int wrapperIndex) {
 		
 		if (
 			parentProperty.getName().equals("accessibility")) {
@@ -471,12 +450,12 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 								childPropertyDefinition, 
 								parentProperty.getPath(), 
 								cmsRepositoryEntityFactory,
-								editedContentObject));
+								editedContentObject, wrapperIndex, this));
 
 			}
 			else {
 				singleValueComplexPropertyChildPropertyWrappers.add(new ComplexCmsPropertyParentWrapper(parentProperty,  
-						childPropertyDefinition, cmsRepositoryEntityFactory, editedContentObject));
+						childPropertyDefinition, cmsRepositoryEntityFactory, editedContentObject, wrapperIndex, this));
 			}
 			
 			break;
@@ -498,7 +477,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									taxonomyService, 
 									topicService, 
 									cmsRepositoryEntityFactory,
-									editedContentObject));
+									editedContentObject, wrapperIndex, this));
 				}
 				else if (childPropertyDefinition.getValueType() == ValueType.ObjectReference){
 					singleValueComplexPropertyChildPropertyWrappers.add(
@@ -511,11 +490,11 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 									contentObjectUIWrapperFactory, 
 									definitionService, 
 									cmsRepositoryEntityFactory,
-									editedContentObject));
+									editedContentObject, wrapperIndex, this));
 				}
 				else{
 					singleValueComplexPropertyChildPropertyWrappers.add(new SimpleCmsPropertyWrapper((SimpleCmsProperty)simpleCmsProperty,  
-							childPropertyDefinition, parentPath, cmsRepositoryEntityFactory, cmsPropertyValidatorVisitor, editedContentObject));
+							childPropertyDefinition, parentPath, cmsRepositoryEntityFactory, cmsPropertyValidatorVisitor, editedContentObject, wrapperIndex, this));
 				}
 			}
 				
@@ -568,7 +547,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 		if (CollectionUtils.isNotEmpty(availabelAspectDefinitions)){
 			for (ComplexCmsPropertyDefinition aspectDefinition : availabelAspectDefinitions){
-				if (!aspectDefinition.isSystemTypeDefinition() && !aspectDefinition.isObsolete()){
+				if ( !aspectDefinition.isObsolete()){
 					String localizedLabelForLocale = aspectDefinition.getDisplayName().getLocalizedLabelForLocale(locale);
 					if (StringUtils.isBlank(localizedLabelForLocale)){
 						localizedLabelForLocale = aspectDefinition.getName(); 
@@ -672,6 +651,14 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 	public Map<String, List<CmsPropertyWrapper<?>>> getChildPropertiesOfSingleValueComplexProperties() {
 		return childPropertiesOfSingleValueComplexProperties;
+	}
+
+	public Set<Integer> getWrapperIndexesToUpdate() {
+		return wrapperIndexesToUpdate;
+	}
+
+	public void setWrapperIndexesToUpdate(Set<Integer> wrapperIndexesToUpdate) {
+		this.wrapperIndexesToUpdate = wrapperIndexesToUpdate;
 	}
 
 

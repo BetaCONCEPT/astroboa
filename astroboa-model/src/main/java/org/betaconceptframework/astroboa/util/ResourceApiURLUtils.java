@@ -108,20 +108,24 @@ public class ResourceApiURLUtils {
 			
 			if (ContentObject.class.isAssignableFrom(type) || CmsProperty.class.isAssignableFrom(type) 
 					|| BinaryChannel.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
+				sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
 			}
 			else if (Topic.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH);
+				sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH);
 			}
 			else if (Space.class.isAssignableFrom(type)){
 				sb.append(CmsConstants.FORWARD_SLASH);
 				sb.append(CmsBuiltInItem.Space.getLocalPart());
 			}
 			else if (Taxonomy.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH);
+				sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH);
 			}
 			else if (CmsDefinition.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH);
+				sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH);
 			}
 			
 			sb.append(CmsConstants.FORWARD_SLASH);
@@ -150,7 +154,8 @@ public class ResourceApiURLUtils {
 		
 		
 		if (cmsEntity instanceof Taxonomy){
-			sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -161,7 +166,8 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof Topic){
-			sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+			.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 
 			if (urlProperties.isFriendly()){
@@ -184,7 +190,8 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof ContentObject){
-			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -196,7 +203,8 @@ public class ResourceApiURLUtils {
 			
 		}
 		else if (cmsEntity instanceof CmsProperty<?,?>){
-			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+				.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -210,12 +218,14 @@ public class ResourceApiURLUtils {
 				.append(((CmsProperty<?,?>)cmsEntity).getPermanentPath());
 		}
 		else if (cmsEntity instanceof ContentObjectTypeDefinition){
-			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+			.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH)
 			.append(((ContentObjectTypeDefinition)cmsEntity).getName());
 		}
 		else if (cmsEntity instanceof CmsPropertyDefinition){
-			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
+			sb.append(CmsConstants.FORWARD_SLASH)
+			.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH)
 			.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
 		}
@@ -225,15 +235,8 @@ public class ResourceApiURLUtils {
 	private static void addOutput(ResourceRepresentationType<?>  resourceRepresentationType,
 			StringBuilder sb, Class<?> type) {
 		
-		//XSD is considered default value and therefore it is not added
-		//if type is CmsDefinition
-		if (CmsDefinition.class.isAssignableFrom(type) && 
-				resourceRepresentationType != null && resourceRepresentationType == ResourceRepresentationType.XSD){
-			return ;
-		}
-		
 		//Add output. XML is considered default value and therefore it is not added
-		if (resourceRepresentationType != null && resourceRepresentationType != ResourceRepresentationType.XML){
+		if (resourceRepresentationType != null && ! resourceRepresentationType.equals(ResourceRepresentationType.XML)){
 			sb.append("?output=");
 			sb.append(resourceRepresentationType.getTypeAsString().toLowerCase());
 		}
@@ -305,10 +308,10 @@ public class ResourceApiURLUtils {
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
 		// http://server/resource-api/
-		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
+		// <reposiotry-id>/objects/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
-		contentApiURLBuilder.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
+		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH+CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
 
 		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH+contentObjectIdOrSystemName);
 		

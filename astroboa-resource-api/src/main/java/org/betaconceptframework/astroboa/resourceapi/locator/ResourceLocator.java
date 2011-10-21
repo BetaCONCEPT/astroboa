@@ -52,25 +52,23 @@ public class ResourceLocator {
 		}
 	}
 
-	@Path(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+	@Path("/{contentURIPath: "+ CmsConstants.RESOURCE_API_CONTENT_URI_PATH + "|" + CmsConstants.DEPRECATED_RESOURCE_API_CONTENT_URI_PATH +"}")
 	public ContentObjectResource getContentObjectResource(){
 		
 		return new ContentObjectResource(astroboaClient);
 		
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
+	@Path("/{taxonomyURIPath: "+ CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH + "|" + CmsConstants.DEPRECATED_RESOURCE_API_TAXONOMY_URI_PATH +"}")
 	public TaxonomyResource getTaxonomyResource(){
 		
 		return new TaxonomyResource(astroboaClient);
 		
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
+	@Path("/{topicURIPath: "+ CmsConstants.RESOURCE_API_TOPIC_URI_PATH + "|" + CmsConstants.DEPRECATED_RESOURCE_API_TOPIC_URI_PATH +"}")
 	public TopicResource getTopicResource(){
-		
 		return new TopicResource(astroboaClient);
-		
 	}
 	
 	@Path(CmsConstants.RESOURCE_API_BINARY_CHANNEL_URI_PATH)
@@ -80,7 +78,7 @@ public class ResourceLocator {
 
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
+	@Path("/{modelURIPath: "+ CmsConstants.RESOURCE_API_MODEL_URI_PATH + "|" + CmsConstants.DEPRECATED_RESOURCE_API_MODEL_URI_PATH +"}")
 	public DefinitionResource getDefinitionResource(){
 		
 		return new DefinitionResource(astroboaClient);

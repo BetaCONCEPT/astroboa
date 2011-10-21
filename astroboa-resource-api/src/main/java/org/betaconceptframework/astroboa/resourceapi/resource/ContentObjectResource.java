@@ -58,6 +58,8 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -197,7 +199,7 @@ public class ContentObjectResource extends AstroboaResource{
 			// This may cause problems if a requested property itself is named under the name of a mime type suffix.
 			// To resolve this potential problem it is required to always put a mime type suffix at the end of URLs that read property values 
 			// if the requested property is named under the name of a mime type suffix 
-			// (i.e. .../contentObject/{contentObjectId}/myImageWithMultipleFormats.jpg.jpg this will result in removing the last "jpg" suffix but keep the previous one which corresponds to a 
+			// (i.e. .../objects/{contentObjectId}/myImageWithMultipleFormats.jpg.jpg this will result in removing the last "jpg" suffix but keep the previous one which corresponds to a 
 			// property named "jpg") 
 			if (propertyPath != null && !propertyPath.endsWith("]")){
 				String candidateMimeTypeSuffix = StringUtils.substringAfterLast(propertyPath, ".");
@@ -295,7 +297,7 @@ public class ContentObjectResource extends AstroboaResource{
 			// This may cause problems if a requested property itself is named under the name of a mime type suffix.
 			// To resolve this potential problem it is required to always put a mime type suffix at the end of URLs that read property values 
 			// if the requested property is named under the name of a mime type suffix 
-			// (i.e. .../contentObject/{contentObjectId}/myImageWithMultipleFormats.jpg.jpg this will result in removing the last "jpg" suffix but keep the previous one which corresponds to a 
+			// (i.e. .../objects/{contentObjectId}/myImageWithMultipleFormats.jpg.jpg this will result in removing the last "jpg" suffix but keep the previous one which corresponds to a 
 			// property named "jpg") 
 			if (propertyPath != null && !propertyPath.endsWith("]")){
 				String candidateMimeTypeSuffix = StringUtils.substringAfterLast(propertyPath, ".");
@@ -1038,7 +1040,12 @@ public class ContentObjectResource extends AstroboaResource{
 			}
 			
 			//Import content but do not save it 
-			 ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(partWhichContainsObjectSource.getBodyAsString(), false, true, false, binaryContentMap);
+			ImportConfiguration importConfiguration = ImportConfiguration.object()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.addBinaryContent(binaryContentMap)
+					.build();
+			
+			 ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(partWhichContainsObjectSource.getBodyAsString(), importConfiguration);
 				
 			 if (logger.isDebugEnabled()){
 				  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
@@ -1120,8 +1127,12 @@ public class ContentObjectResource extends AstroboaResource{
 				String requestContent, String httpMethod){
 		
 		
-		  //Import from xml or json. ContentObject will not be saved
-		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false, null);
+    	  //Import from xml or json. ContentObject will not be saved
+		ImportConfiguration importConfiguration = ImportConfiguration.object()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
+
+		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, importConfiguration);
 			
 		  if (logger.isDebugEnabled()){
 			  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));

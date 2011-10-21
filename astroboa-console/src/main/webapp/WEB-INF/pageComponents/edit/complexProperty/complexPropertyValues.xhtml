@@ -53,6 +53,7 @@ Authors
 						<li class="inlineFormElementValue">
 							<a4j:outputPanel>
 								<rich:dropSupport 
+									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}"
 									ondrop="destroyTextEditor();"
 									acceptedTypes="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}"
 									reRender="complexCmsPropertyChildPropertiesTable"
@@ -60,6 +61,16 @@ Authors
 									dropValue="#{childComplexCmsPropertyWrapper}">
 									
 								</rich:dropSupport>
+								
+								<rich:dragSupport 
+									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}"
+									dragIndicator="complexPropertyIndicator"
+									dragType="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}" 
+									dragValue="#{childComplexCmsPropertyWrapper}">
+	
+									<rich:dndParam name="label" type="drag"
+										value="#{childComplexCmsPropertyWrapper.localizedLabelForCurrentLocale}" />
+								</rich:dragSupport>
 				
 								<a4j:commandLink
 									onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
@@ -76,6 +87,7 @@ Authors
 							</a4j:outputPanel>
 							
 							<!-- Grab action -->
+							<ui:remove>
 							 <a4j:outputPanel 
 						 		styleClass="dragElementValue"
 							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}">
@@ -89,7 +101,8 @@ Authors
 								</rich:dragSupport>
 								Drag to another position
 							</a4j:outputPanel>
-						
+							</ui:remove>
+							
 							<!-- MoveUp action
 							<a4j:commandLink
 								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"

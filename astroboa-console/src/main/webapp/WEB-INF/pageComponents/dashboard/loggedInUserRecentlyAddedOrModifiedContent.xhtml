@@ -53,28 +53,34 @@ Authors
 					styleClass="listViewContentObjectTable">
 
 					<rich:column style="border: 0;">
+						
 						<a4j:commandLink title="#{messages['object.action.viewEditForm']}"
 							action="#{objectEditInit.editObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 							reRender="objectEditorAjaxPanel"
 							oncomplete="showTab('objectEditorTab');"
 							onclick="resetEditors();">
 								
-							<h:outputText
-								value="#{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
-						</a4j:commandLink>
-						<br/>
-						<span style="font-size: 85%;color: #BBB;">#{contentObjectUIWrapper.contentObjectTypeForCurrentLocale}, </span> 
-						<h:outputText style="font-size: 85%;color: #BBB;"
-							value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
-							<f:convertDateTime type="both" dateStyle="short"
-								timeStyle="short" timeZone="#{timeZoneSelector.timeZone.ID}" />
-						</h:outputText>, 
+							<strong><h:outputText
+								value=" #{contentObjectUIWrapper.contentObjectProperty['profile.title'].simpleTypeValue} " />
+							</strong>
+						</a4j:commandLink> 
 						
-						<h:outputText style="font-size: 80%; color: red;" rendered="#{contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter']}"
+						
+						<span>(#{contentObjectUIWrapper.contentObjectTypeForCurrentLocale})  </span>
+						
+						<ui:remove>
+						<h:outputText rendered="#{contentObjectUIWrapper.contentObjectPropertyDefined['statistic.viewCounter'] and (!empty contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue)}"
 						 	value=", #{contentObjectUIWrapper.contentObjectProperty['statistic.viewCounter'].simpleTypeValue}"/>
 						 
-						 <h:outputText style="font-size: 80%; color: red;" rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue}"
-						 	value=", #{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}"/>
+						 <h:outputText rendered="#{!empty contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue}"
+						 	value=", #{messages[contentObjectUIWrapper.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue]}, "/>
+						 </ui:remove>
+						 	
+						 <h:outputText
+							value="#{contentObjectUIWrapper.contentObjectProperty['profile.modified'].simpleTypeValue.time}">
+							<f:convertDateTime timeZone="#{timeZoneSelector.timeZone.ID}" locale="#{localeSelector.locale}" pattern="yyyy.MM.dd '-' HH:mm"/>
+						</h:outputText>
+						 	
 					</rich:column>
 
 				</rich:dataTable>

@@ -41,9 +41,7 @@ Authors
 	
 	
 		<ui:composition>
-		
-			<div>#{messages['content.object.edit.accessibility.editor.tab.search.user.label']}</div>
-			
+			<label for="suggestPersonOrRoleTextFilter#{typeOfAccessRight}">Add User or Group: </label>
 			<h:inputText id="suggestPersonOrRoleTextFilter#{typeOfAccessRight}"
 				value="#{contentObjectEdit.selectedPersonOrRoleTextFilter}" 
 				size="30" 
@@ -61,10 +59,11 @@ Authors
 					<h:outputText value="#{suggestedValue['label']}" />
 				</h:column>
 				<a4j:support event="onselect" ajaxSingle="true"
-						reRender="complexCmsPropertyChildPropertiesTable"
+						reRender="#{typeOfAccessRight}Table"
 						action="#{contentObjectEdit.grantAccessRightToPersonOrRole(typeOfAccessRight, suggestedValue)}" />
 			</rich:suggestionbox>
-
+			
+			<div>#{messages['content.object.edit.accessibility.editor.tab.search.user.label']}</div>
 		</ui:composition>
 	</body>
 

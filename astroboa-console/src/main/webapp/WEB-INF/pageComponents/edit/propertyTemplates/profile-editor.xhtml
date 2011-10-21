@@ -25,255 +25,194 @@ Authors
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	xmlns:ui="http://java.sun.com/jsf/facelets" 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:f="http://java.sun.com/jsf/core" 
-	xmlns:h="http://java.sun.com/jsf/html"  
-	xmlns:c="http://java.sun.com/jstl/core" 
-	xmlns:bcc="http://www.betaconceptframework.org/facelets/components">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
 
 	<body>
 		<ui:composition>
-			
-			<div id="formFieldArea">
-				<h:panelGrid columns="2" style="margin: 0 auto; width: 100%;">
-
-					<h:outputText value="#{messages['content.object.identifier']}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.id}" />
-
-					<c:set var="hasVersion"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.hasVersion']}" />
-					<h:outputText value="#{hasVersion.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText value="#{hasVersion.simpleTypeValue}" />
-
-					<c:set var="versions"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.versions']}" />
-					<h:outputText value="#{versions.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText value="#{versions.simpleTypeValues}" />
-
-					<h:outputText value="#{messages['content.object.contentObjectType']}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectTypeForCurrentLocale}" />
-
-					<h:outputText
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].localizedLabelForCurrentLocale}" 
-						style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText
-						rendered="#{!empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue}"
-						value="#{valueRangeUtil.localizedLabelOfValueInValueRange(
-							contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'],
-							contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue)}"/>
-					<h:panelGroup
-						rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue}" />
-
-					<c:set var="created"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.created']}" />
-					<h:outputText value="#{created.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText value="#{created.simpleTypeValue.time}">
-						<f:convertDateTime type="both" dateStyle="short"
-							timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
-					</h:outputText>
-
-					<c:set var="modified"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.modified']}" />
-					<h:outputText value="#{modified.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText
-						value="#{modified.simpleTypeValue.time}">
-						<f:convertDateTime type="both" dateStyle="short"
-							timeStyle="medium" timeZone="#{timeZoneSelector.timeZone.ID}" />
-					</h:outputText>
-
-					<h:outputText value="#{messages['content.object.owner']}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:outputText
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectOwnerName}" />
-
-					<c:set var="title"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.title']}"/>
-					<h:outputText value="*#{title.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:inputText style="font-size: 95%;"
-						value="#{title.simpleTypeValue}" maxlength="100" size="80" />
-
-					<c:set var="description"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.description']}" />
-					<h:outputText
-						value="*#{description.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:inputTextarea style="font-size: 120%;"
-						value="#{description.simpleTypeValue}" maxlength="500" rows="7"
-						cols="80" />
-
-					<c:set var="language"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.language']}" />
-					<h:outputText value="*#{language.getLocalizedLabelForLocale(localeSelector.localeString)}" style="font-size: 0.8em; font-weight: bold;"/>
-					
-					<h:panelGroup id="languagePanel">
-						<rich:pickList value="#{language.simpleTypeValues}"> 
-            				<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
-        				</rich:pickList>
-					</h:panelGroup>
-
-					<c:set var="publisher"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.publisher']}" />
-					<h:outputText value="#{publisher.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:inputText style="font-size: 95%;"
-						value="#{publisher.simpleTypeValue}" maxlength="100" size="80" />
-
-					<c:set var="creator"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.creator']}" />
-					<h:outputText value="#{creator.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:panelGroup>
-
-						<rich:dataTable
-							value="#{creator.simpleTypeValues}" var="creatorValue"
-							rowKeyVar="index">
-							<rich:column>
-								<h:outputText value="#{creatorValue}" />
-							</rich:column>
-							<rich:column>
-								<a4j:commandLink
-									action="#{contentObjectEdit.removeCreator_UIAction(index)}"
-									reRender="creatorPanel"
-									title="Πατήστε για να αφαιρέσετε τον δημιουργό από την λίστα">
-
-									<img src="images/delete.jpg" border="0" width="16" height="16"
-										align="top" />
-								</a4j:commandLink>
-							</rich:column>
-						</rich:dataTable>
-
-						<h:panelGroup>
-							<h:inputText style="font-size: 95%;"
-								value="#{contentObjectEdit.newCreatorName}" maxlength="100"
-								size="20" />
-
-							<a4j:commandLink
-								styleClass="formItemClass"
-								value="Πατήστε για να προσθέσετε το Δημιουργό στη λίστα"
-								reRender="creatorPanel"
-								action="#{contentObjectEdit.addNewCreator_UIAction}" />
-						</h:panelGroup>
-
-					</h:panelGroup>
-
-					<c:set var="subject"
-						value="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.subject']}" />
-					<h:outputText value="#{subject.localizedLabelForCurrentLocale}" style="font-size: 0.8em; font-weight: bold;"/>
-					<h:panelGrid columns="2">
-						<a4j:outputPanel ajaxRendered="true">
-							<rich:dataTable value="#{subject.simpleTypeValues}" var="topic">
-
-								<f:facet name="header">
-									<rich:columnGroup>
-										<rich:column colspan="2">
-
-											<a4j:outputPanel layout="block"
-											rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToTagContentObject}">
-
-												<rich:dropSupport acceptedTypes="topic"
-													dropValue="#{contentObjectEdit.selectedContentObjectForEdit}"
-													dropListener="#{contentObjectEdit.addDraggedAndDroppedTopicToContentObjectProfileSubject_Listener}"
-													>
-
-
+					<a4j:repeat 
+						value="#{complexCmsPropertyEdit.editedCmsProperties}"
+						var="cmsPropertyWrapper"
+						rowKeyVar="indexOfCmsPropertyWrapper"
+						ajaxKeys="#{complexCmsPropertyEdit.wrapperIndexesToUpdate}">
+						
+						<a4j:outputPanel id="objectProperty" >
+							<!--  If user has no access we do not show the field --> 
+							<ui:fragment rendered="#{cmsPropertyWrapper.readGranted or cmsPropertyWrapper.writeGranted}">
+								
+										<li class="formElement">
+											<label id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+												<a4j:commandLink
+													onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+													rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
+														and ! cmsPropertyWrapper.multiple}"
+													action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path)}"
+													reRender="profilePropertiesPanel,objectFormHeader">
+											
 													<h:outputText
-														value="Σύρετε μία θεματική ενότητα  που θέλετε να προσθέσετε από το δέντρο Θεματικών Ενοτήτων σε αυτή την περιοχή" />
-												</rich:dropSupport>
+														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+													
+													<h:outputText
+														value="#{cmsPropertyWrapper.localizedLabelForCurrentLocale}"/>
+												</a4j:commandLink>
+												
+												
+												
+												<ui:fragment rendered="#{cmsPropertyWrapper.valueType ne 'Complex' 
+																	or cmsPropertyWrapper.multiple}">
+												<!-- Label all other cms properties -->
+													<h:outputText 
+														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+														
+													<h:outputText
+														value="#{cmsPropertyWrapper.localizedLabelForCurrentLocale}"/>
+												</ui:fragment>
+												
+												
+												<ui:remove><img id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="tipImg" src="images/cms-icons/12/info.png"/></ui:remove>
+												<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+												
+											</label>
+										
+										
+											<!--  If user has no access we do not show any value 
+											<h:outputText
+												rendered="#{ !cmsPropertyWrapper.readGranted and ! cmsPropertyWrapper.writeGranted}"
+												value="Δεν επιτρέπεται η ενημέρωση του στοιχείου"
+												/>
+											-->
+												
+											<!-- upload a file for a single or multiple value binary property -->
+											<ui:include
+												src="/WEB-INF/pageComponents/edit/binaryProperty/binaryProperty.xhtml">
+												<!--  Need to pass valueWrapper to xhtml to render its value -->
+												<ui:param name="cmsPropertyWrapper"
+													value="#{cmsPropertyWrapper}" />
+												<ui:param name="indexOfCmsPropertyWrapper"
+													value="#{indexOfCmsPropertyWrapper}" />
+											</ui:include>
+										
+					
+											<!-- Property with a single and simple value -->
+											<a4j:outputPanel
+												rendered="#{cmsPropertyWrapper.writeGranted and
+												!cmsPropertyWrapper.multiple and 
+												cmsPropertyWrapper.valueType ne 'Binary' and 
+												cmsPropertyWrapper.valueType ne 'Complex' and 
+												cmsPropertyWrapper.valueType ne 'TopicReference' and 
+												cmsPropertyWrapper.valueType ne 'ObjectReference'}"
+												keepTransient="true">
+											
+												<ui:include
+													src="/WEB-INF/pageComponents/edit/simpleTypeValue.xhtml">
+													<!--  Need to pass valueWrapper to xhtml to render its value -->
+													<ui:param name="simpleCmsPropertyValueWrapper"
+														value="#{cmsPropertyWrapper.singleSimpleCmsPropertyValueWrapper}" />
+												</ui:include>
 											</a4j:outputPanel>
-										</rich:column>
-									</rich:columnGroup>
-								</f:facet>
-
-								<rich:column>
-
-									<h:outputText style="font-size: 95%;"
-										value="#{topic.localizedLabelForCurrentLocale}"
-										rendered="#{topic.taxonomy.name eq 'bccms:subjectTaxonomy'}" />
-									<h:outputText
-										style="font-size: 95%; text-decoration: underline;"
-										value="#{topic.localizedLabelForCurrentLocale}"
-										rendered="#{! (topic.taxonomy.name eq 'bccms:subjectTaxonomy')}" />
-								</rich:column>
-
-								<rich:column>
-									<a4j:commandLink
-										rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToTagContentObject}"
-										action="#{contentObjectEdit.removeTopicFromContentObjectSubject_UIAction}">
-
-										<a4j:actionparam name="subjectTopicId"
-											value="#{(empty topic.id)? topic.localizedLabelForCurrentLocale : topic.id}"
-											assignTo="#{contentObjectEdit.selectedTopicIdForRemovalFromContentObjectSubject}" />
-
-										<img src="images/delete.jpg" border="0" width="16" height="16"
-											align="top" />
-									</a4j:commandLink>
-								</rich:column>
-
-							</rich:dataTable>
+											
+											<!-- Property with Multiple Simple Values-->
+											<ui:include
+												src="/WEB-INF/pageComponents/edit/simpleTypeValues.xhtml">
+												<!--  Need to pass valueWrapper to xhtml to render its value -->
+												<ui:param name="cmsPropertyWrapper"
+													value="#{cmsPropertyWrapper}" />
+											</ui:include>
+									
+											<!-- TOPIC property with single or multiple values-->
+											<ui:include
+												src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicReferenceProperty.xhtml">
+													<!--  Need to pass valueWrapper to xhtml to render its value -->
+													<ui:param name="topicPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+											</ui:include>
+									
+											<!-- Object Reference Property with single or multiple values -->
+											<ui:include
+												src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceProperty.xhtml">
+													<!--  Need to pass valueWrapper to xhtml to render its value -->
+													<ui:param name="cmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+											</ui:include>
+											
+											<!-- "Add one more value" Action for a Complex Property with multiple values -->
+											<a4j:commandLink
+												onclick="destroyTextEditor();"
+												rendered="#{
+													cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.multiple and  
+													cmsPropertyWrapper.valueType eq 'Complex'}"
+												action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
+												reRender="profilePropertiesPanel, complexCmsPropertyBreadCrumbs"
+												
+												title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
+												<h:graphicImage value="/images/cms-icons/16/add1.png" />
+											</a4j:commandLink>
+											<!-- Values Of a Complex Property with multiple values -->
+											<ui:include
+												src="/WEB-INF/pageComponents/edit/complexPropertyValues.xhtml">
+													<!--  Need to pass valueWrapper to xhtml to render its value -->
+													<ui:param name="parentComplexCmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+											</ui:include>
+					
+					
+											<!-- Delete Action for single-value non mandatory complex cms properties NOT ASPECTS 
+											    exclude profile, accessibility-->
+											<a4j:commandLink
+												onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+												rendered="#{cmsPropertyWrapper.writeGranted and
+												    ! empty cmsPropertyWrapper.cmsProperty and  
+													! cmsPropertyWrapper.multiple and 
+													! cmsPropertyWrapper.mandatory and 
+													cmsPropertyWrapper.valueType eq 'Complex' and 
+													cmsPropertyWrapper.definitionName ne 'profile' and
+													cmsPropertyWrapper.definitionName ne 'accessibility' and
+													! cmsPropertyWrapper.aspect}"
+												
+												action="#{cmsPropertyWrapper.deleteSingleValue_UIAction}"
+												reRender="profilePropertiesPanel">
+												<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+											</a4j:commandLink>
+											
+											<!-- Delete Action for multi-value non mandatory complex cms properties NOT ASPECTS 
+											    exclude profile, accessibility-->
+											<a4j:commandLink
+												onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+												rendered="#{cmsPropertyWrapper.writeGranted and
+												    ! empty cmsPropertyWrapper.cmsProperty and  
+													cmsPropertyWrapper.multiple and 
+													! cmsPropertyWrapper.mandatory and 
+													cmsPropertyWrapper.valueType eq 'Complex' and 
+													cmsPropertyWrapper.definitionName ne 'profile' and
+													cmsPropertyWrapper.definitionName ne 'accessibility' and
+													! cmsPropertyWrapper.aspect and
+													cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() > 1}"
+												action="#{confirmationBean.initiateConfirmation('content.object.edit.multiple.complex.cms.property.delete.question',
+																cmsPropertyWrapper, 
+																'deleteAllChildComplexCmsProperties_UIAction',
+																cmsPropertyWrapper.localizedLabelForCurrentLocale, 
+																'profilePropertiesPanel,complexCmsPropertyBreadCrumbs',
+																null,
+																null)}"
+													 oncomplete="openConfirmationDialog();"
+													 reRender="confirmationDialogPanel">
+												<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+											</a4j:commandLink>
+										</li>	
+									
+							</ui:fragment>
 						</a4j:outputPanel>
-
-						<rich:panel id="addUserTagPanel" style="width: 300px;"
-							headerClass="togglePanelHeaderClass"
-							rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToTagContentObject}">
-							<f:facet name="header">ΕΠΙΛΕΞΤΕ Ή ΠΡΟΣΘΕΣΘΕ ΤΙΣ ΔΙΚΕΣ ΣΑΣ ΕΤΙΚΕΤΕΣ ΚΑΤΗΓΟΡΙΟΠΟΙΗΣΗΣ</f:facet>
-
-
-							<br />
-							<h:outputText
-								value="Επιπλέον των Ταξινομιών του Συστήματος, μπορείτε να κατηγοριοποιήσετε το αντικείμενο και με τις δικές σας Θεματικές Κατηγορίες." />
-							<br />
-							<h:outputText
-								value="Οι Θεματικές Κατηγορίες που προσθέτουν οι χρήστες ονομάζονται Ετικέτες Χρηστών." />
-							<br />
-							<h:outputText
-								value="Χρησιμοποιείστε το πεδίο που ακολουθεί για να προσθέσετε νέες ετικέτες ή διαλέξετε από τις ετικέτες που έχετε ήδη χρησιμοποιήσει." />
-							<br />
-							<h:panelGroup>
-								<h:panelGrid columns="2">
-									<h:inputText value="#{contentObjectEdit.newTagLabel}">
-										<bcc:validateCapitalsOnly
-											errorMessage="Ετικέτα χρήστη : #{messages['validator.capitalsOnly']}" />
-									</h:inputText>
-									<a4j:commandButton
-										action="#{contentObjectEdit.addNewTagToContentObjectSubject_UIAction}"
-										value="Προσθήκη" reRender="addUserTagPanel,myTags"
-										style="font-size: 95%" />
-
-									<h:message for="loggedInUserNewTagLabelInContentObjectEdit"
-										style="color:red; font-weight:bold;" />
-								</h:panelGrid>
-							</h:panelGroup>
-
-
-							<rich:spacer height="5" />
-
-							<h:outputText
-								value="Οι Ετικέτες μου" />
-							<div id="loggedInUserTagsAreaIncontentObjectEdit">
-								<h:panelGroup>
-									<rich:dataList
-										value="#{loggedInRepositoryUser.loadUserTagsOrderedByLabel()}"
-										var="topic">
-										<a4j:commandLink
-											value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
-											action="#{contentObjectEdit.addExistingUserTagToContentObjectSubject_UIAction}"
-											title="Πατήστε για να προσθέσετε την Ετικέτα στη λίστα">
-
-											<a4j:actionparam name="selectedLoggedInUserTagId"
-												value="#{topic.id}" reRender="addUserTagPanel"
-												assignTo="#{contentObjectEdit.selectedLoggedInUserTagId}" />
-
-										</a4j:commandLink>
-									</rich:dataList>
-								</h:panelGroup>
-							</div>
-						</rich:panel>
-					</h:panelGrid>
-
-				</h:panelGrid>
-			</div>
+					</a4j:repeat>
 
 		</ui:composition>
+		
+		
+		
 	</body>
 </html>

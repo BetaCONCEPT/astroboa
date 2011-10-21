@@ -20,6 +20,7 @@ package org.betaconceptframework.astroboa.console.jsf.edit;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -32,13 +33,12 @@ import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapper;
@@ -78,9 +78,11 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			ContentObjectUIWrapperFactory contentObjectUIWrapperFactory, 
 			DefinitionService definitionService, 
 			CmsRepositoryEntityFactory cmsRepositoryEntityFactory,
-			ContentObject contentObject) {
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 
-		super(cmsPropertyDefinition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject);
+		super(cmsPropertyDefinition, parentCmsPropertyPath, cmsRepositoryEntityFactory, contentObject, wrapperIndex, complexCmsPropertyEdit);
 
 		cmsProperty = contentObjectProperty;
 		this.contentService = contentService;
@@ -102,7 +104,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			}
 		}
 
-		this.contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+		this.contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		this.contentObjectCriteria.setOffsetAndLimit(0,15);
 		this.contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 
@@ -123,6 +125,9 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 	}
 
 	public void deleteValueFromContentObjectProperty_UIAction(){
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		//Remove value only it has not already been deleted in case of null value
 		if (indexOfValueToBeDeleted != -1){
 
@@ -202,6 +207,9 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 	}
 
 	public void addDraggedAndDroppedContentObject_Listener(DropEvent dropEvent) {
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		ContentObjectItem contentObjectItem = (ContentObjectItem) dropEvent.getDragValue();
 		String dragType = dropEvent.getDragType();
 
@@ -212,7 +220,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 
 			//A Content Object has been dragged
 			//Load Content object from repository
-			ContentObject contentObject = contentService.getContentObjectByIdAndLocale(contentObjectItem.getId(), JSFUtilities.getLocaleAsString(), null);
+			ContentObject contentObject = contentService.getContentObject(contentObjectItem.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
 
 			if (contentObject == null)
 				JSFUtilities.addMessage(null, "Δεν υπάρχει Αντικείμενο με αναγνωριστικό "+ contentObjectItem.getId() , FacesMessage.SEVERITY_WARN);
@@ -225,7 +233,9 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 	}
 
 	public void addSelectedContentObject_UIAction(ContentObject selectedContentObject, boolean checkAcceptedContentObjectTypes){
-
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		if (cmsProperty != null && getCmsPropertyDefinition() != null && 
 				selectedContentObject != null){
 			List<ContentObject> contentObjects= new ArrayList<ContentObject>();
@@ -311,7 +321,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 
 				for (String acceptedContentType : acceptedContentTypes){
 					if (!ValueType.ObjectReference.toString().equals(acceptedContentType)){
-						ContentObjectTypeDefinition typeDefinition = definitionService.getContentObjectTypeDefinition(acceptedContentType);
+						ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition)definitionService.getCmsDefinition(acceptedContentType, ResourceRepresentationType.DEFINITION_INSTANCE, false);
 
 						if (typeDefinition == null){
 							logger.warn("Try to load accepted content type {} but was not found", acceptedContentType);

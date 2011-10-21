@@ -47,10 +47,14 @@ public class ComplexCmsPropertyParentWrapper extends CmsPropertyWrapper<ComplexC
 	private CmsPropertyDefinition childComplexCmsPropertyDefinition;
 	
 	public ComplexCmsPropertyParentWrapper(ComplexCmsProperty<?,?> parentComplexCmsProperty,  
-			CmsPropertyDefinition childComplexCmsPropertyDefinition,CmsRepositoryEntityFactory cmsRepositoryEntityFactory, ContentObject contentObject) {
+			CmsPropertyDefinition childComplexCmsPropertyDefinition, 
+			CmsRepositoryEntityFactory cmsRepositoryEntityFactory, 
+			ContentObject contentObject, 
+			int wrapperIndex,
+			ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 		
 		super(childComplexCmsPropertyDefinition, 
-				parentComplexCmsProperty.getPath(), cmsRepositoryEntityFactory, contentObject);
+				parentComplexCmsProperty.getPath(), cmsRepositoryEntityFactory, contentObject, wrapperIndex, complexCmsPropertyEdit);
 		
 		this.cmsProperty = parentComplexCmsProperty;
 		this.childComplexCmsPropertyDefinition = childComplexCmsPropertyDefinition;
@@ -112,7 +116,7 @@ public class ComplexCmsPropertyParentWrapper extends CmsPropertyWrapper<ComplexC
 			if (CollectionUtils.isNotEmpty(complexCmsProperties)){
 				for (CmsProperty<?,?> complexCmsProperty : complexCmsProperties)
 					childComplexCmsPropertyWrappers.add(new ComplexCmsPropertyWrapper(complexCmsProperty, false,
-							childComplexCmsPropertyDefinition, cmsProperty.getPath(), cmsRepositoryEntityFactory, getContentObject()));
+							childComplexCmsPropertyDefinition, cmsProperty.getPath(), cmsRepositoryEntityFactory, getContentObject(), wrapperIndex, complexCmsPropertyEdit));
 			}
 		}
 		

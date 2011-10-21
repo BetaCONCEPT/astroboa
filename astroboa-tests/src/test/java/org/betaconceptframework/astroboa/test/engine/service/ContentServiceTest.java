@@ -62,19 +62,19 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinit
 import org.betaconceptframework.astroboa.api.model.exception.CmsConcurrentModificationException;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectReferenceCriterion;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.query.CalendarInfo;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.PopulateContentObject;
@@ -110,6 +110,84 @@ import org.testng.annotations.Test;
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
 	
+	
+	@Test
+	public void testRemovePropertyThatHasNotBeenLoaded(){
+
+		RepositoryUser systemUser = getSystemUser();
+		
+		ContentObject contentObject = createContentObject(systemUser, "test-remove-property-that-has-not-been-loaded");
+		((StringProperty)contentObject.getCmsProperty("simpleString")).addSimpleTypeValue("Simple value");
+		contentObject = contentService.save(contentObject, false, true, null);
+		markObjectForRemoval(contentObject);
+
+		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);	
+		contentObject.removeCmsProperty("simpleString");
+		contentObject = contentService.save(contentObject, false, true, null);
+		
+		ContentObject object = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false); 
+		
+		CmsProperty simpleStringProperty = object.getCmsProperty("simpleString");
+		
+		Assert.assertTrue(((StringProperty)simpleStringProperty).hasNoValues(), "Property simpleString has values in object "+ object.getSystemName());
+
+		
+	}
+	
+	
+	@Test
+	public void testSaveObjectReferenceUsingSystemName(){
+		
+		RepositoryUser systemUser = getSystemUser();
+		
+		ContentObject contentObject = createContentObject(systemUser, "test-save-reference-using-system-name");
+		
+		contentObject = contentService.save(contentObject, false, true, null);
+		markObjectForRemoval(contentObject);
+
+		ContentObject reference = createContentObject(systemUser, "test-save-reference-using-system-name-reference-object");
+		reference = contentService.save(reference, false, true, null);
+		markObjectForRemoval(reference);
+		
+		//reload object
+		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
+		
+		//Reload referenced object and remove its id
+		String referenceId = new String(reference.getId());
+		
+		reference = contentService.getContentObject(reference.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
+		reference.setId(null);
+		
+		((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObject")).addSimpleTypeValue(reference);
+		
+		//Save object
+		contentService.save(contentObject, false, true, null);
+		
+		//Assert that object reference exists
+		assertObjectHasReference(contentObject.getId(), referenceId, "simpleContentObject");
+		
+		//remove property and try to save it using xml
+		contentObject.removeCmsProperty("simpleContentObject");
+		contentService.save(contentObject, false, true, null);
+		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
+		reference.setId(null);
+		((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObject")).addSimpleTypeValue(reference);
+		contentService.save(contentObject.xml(false, false, "simpleContentObject"), false, true, null);
+		//Assert that object reference exists
+		assertObjectHasReference(contentObject.getId(), referenceId, "simpleContentObject");
+		
+		//remove property and try to save it using json
+		contentObject.removeCmsProperty("simpleContentObject");
+		contentService.save(contentObject, false, true, null);
+		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false);
+		reference.setId(null);
+		((ObjectReferenceProperty)contentObject.getCmsProperty("simpleContentObject")).addSimpleTypeValue(reference);
+		contentService.save(contentObject.json(false, false, "simpleContentObject"), false, true, null);
+		//Assert that object reference exists
+		assertObjectHasReference(contentObject.getId(), referenceId, "simpleContentObject");
+		
+	}
+	
 	@Test
 	public void testRemovePropertiesViaXMLorJSONSave() throws Throwable {
 		
@@ -117,10 +195,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		RepositoryUser systemUser = getSystemUser();
 		
-		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE, systemUser, "test-remove-property-via-xml-json-with-binary-content", false);
+		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE,  systemUser,  "test-remove-property-via-xml-json-with-binary-content");
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		List<ResourceRepresentationType<String>> types = Arrays.asList(ResourceRepresentationType.XML,ResourceRepresentationType.JSON);
 		
@@ -276,16 +354,16 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			topic.addChild(childTopic1);
 
 			topic = topicService.save(topic);
-			addEntityToBeDeletedAfterTestIsFinished(topic);
+			markTopicForRemoval(topic);
 
 			//Create one contentObject to be used as a value to a content object property
-			ContentObject contentObjectForContentObjectPropertyValue = createContentObject(systemUser, "valueForContentObjectPropertyForRemovalOfProperties", false);
+			ContentObject contentObjectForContentObjectPropertyValue = createContentObject(systemUser, "valueForContentObjectPropertyForRemovalOfProperties");
 			contentObjectForContentObjectPropertyValue = contentService.save(contentObjectForContentObjectPropertyValue, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObjectForContentObjectPropertyValue);
+			markObjectForRemoval(contentObjectForContentObjectPropertyValue);
 
-			ContentObject contentObjectForContentObjectPropertyValue2 = createContentObject(systemUser, "valueForContentObjectPropertyForRemovalOfProperties2", false);
+			ContentObject contentObjectForContentObjectPropertyValue2 = createContentObject(systemUser, "valueForContentObjectPropertyForRemovalOfProperties2");
 			contentObjectForContentObjectPropertyValue2 = contentService.save(contentObjectForContentObjectPropertyValue2, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObjectForContentObjectPropertyValue2);
+			markObjectForRemoval(contentObjectForContentObjectPropertyValue2);
 
 	}
 	
@@ -303,7 +381,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		ContentObject contentObject = createArrayOfFileResources(0, systemUser);
 		String xml = contentObject.xml(false, true);
 		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, xml, logo, "fileResource.content", null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		//Check that update is also working
 		xml = contentObject.xml(false, true);
@@ -313,7 +391,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject = createArrayOfFileResources(1, systemUser);
 		String json = contentObject.json(false, true);
 		contentObject = saveAndAssertBinaryContentIsSaved(contentObject, json, logo, "fileResource.content", null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		//Check that update is also working
 		json = contentObject.json(false, true);
@@ -332,7 +410,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	
 	private ContentObject createArrayOfFileResources(int index, RepositoryUser systemUser) throws IOException{
 		
-		ContentObject contentObject = createContentObjectForType("arrayOfFileResourceTypeObject", systemUser, "test-save-xml-json-with-binary-content-arrayOfFileResourceTypeObject-"+index, true);
+		ContentObject contentObject = createContentObjectForType("arrayOfFileResourceTypeObject",  systemUser,  "test-save-xml-json-with-binary-content-arrayOfFileResourceTypeObject-"+index);
 
 		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "content");
 		
@@ -354,14 +432,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		RepositoryUser systemUser = getSystemUser();
 
 		//Add binary channel to object
-		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE, systemUser, "test-save-xml-json-with-binary-content", true);
+		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE,  systemUser,  "test-save-xml-json-with-binary-content");
 
 		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "image");
 		BinaryProperty imageProperty = (BinaryProperty)contentObject.getCmsProperty("image");
 		imageProperty.addSimpleTypeValue(logoBinaryChannel);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		//Save XML which contains binary content
 		String xml = contentObject.xml(false, true);
@@ -411,7 +489,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	private ContentObject saveAndAssertBinaryContentIsSaved(ContentObject contentObject, String contentSource, File fileWhichContainsContent, String property, Map<String, byte[]> binaryContent) throws Exception {
 		try{
 
-			contentObject = importService.importContentObject(contentSource, false, true, true, binaryContent);
+			ImportConfiguration configuration = ImportConfiguration.object()
+					.persist(PersistMode.PERSIST_ENTITY_TREE)
+					.version(false)
+					.updateLastModificationTime(true)
+					.addBinaryContent(binaryContent)
+					.build();
+
+			contentObject = importService.importContentObject(contentSource, configuration);
 			
 			//reload object 
 			ContentObject object = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
@@ -497,7 +582,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((StringProperty)object.getCmsProperty("profile.language")).addSimpleTypeValue("en");
 		
 		object = contentService.save(object, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(object);
+		markObjectForRemoval(object);
 
 		//remove system name and save again
 		object.setSystemName(null);
@@ -524,7 +609,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		loginToRepositoryRepresentingIdentityStoreAsSystem();
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personObject");
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.setCacheable(CacheRegion.NONE);
 		contentObjectCriteria.addSystemNameEqualsCriterion("IDENTITY_STORE_SYSTEM_PERSON");
 		
@@ -553,7 +637,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		//New object
 		object = contentService.save(object, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(object);
+		markObjectForRemoval(object);
 		
 		assertAccessibilityProperty(object, "accessibility.canBeReadBy");
 		assertAccessibilityProperty(object, "accessibility.canBeUpdatedBy");
@@ -598,11 +682,11 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	@Test
 	public void testSaveWithNoOwner(){
 
-		ContentObject object = createContentObjectForType("genericContentResourceObject", null, "testEmptyOwner", false);
+		ContentObject object = createContentObjectForType("genericContentResourceObject",  null,  "testEmptyOwner");
 	
 		//New object
 		object = contentService.save(object, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(object);
+		markObjectForRemoval(object);
 
 		Assert.assertNotNull(object.getOwner(), "Object was saved but owner is null");
 		repositoryContentValidator.compareRepositoryUsers(object.getOwner(), getSystemUser(), false, false);
@@ -652,7 +736,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser,"testContains", false);
+		ContentObject contentObject = createContentObject(systemUser,"testContains");
 
 		//Add text in a first level property
 		((StringProperty)contentObject.getCmsProperty("simpleString")).addSimpleTypeValue("Text in first level property");
@@ -667,7 +751,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((StringProperty)contentObject.getCmsProperty("commentSingle.comment.body")).setSimpleTypeValue("Text in a fourth level property");
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
 		
@@ -721,7 +805,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		for (int i=0;i<10;i++){
 
-			ContentObject contentObject = createContentObject(systemUser,"testRankingIn"+i, false);
+			ContentObject contentObject = createContentObject(systemUser,"testRankingIn"+i);
 
 			((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("testRankingInSearch"+i);
 			//Default values will be loaded
@@ -729,14 +813,12 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			contentObject.getCmsProperty("longEnum");
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		}
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 
 		contentObjectCriteria.addCriterion(CriterionFactory.contains("profile.title", "testRank*"));
-		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 		
@@ -751,8 +833,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 
 		contentObjectCriteria.addCriterion(CriterionFactory.equals("profile.title", "testRankingIn1"));
-		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 		
@@ -775,26 +855,28 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
 		topic.setTaxonomy(getSubjectTaxonomy());
 		
-		ContentObject contentObject1 = createContentObject(systemUser, "test-batch-save-1", true);
+		ContentObject contentObject1 = createContentObject(systemUser, "test-batch-save-1");
 
 		((StringProperty)contentObject1.getCmsProperty("singleComplexNotAspectWithCommonAttributes.additionalName")).setSimpleTypeValue("Test");
 		((TopicReferenceProperty)contentObject1.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		
 		contentObject1 = contentService.save(contentObject1, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject1);
 		
-		ContentObject contentObject2 = createContentObject(systemUser, "test-batch-save-2", true);
+		//Topic has been saved along with object save
+		markTopicForRemoval(topicService.getTopic(topic.getName(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false));
+		markObjectForRemoval(contentObject1);
+		
+		ContentObject contentObject2 = createContentObject(systemUser, "test-batch-save-2");
 
 		((StringProperty)contentObject2.getCmsProperty("singleComplexNotAspectWithCommonAttributes.additionalName")).setSimpleTypeValue("Test");
 		((TopicReferenceProperty)contentObject2.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		
 		contentObject2 = contentService.save(contentObject2, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject2);
+		markObjectForRemoval(contentObject2);
 		
 		//Retrieve both objects as resource collection (XML and JSON)
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addSystemNameEqualsAnyCriterion(Arrays.asList("test-batch-save-1","test-batch-save-2"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		String xmlResourceCollection = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.XML);
@@ -811,7 +893,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Retrieve objects using criteria
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addSystemNameEqualsAnyCriterion(Arrays.asList(newTitle+"-1",newTitle+"-2"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -832,7 +913,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Retrieve objects using criteria
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addSystemNameEqualsAnyCriterion(Arrays.asList(newJSONTitle+"-1",newJSONTitle+"-2"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -858,7 +938,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Retrieve objects using criteria
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addSystemNameEqualsAnyCriterion(Arrays.asList(newInstanceTitle+"-1",newInstanceTitle+"-2"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -898,10 +977,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				getSystemUser());
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Create content object
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-delete-with-topic-and-space-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(), "test-delete-with-topic-and-space-reference");
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
 		
@@ -975,13 +1054,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
 		topic.setTaxonomy(getSubjectTaxonomy());
 		
-		ContentObject contentObject = createContentObject(systemUser, "test-export-with-complex-with-id", true);
+		ContentObject contentObject = createContentObject(systemUser, "test-export-with-complex-with-id");
 
 		((StringProperty)contentObject.getCmsProperty("singleComplexNotAspectWithCommonAttributes.additionalName")).setSimpleTypeValue("Test");
 		((TopicReferenceProperty)contentObject.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markTopicForRemoval(topicService.getTopic(topic.getName(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false));
+		markObjectForRemoval(contentObject);
 		
 		
 		//Retrieve content object
@@ -1030,13 +1110,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
 		topic.setTaxonomy(getSubjectTaxonomy());
 		
-		ContentObject contentObject = createContentObject(systemUser, "test-export-with-complex-no-id", true);
+		ContentObject contentObject = createContentObject(systemUser, "test-export-with-complex-no-id");
 
 		((StringProperty)contentObject.getCmsProperty("singleComplexNotAspectWithNoCommonAttributes.additionalName")).setSimpleTypeValue("Test");
 		((TopicReferenceProperty)contentObject.getCmsProperty("singleComplexNotAspectWithNoCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markTopicForRemoval(topicService.getTopic(topic.getName(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false));
+		markObjectForRemoval(contentObject);
 		
 		
 		//Retrieve content object
@@ -1077,13 +1158,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
 		topic.setTaxonomy(getSubjectTaxonomy());
 		
-		ContentObject contentObject = createContentObject(systemUser, "test-update-with-complex-no-id", true);
+		ContentObject contentObject = createContentObject(systemUser, "test-update-with-complex-no-id");
 
 		((StringProperty)contentObject.getCmsProperty("singleComplexNotAspectWithNoCommonAttributes.additionalName")).setSimpleTypeValue("Test");
 		((TopicReferenceProperty)contentObject.getCmsProperty("singleComplexNotAspectWithNoCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markTopicForRemoval(topicService.getTopic(topic.getName(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false));
+		markObjectForRemoval(contentObject);
 		
 		
 		//Now retrieve content object
@@ -1117,10 +1199,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "test-save-in-right-node-path", true);
+		ContentObject contentObject = createContentObject(systemUser, "test-save-in-right-node-path");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		Calendar created = ((CalendarProperty)contentObject.getCmsProperty("profile.created")).getSimpleTypeValue();
 		
@@ -1140,10 +1222,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	@Test
 	public void testGetContentObjectAsContentObjectOutcome() throws Throwable{
 		
-		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportAsContentObjectOutcome", false);
+		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportAsContentObjectOutcome");
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		
 		CmsOutcome<ContentObject> outcome = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_LIST, FetchLevel.ENTITY, CacheRegion.NONE, null,false);
@@ -1163,11 +1245,11 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	@Test
 	public void testGetContentObjectXmlorJSON() throws Throwable{
 		
-		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportXmlJSON", false);
+		ContentObject contentObject =  createContentObject(getSystemUser(), "contentObjectTestExportXmlJSON");
 		contentObject.getCmsProperty("stringEnum");
 		contentObject.getCmsProperty("longEnum");
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		String contentObjectString = null;
 		String contentObjectStringFromServiceUsingId = null;
@@ -1190,7 +1272,11 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				
 				contentObjectStringFromServiceUsingId = contentService.getContentObject(contentObject.getId(), output, FetchLevel.FULL,CacheRegion.NONE, null, true);
 
-				ContentObject contentObjectFromServiceWithId = importDao.importContentObject(contentObjectStringFromServiceUsingId, false, false, ImportMode.DO_NOT_SAVE, null);
+				ImportConfiguration configuration = ImportConfiguration.object()
+						.persist(PersistMode.DO_NOT_PERSIST)
+						.build();
+
+				ContentObject contentObjectFromServiceWithId = importDao.importContentObject(contentObjectStringFromServiceUsingId, configuration);
 				
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectFromServiceWithId, true);
 			
@@ -1213,7 +1299,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE, systemUser, "testSearchUsingNumbericCriterion", false);
+		ContentObject contentObject = createContentObjectForType(TEST_CONTENT_TYPE,  systemUser,  "testSearchUsingNumbericCriterion");
 		
 		((LongProperty)contentObject.getCmsProperty("simpleLong")).setSimpleTypeValue(Long.valueOf(5));
 		((LongProperty)contentObject.getCmsProperty("simpleLongMultiple")).addSimpleTypeValue(Long.valueOf(10));
@@ -1232,7 +1318,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((CalendarProperty)contentObject.getCmsProperty("simpleDateMultiple")).addSimpleTypeValue(simpleDateValue);
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		addCriterionForPropertyAndAssertResult(contentObject.getSystemName(), "simpleLong=\"5\"");
 		addCriterionForPropertyAndAssertResult(contentObject.getSystemName(), "simpleLong!=\"4\"");
@@ -1310,7 +1396,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	private void addCriterionForPropertyAndAssertResult(String systemName,String expression) {
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.addSystemNameEqualsCriterion(systemName);
 		
 		CriterionFactory.parse(expression, contentObjectCriteria);
@@ -1324,13 +1409,14 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObjectForType("genericContentResourceObject", systemUser, "testEmptyComplexCmsPropertySave", false);
+		ContentObject contentObject = createContentObjectForType("genericContentResourceObject",  systemUser,  "testEmptyComplexCmsPropertySave");
 		
 		//Create an empty complex property
 		ComplexCmsProperty workflow = (ComplexCmsProperty) contentObject.getCmsProperty("workflow");
 		
 		//Save object
 		contentObject = contentService.save(contentObject, false, true, null);
+		markObjectForRemoval(contentObject);
 		
 		Assert.assertNull(workflow.getId(), "Empty complex property has an identifier where it should not have" );
 		
@@ -1353,12 +1439,12 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObjectForType("genericContentResourceObject", systemUser, "testEmptyWebPublication", false);
+		ContentObject contentObject = createContentObjectForType("genericContentResourceObject",  systemUser,  "testEmptyWebPublication");
 		
 		((BooleanProperty)contentObject.getCmsProperty("webPublication.publishCreatorName")).setSimpleTypeValue(false);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		try{
 			((BooleanProperty)contentObject.getCmsProperty("webPublication.publishCreatorName")).setSimpleTypeValue(true);
@@ -1382,10 +1468,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser,"testCopy", true);
+		ContentObject contentObject = createContentObject(systemUser, "testCopy");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		ContentObject thirdContentObject = null;
 		
@@ -1393,7 +1479,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			ContentObject clonedContentObject = contentService.copyContentObject(contentObject.getId());
 
 			clonedContentObject = contentService.save(clonedContentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(clonedContentObject);
+			markObjectForRemoval(clonedContentObject);
 			
 			Assert.assertFalse(clonedContentObject.getId().equals(contentObject.getId()), "Identifiers should not be the same");
 
@@ -1408,7 +1494,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			ContentObject clonedContentObject = contentService.copyContentObject(thirdContentObject.getId());
 
 			clonedContentObject = contentService.save(clonedContentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(clonedContentObject);
+			markObjectForRemoval(clonedContentObject);
 
 			Assert.assertFalse(clonedContentObject.getId().equals(contentObject.getId()), "Identifiers should not be the same");
 
@@ -1433,10 +1519,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	{
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser,"testLastModifiedChange", true);
+		ContentObject contentObject = createContentObject(systemUser, "testLastModifiedChange");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		Calendar lastModified = ((CalendarProperty)contentObject.getCmsProperty("profile.modified")).getSimpleTypeValue();
 		
@@ -1451,10 +1537,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertFalse(newLastModified.equals(lastModified), "Content Object profile.modified date has not changed.");
 		
 		//Save new content object with flag set to false
-		contentObject = createContentObject(systemUser,"testLastModifiedChange2", true);
+		contentObject = createContentObject(systemUser, "testLastModifiedChange2");
 
 		contentObject = contentService.save(contentObject, false, false, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		
 		//Last modified must exist in newly created object
@@ -1521,19 +1607,18 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		int numberOfObjects = 5;
 		for (int i=0;i<numberOfObjects;i++){
 
-			ContentObject contentObject = createContentObject(systemUser,"testProjections"+i, true);
+			ContentObject contentObject = createContentObject(systemUser, "testProjections"+i);
 
 			((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("testProjections");
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		}
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 
 		contentObjectCriteria.addCriterion(CriterionFactory.equals("profile.title","testProjections"));
 		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		contentObjectCriteria.addPropertyPathWhoseValueWillBePreLoaded("profile.title");
 		contentObjectCriteria.addPropertyPathWhoseValueWillBePreLoaded("profile.language");
@@ -1586,7 +1671,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "unmanagedImage", true);
+		ContentObject contentObject = createContentObject(systemUser, "unmanagedImage");
 
 		BinaryChannel logoBinaryChannel = loadUnManagedBinaryChannel(logo.getName(), "unmanagedImage");
 		BinaryChannel logo2BinaryChannel = loadUnManagedBinaryChannel(logo2.getName(), "unmanagedImage");
@@ -1597,7 +1682,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		contentObject = contentService.save(contentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		ContentObject contentObjectReloaded = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
 				FetchLevel.ENTITY, CacheRegion.NONE, null, false);
@@ -1665,7 +1750,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "image", true);
+		ContentObject contentObject = createContentObject(systemUser, "image");
 
 		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "image");
 		BinaryChannel logo2BinaryChannel = loadManagedBinaryChannel(logo2, "image");
@@ -1676,7 +1761,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		contentObject = contentService.save(contentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		ContentObject contentObjectReloaded = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
 				FetchLevel.ENTITY, CacheRegion.NONE, null, false);
@@ -1738,10 +1823,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "testSaveCreationDate", true);
+		ContentObject contentObject = createContentObject(systemUser, "testSaveCreationDate");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		//Retrieve content object node
 		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
@@ -1759,7 +1844,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "testSaveWithProvidedCreationDate", true);
+		ContentObject contentObject = createContentObject(systemUser, "testSaveWithProvidedCreationDate");
 
 		Calendar userCreationDate = Calendar.getInstance();
 		userCreationDate.add(Calendar.YEAR, 1);
@@ -1767,7 +1852,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((CalendarProperty)contentObject.getCmsProperty("profile.created")).setSimpleTypeValue(userCreationDate);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, 
 				null, false);
@@ -1792,10 +1877,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "testUpdateCreationDate", true);
+		ContentObject contentObject = createContentObject(systemUser, "testUpdateCreationDate");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		//reload content object
 		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, 
@@ -1837,10 +1922,10 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "validSystemName", true);
+		ContentObject contentObject = createContentObject(systemUser, "validSystemName");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 
 		//Now provide invalid system name
@@ -1921,6 +2006,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		Assert.assertEquals(contentObject.getSystemName(), systemNameAfterSave, "System name was not transformed correctly");
 		
+		markObjectForRemoval(contentObject);
+		
 	}
 
 	@Test
@@ -1928,13 +2015,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		String expectedSystemName = "titleForSystemName";
 
-		ContentObject contentObject = createContentObject(repositoryUserService.getSystemRepositoryUser(), "", false);
+		ContentObject contentObject = createContentObject(repositoryUserService.getSystemRepositoryUser(), "");
 
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(expectedSystemName);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		Assert.assertEquals(contentObject.getSystemName(), expectedSystemName);
 		
@@ -1967,7 +2054,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject.setSystemName(null);
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(expectedSystemName);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		Assert.assertEquals(contentObject.getSystemName(), expectedSystemName);
 
 		expectedSystemName = "Inv{a}li[dC]ha! ra?ct^e&rs";
@@ -1976,7 +2063,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject.setSystemName(null);
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(expectedSystemName);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		Assert.assertEquals(contentObject.getSystemName(), "Inv-a-li-dC-ha-ra-ct-e-rs");
 
 		expectedSystemName = "Ελληνικά";
@@ -1985,7 +2072,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject.setSystemName(null);
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(expectedSystemName);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		Assert.assertEquals(contentObject.getSystemName(), "Ellhnika");
 
 		//Test system name is unique
@@ -1996,9 +2083,9 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		
 		//Create a content object whose system name contains underscore
-		ContentObject contentObject2 = createContentObject(repositoryUserService.getSystemRepositoryUser(), "testunder_score", false);
+		ContentObject contentObject2 = createContentObject(repositoryUserService.getSystemRepositoryUser(), "testunder_score");
 		contentObject2 = contentService.save(contentObject2, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject2);
+		markObjectForRemoval(contentObject2);
 		
 		expectedSystemName = "testunder";
 		loadAccessibilityProperties(contentObject);
@@ -2006,7 +2093,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject.setSystemName(null);
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue(expectedSystemName);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		Assert.assertEquals(contentObject.getSystemName(), "testunder");
 		
 		assertExceptionIsThrownForNonUniqueSystemName("testUNder_SCORE");
@@ -2026,7 +2113,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	private void assertExceptionIsThrownForNonUniqueSystemName(String systemName) {
 		
-		ContentObject anotherContentObject = createContentObject(repositoryUserService.getSystemRepositoryUser(), systemName, false);
+		ContentObject anotherContentObject = createContentObject(repositoryUserService.getSystemRepositoryUser(), systemName);
 		
 	
 		try{
@@ -2040,6 +2127,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			Assert.assertEquals(anotherContentObject.getSystemName(), alternativeSystemName, "A new contentObject was saved with existing system name "+systemName);
 			
 			TestLogPolicy.setDefaultLevelForLogger(PopulateContentObject.class.getName());
+			
+			markObjectForRemoval(anotherContentObject);
 		}
 		catch(Exception e){
 			//Retrieve the exception cause
@@ -2105,21 +2194,20 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		for (int i=0;i<10;i++){
 
-			ContentObject contentObject = createContentObject(systemUser,"testOffsetAndLmit"+i, true);
+			ContentObject contentObject = createContentObject(systemUser, "testOffsetAndLmit"+i);
 
 			((StringProperty)contentObject.getCmsProperty("profile.contentObjectStatus")).setSimpleTypeValue(ContentObjectStatus.published.toString());
 
 			((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("testOffsetAndLmit");
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		}
 
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 
 		contentObjectCriteria.addCriterion(CriterionFactory.equals("profile.title", "testOffsetAndLmit"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 
 		assertTotalCountForOffsetAndLimit(contentObjectCriteria, 0,0,10,0);
@@ -2153,13 +2241,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE, true);
+		ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE);
 
 		//Provide empty value for string
 		((StringProperty)contentObject.getCmsProperty("simpleString")).setSimpleTypeValue("");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 
 		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
@@ -2195,7 +2283,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		newTaxonomy = taxonomyService.save(newTaxonomy);
 		
-		addEntityToBeDeletedAfterTestIsFinished(newTaxonomy);
+		markTaxonomyForRemoval(newTaxonomy);
 
 		Topic topic = JAXBTestUtils.createTopic("firstTopic", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
@@ -2219,8 +2307,9 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		secondTopic.setTaxonomy(taxonomyService.getBuiltInSubjectTaxonomy("en"));
 		
 		secondTopic = topicService.save(secondTopic);
+		markTopicForRemoval(secondTopic);
 		
-		ContentObject contentObject = createContentObject(systemUser,"testTopicPropertyCriterion", false);
+		ContentObject contentObject = createContentObject(systemUser, "testTopicPropertyCriterion");
 
 		((TopicReferenceProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(topic);
 		((TopicReferenceProperty)contentObject.getCmsProperty("simpleTopic")).setSimpleTypeValue(childTopic1);
@@ -2228,7 +2317,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(secondTopic);
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		String systemName = contentObject.getSystemName();
 
@@ -2272,7 +2361,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		Taxonomy newTaxonomy = JAXBTestUtils.createTaxonomy(taxonomyName,cmsRepositoryEntityFactory.newTaxonomy());
 		newTaxonomy = taxonomyService.save(newTaxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(newTaxonomy);
+		markTaxonomyForRemoval(newTaxonomy);
 
 		Topic topic = JAXBTestUtils.createTopic("firstJoinTopic", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),systemUser);
@@ -2291,8 +2380,9 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		secondTopic.addChild(childSecondTopic);
 		secondTopic.setTaxonomy(taxonomyService.getBuiltInSubjectTaxonomy("en"));
 		secondTopic = topicService.save(secondTopic);
+		markTopicForRemoval(secondTopic);
 		
-		ContentObject contentObject = createContentObject(systemUser,"testTopicJoinCriterion", false);
+		ContentObject contentObject = createContentObject(systemUser, "testTopicJoinCriterion");
 
 		((TopicReferenceProperty)contentObject.getCmsProperty("testTopic")).addSimpleTypeValue(topic);
 		((TopicReferenceProperty)contentObject.getCmsProperty("simpleTopic")).setSimpleTypeValue(childTopic1);
@@ -2300,14 +2390,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(childTopic1);
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);	
+		markObjectForRemoval(contentObject);	
 		
 		String systemName = contentObject.getSystemName();
 
 		//Assert search by using topic names instead of id and
 		//by using both TopicPropertyCriterion and simple criterion
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		createAllPossibleTopicReferenceCriterionForTopicAndAssertResult(contentObjectCriteria, "testTopic",topic,systemName, false);
 		
@@ -2526,7 +2615,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects
 		for (Integer i: indeces){
 
-			ContentObject contentObject = createContentObject(systemUser,"testSearchContentObjectsOrderByChildProperty"+i, true);
+			ContentObject contentObject = createContentObject(systemUser, "testSearchContentObjectsOrderByChildProperty"+i);
 
 			((StringProperty)contentObject.getCmsProperty("profile.contentObjectStatus")).setSimpleTypeValue(ContentObjectStatus.published.toString());
 
@@ -2545,7 +2634,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		}
 
 		assertOrderedResultsWithOnlyOneChildProperty(0,20, letters, numbers);
@@ -2782,7 +2871,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addSystemNameContainsCriterion("testSearchContentObjectsOrderByChildProperty*");
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.setOffsetAndLimit(offset, limit);
 		
 		return contentObjectCriteria;
@@ -2797,7 +2885,6 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		ContentObject mainContentObject = createAndPublishSpecificContentObject(systemUser,"testContentObjectJoinInSearchMainContentObject", TEST_CONTENT_TYPE);
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		//Create content object references
 		createContentObjectReferenceForPropertyAndAssertContentObjectReferenceCriterionInSearch(systemUser, mainContentObject, contentObjectCriteria, "simpleContentObject", "testContentObjectJoinInSearchForSimpleContentObjectPropertyReferenceOfType"+TEST_CONTENT_TYPE, TEST_CONTENT_TYPE);
@@ -2956,12 +3043,12 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	private ContentObject createAndPublishSpecificContentObject(RepositoryUser systemUser, String systemName, String type) {
 		
-		ContentObject contentObject = createContentObjectForType(type,systemUser,systemName, false);
+		ContentObject contentObject = createContentObjectForType(type, systemUser, systemName);
 
 		((StringProperty)contentObject.getCmsProperty("profile.contentObjectStatus")).setSimpleTypeValue(ContentObjectStatus.published.toString());
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		return contentObject;
 	}
@@ -2973,7 +3060,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		for (int i=0;i<10;i++){
 
-			ContentObject contentObject = createContentObject(systemUser,"testSearchContentObjects"+i, true);
+			ContentObject contentObject = createContentObject(systemUser, "testSearchContentObjects"+i);
 
 			((StringProperty)contentObject.getCmsProperty("profile.contentObjectStatus")).setSimpleTypeValue(ContentObjectStatus.published.toString());
 
@@ -2984,15 +3071,13 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 			
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		}
 
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 
 		contentObjectCriteria.addCriterion(CriterionFactory.equals("profile.title", "testSearchContentObjects"));
-		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 		
@@ -3016,32 +3101,45 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		for (ContentObject co : outcome.getResults()){
 			
-			ImportMode importModeForLog = null;
-			for (ImportMode importMode : ImportMode.values()){
+			PersistMode persistModeForLog = null;
+			
+			for (PersistMode persistMode : PersistMode.values()){
 				
-				importModeForLog = importMode;
+				persistModeForLog = persistMode;
 				
+				ImportConfiguration configuration = ImportConfiguration.object()
+						.persist(persistMode)
+						.version(false)
+						.updateLastModificationTime(true)
+						.build();
+
 				String coXml = co.xml(prettyPrint);
 
-				ContentObject coFromXml = importDao.importContentObject(coXml, false, true, importMode, null);
+				ContentObject coFromXml = importDao.importContentObject(coXml, configuration);
 
 				String coXmlFromServiceWithId = contentService.getContentObject(co.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, 
 						CacheRegion.NONE, null, false);
 
-				ContentObject coFromServiceWithId = importDao.importContentObject(coXmlFromServiceWithId, false, false, importMode, null);
+				configuration = ImportConfiguration.object()
+						.persist(persistMode)
+						.version(false)
+						.updateLastModificationTime(false)
+						.build();
+
+				ContentObject coFromServiceWithId = importDao.importContentObject(coXmlFromServiceWithId, configuration);
 
 				try{
 					repositoryContentValidator.compareContentObjects(coFromXml, coFromServiceWithId, true);
 				}			
 				catch(Throwable e){
 					
-					logger.error("ImportMode \n{}",importModeForLog);
+					logger.error("PersistMode \n{}",persistModeForLog);
 					logger.error("Initial \n{}",TestUtils.prettyPrintXml(coXml));
 					logger.error("Using Id \n{}",TestUtils.prettyPrintXml(coXmlFromServiceWithId));
 					throw e;
 				}
 				
-				if (ImportMode.DO_NOT_SAVE != importMode){
+				if (PersistMode.DO_NOT_PERSIST != persistMode){
 					co = coFromServiceWithId;
 				}
 			}
@@ -3056,7 +3154,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "imageURLs", true);
+		ContentObject contentObject = createContentObject(systemUser, "imageURLs");
 
 		BinaryChannel logoBinaryChannel = loadManagedBinaryChannel(logo, "image");
 		BinaryChannel logo2BinaryChannel = loadManagedBinaryChannel(logo2, "image");
@@ -3069,7 +3167,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		contentObject = contentService.save(contentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		//Check that existent instances have been updated with repository and host parameters
 		assertBinaryChannelURLs(logoBinaryChannel, imageProperty.getPermanentPath(), contentObject);
@@ -3129,8 +3227,8 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		String contentApiURL = AstroboaClientContextHolder.getActiveCmsRepository().getRestfulApiBasePath();
 		String serverBaseURL = AstroboaClientContextHolder.getActiveCmsRepository().getServerURL();
 		
-		final String expectedBaseUrl = serverBaseURL + contentApiURL+"/"+TestConstants.TEST_REPOSITORY_ID+"/contentObject/";
-		final String expectedRelativeBaseUrl =  contentApiURL+"/"+TestConstants.TEST_REPOSITORY_ID+"/contentObject/";
+		final String expectedBaseUrl = serverBaseURL + contentApiURL+"/"+TestConstants.TEST_REPOSITORY_ID+"/"+CmsConstants.RESOURCE_API_CONTENT_URI_PATH+"/";
+		final String expectedRelativeBaseUrl =  contentApiURL+"/"+TestConstants.TEST_REPOSITORY_ID+"/"+CmsConstants.RESOURCE_API_CONTENT_URI_PATH+"/";
 
 		Assert.assertEquals(binaryChannel.buildResourceApiURL(null, null, null, null, null, true, false), expectedBaseUrl+contentObject.getSystemName()+ "/"+binaryPropertyPermanentPath+ "["+binaryChannel.getId()+"]", "Invalid resource api URL");
 		Assert.assertEquals(binaryChannel.buildResourceApiURL(null, null, null, null, null, false, false), expectedBaseUrl+contentObject.getId()+ "/"+binaryPropertyPermanentPath+ "["+binaryChannel.getId()+"]", "Invalid resource api URL");
@@ -3158,11 +3256,11 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	public void testSaveOfContentObjectPropertyWhichAcceptsAnyContentObjectOfSomeType(){
 
 		//Create main content object
-		ContentObject mainContentObject = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "mainContentObject", false);
+		ContentObject mainContentObject = createContentObjectForType(TEST_CONTENT_TYPE,  getSystemUser(),  "mainContentObject");
 
 		mainContentObject = contentService.save(mainContentObject, false, true, null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(mainContentObject);
+		markObjectForRemoval(mainContentObject);
 		
 		assertSaveOfContentObjectReference(mainContentObject, TEST_CONTENT_TYPE, "referenceOfAnyContentObjectOfTypeTestType", false);
 		assertSaveOfContentObjectReference(mainContentObject, EXTENDED_TEST_CONTENT_TYPE, "referenceOfAnyContentObjectOfTypeTestType",false);
@@ -3262,11 +3360,11 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	
 	private void assertSaveOfContentObjectReference(ContentObject mainContentObject, String contentTypeOfContentObjectReference, String propertyPath, boolean shouldThrowException ){
 		
-		ContentObject contentObject = createContentObjectForType(contentTypeOfContentObjectReference, getSystemUser(), "contentObjectOfType"+contentTypeOfContentObjectReference+propertyPath.replaceAll("\\[","").replaceAll("\\]",""), false);
+		ContentObject contentObject = createContentObjectForType(contentTypeOfContentObjectReference, getSystemUser(), "contentObjectOfType"+contentTypeOfContentObjectReference+propertyPath.replaceAll("\\[","").replaceAll("\\]",""));
 
 		contentObject = contentService.save(contentObject, false, true, null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		//Save reference.
 		ObjectReferenceProperty contentObjectProperty = (ObjectReferenceProperty)mainContentObject.getCmsProperty(propertyPath);
@@ -3319,15 +3417,20 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		topic.addChild(childTopic1);
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
-		ContentObject contentObject =  createContentObjectAndPopulateAllProperties(getSystemUser(), "contentObjectTestExportPreFetchMechanism", false);
+		//Create object to be used in referencec
+		ContentObject objectReference = createContentObject(getSystemUser(), "contentObjectTestExportPreFetchMechanismReference");
+		objectReference = contentService.save(objectReference, false, true, null);
+		markObjectForRemoval(objectReference);
+		
+		ContentObject contentObject =  createContentObjectAndPopulateAllProperties(getSystemUser(), "contentObjectTestExportPreFetchMechanism");
 		
 		((LongProperty)contentObject.getCmsProperty("statisticTypeMultiple.viewCounter")).setSimpleTypeValue((long)1);
 		((LongProperty)contentObject.getCmsProperty("statisticType.viewCounter")).setSimpleTypeValue((long)1);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		List<String> propertyPaths = Arrays.asList("profile.created", "allPropertyTypeContainer");
 		
@@ -3842,4 +3945,16 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 	}
 
+	private void assertObjectHasReference(String objectId, String referencedObjectId, String property){
+		
+		ContentObject object = contentService.getContentObject(objectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, null, false); 
+		
+		CmsProperty propertyReference = object.getCmsProperty(property);
+		
+		Assert.assertTrue(propertyReference instanceof ObjectReferenceProperty, "Property "+property+ " is not of type "+ValueType.ObjectReference+ " in object "+ object.getSystemName());
+
+		Assert.assertTrue(((ObjectReferenceProperty)propertyReference).hasValues(), "Property "+property+ " has no values in object "+ object.getSystemName());
+		
+		Assert.assertEquals(referencedObjectId, ((ObjectReferenceProperty)propertyReference).getSimpleTypeValue().getId(), "Property "+property+ " value is an invalid reference in object "+ object.getSystemName());
+	}
 }

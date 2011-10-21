@@ -86,6 +86,9 @@
 		
 		<xs:attributeGroup ref="tns:commonEntityAttributes"/>
 		
+		<!-- This attribute has been deprecated and will be removed in the future releases.
+		All functionality regarding this feature has been removed but this attribute remains
+		for backwards compatibility reasons-->
 		<xs:attribute name="systemBuiltinEntity" type="xs:boolean" use="optional"/>
 	</xs:complexType>
 
@@ -112,166 +115,6 @@
 
 					<xs:element name="accessibility" minOccurs="1"
 							maxOccurs="1" type="accessibilityType:accessibilityType" />
-							
-					<xs:element name="resourceRepresentationTemplateObjectReference" 
-						minOccurs="0" 
-						maxOccurs="1"
-						type="tns:contentObjectReferenceType"
-						tns:acceptedContentTypes="resourceRepresentationTemplateObject"
-						tns:description="A reference to a resourceRepresentationTemplateObject instance. Objects of type 'resourceRepresentationTemplateObject' 
-							are used to hold templates for creating views and rendering 
-							content objects to various representation formats (i.e. web pages, pdf documents, etc.). 
-							For example the template code stored inside the 'xhtml' and 'pdf' properties of a resourceRepresentationTemplateObject 
-							could be respectively a 'facelets page' for rendering a web page and an 'xslt' for rendering pdfs. 
-							You may use this property if you require to store resource representation templates inside ASTROBOA.
-							If you want to just provide a sympolic name for the required template and let each content application to decide how to interpret 
-							the sympolic name then you may use the other provided property which follows. It is called 'resourceRepresentationTemplateName' 
-							and is of type 'bccmsmodel:topicType'">
-							
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									<tns:displayName>Reference to Presentation Template</tns:displayName>
-									<tns:description>
-									<p>
-									 This field holds a reference to a content object that stores the template to be used 
-									 when presenting instances of this content type.
-									</p>
-									<p> 
-									 There are two options concerning presentation templates: 
-									</p>
-									<ul>
-									<li> 
-									 The first option is to store the template code in Astroboa. 
-									 In this case create a new content object of type "Presentation Template", 
-									 add your template code there and then use this field to add a reference to the 
-									 "Presentation Template" Object you have just created. You may link your template object to as many 
-									 content objects as you wish.
-									 </li>
-									 
-									 <li>
-									 The second option is to store your template in a file outside Astroboa. In this case you should use the field 
-									 that follows and is named "Presentation Template Name", in order to capture the name of the file into which the template code is stored.
-									 Read the information about that field to learn more.
-									 </li>
-									 </ul>
-									 <p>
-									 It is not required to add a presentation template for each content object instance that you create. 
-									 When the Astroboa web publication infrastructure is utilized (i.e. portal-commons library with Facelets+JSF) 
-									 there are rules that automatically determine which presentation template to use per content object type. 
-									 The common case is to use this or the next field when you want to override the default rules and instruct your 
-									 content application to use a specific presentation template for this content object instance. 
-									 Read the information about content objects of type "Presentation Template" to learn more.
-									 </p>  
-									</tns:description>
-								</xs:documentation>
-								<xs:documentation xml:lang="el">
-									<tns:displayName>Πρότυπη Σελίδα</tns:displayName>
-									<tns:description>
-										<p>
-										Σε αυτό το πεδίο μπορείτε να προσθέσετε την "Πρότυπη Σελίδα" μεσω της οποίας θα γίνεται η παρουσίαση
-										αυτού του αντικειμένου. Η προσθήκη γίνεται μέσω αναφοράς σε ένα αντικείμενο τύπου "Πρότυπη Σελίδα" το οποίο 
-										περιέχει τον κώδικα της πρότυπης σελίδας.
-										</p>
-										<p>
-										Γενικά υπάρχουν δύο εκδοχές όσον αφορά στις πρότυπες σελίδες:
-										</p>
-										<ul>
-										<li>
-										Η πρώτη είναι να αποθηκεύσετε την πρότυπη σελίδα στο Astroboa. 
-										Σε αυτή την περίπτωση πρέπει πρώτα να δημιουργήσε ένα αντικείμενο τύπου "Πρότυπο Σελίδας" και 
-										μέσα σε αυτό να προσθέσετε το κώδικα του προτύπου. Κατόπιν σε αυτό το πεδίο που βρίσκεστε τώρα θα προσθέσετε 
-										μια αναφορά στο αντικείμενο που δημιουργήσατε. Φυσικά μπορείτε να χρησιμοποιήσετε την "Πρότυπη Σελίδα" σε όσα αντικείμενα
-										θέλετε.
-										</li>
-										
-										<li>
-										Η δεύτερη εκδοχή είναι να αποθηκεύεται τις πρότυπες σελίδες σε αρχεία εκτός του Astroboa. 
-										Σε αυτή την περίπτωση δεν χρησιμοποιείτε αυτό το πεδίο αλλα το πεδίο που ακολουθεί και ονομάζεται "Όνομα Πρότυπης Σελίδας". 
-										Σε εκείνο το πεδίο θα καταγράψετε το όνομα του αρχείου στο οποίο βρίσκεται ο κώδικας της πρότυπης σελίδας. 
-										Διαβάστε τις οδηγίες του πεδίου που ακολουθεί για να μάθετε περισσότερα. 
-										</li>
-										</ul>
-										<p>
-										Συνήθως δεν απαιτείται να συμπληρώνετε την "Πρότυπη Σελίδα" για κάθε αντικείμενο που φτιάχνετε. 
-										Οι βιβλιοθήκες του Astroboa που φτιάχνουν την Διαδικτυακή πύλη έχουν κανόνες που αυτόματα επιλέγουν 
-										την κατάλληλη "Πρότυπη Σελίδα" για κάθε τύπο αντικειμένου. 
-										Εσείς χρησιμοποιείται αυτο και το επόμενο πεδίο για να παρακάμψεται την αυτόματη επιλογή και να επιλέξετε διαφορετικό "Πρότυπο" 
-										για ένα συγκεκριμένο αντικείμενο. Μπορείτε να διαβάσετε τις οδηγίες που συνοδεύουν τον τύπο αντικειμένου με όνομα "Πρότυπη Σελίδα" 
-										για να μάθετε περισσότερα.
-										</p>
-									</tns:description>
-								</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						
-						<xs:element name="resourceRepresentationTemplateName"
-							type="tns:topicType"
-							tns:acceptedTaxonomies="resourceRepresentationTemplateName" 
-							minOccurs="0" 
-							maxOccurs="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									<tns:displayName>Presentation Template Name</tns:displayName>
-									<tns:description>
-										<p>
-										This is the symbolic name of a template to be used when presenting instances of this content type. 
-										To allow easy management, the template names are topics provided through an astroboa vocabulary 
-										named after the name of this field
-										The symbolic name can be interpreted and mapped 
-										differently by different content applications.
-										</p>
-										<p>
-										According to the templating engine that the content application utilizes the appropriate template file should be 
-										located by means of the symbolic name. 
-										</p>
-										<p>
-										When the Astroboa web publication infrastructure is utilized (i.e. portal-commons library with Facelets+JSF) 
-										the name corresponds to an XHTML file stored inside the web application. 
-										</p>
-										<p>
-										Another use case is when a content application utilizes Astroboa RESTful API to retrieve content. 
-										In this case the template name may correspond to an XSLT file that should be used by the content application 
-										in order to transform the consumed XML to PDF or HTML."
-										</p>
-										<p>
-										You may choose to store the template inside Astroboa instead of a file in your content application. 
-										In this case you should use the previous field in this form named "Reference to Presentation Template".
-										See the information on that field about its use.
-										</p> 
-									</tns:description>
-								</xs:documentation>
-								<xs:documentation xml:lang="el">
-									<tns:displayName>Όνομα Πρότυπης Σελίδας</tns:displayName>
-									<tns:description>
-										<p>
-										Σε αυτό το πεδίο μπορείτε να προσθέσετε το "Όνομα της Πρότυπης Σελίδας" μεσω της οποίας θα γίνεται η παρουσίαση
-										αυτού του αντικειμένου. 
-										</p>
-										<p>
-										Για την καλύτερη και ευκολότερη διαχείριση των ονομάτων, έχει δημιουργηθεί ένας "Θησαυρός Όρων" 
-										στο οποίο κρατούνται όλα τα ονόματα των πρότυπων σελίδων. Το όνομα του Θησαυρού είναι το ίδιο με το όνομα αυτού 
-										του πεδίου για να μπορείτε να τον εντοπίσετε εύκολα.
-										</p>
-										<p>
-										Αν στον θησαυρό βρείτε μια λίστα από ονόματα πρότυπων σελίδων σημαίνει πως κάποιος προγραμματιστής (σχεδιαστής σελίδων) έχει ήδη 
-										δημιουργήσει αρχεία με πρότυπες σελίδες προς χρήση.
-										</p>
-										<p>
-										Το "Όνομα" της Πρότυπης Σελίδας που θα επιλέξετε αντιστοιχεί σε ένα αρχείο που περιέχει τον κώδικα της "Πρότυπης Σελίδας".
-										Η κονσόλα διαχείρισης του Astroboa παράγει αυτόματα την παρουσίαση των αντικειμένων ακολουθώντας κάποιες συμβάσεις. 
-										Οι πρότυπες σελίδες που επιλέγετε προορίζονται για τις Διαδικτυακές Πύλες που αντούν το περιεχόμενο που εσείς εισάγεται μέσω της κονσόλας και χρειάζονται 
-										κάποιο τρόπο / οδηγίες να το δείξουν στους χρήστες. Οι οδηγίες αυτές μπορούν να υποδειχτούν αν προσθέσετε εδώ την κατάλληλη πρότυπη σελίδα.
-										</p>
-										<p>
-										Μπορείτε να διατηρείτε τον κώδικα των πρότυπων σελίδων μέσα στο Astroboa αντί σε αρχεία της Web Εφαρμογής. 
-										Σε αυτή την περίπτωση πρέπει να χρησιμοποιείσετε το προηγούμε πεδίο της φόρμας με το όνομα "Πρότυπη Σελίδα".
-										Διαβάστε τις πληροφορίες που συνοδεύουν το παραπάνω πεδίο για να μάθετε πως θα το χρησιμοποιήσετε.
-										</p> 
-									</tns:description>
-								</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-							
 				</xs:sequence>
 
 				<!--
@@ -552,7 +395,11 @@
 
 		<!--
 			Used mainly by global elements which describe content object type
-			definitions
+			definitions.
+			
+			This attribute has been deprecated and will be removed in the future releases.
+			All functionality regarding this feature has been removed but this attribute remains
+			for backwards compatibility reasons.
 		-->
 		<xs:attribute name="systemType" type="xs:boolean" />
 		

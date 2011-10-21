@@ -2,23 +2,22 @@
 package  org.betaconceptframework.astroboa.model.impl.query.parser;
 
 
-import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
-import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
-import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
-import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.Condition;
-import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
-import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
-import org.betaconceptframework.astroboa.util.DateUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.query.Condition;
+import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
+import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
+import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
+import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
+import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
+import org.betaconceptframework.astroboa.util.DateUtils;
 
 
 /**
@@ -120,7 +119,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
@@ -137,7 +135,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
@@ -151,7 +148,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 

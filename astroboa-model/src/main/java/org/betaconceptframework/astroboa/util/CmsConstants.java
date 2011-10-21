@@ -133,11 +133,11 @@ public final class CmsConstants {
 	public static final String XML_DATATYPES_DTD_LOCATION  = "http://www.w3.org/2001/03/datatypes.dtd";
 	
 	public final static String REPOSITORY_ELEMENT_NAME = "repository";
-	public final static String REPOSITORY_PREFIXED_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX+":"+REPOSITORY_ELEMENT_NAME;
+	public final static String REPOSITORY_PREFIXED_NAME = BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX+":"+REPOSITORY_ELEMENT_NAME;
 	public final static String REPOSITORY_ID_ATTRIBUTE_NAME = "id";
 	public final static String REPOSITORY_SERIALIZATION_CREATION_DATE_ATTRIBUTE_NAME = "created";
 	public final static String RESOURCE_RESPONSE = "resourceResponse";
-	public final static String RESOURCE_RESPONSE_PREFIXED_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX+":"+RESOURCE_RESPONSE;
+	public final static String RESOURCE_RESPONSE_PREFIXED_NAME = BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX+":"+RESOURCE_RESPONSE;
 	public final static String RESOURCE_COLLECTION = "resourceCollection";
 	public final static String RESOURCE = "resource";
 	public final static String TOTAL_RESOURCE_COUNT = "totalResourceCount";
@@ -160,14 +160,19 @@ public final class CmsConstants {
 	public static final String CONTENT_ELEMENT_NAME = "content";
 	public static final String REPOSITORY_USERS_ELEMENT_NAME ="repositoryUsers";
 	public static final String TAXONOMIES_ELEMENT_NAME ="taxonomies";
-	public static final String CONTENT_OBJECTS_ELEMENT_NAME ="contentObjects";
+	public static final String TOPICS_ELEMENT_NAME ="topics";
+	public static final String OBJECTS_ELEMENT_NAME ="objects";
 	public static final String TITLE_ELEMENT_NAME = "title";
 	public static final String PROFILE_ELEMENT_NAME = "profile";
+	public static final String ARRAY_OF_OBJECT_TYPE_ELEMENT_NAME = "arrayOfObjectTypes";
+	public static final String OBJECT_TYPE_ELEMENT_NAME = "objectType";
+	public static final String ARRAY_OF_PROPERTIES_ELEMENT_NAME = "arrayOfProperties";
+	public static final String PROPERTY_ELEMENT_NAME = "property";
 	//This flag is used when exporting content to JSON format to indicate whether exported json object should be 
 	//exported as an array or not. This is mostly useful in cases where json object contains only one value
 	//abut must be exported as an array which has a single item rather than a single value object.
 	//This flag is the name of a fake attribute passed in JSONXmlStreamWriter (located in astroboa-model module)
-	public static final String EXPORT_AS_AN_ARRAY_INSTRUCTION =BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+"exportAsAnArrayInstruction";
+	public static final String EXPORT_AS_AN_ARRAY_INSTRUCTION =BetaConceptNamespaceConstants.ASTROBOA_PREFIX+"exportAsAnArrayInstruction";
 	
 	/**
 	 * The actual value for ${version} will be provided during process-resources phase by Maven resource plugin.
@@ -251,11 +256,37 @@ public final class CmsConstants {
 	}
 	
 	
-	public static final String RESOURCE_API_CONTENT_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
-	public static final String RESOURCE_API_TAXONOMY_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
-	public static final String RESOURCE_API_TOPIC_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
+	public static final String RESOURCE_API_CONTENT_URI_PATH = "objects";
+	public static final String RESOURCE_API_TAXONOMY_URI_PATH = "taxonomies";
+	public static final String RESOURCE_API_TOPIC_URI_PATH = "topics";
+	public static final String RESOURCE_API_MODEL_URI_PATH = "models";
 	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
-	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
+
+	/**
+	 * Use {@link #RESOURCE_API_CONTENT_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_CONTENT_URI_PATH = "contentObject";
+
+	/**
+	 * Use {@link #RESOURCE_API_TAXONOMY_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_TAXONOMY_URI_PATH = "taxonomy";
 	
+	/**
+	 * Use {@link #RESOURCE_API_TOPIC_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_TOPIC_URI_PATH = "topic";
+
+	/**
+	 * Use {@link #RESOURCE_API_MODEL_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_MODEL_URI_PATH = "model";
+
+	
+	public static final String EXCHANGE_NAME = "AstroboaExchange";
 }

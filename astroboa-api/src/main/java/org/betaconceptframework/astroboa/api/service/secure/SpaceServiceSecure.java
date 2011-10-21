@@ -82,8 +82,10 @@ public interface SpaceServiceSecure  {
 	 * @param spaceId Space's id to be deleted.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
+	 * @return <code>true</code> if space has been successfully deleted, <code>false</code> if or no space with the provided id or name is found.
+	 *  
 	 */
-	void deleteSpace(String spaceId, String authenticationToken);
+	boolean deleteSpace(String spaceId, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link SpaceService#getSpace(String, String)}

@@ -98,8 +98,6 @@ public class WebPublicationScheduler {
 		// we are looking only for content objects that their publication start date is earlier than now
 		contentObjectCriteria.addCriterion(CriterionFactory.lessThan("webPublication.webPublicationStartDate", Calendar.getInstance()));
 
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-
 		//CHECK IF WE NEED TO SPECIFY RENDER PROPERTIES WITH A LOCALE
 		//contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
 

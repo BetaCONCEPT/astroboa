@@ -244,8 +244,6 @@ public abstract class CmsRepositoryEntityFactory {
 			//Render Type Definition
 			((ContentObjectImpl)contentObject).setTypeDefinition(contentObjectTypeDefinition);
 
-			contentObject.setSystemBuiltinEntity(contentObjectTypeDefinition.isSystemTypeDefinition());
-			
 			contentObject.getComplexCmsRootProperty().setCurrentLocale(locale);
 
 			Localization displayName = ((LocalizableCmsDefinitionImpl)contentObjectTypeDefinition).cloneDisplayName();
@@ -258,7 +256,7 @@ public abstract class CmsRepositoryEntityFactory {
 					new ComplexCmsPropertyDefinitionImpl(contentObjectTypeDefinition.getQualifiedName(),
 					description,displayName, false,false,true, null, null, null, null, complexPropertyDefinitionHelper, 
 					((ContentObjectTypeDefinitionImpl)contentObjectTypeDefinition).getDefinitionFileURI(),  
-					contentObjectTypeDefinition.getPropertyPathsWhoseValuesCanBeUsedAsALabel(), contentObjectTypeDefinition.isSystemTypeDefinition(), true,  
+					contentObjectTypeDefinition.getPropertyPathsWhoseValuesCanBeUsedAsALabel(), true,  
 					null, contentObjectTypeDefinition.getName(), true));
 
 			//Provide values that will be used for lazy rendering

@@ -20,15 +20,16 @@
 package org.betaconceptframework.astroboa.api.service;
 
 
+import java.net.URI;
 import java.net.URL;
-import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 
 /**
@@ -62,10 +63,11 @@ public interface ImportService {
 	 * 	</p>
 	 * 
 	 * @param contentSource Import source location. 
+	 * @param configuration Import configuration.
 	 * 
 	 * @return A report about import progress. In local invocations of this method it is possible to follow import progress.
 	 */
-	ImportReport importRepositoryContentFromURL(URL contentSource);
+	Future<ImportReport> importRepositoryContentFromURI(URI contentSource, ImportConfiguration configuration);
 	
 	/**
 	 * Import content to Astroboa repository. 
@@ -81,10 +83,11 @@ public interface ImportService {
 	 * 	</p>
 	 * 
 	 * @param contentSource Import source. 
+	 * @param configuration Import configuration.
 	 * 
 	 * @return A report about import progress. In local invocations of this method it is possible to follow import progress.
 	 */
-	ImportReport importRepositoryContentFromString(String contentSource);
+	Future<ImportReport> importRepositoryContentFromString(String contentSource, ImportConfiguration configuration);
 	
 	/**
 	 * Import content object to Astroboa repository from XML or JSON. 
@@ -99,19 +102,11 @@ public interface ImportService {
 	 * </p>
 	 * 
 	 * @param contentSource Xml or JSON representation of a {@link ContentObject}.
-	 * @param version
-	 *            <code>true</code> to create a new version for content
-	 *            object, <code>false</code> otherwise. Taken into account only if <code>save</code> is <code>true</code>
-	 * @param updateLastModificationDate <code>true</code> to change last modification date, <code>false</code> otherwise. 
-	 * Taken into account only if <code>save</code> is <code>true</code>
-	 * @param binaryContent Map containing the binary content of one or more properties of type {@link ValueType#Binary}. 
-	 * 	The key of the map must match the value of the 'url' attribute of the property in the XML/JSON representation of the
-	 * content.  
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
+	 * 
 	 * @return Imported {@link ContentObject}
 	 */
-	ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationTime, boolean save, Map<String, byte[]> binaryContent);
+	ContentObject importContentObject(String contentSource,ImportConfiguration configuration);
 	
 	/**
 	 * Import repository user to Astroboa repository from XML or JSON. 
@@ -126,12 +121,11 @@ public interface ImportService {
 	 * </p>
 	 * 
 	 * @param repositoryUserSource Xml or JSON representation of a {@link RepositoryUser}.
-	 * @param save
-	 *            <code>true</code> to save repository user, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
 	 * 
 	 * @return Newly created or updated RepositoryUser
 	 */
-	RepositoryUser importRepositoryUser(String repositoryUserSource, boolean save);
+	RepositoryUser importRepositoryUser(String repositoryUserSource, ImportConfiguration configuration);
 
 	/**
 	 * Import topic to Astroboa repository from XML or JSON. 
@@ -145,11 +139,11 @@ public interface ImportService {
 	 * </p>
 	 * 
 	 * @param topicSource Xml or JSON representation of a {@link Topic}.
-	 * @param save
-	 *            <code>true</code> to save topic after import, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
+	 * 
 	 * @return Newly created or updated Topic
 	 */
-	Topic importTopic(String topicSource, boolean save);
+	Topic importTopic(String topicSource, ImportConfiguration configuration);
 
 	/**
 	 * Import space to Astroboa repository from XML or JSON. 
@@ -163,11 +157,11 @@ public interface ImportService {
 	 * </p>
 	 * 
 	 * @param spaceSource Xml or JSON representation of a {@link Space}.
-	 * @param save
-	 *            <code>true</code> to save space after import, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
+	 * 
 	 * @return Newly created or updated Space
 	 */
-	Space importSpace(String spaceSource, boolean save);
+	Space importSpace(String spaceSource, ImportConfiguration configuration);
 
 	/**
 	 * Import taxonomy to Astroboa repository from XML or JSON. 
@@ -181,10 +175,10 @@ public interface ImportService {
 	 * </p>
 	 * 
 	 * @param taxonomySource Xml or JSON representation of a {@link Taxonomy}.
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
+	 * 
 	 * @return Newly created or updated Taxonomy
 	 */
-	Taxonomy importTaxonomy(String taxonomySource, boolean save);
+	Taxonomy importTaxonomy(String taxonomySource, ImportConfiguration configuration);
 
 }

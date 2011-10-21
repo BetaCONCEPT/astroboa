@@ -98,17 +98,17 @@ Authors
   								</move>
   								<move todir="${project.build.testOutputDirectory}/cloneRepository/astroboa_schemata" includeemptydirs="false">
     								<fileset dir="${project.build.testOutputDirectory}/cloneRepository/astroboa_schemata">
-      									<include name="**/*.xsd"/>
-										<exclude name="**/*-${project.version}.xsd"/>
+      									<include name="**/*.xsd" />
+										<exclude name="**/*-${project.version}.xsd" />
     								</fileset>
-    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd"/>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
   								</move>
   								<move todir="${project.build.testOutputDirectory}/newRepositoryAddedAtRuntime/astroboa_schemata" includeemptydirs="false">
     								<fileset dir="${project.build.testOutputDirectory}/newRepositoryAddedAtRuntime/astroboa_schemata">
-      									<include name="**/*.xsd"/>
-										<exclude name="**/*-${project.version}.xsd"/>
+      									<include name="**/*.xsd" />
+										<exclude name="**/*-${project.version}.xsd" />
     								</fileset>
-    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd"/>
+    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
   								</move>
   								
 		            		</tasks>
@@ -270,13 +270,13 @@ Authors
 
 	<scm>
 		<connection>
-			scm:git:ssh://github.com/BetaCONCEPT/astroboa.git
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</connection>
 		<developerConnection>
-			scm:git:ssh://git@github.com:BetaCONCEPT/astroboa.git
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</developerConnection>
 		<url>
-			https://github.com/BetaCONCEPT/astroboa/tree/master/astroboa-tests
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
 		</url>
 	</scm>
 

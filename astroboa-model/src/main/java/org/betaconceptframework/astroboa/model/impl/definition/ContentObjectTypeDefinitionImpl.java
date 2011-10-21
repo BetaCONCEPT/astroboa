@@ -50,8 +50,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 	
 	private final ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper;
 	
-	private final boolean systemTypeDefinition;
-	
 	private List<String> superTypes;
 	
 	private final boolean schemaExtendsBaseObjectType;
@@ -61,7 +59,7 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 	public ContentObjectTypeDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName,
 			ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper,
-			URI definitionFileURI, boolean systemTypeDefinition, 
+			URI definitionFileURI,  
 			List<String> superTypes, 
 			boolean schemaExtendsBaseObjectType,
 			String propertyPathsWhoseValuesCanBeUsedAsALabel) {
@@ -71,8 +69,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 		this.complexPropertyDefinitionHelper = complexPropertyDefinitionHelper;
 		
 		this.definitionFileURI = definitionFileURI;
-		
-		this.systemTypeDefinition = systemTypeDefinition;
 		
 		this.superTypes = superTypes;
 		
@@ -147,11 +143,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 		return definitionFileURI;
 	}
 
-	public boolean isSystemTypeDefinition() {
-		return systemTypeDefinition;
-	}
-
-
 	public boolean isTypeOf(String superType) {
 		return superType != null && superTypes != null && superTypes.contains(superType);
 	}
@@ -168,8 +159,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 				.append(definitionFileURI)
 				.append(", superTypes=")
 				.append(superTypes)
-				.append(", systemTypeDefinition=")
-				.append(systemTypeDefinition)
 				.append(super.toString())
 				.append("]").toString();
 	}

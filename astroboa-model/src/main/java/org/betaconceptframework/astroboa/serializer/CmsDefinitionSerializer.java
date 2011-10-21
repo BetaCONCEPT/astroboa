@@ -18,6 +18,7 @@
  */
 package org.betaconceptframework.astroboa.serializer;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -39,8 +40,10 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.RepositoryContext;
+import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.DoublePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.LongPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 
 /**
  * 
@@ -67,15 +70,16 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	@Override
 	public void visit(ContentObjectTypeDefinition contentObjectTypeDefinition) {
 		
-		serializer.startElement(contentObjectTypeDefinition.getName(), true, true);
-
 		rootDefinition = contentObjectTypeDefinition;
-		
+
+		//Create start element only if output is XML
+		if (!serializer.outputIsJSON()){
+			serializer.startElement(CmsConstants.OBJECT_TYPE_ELEMENT_NAME, true, true);
+		}
+
 		exportDefinitionObjectAndBasicProperties(contentObjectTypeDefinition);
 		
-		if (!serializer.outputIsJSON()){
-			serializer.endElement(contentObjectTypeDefinition.getName(), true, false);
-		}
+		closeStartTagIfOutputIsXML(CmsConstants.OBJECT_TYPE_ELEMENT_NAME);
 
 		exportDisplayName(contentObjectTypeDefinition);
 
@@ -85,22 +89,12 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	@Override
 	public void visitComplexPropertyDefinition(ComplexCmsPropertyDefinition complexPropertyDefinition) {
 
-		
-		
-		if (rootDefinition != null){
-			serializer.startElement("property", true, false);
-		}
-		else{
-			serializer.startElement(complexPropertyDefinition.getName(), true, true);
-			rootDefinition = complexPropertyDefinition;
-		}
-		
+		startTagForPropertyAndSetRootDefinitionIfNecessary(complexPropertyDefinition);
+
 		exportDefinitionObjectAndBasicProperties(complexPropertyDefinition);
 		
-		if (!serializer.outputIsJSON()){
-			serializer.endElement("property", true, false);
-		}
-
+		closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
+		
 		exportDisplayName(complexPropertyDefinition);
 
 	}
@@ -109,18 +103,9 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	public <T> void visitSimplePropertyDefinition(
 			SimpleCmsPropertyDefinition<T> simplePropertyDefinition) {
 		
-		
-		
 		if (simplePropertyDefinition != null){
 			
-			if (rootDefinition != null){
-				serializer.startElement("property", true, false);
-			}
-			else{
-				serializer.startElement(simplePropertyDefinition.getName(), true, true);
-				rootDefinition = simplePropertyDefinition;
-			}
-
+			startTagForPropertyAndSetRootDefinitionIfNecessary(simplePropertyDefinition);
 			
 			exportDefinitionObjectAndBasicProperties(simplePropertyDefinition);
 			
@@ -151,13 +136,13 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 				break;
 			}
 			
-			if (!serializer.outputIsJSON()){
-				serializer.endElement("property", true, false);
-			}
-
+			closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
+			
 			exportDisplayName(simplePropertyDefinition);
 
-			serializer.endElement("property", false,true);
+			if (rootDefinition != null && rootDefinition != simplePropertyDefinition){
+				serializer.endElement(CmsConstants.PROPERTY_ELEMENT_NAME, false,true);
+			}
 			
 		}
 		
@@ -263,10 +248,14 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		super.finishedChildDefinitionsVisit(parentDefinition);
 		
-		serializer.endArray("propertyList");
+		if (serializer.outputIsJSON()){
+			serializer.endArray(CmsConstants.PROPERTY_ELEMENT_NAME);
+		}
+
+		serializer.endElement(CmsConstants.ARRAY_OF_PROPERTIES_ELEMENT_NAME, false, true);
 		
 		if (rootDefinition != null && rootDefinition != parentDefinition){
-			serializer.endElement("property", false, true);
+			serializer.endElement(CmsConstants.PROPERTY_ELEMENT_NAME, false, true);
 		}
 
 	}
@@ -279,12 +268,25 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		super.startChildDefinitionsVisit(parentDefinition);
 		
-		serializer.startArray("propertyList");
+		serializer.startElement(CmsConstants.ARRAY_OF_PROPERTIES_ELEMENT_NAME, false, true);
+		
+		if (serializer.outputIsJSON()){
+			serializer.startArray(CmsConstants.PROPERTY_ELEMENT_NAME);
+		}
+
 	}
 
 	public String exportOutcome() {
 		
-		serializer.endElement(rootDefinition.getName(), false,true);
+		//Create an end tag only if output is XML
+		if (rootDefinition != null && ! serializer.outputIsJSON()){
+			if (rootDefinition instanceof ContentObjectTypeDefinition){
+				serializer.endElement(CmsConstants.OBJECT_TYPE_ELEMENT_NAME, false,true);
+			}
+			else if (rootDefinition instanceof CmsPropertyDefinition ){
+				serializer.endElement(CmsConstants.PROPERTY_ELEMENT_NAME, false,true);
+			}
+		}
 		
 		return serializer.serialize();
 
@@ -333,7 +335,20 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	}
 
 	private void exportValueType(LocalizableCmsDefinition cmsDefinition) {
-		serializer.writeAttribute("valueType",cmsDefinition.getValueType().toString());
+		
+		if (cmsDefinition instanceof ComplexCmsPropertyDefinition && 
+				StringUtils.isNotBlank(((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getTypeName())){
+			serializer.writeAttribute("valueType",((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getTypeName());
+		}
+		else if (cmsDefinition instanceof ContentObjectTypeDefinition && 
+				CollectionUtils.isNotEmpty(((ContentObjectTypeDefinition)cmsDefinition).getSuperContentTypes())) {
+			//Object type is always the last element of the list
+			List<String> objectTypes = ((ContentObjectTypeDefinition)cmsDefinition).getSuperContentTypes();
+			serializer.writeAttribute("valueType",objectTypes.get(objectTypes.size()-1));
+		}
+		else{
+			serializer.writeAttribute("valueType",cmsDefinition.getValueType().toString());
+		}
 	}
 
 	private void exportName(LocalizableCmsDefinition cmsDefinition) {
@@ -379,6 +394,30 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		return null;
 	}
 
+	private void closeStartTagIfOutputIsXML(String elementName){
+		
+		if (!serializer.outputIsJSON()){
+			serializer.endElement(elementName, true, false);
+		}
+
+	}
+
+	private void startTagForPropertyAndSetRootDefinitionIfNecessary(CmsPropertyDefinition cmsPropertyDefinition){
+
+		if (rootDefinition == null){
+			rootDefinition = cmsPropertyDefinition;
+
+			//Create start element only if output is XML
+			if (!serializer.outputIsJSON()){
+				serializer.startElement(CmsConstants.PROPERTY_ELEMENT_NAME, true, true);
+			}
+		}
+		else{
+			serializer.startElement(CmsConstants.PROPERTY_ELEMENT_NAME, true, ! serializer.outputIsJSON());
+		}
+		
+	}
+	
 	private class MarkerSerializer extends AbstractSerializer {
 
 		public MarkerSerializer(boolean prettyPrint, boolean jsonOutput) {

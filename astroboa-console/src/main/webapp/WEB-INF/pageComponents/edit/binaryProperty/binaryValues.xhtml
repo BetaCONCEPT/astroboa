@@ -93,12 +93,6 @@ Authors
 													
 													<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}?width=150"/>
 													
-													<ui:remove>
-													<seam:graphicImage
-														value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.content}">
-														<seam:transformImageSize width="150" maintainRatio="true" />
-													</seam:graphicImage>
-													</ui:remove>
 												</a>
 												<br/><span style="font-size: 0.8em;">#{messages['content.object.edit.action.viewFileInline']}</span>
 											</ui:fragment>

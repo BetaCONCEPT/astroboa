@@ -584,7 +584,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
 		// http://server/resource-api/
-		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
+		// <reposiotry-id>/objects/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
 		StringBuilder contentApiURLBuilder = new StringBuilder();
@@ -655,7 +655,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
 		// http://server/resource-api/
-		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
+		// <reposiotry-id>/objects/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
 		StringBuilder resourceApiURLBuilder = new StringBuilder();
@@ -671,7 +671,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		resourceApiURLBuilder.append(getRestfulApiBasePath()).append(CmsConstants.FORWARD_SLASH); 
 
 		resourceApiURLBuilder.append((StringUtils.isBlank(repositoryId) ? "no-repository":repositoryId));
-		resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append("contentObject");
+		resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
 		
 		if (friendlyUrl) {
 			resourceApiURLBuilder.append(CmsConstants.FORWARD_SLASH).append(contentObjectSystemName);

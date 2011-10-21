@@ -81,7 +81,6 @@ public class BinaryChannelAdapter extends XmlAdapter<BinaryChannelType,BinaryCha
 			
 			binaryChannelType.setMimeType(binaryChannel.getMimeType());
 			binaryChannelType.setSourceFileName(binaryChannel.getSourceFilename());
-			binaryChannelType.setSystemBuiltinEntity(binaryChannel.isSystemBuiltinEntity());
 			
 			binaryChannelType.setUrl(binaryChannel.buildResourceApiURL(null, null, null, null, null, false, false));
 
@@ -117,7 +116,6 @@ public class BinaryChannelAdapter extends XmlAdapter<BinaryChannelType,BinaryCha
 			
 			binaryChannel.setMimeType(binaryChannelType.getMimeType());
 			binaryChannel.setSourceFilename(binaryChannelType.getSourceFileName());
-			binaryChannel.setSystemBuiltinEntity(binaryChannelType.isSystemBuiltinEntity());
 			
 			final byte[] content = binaryChannelType.getContent();
 			

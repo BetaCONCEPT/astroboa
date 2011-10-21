@@ -374,6 +374,11 @@ public class ImportContentHandler<T> implements ContentHandler{
 						pushEntity(localName, taxonomy, atts);
 						return;
 					}
+					else if (CmsBuiltInItem.Topic.getLocalPart().equals(localName)){
+						Topic topic = createNewTopic(atts, localName);
+						pushEntity(localName, topic, atts);
+						return;
+					}
 					else if (CmsBuiltInItem.OrganizationSpace.getLocalPart().equals(localName)){
 						Space space = createNewSpace(atts, localName);
 						pushEntity(localName, space, atts);
@@ -445,8 +450,9 @@ public class ImportContentHandler<T> implements ContentHandler{
 		StringUtils.equals(localName, CmsConstants.CHILD_SPACES) ||
 		StringUtils.equals(localName, CmsConstants.CHILD_TOPICS) || 
 		(cmsRepositoryEntityQueue.peek().getEntity() instanceof Repository && 
-				(StringUtils.equals(localName, CmsConstants.CONTENT_OBJECTS_ELEMENT_NAME) ||
+				(StringUtils.equals(localName, CmsConstants.OBJECTS_ELEMENT_NAME) ||
 						StringUtils.equals(localName, CmsConstants.TAXONOMIES_ELEMENT_NAME) ||
+						StringUtils.equals(localName, CmsConstants.TOPICS_ELEMENT_NAME) ||
 						StringUtils.equals(localName, CmsConstants.REPOSITORY_USERS_ELEMENT_NAME))) ||
 						(cmsRepositoryEntityQueue.peek().getEntity() instanceof List &&
 				( StringUtils.equals(localName, CmsConstants.RESOURCE_COLLECTION) ||

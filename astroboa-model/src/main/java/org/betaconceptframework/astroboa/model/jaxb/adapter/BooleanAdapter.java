@@ -23,14 +23,14 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang.BooleanUtils;
 
 /**
- * Filter value of systemBuiltInEntity variable so that
+ * Filter a variable of Boolean type in such a way that so that
  * when it is marshaled to an XML or JSON attribute, it will appear only when
  * its value is true. 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class SystemBuiltInEntityAdapter extends XmlAdapter<Boolean,Boolean>{
+public class BooleanAdapter extends XmlAdapter<Boolean,Boolean>{
 
 	@Override
 	public Boolean marshal(Boolean v) throws Exception {

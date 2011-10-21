@@ -19,18 +19,20 @@
 
 package org.betaconceptframework.astroboa.service.secure.impl;
 
+import java.util.concurrent.Future;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Local;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
 
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.service.SerializationService;
 import org.betaconceptframework.astroboa.api.service.secure.SerializationServiceSecure;
-import org.betaconceptframework.astroboa.api.service.secure.remote.RemoteSerializationServiceSecure;
 import org.betaconceptframework.astroboa.service.secure.interceptor.AstroboaSecurityAuthenticationInterceptor;
 
 /**
@@ -51,7 +53,6 @@ import org.betaconceptframework.astroboa.service.secure.interceptor.AstroboaSecu
  */
 
 @Local({SerializationServiceSecure.class})
-@Remote({RemoteSerializationServiceSecure.class})
 @Stateless(name="SerializationServiceSecure")
 @TransactionManagement(TransactionManagementType.BEAN)
 @Interceptors({AstroboaSecurityAuthenticationInterceptor.class})
@@ -64,27 +65,27 @@ public class SerializationServiceSecureImpl extends AbstractSecureAstroboaServic
 	}
 	
 	@RolesAllowed("ROLE_ADMIN")
-	public SerializationReport serializeContentObjects(boolean exportBinary,String authenticationToken) {
-		return serializationService.serializeObjects(exportBinary);
+	public Future<SerializationReport> serializeObjects(ContentObjectCriteria objectCriteria, SerializationConfiguration serializationConfiguration,String authenticationToken) {
+		return serializationService.serializeObjects(objectCriteria, serializationConfiguration);
 	}
 
 	@RolesAllowed("ROLE_ADMIN")
-	public SerializationReport serializeRepository(boolean exportBinary,String authenticationToken) {
-		return serializationService.serializeRepository(exportBinary);
+	public Future<SerializationReport> serializeRepository(SerializationConfiguration serializationConfiguration,String authenticationToken) {
+		return serializationService.serializeRepository(serializationConfiguration);
 	}
 
 	@RolesAllowed("ROLE_ADMIN")
-	public SerializationReport serializeOrganizationSpace(String authenticationToken) {
+	public Future<SerializationReport> serializeOrganizationSpace(String authenticationToken) {
 		return serializationService.serializeOrganizationSpace();
 	}
 
 	@RolesAllowed("ROLE_ADMIN")
-	public SerializationReport serializeRepositoryUsers(String authenticationToken) {
+	public Future<SerializationReport> serializeRepositoryUsers(String authenticationToken) {
 		return serializationService.serializeRepositoryUsers();
 	}
 
 	@RolesAllowed("ROLE_ADMIN")
-	public SerializationReport serializeTaxonomies(String authenticationToken) {
+	public Future<SerializationReport> serializeTaxonomies(String authenticationToken) {
 		return serializationService.serializeTaxonomies();
 	}
 }
