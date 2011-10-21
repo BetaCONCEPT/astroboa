@@ -547,7 +547,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 		if (CollectionUtils.isNotEmpty(availabelAspectDefinitions)){
 			for (ComplexCmsPropertyDefinition aspectDefinition : availabelAspectDefinitions){
-				if (!aspectDefinition.isSystemTypeDefinition() && !aspectDefinition.isObsolete()){
+				if ( !aspectDefinition.isObsolete()){
 					String localizedLabelForLocale = aspectDefinition.getDisplayName().getLocalizedLabelForLocale(locale);
 					if (StringUtils.isBlank(localizedLabelForLocale)){
 						localizedLabelForLocale = aspectDefinition.getName(); 

@@ -89,13 +89,6 @@ Authors
 											</label>
 											<h:inputText value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemName}" />
 										</li>
-										<li class="formElement">
-											<label>		
-												#{messages['content.object.edit.system.entity']}
-											</label>
-											<h:selectBooleanCheckbox
-												value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemBuiltinEntity}"/>
-										</li>
 										
 										<ui:include
 											src="/WEB-INF/pageComponents/edit/propertyTemplates/profile-editor.xhtml" >
