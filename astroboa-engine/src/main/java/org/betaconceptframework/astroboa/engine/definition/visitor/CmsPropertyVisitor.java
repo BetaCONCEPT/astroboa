@@ -94,6 +94,7 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
+import com.sun.xml.xsom.XSUnionSimpleType;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.XmlString;
@@ -696,7 +697,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	private void visitSubProperties(final XSComplexType complexType, boolean complexTypeRepresentsContentObjectType) throws Exception {
 
-		logger.error("Visiting sub properties for definition '{}'",name );
+		logger.debug("Visiting sub properties for definition '{}'",name );
 
 		//Inherit complexType Annotation in case no annotation is defined so far
 		if (displayName == null || MapUtils.isEmpty(displayName.getLocalizedLabels()))
@@ -726,15 +727,19 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 		if (complexType.getAttributeUses() != null ){
 			
-			for(XSAttributeUse attribute : complexType.getAttributeUses()){
+			String complexTypeTargetNamespace = retrieveComplexTypeTargetNamespace(complexType);
+					
+			for (XSAttributeUse attribute : complexType.getAttributeUses()){
+				
+				String attributeTargetNamespace = getAttributeNamespace(attribute, complexTypeTargetNamespace);
 				
 				//Check if complex type defines any attributes, excluding ASTROBOA's built-in attributes
-				if (attribute.getDecl() != null && ! StringUtils.equals(attribute.getDecl().getTargetNamespace(), BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI)){
+				if (! StringUtils.equals(attributeTargetNamespace, BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI)){
 					
-					ItemQName attr = ItemUtils.createNewItem("", attribute.getDecl().getTargetNamespace(), attribute.getDecl().getName());
+					ItemQName attr = ItemUtils.createNewItem("", attributeTargetNamespace, attribute.getDecl().getName());
 					ItemQName attrType = ItemUtils.createNewItem("", attribute.getDecl().getType().getTargetNamespace(), attribute.getDecl().getType().getName());
 					
-					logger.error("Found attribute {} with type {}", attr.toString(), attrType.toString());
+					logger.debug("Found attribute {} with type {}", attr, attrType);
 					
 					addAttributeAsChildProperty(attribute);
 					
@@ -743,6 +748,55 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 		
 	}
+
+	private String getAttributeNamespace(XSAttributeUse attribute, String parentNamespace){
+		
+		//Get attribute' namespace 
+		String attributeNamespace = null;
+		
+		if (attribute.getDecl() != null){
+			attributeNamespace = attribute.getDecl().getTargetNamespace();
+		}
+		
+		//Get the namespace of the schema where this attribute is defined
+		//We are interested where this attribute is defined. 
+		if (StringUtils.isBlank(attributeNamespace) && attribute.getOwnerSchema() != null){
+			attributeNamespace = attribute.getOwnerSchema().getTargetNamespace();
+		}
+		
+		//Get the namespace of the parent component (element or complex type)
+		if (StringUtils.isBlank(attributeNamespace)){
+			attributeNamespace = parentNamespace;
+		}
+		
+		return attributeNamespace;
+	}
+	
+	private String retrieveComplexTypeTargetNamespace(XSComplexType complexType) {
+		
+		String targetNamespace = complexType.getTargetNamespace();
+		
+		if (StringUtils.isBlank(targetNamespace)){
+			
+			if (!complexType.isGlobal()){
+				//Get namespace of its parent if any
+				XSElementDecl parentElement = complexType.getScope();
+			
+				if (parentElement != null){
+					targetNamespace = parentElement.getTargetNamespace();
+				}
+			}
+			
+			if (StringUtils.isBlank(targetNamespace) && complexType.getOwnerSchema() != null){
+				//Retrieve tagetNamespace as defined in the schema where this complexType exists
+				targetNamespace = complexType.getOwnerSchema().getTargetNamespace();
+			}
+			
+		}
+		
+		return targetNamespace;
+	}
+
 
 	private void setComplexReference(XSElementDecl element) throws Exception {
 
@@ -888,9 +942,12 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 		logger.debug("Setting basic properties for definition '{}'", name);
 
-		//		Set CmsAnnotation
+		//		Retrieve annotation to build display name and description
 		if (component.getAnnotation() != null){
 			annotation(component.getAnnotation());
+		}
+		else if (component instanceof XSAttributeUse && ((XSAttributeUse)component).getDecl().getAnnotation() != null){
+			annotation(((XSAttributeUse)component).getDecl().getAnnotation());
 		}
 
 		if (isDefinitionSimple()){
@@ -1490,15 +1547,28 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		String typeName = simpleType.getName();
 		String typeNamespace = simpleType.getTargetNamespace();
 
-		
-		//Check if element is an enumeration
-		if (!simpleType.asSimpleType().isPrimitive() && simpleType.asSimpleType().isRestriction()
-				&& typeNamespace != null && ! typeNamespace.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)){
-			XSRestrictionSimpleType restriction = simpleType.asSimpleType().asRestriction();
+		//Check if simple type is primitive
+		if (!simpleType.asSimpleType().isPrimitive() ) {
+			
+			//Check if element is an enumeration
+			if (simpleType.asSimpleType().isRestriction() && 
+					typeNamespace != null && 
+					! typeNamespace.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+				
+				XSRestrictionSimpleType restriction = simpleType.asSimpleType().asRestriction();
 			
 				typeName = restriction.getBaseType().getName();
 				typeNamespace = restriction.getBaseType().getTargetNamespace();
+			}
+			else if (simpleType.asSimpleType().isUnion()){
+
+				XSUnionSimpleType union = simpleType.asSimpleType().asUnion();
 				
+				//All members must have the same type.
+				//Union with members of different types is not supported
+				
+
+			}
 		}
 		
 		if (typeName == null){
@@ -1510,7 +1580,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 		//Check what kind of type this element is
 		if (typeItemQName.equals(XSSchemaItem.String) ||
-				typeItemQName.equals(XSSchemaItem.NormalizedString)){
+				typeItemQName.equals(XSSchemaItem.NormalizedString) ||
+				typeItemQName.equals(XSSchemaItem.AnyURI)){
 			valueType = ValueType.String;
 			
 			if (StringUtils.equals(simpleType.getName(), CmsDefinitionItem.passwordType.getLocalPart())){
@@ -1549,7 +1620,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			calendarPattern = CmsConstants.DATE_PATTERN;
 		}
 		else
-			throw new CmsException("Unknown simple type for component "+ componentName+ " Type details "+
+			throw new CmsException("Unknown type for component(element or attribute) "+ componentName+ ". Type details: "+
 					" Target namespace "+	simpleType.getTargetNamespace() + " and name "+ typeName);
 		
 	}
