@@ -61,7 +61,8 @@ public enum XSSchemaItem implements ItemQName{
 	UnsignedInt("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	Byte("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	UnsignedByte("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
-	Time("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	Time("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	AnyURI("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	
 	
 	private ItemQName xsSchemaItem;
