@@ -93,6 +93,7 @@ Authors
     								<fileset dir="${project.build.testOutputDirectory}/repository/astroboa_schemata">
       									<include name="**/*.xsd" />
       									<exclude name="**/*-${project.version}.xsd" />
+      									<exclude name="**/Europass*.xsd" />
     								</fileset>
     								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
   								</move>
