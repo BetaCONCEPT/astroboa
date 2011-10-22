@@ -32,7 +32,7 @@
 	xmlns:administrativeMetadataType="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
 	xmlns:accessibilityType="http://www.betaconceptframework.org/schema/astroboa/admin/accessibilityType"
 	elementFormDefault="unqualified" version="${project.version}"
-	attributeFormDefault="qualified">
+	attributeFormDefault="unqualified">
 
 
 	<xs:import
