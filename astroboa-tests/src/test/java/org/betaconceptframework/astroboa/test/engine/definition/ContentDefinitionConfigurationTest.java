@@ -53,7 +53,7 @@ import org.testng.annotations.Test;
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
-	//@Test
+	@Test
 	public void testIndependentContentTypes(){
 	
 		for (String typeName : getIndependentContentTypes()){
@@ -64,8 +64,6 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 			checkPropertyExistsAndIsOfType(independentDefinition, "profile", ComplexCmsPropertyDefinition.class);
 			checkPropertyExistsAndIsOfType(independentDefinition, "accessibility", ComplexCmsPropertyDefinition.class);
-			checkPropertyExistsAndIsOfType(independentDefinition, "resourceRepresentationTemplateObjectReference", ObjectReferencePropertyDefinition.class);
-			checkPropertyExistsAndIsOfType(independentDefinition, "resourceRepresentationTemplateName", TopicReferencePropertyDefinition.class);
 			
 			//These properties  are assumed to be provided in all independent types
 			//Normal properties
@@ -166,7 +164,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 			}
 			else if (EXTENDED_TEST_CONTENT_TYPE.equals(testContentType))
 			{
-				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "en", "This type represents an extension of extendedTestType" , "This type represents an extension of extendedTestType");
+				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "en", "This type represents an extension of extended test content type" , "This type represents an extension of extended test content type");
 				assertDescriptionAndDisplayNameExistsForPropertyAndLocale(testDefinition, testContentType, "el", "Extended Test" , "Extended Test");
 			}
 			
