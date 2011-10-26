@@ -56,6 +56,23 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
 	 */
 	@Test
+	public void testAlternateDeclarationOfBinaryChannel(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition binaryChannelAlterantiveTypeDefinition = testDefinition.getCmsPropertyDefinition("alternativeBinaryChannel");
+		
+		Assert.assertNotNull(binaryChannelAlterantiveTypeDefinition);
+		
+		Assert.assertEquals(ValueType.Binary, binaryChannelAlterantiveTypeDefinition.getValueType());
+		Assert.assertTrue(binaryChannelAlterantiveTypeDefinition instanceof BinaryPropertyDefinition );
+
+	}
+	
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
+	 */
+	@Test
 	public void testUnionOfSimpleTypes(){
 		
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
@@ -65,6 +82,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertNotNull(unionOfStringTypesDefinition);
 		
 		Assert.assertEquals(ValueType.String, unionOfStringTypesDefinition.getValueType());
+		Assert.assertTrue(unionOfStringTypesDefinition instanceof StringPropertyDefinition );
 		
 		Assert.assertNotNull(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration(), "Enumerated Valued for unionOfStringTypes definition do not exist");
 		Assert.assertFalse(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration().isEmpty(), "Enumerated Valued for unionOfStringTypes definition do not exist");

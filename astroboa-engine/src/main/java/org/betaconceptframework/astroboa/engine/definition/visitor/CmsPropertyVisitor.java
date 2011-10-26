@@ -517,17 +517,25 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	public void complexType(XSComplexType complexType) {
 
-			valueType = ValueType.Complex;
-			complexPropertyTypeName = complexType.getName();
-			
-			logger.debug("Instantiated definition of type '{}'",valueType);
-
-			if (elementExtendsComplexCmsPropertyType(complexType)){
-				complexDefinitionContainsCommonAttributes = true;
+			//Special case where complex type contains simple content
+			//whose type is Base64Binary
+			if (complexTypeExtendsBase64Binary(complexType)){
+				valueType = ValueType.Binary;
 			}
 			else{
-				complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(complexType);
-			}
+				valueType = ValueType.Complex;
+
+				complexPropertyTypeName = complexType.getName();
+			
+				if (elementExtendsComplexCmsPropertyType(complexType)){
+					complexDefinitionContainsCommonAttributes = true;
+				}
+				else{
+					complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(complexType);
+				}
+			}	
+			
+			logger.debug("Instantiated definition of type '{}'",valueType);
 			
 			populateDefinition(complexType);
 		
@@ -1523,17 +1531,24 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			}
 			else{
 				
-				//Allow element to extend any complex type regardless of its location
-				valueType = ValueType.Complex;
-				namespaceUri = elementType.getTargetNamespace();
-				complexPropertyTypeName = elementType.asComplexType().getName();
-				
-				//Disable caching this definition since it does not extend complexCmsPropertyType
-				//and thus it cannot be global
-				cacheComplexDefinitionReference = false;
-				complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(elementType.asComplexType());
+				//Special case where complex type contains simple content
+				//whose type is Base64Binary
+				if (complexTypeExtendsBase64Binary(elementType.asComplexType())){
+					valueType = ValueType.Binary;
+				}
+				else{
 
-				
+					//Allow element to extend any complex type regardless of its location
+					valueType = ValueType.Complex;
+					namespaceUri = elementType.getTargetNamespace();
+					complexPropertyTypeName = elementType.asComplexType().getName();
+					
+					//Disable caching this definition since it does not extend complexCmsPropertyType
+					//and thus it cannot be global
+					cacheComplexDefinitionReference = false;
+					complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(elementType.asComplexType());
+	
+				}
 				/*
 				//Type is a complex type which does not extend CmsDefinitionItem.complexCmsPropertyType 
 				//This is only acceptable only if this type resides in the same XSD file
@@ -1801,6 +1816,19 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		return complexTypeAsItemQName.equals(CmsDefinitionItem.complexCmsPropertyType); //Complex Type must extend ComplexCmsProperty type 
 
 	}
+	
+	private boolean complexTypeExtendsBase64Binary(XSComplexType complexType){
+		
+		//According to XSOM API method getBaseType always returns not null
+		String typeName = complexType.getBaseType().getName();
+		String typeNamespace = complexType.getBaseType().getTargetNamespace();
+
+		ItemQName complexTypeAsItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
+
+		return complexTypeAsItemQName.equals(XSSchemaItem.Base64Binary);  
+
+	}
+
 
 	public void modelGroup(XSModelGroup arg0) {
 

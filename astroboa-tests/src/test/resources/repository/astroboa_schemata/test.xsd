@@ -698,6 +698,13 @@
 							</xs:annotation>
 						</xs:element>
 
+						<xs:element name="alternativeBinaryChannel" minOccurs="0" maxOccurs="1" type="tns:binaryChannelAlternativeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary Channel Alternative Type</xs:documentation>
+								<xs:documentation xml:lang="el">Binary Channel Alternative Type</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -1196,5 +1203,14 @@
         <xs:enumeration value="Baby blue"/>
     </xs:restriction>
  </xs:simpleType>
+ 
+ <xs:complexType name="binaryChannelAlternativeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">BinaryChannelAlternativeType</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:base64Binary"/>
+		</xs:simpleContent>
+	</xs:complexType>
   
 </xs:schema>
