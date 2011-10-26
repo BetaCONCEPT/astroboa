@@ -37,7 +37,6 @@ import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefi
 import org.betaconceptframework.astroboa.api.model.definition.LongPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.security.AstroboaPasswordEncryptor;
@@ -53,6 +52,36 @@ import org.testng.annotations.Test;
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
+	 */
+	@Test
+	public void testUnionOfSimpleTypes(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition unionOfStringTypesDefinition = testDefinition.getCmsPropertyDefinition("unionOfStringTypes");
+		
+		Assert.assertNotNull(unionOfStringTypesDefinition);
+		
+		Assert.assertEquals(ValueType.String, unionOfStringTypesDefinition.getValueType());
+		
+		Assert.assertNotNull(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration(), "Enumerated Valued for unionOfStringTypes definition do not exist");
+		Assert.assertFalse(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration().isEmpty(), "Enumerated Valued for unionOfStringTypes definition do not exist");
+		
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Pink"), "unionOfStringTypes Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Salmon"),"unionOfStringTypes Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Coral pink"), "unionOfStringTypes Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Crimson red"), "unionOfStringTypes Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Asparagus"), "unionOfStringTypes Definition does not have value 'Asparagus'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Dark green"), "unionOfStringTypes Definition does not have value 'Dark green'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Forest green"), "unionOfStringTypes Definition does not have value 'Forest green'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Mantis"), "unionOfStringTypes Definition does not have value 'Mantis'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Powder blue"), "unionOfStringTypes Definition does not have value 'Powder blue'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Light blue"), "unionOfStringTypes Definition does not have value 'Light blue'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Baby blue"), "unionOfStringTypes Definition does not have value 'Baby blue'");
+	}
+	
 	@Test
 	public void testIndependentContentTypes(){
 	

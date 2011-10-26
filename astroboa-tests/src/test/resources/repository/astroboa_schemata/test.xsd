@@ -688,6 +688,15 @@
 									</xs:documentation>
 							</xs:annotation>
 						</xs:element>
+						
+						<xs:element name="unionOfStringTypes" minOccurs="0" maxOccurs="1" type="tns:colorVariationType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Union Of String types
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Union Of String types
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
 
 					</xs:sequence>
 				</xs:extension>
@@ -1135,4 +1144,57 @@
    </xs:complexContent>
  </xs:complexType>
  
+ <xs:simpleType name="colorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+	<bccmsmodel:displayName>Color Variation Type</bccmsmodel:displayName>  
+                <bccmsmodel:description>Color Variation Type</bccmsmodel:description>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="tns:RedColorVariationType 
+                            tns:GreenColorVariationType
+                            tns:BlueColorVariationType"/>
+</xs:simpleType>
+
+ <xs:simpleType name="RedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Pink"/>
+        <xs:enumeration value="Salmon"/>
+        <xs:enumeration value="Coral pink"/>
+        <xs:enumeration value="Crimson red"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+  <xs:simpleType name="GreenColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Green color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Asparagus"/>
+        <xs:enumeration value="Dark green"/>
+        <xs:enumeration value="Forest green"/>
+        <xs:enumeration value="Mantis"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="BlueColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Blue color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Powder blue"/>
+        <xs:enumeration value="Light blue"/>
+        <xs:enumeration value="Baby blue"/>
+    </xs:restriction>
+ </xs:simpleType>
+  
 </xs:schema>

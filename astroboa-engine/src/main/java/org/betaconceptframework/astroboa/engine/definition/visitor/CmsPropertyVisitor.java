@@ -1093,135 +1093,159 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			componentType = ((XSAttributeUse)component).getDecl().getType();
 		}
 
-		
 		//Also if it is a restriction then it is probably an enumeration
-			if (componentType != null && componentType.isSimpleType() && 
-					componentType.asSimpleType().isRestriction()){
-				
-				XSRestrictionSimpleType restriction = componentType.asSimpleType().asRestriction();
-				Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
-				
+		if (componentType != null && componentType.isSimpleType() ){
+			
+			if (definitionValueRange == null){
 				definitionValueRange = new LinkedHashMap<String, Localization>();
-				
-				for (XSFacet facet : facets){
-					if (XSFacet.FACET_ENUMERATION.equals(facet.getName())){
-						
-						Localization localization = new LocalizationImpl();
+			}
 
-						XSAnnotation annotation = facet.getAnnotation();
-						if (annotation != null && annotation.getAnnotation() != null && 
-								annotation.getAnnotation() instanceof CmsAnnotation){
-							
-							CmsAnnotation cmsAnnotation = (CmsAnnotation) annotation.getAnnotation();
-							
-							if (cmsAnnotation.getDisplayName() != null)
-							{
-								//We are only interested for the displayName of the value
-								localization = cmsAnnotation.getDisplayName();
-							}
-						}
-						else{
-							logger.warn("Found no localization for enumeration entry {} for element {}", facet.getValue().value, name);
-						}
-						
-						definitionValueRange.put(facet.getValue().value, localization);
-					}
-					else if (XSFacet.FACET_MAXEXCLUSIVE.equals(facet.getName())){
-						maxValueIsExclusive = true;
-						
-						if (valueType == ValueType.Long){
-							maxValue = retrieveLongValue(facet.getValue().value);	
-						}
-						else if (valueType == ValueType.Double){
-							maxValue = retrieveDoubleValue(facet.getValue().value);
-						}
-						else{
-							logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_MAXINCLUSIVE.equals(facet.getName())){
-						maxValueIsExclusive = false;
-						
-						if (valueType == ValueType.Long){
-							maxValue = retrieveLongValue(facet.getValue().value);	
-						}
-						else if (valueType == ValueType.Double){
-							maxValue = retrieveDoubleValue(facet.getValue().value);
-						}
-						else{
-							logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_MINEXCLUSIVE.equals(facet.getName())){
-						minValueIsExclusive = true;
-						
-						if (valueType == ValueType.Long){
-							minValue = retrieveLongValue(facet.getValue().value);	
-						}
-						else if (valueType == ValueType.Double){
-							minValue = retrieveDoubleValue(facet.getValue().value);
-						}
-						else{
-							logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_MININCLUSIVE.equals(facet.getName())){
-						minValueIsExclusive = false;
-						
-						if (valueType == ValueType.Long){
-							minValue = retrieveLongValue(facet.getValue().value);	
-						}
-						else if (valueType == ValueType.Double){
-							minValue = retrieveDoubleValue(facet.getValue().value);
-						}
-						else{
-							logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_MINLENGTH.equals(facet.getName())){
-						if (valueType == ValueType.String){
-							minLength = retrieveIntegerValue(facet.getValue().value);	
-						}
-						else{
-							logger.warn("Found minLength restriction entry {} for non string element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_MAXLENGTH.equals(facet.getName())){
-						if (valueType == ValueType.String){
-							maxLength = retrieveIntegerValue(facet.getValue().value);	
-						}
-						else{
-							logger.warn("Found maxLength restriction entry {} for non string element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_LENGTH.equals(facet.getName())){
-						if (valueType == ValueType.String){
-							minLength = retrieveIntegerValue(facet.getValue().value);
-							maxLength = minLength;
-						}
-						else{
-							logger.warn("Found length restriction entry {} for non string element {}", facet.getValue().value, name);
-						}
-					}
-					else if (XSFacet.FACET_PATTERN.equals(facet.getName())){
-						if (valueType == ValueType.String){
-							pattern = facet.getValue().value;
-							
-							if (StringUtils.isBlank(pattern)){
-								pattern = null;
-								logger.warn("Found blank pattern for string element {}", name);
-							}
-						}
-						else{
-							logger.warn("Found pattern restriction entry {} for non string element {}", facet.getValue().value, name);
-						}
+			if (componentType.asSimpleType().isRestriction()){
+			
+				XSRestrictionSimpleType restriction = componentType.asSimpleType().asRestriction();
+
+				loadRestrictionFacets(restriction);
+				
+			}
+			else if (componentType.asSimpleType().isUnion()){
+				
+				XSUnionSimpleType unionType = componentType.asSimpleType().asUnion();
+				
+				int memberCount = unionType.getMemberSize();
+				
+				for (int i=0;i<memberCount;i++){
+					XSSimpleType member = unionType.getMember(i);
+					
+					if (member.isRestriction()){
+						loadRestrictionFacets(member.asRestriction());
 					}
 				}
+
+			}
+			
+			if (definitionValueRange.size() == 0){
+				definitionValueRange = null;
+			}
+		}
+	}
+
+	private void loadRestrictionFacets(XSRestrictionSimpleType restriction) {
+		Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
+		
+		for (XSFacet facet : facets){
+			if (XSFacet.FACET_ENUMERATION.equals(facet.getName())){
 				
-				if (definitionValueRange.size() == 0){
-					definitionValueRange = null;
+				Localization localization = new LocalizationImpl();
+
+				XSAnnotation annotation = facet.getAnnotation();
+				if (annotation != null && annotation.getAnnotation() != null && 
+						annotation.getAnnotation() instanceof CmsAnnotation){
+					
+					CmsAnnotation cmsAnnotation = (CmsAnnotation) annotation.getAnnotation();
+					
+					if (cmsAnnotation.getDisplayName() != null)
+					{
+						//We are only interested for the displayName of the value
+						localization = cmsAnnotation.getDisplayName();
+					}
+				}
+				else{
+					logger.warn("Found no localization for enumeration entry {} for element {}", facet.getValue().value, name);
+				}
+				
+				definitionValueRange.put(facet.getValue().value, localization);
+			}
+			else if (XSFacet.FACET_MAXEXCLUSIVE.equals(facet.getName())){
+				maxValueIsExclusive = true;
+				
+				if (valueType == ValueType.Long){
+					maxValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					maxValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
 				}
 			}
+			else if (XSFacet.FACET_MAXINCLUSIVE.equals(facet.getName())){
+				maxValueIsExclusive = false;
+				
+				if (valueType == ValueType.Long){
+					maxValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					maxValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MINEXCLUSIVE.equals(facet.getName())){
+				minValueIsExclusive = true;
+				
+				if (valueType == ValueType.Long){
+					minValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					minValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MININCLUSIVE.equals(facet.getName())){
+				minValueIsExclusive = false;
+				
+				if (valueType == ValueType.Long){
+					minValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					minValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MINLENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					minLength = retrieveIntegerValue(facet.getValue().value);	
+				}
+				else{
+					logger.warn("Found minLength restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MAXLENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					maxLength = retrieveIntegerValue(facet.getValue().value);	
+				}
+				else{
+					logger.warn("Found maxLength restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_LENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					minLength = retrieveIntegerValue(facet.getValue().value);
+					maxLength = minLength;
+				}
+				else{
+					logger.warn("Found length restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_PATTERN.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					pattern = facet.getValue().value;
+					
+					if (StringUtils.isBlank(pattern)){
+						pattern = null;
+						logger.warn("Found blank pattern for string element {}", name);
+					}
+				}
+				else{
+					logger.warn("Found pattern restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+		}
 	}
 
 	private void getDefaultValue(XSComponent component) {
@@ -1550,7 +1574,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		//Check if simple type is primitive
 		if (!simpleType.asSimpleType().isPrimitive() ) {
 			
-			//Check if element is an enumeration
+			//Check if element is a restriction
 			if (simpleType.asSimpleType().isRestriction() && 
 					typeNamespace != null && 
 					! typeNamespace.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)){
@@ -1566,14 +1590,20 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				
 				//All members must have the same type.
 				//Union with members of different types is not supported
+				ItemQName unionCommonType = getUnionMemberCommonType(union);
+						
+				if (unionCommonType == null){
+					throw new CmsException("Component "+ componentName+ " Target namespace "+	simpleType.getTargetNamespace() + 
+						" is a union of "+ union.getMemberSize() + " simple types which are not of the same base type. Unions whose members are not of the same base type are not supported");
+				}
 				
-
+				typeName = unionCommonType.getLocalPart();
+				typeNamespace = unionCommonType.getNamespaceURI();
 			}
 		}
 		
 		if (typeName == null){
-			throw new CmsException("Unknown simple type for component "+ componentName+ " Namespace "+
-					" Target namespace "+	simpleType.getTargetNamespace());
+			throw new CmsException("Unknown simple type for component "+ componentName+ " Target namespace "+	simpleType.getTargetNamespace());
 		}
 		
 		typeItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
@@ -1623,6 +1653,38 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			throw new CmsException("Unknown type for component(element or attribute) "+ componentName+ ". Type details: "+
 					" Target namespace "+	simpleType.getTargetNamespace() + " and name "+ typeName);
 		
+	}
+
+	private ItemQName getUnionMemberCommonType(XSUnionSimpleType union) {
+		
+		int memberCount = union.getMemberSize();
+		
+		ItemQName commonType = null;
+		
+		for (int i=0;i<memberCount;i++){
+			XSSimpleType member = union.getMember(i);
+			
+			String typeNamespace = member.getTargetNamespace();
+			String typeName = member.getName();
+			
+			if (member.isRestriction()){
+				typeNamespace = member.asRestriction().getBaseType().getTargetNamespace();
+				typeName = member.asRestriction().getBaseType().getName();
+			}
+			
+			if (commonType == null){
+				commonType = ItemUtils.createNewItem("", typeNamespace, typeName);
+			}
+			else{
+				ItemQName memberType = ItemUtils.createNewItem("", typeNamespace, typeName);
+				
+				if (! memberType.equals(commonType)){
+					return null;
+				}
+			}
+		}
+		
+		return commonType;
 	}
 
 	private void determineValueTypeForGlobalElement(XSElementDecl element,
