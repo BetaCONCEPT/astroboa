@@ -62,7 +62,12 @@ public enum XSSchemaItem implements ItemQName{
 	Byte("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	UnsignedByte("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	Time("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
-	AnyURI("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	AnyURI("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	GYear("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	GYearMonth("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	GMonth("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	GMonthDay("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
+	GDay("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	
 	
 	private ItemQName xsSchemaItem;

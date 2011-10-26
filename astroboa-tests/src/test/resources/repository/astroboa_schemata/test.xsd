@@ -705,6 +705,36 @@
 							</xs:annotation>
 						</xs:element>
 
+						<xs:element name="year" type="xs:gYear" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Year</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="month" type="xs:gMonth" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Month</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="yearMonth" type="xs:gYearMonth" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Year Month</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="day" type="xs:gDay" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Day</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="monthDay" type="xs:gMonthDay" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Month Day</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>

@@ -20,6 +20,7 @@ package org.betaconceptframework.astroboa.test.engine.definition;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -51,6 +52,123 @@ import org.testng.annotations.Test;
  * 
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
+
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-166
+	 */
+	@Test
+	public void testGYearGMonthGYearMonthGDayGMonthDaySupport(){
+		
+		//Test regular expressions
+		Pattern gYearPattern = Pattern.compile(CmsConstants.GYEAR_REG_EXP);
+		Assert.assertTrue(gYearPattern.matcher("2011").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001Z").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001+07:00").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001-03:00").matches());
+		Assert.assertFalse(gYearPattern.matcher("a001").matches());
+		Assert.assertFalse(gYearPattern.matcher("a0a 01").matches());
+		Assert.assertFalse(gYearPattern.matcher("001").matches());
+		Assert.assertFalse(gYearPattern.matcher("001 ").matches());
+		Assert.assertFalse(gYearPattern.matcher("23").matches());
+		
+		Pattern gMonthPattern = Pattern.compile(CmsConstants.GMONTH_REG_EXP);
+		Assert.assertTrue(gMonthPattern.matcher("--12").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--01").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--10Z").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--12+07:00").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--02-03:00").matches());
+		Assert.assertFalse(gMonthPattern.matcher("12").matches());
+		Assert.assertFalse(gMonthPattern.matcher("--00").matches());
+		Assert.assertFalse(gMonthPattern.matcher("-02").matches());
+		Assert.assertFalse(gMonthPattern.matcher("-02 ").matches());
+		Assert.assertFalse(gMonthPattern.matcher("--0 2").matches());
+		
+		Pattern gYearMonthPattern = Pattern.compile(CmsConstants.GYEAR_MONTH_REG_EXP);
+		Assert.assertTrue(gYearMonthPattern.matcher("2011-12").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("1990-01").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("0000-10Z").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("0102-12+07:00").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("1928-02-03:00").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("192012").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1000--00").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("123-02").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1233-02 ").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1234-0 2").matches());
+		
+		Pattern gDayPattern = Pattern.compile(CmsConstants.GDAY_REG_EXP);
+		Assert.assertTrue(gDayPattern.matcher("---12").matches());
+		Assert.assertTrue(gDayPattern.matcher("---31").matches());
+		Assert.assertTrue(gDayPattern.matcher("---05Z").matches());
+		Assert.assertTrue(gDayPattern.matcher("---12+07:00").matches());
+		Assert.assertTrue(gDayPattern.matcher("---02-03:00").matches());
+		Assert.assertFalse(gDayPattern.matcher("192012").matches());
+		Assert.assertFalse(gDayPattern.matcher("--00").matches());
+		Assert.assertFalse(gDayPattern.matcher("-02").matches());
+		Assert.assertFalse(gDayPattern.matcher("---02 ").matches());
+		Assert.assertFalse(gDayPattern.matcher("---0 2").matches());
+
+		Pattern gMonthDayPattern = Pattern.compile(CmsConstants.GMONTH_DAY_REG_EXP);
+		Assert.assertTrue(gMonthDayPattern.matcher("--01-12").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--10-31").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--12-05Z").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--01-12+07:00").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--11-02-03:00").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("192012").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("---00").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("-01-02").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("01---02 ").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("--13-02").matches());
+
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition yearDefinition = testDefinition.getCmsPropertyDefinition("year");
+		
+		Assert.assertNotNull(yearDefinition);
+		
+		Assert.assertEquals(ValueType.String, yearDefinition.getValueType());
+		Assert.assertTrue(yearDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GYEAR_REG_EXP, ((StringPropertyDefinition)yearDefinition).getPattern());
+
+		
+		CmsPropertyDefinition monthDefinition = testDefinition.getCmsPropertyDefinition("month");
+		
+		Assert.assertNotNull(monthDefinition);
+		
+		Assert.assertEquals(ValueType.String, monthDefinition.getValueType());
+		Assert.assertTrue(monthDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GMONTH_REG_EXP, ((StringPropertyDefinition)monthDefinition).getPattern());
+
+		CmsPropertyDefinition yearMonthDefinition = testDefinition.getCmsPropertyDefinition("yearMonth");
+		
+		Assert.assertNotNull(yearMonthDefinition);
+		
+		Assert.assertEquals(ValueType.String, yearMonthDefinition.getValueType());
+		Assert.assertTrue(yearMonthDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GYEAR_MONTH_REG_EXP, ((StringPropertyDefinition)yearMonthDefinition).getPattern());
+
+		CmsPropertyDefinition dayDefinition = testDefinition.getCmsPropertyDefinition("day");
+		
+		Assert.assertNotNull(dayDefinition);
+		
+		Assert.assertEquals(ValueType.String, dayDefinition.getValueType());
+		Assert.assertTrue(dayDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GDAY_REG_EXP, ((StringPropertyDefinition)dayDefinition).getPattern());
+
+		CmsPropertyDefinition monthDayDefinition = testDefinition.getCmsPropertyDefinition("monthDay");
+		
+		Assert.assertNotNull(monthDayDefinition);
+		
+		Assert.assertEquals(ValueType.String, monthDayDefinition.getValueType());
+		Assert.assertTrue(monthDayDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GMONTH_DAY_REG_EXP, ((StringPropertyDefinition)monthDayDefinition).getPattern());
+
+	}
 
 	/*
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164

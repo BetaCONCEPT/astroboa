@@ -1653,6 +1653,26 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				typeItemQName.equals(XSSchemaItem.UnsignedByte)){
 			valueType = ValueType.Long;
 		}
+		else if (typeItemQName.equals(XSSchemaItem.GYear)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GYEAR_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GMonth)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GMONTH_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GYearMonth)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GYEAR_MONTH_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GDay)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GDAY_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GMonthDay)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GMONTH_DAY_REG_EXP;
+		}
 		else if (typeItemQName.equals(XSSchemaItem.Boolean)){
 			valueType = ValueType.Boolean;
 		}
