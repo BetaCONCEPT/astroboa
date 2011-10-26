@@ -2,22 +2,23 @@
 package  org.betaconceptframework.astroboa.model.impl.query.parser;
 
 
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
+import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
+import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
+import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
+import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
+import org.betaconceptframework.astroboa.api.model.query.Condition;
+import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
+import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
+import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
+import org.betaconceptframework.astroboa.util.DateUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.query.Condition;
-import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
-import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
-import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
-import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
-import org.betaconceptframework.astroboa.util.DateUtils;
 
 
 /**
@@ -782,6 +783,16 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     finally { jj_save(1, xla); }
   }
 
+  private boolean jj_3R_4() {
+    if (jj_scan_token(PROPERTY_PATH)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_12() {
+    if (jj_3R_14()) return true;
+    return false;
+  }
+
   private boolean jj_3R_8() {
     if (jj_scan_token(IS_NOT_NULL)) return true;
     return false;
@@ -941,16 +952,6 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
 
   private boolean jj_3_2() {
     if (jj_3R_6()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_4() {
-    if (jj_scan_token(PROPERTY_PATH)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_12() {
-    if (jj_3R_14()) return true;
     return false;
   }
 
