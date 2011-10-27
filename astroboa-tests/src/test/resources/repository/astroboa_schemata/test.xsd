@@ -735,6 +735,15 @@
 							</xs:annotation>
 						</xs:element>
 
+						<xs:element name="multilevelStringEnumeration" minOccurs="0" maxOccurs="1" type="tns:ExtendedRedColorVariationType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Multi Level String Enumeration
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Multi Level String Enumeration
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -1204,6 +1213,17 @@
         <xs:enumeration value="Salmon"/>
         <xs:enumeration value="Coral pink"/>
         <xs:enumeration value="Crimson red"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="ExtendedRedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Extended Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="tns:RedColorVariationType">
+        <xs:enumeration value="Candy apple red"/>
     </xs:restriction>
  </xs:simpleType>
  

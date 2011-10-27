@@ -54,6 +54,28 @@ import org.testng.annotations.Test;
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-167
+	 */
+	@Test
+	public void testMultiLevelStringEnumeration(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition multiLevelStringEnumerationDefinition = testDefinition.getCmsPropertyDefinition("multilevelStringEnumeration");
+		
+		Assert.assertNotNull(multiLevelStringEnumerationDefinition);
+		
+		Assert.assertEquals(ValueType.String, multiLevelStringEnumerationDefinition.getValueType());
+		Assert.assertTrue(multiLevelStringEnumerationDefinition instanceof StringPropertyDefinition );
+
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Pink"), "multiLevelStringEnumerationDefinition Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Salmon"),"multiLevelStringEnumerationDefinition Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Coral pink"), "multiLevelStringEnumerationDefinition Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Crimson red"), "multiLevelStringEnumerationDefinition Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Candy apple red"), "multiLevelStringEnumerationDefinition Definition does not have value 'Candy apple red'");
+	}
+
+	/*
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-166
 	 */
 	@Test

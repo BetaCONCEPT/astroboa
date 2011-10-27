@@ -1138,6 +1138,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void loadRestrictionFacets(XSRestrictionSimpleType restriction) {
+		
 		Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
 		
 		for (XSFacet facet : facets){
@@ -1162,6 +1163,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				}
 				
 				definitionValueRange.put(facet.getValue().value, localization);
+
 			}
 			else if (XSFacet.FACET_MAXEXCLUSIVE.equals(facet.getName())){
 				maxValueIsExclusive = true;
@@ -1254,6 +1256,22 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				}
 			}
 		}
+		
+		
+		//Continue if restriction extends another restriction
+		//CAUTION : In case parent restriction has facets other than Enumeration
+		//then these facets will override equivalent facets of this type
+		//This code must be reviewed
+		XSType baseType = restriction.getBaseType();
+		
+		if (baseType.isSimpleType() && 
+				! baseType.asSimpleType().isPrimitive() &&
+				baseType.asSimpleType().isRestriction() && 
+				! StringUtils.equals(baseType.getTargetNamespace(), XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+			
+			loadRestrictionFacets(baseType.asSimpleType().asRestriction());
+		}
+
 	}
 
 	private void getDefaultValue(XSComponent component) {
@@ -1591,13 +1609,14 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			
 			//Check if element is a restriction
 			if (simpleType.asSimpleType().isRestriction() && 
-					typeNamespace != null && 
-					! typeNamespace.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+					! StringUtils.equals(typeNamespace, XMLConstants.W3C_XML_SCHEMA_NS_URI)){
 				
 				XSRestrictionSimpleType restriction = simpleType.asSimpleType().asRestriction();
 			
-				typeName = restriction.getBaseType().getName();
-				typeNamespace = restriction.getBaseType().getTargetNamespace();
+				XSType baseType = retrieveBaseTypeFromRestriction(restriction);
+				
+				typeName = baseType.getName();
+				typeNamespace = baseType.getTargetNamespace();
 			}
 			else if (simpleType.asSimpleType().isUnion()){
 
@@ -1688,6 +1707,21 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			throw new CmsException("Unknown type for component(element or attribute) "+ componentName+ ". Type details: "+
 					" Target namespace "+	simpleType.getTargetNamespace() + " and name "+ typeName);
 		
+	}
+
+	private XSType retrieveBaseTypeFromRestriction(XSRestrictionSimpleType restriction) {
+		
+		XSType baseType = restriction.getBaseType();
+		
+		if (baseType.isSimpleType() && 
+				! baseType.asSimpleType().isPrimitive() &&
+				baseType.asSimpleType().isRestriction() && 
+				! StringUtils.equals(baseType.getTargetNamespace(), XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+			
+			return retrieveBaseTypeFromRestriction(baseType.asSimpleType().asRestriction());
+		}
+		
+		return baseType;
 	}
 
 	private ItemQName getUnionMemberCommonType(XSUnionSimpleType union) {
