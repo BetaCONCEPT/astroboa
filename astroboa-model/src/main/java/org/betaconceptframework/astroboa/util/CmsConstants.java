@@ -292,6 +292,12 @@ public final class CmsConstants {
 	public static final String EXCHANGE_NAME = "AstroboaExchange";
 	
 	/*
+	 * Regular expression for the pattern of the values of an element
+	 * of type {http://www.w3.org/2001/XMLSchema.xsd}language (xml:lang)
+	 */
+	public static final String XML_SCHEMA_LANGUAGE_TYPE_REG_EXP = "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*";
+	
+	/*
 	 * ISO 8601 regular expressions for XML Schema types
 	 * gYear, gMonth, gYearMonth, gDay, gMonthDay
 	 */

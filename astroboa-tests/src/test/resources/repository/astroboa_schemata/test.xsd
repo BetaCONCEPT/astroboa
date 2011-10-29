@@ -744,6 +744,12 @@
 							</xs:annotation>
 						</xs:element>
 
+						<xs:element name="language" type="xs:language" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Language</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>

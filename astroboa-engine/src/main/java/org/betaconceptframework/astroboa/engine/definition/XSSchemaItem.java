@@ -67,7 +67,8 @@ public enum XSSchemaItem implements ItemQName{
 	GYearMonth("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	GMonth("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
 	GMonthDay("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI), 
-	GDay("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	GDay("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI),
+	Language("xs", XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	
 	
 	private ItemQName xsSchemaItem;

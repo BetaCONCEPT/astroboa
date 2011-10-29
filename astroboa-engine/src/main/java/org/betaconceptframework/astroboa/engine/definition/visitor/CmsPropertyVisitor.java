@@ -69,6 +69,7 @@ import org.betaconceptframework.astroboa.model.impl.definition.ObjectReferencePr
 import org.betaconceptframework.astroboa.model.impl.definition.StringPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.TopicReferencePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsDefinitionItem;
+import org.betaconceptframework.astroboa.model.impl.item.ItemQNameImpl;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.DateUtils;
@@ -1111,7 +1112,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			if (componentType.asSimpleType().isRestriction()){
 			
 				XSRestrictionSimpleType restriction = componentType.asSimpleType().asRestriction();
-
+				
 				loadRestrictionFacets(restriction);
 				
 			}
@@ -1138,6 +1139,67 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void loadRestrictionFacets(XSRestrictionSimpleType restriction) {
+		
+		if (StringUtils.equals(restriction.getName(), XSSchemaItem.Language.getLocalPart()) &&
+				StringUtils.equals(restriction.getTargetNamespace(), XSSchemaItem.Language.getNamespaceURI())
+			){
+			
+			/*
+			 * XSOM library uses file xsom-20110809.jar/com.sun.xml.xsom.impl.parser.datatypes.xsd,
+			 * which contains a list of built in datatypes defined by XML Schema,
+			 * when information about one or more of these types is required. 
+			 * 
+			 * Unfortunately, it contains wrong information
+			 * about the pattern of the 'language' simple type. In this file, 'language'
+			 * simple type is defined as 
+			 * 
+			   <xs:simpleType name="language" >
+			    <xs:restriction base="xs:token">
+			      <xs:pattern
+			        value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*"
+			                >
+			        <xs:annotation>
+			          <xs:documentation
+			                source="http://www.w3.org/TR/REC-xml#NT-LanguageID">
+			            pattern specifies the content of section 2.12 of XML 1.0e2
+			            and RFC 1766
+			          </xs:documentation>
+			        </xs:annotation>
+			      </xs:pattern>
+			    </xs:restriction>
+			  </xs:simpleType>
+			  
+			 * where as in http://www.w3.org/2001/XMLSchema.xsd  (The XML Schema for the ... XML Schema)
+			 * 'language' type is defined as
+			    
+			   	<xs:simpleType name="language" id="language">
+			   		<xs:annotation>
+			   			<xs:documentation source="http://www.w3.org/TR/xmlschema-2/#language"/>
+			   		</xs:annotation>
+			   		<xs:restriction base="xs:token">
+			   			<xs:pattern value="[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*" id="language.pattern">
+				   			<xs:annotation>
+				   				<xs:documentation source="http://www.ietf.org/rfc/rfc3066.txt">
+						            pattern specifies the content of section 2.12 of XML 1.0e2
+						            and RFC 3066 (Revised version of RFC 1766).
+	          					</xs:documentation>
+	          				</xs:annotation>
+          				</xs:pattern>
+          			</xs:restriction>
+          		</xs:simpleType>
+          		
+          		Every time we ask  XSOM about the pattern of the 'language' type, it is returning the one
+          		provided in the datatypes.xsd file and not the valid value provided by the XML Schema's xsd. 
+          		Therefore we have defined the constant CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP 
+          		which contains the true value of the pattern and use this instead. 
+          		
+          		Thus, in the context of this method, if the restriction whose facets we want to load 
+          		is the 'language' type restriction, there is no point in processing its facets at all. 
+          		We know apriori that there is only one facet, the pattern and it has a specific value.
+			 */
+			
+			return ;
+		}
 		
 		Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
 		
@@ -1383,8 +1445,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 			//this is the only place where these values can be set
 			//There is no access to these properties from Element perspective
-			boolean mandatory = particle.getMinOccurs() == 1;
-			boolean multiple = particle.getMaxOccurs() == XSParticle.UNBOUNDED;
+			boolean mandatory = particle.getMinOccurs() != null && particle.getMinOccurs().intValue() == 1;
+			boolean multiple = particle.getMaxOccurs() != null && particle.getMaxOccurs().intValue() == XSParticle.UNBOUNDED;
 
 
 			final XSElementDecl elementDecl = particle.getTerm().asElementDecl();
@@ -1702,6 +1764,10 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		else if (typeItemQName.equals(XSSchemaItem.Date)){
 			valueType = ValueType.Date;
 			calendarPattern = CmsConstants.DATE_PATTERN;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.Language)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP;
 		}
 		else
 			throw new CmsException("Unknown type for component(element or attribute) "+ componentName+ ". Type details: "+

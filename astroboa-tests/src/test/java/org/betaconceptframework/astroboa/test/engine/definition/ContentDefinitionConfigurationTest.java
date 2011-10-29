@@ -53,6 +53,26 @@ import org.testng.annotations.Test;
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
+	
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-168
+	 */
+	@Test
+	public void testSuportForXSDLanguageType(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition languageDefinition = testDefinition.getCmsPropertyDefinition("language");
+		
+		Assert.assertNotNull(languageDefinition);
+		
+		Assert.assertEquals(ValueType.String, languageDefinition.getValueType());
+		Assert.assertTrue(languageDefinition instanceof StringPropertyDefinition );
+		Assert.assertEquals(CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP, ((StringPropertyDefinition)languageDefinition).getPattern());
+
+
+	}
+
 	/*
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-167
 	 */
