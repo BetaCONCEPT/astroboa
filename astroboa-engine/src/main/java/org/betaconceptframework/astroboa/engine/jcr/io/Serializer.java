@@ -24,8 +24,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -59,10 +62,12 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinit
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.commons.comparator.PropertyRepresentingXmlAttributeComparator;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.io.contenthandler.ExportContentHandler;
@@ -73,6 +78,7 @@ import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtil
 import org.betaconceptframework.astroboa.engine.jcr.util.JcrNodeUtils;
 import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.SimpleCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.io.SerializationReportImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
@@ -154,6 +160,8 @@ public class Serializer {
 	}
 
 	private SerializationConfiguration serializationConfiguration;
+
+	private Comparator<CmsPropertyDefinition> cmsPropertyDefinitionComparator = new PropertyRepresentingXmlAttributeComparator();
 	
 	
 	public Serializer(OutputStream out, CmsRepositoryEntityUtils cmsRepositoryEntityUtils, Session session, SerializationConfiguration serializationConfiguration) throws Exception{
@@ -811,7 +819,7 @@ public class Serializer {
 						numberOfJcrPropertiesLeftToProcess > 0){
 					
 					if (node.hasProperty(cmsPropertyName)){
-						serializePropertyAsElement(node.getProperty(cmsPropertyName), objectPath);
+						serializeProperty(node.getProperty(cmsPropertyName), objectPath);
 						numberOfJcrPropertiesLeftToProcess--;
 					}
 				}
@@ -869,7 +877,7 @@ public class Serializer {
 		}
 		else{
 			//	Could not serialize properties in order. Follow the default procedure
-			serializePropertiesAsElements(node);
+			serializeProperties(node);
 
 			serializeChildNodes(node, true, FetchLevel.FULL);
 		}
@@ -896,13 +904,27 @@ public class Serializer {
 		LocalizableCmsDefinition currentDefinition = parentPropertyDefinitionQueue.peek();
 
 		if (currentDefinition != null){
+			
+			Map<String, CmsPropertyDefinition> definitions = new LinkedHashMap<String, CmsPropertyDefinition>();
+			List<CmsPropertyDefinition> listOfDefinitionEntries = new ArrayList<CmsPropertyDefinition>();
+			
 			if (currentDefinition instanceof ComplexCmsPropertyDefinition){
-				return ((ComplexCmsPropertyDefinition)currentDefinition).getChildCmsPropertyDefinitions();
+				listOfDefinitionEntries.addAll(((ComplexCmsPropertyDefinition)currentDefinition).getChildCmsPropertyDefinitions().values());
 			}
+			else if (currentDefinition instanceof ContentObjectTypeDefinition){
+				listOfDefinitionEntries.addAll(((ContentObjectTypeDefinition)currentDefinition).getPropertyDefinitions().values());
+			}
+			
+			//Sort entries
+			Collections.sort(listOfDefinitionEntries, cmsPropertyDefinitionComparator);
+			
+			for (CmsPropertyDefinition definition : listOfDefinitionEntries){
+				definitions.put(definition.getName(), definition);
+			}
+			
+			
+			return definitions;
 
-			if (currentDefinition instanceof ContentObjectTypeDefinition){
-				return ((ContentObjectTypeDefinition)currentDefinition).getPropertyDefinitions();
-			}
 		}
 
 		return null;
@@ -1389,7 +1411,7 @@ public class Serializer {
 		}
 	}
 
-	private void serializePropertiesAsElements(Node node) throws Exception{
+	private void serializeProperties(Node node) throws Exception{
 
 		PropertyIterator properties = node.getProperties();
 
@@ -1409,13 +1431,13 @@ public class Serializer {
 				continue;
 			}
 
-			serializePropertyAsElement(property, objectPath);
+			serializeProperty(property, objectPath);
 
 		}
 
 	}
 
-	private void serializePropertyAsElement(Property property, String objectPath)  throws Exception{
+	private void serializeProperty(Property property, String objectPath)  throws Exception{
 		String propertyName = property.getName();
 
 		if (shouldSerializeProperty(propertyName)){
@@ -1457,11 +1479,12 @@ public class Serializer {
 			
 			boolean userHasDefinedPropertyAsMultiple = propertyDefinition != null && propertyDefinition.isMultiple();
 			boolean jcrHasMarkedPropertyAsMultiple = property.getDefinition() != null && property.getDefinition().isMultiple();
+			boolean exportAsAnAttribute = propertyDefinition instanceof SimpleCmsPropertyDefinition && ((SimpleCmsPropertyDefinitionImpl)propertyDefinition).isRepresentsAnXmlAttribute();
 
 			if (jcrHasMarkedPropertyAsMultiple){
 				
 				for (Value value : property.getValues()){
-					createElementWithValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple, objectPath);
+					writeValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple, objectPath,exportAsAnAttribute);
 					
 					if (!userHasDefinedPropertyAsMultiple){
 						logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a single value property. Property's instance " +
@@ -1472,7 +1495,7 @@ public class Serializer {
 				}
 			}
 			else{
-				createElementWithValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple,objectPath);
+				writeValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple,objectPath,exportAsAnAttribute);
 				
 				if (userHasDefinedPropertyAsMultiple){
 					logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a multi value property. Property's instance " +
@@ -1551,39 +1574,52 @@ public class Serializer {
 		}
 	}
 
-	private void createElementWithValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath) throws Exception {
+	private void writeValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath, boolean exportAsAnAttribute) throws Exception {
 		if (value != null){
-			if (ValueType.TopicReference == valueType){
-				addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
-			}
-			else if (ValueType.ObjectReference == valueType){
-				addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
-			}
-			else{
-
-				if (propertyMayHaveMultipltValues && outputIsJSON()){
-					openEntityWithAttribute(propertyName, CmsConstants.EXPORT_AS_AN_ARRAY_INSTRUCTION, "true");
+			
+			if (exportAsAnAttribute){
+				
+				if (ValueType.Date == valueType){
+					String dateValue = convertCalendarToXMLFormat(value.getDate(), dateTimePattern);
+					writeAttribute(propertyName, dateValue);
 				}
 				else{
-					openEntityWithNoAttributes(propertyName);
+					writeAttribute(propertyName, value.getString());
 				}
-
-				if (ValueType.Binary == valueType){
-					exportContentHandler.closeOpenElement();
-
-					serializeBinaryValue(value);
-
+			}
+			else{
+				if (ValueType.TopicReference == valueType){
+					addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
 				}
-				else if (ValueType.Date == valueType){
-					char[] ch = convertCalendarToXMLFormat(value.getDate(), dateTimePattern).toCharArray();
-					writeElementContent(ch);
+				else if (ValueType.ObjectReference == valueType){
+					addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
 				}
-				else {
-					char[] ch = value.getString().toCharArray();
-					writeElementContent(ch);
-				}
+				else{
 
-				closeEntity(propertyName);
+					if (propertyMayHaveMultipltValues && outputIsJSON()){
+						openEntityWithAttribute(propertyName, CmsConstants.EXPORT_AS_AN_ARRAY_INSTRUCTION, "true");
+					}
+					else{
+						openEntityWithNoAttributes(propertyName);
+					}
+
+					if (ValueType.Binary == valueType){
+						exportContentHandler.closeOpenElement();
+
+						serializeBinaryValue(value);
+
+					}
+					else if (ValueType.Date == valueType){
+						char[] ch = convertCalendarToXMLFormat(value.getDate(), dateTimePattern).toCharArray();
+						writeElementContent(ch);
+					}
+					else {
+						char[] ch = value.getString().toCharArray();
+						writeElementContent(ch);
+					}
+
+					closeEntity(propertyName);
+				}
 			}
 		}
 	}

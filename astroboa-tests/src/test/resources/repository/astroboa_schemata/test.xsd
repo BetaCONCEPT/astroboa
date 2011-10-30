@@ -1241,15 +1241,25 @@
     </xs:restriction>
  </xs:simpleType>
  
+ <xs:simpleType name="MoreRedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            More Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Candy apple red"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
  <xs:simpleType name="ExtendedRedColorVariationType">
     <xs:annotation>
         <xs:documentation xml:lang="en">
             Extended Red color variations
         </xs:documentation>
     </xs:annotation>
-    <xs:restriction base="tns:RedColorVariationType">
-        <xs:enumeration value="Candy apple red"/>
-    </xs:restriction>
+    <xs:union memberTypes="tns:RedColorVariationType
+    						tns:MoreRedColorVariationType"/>
  </xs:simpleType>
  
   <xs:simpleType name="GreenColorVariationType">

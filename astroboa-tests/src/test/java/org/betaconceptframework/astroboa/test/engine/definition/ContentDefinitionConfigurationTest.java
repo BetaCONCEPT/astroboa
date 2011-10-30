@@ -40,6 +40,7 @@ import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePro
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.model.impl.definition.SimpleCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.security.AstroboaPasswordEncryptor;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -321,6 +322,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 			CmsPropertyDefinition simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("simpleStringFromAttribute");
 			Assert.assertFalse(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is mandatory");
 			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+			Assert.assertTrue(((SimpleCmsPropertyDefinitionImpl)simpleStringDefinition).isRepresentsAnXmlAttribute(), "Property "+simpleStringDefinition.getFullPath()+" does not represent an xml attribute");
 
 			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
 					"String <b>Property</b> defined by Attribute", "String Property defined by Attribute");
@@ -328,6 +330,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 			simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("mandatorySimpleStringFromAttribute");
 			Assert.assertTrue(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is optional");
 			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+			Assert.assertTrue(((SimpleCmsPropertyDefinitionImpl)simpleStringDefinition).isRepresentsAnXmlAttribute(), "Property "+simpleStringDefinition.getFullPath()+" does not represent an xml attribute");
 			
 			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
 					"mandatorySimpleStringFromAttribute", "mandatorySimpleStringFromAttribute");

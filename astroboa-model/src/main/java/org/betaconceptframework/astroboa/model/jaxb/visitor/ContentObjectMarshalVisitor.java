@@ -56,6 +56,7 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.commons.visitor.AbstractCmsPropertyDefinitionVisitor;
 import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.SimpleCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.jaxb.AstroboaMarshaller;
 import org.betaconceptframework.astroboa.model.jaxb.CmsEntitySerialization;
 import org.betaconceptframework.astroboa.model.jaxb.MarshalUtils;
@@ -524,9 +525,18 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 		
 		final SimpleCmsPropertyType simpleCmsPropertyType = new SimpleCmsPropertyType();
 		
+		simpleCmsPropertyType.setExportAsAnAttribute(((SimpleCmsPropertyDefinitionImpl)simpleCmsPropertyDefinition).isRepresentsAnXmlAttribute());
+		
 		CmsPropertyTypeJAXBElement<SimpleCmsPropertyType> simpleCmsPropertyTypeJaxbElement = new CmsPropertyTypeJAXBElement(
 				new QName(simpleCmsPropertyDefinition.getQualifiedName().getLocalPart()),
 				SimpleCmsPropertyType.class, null, simpleCmsPropertyType);
+		
+		//Special case. If property represents an attribute
+		//and export is in XML format
+		//attribute's value should be the empty string
+		if (!marshalOutputTypeIsJSON() && simpleCmsPropertyType.exportAsAnAttribute()){
+			simpleCmsPropertyType.setContent("");
+		}
 		
 		addJaxbElementToCurrentParentComplexCmsPropertyType(simpleCmsPropertyTypeJaxbElement);
 	}
@@ -546,6 +556,8 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 			case Date:
 				
 				final SimpleCmsPropertyType simpleCmsPropertyType = new SimpleCmsPropertyType();
+				
+				simpleCmsPropertyType.setExportAsAnAttribute(((SimpleCmsPropertyDefinitionImpl)simplePropertyDefinition).isRepresentsAnXmlAttribute());
 				
 				if (marshalOutputTypeIsJSON() && simplePropertyDefinition.isMultiple()){
 					simpleCmsPropertyType.setExportAsAnArray(true);
@@ -761,11 +773,12 @@ public class ContentObjectMarshalVisitor extends AbstractCmsPropertyDefinitionVi
 	}
 
 	private void addJaxbElementToCurrentParentComplexCmsPropertyType(CmsPropertyType cmsPropertyType) {
+		
 		if (contentObjectMarshalContext.getFirstComplexCmsPropertyType() == null){
-			contentObjectMarshalContext.getContentObjectType().getCmsProperties().add(cmsPropertyType);
+			contentObjectMarshalContext.getContentObjectType().addCmsProperty(cmsPropertyType);
 		}
 		else{
-			contentObjectMarshalContext.getFirstComplexCmsPropertyType().getCmsProperties().add(cmsPropertyType);
+			contentObjectMarshalContext.getFirstComplexCmsPropertyType().addCmsProperty(cmsPropertyType);
 		}
 	}
 

@@ -19,10 +19,13 @@
 package org.betaconceptframework.astroboa.model.jaxb.type;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.RepositoryUserAdapter;
 
@@ -42,10 +47,8 @@ import org.betaconceptframework.astroboa.model.jaxb.adapter.RepositoryUserAdapte
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contentObjectType", propOrder = {
-		"systemName",
-		"contentObjectTypeName",
-    "owner",
-    "cmsProperties"
+		"owner",
+		"cmsProperties"
 })
 public class ContentObjectType extends AstroboaEntityType{
 
@@ -65,6 +68,9 @@ public class ContentObjectType extends AstroboaEntityType{
 	@XmlJavaTypeAdapter(value=RepositoryUserAdapter.class)
 	private RepositoryUser owner;
     
+	@XmlAnyAttribute
+	private Map<QName, String> cmsPropertiesAsAttributes;
+
     @XmlAnyElement(lax = true)
     private List<CmsPropertyType> cmsProperties;
 
@@ -109,4 +115,32 @@ public class ContentObjectType extends AstroboaEntityType{
         return this.cmsProperties;
     }
 	
+	public Map<QName,String> getCmsPropertiesAsAttributes() {
+        if (cmsPropertiesAsAttributes == null) {
+        	cmsPropertiesAsAttributes = new LinkedHashMap<QName,String>();
+        }
+        return this.cmsPropertiesAsAttributes;
+	}
+
+
+	public void addCmsProperty(CmsPropertyType cmsProperty){
+		
+		if (cmsProperty !=null){
+			if (cmsProperty instanceof SimpleCmsPropertyType &&
+					BooleanUtils.isTrue(((SimpleCmsPropertyType)cmsProperty).exportAsAnAttribute())){
+				getCmsPropertiesAsAttributes().put(cmsProperty.getQname(),((SimpleCmsPropertyType)cmsProperty).getContent());
+			}
+			else if (cmsProperty instanceof CmsPropertyTypeJAXBElement && 
+					((CmsPropertyTypeJAXBElement)cmsProperty).getDeclaredType() == SimpleCmsPropertyType.class && 
+							BooleanUtils.isTrue(((CmsPropertyTypeJAXBElement<SimpleCmsPropertyType>)cmsProperty).getValue().exportAsAnAttribute())){
+				getCmsPropertiesAsAttributes().put(cmsProperty.getQname(),((CmsPropertyTypeJAXBElement<SimpleCmsPropertyType>)cmsProperty).getValue().getContent());
+			}
+			else{
+				getCmsProperties().add(cmsProperty);
+			}
+		}
+		
+		
+	}
+
 }

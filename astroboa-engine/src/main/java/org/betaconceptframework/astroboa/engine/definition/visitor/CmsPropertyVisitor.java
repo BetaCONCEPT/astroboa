@@ -172,6 +172,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	private boolean typeDefinitionExtendsBaseObjectType;
 	
 	private boolean propertyRepresentsTheSimpleContentOfAComplexProperty;
+	private boolean propertyRepresentsAnXmlAttribute;
 	
 	public boolean propertyRepresentsTheSimpleContentOfAComplexProperty() {
 		return propertyRepresentsTheSimpleContentOfAComplexProperty;
@@ -215,13 +216,13 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			switch (valueType) {
 			case Binary:
 				definition = new BinaryPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition, null, binaryChannelIsUnmanaged);
+						restrictWriteToRoles, parentDefinition, null, binaryChannelIsUnmanaged,propertyRepresentsAnXmlAttribute);
 				break;
 			case Boolean:
 				definition = new BooleanPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Boolean.valueOf(defaultValue): null) , 
-						null);
+						null,propertyRepresentsAnXmlAttribute);
 				break;
 			case Complex:
 				
@@ -333,7 +334,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			case ObjectReference:
 				
 				definition = new ObjectReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null, acceptedContentTypes);
+						restrictWriteToRoles, parentDefinition,	null, acceptedContentTypes,propertyRepresentsAnXmlAttribute);
 				
 				break;
 			case ContentType:
@@ -351,7 +352,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new CalendarPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? DateUtils.fromString(defaultValue, calendarPattern): null) , 
-						null,calendarPattern);
+						null,calendarPattern,propertyRepresentsAnXmlAttribute);
 				break;
 			case Double:
 				Map<Double, Localization> acceptedValues = null;
@@ -366,7 +367,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new DoublePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Double.valueOf(defaultValue): null) , 
-						null, acceptedValues, (Double)minValue, minValueIsExclusive, (Double)maxValue, maxValueIsExclusive);
+						null, acceptedValues, (Double)minValue, minValueIsExclusive, (Double)maxValue, maxValueIsExclusive,propertyRepresentsAnXmlAttribute);
 				break;
 			case Long:
 				Map<Long, Localization> longAcceptedValues = null;
@@ -381,17 +382,17 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new LongPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Long.valueOf(defaultValue): null) , 
-						null, longAcceptedValues, (Long)minValue, minValueIsExclusive, (Long)maxValue, maxValueIsExclusive);
+						null, longAcceptedValues, (Long)minValue, minValueIsExclusive, (Long)maxValue, maxValueIsExclusive,propertyRepresentsAnXmlAttribute);
 				break;
 			case String:
 				definition = new StringPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						defaultValue, null, maxLength, minLength, stringFormat, definitionValueRange, 
-						passwordEncryptorClassName, passwordType, pattern);
+						passwordEncryptorClassName, passwordType, pattern,propertyRepresentsAnXmlAttribute);
 				break;
 			case TopicReference:
 				definition = new TopicReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null, acceptedTaxonomies);
+						restrictWriteToRoles, parentDefinition,	null, acceptedTaxonomies,propertyRepresentsAnXmlAttribute);
 				break;
 
 			default:
@@ -489,12 +490,15 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	public void attributeUse(XSAttributeUse attribute) {
 	
+		propertyRepresentsAnXmlAttribute = true;
+		
 		determineValueTypeForSimpleType(attribute.getDecl().getName(), attribute.getDecl().getType());
 
 		logger.debug("Constructing definition with type '{}' for attribute '{}'",valueType , attribute.getDecl().getName());
 
 		populateDefinition(attribute);
 
+		
 	}
 	
 	

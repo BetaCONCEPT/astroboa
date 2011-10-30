@@ -81,6 +81,80 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Test
+	public void testExportOfPropertiesWhichAreDefinedAsAttributes() throws Throwable{
+		
+		ContentObject independentObject = createContentObjectForType(INDENPENDENT_CONTENT_TYPE_NAME, getSystemUser(), "test-export-property-as-an-attribute");
+		String attributeValue = "attribute-value";
+		((StringProperty)independentObject.getCmsProperty("mandatorySimpleStringFromAttribute")).addSimpleTypeValue(attributeValue);
+
+		String xml = independentObject.xml(false);
+		String json = independentObject.json(false);
+
+		System.out.println("XML \n"+independentObject.xml(true));
+		String expectedOutcome = "mandatorySimpleStringFromAttribute=\""+attributeValue+"\"";
+		Assert.assertTrue(xml.contains(expectedOutcome), "XML export from API does not contain attribute mandatorySimpleStringFromAttribute");
+
+		expectedOutcome = "\"mandatorySimpleStringFromAttribute\":\""+attributeValue+"\"";
+		assertPropertyIsExported(json,expectedOutcome);
+		
+		//Now save object and check again
+		independentObject = contentService.save(independentObject, false, true, null);
+		markObjectForRemoval(independentObject);
+		
+		String jsonFromApi = null;
+		String jsonFromService = null;
+		String xmlFromApi = null;
+		String xmlFromService = null;
+
+		try{
+
+			/*
+			 * Generate XML exports from API and Service API
+			 */
+			xmlFromApi = independentObject.xml(false);
+
+			xmlFromService = contentService.getContentObject(independentObject.getId(), ResourceRepresentationType.XML, FetchLevel.FULL, 
+					CacheRegion.NONE, null, false);
+
+			String expectedProperty = "mandatorySimpleStringFromAttribute=\""+attributeValue+"\"";
+			Assert.assertTrue(xmlFromApi.contains(expectedProperty), "XML export from API does not contain attribute mandatorySimpleStringFromAttribute");
+			Assert.assertTrue(xmlFromService.contains(expectedProperty), "XML export from Service does not contain attribute mandatorySimpleStringFromAttribute");
+			
+			jsonFromApi = independentObject.json(false);
+
+			jsonFromService = contentService.getContentObject(independentObject.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL, 
+					CacheRegion.NONE, null, false);
+
+			expectedProperty = "\"mandatorySimpleStringFromAttribute\":\""+attributeValue+"\"";
+			assertPropertyIsExported(jsonFromApi,expectedProperty);
+			assertPropertyIsExported(jsonFromService,expectedProperty);
+
+		
+		}
+		catch(Throwable e){
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("JSON From API \n");
+			sb.append(jsonFromApi);
+
+			sb.append("\nJSON From Service \n");
+			sb.append(jsonFromService);
+
+			sb.append("\nXML From API \n");
+			sb.append(xmlFromApi);
+
+			sb.append("\nXML From Service \n");
+			sb.append(xmlFromService);
+
+			logger.error(sb.toString(), e);
+
+			throw e;
+		}
+
+		
+	}
+	
+	@Test
 	public void testExportObjectReference() throws Throwable{
 
 		ContentObject contentObjectForTestExportObjectReference = createContentObject(getSystemUser(),  "testExportObjectReference");
