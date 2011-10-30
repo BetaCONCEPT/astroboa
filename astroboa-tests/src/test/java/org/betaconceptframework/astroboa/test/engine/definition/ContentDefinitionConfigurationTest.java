@@ -55,10 +55,46 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 	
 	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-169
+	 */
+	@Test
+	public void testSupportForComplexTypesWithSimpleContent(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition complexWithSimpleContentDefinition = testDefinition.getCmsPropertyDefinition("complexWithSimpleContent");
+		
+		Assert.assertNotNull(complexWithSimpleContentDefinition);
+
+		Assert.assertEquals(ValueType.Complex, complexWithSimpleContentDefinition.getValueType());
+		Assert.assertTrue(complexWithSimpleContentDefinition instanceof ComplexCmsPropertyDefinition );
+		
+		Assert.assertEquals(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).getChildCmsPropertyDefinitions().size(), 2, "Property complexWithSimpleContent should have 2 child properties");
+
+		Assert.assertTrue(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).hasChildCmsPropertyDefinition("color"));
+		Assert.assertTrue(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).hasChildCmsPropertyDefinition(CmsConstants.NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT));
+
+		CmsPropertyDefinition colorEnumerationDefinition = ((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).getChildCmsPropertyDefinition("color");
+		
+		Assert.assertNotNull(colorEnumerationDefinition);
+		
+		Assert.assertEquals(ValueType.String, colorEnumerationDefinition.getValueType());
+		Assert.assertTrue(colorEnumerationDefinition instanceof StringPropertyDefinition );
+
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Pink"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Salmon"),colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Coral pink"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Crimson red"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Candy apple red"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Candy apple red'");
+
+	
+	}
+
+	/*
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-168
 	 */
 	@Test
-	public void testSuportForXSDLanguageType(){
+	public void testSupportForXSDLanguageType(){
 		
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		
@@ -77,7 +113,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-167
 	 */
 	@Test
-	public void testMultiLevelStringEnumeration(){
+	public void testMultiLevelStringEnumerationSupport(){
 		
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		
@@ -216,7 +252,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
 	 */
 	@Test
-	public void testAlternateDeclarationOfBinaryChannel(){
+	public void testAlternateDeclarationOfBinaryChannelSupport(){
 		
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		

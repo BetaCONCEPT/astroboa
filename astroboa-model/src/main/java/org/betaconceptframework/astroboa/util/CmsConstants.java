@@ -257,6 +257,8 @@ public final class CmsConstants {
 	}
 	
 	
+	public static final String NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT = "value";
+	
 	public static final String RESOURCE_API_CONTENT_URI_PATH = "objects";
 	public static final String RESOURCE_API_TAXONOMY_URI_PATH = "taxonomies";
 	public static final String RESOURCE_API_TOPIC_URI_PATH = "topics";

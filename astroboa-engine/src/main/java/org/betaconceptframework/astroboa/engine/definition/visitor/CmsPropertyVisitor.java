@@ -69,7 +69,6 @@ import org.betaconceptframework.astroboa.model.impl.definition.ObjectReferencePr
 import org.betaconceptframework.astroboa.model.impl.definition.StringPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.TopicReferencePropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsDefinitionItem;
-import org.betaconceptframework.astroboa.model.impl.item.ItemQNameImpl;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.DateUtils;
@@ -170,9 +169,19 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	private String pattern;
 	
-	
 	private boolean typeDefinitionExtendsBaseObjectType;
 	
+	private boolean propertyRepresentsTheSimpleContentOfAComplexProperty;
+	
+	public boolean propertyRepresentsTheSimpleContentOfAComplexProperty() {
+		return propertyRepresentsTheSimpleContentOfAComplexProperty;
+	}
+
+	public void setPropertyRepresentsTheSimpleContentOfAComplexProperty(
+			boolean propertyRepresentsTheSimpleContentOfAComplexProperty) {
+		this.propertyRepresentsTheSimpleContentOfAComplexProperty = propertyRepresentsTheSimpleContentOfAComplexProperty;
+	}
+
 	private QName generatedQNameForDefinition(){
 		if (parentDefinition != null && parentDefinition.getQualifiedName() != null && parentDefinition.getQualifiedName().getPrefix() != null){
 			return new QName(namespaceUri,name,parentDefinition.getQualifiedName().getPrefix());
@@ -715,25 +724,26 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				annotation(complexType.getAnnotation());
 		}
 
-		XSParticle particle = complexType.getContentType().asParticle();
-
-		if (particle == null){
-			
-			//Probably empty. If not throw an exception for an invalid complex type
-			if (complexType.getContentType().asEmpty() == null){
-				
-				if (complexType.getName() !=null){
-					throw new Exception("Complex Type "+ complexType.getName()+ " definition is not supported by ASTROBOA");
-				}
-				else{
-					throw new Exception("Complex Type "+ complexType.getBaseType().getName()+ " definition is not supported by ASTROBOA");
-				}
-			}
+		XSContentType complexTypeContent = complexType.getContentType();
+		
+		//1. ComplexType has Complex Content
+		if (complexTypeContent.asParticle() != null){
+			addSubElementsAsChildProperties(complexTypeContent.asParticle().getTerm().asModelGroup(), complexTypeRepresentsContentObjectType);
+		}
+		//2. ComplexType has Simple Content
+		else if (complexTypeContent.asSimpleType() != null){
+			addPropertyWhichRepresentsTheSimpleContentOfAComplexType(complexTypeContent.asSimpleType());
+		}
+		//3. ComplexType is empty
+		else if (complexTypeContent.asEmpty() != null){
+			logger.warn("Type {}{} is empty", namespaceUri, name);
 		}
 		else{
-			addSubElementsAsChildProperties(particle.getTerm().asModelGroup(), complexTypeRepresentsContentObjectType);
+			//Something weird is happenning. Throw an exception
+			throw new Exception("Complex Type {"+ namespaceUri+ "}" +name+" definition is not supported by ASTROBOA");
 		}
 
+		//Visit complex type attributes
 		if (complexType.getAttributeUses() != null ){
 			
 			String complexTypeTargetNamespace = retrieveComplexTypeTargetNamespace(complexType);
@@ -936,8 +946,13 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void setBasicProperties(XSComponent component) throws Exception {
-		//Attributes defined by XML Schema
-		if (component instanceof XSDeclaration){
+		
+		if (propertyRepresentsTheSimpleContentOfAComplexProperty){
+			//Special case. This property represents the simple content of a complex type
+			//In this case, its name is fixed
+			name = CmsConstants.NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT;
+		}
+		else if (component instanceof XSDeclaration){
 			name = ((XSDeclaration)component).getName();
 		}
 		else if (component instanceof XSAttributeUse){
@@ -1448,7 +1463,6 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			boolean mandatory = particle.getMinOccurs() != null && particle.getMinOccurs().intValue() == 1;
 			boolean multiple = particle.getMaxOccurs() != null && particle.getMaxOccurs().intValue() == XSParticle.UNBOUNDED;
 
-
 			final XSElementDecl elementDecl = particle.getTerm().asElementDecl();
 			LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();
 			
@@ -1472,7 +1486,45 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
-	public void simpleType(XSSimpleType arg0) {
+	private void addPropertyWhichRepresentsTheSimpleContentOfAComplexType(XSSimpleType simpleContent){
+		
+		LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();
+		
+		cmsDefinitionVisitor.cacheDefinitionWhichIsUnderProcess(definitionForCurrentProperty);
+		
+		CmsPropertyVisitor propertyVisitor = new CmsPropertyVisitor(builtInAttributes, 
+				definitionForCurrentProperty, false, false, childPropertyDefinitions.size(), 
+				cmsDefinitionVisitor);
+		propertyVisitor.setPropertyRepresentsTheSimpleContentOfAComplexProperty(true);
+		
+		simpleContent.visit(propertyVisitor);
+
+		LocalizableCmsDefinition subPropertyDefinition = propertyVisitor.getDefinition();
+		
+		if (subPropertyDefinition == null){
+			logger.warn("Unable to define sub property '{}'", "{"+simpleContent.getTargetNamespace()+"}"+simpleContent.getName());
+		}
+		else{
+			logger.debug("Adding child property definition '{}' to definition '{}'", subPropertyDefinition.getQualifiedName(), 
+					"{"+namespaceUri+"}"+name);
+			childPropertyDefinitions.put(subPropertyDefinition.getName(), (CmsPropertyDefinition)subPropertyDefinition);
+		}
+		
+	}
+	
+	public void simpleType(XSSimpleType simpleType) {
+		
+		determineValueTypeForSimpleType(simpleType.getName(), simpleType);
+
+		if (valueType != null){
+			logger.debug("Constructing definition with type '{}' for element '{}'",valueType , simpleType.getName());
+
+			populateDefinition(simpleType);
+
+		}
+		else{
+			createDefinition = false;
+		}
 
 
 	}
@@ -1480,7 +1532,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	public void elementDecl(XSElementDecl element) {
 
 		//Determine type of element
-		determineValueTypeForElement(element);
+		determineValueTypeForElement(element, element.getType());
 
 		if (valueType != null){
 			logger.debug("Constructing definition with type '{}' for element '{}'",valueType , element.getName());
@@ -1494,10 +1546,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	}
 
-	private void determineValueTypeForElement(XSElementDecl element) {
+	private void determineValueTypeForElement(XSDeclaration element, XSType elementType) {
 
-		XSType elementType = element.getType();
-		
 		if (element.isGlobal()){
 			determineValueTypeForGlobalElement(element, elementType);
 		}
@@ -1574,7 +1624,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void determineValueTypeForExternalComplexTypeElement(
-			XSElementDecl element, XSType elementType, String typeName,
+			XSDeclaration element, XSType elementType, String typeName,
 			String typeNamespace) {
 		
 		ItemQName typeItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
@@ -1822,7 +1872,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		return commonType;
 	}
 
-	private void determineValueTypeForGlobalElement(XSElementDecl element,
+	private void determineValueTypeForGlobalElement(XSDeclaration element,
 			XSType elementType) {
 		
 		logger.debug("Determine type for global element {}{}", "{"+element.getTargetNamespace() + "}", element.getName());

@@ -750,11 +750,30 @@
 							</xs:annotation>
 						</xs:element>
 
+						<xs:element name="complexWithSimpleContent" type="tns:ComplexWithSimpleContentType" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Complex with simple content</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 
+
+<xs:complexType name="ComplexWithSimpleContentType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Complex type with simple content 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="color" type="tns:ExtendedRedColorVariationType" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 
 <xs:complexType name="moderatedAndRankedUserCommentType">
 		<xs:annotation>
