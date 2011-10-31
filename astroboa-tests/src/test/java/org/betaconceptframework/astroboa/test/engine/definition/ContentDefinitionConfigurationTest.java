@@ -250,7 +250,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 	}
 
 	/*
-	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-165
 	 */
 	@Test
 	public void testAlternateDeclarationOfBinaryChannelSupport(){
