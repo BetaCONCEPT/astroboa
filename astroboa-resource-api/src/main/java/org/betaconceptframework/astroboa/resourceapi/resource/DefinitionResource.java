@@ -18,9 +18,14 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.resource;
 
+import java.io.File;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,14 +33,22 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
+import org.betaconceptframework.astroboa.resourceapi.utility.XmlSchemaGenerator;
 import org.betaconceptframework.astroboa.serializer.ModelSerializer;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,6 +153,55 @@ public class DefinitionResource extends AstroboaResource{
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
 	}
 	
+	 @POST
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 public Response postDefinition(String source) {
+		 
+		 try {
+			 
+			 ObjectMapper mapper = new ObjectMapper();
+			 Map<String,Object> objectType = mapper.readValue(source, Map.class);
+			 
+			XmlSchemaGenerator xmlSchemaTemplate = new XmlSchemaGenerator();
+			
+			String schema = xmlSchemaTemplate.generateXmlSchema(objectType);
+			
+			//Save schema to schemata folder
+			String objectTypeName = (String)objectType.get("name");
+			
+			File schemaFile = new File(astroboaClient.getRepositoryService().getCurrentConnectedRepository().getRepositoryHomeDirectory()+File.separator+"astroboa_schemata", objectTypeName+".xsd");
+
+			FileUtils.writeStringToFile(schemaFile,schema);
+			
+			//Call definition service to force Astroboa to load newly created definition
+			CmsDefinition newlyCreatedDefinition = astroboaClient.getDefinitionService().getCmsDefinition(objectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE, false);
+			
+			if (newlyCreatedDefinition == null){
+				throw new Exception("Object type "+objectTypeName+ " was not created.");
+			}
+			
+			//Generate Response
+			ResponseBuilder responseBuilder = Response.status(Status.CREATED);
+			
+			UrlProperties urlProperties = new UrlProperties();
+			urlProperties.setResourceRepresentationType(null);
+			urlProperties.setFriendly(false);
+			urlProperties.setRelative(false);
+			urlProperties.setIdentifier(newlyCreatedDefinition.getName());
+			
+			responseBuilder.location(URI.create(ResourceApiURLUtils.generateUrlForEntity(newlyCreatedDefinition, urlProperties)));
+			
+			return Response.ok().build();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ContentApiUtils.createResponseForException(Status.BAD_REQUEST, e, true, "Definition source "+source);
+		}
+		 
+		 
+	  }
+
+
 	private Response getDefinitionInternal(String propertyPath, Output output, String callback, boolean prettyPrint){
 		
 		try {
