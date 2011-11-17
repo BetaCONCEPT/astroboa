@@ -51,13 +51,13 @@
 	<xs:element name="cascadingStyleSheetObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Use this object to hold the code of a <em>cascading style sheet</em>.</p>
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα ενός <em>cascading style sheet</em> 
@@ -112,13 +112,13 @@
 						bccmsmodel:labelElementPath="name">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Attach this complex field to your objects to store the code of a <em>cascading style sheet</em>.</p>
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Cascading Style Sheet (CSS)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 						Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα ενός <em>cascading style sheet</em>
@@ -211,13 +211,13 @@
 	<xs:complexType name="arrayOfCascadingStyleSheetTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Attach this complex field to your objects to store a list of CSS.</p> 
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα από Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Χρησιμοποιείστε αυτό το σύνθετο πεδίο στα αντικείμενά σας για να αποθηκεύσετε τον κώδικα πολλών CSS</p>
 				</bccmsmodel:description>
@@ -237,16 +237,16 @@
 	</xs:complexType>
 	
 	
-	<xs:element name="arrayOfScriptTypeObject">
+	<xs:element name="arrayOfCascadingStyleSheetTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Use this object to store a list of css</p>
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα από Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε τον κώδικα πολλών css</p>
 				</bccmsmodel:description>
@@ -281,10 +281,10 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:complexType name="arrayOfScriptObjectType">
+	<xs:complexType name="arrayOfCascadingStyleSheetObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets (References)</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 						Attach this complex field to your objects to store a list of references to "Cascading Style Sheet" objects  
@@ -292,7 +292,7 @@
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα από Αναφορές σε Cascading Style Sheets</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Cascading Style Sheets (Λίστα αναφορών)</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 					Προσθέσθε αυτό το σύνθετο πεδίο στα αντικειμενά σας για να αποθηκεύσετε αναφορές σε αντικείμενα που κρατούν Cascading Style Sheets 
@@ -311,13 +311,13 @@
 						bccmsmodel:acceptedContentTypes="cascadingStyleSheetObject">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
-								<bccmsmodel:displayName>Reference to Cascading Style Sheet Object</bccmsmodel:displayName>
+								<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 								<bccmsmodel:description>
 									 Add existing content object instances of type "Cascading Style Sheet" (references to them will be actually stored)
 								</bccmsmodel:description> 
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
-								<bccmsmodel:displayName>Αναφορά σε Cascading Style Sheet</bccmsmodel:displayName>
+								<bccmsmodel:displayName>Cascading Style Sheet</bccmsmodel:displayName>
 								<bccmsmodel:description>
 									Προσθέσθε αντικείμενα τύπου "Cascading Style Sheet" από τα διαθέσιμα που έχουν καταχωρηθεί στο σύστημα 
 									(για κάθε αντικείμενο που θα προσθέσετε θα αποθηκευτεί απλώς μια αναφορά σε αυτό).

@@ -446,7 +446,7 @@
 	<xs:complexType name="arrayOfGeoTagObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Geotag Objects</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Geotag Object Reference List</bccmsmodel:displayName>
 								<bccmsmodel:description>This complex type represents a list of REFERENCES to Geotag objects (i.e. Geo Tag content objects). This list can be attached to other content objects</bccmsmodel:description> 
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
@@ -479,7 +479,7 @@
 	<xs:element name="arrayOfGeoTagTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Geotags</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Geotag List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Use this content object type to store the geographical identification metadata 
 					for a list of locations (a list of geotags). Read the "GeoTag" description for more information.

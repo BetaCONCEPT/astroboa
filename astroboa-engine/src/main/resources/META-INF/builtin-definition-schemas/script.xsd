@@ -320,7 +320,7 @@
 	<xs:complexType name="arrayOfScriptTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Scripts</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Script List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Attach this complex field to your objects to store a list of scripts (i.e. groovy, javascript, python, etc.).</p> 
 					
@@ -353,7 +353,7 @@
 	<xs:element name="arrayOfScriptTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Scripts</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Script List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Use this object to store a list of scripts (i.e. groovy, javascript, python, etc.).</p> 
 					
@@ -401,7 +401,7 @@
 	<xs:complexType name="arrayOfScriptObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Scripts</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Script Object Reference List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 					Attach this complex field to your objects to store a list of references to script objects 

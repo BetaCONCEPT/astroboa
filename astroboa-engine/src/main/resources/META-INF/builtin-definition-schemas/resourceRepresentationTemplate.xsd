@@ -66,7 +66,7 @@
 					</p>
 					<p>
 					Astroboa installation package provides a set of default "Presentation Templates" for the provided content types 
-					(Portal Section, File Resource, Generic Resource, Person, Organization, etc.) 
+					(Portal Section, File, Text, Person, Organization, etc.) 
 					in order to support out of the box web publication
 					</p>
 				</bccmsmodel:description>

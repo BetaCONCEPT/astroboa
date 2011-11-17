@@ -405,12 +405,12 @@
 		<xs:complexType name="arrayOfOrganizationObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Organization Objects</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Organizations (References)</bccmsmodel:displayName>
 				<bccmsmodel:description>This complex type represents a list of REFERENCES to Organization objects (i.e. organization content objects). 
 				This list can be attached to other content objects</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Αναφορών σε Οργανισμούς</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Οργανισμοί (Λίστα αναφορών)</bccmsmodel:displayName>
 				<bccmsmodel:description>Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθούν λίστες οργανισμών που μπορούν δυναμικά ή στατικά (στον ορισμό του αντικειμένου) 
 				να χρησιμοποιηθούν ως τμήμα κάποιου αντικειμένου, π.χ. μπορούμε να ορίσουμε ένα τύπο αντικειμένου για την αναπαράσταση ενός ομίλου και ένα πεδίο του να περιλαμβάνει την λίστα των 
 				εταιριών του Ομίλου.</bccmsmodel:description>
@@ -426,11 +426,12 @@
 						bccmsmodel:acceptedContentTypes="organizationObject">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
-								<bccmsmodel:displayName>Reference to Organization Object</bccmsmodel:displayName>
-								<bccmsmodel:description>Organization Object Instance referenced by another content object instance</bccmsmodel:description>
+								<bccmsmodel:displayName>Organization</bccmsmodel:displayName>
+								<bccmsmodel:description>A reference to an existing Organization Object</bccmsmodel:description>
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
-								Λίστα Αναφορών σε Οργανισμούς
+								<bccmsmodel:displayName>Οργανισμός</bccmsmodel:displayName>
+								<bccmsmodel:description>Αναφόρα σε αντικείμενο τύπου Οργανισμός</bccmsmodel:description>
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
@@ -443,7 +444,7 @@
 		bccmsmodel:labelElementPath="title,personObjectReference.profile.title,personName">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Job Position In Organization</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Organization Job Position</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					This complex type represents a person's job position inside an organization. 
 					It provides fields for the person which occupies the job, the job title, the description of the role of the person,  
@@ -599,14 +600,14 @@
 	<xs:complexType name="arrayOfOrganizationJobPositionTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Organization Job Positions</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Organization Job Positions</bccmsmodel:displayName>
 				<bccmsmodel:description>This complex type represents a list of job positions under the organization or one of its departments. 
 					There is no field for keeping the organization/departments because this type 
 					should be used in the context of an organization definition, i.e. to define the field that holds all the job positions of the organization or one of its departments.
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Θέσεων Εργασίας Οργανισμού</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Θέσεις Εργασίας Οργανισμού</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τις θέσεις εργασίας ενός οργανισμού ή ενός τμήματος του οργανισμού.
 					Ο τύπος έχει χρήση μόνο ως κομμάτι πληροφορίας ενός οργανισμού/τμήματος διότι δεν περιέχει πεδίο για τον οργανισμό/τμήμα που παρέχει την θέση. 
@@ -814,13 +815,13 @@
 	<xs:complexType name="arrayOfDepartmentTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Departments</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Organization Departments</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					This complex type represents a list of departments under the organization or under one of its departments.
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Τμημάτων Οργανισμού</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Τμήματα Οργανισμού</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τα τμήματα ενός οργανισμού ή ενός τμήματος του οργανισμού.   
 				</bccmsmodel:description>

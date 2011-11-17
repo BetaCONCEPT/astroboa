@@ -630,13 +630,13 @@
 	<xs:complexType name="arrayOfPersonJobPositionTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Person Job Positions</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Person Job Positions</bccmsmodel:displayName>
 				<bccmsmodel:description>This complex type represents a list of job positions for a person. There is no field for keeping the person itself and so this type 
 					should be used in the context of a person definition, i.e. to define the field that holds all the job positions of the person.
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Θέσεων Εργασίας Προσώπου</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Θέσεις Εργασίας Προσώπου</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Αυτός ο σύνθετος τύπος μπορεί να χρησιμοποιηθεί για να δημιουργηθεί η λίστα με τις θέσεις εργασίας που είχε ή έχει ένα πρόσωπο σε διάφορους οργανισμούς.
 					Ο τύπος έχει χρήση μόνο ως τμήμα πληροφορίας ενός προσώπου διότι δεν περιέχει πεδίο για το πρόσωπο που κατέχει την θέση. Δεδομένου ότι η λίστα θα 
@@ -1120,12 +1120,13 @@
 	<xs:complexType name="arrayOfPersonObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Person Objects</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Persons (References)</bccmsmodel:displayName>
 				<bccmsmodel:description>This complex type represents a list of REFERENCES to Person objects (i.e. person content objects). 
 					This list can be attached to other content objects</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αναφορών σε Πρόσωπα
+				<bccmsmodel:displayName>Πρόσωπα (Λίστα αναφορών)</bccmsmodel:displayName>
+				<bccmsmodel:description>Λίστα αναφορών σε αντικείμενα τύπου πρόσωπο</bccmsmodel:description>
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
