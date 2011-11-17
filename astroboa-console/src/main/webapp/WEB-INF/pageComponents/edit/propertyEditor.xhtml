@@ -51,6 +51,11 @@ Authors
 							<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
 								#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 							</span>
+							
+							<ui:include src="/WEB-INF/pageComponents/edit/extraProperties/removeExtraProperty.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
 								
 							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
 						</label>

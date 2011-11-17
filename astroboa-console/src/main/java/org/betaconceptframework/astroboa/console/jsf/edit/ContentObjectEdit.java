@@ -625,15 +625,15 @@ public class ContentObjectEdit extends AbstractUIBean {
 							+ " because extra property does not exist in content object"); 
 				}
 				else{
-					//selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().removeAspect(aspect);
+					ComplexCmsProperty<?,?> extraProperty = (ComplexCmsProperty<?,?>)selectedContentObjectForEdit.getContentObject().getCmsProperty(propertyName);
 					selectedContentObjectForEdit.getContentObject().removeCmsProperty(propertyName);
-
 					extraPropertyEdit.reloadEditedCmsProperties();
+					JSFUtilities.addMessage(null, "object.edit.removeExtraProperty.success", new String[] {extraProperty.getAvailableLocalizedLabel(localeSelector.getLocaleString())}, FacesMessage.SEVERITY_INFO);
 				}
 			}
 			catch (Exception e){
 				logger.error("",e); 
-				JSFUtilities.addMessage(null, "object.edit.remove.aspect.error", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.removeExtraProperty.error", null, FacesMessage.SEVERITY_ERROR); 
 			}
 		}
 
@@ -880,7 +880,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 				Events.instance().raiseEvent(SeamEventNames.CONTENT_OBJECT_MODIFIED, new Object[]{loggedInRepositoryUser.getRepositoryUser().getId(), 
 						draftItemId});
 				
-
+				// Reset the extra properties editor in order to reload the extra properties list
+				// We need this in the case that the user has added an extra property, added no values in it 
+				// and after the successful save the empty property has been automatically removed from the object 
+				extraPropertyEdit.reloadEditedCmsProperties();
 			} 
 			else{
 				return contentObjectPreparationOutcome;

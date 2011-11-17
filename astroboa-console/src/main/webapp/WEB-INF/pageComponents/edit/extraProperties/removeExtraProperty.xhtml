@@ -35,49 +35,20 @@ Authors
 	xmlns:seam="http://jboss.com/products/seam/taglib">
 
 	<body>
-		<ui:composition>
+		<ui:composition>		
+			<!-- Remove an extra property -->
+			<a4j:commandLink
+				onclick="closePropertyPrototypeSelectionDialog(); destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+				rendered="#{cmsPropertyWrapper.writeGranted 
+				and cmsPropertyWrapper.valueType eq 'Complex' 
+				and cmsPropertyWrapper.aspect}"
+				action="#{contentObjectEdit.removeExtraProperty_UIAction(cmsPropertyWrapper.definitionName)}"
+				reRender="#{(empty cmsPropertyWrapper.complexCmsPropertyEdit.editedCmsProperties)? 'extraPropertiesPanel' : cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
+				alt="#{messages['object.edit.action.removeDynamicProperty']}"
+				title="#{messages['object.edit.action.removeDynamicProperty']}">
+				<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-octagon-frame.png"/>
+			</a4j:commandLink>
 			
-			<div id="extraPropertiesArea">
-				
-				<ol class="formElementList">
-						
-					<a4j:repeat 
-						value="#{complexCmsPropertyEdit.editedCmsProperties}"
-						var="cmsPropertyWrapper"
-						rowKeyVar="indexOfCmsPropertyWrapper"
-						ajaxKeys="#{complexCmsPropertyEdit.wrapperIndexesToUpdate}">
-						
-						<a4j:outputPanel id="EXTRA_PROPERTIES" >
-						
-							<ui:include src="/WEB-INF/pageComponents/edit/propertyEditor.xhtml" >
-								<ui:param name="cmsPropertyWrapper"
-									value="#{cmsPropertyWrapper}" />
-							</ui:include>
-						
-						</a4j:outputPanel>
-						
-					</a4j:repeat>
-				</ol>
-			
-			</div>
-			
-			
-			<script type="text/javascript">
-			//<![CDATA[
-				bcmslib.jQuery(document).ready(function(){
-					createPropertyHelpMessage();
-				//	createTopicReferenceHelpMessage();
-				//	createtObjectReferenceHelpMessage();
-					
-					createSlideshow('.objectPhotosSlideshow');
-
-				});
-			//]]>
-			</script>
-
 		</ui:composition>
-		
-		
-		
 	</body>
 </html>

@@ -58,23 +58,6 @@ Authors
 						
 					</a4j:repeat>
 				</ol>
-				
-				<ui:remove>
-					
-					<!-- Delete Action for aspect cms properties -->
-								<a4j:commandLink
-									onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-									rendered="#{cmsPropertyWrapper.writeGranted 
-									and cmsPropertyWrapper.valueType eq 'Complex' 
-									and cmsPropertyWrapper.aspect}"
-									action="#{contentObjectEdit.removeAspectFromEditedContentObject_UIAction(cmsPropertyWrapper.definitionName)}"
-									reRender="complexCmsPropertyChildPropertiesTable"
-									
-									title="#{messages['object.edit.action.removeDynamicProperty']}">
-									<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
-								</a4j:commandLink>
-					
-				</ui:remove>
 			
 			</div>
 			
