@@ -37,7 +37,7 @@ Authors
 	<body>
 		<ui:composition>
 			
-			<div id="XSDEditor" title="#{messages['content.type.editor.label']}">
+			<div id="XSDEditor" title="#{messages['object.type.editor.label']}">
 				<ui:remove>
 				<a4j:outputPanel id="XSDEditorMessages">
 					<ui:fragment rendered="#{! empty facesContext.maximumSeverity}">
@@ -54,7 +54,7 @@ Authors
 					
 						<ui:fragment rendered="#{identity.hasRole('ROLE_ADMIN') and (empty contentTypeEditor.selectedContentTypeForEdit)}">
 							<h:panelGroup>
-								<h:outputText value="#{messages['content.type.select.new.content.type.file.name.input.text.label']}"/>
+								<h:outputText value="#{messages['object.type.select.new.content.type.file.name.input.text.label']}"/>
 								<h:inputText value="#{contentTypeEditor.newContentTypeFilename}"/>
 							</h:panelGroup>
 						
@@ -69,7 +69,7 @@ Authors
 							<h:panelGroup>
 								<center>
 									<a4j:commandLink 
-										value="#{messages['content.type.select.table.save.content.type.link.label']}"
+										value="#{messages['object.type.select.table.save.content.type.link.label']}"
 										onclick="editAreaLoader.prepare_areas_for_betacms_submit('XSDEditorForm');"
 										action="#{contentTypeEditor.saveContentType_UIAction('NEW_CONTENT_TYPE')}"
 										reRender="XSDEditorMessages,objectTypeSelectorAjaxPanel,topMenuObjectTypeSelectorAjaxPanel,userSpaceObjectTypeSelectorAjaxPanel"
@@ -79,14 +79,14 @@ Authors
 									<rich:spacer width="10"/>
 										
 									<a href="#" onclick="bcmslib.jQuery('#XSDEditor').dialog('close');">
-										#{messages['content.type.select.table.hide.link.label']}</a>
+										#{messages['object.type.select.table.hide.link.label']}</a>
 								</center>
 							</h:panelGroup>
 						</ui:fragment>
 						
 						<ui:fragment rendered="#{! empty contentTypeEditor.selectedContentTypeForEdit}">						
 							<div style="margin-bottom: 10px; font-weight: bold;">
-								#{messages['content.type.select.new.content.type.file.name.input.text.label']}: 
+								#{messages['object.type.select.new.content.type.file.name.input.text.label']}: 
 								#{(!empty contentTypeEditor.xsdSchemasPerContentType[contentTypeEditor.selectedContentTypeForEdit].schemaFile)? contentTypeEditor.xsdSchemasPerContentType[contentTypeEditor.selectedContentTypeForEdit].schemaFile.name : 'Internal Schema' }
 							</div>
 							
@@ -99,7 +99,7 @@ Authors
 							<h:panelGroup>
 								<center>
 									<a4j:commandLink
-										value="#{messages['content.type.select.table.save.content.type.link.label']}"
+										value="#{messages['object.type.select.table.save.content.type.link.label']}"
 										onclick="editAreaLoader.prepare_areas_for_betacms_submit('XSDEditorForm');"
 										action="#{contentTypeEditor.saveContentType_UIAction(contentTypeEditor.selectedContentTypeForEdit)}"
 										rendered="#{contentTypeEditor.shouldEditContentTypeXSD(contentTypeEditor.selectedContentTypeForEdit)}"
@@ -111,7 +111,7 @@ Authors
 									
 									<a4j:commandLink 
 										ajaxSingle="true"
-										value="#{messages['content.type.select.table.hide.link.label']}"
+										value="#{messages['object.type.select.table.hide.link.label']}"
 										action="#{contentTypeEditor.setSelectedContentTypeForEdit(null)}"
 										reRender="XSDEditorPanel,XSDEditorMessages"
 										oncomplete="bcmslib.jQuery('#XSDEditor').dialog('close');"

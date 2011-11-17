@@ -45,16 +45,16 @@ Authors
 		<ui:composition>
 		
 			<ui:param name="tabLabelKey"
-			  value="content.object.edit.accessibility.editor.tab.label.#{typeOfAccessRight}"/>
+			  value="object.edit.accessibility.editor.tab.label.#{typeOfAccessRight}"/>
 			  
 			<ui:param name="tabHeaderKey"
-			  value="content.object.edit.accessibility.editor.tab.header.#{typeOfAccessRight}"/>
+			  value="object.edit.accessibility.editor.tab.header.#{typeOfAccessRight}"/>
 			  
 			<ui:param name="tabPanelHeaderKey"
-			  value="content.object.edit.accessibility.editor.tab.panel.header.#{typeOfAccessRight}"/>
+			  value="object.edit.accessibility.editor.tab.panel.header.#{typeOfAccessRight}"/>
 			
 			<ui:param name="tabDragHeaderKey"
-			  value="content.object.edit.accessibility.editor.tab.drag.label.#{typeOfAccessRight}"/>
+			  value="object.edit.accessibility.editor.tab.drag.label.#{typeOfAccessRight}"/>
 			  
 			<div class="ui-widget" style="margin: 5px 10px 20px 10px;">
 					<div class="ui-widget-header ui-corner-tl ui-corner-tr" style="padding: 5px 5px 5px 5px;">#{messages[tabPanelHeaderKey]}</div>
@@ -74,9 +74,9 @@ Authors
 								<h:selectOneRadio id="#{typeOfAccessRight}SelectOneRadio" 
 									value="#{contentObjectEdit.radioButtonSelectionMap[typeOfAccessRight]}"
 									style="font-size: 95%;">
-									<f:selectItem itemValue="1" itemLabel="#{messages['content.object.edit.accessibility.editor.radioButton.all']}" />
-									<f:selectItem itemValue="2" itemLabel="#{messages['content.object.edit.accessibility.editor.radioButton.none']}" />
-									<f:selectItem itemValue="3"	itemLabel="#{messages['content.object.edit.accessibility.editor.radioButton.selected']}" />
+									<f:selectItem itemValue="1" itemLabel="#{messages['object.edit.accessibility.editor.radioButton.all']}" />
+									<f:selectItem itemValue="2" itemLabel="#{messages['object.edit.accessibility.editor.radioButton.none']}" />
+									<f:selectItem itemValue="3"	itemLabel="#{messages['object.edit.accessibility.editor.radioButton.selected']}" />
 				
 									<a4j:support event="onchange"
 										reRender="#{typeOfAccessRight}UserAndGroupListPanel" ajaxSigle="true"/>
@@ -103,7 +103,7 @@ Authors
 									<rich:column>
 										<a4j:commandLink
 											action="#{contentObjectEdit.removeUserOrGroupFromAccessRightList_UIAction(contentObjectEdit.userListByAccessRight[typeOfAccessRight], personOrGroupWithAccessRight)}"
-											title="#{messages['content.object.edit.accessibility.editor.tab.remove.value.from.list']}"
+											title="#{messages['object.edit.accessibility.editor.tab.remove.value.from.list']}"
 											reRender="#{typeOfAccessRight}UserAndGroupListPanel"
 											ajaxSingle="true">
 		

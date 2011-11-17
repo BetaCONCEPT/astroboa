@@ -145,7 +145,7 @@ Authors
 							<a4j:commandLink
 								title="Πατείστε για να διαγράψετε το αντικείμενο"
 								rendered="#{contentObjectUIWrapper.loggedInUserAuthorizedToDeleteContentObject}"
-								action="#{confirmationBean.initiateConfirmation('confirmation.panel.delete.question',contentObjectList, 
+								action="#{confirmationBean.initiateConfirmation('dialog.confirmation.delete.question',contentObjectList, 
 											'permanentlyRemoveSelectedContentObject_UIAction',
 											contentObjectUIWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue, 
 											'ajaxDynamicAreaPanel, topicTreePanel, cmsTree,contentObjectListOfTypeQueryTable',

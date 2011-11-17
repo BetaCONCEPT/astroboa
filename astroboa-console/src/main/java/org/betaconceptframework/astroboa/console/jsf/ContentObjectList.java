@@ -214,7 +214,7 @@ public class ContentObjectList extends AbstractUIBean {
 				contentObjectEdit.getSelectedContentObjectForEdit().getContentObject().getId() != null && 
 				contentObjectEdit.getSelectedContentObjectForEdit().getContentObject().getId().equals(selectedContentObjectIdentifier)) {
 			
-			JSFUtilities.addMessage(null, "content.object.edit.objectIsEditedAndCannotBeRemoved", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.objectIsEditedAndCannotBeRemoved", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -224,13 +224,13 @@ public class ContentObjectList extends AbstractUIBean {
 			Events.instance().raiseEvent(SeamEventNames.CONTENT_OBJECT_DELETED, new Object[]{selectedContentObjectType, selectedContentObjectIdentifier, selectedContentObjectCreatedDate});
 		}
 		catch (Exception e) {
-			JSFUtilities.addMessage(null, "content.object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR);
 			getLogger().error("The content object could not be permanently deleted." , e);
 			return;
 		}
 		
 		// generate a success message, reset the browsing trees to accomodate the change and finally change the view to show the conentObjectListPanel 
-		JSFUtilities.addMessage(null, "content.object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO);
+		JSFUtilities.addMessage(null, "object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO);
 		
 		//contentObjectListHeaderMessage = JSFUtilities.getStringI18n("object.list.message.contentObjectListHeaderMessageAfterContentObjectRemoval");
 		contentObjectListHeaderMessage = null;

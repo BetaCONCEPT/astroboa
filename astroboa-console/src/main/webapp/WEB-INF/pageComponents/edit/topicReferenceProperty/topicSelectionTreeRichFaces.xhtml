@@ -59,25 +59,28 @@ Authors
 						iconLeaf="/images/cms-icons/16/fugue/tag-label-red.png"
 						rendered="#{topicTreeNodeForInput.containerAndTopic}">
 						
+						<ui:remove>
 						<rich:dragSupport
 							dragIndicator="draggedTopicIndicator"
 							dragType="topic"
 							dragValue="#{topicTreeNodeForInput.topic}">
 							<rich:dndParam name="label" type="drag" value="#{topicTreeNodeForInput.description}" />
 						</rich:dragSupport>
+						</ui:remove>
 						
 						<c:set var="numberOfContentObjectsReferencedByTopicForInput"
 							value="#{topicTreeNodeForInput.topic.numberOfReferrerContentObjects}" />
-							
-						<a href="#">#{topicTreeNodeForInput.description}</a>
+						
+						<a4j:commandLink value="#{topicTreeNodeForInput.description}" 
+							onsubmit="destroyTextEditor();"
+							reRender="#{taxonomyTree.topicPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
+							action="#{taxonomyTree.topicPropertyWrapper.addSelectedTopic_UIAction(topicTreeNodeForInput.topic, false)}"
+							ajaxSingle="true"/>
 						
 						<h:outputText
 							value=" (#{topicTreeNodeForInput.childCount})" 
 							rendered="#{topicTreeNodeForInput.childCount gt 0}" />
 							
-						<h:outputText
-							value=" [#{numberOfContentObjectsReferencedByTopicForInput}]"
-							rendered="#{numberOfContentObjectsReferencedByTopicForInput gt 0}" />
 						
 					</rich:treeNode>
 					

@@ -43,7 +43,6 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
@@ -52,7 +51,6 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsNonUniqueContent
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
@@ -70,7 +68,7 @@ import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
 import org.betaconceptframework.astroboa.console.jsf.LoggedInRepositoryUserSettings;
 import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
-import org.betaconceptframework.astroboa.console.jsf.clipboard.Clipboard;
+import org.betaconceptframework.astroboa.console.jsf.edit.ComplexCmsPropertyEdit.EditorTab;
 import org.betaconceptframework.astroboa.console.jsf.edit.draft.DraftItem;
 import org.betaconceptframework.astroboa.console.jsf.space.UserSpaceNavigation;
 import org.betaconceptframework.astroboa.console.jsf.taxonomy.LazyLoadingTopicTreeNode;
@@ -170,8 +168,6 @@ public class ContentObjectEdit extends AbstractUIBean {
 		canBeTaggedBy,
 	}
 
-	private String selectedUserOrGroupIdToBeRemovedFromAccessRightList;
-
 	private Space spaceToCopyNewObject;
 
 	private String selectedTopicIdForRemovalFromContentObjectSubject;
@@ -179,10 +175,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 	
 	private List<SelectItem> selectedLanguages;
 
-	//Three instances of the same Spring Prototype Bean injected
+	//Four instances of the same Spring Prototype Bean injected
 	private ComplexCmsPropertyEdit complexCmsPropertyEdit;
 	private ComplexCmsPropertyEdit profilePropertyEdit;
-	private ComplexCmsPropertyEdit accessibilityPropertyEdit;
+	private ComplexCmsPropertyEdit extraPropertyEdit;
 
 	private String newTagLabel;
 
@@ -226,21 +222,19 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	//Corresponds to input text for adding new creator to a content object
 	private String newCreatorName;
-
-	private String newLanguageName;
 	
-	private List<ComplexCmsPropertyBreadCrumb> complexCmsPropertyBreadCrumbs = new ArrayList<ComplexCmsPropertyBreadCrumb>();
+	private List<ComplexCmsPropertyBreadCrumb> fixedPropertyBreadCrumbs = new ArrayList<ComplexCmsPropertyBreadCrumb>();
+	private List<ComplexCmsPropertyBreadCrumb> extraPropertyBreadCrumbs = new ArrayList<ComplexCmsPropertyBreadCrumb>();
 
-	private final static String defaultComplexCmsPropertyEditorPagePath = "/WEB-INF/pageComponents/edit/editorForCmsPropertiesOfAComplexCmsProperty.xhtml"; 
-
-	private String complexCmsPropertyEditorPagePath = defaultComplexCmsPropertyEditorPagePath;
+	private final static String defaultFixedPropertyEditorPagePath = "/WEB-INF/pageComponents/edit/fixedPropertiesEditor.xhtml"; 
+	private final static String defaultExtraPropertyEditorPagePath = "/WEB-INF/pageComponents/edit/extraPropertiesEditor.xhtml"; 
+	private String complexCmsPropertyEditorPagePath = defaultFixedPropertyEditorPagePath;
 
 	private ContentObject explicitlySetContentObjectForEdit;
 	
 	private String selectedPersonOrRoleTextFilter;
 	
-	@In(create=true)
-	private Clipboard clipboard;
+	
 	
 	private CmsRepositoryEntityFactory cmsRepositoryEntityFactory;
 
@@ -249,7 +243,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		if (contentObject == null)
 		{
 			getLogger().error("Error while loading content object from draft. Content Object is null"); 
-			JSFUtilities.addMessage(null, "content.object.edit.load.error", null, FacesMessage.SEVERITY_ERROR); 
+			JSFUtilities.addMessage(null, "object.edit.load.error", null, FacesMessage.SEVERITY_ERROR); 
 			return null;
 		}
 		
@@ -308,7 +302,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			catch (Exception e) {
 				getLogger().error("Error while loading content objects ",  e); 
-				JSFUtilities.addMessage(null, "content.object.edit.load.error", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.load.error", null, FacesMessage.SEVERITY_ERROR); 
 				//pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.ContentObjectList.getDynamicUIAreaPageComponent());
 				return null;
 			}
@@ -319,7 +313,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			catch (Exception e) {
 				getLogger().error("Error while generating template for new content object ", e); 
-				JSFUtilities.addMessage(null, "content.object.edit.error.creating.new.content.object", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.error.creating.new.content.object", null, FacesMessage.SEVERITY_ERROR); 
 				//pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.ContentObjectList.getDynamicUIAreaPageComponent());
 				return null;
 			}
@@ -334,9 +328,13 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	private String initializeContentObjectEdit() {
 		complexCmsPropertyEdit.setEditedContentObject(selectedContentObjectForEdit.getContentObject());
+		complexCmsPropertyEdit.setEditorTab(EditorTab.FIXED_PROPERTIES);
 		profilePropertyEdit.setEditedContentObject(selectedContentObjectForEdit.getContentObject());
+		profilePropertyEdit.setEditorTab(EditorTab.ADMIN_PROPERTY);
+		extraPropertyEdit.setEditedContentObject(selectedContentObjectForEdit.getContentObject());
+		extraPropertyEdit.setEditorTab(EditorTab.EXTRA_PROPERTIES);
 
-		loadComplexCmsPropertyToComplexCmsPropertyEditor(selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty());
+		loadComplexCmsPropertyToComplexCmsPropertyEditor(selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty(), complexCmsPropertyEdit);
 		
 		profilePropertyEdit.editComplexCmsProperty((ComplexCmsProperty<ComplexCmsPropertyDefinition, ComplexCmsProperty<?,?>>)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile"));
 
@@ -353,6 +351,8 @@ public class ContentObjectEdit extends AbstractUIBean {
 		
 		profilePropertyEdit.setCmsPropertyValidatorVisitor(cmsPropertyValidatorVisitor);
 		
+		extraPropertyEdit.setCmsPropertyValidatorVisitor(cmsPropertyValidatorVisitor);
+		
 		return null;
 	}
 
@@ -367,49 +367,43 @@ public class ContentObjectEdit extends AbstractUIBean {
 	}
 
 
-	private void createComplexCmsPropertyToBreadCrumd(
-			ComplexCmsProperty complexCmsProperty) {
+	private void createFixedPropertyBreadCrumbs(
+			ComplexCmsProperty<?,?> complexCmsProperty) {
 
-		if (complexCmsPropertyBreadCrumbs != null)
-			complexCmsPropertyBreadCrumbs.clear();
-		else
-			complexCmsPropertyBreadCrumbs = new ArrayList<ComplexCmsPropertyBreadCrumb>();
-
-		ComplexCmsProperty currentProperty = complexCmsProperty;
+		fixedPropertyBreadCrumbs.clear();
+		
+		ComplexCmsProperty<?,?> currentProperty = complexCmsProperty;
 
 		do{
 			String localizedLabel = (currentProperty instanceof ComplexCmsRootProperty ? 
 					selectedContentObjectForEdit.getContentObject().getTypeDefinition().getDisplayName().getLocalizedLabelForLocale(localeSelector.getLocaleString()) :
-						currentProperty.getLocalizedLabelForLocale(localeSelector.getLocaleString()));
+						currentProperty.getAvailableLocalizedLabel(localeSelector.getLocaleString()));
 
 			if (StringUtils.isBlank(localizedLabel))
 				localizedLabel = currentProperty.getName(); 
 
-			//Add index to label
-			if( !(currentProperty instanceof ComplexCmsRootProperty) && currentProperty instanceof ComplexCmsProperty 
-					&& currentProperty.getPropertyDefinition().isMultiple()){
+			//If property has multiple values add the value index to label
+			if(currentProperty.getPropertyDefinition().isMultiple()){
 				int index = PropertyPath.extractIndexFromPath(currentProperty.getPath());
 				if (index == PropertyPath.NO_INDEX)
-					index =0;
+					index = 0;
 				localizedLabel += CmsConstants.LEFT_BRACKET+index+
 				CmsConstants.RIGHT_BRACKET;
 			}
 
-			if (currentProperty instanceof ComplexCmsProperty){
-				String propertyLabel =  ((ComplexCmsProperty)currentProperty).getPropertyLabel(localeSelector.getLocaleString());
-				
-				if (StringUtils.isNotBlank(propertyLabel)){
-					localizedLabel += " - "+propertyLabel;
-				}
-				
+			// check if the schema defines child properties that their values need to be appended in property localized name as extra identifiers 
+			String propertyLabel =  ((ComplexCmsProperty<?,?>)currentProperty).getPropertyLabel(localeSelector.getLocaleString());	
+			if (StringUtils.isNotBlank(propertyLabel)){
+				localizedLabel += " - "+propertyLabel;
 			}
+				
 			
 			if (currentProperty instanceof ComplexCmsRootProperty){
 				//Root property does not have a path
-				complexCmsPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel,selectedContentObjectForEdit.getContentObject().getTypeDefinition().getName()));
+				fixedPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel,selectedContentObjectForEdit.getContentObject().getTypeDefinition().getName()));
 			}
 			else{
-				complexCmsPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel,currentProperty.getPath()));
+				fixedPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel,currentProperty.getPath()));
 			}
 
 			currentProperty = currentProperty.getParentProperty();
@@ -417,12 +411,63 @@ public class ContentObjectEdit extends AbstractUIBean {
 		}
 		while( currentProperty != null);
 
-		if (complexCmsPropertyBreadCrumbs.size()> 1)
-			Collections.reverse(complexCmsPropertyBreadCrumbs);
+		if (fixedPropertyBreadCrumbs.size() > 1)
+			Collections.reverse(fixedPropertyBreadCrumbs);
 
 	}
 
+	private void createExtraPropertyBreadCrumbs(
+			ComplexCmsProperty<?,?> complexCmsProperty) {
 
+		extraPropertyBreadCrumbs.clear();
+		
+		ComplexCmsProperty<?,?> currentProperty = complexCmsProperty;
+
+		do{
+			String localizedLabel;
+			// if we are the level of the root property then the bread crumb label will be "Extra Properties" instead of the object type label in order to allow the user go back
+			// to the extra properties form
+			if (currentProperty instanceof ComplexCmsRootProperty) {
+				localizedLabel =  JSFUtilities.getStringI18n("object.edit.tab.extraProperties");
+				
+				// instead of a real property path we will create this bread crumb with the string 'EXTRA_PROPERIES' as path. 
+				// This will force a return to the extra properties form
+				extraPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel, "EXTRA_PROPERTIES"));
+			}
+			else {
+				localizedLabel =  
+						currentProperty.getAvailableLocalizedLabel(localeSelector.getLocaleString());
+				
+				if (StringUtils.isBlank(localizedLabel))
+					localizedLabel = currentProperty.getName(); 
+
+				//If property has multiple values add the value index to label
+				if(currentProperty.getPropertyDefinition().isMultiple()){
+					int index = PropertyPath.extractIndexFromPath(currentProperty.getPath());
+					if (index == PropertyPath.NO_INDEX)
+						index = 0;
+					localizedLabel += CmsConstants.LEFT_BRACKET+index+
+					CmsConstants.RIGHT_BRACKET;
+				}
+				
+				// check if the schema defines child properties that their values need to be appended in property localized name as extra identifiers 
+				String propertyLabel =  ((ComplexCmsProperty<?,?>)currentProperty).getPropertyLabel(localeSelector.getLocaleString());	
+				if (StringUtils.isNotBlank(propertyLabel)){
+					localizedLabel += " - "+propertyLabel;
+				}
+				
+				extraPropertyBreadCrumbs.add(new ComplexCmsPropertyBreadCrumb(localizedLabel,currentProperty.getPath()));
+			}
+
+			currentProperty = currentProperty.getParentProperty();
+
+		}
+		while( currentProperty != null);
+
+		if (extraPropertyBreadCrumbs.size() > 1)
+			Collections.reverse(extraPropertyBreadCrumbs);
+
+	}
 
 
 	//private void generateCmsPropertiesTree() {
@@ -462,7 +507,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			//Found no content object type found throw new Exception
 			if (contentObjectTypeForNewObject == null){
 				newContentObject = false;
-				JSFUtilities.addMessage(null, "content.object.edit.error.no.content.type", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.error.no.content.type", null, FacesMessage.SEVERITY_ERROR); 
 				throw new Exception("ContentObject Type for the generation of a new content object has not been provided"); 
 			}
 			else{
@@ -505,7 +550,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 	}
 
 
-	private void loadComplexCmsPropertyToComplexCmsPropertyEditor(ComplexCmsProperty complexCmsProperty) {
+	private void loadComplexCmsPropertyToComplexCmsPropertyEditor(ComplexCmsProperty<?,?> complexCmsProperty, ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 
 		//Find appropriate template to load
 		String cmsPropertyTemplatePath = "/WEB-INF/pageComponents/";    
@@ -539,10 +584,15 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 		}
 		catch(Exception e){
-			logger.debug("Template '"+complexCmsPropertyEditorPagePath+"' for cms property '"+definitionFullPath + "' not found. Loading default "+defaultComplexCmsPropertyEditorPagePath); 
+			logger.debug("Template '"+complexCmsPropertyEditorPagePath+"' for cms property '"+definitionFullPath + "' not found. Loading default "+defaultFixedPropertyEditorPagePath); 
 
 			//Return default template
-			complexCmsPropertyEditorPagePath = defaultComplexCmsPropertyEditorPagePath;
+			if (complexCmsPropertyEdit.getEditorTab().equals(EditorTab.FIXED_PROPERTIES)) {
+				complexCmsPropertyEditorPagePath = defaultFixedPropertyEditorPagePath;
+			}
+			else if (complexCmsPropertyEdit.getEditorTab().equals(EditorTab.EXTRA_PROPERTIES)) {
+				complexCmsPropertyEditorPagePath = defaultExtraPropertyEditorPagePath;
+			}
 		}
 		finally{
 			//Render with default editor
@@ -551,7 +601,12 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 
 		//Create bread crumbs
-		createComplexCmsPropertyToBreadCrumd(complexCmsProperty);
+		if (complexCmsPropertyEdit.getEditorTab().equals(EditorTab.FIXED_PROPERTIES)) {
+			createFixedPropertyBreadCrumbs(complexCmsProperty);
+		}
+		else {
+			createExtraPropertyBreadCrumbs(complexCmsProperty);
+		}
 
 	}
 
@@ -560,30 +615,31 @@ public class ContentObjectEdit extends AbstractUIBean {
 		return definitionFullPath.replaceAll("\\.", "-"); 
 	}
 
-	public void removeAspectFromEditedContentObject_UIAction(String aspect) {
+	public void removeExtraProperty_UIAction(String propertyName) {
 
 		if (selectedContentObjectForEdit != null && selectedContentObjectForEdit.getContentObject() != null){
 			try{
 				//	Remove aspect from list in ContentObject
-				if (!selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().hasAspect(aspect)){
-					logger.warn("Unable to remove aspect '"+ aspect+ "' from content object "+ selectedContentObjectForEdit.getContentObject().getId()  
-							+ " because aspect does not exist in content object"); 
+				if (!selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().hasAspect(propertyName)){
+					logger.warn("Unable to remove extra property '"+ propertyName+ "' from content object "+ selectedContentObjectForEdit.getContentObject().getId()  
+							+ " because extra property does not exist in content object"); 
 				}
 				else{
 					//selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().removeAspect(aspect);
-					selectedContentObjectForEdit.getContentObject().removeCmsProperty(aspect);
+					selectedContentObjectForEdit.getContentObject().removeCmsProperty(propertyName);
 
-					complexCmsPropertyEdit.reloadEditedCmsProperties();
+					extraPropertyEdit.reloadEditedCmsProperties();
 				}
 			}
 			catch (Exception e){
 				logger.error("",e); 
-				JSFUtilities.addMessage(null, "content.object.edit.remove.aspect.error", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.remove.aspect.error", null, FacesMessage.SEVERITY_ERROR); 
 			}
 		}
 
 	}
-
+	
+	/*
 	public void addAspectToComplexProperty_UIAction(String newlyAddedAspect){
 		if (selectedContentObjectForEdit != null){
 			try{
@@ -597,52 +653,80 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			catch (Exception e){
 				logger.error("",e); 
-				JSFUtilities.addMessage(null, "content.object.edit.add.aspect.error", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.add.aspect.error", null, FacesMessage.SEVERITY_ERROR); 
 			}
 		}
 	}
-
+	*/
+	
+	/* Extra properties are properties that are not statically defined in object type schemas
+	 * They can be dynamically added in any object instance.
+	 * Any complex property type defined outside of an object type definition can be used as a prototype for adding extra properties to object instances.
+	 * When a user selects to add an extra property from the available prototypes, this method displays the property form in the console editor 
+	 * The property name is the name of the prototype.
+	 */
+	public void showNewExtraProperty_UIAction(String propertyName) {
+		ComplexCmsProperty<?,?> extraProperty = (ComplexCmsProperty<?,?>)selectedContentObjectForEdit.getContentObject().getCmsProperty(propertyName);
+		if (extraProperty != null) {
+			extraPropertyEdit.reloadEditedCmsProperties();
+			JSFUtilities.addMessage(null, "object.edit.addExtraProperty.success", new String[] {extraProperty.getAvailableLocalizedLabel(localeSelector.getLocaleString())}, FacesMessage.SEVERITY_INFO);
+		}
+		else {
+			JSFUtilities.addMessage(null, "object.edit.addExtraProperty.error", null, FacesMessage.SEVERITY_WARN);
+		}
+	}
+	
+	// This method displays the selected complex property either in the properties or in the extra properties tab according to which complexCmsPropertyEdit instance has been passed to the method
 	@Observer({SeamEventNames.NEW_COMPLEX_CMS_PROPERTY_ADDED})
-	public void showSelectedComplexPropertyForPath_UIAction(String complexCmsPropertyPath){
+	public void showSelectedComplexPropertyForPath_UIAction(String complexCmsPropertyPath, ComplexCmsPropertyEdit complexCmsPropertyEdit){
 		
-		//BE AWARE
-		//complexCmsPropertyPath is the path of property WIHTOUT the content type
-		if (StringUtils.isNotBlank(complexCmsPropertyPath)){
+		if (StringUtils.isNotBlank(complexCmsPropertyPath)) { 
+			
+			// when path equals 'EXTRA_PROPERTIES' we set the edited property in the complexPropertiesEdit 
+			// to be null in order to force loading the extra properties form. 
+			// We also se the template to be used and we reset the extra properties bread crumbs array
+			if (complexCmsPropertyPath.equals("EXTRA_PROPERTIES")){ 
+				complexCmsPropertyEdit.editComplexCmsProperty(null);
+				complexCmsPropertyEditorPagePath = defaultExtraPropertyEditorPagePath;
+				extraPropertyBreadCrumbs = new ArrayList<ComplexCmsPropertyBreadCrumb>();
+			}
+			else {
 
-			try{
-
-				ComplexCmsProperty complexCmsProperty = null;
-				
-				if (selectedContentObjectForEdit.getContentObject().getTypeDefinition().getName().equals(complexCmsPropertyPath)){
-					//Load root property
-					complexCmsProperty = selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty();
-				}
-				else{
-					complexCmsProperty = (ComplexCmsProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty(complexCmsPropertyPath);
-				}
-
-				if (complexCmsProperty == null){
-					//Complex Cms Property is either not defined or
-					//is a multiple complex cms property
-					if (selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().isChildPropertyDefined(complexCmsPropertyPath)){
-
-						//Create a template for complex cms property
-						complexCmsProperty = (ComplexCmsProperty)complexCmsPropertyEdit.getEditedComplexCmsProperty().createNewValueForMulitpleComplexCmsProperty(complexCmsPropertyPath);
-						
+				try{
+	
+					ComplexCmsProperty<?,?> complexCmsProperty = null;
+					
+					if (selectedContentObjectForEdit.getContentObject().getTypeDefinition().getName().equals(complexCmsPropertyPath)){
+						//Load root property
+						complexCmsProperty = selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty();
+					}
+					else{
+						complexCmsProperty = (ComplexCmsProperty<?,?>)selectedContentObjectForEdit.getContentObject().getCmsProperty(complexCmsPropertyPath);
+					}
+	
+					if (complexCmsProperty == null){
+						//Complex Cms Property is either not defined or
+						//is a multiple complex cms property
+						if (selectedContentObjectForEdit.getContentObject().getComplexCmsRootProperty().isChildPropertyDefined(complexCmsPropertyPath)){
+	
+							//Create a template for complex cms property
+							complexCmsProperty = (ComplexCmsProperty<?,?>)complexCmsPropertyEdit.getEditedComplexCmsProperty().createNewValueForMulitpleComplexCmsProperty(complexCmsPropertyPath);
+							
+						}
+					}
+					
+					if (complexCmsProperty == null){
+							logger.warn("Attempt to create and load complex cms Property "+ complexCmsPropertyPath + " failed"); 
+					}
+					else{
+						//Load complex cms property editor only if complex cms property was found
+						loadComplexCmsPropertyToComplexCmsPropertyEditor(complexCmsProperty, complexCmsPropertyEdit);
 					}
 				}
-				
-				if (complexCmsProperty == null){
-						logger.warn("Attempt to create and load complex cms Property "+ complexCmsPropertyPath + " failed"); 
+				catch(Exception e){
+					logger.error("",e); 
+					JSFUtilities.addMessage(null, "application.unknown.error.message", null, FacesMessage.SEVERITY_WARN); 
 				}
-				else{
-					//Load complex cms property editor only if complex cms property was found
-					loadComplexCmsPropertyToComplexCmsPropertyEditor(complexCmsProperty);
-				}
-			}
-			catch(Exception e){
-				logger.error("",e); 
-				JSFUtilities.addMessage(null, "application.unknown.error.message", null, FacesMessage.SEVERITY_WARN); 
 			}
 		}
 	}
@@ -767,7 +851,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				initializeInputAndOutputUIComponentsRelatedtoSecurityProperties();
 				
 				// generate a success message
-				JSFUtilities.addMessage(null, "content.object.edit.successful.save.info.message", null, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "object.edit.successful.save.info.message", null, FacesMessage.SEVERITY_INFO); 
 
 				if (listOfTopicIdsWhoseNumberOfContentObjectReferrersShouldBeUpdated.size() > 0)
 					Events.instance().raiseEvent(SeamEventNames.UPDATE_NO_OF_CONTENT_OBJECT_REFERRERS, listOfTopicIdsWhoseNumberOfContentObjectReferrersShouldBeUpdated);
@@ -807,7 +891,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		{
 			if (! contentObjectWasSavedInRepository){
 				//Produce error message only if content object was not saved at all
-				JSFUtilities.addMessage(null, "content.object.edit.non.unique.system.name", new String[]{selectedContentObjectForEdit.getContentObject().getSystemName()}, FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.non.unique.system.name", new String[]{selectedContentObjectForEdit.getContentObject().getSystemName()}, FacesMessage.SEVERITY_WARN); 
 
 				if (newContentObject) {
 					selectedContentObjectForEdit.getContentObject().setId(null);
@@ -819,7 +903,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		}
 		catch(CmsConcurrentModificationException e)
 		{
-			JSFUtilities.addMessage(null, "content.object.edit.save.concurrentModificationError", null, FacesMessage.SEVERITY_WARN); 
+			JSFUtilities.addMessage(null, "object.edit.save.concurrentModificationError", null, FacesMessage.SEVERITY_WARN); 
 
 			if (newContentObject) {
 				selectedContentObjectForEdit.getContentObject().setId(null);
@@ -833,7 +917,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 			if (! contentObjectWasSavedInRepository){
 				//Produce error message only if content object was not saved at all
-				JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR); 
 				if (newContentObject) {
 					selectedContentObjectForEdit.getContentObject().setId(null);
 				}
@@ -853,7 +937,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		if (newContentObject && selectedContentObjectForEdit.getContentObject().getSystemName() != null && selectedContentObjectForEdit.getContentObject().getId() != null && 
 				selectedContentObjectForEdit.getContentObject().getSystemName().endsWith(selectedContentObjectForEdit.getContentObject().getId()))
 		{
-			JSFUtilities.addMessage(null, "content.object.edit.save.system.name.provided",
+			JSFUtilities.addMessage(null, "object.edit.save.system.name.provided",
 					providedSystemName != null ? new String[]{providedSystemName}:
 						new String[]{""}, FacesMessage.SEVERITY_WARN);
 		}
@@ -875,14 +959,14 @@ public class ContentObjectEdit extends AbstractUIBean {
 				spaceToCopyNewObject = null;
 				
 				// generate a success message
-				JSFUtilities.addMessage(null, "content.object.edit.sucessfully.attach.content.object.to.space", null, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "object.edit.sucessfully.attach.content.object.to.space", null, FacesMessage.SEVERITY_INFO); 
 			}
 				
 				
 
 		}
 		catch (Exception e) {
-			JSFUtilities.addMessage(null, "content.object.edit.space.attach.error", null, FacesMessage.SEVERITY_ERROR); 
+			JSFUtilities.addMessage(null, "object.edit.space.attach.error", null, FacesMessage.SEVERITY_ERROR); 
 			getLogger().error("Content Object could not be attached to requested SPACE_INSTANCE",e); 
 			return "error"; 
 
@@ -944,7 +1028,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		// check if all mandatory properties have been provided. The checking method produces the appropriate UI messages when a property is missing 
 		//if (mandatoryPropertiesMissing()) {
 		if (cmsPropertyValidatorVisitor.mandatoryPropertiesAreMissing()) {
-			JSFUtilities.addMessage(null, "content.object.edit.error.required", null, FacesMessage.SEVERITY_WARN); 
+			JSFUtilities.addMessage(null, "object.edit.error.required", null, FacesMessage.SEVERITY_WARN); 
 			return "error"; 
 		}
 
@@ -972,7 +1056,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			CmsOutcome<ContentObject> portalOutcome = contentService.searchContentObjects(portalCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			
 			if (portalOutcome !=null && portalOutcome.getCount() > 0){
-				JSFUtilities.addMessage(null, "content.object.edit.already.existing.portal.system.name", new String[]{portalSystemName}, FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.already.existing.portal.system.name", new String[]{portalSystemName}, FacesMessage.SEVERITY_WARN); 
 				return "error"; 
 			}
 		}
@@ -992,7 +1076,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				if (webPublicationStartDateProperty == null || webPublicationStartDateProperty.hasNoValues())
 				{
 					String propertyLocalizedLabel = (webPublicationStartDateProperty == null? 
-							JSFUtilities.getLocalizedMessage("content.object.edit.web.publication.start.date", null) :
+							JSFUtilities.getLocalizedMessage("object.edit.web.publication.start.date", null) :
 							webPublicationStartDateProperty.getLocalizedLabelOfFullPathforLocaleWithDelimiter(JSFUtilities.getLocaleAsString(), " > ")
 							);
 					
@@ -1109,7 +1193,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 					userList.add(userOrRoleMap);
 				else {
 					logger.warn("User already in access right list. selection is ignored"); 
-					JSFUtilities.addMessage(null, "content.object.edit.accessibility.value.already.exists.warning", null, FacesMessage.SEVERITY_WARN); 
+					JSFUtilities.addMessage(null, "object.edit.accessibility.value.already.exists.warning", null, FacesMessage.SEVERITY_WARN); 
 				} 
 			}
 		}
@@ -1160,7 +1244,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				
 				List<Map<String, String>> userList = userListByAccessRight.get(accessRight.toString());
 				if (userList == null || userList.size() == 0) {
-					JSFUtilities.addMessage(null, "content.object.edit.accessibility.value.user.group."+accessRight.toString()+".empty", null, FacesMessage.SEVERITY_ERROR); 
+					JSFUtilities.addMessage(null, "object.edit.accessibility.value.user.group."+accessRight.toString()+".empty", null, FacesMessage.SEVERITY_ERROR); 
 					return "error"; 
 				}
 				copyUIAccessRightListToContentObjectAccessRightList(userList, accessibilityProperty.getSimpleTypeValues());
@@ -1168,7 +1252,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			
 			default:
 				// we do not support any other value. reset radio button to default, generate an error message and return
-				JSFUtilities.addMessage(null, "content.object.edit.invalid.accessibility.value", 
+				JSFUtilities.addMessage(null, "object.edit.invalid.accessibility.value", 
 						new String[] {String.valueOf(radioButtonSelectionMap.get(accessRight.toString()))}, FacesMessage.SEVERITY_WARN); 
 			
 				radioButtonSelectionMap.put(accessRight.toString(), 1);
@@ -1349,7 +1433,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(loggedInRepositoryUser.getRepositoryUser().getFolksonomy().getRootTopics(), 
 					newTagLabel) != null) {
 				logger.warn("The user tag is not a new tag since it is already in user tags"); 
-				JSFUtilities.addMessage(null, "content.object.edit.tag.already.exists", null, FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.tag.already.exists", null, FacesMessage.SEVERITY_WARN); 
 				return;
 			}
 
@@ -1357,13 +1441,13 @@ public class ContentObjectEdit extends AbstractUIBean {
 			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
 					newTagLabel) != null) {
 				logger.warn("The user tag is already in content object subject."); 
-				JSFUtilities.addMessage(null, "content.object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
 				return;
 			}
 
 			// if we have reached this point everything is ok. Let proceed to add the new  tag
 			//Save Tag
-			topicService.saveTopic(newUserTag);
+			topicService.save(newUserTag);
 
 			//Attach tag to content object
 			((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(newUserTag); 
@@ -1378,7 +1462,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		}
 		else {
 			logger.error("An empty label has been provided. User Tag cannot be created with an empty label"); 
-			JSFUtilities.addMessage(null, "content.object.edit.empty.tag.error", null, FacesMessage.SEVERITY_WARN); 
+			JSFUtilities.addMessage(null, "object.edit.empty.tag.error", null, FacesMessage.SEVERITY_WARN); 
 
 		}
 	}
@@ -1390,7 +1474,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
 					selectedLoggedInUserTag.getLocalizedLabelForCurrentLocale()) != null) {
 				logger.warn("The selected tag is already in content object subject."); 
-				JSFUtilities.addMessage(null, "content.object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
 				return;
 			}
 
@@ -1407,23 +1491,6 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	}
 
-
-	public SimpleCmsPropertyValueWrapper getSimpleCmsPropertyValueWrapper(
-			Integer indexOfSimpleCmsPropertyWrapper,
-			Integer indexOfSimpleCmsPropertyValueWrapper) {
-		if (complexCmsPropertyEdit == null)
-			return null;
-
-		try{
-			return complexCmsPropertyEdit.getSimpleCmsPropertyValueWrapper(indexOfSimpleCmsPropertyWrapper, indexOfSimpleCmsPropertyValueWrapper);
-		}
-		catch(Exception e){
-			logger.error("While trying to get simple cms property value wrapper with index "+indexOfSimpleCmsPropertyValueWrapper + 
-					" from simple cms property wrapper with index "+ indexOfSimpleCmsPropertyWrapper, e); 
-			return null;
-		}
-
-	}
 
 
 	public void addDraggedAndDroppedSpace_Listener(DropEvent dropEvent) {
@@ -1450,7 +1517,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 
 			if (StringUtils.isEmpty(droppedTopicTaxonomyName) || !acceptedTaxonomies.contains(droppedTopicTaxonomyName)){
-				JSFUtilities.addMessage(null, "content.object.edit.invalid.topic.does.not.belong.to.accepted.taxonomies", null , FacesMessage.SEVERITY_WARN); 
+				JSFUtilities.addMessage(null, "object.edit.invalid.topic.does.not.belong.to.accepted.taxonomies", null , FacesMessage.SEVERITY_WARN); 
 				return;
 			}
 		}
@@ -1473,13 +1540,13 @@ public class ContentObjectEdit extends AbstractUIBean {
 		if (!topicExists) {
 			((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topicTreeNode.getTopic()); 
 
-			JSFUtilities.addMessage(null, "content.object.edit.topic.added.to.content.object", null , FacesMessage.SEVERITY_INFO); 
+			JSFUtilities.addMessage(null, "object.edit.topic.added.to.content.object", null , FacesMessage.SEVERITY_INFO); 
 
 			updateListOfTopicIdsWhoseNumberOfContentObjectReferrersShouldBeUpdated(topicTreeNode.getTopic().getId());
 
 		}
 		else
-			JSFUtilities.addMessage(null, "content.object.edit.topic.already.exists", null , FacesMessage.SEVERITY_WARN); 
+			JSFUtilities.addMessage(null, "object.edit.topic.already.exists", null , FacesMessage.SEVERITY_WARN); 
 
 
 	}
@@ -1570,7 +1637,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 					thumbnailBinaryChannel.setContent(thumbnailContent);
 					thumbnailBinaryChannel.setEncoding(binaryChannelWhoseThumbnailWillBeCreated.getEncoding());
 
-					JSFUtilities.addMessage(null, "content.object.edit.thubnail.created", null, FacesMessage.SEVERITY_INFO); 
+					JSFUtilities.addMessage(null, "object.edit.thubnail.created", null, FacesMessage.SEVERITY_INFO);
+					
+					// We should update the thumnail property at the UI. So we add the thumbnail wrapper index to the list of wrappers that should be updated by the UI
+					complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(complexCmsPropertyEdit.getIndexOfPropertyWrapper("thumbnail")));
 
 				} catch (Exception e) {
 					logger.error("Could not generate thumbnail ", e); 
@@ -1601,7 +1671,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 						createdDate});
 			}
 			catch (Exception e) {
-				JSFUtilities.addMessage(null, "content.object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR); 
 				getLogger().error("The content object could not be permanently deleted. The error is: " , e); 
 				return null; 
 			}
@@ -1612,7 +1682,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			return null; 
 		}
 		// generate a success message, reset the browsing trees to accommodate the change and finally change the view to show the conentObjectListPanel 
-		JSFUtilities.addMessage(null, "content.object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO); 
+		JSFUtilities.addMessage(null, "object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO); 
 
 		// reset search results table
 		ContentObjectStatefulSearchService contentObjectStatefulSearchService = (ContentObjectStatefulSearchService) JSFUtilities.getBeanFromSpringContext("contentObjectStatefulSearchService"); 
@@ -1702,10 +1772,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 				workflowProperty.setSimpleTypeValue(workflow);
 			}
 			else{
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.scheduledForPublication", null)}, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.scheduledForPublication", null)}, FacesMessage.SEVERITY_INFO); 
 
 				if (today != null)
-					JSFUtilities.addMessage(null, "content.object.edit.webpublicationdate.set.info", 
+					JSFUtilities.addMessage(null, "object.edit.webpublicationdate.set.info", 
 					new String[]{DateUtils.format(today, "dd/MM/yyyy HH:mm")}, FacesMessage.SEVERITY_INFO); 
 
 				// refresh the list of content objects which are submitted for publication
@@ -1721,7 +1791,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			workflowProperty.setSimpleTypeValue(workflow);
 			
 			getLogger().error("Error while activating publication scheduling ",  e); 
-			JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
 			
 		}
 
@@ -1750,7 +1820,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			else {
 				// the save was successful
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", 
+				JSFUtilities.addMessage(null, "object.edit.status.changed.info.message", 
 						new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.submitted", null)}, FacesMessage.SEVERITY_INFO); 
 			}
 		}
@@ -1758,7 +1828,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 			contentObjectStatusProperty.setSimpleTypeValue(previousStatus);
 			workflowProperty.setSimpleTypeValue(previousWorkflow);
 			getLogger().error("Error while submitting content object for web publication ",  e); 
-			JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
 
 		}
 	}
@@ -1777,14 +1847,14 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			else {
 				// the save was successful
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.temporarilyRejectedForReauthoring", null)}, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.temporarilyRejectedForReauthoring", null)}, FacesMessage.SEVERITY_INFO); 
 			}
 		}
 		catch(Exception e){
 			contentObjectStatusProperty.setSimpleTypeValue(previousStatus);
 			
 			getLogger().error("Error while temporarily reject content object for reauthoring",  e); 
-			JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
 
 		}
 	}
@@ -1827,10 +1897,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			else {
 				// the save was successful
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.published", null)}, FacesMessage.SEVERITY_INFO);
+				JSFUtilities.addMessage(null, "object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.published", null)}, FacesMessage.SEVERITY_INFO);
 				
 				if (publicationStartDateHasBeenSet) {
-					JSFUtilities.addMessage(null, "content.object.edit.webpublicationdate.set.info", 
+					JSFUtilities.addMessage(null, "object.edit.webpublicationdate.set.info", 
 							new String[]{DateUtils.format(now, "dd/MM/yyyy HH:mm")}, FacesMessage.SEVERITY_INFO);
 				}
 			}
@@ -1841,7 +1911,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 				workflowProperty.setSimpleTypeValue(workflow);
 			}
 			getLogger().error("Error while un-publishing content object ",  e); 
-			JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
 
 		}
 
@@ -1861,14 +1931,14 @@ public class ContentObjectEdit extends AbstractUIBean {
 			}
 			else {
 				// the save was successful
-				JSFUtilities.addMessage(null, "content.object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.not.defined", null)}, FacesMessage.SEVERITY_INFO); 
+				JSFUtilities.addMessage(null, "object.edit.status.changed.info.message", new String[] {JSFUtilities.getParameterisedStringI18n("content.object.profile.status.not.defined", null)}, FacesMessage.SEVERITY_INFO); 
 			}
 		}
 		catch(Exception e){
 			contentObjectStatusProperty.setSimpleTypeValue(previousStatus);		
 			
 			getLogger().error("Error while un-publishing content object ",  e); 
-			JSFUtilities.addMessage(null, "content.object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.save.error", null, FacesMessage.SEVERITY_ERROR);
 
 		}
 
@@ -2105,18 +2175,18 @@ public class ContentObjectEdit extends AbstractUIBean {
 	}
 
 
-	public void setSelectedUserOrGroupIdToBeRemovedFromAccessRightList(
-			String selectedUserOrGroupIdToBeRemovedFromAccessRightList) {
-		this.selectedUserOrGroupIdToBeRemovedFromAccessRightList = selectedUserOrGroupIdToBeRemovedFromAccessRightList;
-	}
-
 	public String getComplexCmsPropertyEditorPagePath(){
 		return complexCmsPropertyEditorPagePath;
 	}
 
 
-	public List<ComplexCmsPropertyBreadCrumb> getComplexCmsPropertyBreadCrumbs() {
-		return complexCmsPropertyBreadCrumbs;
+	public List<ComplexCmsPropertyBreadCrumb> getFixedPropertyBreadCrumbs() {
+		return fixedPropertyBreadCrumbs;
+	}
+
+
+	public List<ComplexCmsPropertyBreadCrumb> getExtraPropertyBreadCrumbs() {
+		return extraPropertyBreadCrumbs;
 	}
 
 
@@ -2171,6 +2241,16 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 	public void setUserSpaceNavigation(UserSpaceNavigation userSpaceNavigation) {
 		this.userSpaceNavigation = userSpaceNavigation;
+	}
+
+
+	public ComplexCmsPropertyEdit getExtraPropertyEdit() {
+		return extraPropertyEdit;
+	}
+
+
+	public void setExtraPropertyEdit(ComplexCmsPropertyEdit extraPropertyEdit) {
+		this.extraPropertyEdit = extraPropertyEdit;
 	}
 	
 }

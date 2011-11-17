@@ -133,6 +133,9 @@ public class ComplexCmsPropertyParentWrapper extends CmsPropertyWrapper<ComplexC
 	
 	//childPropertyPath is relative to cmsProperty
 	public void deleteComplexCmsProperty_UIAction(String childPropertyPath){
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
 		try{
 			
 			cmsProperty.removeChildProperty(childPropertyPath);
@@ -156,7 +159,7 @@ public class ComplexCmsPropertyParentWrapper extends CmsPropertyWrapper<ComplexC
 
 			//Notify tree that a property is added
 			if (childCmsProperty != null){
-				Events.instance().raiseEvent(SeamEventNames.NEW_COMPLEX_CMS_PROPERTY_ADDED, childCmsProperty.getPath());
+				Events.instance().raiseEvent(SeamEventNames.NEW_COMPLEX_CMS_PROPERTY_ADDED, childCmsProperty.getPath(), complexCmsPropertyEdit);
 			}
 			else{
 				logger.warn("Could not create new cms property {}", cmsProperty.getFullPath()+"."+childComplexCmsPropertyDefinition.getName());

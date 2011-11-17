@@ -66,7 +66,7 @@ Authors
 </ui:remove>
 
 			
-				<a4j:commandButton value="#{messages['content.object.edit.workflowActions.activatePublicationScheduling']}"
+				<a4j:commandButton value="#{messages['object.edit.workflowActions.activatePublicationScheduling']}"
 					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 					action="#{contentObjectEdit.activatePublicationScheduling_UIAction}"
 					rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and 
@@ -81,7 +81,7 @@ Authors
 
 				<a4j:commandButton 
 					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-					value="#{messages['content.object.edit.workflowActions.submitForApproval']}"
+					value="#{messages['object.edit.workflowActions.submitForApproval']}"
 					action="#{contentObjectEdit.submitContentObjectForWebPublication_UIAction}"
 					rendered="#{ !contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and
 							   (empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue or 
@@ -92,7 +92,7 @@ Authors
 
 				<a4j:commandButton 
 					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-					value="#{messages['content.object.edit.workflowActions.reject']}"
+					value="#{messages['object.edit.workflowActions.reject']}"
 					action="#{contentObjectEdit.temporarilyRejectContentObjectForReauthoring_UIAction}"
 					rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue == 'webPublishing' and 
 										 ( contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submitted' or

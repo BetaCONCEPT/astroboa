@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
+import org.betaconceptframework.astroboa.console.jsf.edit.ComplexCmsPropertyEdit;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsDefinitionTreeNodeRichFaces;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsDefinitionTreeNodeRichFaces.Type;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsPropertyForContentObjectEditTreeNodeRichFaces;
@@ -113,7 +114,7 @@ public class CmsDefinitionTree extends AbstractUIBean{
 	}
 	
 	@Observer({SeamEventNames.NEW_COMPLEX_CMS_PROPERTY_ADDED})
-	public void newCmsPropertyAdded(String parentTreeNodeIdentifier) {
+	public void newCmsPropertyAdded(String parentTreeNodeIdentifier, ComplexCmsPropertyEdit complexCmsPropertyEdit) {
 		
 		TreeNode parentTreeNode = null;
 		

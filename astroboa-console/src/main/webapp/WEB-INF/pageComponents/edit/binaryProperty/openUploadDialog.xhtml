@@ -37,34 +37,19 @@ Authors
 			
 			<a4j:commandLink
 				onclick="destroyTextEditor();"
+				action="#{dialogPropertyWrapper.setCmsPropertyWrapper(cmsPropertyWrapper)}"
 				rendered="#{cmsPropertyWrapper.writeGranted and 
 					cmsPropertyWrapper.valueType eq 'Binary' and
 					!  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged}"
-				action="#{uploadDataForBinaryChannelDialogue.startDialogue_UIAction}"
 				oncomplete="openFileUploadDialog();"
-				value="#{messages['content.object.edit.action.uploadFile']} ">
+				title="#{messages['object.edit.action.uploadFile']} ">
 
 				<a4j:actionparam name="indexOfSimpleCmsPropertyValueWrapper"
-					value="#{cmsPropertyWrapper.multiple ? -1 : 0}"
-					assignTo="#{uploadDataForBinaryChannelDialogue.indexOfSimpleCmsPropertyValueWrapper}" />
-					
-				<a4j:actionparam name="indexOfCmsPropertyWrapper"
-					value="#{indexOfCmsPropertyWrapper}"
-					assignTo="#{uploadDataForBinaryChannelDialogue.indexOfSimpleCmsPropertyWrapper}" />
-
-				<a4j:actionparam name="idOfUIComponentToBeUpdatedAfterSelection"
-					value="complexCmsPropertyChildPropertiesTable"
-					assignTo="#{uploadDataForBinaryChannelDialogue.idOfUIComponentToBeUpdatedAfterSelection}" />
+					value="-1"
+					assignTo="#{cmsPropertyWrapper.indexOfPropertyValueToBeProcessed}" />
 				
 					<h:graphicImage value="/images/cms-icons/16/fugue/drive-upload.png" />
 			</a4j:commandLink>
-			<!-- Binary Property Values -->
-			<ui:include
-				src="/WEB-INF/pageComponents/edit/binaryProperty/binaryValues.xhtml">
-				<!--  Need to pass valueWrapper to xhtml to render its value -->
-				<ui:param name="simpleCmsPropertyWrapper"
-					value="#{cmsPropertyWrapper}" />
-			</ui:include>
 
 		</ui:composition>
 	</body>

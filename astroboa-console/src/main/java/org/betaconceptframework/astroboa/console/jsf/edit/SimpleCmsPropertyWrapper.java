@@ -63,8 +63,6 @@ import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsProperty>{
 
 	private List<SimpleCmsPropertyValueWrapper> simpleCmsPropertyValueWrappers = new ArrayList<SimpleCmsPropertyValueWrapper>();
-	private int indexOfValueToBeDeleted = -1;
-	private int indexOfValueToBeCopied;
 	private CmsPropertyValidatorVisitor cmsPropertyValidatorVisitor;
 
 	private String selectedDispositionType;
@@ -124,11 +122,6 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	}
 
 
-	public void setIndexOfValueToBeDeleted(int indexOfValueToBeDeleted) {
-		this.indexOfValueToBeDeleted = indexOfValueToBeDeleted;
-	}
-
-
 	/**
 	 * This method should be called only if simpleCmsProperty is Single value
 	 * Otherwise an exception is thrown
@@ -175,8 +168,13 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	
 	public void createURLForPropertyAndCopyItToClipboard_UIAction() {
 		
+		if (indexOfPropertyValueToBeProcessed == -1) {
+			logger.error("The index of property value has not been set. Property value url cannot be created.");
+			return;
+		}
+		
 		try {
-			SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper = simpleCmsPropertyValueWrappers.get(indexOfValueToBeCopied);
+			SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper = simpleCmsPropertyValueWrappers.get(indexOfPropertyValueToBeProcessed);
 
 			if (simpleCmsPropertyValueWrapper != null) { 
 				
@@ -270,31 +268,31 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
 		
 		//Remove value only if it has not already been deleted in case of null value
-		if (indexOfValueToBeDeleted != -1){
+		if (indexOfPropertyValueToBeProcessed != -1){
 
 			//Remove value from simple cms property
-			//only if indexOfvalueTobeDeleted exists for values
+			//only if indexOfPropertyValueToBeProcessed exists for values
 			try{
-				if (simpleCmsPropertyValueWrappers.get(indexOfValueToBeDeleted) != null && 
-						! simpleCmsPropertyValueWrappers.get(indexOfValueToBeDeleted).isValueSetNull() &&
-						cmsProperty.getSimpleTypeValues().get(indexOfValueToBeDeleted) != null){
-					cmsProperty.removeSimpleTypeValue(indexOfValueToBeDeleted);
+				if (simpleCmsPropertyValueWrappers.get(indexOfPropertyValueToBeProcessed) != null && 
+						! simpleCmsPropertyValueWrappers.get(indexOfPropertyValueToBeProcessed).isValueSetNull() &&
+						cmsProperty.getSimpleTypeValues().get(indexOfPropertyValueToBeProcessed) != null){
+					cmsProperty.removeSimpleTypeValue(indexOfPropertyValueToBeProcessed);
 				}
 			}
 			catch(Exception e){
 				//Ignore exception
 			}
 				
-			removeWrapperAndShoftIndexes();
+			removeWrapperAndShortIndexes();
 
-			indexOfValueToBeDeleted = -1;
+			indexOfPropertyValueToBeProcessed = -1;
 		}
 	}
 
 
-	private void removeWrapperAndShoftIndexes() {
+	private void removeWrapperAndShortIndexes() {
 		try{
-			simpleCmsPropertyValueWrappers.remove(indexOfValueToBeDeleted);
+			simpleCmsPropertyValueWrappers.remove(indexOfPropertyValueToBeProcessed);
 			
 			for (SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper : simpleCmsPropertyValueWrappers){
 				simpleCmsPropertyValueWrapper.changeIndex(simpleCmsPropertyValueWrappers.indexOf(simpleCmsPropertyValueWrapper));
@@ -311,7 +309,8 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		//Create the wrappers if they do not yet exist
 		// if the property has already value create as many wrappers as the values
 		// if the property has no values yet then create one value wrapper to allow the creation of the UI input component that 
-		// will allow the user to add values
+		// will allow the user to add values.
+		// If property is binary and no values yet then no empty wrapper is created since it will be created when the user uploads a file through the upload dialog. 
 		if (CollectionUtils.isEmpty(simpleCmsPropertyValueWrappers) && cmsProperty != null){
 			List values = cmsProperty.getSimpleTypeValues();
 			if (CollectionUtils.isNotEmpty(values)) {
@@ -320,20 +319,14 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 				}
 			}
 			else {
-				addNewSimpleCmsPropertyValueWrapper();
+				if (!getValueType().equals(ValueType.Binary)) {
+					addNewSimpleCmsPropertyValueWrapper();
+				}
 			}
 			
 		}
 
 		return simpleCmsPropertyValueWrappers;
-	}
-
-	public void setIndexOfValueToBeCopied(int indexOfValueToBeCopied) {
-		this.indexOfValueToBeCopied = indexOfValueToBeCopied;
-	}
-	
-	public int getIndexOfValueToBeCopied() {
-		return indexOfValueToBeCopied;
 	}
 
 
@@ -344,7 +337,7 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		
 		if (valueEnumeration != null){
 			
-			valueEnumerationSelectItems.add(new SelectItem("", JSFUtilities.getLocalizedMessage("content.object.edit.select.box.no.value", null)));
+			valueEnumerationSelectItems.add(new SelectItem("", JSFUtilities.getLocalizedMessage("object.edit.select.box.no.value", null)));
 			
 			for (Object value : valueEnumeration.keySet()){
 				valueEnumerationSelectItems.add(new SelectItem(value,((Localization)valueEnumeration.get(value)).getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()))); 
@@ -358,7 +351,7 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		// get clipboard from session context
 		Clipboard clipboard =  (Clipboard) Contexts.getSessionContext().get("clipboard");
 		if (clipboard != null) {
-			setIndexOfValueToBeCopied(indexOfValueToBeCopied);
+			indexOfPropertyValueToBeProcessed = indexOfValueToBeCopied;
 			clipboard.setSelectedCmsPropertyWrapper(this);
 		}
 		else {
@@ -368,13 +361,14 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 	
 	
 	public void fileUpload_Listener(UploadEvent event) {
+		
 		try {
 			processUploadedFile(event.getUploadItem());
 
 			//	resetAfterDialogueCompletion();
 		}
 		catch (Exception e) {
-			JSFUtilities.addMessage(null, "Συνέβη κάποιο σφάλμα. Δεν μεταφορτώθηκε το αρχείο", FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.action.uploadFile.uploadFailed", null, FacesMessage.SEVERITY_WARN);
 		}
 	}
 
@@ -387,10 +381,25 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		
 		ConfigurableMimeFileTypeMap mimeTypesMap = (ConfigurableMimeFileTypeMap) JSFUtilities.getBeanFromSpringContext("mimeTypesMap");
 		
-		// add a new value wrapper
-		addBlankValue_UIAction();
-		SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper = 
-				simpleCmsPropertyValueWrappers.get(simpleCmsPropertyValueWrappers.size()-1);
+		// add the wrapper index to the list of wrappers that should be updated by the UI
+		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
+		
+		SimpleCmsPropertyValueWrapper simpleCmsPropertyValueWrapper;
+		
+		// We should check if we add a new binary or updating an existing one
+		if (indexOfPropertyValueToBeProcessed == -1){
+			// add a new value wrapper if property is defined to get multiple values or it is defined to get a single value and no value
+			// exists yet
+			if (isMultiple() || (!isMultiple() && getSimpleCmsPropertyValueWrappers().isEmpty())) {
+				addNewSimpleCmsPropertyValueWrapper();
+			}
+			simpleCmsPropertyValueWrapper = 
+					simpleCmsPropertyValueWrappers.get(simpleCmsPropertyValueWrappers.size()-1);
+		}
+		else {
+			simpleCmsPropertyValueWrapper = 
+					simpleCmsPropertyValueWrappers.get(indexOfPropertyValueToBeProcessed);
+		}
 		
 		if (uploadItem.isTempFile()) { // if upload was set to use temp files
 			filename = FilenameUtils.getName(uploadItem.getFileName());
@@ -414,7 +423,7 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 		}
 		
 		if (filedata == null || filename == null){
-			JSFUtilities.addMessage(null, "Δεν μεταφορτώθηκε σωστά το αρχείο. Προσπαθήστε πάλι", FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.action.uploadFile.uploadFailed", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 
@@ -429,12 +438,12 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 					thumbnailContent = ImageUtils.generateJpegThumbnailHQ(filedata, 128, 256);
 				}
 				else{
-					JSFUtilities.addMessage(null, "Επιτρεπτά φορμά εικόνας JPEG / PNG / GIF", FacesMessage.SEVERITY_WARN);
+					JSFUtilities.addMessage(null, "object.edit.action.uploadFile.thumbnailCanBeCreatedOnlyFromJPGorPNGorGIFFiles", null, FacesMessage.SEVERITY_WARN);
 					return;
 				}
 			}
 
-			BinaryChannel binaryChannelValue = simpleCmsPropertyValueWrapper.getOrCreateNewBinaryChannelValue();
+			BinaryChannel binaryChannelValue = simpleCmsPropertyValueWrapper.getNewBinaryChannelValue();
 
 
 			//Copy byte[] to a new byte[]
@@ -459,12 +468,13 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 
 		}
 		catch (Exception e) {
-			JSFUtilities.addMessage(null, "Σφάλμα κατά την ανάγνωση των ιδιοτήτων του ψηφιακού καναλιού:" + e.toString(), FacesMessage.SEVERITY_ERROR);
-			logger.error("", e);
+			JSFUtilities.addMessage(null, "object.edit.action.uploadFile.uploadFailed", null, FacesMessage.SEVERITY_ERROR);
+			logger.error("File upload failed", e);
 		}
 		finally
 		{
 			simpleCmsPropertyValueWrapper.setMimeTypeIconFilePath(null);
+			indexOfPropertyValueToBeProcessed = -1;
 
 		}
 	}

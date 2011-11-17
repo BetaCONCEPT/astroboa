@@ -105,7 +105,7 @@ public class CmsPropertyValidatorVisitor {
 		//Validate system name
 		if (StringUtils.isNotBlank(contentObject.getSystemName())){
 			if (!CmsConstants.SystemNamePattern.matcher(contentObject.getSystemName()).matches()){
-				JSFUtilities.addMessage(null, "content.object.edit.invalid.system.name", new String[]{contentObject.getSystemName()}, FacesMessage.SEVERITY_WARN);
+				JSFUtilities.addMessage(null, "object.edit.invalid.system.name", new String[]{contentObject.getSystemName()}, FacesMessage.SEVERITY_WARN);
 				hasErrors = true;
 			}
 		}
@@ -541,7 +541,7 @@ public class CmsPropertyValidatorVisitor {
 						if (! ((BinaryChannel)value).contentExists()){
 							
 							addErrorMessage(simpleCmsProperty.getFullPath(), 
-									"content.object.edit.validation.invalid.path.to.unmanaged.binary.channel", 
+									"object.edit.validation.invalid.path.to.unmanaged.binary.channel", 
 									getLocalizedLabelOfFullPathFromCmsProperty(simpleCmsProperty),
 									((BinaryChannel)value).getRelativeFileSystemPath());
 						}

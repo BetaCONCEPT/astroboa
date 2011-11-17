@@ -57,9 +57,6 @@ import org.richfaces.event.DropEvent;
  */
 public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<ObjectReferenceProperty>{
 
-	
-	private int indexOfValueToBeDeleted = -1;
-
 	private String contentObjectTitlePattern;
 
 	private ContentObjectCriteria contentObjectCriteria;
@@ -129,14 +126,14 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
 		
 		//Remove value only it has not already been deleted in case of null value
-		if (indexOfValueToBeDeleted != -1){
+		if (indexOfPropertyValueToBeProcessed != -1){
 
 			try{
 				if (cmsProperty.getPropertyDefinition().isMultiple()){
 					//Remove value from simple cms property
-					//only if indexOfvalueTobeDeleted exists for values
-					if (indexOfValueToBeDeleted < cmsProperty.getSimpleTypeValues().size()){
-						cmsProperty.removeSimpleTypeValue(indexOfValueToBeDeleted);
+					//only if indexOfPropertyValueToBeProcessed exists for values
+					if (indexOfPropertyValueToBeProcessed < cmsProperty.getSimpleTypeValues().size()){
+						cmsProperty.removeSimpleTypeValue(indexOfPropertyValueToBeProcessed);
 					}
 				}
 				else{
@@ -150,7 +147,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 				//Reset first wrapper
 				simpleCmsPropertyValueWrappers.clear();
 
-				indexOfValueToBeDeleted = -1;
+				indexOfPropertyValueToBeProcessed = -1;
 			}
 
 		}
@@ -300,10 +297,6 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 		return contentObjectTitlePattern;
 	}
 
-	public void setIndexOfValueToBeDeleted(int indexOfValueToBeDeleted) {
-		this.indexOfValueToBeDeleted = indexOfValueToBeDeleted;
-	}
-
 	public List<String> getAcceptedContentTypes() {
 		if (acceptedContentTypes == null){
 			return definitionService.getContentObjectTypes();
@@ -314,35 +307,44 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 
 	public String getLocalizedLabelsForAcceptedContentTypes(){
 		if (StringUtils.isBlank(localizedLabelsForAcceptedTypes)){
+			List<String> acceptedContentTypes = null;
+			List<String> localizedLabels = new ArrayList<String>();
+			// we do not get the accepted object types from the provided class property since we do not need to return to the user all available types 
+			// if no restriction has been set in the definition. When there is no rescriction we just return a localized string for "All Object Types are accepted"
+			if (getCmsPropertyDefinition() != null) {
+				acceptedContentTypes = ((ObjectReferencePropertyDefinition)getCmsPropertyDefinition()).getExpandedAcceptedContentTypes();
+			}
 
 			if (CollectionUtils.isNotEmpty(acceptedContentTypes)){
 
-				List<String> localizedLabels = new ArrayList<String>();
-
 				for (String acceptedContentType : acceptedContentTypes){
-					if (!ValueType.ObjectReference.toString().equals(acceptedContentType)){
-						ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition)definitionService.getCmsDefinition(acceptedContentType, ResourceRepresentationType.DEFINITION_INSTANCE, false);
-
-						if (typeDefinition == null){
-							logger.warn("Try to load accepted content type {} but was not found", acceptedContentType);
-							localizedLabels.add(acceptedContentType);
+					
+					ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition)definitionService.getCmsDefinition(acceptedContentType, ResourceRepresentationType.DEFINITION_INSTANCE, false);
+	
+					if (typeDefinition == null){
+						logger.warn("Try to load accepted content type {} but was not found", acceptedContentType);
+						localizedLabels.add(acceptedContentType);
+					}
+					else{
+						if (StringUtils.isNotBlank(typeDefinition.getDisplayName().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()))){
+							localizedLabels.add(typeDefinition.getDisplayName().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString())); 
 						}
 						else{
-							if (StringUtils.isNotBlank(typeDefinition.getDisplayName().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()))){
-								localizedLabels.add(typeDefinition.getDisplayName().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString())); 
-							}
-							else{
-								localizedLabels.add(acceptedContentType);
-							}
+							localizedLabels.add(acceptedContentType);
 						}
 					}
 				}
-
-				if (localizedLabels.size() > 0){
-					localizedLabelsForAcceptedTypes = StringUtils.join(localizedLabels, ",");
-				}
-
+				
+				
 			}
+			else {
+				localizedLabels.add(JSFUtilities.getStringI18n("dialog.objectSelection.allObjectTypesAreAccepted"));
+			}
+			
+			if (localizedLabels.size() > 0){
+				localizedLabelsForAcceptedTypes = StringUtils.join(localizedLabels, ",");
+			}
+
 		}
 
 		return localizedLabelsForAcceptedTypes;

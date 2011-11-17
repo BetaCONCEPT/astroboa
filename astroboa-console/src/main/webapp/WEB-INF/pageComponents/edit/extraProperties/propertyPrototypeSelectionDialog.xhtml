@@ -31,32 +31,37 @@ Authors
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:seam="http://jboss.com/products/seam/taglib">
 
 	<body>
 		<ui:composition>
-			<div id="taxonomyImportDialog" title="#{messages['taxonomy.file.upload.panel.header']}">
-				<a4j:form id="taxonomyImportDialogForm">
-					<a4j:outputPanel id="taxonomyImportDialogPanel" layout="block" style="margin-bottom: 10px;">
-						<rich:fileUpload 
-							fileUploadListener="#{importTaxonomyXMLDialogue.fileUpload_Listener}"
-							acceptedTypes="xml"
-							maxFilesQuantity="50"
-							immediateUpload="true" >
-					  		<f:facet name="label">
-					  			<h:outputText value="{_KB}KB from {KB}KB uploaded --- {mm}:{ss}" />
-			        		</f:facet>
-						</rich:fileUpload>
-					</a4j:outputPanel>
+			
+			<div id="propertyPrototypeSelectionDialog" title="#{messages['object.edit.aspect.panel.label']}">
+				<a4j:form id="propertyPrototypeSelectionForm">
+					<a4j:outputPanel id="propertyPrototypeSelectionDialogPanel">
+						<ui:fragment rendered="#{! empty contentObjectEdit.extraPropertyEdit.editorTab}">
+							<ul id="dynPropList">	
+								<a4j:repeat
+									value="#{contentObjectEdit.extraPropertyEdit.propertyPrototypes}"
+									var="dynProp">
+									<li class="dynPropItem">
+										<a4j:commandLink
+											onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+											action="#{contentObjectEdit.showNewExtraProperty_UIAction(dynProp.value)}"
+											reRender="extraPropertiesPanel,propertyPrototypeSelectionDialogPanel"
+											title="#{messages['object.edit.action.addDynamicProperty']}">
 					
-					<a4j:commandButton 
-						styleClass="formItemClass"
-						action="#{importTaxonomyXMLDialogue.displayMessages_UIAction}"
-						value="#{messages['close.button.label']}"
-						onclick="closeImportTaxonomyXmlDialog();" 
-						reRender="topicTreePanel,taxonomyImportDialogPanel"/>
+											<h:outputText value="#{dynProp.label}"/>
+										</a4j:commandLink>
+									</li>
+								</a4j:repeat>
+							</ul>
+						</ui:fragment>
+					</a4j:outputPanel>
 				</a4j:form>
 			</div>
+			
 		</ui:composition>
 	</body>
 </html>

@@ -79,13 +79,13 @@ public class SchemaServiceAsync {
 				}
 
 				allowedTaxonomies[1] = 
-					messages.get("content.object.edit.topic.selection.accepted.values.fromSpecificTaxonomies") + 
+					messages.get("object.edit.topic.selection.accepted.values.fromSpecificTaxonomies") + 
 					"<br/>" +
 					"<strong>" + StringUtils.join(localizedLabels, ",") + "</strong>";
 
 			}
 			else {
-				allowedTaxonomies[1] = messages.get("content.object.edit.topic.selection.accepted.values.fromAllTaxonomies");
+				allowedTaxonomies[1] = messages.get("object.edit.topic.selection.accepted.values.fromAllTaxonomies");
 			}
 
 
@@ -125,13 +125,13 @@ public class SchemaServiceAsync {
 				}
 
 				allowedObjectTypes[1] = 
-					messages.get("content.object.edit.content.object.selection.accepted.values.specificObjectTypes") + 
+					messages.get("object.edit.content.object.selection.accepted.values.specificObjectTypes") + 
 					"<br/>" +
 					"<strong>" + StringUtils.join(localizedLabels, ",") + "</strong>";
 
 			}
 			else {
-				allowedObjectTypes[1] = messages.get("content.object.edit.content.object.selection.accepted.values.allObjectTypes");
+				allowedObjectTypes[1] = messages.get("object.edit.content.object.selection.accepted.values.allObjectTypes");
 			}
 
 

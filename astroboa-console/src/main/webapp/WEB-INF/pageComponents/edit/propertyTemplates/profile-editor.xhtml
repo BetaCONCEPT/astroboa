@@ -42,24 +42,25 @@ Authors
 						rowKeyVar="indexOfCmsPropertyWrapper"
 						ajaxKeys="#{complexCmsPropertyEdit.wrapperIndexesToUpdate}">
 						
-						<a4j:outputPanel id="objectProperty" >
+						<a4j:outputPanel id="ADMIN_PROPERTY" >
 							<!--  If user has no access we do not show the field --> 
 							<ui:fragment rendered="#{cmsPropertyWrapper.readGranted or cmsPropertyWrapper.writeGranted}">
 								
 										<li class="formElement">
-											<label id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+											<label>
 												<a4j:commandLink
 													onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 													rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
 														and ! cmsPropertyWrapper.multiple}"
-													action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path)}"
-													reRender="profilePropertiesPanel,objectFormHeader">
+													action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path, cmsPropertyWrapper.complexCmsPropertyEdit)}"
+													reRender="profilePropertiesPanel,fixedPropertyBreadCrumbs">
 											
 													<h:outputText
 														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 													
-													<h:outputText
-														value="#{cmsPropertyWrapper.localizedLabelForCurrentLocale}"/>
+													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+														#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
+													</span>
 												</a4j:commandLink>
 												
 												
@@ -70,12 +71,36 @@ Authors
 													<h:outputText 
 														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 														
-													<h:outputText
-														value="#{cmsPropertyWrapper.localizedLabelForCurrentLocale}"/>
+													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+														#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
+													</span>
 												</ui:fragment>
 												
 												
-												<ui:remove><img id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="tipImg" src="images/cms-icons/12/info.png"/></ui:remove>
+												<ui:include
+													src="/WEB-INF/pageComponents/edit/topicReferenceProperty/openTopicTree.xhtml">
+													<ui:param name="cmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+												</ui:include>
+												
+												<ui:include
+													src="/WEB-INF/pageComponents/edit/binaryProperty/openUploadDialog.xhtml">
+													<ui:param name="cmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+												</ui:include>
+												
+												<ui:include
+													src="/WEB-INF/pageComponents/edit/complexProperty/addComplexPropertyValue.xhtml">
+													<ui:param name="cmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+												</ui:include>
+												
+												<ui:include
+													src="/WEB-INF/pageComponents/edit/objectReferenceProperty/openObjectSelectionDialog.xhtml">
+													<ui:param name="cmsPropertyWrapper"
+														value="#{cmsPropertyWrapper}" />
+												</ui:include>
+												
 												<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
 												
 											</label>
@@ -88,14 +113,12 @@ Authors
 												/>
 											-->
 												
-											<!-- upload a file for a single or multiple value binary property -->
+											<!-- binary property with one or multiple values-->
 											<ui:include
-												src="/WEB-INF/pageComponents/edit/binaryProperty/binaryProperty.xhtml">
+												src="/WEB-INF/pageComponents/edit/binaryProperty/binaryValues.xhtml">
 												<!--  Need to pass valueWrapper to xhtml to render its value -->
 												<ui:param name="cmsPropertyWrapper"
 													value="#{cmsPropertyWrapper}" />
-												<ui:param name="indexOfCmsPropertyWrapper"
-													value="#{indexOfCmsPropertyWrapper}" />
 											</ui:include>
 										
 					
@@ -117,7 +140,7 @@ Authors
 												</ui:include>
 											</a4j:outputPanel>
 											
-											<!-- Property with Multiple Simple Values-->
+											<!-- Values of a Property with Multiple Simple Values-->
 											<ui:include
 												src="/WEB-INF/pageComponents/edit/simpleTypeValues.xhtml">
 												<!--  Need to pass valueWrapper to xhtml to render its value -->
@@ -125,37 +148,27 @@ Authors
 													value="#{cmsPropertyWrapper}" />
 											</ui:include>
 									
-											<!-- TOPIC property with single or multiple values-->
+											<!-- Values of a TOPIC property with single or multiple values-->
 											<ui:include
-												src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicReferenceProperty.xhtml">
+												src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicValues.xhtml">
 													<!--  Need to pass valueWrapper to xhtml to render its value -->
 													<ui:param name="topicPropertyWrapper"
 														value="#{cmsPropertyWrapper}" />
 											</ui:include>
-									
-											<!-- Object Reference Property with single or multiple values -->
+											
+											
+											<!-- Values of Object Reference Property with single or multiple values -->
 											<ui:include
-												src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceProperty.xhtml">
-													<!--  Need to pass valueWrapper to xhtml to render its value -->
-													<ui:param name="cmsPropertyWrapper"
-														value="#{cmsPropertyWrapper}" />
+												src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceValues.xhtml">
+												<!--  Need to pass valueWrapper to xhtml to render its value -->
+												<ui:param name="cmsPropertyWrapper"
+													value="#{cmsPropertyWrapper}" />
 											</ui:include>
 											
-											<!-- "Add one more value" Action for a Complex Property with multiple values -->
-											<a4j:commandLink
-												onclick="destroyTextEditor();"
-												rendered="#{
-													cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.multiple and  
-													cmsPropertyWrapper.valueType eq 'Complex'}"
-												action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
-												reRender="profilePropertiesPanel, complexCmsPropertyBreadCrumbs"
-												
-												title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
-												<h:graphicImage value="/images/cms-icons/16/add1.png" />
-											</a4j:commandLink>
+											
 											<!-- Values Of a Complex Property with multiple values -->
 											<ui:include
-												src="/WEB-INF/pageComponents/edit/complexPropertyValues.xhtml">
+												src="/WEB-INF/pageComponents/edit/complexProperty/complexPropertyValues.xhtml">
 													<!--  Need to pass valueWrapper to xhtml to render its value -->
 													<ui:param name="parentComplexCmsPropertyWrapper"
 														value="#{cmsPropertyWrapper}" />
@@ -193,11 +206,11 @@ Authors
 													cmsPropertyWrapper.definitionName ne 'accessibility' and
 													! cmsPropertyWrapper.aspect and
 													cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() > 1}"
-												action="#{confirmationBean.initiateConfirmation('content.object.edit.multiple.complex.cms.property.delete.question',
+												action="#{confirmationBean.initiateConfirmation('object.edit.multiple.complex.cms.property.delete.question',
 																cmsPropertyWrapper, 
 																'deleteAllChildComplexCmsProperties_UIAction',
 																cmsPropertyWrapper.localizedLabelForCurrentLocale, 
-																'profilePropertiesPanel,complexCmsPropertyBreadCrumbs',
+																'profilePropertiesPanel,fixedPropertyBreadCrumbs',
 																null,
 																null)}"
 													 oncomplete="openConfirmationDialog();"

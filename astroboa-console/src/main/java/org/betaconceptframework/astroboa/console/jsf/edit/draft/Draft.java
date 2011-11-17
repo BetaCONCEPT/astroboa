@@ -98,7 +98,7 @@ public class Draft {
 				if (! success && Calendar.getInstance().after(thirtySecondsAfterStart))
 			      {
 			    	  success = true;
-			    	  JSFUtilities.addMessage(null, "content.object.edit.save.draft.error",null, FacesMessage.SEVERITY_WARN);
+			    	  JSFUtilities.addMessage(null, "object.edit.save.draft.error",null, FacesMessage.SEVERITY_WARN);
 			      }
 
 			} while (!success);
@@ -108,7 +108,7 @@ public class Draft {
 		catch(Exception e)
 		{
 			logger.error("",e);
-			JSFUtilities.addMessage(null, "content.object.edit.save.draft.error",null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.save.draft.error",null, FacesMessage.SEVERITY_WARN);
 		}
 
 	}

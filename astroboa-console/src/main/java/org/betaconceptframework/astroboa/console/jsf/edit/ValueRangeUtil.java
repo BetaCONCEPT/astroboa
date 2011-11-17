@@ -46,7 +46,7 @@ public class ValueRangeUtil {
 		
 		if (valueRange != null){
 			
-			valueRangeSelectItems.add(new SelectItem("", JSFUtilities.getLocalizedMessage("content.object.edit.select.box.no.value", null)));
+			valueRangeSelectItems.add(new SelectItem("", JSFUtilities.getLocalizedMessage("object.edit.select.box.no.value", null)));
 			
 			for (Object value : valueRange.keySet()){
 				valueRangeSelectItems.add(new SelectItem(value,((Localization)valueRange.get(value)).getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()))); 

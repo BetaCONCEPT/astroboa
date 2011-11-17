@@ -129,14 +129,14 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 			Events.instance().raiseEvent(SeamEventNames.CONTENT_OBJECT_DELETED,new Object[]{contentObjectType, selectedContentObjectIdentifier, dayToRefresh});
 		}
 		catch (Exception e) {
-			JSFUtilities.addMessage(null, "content.object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR);
+			JSFUtilities.addMessage(null, "object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR);
 			getLogger().error("The content object could not be permanently deleted. The error is: " , e);
 			e.printStackTrace();
 			return;
 		}
 		
 		// generate a success message, reset the browsing trees to accommodate the change and finally change the view to show the conentObjectListPanel 
-		JSFUtilities.addMessage(null, "content.object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO);
+		JSFUtilities.addMessage(null, "object.edit.successful.delete.info.message", null, FacesMessage.SEVERITY_INFO);
 		
 	}
 

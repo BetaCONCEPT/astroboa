@@ -52,6 +52,7 @@ import org.betaconceptframework.bean.AbstractBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 import org.betaconceptframework.utility.MicrosoftFileTextExtractor;
 import org.betaconceptframework.utility.PdfToTextExtractor;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.security.Identity;
 import org.springframework.web.context.support.ServletContextResource;
 
@@ -65,13 +66,15 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	
 	private static final long serialVersionUID = 1L;
 	
-	// injected beans
+	// injected spring beans
 	private PdfToTextExtractor pdfToTextExtractor;
 	private MicrosoftFileTextExtractor microsoftFileTextExtractor;
 	private ContentService contentService;
 	private DefinitionService definitionService;
-	private LoggedInRepositoryUser loggedInRepositoryUser;
 	private CMSUtilities cmsUtilities;
+	
+	// this bean is manually retrieved from seam context in constructor 
+	private LoggedInRepositoryUser loggedInRepositoryUser;
 	
 	private Map<String, CmsProperty> cacheOfCheckedPropertiesForExistance = new HashMap<String, CmsProperty>(); 
 	
@@ -90,7 +93,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 	private List<String> acceptedTaxonomiesForProfileSubject;
 	
 	public ContentObjectUIWrapper() {
-		
+		loggedInRepositoryUser = (LoggedInRepositoryUser) Contexts.getSessionContext().get("loggedInRepositoryUser");
 	}
 	
 	public ContentObjectUIWrapper (ContentObject contentObject) {

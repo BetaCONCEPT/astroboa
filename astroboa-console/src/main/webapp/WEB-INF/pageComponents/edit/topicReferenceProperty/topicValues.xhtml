@@ -41,34 +41,39 @@ Authors
 				rendered="#{ ( topicPropertyWrapper.writeGranted or topicPropertyWrapper.readGranted ) 
 					and  topicPropertyWrapper.valueType eq 'TopicReference'
 					and ! empty topicPropertyWrapper.simpleCmsPropertyValueWrappers}">
-					
-				<div class="formElementValuesLabelSpacer">fake label</div>
 				
-				<ol class="formElementValues">
+				<ui:remove>
+				<div class="formElementValuesLabelSpacer">fake label</div>
+				</ui:remove>
+				
+				
+				<ol class="topicValues">
 					<a4j:repeat
 						var="simpleCmsPropertyValueWrapper"
 						value="#{topicPropertyWrapper.simpleCmsPropertyValueWrappers}"
 						rowKeyVar="indexOfSimpleCmsPropertyValueWrapper">
 	
 					<li class="inlineFormElementValue">
-					 	<a4j:outputPanel >
+						
+					 	<a4j:outputPanel>
 							<rich:dropSupport 
 								ondrop="destroyTextEditor();"
 								acceptedTypes="topicReference#{topicPropertyWrapper.cmsProperty.name}"
-								reRender="objectProperty"
+								reRender="#{topicPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
 								dropListener="#{topicPropertyWrapper.addDraggedAndDroppedReference_Listener}"
 								dropValue="#{indexOfSimpleCmsPropertyValueWrapper}"
 								ajaxSingle="true">
 								
 							</rich:dropSupport>
-							
+								
 							<h:outputText rendered="#{simpleCmsPropertyValueWrapper.simpleCmsProperty.path eq 'profile.subject'}" 
 								value="#{simpleCmsPropertyValueWrapper.value.getAvailableLocalizedLabel(localeSelector.localeString)}
 										 - (#{simpleCmsPropertyValueWrapper.value.taxonomy.getAvailableLocalizedLabel(localeSelector.localeString)})"/>
 							
 							<h:outputText rendered="#{simpleCmsPropertyValueWrapper.simpleCmsProperty.path ne 'profile.subject'}" 
 								value="#{simpleCmsPropertyValueWrapper.value.getAvailableLocalizedLabel(localeSelector.localeString)}"/>
-								
+							
+									
 							<rich:dragSupport 
 								rendered="#{topicPropertyWrapper.writeGranted and topicPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}"
 								dragIndicator="propertyReferenceIndicator"
@@ -81,11 +86,26 @@ Authors
 										simpleCmsPropertyValueWrapper.value.name : 
 										simpleCmsPropertyValueWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString)}" />
 							</rich:dragSupport>
+									
 							
 						</a4j:outputPanel>
 						
-						<!-- Grab action -->
+						<!-- Delete action -->
+						<a4j:commandLink
+							onclick="destroyTextEditor();"
+							styleClass="delete"
+							rendered="#{topicPropertyWrapper.writeGranted}"
+							action="#{topicPropertyWrapper.deleteValueFromTopicProperty_UIAction}"
+							reRender="#{topicPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
+							ajaxSingle="true">
+							<a4j:actionparam name="valueIndex"
+								value="#{indexOfSimpleCmsPropertyValueWrapper}"
+								assignTo="#{topicPropertyWrapper.indexOfPropertyValueToBeProcessed}" />
+								<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-octagon-frame.png"/>
+						</a4j:commandLink>
+						
 						<ui:remove>
+						<!-- Grab action -->
 						 <a4j:outputPanel 
 						 	styleClass="dragElementValue"
 						 	rendered="#{topicPropertyWrapper.writeGranted and topicPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
@@ -102,46 +122,19 @@ Authors
 							</rich:dragSupport>
 							Drag to another position
 						</a4j:outputPanel>
+						
 						</ui:remove>
 						
-						<!-- MoveUp action 
-						<a4j:commandLink
-							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-							rendered="#{topicPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper gt 0}"
-							action="#{topicPropertyWrapper.moveUp_UIAction(simpleCmsPropertyValueWrapper)}"
-							reRender="complexCmsPropertyChildPropertiesTable"
-							title="Μεταφορά μιά θέση επάνω">
-							<h:graphicImage value="/images/cms-icons/16/up_arrow.png" />
-						</a4j:commandLink>
-						-->
 						
-						<!-- MoveDown action 
-						<a4j:commandLink
-							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-							rendered="#{topicPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper lt topicPropertyWrapper.simpleCmsPropertyValueWrappers.size()-1}"
-							action="#{topicPropertyWrapper.moveDown_UIAction(simpleCmsPropertyValueWrapper)}"
-							reRender="complexCmsPropertyChildPropertiesTable"
-							title="Μεταφορά μιά θέση κάτω">
-							<h:graphicImage value="/images/cms-icons/16/down_arrow.png" />
-						</a4j:commandLink>
-						-->
-						
-						<!-- Delete action -->
-						<a4j:commandLink
-							onclick="destroyTextEditor();"
-							value="Delete Topic"
-							styleClass="delete"
-							rendered="#{topicPropertyWrapper.writeGranted}"
-							action="#{topicPropertyWrapper.deleteValueFromTopicProperty_UIAction}"
-							reRender="objectProperty"
-							ajaxSingle="true">
-							<a4j:actionparam name="valueIndex"
-								value="#{indexOfSimpleCmsPropertyValueWrapper}"
-								assignTo="#{topicPropertyWrapper.indexOfValueToBeDeleted}" />
-						</a4j:commandLink>
 						</li>	
 					</a4j:repeat>
+
 				</ol>
+				
+				<ui:remove>
+				<img id="#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}" class="topicTipImg" src="images/cms-icons/12/info.png"/>
+				<div class="topicTip_#{topicPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+				</ui:remove>
 				
 			</ui:fragment>
 		</ui:composition>

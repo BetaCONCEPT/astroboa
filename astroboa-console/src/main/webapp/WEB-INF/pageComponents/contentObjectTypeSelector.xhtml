@@ -40,7 +40,7 @@ Authors
 			<ui:fragment rendered="#{identity.hasRole('ROLE_ADMIN')}">
 				<p>
 					
-					<a4j:commandLink value="#{messages['content.type.select.add.link.label']}"
+					<a4j:commandLink value="#{messages['object.type.select.add.link.label']}"
 						action="#{contentTypeEditor.setSelectedContentTypeForEdit(null)}"
 						reRender="XSDEditorPanel"
 						oncomplete="openXSDEditor();"
@@ -73,7 +73,7 @@ Authors
 											oncomplete="openXSDEditor();">
 										<img 
 											src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-											alt="#{messages['content.type.select.table.edit.link.label']}" title="#{messages['content.type.select.table.edit.link.label']}" />
+											alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
 								</a4j:commandLink>
 								
 								<img id="contentTypeLeftTooltipIcon#{rowKey}" src="images/cms-icons/12/info.png"/>
@@ -119,7 +119,7 @@ Authors
 												oncomplete="openXSDEditor();">
 											<img 
 												src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-												alt="#{messages['content.type.select.table.edit.link.label']}" title="#{messages['content.type.select.table.edit.link.label']}" />
+												alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
 										</a4j:commandLink>
 									</td>
 									<td class="actionIcon">
@@ -168,7 +168,7 @@ Authors
 											oncomplete="openXSDEditor();">
 											<img 
 												src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-												alt="#{messages['content.type.select.table.edit.link.label']}" title="#{messages['content.type.select.table.edit.link.label']}" />
+												alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
 										</a4j:commandLink>
 									</td>
 									<td class="actionIcon">

@@ -45,13 +45,14 @@ Authors
     </bean>
     
 	<!-- PersonService extists in betaconcept-indentity 
-		 RepositoryUserService and CmsRepositoryEntityFactory extists in astroboa-engine -->
+		 RepositoryUserService and CmsRepositoryEntityFactory extists in astroboa-engine 
 	<bean id="loggedInRepositoryUser" class="org.betaconceptframework.astroboa.console.security.LoggedInRepositoryUser" scope="session" >
 		<aop:scoped-proxy/>
 		<property name="cmsUtilities" ref="cmsUtilities"/>
 		<property name="repositoryUserService" ref="repositoryUserService"/>
 		<property name="contentService" ref="contentService"/>
 	</bean>
+	-->
 	
 	<bean id="contentObjectStatefulSearchService" class="org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService" scope="session" autowire="byName" >
 		<aop:scoped-proxy/>
@@ -61,74 +62,13 @@ Authors
 		<aop:scoped-proxy/>
 	</bean>
 	
-	<!-- 
-	<bean id="tagEdit" class="org.betaconceptframework.astroboa.console.jsf.TagEdit" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	 -->
-	
-	<!-- <bean id="spaceNavigation" class="org.betaconceptframework.astroboa.console.jsf.SpaceNavigation" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>-->
-	
-	<!--  
-	<bean id="contentObjectEdit" class="org.betaconceptframework.astroboa.console.jsf.ContentObjectEdit" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	-->
-	
 	<bean id="contentObjectList" class="org.betaconceptframework.astroboa.console.jsf.ContentObjectList" scope="session" autowire="byName" >
 		<aop:scoped-proxy/>
 	</bean>
-	
-	<!-- 
-	<bean id="repositoryNavigation" class="org.betaconceptframework.astroboa.console.jsf.RepositoryNavigation" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	-->
 		
 	<bean id="searchResultsFilterAndOrdering" class="org.betaconceptframework.astroboa.console.jsf.SearchResultsFilterAndOrdering" scope="session" autowire="byName" >
 		<aop:scoped-proxy/>
 	</bean>
-	
-	<!--  
-	<bean id="contentObjectViewAsTree" class="org.betaconceptframework.astroboa.console.jsf.ContentObjectViewAsTree" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	-->
-	
-	<!--  
-	<bean id="contentObjectSearchByContentType" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByContentType" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	
-	
-	<bean id="contentObjectSearchByTopic" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByTopic" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	
-	<bean id="contentObjectSearchByText" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByText" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	
-	<bean id="contentObjectSearchByOwner" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByOwner" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	
-	<bean id="contentObjectSearchByStatus" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByStatus" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	  
-		<bean id="contentObjectSearchByCriteria" class="org.betaconceptframework.astroboa.console.jsf.browse.ContentObjectSearchByCriteria" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	-->
-	
-	<!-- 
-	<bean id="recentlyAddedContent" class="org.betaconceptframework.astroboa.console.jsf.RecentlyAddedContent" scope="session" autowire="byName" >
-		<aop:scoped-proxy/>
-	</bean>
-	-->
 	
 	<bean id="contentObjectSubjectManagement" class="org.betaconceptframework.astroboa.console.jsf.ContentObjectSubjectManagement" scope="session" autowire="byName" >
 		<aop:scoped-proxy/>

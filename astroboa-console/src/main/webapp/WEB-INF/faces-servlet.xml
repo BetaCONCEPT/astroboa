@@ -33,9 +33,9 @@ Authors
 <!--  	<variable-resolver>de.mindmatters.faces.spring.support.DelegatingVariableResolver</variable-resolver> */ -->
 		<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
 		<locale-config>
-            <default-locale>el</default-locale>
-            <supported-locale>el</supported-locale>
+            <default-locale>en</default-locale>
             <supported-locale>en</supported-locale>
+            <supported-locale>el</supported-locale>
 		</locale-config>
 		<message-bundle>messages</message-bundle>
 		<!-- <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>  -->

@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
  *  'ajaxDynamicAreaPanel, topicTree, cmsTree, clipboardTable' are reRendered.
  * <pre>
  * <a4j:commandLink
-		action="#{confirmationBean.initiateConfirmation('confirmation.panel.delete.question',
+		action="#{confirmationBean.initiateConfirmation('dialog.confirmation.delete.question',
 				contentObjectList, 
 				'permanentlyRemoveSelectedContentObject_UIAction',
 				'My Custom Message', 

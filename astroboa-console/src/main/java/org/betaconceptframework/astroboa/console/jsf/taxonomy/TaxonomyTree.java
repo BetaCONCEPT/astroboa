@@ -23,6 +23,7 @@ package org.betaconceptframework.astroboa.console.jsf.taxonomy;
 import java.util.List;
 
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.console.jsf.edit.TopicPropertyWrapper;
 import org.betaconceptframework.astroboa.console.seam.SeamEventNames;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.jboss.seam.ScopeType;
@@ -55,6 +56,9 @@ public class TaxonomyTree extends AbstractUIBean{
 	private TreeNode taxonomyRootNodeForTopicInput;
 	
 	private List<String> acceptedTaxonomies;
+	
+	// the wrapper of a topic property to which selected topic values from the tree will be added 
+	private TopicPropertyWrapper topicPropertyWrapper;
 	
 	private Boolean topicSelectionDialogueActive;
 	
@@ -199,12 +203,20 @@ public class TaxonomyTree extends AbstractUIBean{
 	}
 	
 	/*
+	 * Setup tree for adding values to the property wrapped by the provided property wrapper
+	 */
+	public void setupTreeForProperty(TopicPropertyWrapper topicPropertyWrapper) {
+		this.topicPropertyWrapper = topicPropertyWrapper;
+		taxonomyRootNodeForTopicInput = null;
+		topicSelectionDialogueActive = true;
+		this.acceptedTaxonomies = topicPropertyWrapper.getAcceptedTaxonomies();
+	}
+	
+	/*
 	 * Every time this method is called we should also nullify the taxonomyRootNodeForTopicInput
 	 * so that the taxonomy tree will be recreated. We also set the dialogue to be active
 	 */
 	public void setAcceptedTaxonomies(List<String> acceptedTaxonomies) {
-		taxonomyRootNodeForTopicInput = null;
-		topicSelectionDialogueActive = true;
 		this.acceptedTaxonomies = acceptedTaxonomies;
 	}
 
@@ -215,5 +227,10 @@ public class TaxonomyTree extends AbstractUIBean{
 	public void deactivateTopicSelectionDialog() {
 		topicSelectionDialogueActive = false;
 		taxonomyRootNodeForTopicInput = null;
+		topicPropertyWrapper = null;
+	}
+
+	public TopicPropertyWrapper getTopicPropertyWrapper() {
+		return topicPropertyWrapper;
 	}
 }

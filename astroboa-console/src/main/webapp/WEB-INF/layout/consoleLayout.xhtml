@@ -112,7 +112,7 @@ Authors
 								</div>
 								<div id="objectEditorTab">
 									<ui:include
-										src="/WEB-INF/pageComponents/edit/contentObjectEditor.xhtml" />
+										src="/WEB-INF/pageComponents/edit/objectEditor.xhtml" />
 								</div>
 								<div id="objectViewerTab">
 									<ui:include
@@ -126,7 +126,7 @@ Authors
 							</div>
 							
 							
-							<s:fragment rendered="#{pageController.dynamicUIAreaCurrentPageComponent ne '/WEB-INF/pageComponents/edit/contentObjectEditor.xhtml'}">
+							<s:fragment rendered="#{pageController.dynamicUIAreaCurrentPageComponent ne '/WEB-INF/pageComponents/edit/objectEditor.xhtml'}">
    								<script type="text/javascript">stopContentObjectAutoSave();</script>
 							</s:fragment>
 						</ui:insert>
@@ -149,12 +149,16 @@ Authors
 		</div>
 
 		<ui:include src="/WEB-INF/pageComponents/xsdSchemaEditor.xhtml" />
-		<ui:include src="/WEB-INF/pageComponents/fileUploadDialog.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/edit/binaryProperty/fileUploadDialog.xhtml" />
 		<ui:include src="/WEB-INF/pageComponents/clipboard.xhtml" />
 		<ui:include src="/WEB-INF/pageComponents/confirmationDialog.xhtml" />
 		
 		<ui:include src="/WEB-INF/pageComponents/objectPropertyUrlCreationDialog.xhtml" />
 		<ui:include src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicSelectionDialog.xhtml" />
+		<ui:include src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectSelectionDialog.xhtml" />
+		
+		<ui:include src="/WEB-INF/pageComponents/edit/extraProperties/propertyPrototypeSelectionDialog.xhtml"/>
+									
 		
 		<ui:include src="/WEB-INF/pageComponents/taxonomy/importTaxonomyXmlDialog.xhtml" />
 		
@@ -178,6 +182,10 @@ Authors
 		
 		<script type="text/javascript">
 		//<![CDATA[
+       		
+		    // the current locale
+		    locale = '#{localeSelector.localeString}'
+		           
 			/* Context Menu on Taxonomy and Topics */
 		    function initializeTaxonomyContextMenus() {
 		    	if (!shouldCreateTaxonomyAndTopicContextMenus) {
@@ -203,10 +211,10 @@ Authors
 		    			 { 
 		    			 var selectedTopicId = bcmslib.jQuery(this).attr("id"); 
 		    			 showDynamicConfirmationDialog(
-		    					 "#{messages['confirmation.panel.header']}", 
-		    					 "#{messages['confirmation.panel.delete.question']}", 
-		    					 "#{messages['confirmation.panel.ok']}", 
-		    					 "#{messages['confirmation.panel.cancel']}", 
+		    					 "#{messages['dialog.confirmation.header']}", 
+		    					 "#{messages['dialog.confirmation.delete.question']}", 
+		    					 "#{messages['dialog.confirmation.ok']}", 
+		    					 "#{messages['dialog.confirmation.cancel']}", 
 		    					 'deleteTopic("' + selectedTopicId + '"); closeDynamicConfirmationDialog();', 
 		    					 ''
 		    			 ); 
@@ -239,10 +247,10 @@ Authors
 		    			 {
 		    			 var selectedTaxonomyId = bcmslib.jQuery(this).attr("id"); 
 		    			 showDynamicConfirmationDialog(
-		    					 "#{messages['confirmation.panel.header']}", 
-		    					 "#{messages['confirmation.panel.delete.question']} " + bcmslib.jQuery(this).html(), 
-		    					 "#{messages['confirmation.panel.ok']}", 
-		    					 "#{messages['confirmation.panel.cancel']}", 
+		    					 "#{messages['dialog.confirmation.header']}", 
+		    					 "#{messages['dialog.confirmation.delete.question']} " + bcmslib.jQuery(this).html(), 
+		    					 "#{messages['dialog.confirmation.ok']}", 
+		    					 "#{messages['dialog.confirmation.cancel']}", 
 		    					 'deleteTaxonomy("' + selectedTaxonomyId + '"); closeDynamicConfirmationDialog();', 
 		    					 ''
 		    			 ); 
@@ -264,6 +272,8 @@ Authors
 				createDynamicConfirmationDialog();
 				createObjectPropertyUrlCreationDialog();
 				createTopicSelectionDialog();
+				createObjectSelectionDialog();
+				createPropertyPrototypeSelectionDialog();
 				createImportTaxonomyXmlDialog();
 				
 				createObjectTypeSelectionMenuInFolderTab();

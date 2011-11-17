@@ -34,10 +34,10 @@ Authors
 
 	<body>
 		<ui:composition>
-			<div id="fileUploadDialog" title="#{messages['content.object.edit.file.upload.panel.header']}">
+			<div id="fileUploadDialog" title="#{messages['object.edit.action.uploadFile.panel.header']}">
 				<a4j:form id="fileUploadForm">
 					<a4j:outputPanel id="fileUploadPanel" layout="block" style="margin-bottom: 10px;">
-						<rich:fileUpload fileUploadListener="#{uploadDataForBinaryChannelDialogue.fileUpload_Listener}"
+						<rich:fileUpload fileUploadListener="#{dialogPropertyWrapper.cmsPropertyWrapper.fileUpload_Listener}"
 							maxFilesQuantity="300"
 							immediateUpload="true" >
 					  		<f:facet name="label">
@@ -47,10 +47,11 @@ Authors
 					</a4j:outputPanel>
 					
 					<a4j:commandButton 
-						styleClass="formItemClass" 
-						value="#{messages['content.object.edit.file.upload.close.button.label']}"
+						styleClass="formItemClass"
+						ajaxSingle="true"
+						value="#{messages['close.button.label']}"
 						onclick="bcmslib.jQuery('#fileUploadDialog').dialog('close');" 
-						reRender="complexCmsPropertyChildPropertiesTable"/>
+						reRender="#{dialogPropertyWrapper.cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"/>
 				</a4j:form>
 			</div>
 			

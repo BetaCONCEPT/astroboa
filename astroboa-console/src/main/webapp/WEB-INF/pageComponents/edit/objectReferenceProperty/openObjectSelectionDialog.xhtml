@@ -34,27 +34,17 @@ Authors
 
 	<body>
 		<ui:composition>
-		
-			<!-- Object Reference Property with single or multiple values -->
-			<ui:fragment
-				rendered="#{cmsPropertyWrapper.writeGranted and 
-				cmsPropertyWrapper.valueType eq 'ObjectReference'}"
-				keepTransient="true">
 				
-				<ui:include
-					src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectSelection.xhtml">
-					<!--  Need to pass property wrapper to xhtml -->
-					<ui:param name="cmsPropertyWrapper"
-						value="#{cmsPropertyWrapper}" />
-				</ui:include>
-			</ui:fragment>
-			<!-- Object Reference Values -->
-			<ui:include
-				src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceValues.xhtml">
-				<!--  Need to pass valueWrapper to xhtml to render its value -->
-				<ui:param name="cmsPropertyWrapper"
-					value="#{cmsPropertyWrapper}" />
-			</ui:include>
+			<a4j:commandLink
+				action="#{dialogPropertyWrapper.setCmsPropertyWrapper(cmsPropertyWrapper)}"
+				oncomplete="openObjectSelectionDialog();"
+				rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.valueType eq 'ObjectReference'}"
+				reRender="objectSelectionDialogPanel"
+				ajaxSingle="true"
+				title="Add Object Reference">
+				<img src="images/cms-icons/16/fugue/document--plus.png"
+					alt="Add Object Reference"/>
+			</a4j:commandLink>
 			
 		</ui:composition>
 	</body>

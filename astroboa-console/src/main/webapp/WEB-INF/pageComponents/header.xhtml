@@ -61,7 +61,7 @@ Authors
 						<a4j:commandLink id="logoutButton2" value="#{messages['logout']}"
 							rendered="#{draft.hasLoggedInRepositoryUserItemsInDraft(loggedInRepositoryUser.repositoryUser.id)}"
 							action="#{confirmationBean.initiateConfirmationWithActionOnOKAndFinalAction(
-											'confirmation.panel.delete.draft.question',
+											'dialog.confirmation.delete.draft.question',
 											draft, 
 											'permanentlyRemoveDraftItemsForLoggedInRepositoryUser_UIAction',
 											confirmationBean.getArrayForCommaDelimitedObjects(loggedInRepositoryUser.repositoryUser.id),

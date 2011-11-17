@@ -1,3 +1,5 @@
+// this variable holds the current user locale
+var locale
 
 // keep all object property descriptions in a map (js object actually) in order to minimize server traffic
 var objectPropertyDescriptionMap = {};
@@ -18,10 +20,18 @@ var taxonomyContextMenu;
 
 // this variable holds whether context menus for taxonomy and topics should be created
 // i.e. whether the logged in user has role taxonomy_editor
+// it is set when the main page template loads (consoleLayout.xhtml) through a facelets expression 
 var shouldCreateTaxonomyAndTopicContextMenus = false;
 
 // this variable holds the code editor object
 var editor;
+
+// create references to remote services
+var editServiceAsync = Seam.Component.getInstance("editServiceAsync");
+var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
+var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+
+
 
 // create the code editor dialog
 function createCodeEditor() {
@@ -291,7 +301,64 @@ function callFunctionOnEnterKey(e, func, arg) {
 		bcmslib.jQuery('#topicSelectionDialog').dialog('close');
 	}
     
-    /* Import Taxonomy from Xml Dialog */
+    
+    /* Object Selection Dialog */
+    function createObjectSelectionDialog() {
+    	
+    	bcmslib.jQuery('#objectSelectionDialog').dialog(
+			{ 
+				autoOpen: false,
+				modal: false,
+				width: 700,
+				height: 580,
+				resizable: true,
+				draggable: true,
+				position: ['center', 'top'],
+				open: function(event, ui) 
+				{	
+					bcmslib.jQuery(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+				}
+			 }
+		);
+    }
+    
+    function openObjectSelectionDialog() {
+		bcmslib.jQuery('#objectSelectionDialog').dialog('open');
+	}
+    
+    function closeObjectSelectionDialog() {
+		bcmslib.jQuery('#objectSelectionDialog').dialog('close');
+		bcmslib.jQuery("#objectSelectionDialogResults").html("");
+		bcmslib.jQuery("#objectSelectionDialogMessages").html("");
+	}
+    
+    
+    /* Property Prototype Selection Dialog */
+    function createPropertyPrototypeSelectionDialog() {
+    	
+    	bcmslib.jQuery('#propertyPrototypeSelectionDialog').dialog(
+			{ 
+				autoOpen: false,
+				modal: false,
+				width: 500,
+				height: 500,
+				resizable: true,
+				draggable: true,
+				position: ['center', 95]
+			 }
+		);
+    }
+    
+    function openPropertyPrototypeSelectionDialog() {
+		bcmslib.jQuery('#propertyPrototypeSelectionDialog').dialog('open');
+	}
+    
+    function closePropertyPrototypeSelectionDialog() {
+		bcmslib.jQuery('#propertyPrototypeSelectionDialog').dialog('close');
+	}
+    
+    
+    /* Create Import Taxonomy from Xml Dialog */
     function createImportTaxonomyXmlDialog() {
     	bcmslib.jQuery('#taxonomyImportDialog').dialog(
     			{ 
@@ -613,8 +680,8 @@ function callFunctionOnEnterKey(e, func, arg) {
 		,	west__size:					"auto"
 		,	west__minSize:				250
 		,	west__maxSize:				Math.floor(screen.availWidth / 2)
-		,	west__spacing_open:			10
-		,	west__spacing_closed:		10
+		,	west__spacing_open:			16
+		,	west__spacing_closed:		16
 		,	west__closable:				true
 		,	west__resizable:			true
 		,	west__slidable:				true
@@ -628,6 +695,9 @@ function callFunctionOnEnterKey(e, func, arg) {
 		
 		,	south__spacing_open:		10
 		,	south__spacing_closed:		10
+		
+		,	togglerContent_open:	'<div class="ui-icon ui-icon-circle-triangle-w"></div>'
+		,	togglerContent_closed:	'<div class="ui-icon ui-icon-circle-triangle-e"></div>'
 		
 		});
 
@@ -669,8 +739,6 @@ function callFunctionOnEnterKey(e, func, arg) {
     
     
     /* create property help message boxes */
-    var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
-    
     function generatePropertyDescriptionElement(propertyDescription) {
     	var escapedTipDivClassSelector = "." + propertyDescription[0].replace(/\./g, "\\.");
     	bcmslib.jQuery(escapedTipDivClassSelector).hide()
@@ -1353,8 +1421,202 @@ function callFunctionOnEnterKey(e, func, arg) {
 			});
     }
     
+    
+    /* ASTROBOA REST API REQUESTS
+     * Implemented using amplify library
+     */
+    
+    // getObjectCollection
+    amplify.request.define( "objects", "ajax", {
+    	url: "/console/contentObject",
+        dataType: "json",
+        type: "GET"
+    });
+    
+    function getObjectCollection(query, projectionPaths, offset, limit, orderBy, successEvent, errorEvent, eventContext) {
+    	query = encodeURIComponent(query);
+		
+    	if (offset == null || offset < 0) {
+			offset = 0;
+		}
+    	
+    	if (limit == null || limit < 0) {
+    		limit = 50;
+		}
+    	
+    	if (orderBy != null && orderBy != "") {
+			orderBy = encodeURIComponent(orderBy);
+		}
+		
+		if (projectionPaths != null && projectionPaths != "") {
+			projectionPaths = encodeURIComponent(projectionPaths);
+		}
+		
+		var data = {
+			'cmsQuery': 		query,
+			'projectionPaths':	projectionPaths,
+			'offset':			offset,
+			'limit':			limit,
+			'orderBy':			orderBy
+		}
+		
+		var requestSettings = {
+		        'resourceId': 		'objects',
+		        'data': 			data,
+		        'success': 			function(data) {
+		        						if (successEvent != null) {
+		        							amplify.publish(successEvent, requestSettings, data, status, eventContext);
+		        						}
+		        						else {
+		        							amplify.publish('astroboa.api.success', requestSettings, data, status, eventContext);
+		        						}
+		        					},
+		        'error': 			function(data, status) {
+		        						if (errorEvent != null) {
+		        							amplify.publish(errorEvent, requestSettings, data, status, eventContext);
+		        						}
+		        						else {
+		        							amplify.publish('astroboa.api.error', requestSettings, data, status, eventContext);
+		        						}
+		        					}
+		    };
+		
+	    amplify.request(requestSettings);
+    }
+    
+    // getObjectModel
+    amplify.request.define( "models", "ajax", {
+    	url: "/console/model/{fullPropertyPath}",
+        dataType: "json",
+        type: "GET",
+        cache: true
+    });
+    
+    function getObjectModel(fullPropertyPath, successEvent, errorEvent, eventContext) {
+    	var data = {
+    		'fullPropertyPath': fullPropertyPath,
+    		'output':			'json'
+    	}
+    	
+    	var requestSettings = {
+    	        'resourceId': 		'models',
+    	        'data': 			data,
+    	        'success': 			function(data) {
+    	        						if (successEvent != null) {
+    	        							amplify.publish(successEvent, requestSettings, data, status, eventContext);
+    	        						}
+    	        						else {
+    	        							amplify.publish('astroboa.api.success', requestSettings, data, status, eventContext);
+    	        						}
+    	        					},
+    	        'error': 			function(data, status) {
+    	        						if (errorEvent != null) {
+    	        							amplify.publish(errorEvent, requestSettings, data, status, eventContext);
+    	        						}
+    	        						else {
+    	        							amplify.publish('astroboa.api.error', requestSettings, data, status, eventContext);
+    	        						}
+    	        					}
+    	    };
+    	
+    	amplify.request(requestSettings);
+    }
+    
+    // if no error event is specified in astroboa api calls
+    // then this default error subscriber will fire
+    amplify.subscribe('astroboa.api.error', function( settings, data, status, eventContext ) {
+       alert("An error occured in server communication. Please try again");
+    });
+    
+    // if no success event is specified in astroboa api calls
+    // then this default error subscriber will fire
+    amplify.subscribe('astroboa.api.success', function( settings, data, status, eventContext ) {
+       alert("Api call returned successfully. The returned data is:" + data);
+    });
+    
+    
+    
+    (function($, amplify) {
+
+    	$(function() {
+    		$("form#objectSelectionForm").submit(function(event) {
+    			// we should first get the property model to find which object types are
+    			// allowed as values so that we can properly set the object search criteria
+    			var fullPropertyPath = $("#objectSelectionDialogFullPropertyPath").val();
+    			
+    			getObjectModel(fullPropertyPath, 'objectSelectionDialog.getPropertyModel.success');
+    			event.preventDefault();
+    		});
+    		
+    		amplify.subscribe('objectSelectionDialog.getPropertyModel.success', function( settings, data, status, eventContext ) {
+    			if (data != null) {
+    				var  query = '';
+    				var acceptedObjectTypes = data.acceptedContentTypes;
+    				if (acceptedObjectTypes != null) {
+    					query += '('
+    					acceptedObjectTypeList = acceptedObjectTypes.split(',');
+    					
+    					for(i = 0; i < acceptedObjectTypeList.length - 1; i++){
+    						query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[i]) + '" OR '; 
+    					}
+	    				
+    					query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[acceptedObjectTypeList.length - 1]) + '") AND ';
+    				}
+    			
+    				var title = $('#objectTitle').val();
+        			query += 'profile.title CONTAINS "' + title + '*"';
+        			getObjectCollection(
+        				query, 'profile.title', 0, 300, 'profile.title asc', 'objectSelectionDialog.search.success');
+    			}
+    		});
+    			
+    		
+    		amplify.subscribe('objectSelectionDialog.search.success', function( settings, data, status, eventContext ) {
+    	    	if (data != null && data.totalResourceCount > 0) {
+    	    		$("#objectSelectionDialogResults").html("");
+    				objects = data.resourceCollection.resource;
+    				$('<ul class="nostyle">').appendTo("#objectSelectionDialogResults");
+    				$.each(objects, function(i, object) { 
+    					var objectRowId = 'objectSelectionDialog' + object.cmsIdentifier;
+    					var objectRow = '<li id="' + objectRowId +'"><a href="#" onclick="editServiceAsync.addObjectToPropertyValues(\'' 
+    						+ object.systemName 
+    						+ '\', true, showSelectedObject)">' 
+    						+ object.profile.title + "</a></li>";
+    					
+    					$(objectRow).appendTo("#objectSelectionDialogResults");
+    					// fetch the object type i18n label
+    					getObjectModel(object.contentObjectTypeName, 'objectSelectionDialog.getTypeModel.success', null, objectRowId);
+    				});
+    				$('</ul>').appendTo("#objectSelectionDialogResults");
+    	    	}
+    	    	else {
+    	    		$("#objectSelectionDialogResults").html("");
+    	    		$("#objectSelectionDialogMessages").html('No Objects found').fadeIn(300).delay(4000).fadeOut();
+    	    	}
+    	    });
+    		
+    		amplify.subscribe('objectSelectionDialog.getTypeModel.success', function( settings, data, status, eventContext ) {
+    			if (data != null) {
+    				$('#'+eventContext).append(' (' + data.label[locale] + ')');
+    			}
+    		});
+    		
+    	});
+
+    }(bcmslib.jQuery, amplify) );
+    
+    function showSelectedObject(result) {
+    	resultObject = bcmslib.jQuery.parseJSON(result);
+    	if (resultObject.status === 'success') {
+    		reRenderProperty();
+    	}
+    	
+    	bcmslib.jQuery("#objectSelectionDialogMessages").html(resultObject.message).fadeIn(300).delay(4000).fadeOut();
+    }
+		
+    
+    
     /*HTTP SESSION CHECKER */
-    var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
     var timeoutMillis = 180*60*1000+3000;
     var sessionTimeoutInterval = null;
 
