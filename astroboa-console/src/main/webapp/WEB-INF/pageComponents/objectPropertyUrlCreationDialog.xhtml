@@ -34,7 +34,7 @@ Authors
 	<body>
 		<ui:composition>
 			  
-			<div id="objectPropertyUrlCreationDialog" title="#{messages['content.object.edit.action.createObjectPropertyURL.dialogTitle']}">
+			<div id="objectPropertyUrlCreationDialog" title="#{messages['object.edit.action.createObjectPropertyURL.dialogTitle']}">
 				<a4j:form id="objectPropertyUrlCreationDialogForm">
 		      		
               		<a4j:jsFunction
@@ -52,67 +52,67 @@ Authors
 					<a4j:outputPanel id="objectPropertyUrlCreationDialogPanel" >
 						<div style="margin-top: 35px;">
 							<img id="objectPropertyUrlCreationDialogDispositionTypeHelp" src="images/cms-icons/12/info.png"/>
-							#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend']}
+							#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend']}
 						</div>
 
 						<ol class="formElementList">
 							<li class="formElement">
-								<label for="objectPropertyUrlCreationDialogDispostitionInline">#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline']}</label>
+								<label for="objectPropertyUrlCreationDialogDispostitionInline">#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline']}</label>
 								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionInline" name="dispositionType" checked="checked" value="INLINE"/>
 							</li>
 							<li>
-								<label for="objectPropertyUrlCreationDialogDispostitionAttachment">#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment']}</label>
+								<label for="objectPropertyUrlCreationDialogDispostitionAttachment">#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment']}</label>
 								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionAttachment" name="dispositionType" value="ATTACHMENT" />
 							</li>
 						</ol>
 						<div id="objectPropertyUrlCreationDialogDispositionTypeTooltip">
 							<h:outputText escape="false" 
-								value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip']}" />
+								value="#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip']}" />
 						</div>
 						
 						<ui:fragment 
-							rendered="#{clipboard.selectedCmsPropertyWrapper.simpleCmsPropertyValueWrappers[clipboard.selectedCmsPropertyWrapper.indexOfValueToBeCopied].isJPGorPNGorGIFImage()}">
+							rendered="#{clipboard.selectedCmsPropertyWrapper.simpleCmsPropertyValueWrappers[clipboard.selectedCmsPropertyWrapper.indexOfPropertyValueToBeProcessed].isJPGorPNGorGIFImage()}">
 							<hr/>
 							<img  id="objectPropertyUrlCreationDialogImageSizeHelp" src="images/cms-icons/12/info.png"/>
-							#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend']}
+							#{messages['object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend']}
 						
 								<ol class="formElementList">
 									<li class="formElement">
-										<label for="objectPropertyUrlCreationDialogImageWidth">#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageWidth']}</label>
+										<label for="objectPropertyUrlCreationDialogImageWidth">#{messages['object.edit.action.createObjectPropertyURL.dialogImageWidth']}</label>
 										<input id="objectPropertyUrlCreationDialogImageWidth" type="text" style="float: left; width: 50px;"/>
-										<label for="objectPropertyUrlCreationDialogImageHeight">#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageHeight']}</label>
+										<label for="objectPropertyUrlCreationDialogImageHeight">#{messages['object.edit.action.createObjectPropertyURL.dialogImageHeight']}</label>
 										<input id="objectPropertyUrlCreationDialogImageHeight" type="text" style="float: left; width: 50px;"/>
 									</li>
 									<li class="formElement">
-										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageAspectRatio']}</label>
+										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageAspectRatio']}</label>
 										<input id="objectPropertyUrlCreationDialogImageAspectRatio" type="text"/>
 									</li>
 									<li class="formElement">
-										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyTop']}</label>
+										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyTop']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyTop" type="radio" name="cropPolicy" checked="checked" value="top"/>
 									</li>
 									<li class="formElement">
-										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyCenter']}</label>
+										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyCenter']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyCenter" type="radio" name="cropPolicy" value="center"/>
 									</li>
 									<li class="formElement">
-										<label>#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyBottom']}</label>
+										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyBottom']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyBottom" type="radio" name="cropPolicy" value="bottom"/>
 									</li>
 								</ol>
 							
 							<div id="objectPropertyUrlCreationDialogImageSizeTooltip">
 								<h:outputText escape="false"
-									value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogImageResizeAndCropTooltip']}" />
+									value="#{messages['object.edit.action.createObjectPropertyURL.dialogImageResizeAndCropTooltip']}" />
 							</div>
 						</ui:fragment>
 						
 						<div style="clear:both; border: 1px solid #ABABAB; margin: 10px 10px 10px 10px; padding: 10px 10px 10px 10px; font-size: 9px; color: blue;">
-							#{messages['content.object.edit.action.createObjectPropertyURL.dialogWarning']}
+							#{messages['object.edit.action.createObjectPropertyURL.dialogWarning']}
 						</div>
 						<div style="margin: 10 auto;">
-							<input type="button" onclick="generateObjectPropertyUrl(true);" value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogButton.createFriendlyURL']}"/>
-							<input type="button" onclick="generateObjectPropertyUrl(false);" value="#{messages['content.object.edit.action.createObjectPropertyURL.dialogButton.createPermanentURL']}"/>
+							<input type="button" onclick="generateObjectPropertyUrl(true);" value="#{messages['object.edit.action.createObjectPropertyURL.dialogButton.createFriendlyURL']}"/>
+							<input type="button" onclick="generateObjectPropertyUrl(false);" value="#{messages['object.edit.action.createObjectPropertyURL.dialogButton.createPermanentURL']}"/>
 						</div>
 						
 						<a4j:outputPanel id="objectPropertyUrlCreationDialogUrlBox" >
@@ -126,7 +126,6 @@ Authors
 						<script type="text/javascript">
 						//<![CDATA[
 							createUrlCreationDialogHelpMessages();
-							bcmslib.jQuery("#objectPropertyUrlCreationDialogForm input:not(input[type=button])").uniform();
 						//]]>
 						</script>
 						

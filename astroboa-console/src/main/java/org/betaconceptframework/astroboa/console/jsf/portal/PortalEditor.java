@@ -140,7 +140,7 @@ public class PortalEditor {
 
 			}
 			catch (Exception e) {
-				JSFUtilities.addMessage(null, "content.object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR); 
+				JSFUtilities.addMessage(null, "object.edit.contentObjectCouldNotBePermanentlyRemovedError", null, FacesMessage.SEVERITY_ERROR); 
 				logger.error("The content object could not be permanently deleted. The error is: " , e); 
 			}
 		}

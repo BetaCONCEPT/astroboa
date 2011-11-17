@@ -75,6 +75,11 @@ Authors
 	</event>
 	-->
 	
+	<component name="loggedInRepositoryUser">
+		<property name="astroboaClient">#{astroboaClient}</property>
+		<property name="cmsUtilities">#{cmsUtilities}</property>
+	</component>
+	
 	<component name="login">
 		<property name="astroboaClient">#{astroboaClient}</property>
 		<property name="loggedInRepositoryUser">#{loggedInRepositoryUser}</property>
@@ -186,7 +191,7 @@ Authors
 		<property name="cmsRepositoryEntityFactory">#{cmsRepositoryEntityFactory}</property>
 		<property name="complexCmsPropertyEdit">#{complexCmsPropertyEdit}</property>
 		<property name="profilePropertyEdit">#{complexCmsPropertyEdit}</property>
-		<property name="accessibilityPropertyEdit">#{complexCmsPropertyEdit}</property>
+		<property name="extraPropertyEdit">#{complexCmsPropertyEdit}</property>
 	</component>
 	
 	<component name="tagEdit">
@@ -372,6 +377,10 @@ Authors
 	<component name="schemaServiceAsync">
 	    <property name="definitionService">#{definitionService}</property>
 	    <property name="taxonomyService">#{taxonomyService}</property>
+	</component>
+	
+	<component name="editServiceAsync">
+	  <property name="astroboaClient">#{astroboaClient}</property>
 	</component>
 	
 	<!-- 

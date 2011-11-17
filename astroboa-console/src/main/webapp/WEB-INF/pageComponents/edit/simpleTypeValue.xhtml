@@ -122,11 +122,9 @@ Authors
 						rows="25" 
 						style="white-space: nowrap; width: 70%"/>
 					
-					
+					<ui:remove>
 					<input type="button" onclick="showCodeEditor('#{simpleCmsPropertyValueWrapper.fullPropertyPath}');" value="edit"/>
 					
-				
-					<ui:remove>
 					<script language="javascript" type="text/javascript">
 						//<![CDATA[
 						var codeEditorId=bcmslib.jQuery("textarea[class*='codeEditor_#{simpleCmsPropertyValueWrapper.fullPropertyPath}']").attr('id');
@@ -284,7 +282,7 @@ Authors
 			 rendered="#{cmsPropertyWrapper.valueType eq 'String' and 
 								 cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType}" >
 				
-				<h:outputText value="#{messages['content.object.edit.string.property.password.type.old.value']}" 
+				<h:outputText value="#{messages['object.edit.string.property.password.type.old.value']}" 
 						rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
 									and	cmsPropertyWrapper.cmsProperty.hasValues()}"/>
 				<h:inputSecret
@@ -292,19 +290,19 @@ Authors
 									and	cmsPropertyWrapper.cmsProperty.hasValues()}"
 							value="#{simpleCmsPropertyValueWrapper.passwordVerifier.oldPassword}" size="20" 
 							maxlength="50" 
-							label="#{messages['content.object.edit.string.property.password.type.old.value']}">
+							label="#{messages['object.edit.string.property.password.type.old.value']}">
 				</h:inputSecret>
 
-				<h:outputText value="#{messages['content.object.edit.string.property.password.type.new.value']}" 
+				<h:outputText value="#{messages['object.edit.string.property.password.type.new.value']}" 
 						rendered="#{cmsPropertyWrapper.writeGranted}"/>
 				<h:inputSecret
 						rendered="#{cmsPropertyWrapper.writeGranted}"
 						value="#{simpleCmsPropertyValueWrapper.passwordVerifier.newPassword}" size="20" 
 						maxlength="50"
-						label="#{messages['content.object.edit.string.property.password.type.new.value']}">
+						label="#{messages['object.edit.string.property.password.type.new.value']}">
 				</h:inputSecret>
 
-				<h:outputText value="#{messages['content.object.edit.string.property.password.type.new.value.verify']}" 
+				<h:outputText value="#{messages['object.edit.string.property.password.type.new.value.verify']}" 
 						rendered="#{cmsPropertyWrapper.writeGranted}"/>
 						
 				<h:inputSecret

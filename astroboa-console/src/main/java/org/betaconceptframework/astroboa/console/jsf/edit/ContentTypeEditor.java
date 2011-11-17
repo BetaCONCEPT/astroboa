@@ -182,7 +182,7 @@ public class ContentTypeEditor {
 							if (existingXSDs != null && existingXSDs.length > 0){
 								for(String filename : existingXSDs){
 									if (StringUtils.equals(filename, newContentTypeFilename)){
-										JSFUtilities.addMessage(null, "content.type.select.content.type.exists", new String[]{newContentTypeFilename}, FacesMessage.SEVERITY_INFO);
+										JSFUtilities.addMessage(null, "object.type.select.content.type.exists", new String[]{newContentTypeFilename}, FacesMessage.SEVERITY_INFO);
 										return null;	
 									}
 								}
@@ -207,7 +207,7 @@ public class ContentTypeEditor {
 				}
 				
 				else{
-					JSFUtilities.addMessage(null, "content.type.select.new.content.type.missing", null, FacesMessage.SEVERITY_WARN);
+					JSFUtilities.addMessage(null, "object.type.select.new.content.type.missing", null, FacesMessage.SEVERITY_WARN);
 				}
 				
 			}
@@ -232,7 +232,7 @@ public class ContentTypeEditor {
 			label = contentType;
 		}
 
-		JSFUtilities.addMessage(null, "content.type.select.table.save.content.type.success", new String[]{label}, FacesMessage.SEVERITY_INFO);
+		JSFUtilities.addMessage(null, "object.type.select.table.save.content.type.success", new String[]{label}, FacesMessage.SEVERITY_INFO);
 		
 		// if a type has been added or edited then remove "contentObjectTypesAsSelectItems" from page scope so that all menus that
 		// show the available contet types will be reloaded

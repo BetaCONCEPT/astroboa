@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+			
+			<div id="propertyPrototypeSelectionDialog" title="#{messages['object.edit.aspect.panel.label']}">
+				<a4j:form id="propertyPrototypeSelectionForm">
+					<a4j:outputPanel id="propertyPrototypeSelectionDialogPanel">
+						<ui:fragment rendered="#{! empty contentObjectEdit.extraPropertyEdit.editorTab}">
+							<ul id="dynPropList">	
+								<a4j:repeat
+									value="#{contentObjectEdit.extraPropertyEdit.propertyPrototypes}"
+									var="dynProp">
+									<li class="dynPropItem">
+										<a4j:commandLink
+											onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+											action="#{contentObjectEdit.showNewExtraProperty_UIAction(dynProp.value)}"
+											reRender="extraPropertiesPanel,propertyPrototypeSelectionDialogPanel"
+											title="#{messages['object.edit.action.addDynamicProperty']}">
+					
+											<h:outputText value="#{dynProp.label}"/>
+										</a4j:commandLink>
+									</li>
+								</a4j:repeat>
+							</ul>
+						</ui:fragment>
+					</a4j:outputPanel>
+				</a4j:form>
+			</div>
+			
+		</ui:composition>
+	</body>
+</html>

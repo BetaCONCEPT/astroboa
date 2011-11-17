@@ -269,11 +269,11 @@
 				bccmsmodel:labelElementPath="genericContentResourceObjectReference.profile.title" >
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Generic Content Resource Objects</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Text Object Reference List</bccmsmodel:displayName>
 								<bccmsmodel:description>This complex type represents a list of REFERENCES to Generic Content Resource objects. This list can be attached to other content objects</bccmsmodel:description> 
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αναφορών σε αντικείμενα Βασικού Περιεχομένου
+				Λίστα Αναφορών σε αντικείμενα Κειμένου
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -286,11 +286,11 @@
 						bccmsmodel:acceptedContentTypes="genericContentResourceObject">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
-								<bccmsmodel:displayName>References to Generic Content Resource Objects</bccmsmodel:displayName>
-								<bccmsmodel:description>Generic Content Resource Object Instance referenced by another content object instance</bccmsmodel:description> 
+								<bccmsmodel:displayName>Text Object Reference</bccmsmodel:displayName>
+								<bccmsmodel:description>A reference to a Text Object</bccmsmodel:description> 
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
-								Αναφορά σε αντικείμενο Βασικού Περιεχομένου
+								Αναφορά σε αντικείμενο Κειμένου
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>

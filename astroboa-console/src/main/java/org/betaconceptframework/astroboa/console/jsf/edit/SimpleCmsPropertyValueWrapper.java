@@ -361,12 +361,10 @@ public class SimpleCmsPropertyValueWrapper {
 	}
 
 
-	public BinaryChannel getOrCreateNewBinaryChannelValue() {
-		if (getBinaryChannelValue() == null){
+	public BinaryChannel getNewBinaryChannelValue() {
 
-			binaryChannelValue = cmsRepositoryEntityFactory.newBinaryChannel();
-			binaryChannelValue.setName(simpleCmsProperty.getName());
-		}
+		binaryChannelValue = cmsRepositoryEntityFactory.newBinaryChannel();
+		binaryChannelValue.setName(simpleCmsProperty.getName());
 		return binaryChannelValue;
 	}
 

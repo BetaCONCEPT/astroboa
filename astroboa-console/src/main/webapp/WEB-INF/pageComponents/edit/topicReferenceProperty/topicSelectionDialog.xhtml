@@ -37,6 +37,7 @@ Authors
 			<div id="topicSelectionDialog" title="#{messages['navigation.menu.taxonomies']}">
 				<a4j:form id="topicSelectionForm">
 					<a4j:outputPanel id="topicSelectionDialogPanel">
+						<ui:remove>
 						<rich:suggestionbox for="topicLabelPattern"
 							suggestionAction="#{topicPropertyWrapper.findTopics_UIAction}" 
 							var="suggestedTopic"
@@ -50,7 +51,7 @@ Authors
 								reRender="complexCmsPropertyChildPropertiesTable"
 								action="#{topicPropertyWrapper.addSelectedTopic_UIAction(suggestedTopic, false)}"/>
 						</rich:suggestionbox>
-				
+						</ui:remove>
 						<ui:include src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicSelectionTreeRichFaces.xhtml" />
 					
 					</a4j:outputPanel>
@@ -62,7 +63,7 @@ Authors
 								styleClass="formItemClass"
 								onclick="closeTopicSelectionDialog();"
 								reRender="topicSelectionDialogPanel"
-								value="#{messages['content.object.edit.file.upload.close.button.label']}"/>
+								value="#{messages['close.button.label']}"/>
 						</p>
 					</div>
 				</a4j:form>

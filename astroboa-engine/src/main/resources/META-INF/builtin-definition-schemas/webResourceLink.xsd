@@ -51,10 +51,10 @@
 						bccmsmodel:labelElementPath="title" >
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Web Resource Link (URL)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Web Link</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
-						Use this complex type to store a link to a Web Resource.
+						Use this complex type to store a link to a Web Resource (a URL).
 					</p>
 					It provides properties for specifing:
 					<ul>
@@ -203,12 +203,12 @@
 	<xs:complexType name="arrayOfWebResourceLinkTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Web Resources Links (URLs)</bccmsmodel:displayName>
-								<bccmsmodel:description>This complex type represents a list of Links to Web Resources. The links/references to web resources are expressed through absolute or relative URLs, 
+				<bccmsmodel:displayName>Web Links</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of Links to Web Resources. The links/references to web resources are expressed through absolute or relative URLs, 
 		i.e. http://www.site.com/page1, ftp://ftp.server.org/path/file, /portal/resource/contentObject/id/ffff-eeee</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Συνδέσμων (URLs)
+				Σύνδεσμοι (URLs)
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -226,7 +226,7 @@
 	<xs:element name="webResourceLinkObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Web Resource Link (URL)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Web Link</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 						Use this content object type to store a link to a Web Resource.
@@ -361,12 +361,14 @@
 	<xs:complexType name="arrayOfWebResourceLinkObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Web Resource Link Objects</bccmsmodel:displayName>
-								<bccmsmodel:description>This complex type represents a list of REFERENCES to web resource link objects (i.e. Web Resource Link content objects). 
-			This list can be attached to other content objects</bccmsmodel:description>
+				<bccmsmodel:displayName>Web Links (References)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type represents a list of REFERENCES to web link objects
+				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αναφορών σε Συνδέσμους
+				<bccmsmodel:displayName>Σύνδεσμοι (Λίστα αναφορών)</bccmsmodel:displayName>
+				<bccmsmodel:description>Μια λίστα αναφορών σε αντικείνα τύπου Σύνδεσμος</bccmsmodel:description>
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -396,10 +398,10 @@
 	<xs:element name="arrayOfWebResourceLinkTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Web Resource Links (URLs)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Web Links</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
-						Use this content object type to store a list of links to Web Resources.
+						Use this object type to store a list of links to Web Resources.
 					</p>
 					For each resource in the list you can specify:
 					<ul>
@@ -428,7 +430,7 @@
 			</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Συνδέσμων (URLs)</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Σύνδέσμοι (URLs)</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 						Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε μια λίστα απο συνδέσμους προς περιεχόμενο που βρίσκεται στο 

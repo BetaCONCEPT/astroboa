@@ -37,29 +37,31 @@ Authors
 	<body>
 		<ui:composition>
 
-		<a4j:outputPanel id="complexCmsPropertyBreadCrumbs">
-			<h:outputText value="#{messages['content.object.edit.breadcrumb.label']} " style="font-size: 0.8em; font-weight: bold;"/>
-			<a4j:repeat value="#{contentObjectEdit.complexCmsPropertyBreadCrumbs}" var="complexCmsPropertyBreadCrumb"
-			 rowKeyVar="index">
-
+			<a4j:outputPanel id="extraPropertyBreadCrumbs">
+				<ui:fragment rendered="#{contentObjectEdit.extraPropertyBreadCrumbs.size() gt 1}">
+				
+					<h:outputText value="#{messages['object.edit.breadcrumb.label']} " style="font-size: 0.8em; font-weight: bold;"/>
+					<a4j:repeat value="#{contentObjectEdit.extraPropertyBreadCrumbs}" var="complexCmsPropertyBreadCrumb"
+				 		rowKeyVar="index">
+	
 						<h:outputText value=" > " rendered="#{index ne 0}" style="font-size: 1em;"/>
-
+		
 						<!-- Show Action -->
 						<a4j:commandLink
 							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-							action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(complexCmsPropertyBreadCrumb.path)}"
-							reRender="complexCmsPropertyChildPropertiesTable, complexCmsPropertyBreadCrumbs">
-
+							action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(complexCmsPropertyBreadCrumb.path, contentObjectEdit.extraPropertyEdit)}"
+							reRender="extraPropertiesPanel,extraPropertyBreadCrumbs">
+		
 							<h:outputText value="#{complexCmsPropertyBreadCrumb.localizedLabel}" style="font-size: 1em;"/>
-
+		
 						</a4j:commandLink>
 						
 						<rich:spacer width="5"/>
-						
-				</a4j:repeat>
+							
+					</a4j:repeat>
 				
-			
+				</ui:fragment>
 			</a4j:outputPanel>
-</ui:composition>
-</body>
+		</ui:composition>
+	</body>
 </html>

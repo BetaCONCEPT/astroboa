@@ -57,6 +57,7 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 	private ValueType valueType;
 	private String path;
 	protected int wrapperIndex;
+	protected int indexOfPropertyValueToBeProcessed = -1;
 	
 	private CmsPropertyDefinition cmsPropertyDefinition;
 	private String parentCmsPropertyPath;
@@ -268,5 +269,18 @@ public abstract class CmsPropertyWrapper<T extends CmsProperty> {
 
 	public int getWrapperIndex() {
 		return wrapperIndex;
+	}
+
+	public ComplexCmsPropertyEdit getComplexCmsPropertyEdit() {
+		return complexCmsPropertyEdit;
+	}
+
+	public int getIndexOfPropertyValueToBeProcessed() {
+		return indexOfPropertyValueToBeProcessed;
+	}
+
+	public void setIndexOfPropertyValueToBeProcessed(
+			int indexOfPropertyValueToBeProcessed) {
+		this.indexOfPropertyValueToBeProcessed = indexOfPropertyValueToBeProcessed;
 	}
 }

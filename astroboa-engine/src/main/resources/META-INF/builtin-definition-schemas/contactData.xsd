@@ -325,7 +325,7 @@
 		bccmsmodel:labelElementPath="type,number">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>phone</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Phone</bccmsmodel:displayName>
 				<bccmsmodel:description>Holds a phone number. Use the field named "Phone Type" to specify the phone type e.g. home, mobile, work</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
@@ -424,7 +424,7 @@
 		bccmsmodel:labelElementPath="emailAddress">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>email</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Email</bccmsmodel:displayName>
 				<bccmsmodel:description>Holds an email address and its type. Use the field named "Email Type" to specify the email type e.g. home, work</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">

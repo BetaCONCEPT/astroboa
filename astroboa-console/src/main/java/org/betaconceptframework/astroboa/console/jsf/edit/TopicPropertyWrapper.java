@@ -56,8 +56,6 @@ import org.richfaces.event.DropEvent;
  */
 public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<TopicReferenceProperty>{
 
-	private int indexOfValueToBeDeleted = -1;
-
 	private String topicLabelPattern;
 
 	private TopicCriteria topicCriteria;
@@ -141,17 +139,17 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 		complexCmsPropertyEdit.setWrapperIndexesToUpdate(Collections.singleton(wrapperIndex));
 		
 		//Remove value only it has not already been deleted in case of null value
-		if (indexOfValueToBeDeleted != -1){
+		if (indexOfPropertyValueToBeProcessed != -1){
 			
 			try{
 				if (cmsProperty.getPropertyDefinition().isMultiple()){
 					//Remove value from simple cms property
-					//only if indexOfvalueTobeDeleted exists for values
-					if (indexOfValueToBeDeleted < cmsProperty.getSimpleTypeValues().size()){
+					//only if indexOfPropertyValueToBeProcessed exists for values
+					if (indexOfPropertyValueToBeProcessed < cmsProperty.getSimpleTypeValues().size()){
 						
-						String topicIdToBeRemoved = cmsProperty.getSimpleTypeValues().get(indexOfValueToBeDeleted).getId();
+						String topicIdToBeRemoved = cmsProperty.getSimpleTypeValues().get(indexOfPropertyValueToBeProcessed).getId();
 						
-						cmsProperty.removeSimpleTypeValue(indexOfValueToBeDeleted);
+						cmsProperty.removeSimpleTypeValue(indexOfPropertyValueToBeProcessed);
 
 						Events.instance().raiseEvent(SeamEventNames.UPDATE_LIST_OF_TOPICS_WHOSE_NUMBER_OF_CO_REFERENCES_SHOULD_CHANGE, 
 								topicIdToBeRemoved);
@@ -175,7 +173,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 				//Reset first wrapper
 				simpleCmsPropertyValueWrappers.clear();
 
-				indexOfValueToBeDeleted = -1;
+				indexOfPropertyValueToBeProcessed = -1;
 			}
 			
 		}
@@ -282,7 +280,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 					selectedTopic.getTaxonomy().getName() == null ||
 					! acceptedTaxonomies.contains(selectedTopic.getTaxonomy().getName())
 					) {
-						JSFUtilities.addMessage(null, "content.object.edit.topic.taxonomyOfTopicNotInAllowedTaxonomies", 
+						JSFUtilities.addMessage(null, "object.edit.topic.taxonomyOfTopicNotInAllowedTaxonomies", 
 								new String[]{selectedTopic.getTaxonomy().getLocalizedLabelForCurrentLocale(), localizedLabelsForAcceptedTaxonomies}, 
 								FacesMessage.SEVERITY_WARN);
 						return;
@@ -303,7 +301,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 
 		//check if topic allows content object references
 		if (!selectedTopic.isAllowsReferrerContentObjects()){
-			JSFUtilities.addMessage(null, "content.object.edit.topic.doesNotAllowObjectsToUseIt", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.topic.doesNotAllowObjectsToUseIt", null, FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		
@@ -339,7 +337,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 
 		}
 		else
-			JSFUtilities.addMessage(null, "content.object.edit.topic.already.exists", null, FacesMessage.SEVERITY_WARN);
+			JSFUtilities.addMessage(null, "object.edit.topic.already.exists", null, FacesMessage.SEVERITY_WARN);
 
 
 	}
@@ -356,10 +354,6 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 
 	public String getTopicLabelPattern() {
 		return topicLabelPattern;
-	}
-
-	public void setIndexOfValueToBeDeleted(int indexOfValueToBeDeleted) {
-		this.indexOfValueToBeDeleted = indexOfValueToBeDeleted;
 	}
 	
 	public List<String> getAcceptedTaxonomies() {

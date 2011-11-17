@@ -41,10 +41,8 @@ Authors
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) 
 				and  cmsPropertyWrapper.valueType eq 'ObjectReference'
 				and ! empty cmsPropertyWrapper.simpleCmsPropertyValueWrappers}">
-					
-				<div class="formElementValuesLabelSpacer">fake label</div>
 				
-				<ol class="formElementValues">
+				<ol class="objectReferenceValues">
 					<a4j:repeat
 						var="simpleCmsPropertyValueWrapper"
 						value="#{cmsPropertyWrapper.simpleCmsPropertyValueWrappers}"
@@ -56,7 +54,7 @@ Authors
 									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}"
 									ondrop="destroyTextEditor();"
 									acceptedTypes="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}"
-									reRender="objectProperty"
+									reRender="#{cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
 									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
 									dropValue="#{indexOfSimpleCmsPropertyValueWrapper}"
 									ajaxSigle="true">
@@ -81,57 +79,18 @@ Authors
 			
 							</a4j:outputPanel>
 							
-							<!-- Grab action -->
-							<ui:remove>
-							 <a4j:outputPanel 
-						 		styleClass="dragElementValue"
-							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size() gt 1}">
-								<rich:dragSupport 
-									dragIndicator="propertyReferenceIndicator"
-									dragType="contentObjectReference#{cmsPropertyWrapper.cmsProperty.name}" 
-									dragValue="#{indexOfSimpleCmsPropertyValueWrapper}">
-	
-									<rich:dndParam name="label" type="drag"
-										value="#{ empty simpleCmsPropertyValueWrapper.value ? ' ' : simpleCmsPropertyValueWrapper.value.getCmsProperty('profile.title').simpleTypeValue}" />
-								</rich:dragSupport>
-								Drag to another position
-							</a4j:outputPanel>
-							</ui:remove>
-							
-							<!-- MoveUp action 
-							<a4j:commandLink
-								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-								rendered="#{cmsPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper gt 0}"
-								action="#{cmsPropertyWrapper.moveUp_UIAction(simpleCmsPropertyValueWrapper)}"
-								reRender="complexCmsPropertyChildPropertiesTable"
-								title="Μεταφορά μιά θέση επάνω">
-								<h:graphicImage value="/images/cms-icons/16/up_arrow.png" />
-							</a4j:commandLink>
-							-->
-						
-							<!-- MoveDown action 
-							<a4j:commandLink
-								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-								rendered="#{cmsPropertyWrapper.writeGranted and indexOfSimpleCmsPropertyValueWrapper lt cmsPropertyWrapper.simpleCmsPropertyValueWrappers.size()-1}"
-								action="#{cmsPropertyWrapper.moveDown_UIAction(simpleCmsPropertyValueWrapper)}"
-								reRender="complexCmsPropertyChildPropertiesTable"
-								title="Μεταφορά μιά θέση κάτω">
-								<h:graphicImage value="/images/cms-icons/16/down_arrow.png" />
-							</a4j:commandLink>
-							-->
-
 							<!-- Delete action -->
 							<a4j:commandLink
 								onclick="destroyTextEditor();"
-								value="Delete Object Reference"
 								styleClass="delete"
 								rendered="#{cmsPropertyWrapper.writeGranted}"
 								action="#{cmsPropertyWrapper.deleteValueFromContentObjectProperty_UIAction}"
-								reRender="objectProperty"
+								reRender="#{cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
 								ajaxSingle="true">
 								<a4j:actionparam name="valueIndex"
 									value="#{indexOfSimpleCmsPropertyValueWrapper}"
-									assignTo="#{cmsPropertyWrapper.indexOfValueToBeDeleted}" />
+									assignTo="#{cmsPropertyWrapper.indexOfPropertyValueToBeProcessed}" />
+								<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-octagon-frame.png"/>
 							</a4j:commandLink>
 					 	
 						</li>	

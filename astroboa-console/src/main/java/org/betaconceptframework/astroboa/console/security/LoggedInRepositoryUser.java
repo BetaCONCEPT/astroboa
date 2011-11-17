@@ -43,7 +43,9 @@ import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.DisplayNamePrincipal;
 import org.betaconceptframework.astroboa.api.security.PersonUserIdPrincipal;
 import org.betaconceptframework.astroboa.api.service.ContentService;
+import org.betaconceptframework.astroboa.api.service.RepositoryService;
 import org.betaconceptframework.astroboa.api.service.RepositoryUserService;
+import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
 import org.betaconceptframework.astroboa.console.commons.TopicComparator;
 import org.betaconceptframework.astroboa.console.commons.TopicComparator.OrderByProperty;
@@ -54,6 +56,9 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.bean.AbstractBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
 import org.jboss.seam.security.Identity;
@@ -65,14 +70,15 @@ import org.jboss.seam.web.ServletContexts;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  *
  */
+@Name("loggedInRepositoryUser")
+@Scope(ScopeType.SESSION)
 public class LoggedInRepositoryUser extends AbstractBean {
 	
 	private static final long serialVersionUID = 1L;
 	
 	// injected beans
 	private CMSUtilities cmsUtilities;
-	private RepositoryUserService repositoryUserService;
-	private ContentService contentService;
+	private AstroboaClient astroboaClient;
 
 	private String displayName;
 	private String personId;
@@ -98,7 +104,7 @@ public class LoggedInRepositoryUser extends AbstractBean {
 	public RepositoryUser getRepositoryUser() {
 		if (this.repositoryUser == null) {
 			try {
-				RepositoryUser retreivedRepositoryUser = getCmsUtilities().findLoggedInRepositoryUser(JSFUtilities.getLocaleAsString());
+				RepositoryUser retreivedRepositoryUser = cmsUtilities.findLoggedInRepositoryUser(JSFUtilities.getLocaleAsString());
 				if (retreivedRepositoryUser == null) { 
 					
 					// There is a possibility that RepositoryUser was not found because her external id has been registered with a previous astroboa version 
@@ -210,7 +216,7 @@ public class LoggedInRepositoryUser extends AbstractBean {
 			}
 			
 			try{
-				ContentObject person = contentService.getContentObject(getPersonId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, Arrays.asList("audit.consoleLoginLog"), false);
+				ContentObject person = astroboaClient.getContentService().getContentObject(getPersonId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, null, Arrays.asList("audit.consoleLoginLog"), false);
 				
 				if (person != null) {
 					StringProperty consoleLoginLogProperty = ((StringProperty) person.getCmsProperty("audit.consoleLoginLog"));
@@ -251,7 +257,7 @@ public class LoggedInRepositoryUser extends AbstractBean {
 					
 					consoleLoginLogProperty.setSimpleTypeValue(consoleLoginLog + "[client " + remoteServerAddr + "] [" + loginTimestampAsString + "]");
 					
-					contentService.save(person, false, false, null);
+					astroboaClient.getContentService().save(person, false, false, null);
 				}
 			}
 			catch(Exception e) {
@@ -286,7 +292,7 @@ public class LoggedInRepositoryUser extends AbstractBean {
 		}
 		
 		try{
-			repositoryUserService.save(userToBeCreated);
+			astroboaClient.getRepositoryUserService().save(userToBeCreated);
 		}
 		catch(Exception e)
 		{
@@ -314,11 +320,11 @@ public class LoggedInRepositoryUser extends AbstractBean {
 	}
 	
 	public String getLocalizedLabelForConnectedRepository(){
-		if (AstroboaClientContextHolder.getRepositoryContextForActiveClient() != null  && AstroboaClientContextHolder.getRepositoryContextForActiveClient().getCmsRepository() != null){
-			return AstroboaClientContextHolder.getRepositoryContextForActiveClient().getCmsRepository().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString());
-		}
-		
-		return null;
+		return astroboaClient.getRepositoryService().getCurrentConnectedRepository().getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString());
+	}
+	
+	public String getConnectedRepositoryId(){
+		return astroboaClient.getRepositoryService().getCurrentConnectedRepository().getId();
 	}
 
 	public String getIdentity(){
@@ -363,26 +369,6 @@ public class LoggedInRepositoryUser extends AbstractBean {
 			
 		}
 	}
-	
-	public CMSUtilities getCmsUtilities() {
-		return cmsUtilities;
-	}
-
-	public void setCmsUtilities(CMSUtilities cmsUtilities) {
-		this.cmsUtilities = cmsUtilities;
-	}
-
-	public RepositoryUserService getRepositoryUserService() {
-		return repositoryUserService;
-	}
-
-	public void setRepositoryUserService(RepositoryUserService repositoryUserService) {
-		this.repositoryUserService = repositoryUserService;
-	}
-
-	public void setContentService(ContentService contentService) {
-		this.contentService = contentService;
-	}
 
 	public boolean isExternallyManagedIdentity() {
 		return externallyManagedIdentity;
@@ -391,5 +377,6 @@ public class LoggedInRepositoryUser extends AbstractBean {
 	public void setExternallyManagedIdentity(boolean externallyManagedIdentity) {
 		this.externallyManagedIdentity = externallyManagedIdentity;
 	}
+
 
 }

@@ -155,4 +155,9 @@ public class Utils {
 		return applicationMessagesAsCSVString;
 	}
 	
+	public static String currentTimeInSeconds() {
+		long time = System.currentTimeMillis()/1000;
+		return String.valueOf(time);
+	}
+	
 }

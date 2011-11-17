@@ -39,23 +39,23 @@ Authors
 			<ui:remove>
 			<div
 				style="width: 100%; background-color: gray; color: white; text-align: center;">
-				#{messages['content.object.edit.actions.panel.label']}
+				#{messages['object.edit.actions.panel.label']}
 			</div>
 
 			<rich:spacer height="3" />
 
 			<a4j:outputPanel id="spaceAttachPanel">
 				<div style="width: 100%">
-					#{messages['content.object.edit.actions.instructions']}
+					#{messages['object.edit.actions.instructions']}
 					<br />
 					<h:selectOneRadio
 						value="#{contentObjectEdit.selectedOptionForAttachingObjectToUserSpace}"
 						style="font-size: 95%;">
-						<f:selectItem itemValue="1" itemLabel="#{messages['content.object.edit.actions.do.not.attach.space']}" />
+						<f:selectItem itemValue="1" itemLabel="#{messages['object.edit.actions.do.not.attach.space']}" />
 						<f:selectItem itemValue="2"
-							itemLabel="#{messages['content.object.edit.actions.attach.to.root.space']}" />
+							itemLabel="#{messages['object.edit.actions.attach.to.root.space']}" />
 						<f:selectItem itemValue="3"
-							itemLabel="#{messages['content.object.edit.actions.attach.to.selected.space']} : #{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}">
+							itemLabel="#{messages['object.edit.actions.attach.to.selected.space']} : #{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}">
 						</f:selectItem>
 
 						<a4j:support event="onchange" />
@@ -74,7 +74,7 @@ Authors
 									value="#{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}" />
 							</div>
 							<h:outputText style="font-weight: 600; font-size: 1.1em;"
-								value="#{messages['content.object.edit.actions.drag.and.drop.panel.label']}" />
+								value="#{messages['object.edit.actions.drag.and.drop.panel.label']}" />
 					</a4j:outputPanel>
 					</div>
 
@@ -91,41 +91,41 @@ Authors
 					<h:selectBooleanCheckbox
 						value="#{loggedInRepositoryUserSettings.createVersionUponSuccessfulSave}" />
 					<h:outputText
-						value="#{messages['content.object.edit.actions.do.not.create.new.version']}" />
+						value="#{messages['object.edit.actions.do.not.create.new.version']}" />
 
 				</h:panelGroup>
 				<h:panelGroup>
 					<h:selectBooleanCheckbox
 						value="#{loggedInRepositoryUserSettings.openNewContentObjectEditorUponSuccessfulSave}"
 						rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id}" />
-					<h:outputText value="#{messages['content.object.edit.actions.clear.form.after.save']}"
+					<h:outputText value="#{messages['object.edit.actions.clear.form.after.save']}"
 						rendered="#{empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id}" />
 				</h:panelGroup>
 				<h:panelGroup>
 					<h:selectBooleanCheckbox
 						value="#{loggedInRepositoryUserSettings.closeEditorAfterSave}" />
-					<h:outputText value="#{messages['content.object.edit.actions.close.form.after.save']}" />
+					<h:outputText value="#{messages['object.edit.actions.close.form.after.save']}" />
 				</h:panelGroup>
 				
 				<h:panelGroup>
 					<h:selectBooleanCheckbox
 						value="#{loggedInRepositoryUserSettings.copyContentObjectToClipboardUponSuccessfulSave}" />
-					<h:outputText value="#{messages['content.object.edit.actions.copy.to.clipboard.after.save']}" />
+					<h:outputText value="#{messages['object.edit.actions.copy.to.clipboard.after.save']}" />
 				</h:panelGroup>
 			</h:panelGrid>
 </ui:remove>
 			
 
 					<a4j:commandButton id="saveContentObjectButton" 
-						value="#{messages['content.object.edit.actions.save']}"
+						value="#{messages['object.edit.actions.save']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 						action="#{contentObjectEdit.saveContentObject_UIAction}"
 						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
-						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+						reRender="objectEditorAjaxPanel,fixedPropertyBreadCrumbs,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
 
 					
 					<a4j:commandButton id="saveDraftContentObjectButton" 
-						value="#{messages['content.object.edit.actions.saveDraft']}"
+						value="#{messages['object.edit.actions.saveDraft']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 						action="#{draft.add(loggedInRepositoryUser.repositoryUser.id, contentObjectEdit.selectedContentObjectForEdit.contentObject)}"
 						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
@@ -133,9 +133,9 @@ Authors
 
    
 					<a4j:commandButton id="removeObjectButton" 
-						value="#{messages['content.object.edit.actions.delete']}"
+						value="#{messages['object.edit.actions.delete']}"
 						action="#{confirmationBean.initiateConfirmation(
-											'confirmation.panel.delete.question',
+											'dialog.confirmation.delete.question',
 											contentObjectEdit, 
 											'permanentlyRemoveContentObjectUIAction',
 											contentObjectEdit.selectedContentObjectForEdit.contentObject.getCmsProperty('profile.title').simpleTypeValue, 
@@ -150,24 +150,24 @@ Authors
 
 					
 					<a4j:commandButton id="PublishButton" 
-						value="#{messages['content.object.edit.actions.publish']}"
+						value="#{messages['object.edit.actions.publish']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 						action="#{contentObjectEdit.publishContentObject_UIAction}"
 						rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue ne 'published' and 
 										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
-						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+						reRender="objectEditorAjaxPanel,fixedPropertyBreadCrumbs,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
 						
 					<a4j:commandButton id="unPublishButton" 
-						value="#{messages['content.object.edit.actions.cancelPublication']}"
+						value="#{messages['object.edit.actions.cancelPublication']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 						action="#{contentObjectEdit.unPublishContentObject_UIAction}"
 						rendered="#{(contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'published' or
 										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'scheduledForPublication') and 
 										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
-						reRender="objectEditorAjaxPanel,objectFormHeader,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+						reRender="objectEditorAjaxPanel,fixedPropertyBreadCrumbs,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
 
 					<a4j:commandButton 
-						value="#{messages['content.object.edit.actions.clearForm']}"
+						value="#{messages['object.edit.actions.clearForm']}"
 						action="#{objectEditInit.editNewObject_UIAction(contentObjectEdit.selectedContentObjectForEdit.contentObject.contentObjectType)}" 
 						reRender="objectEditorAjaxPanel"
 						ajaxSingle="true"/>

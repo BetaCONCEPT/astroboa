@@ -49,7 +49,6 @@ import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapperFactory;
-import org.betaconceptframework.astroboa.console.jsf.rule.RuleEngineBean;
 import org.betaconceptframework.astroboa.console.jsf.visitor.CmsPropertyValidatorVisitor;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -57,7 +56,6 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.security.Identity;
 
 /**
@@ -91,14 +89,30 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 	private ContentObjectUIWrapperFactory contentObjectUIWrapperFactory;
 	
 	private ContentObject editedContentObject;
+	
+	// different ComplexCmsEditorInstances handle different object editor tabs
+	// we use this enum to define the different tabs and use it to define in the 
+	// following variable which tab this instance handles
+	public enum EditorTab {
+		ADMIN_PROPERTY,
+		FIXED_PROPERTIES,
+		EXTRA_PROPERTIES
+	}
+	
+	private EditorTab editorTab; 
+	
+	// The list of extra properties that have been added to the edited object instance
+	private List<String> extraProperties = null;
+	
+	// The map holds the property prototypes from which the user may create extra properties
+	// per object instance. The extra properties are not defined in object type schema and can be dynamically added per
+	// object instance. The property prototypes correspond to complex properties in the schema that are defined outside of object definitions (reusable property types)
+	//Key in the map is the prototype property name 
+	//the value is a select item with i18n labels for the property name
+	private Map<String, SelectItem> propertyPrototypesMap;
 
-
-	//Key is aspect name 
-	//Value is aspect localized labels
-	private Map<String, SelectItem> availableAspectsPerName;
-
-	//Exactly the same as before but used for displaying reasons
-	private List<SelectItem> availableAspects;
+	//Exactly the same as above but used for creating the select menu for the UI
+	private List<SelectItem> propertyPrototypes;
 
 	private CmsRepositoryEntityFactory cmsRepositoryEntityFactory;
 
@@ -117,8 +131,8 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 	public void reloadEditedCmsProperties() {
 		//Nullify so that in first visit they will be reloaded
 		editedCmsProperties = null;
-		availableAspectsPerName = null;
-		availableAspects = null;
+		propertyPrototypesMap = null;
+		propertyPrototypes = null;
 		childPropertiesOfSingleValueComplexProperties.clear();
 	}
 
@@ -136,79 +150,76 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 		this.editedComplexCmsProperty = editedComplexCmsProperty; 
 		editedCmsProperties = null;
 		fullLocalisedName = null;
-		availableAspectsPerName = null;
-		availableAspects = null;
+		propertyPrototypesMap = null;
+		propertyPrototypes = null;
 		childPropertiesOfSingleValueComplexProperties.clear();
 	}
 
 	public List<CmsPropertyWrapper<?>> getEditedCmsProperties(){
 
-		if (editedCmsProperties == null && editedComplexCmsProperty != null){
+		if (editedCmsProperties == null){
 
 			try{
-				
-				// We should first assemble a list of all edited properties i.e. the child properties of the edited ComplexCmsProperty 
 				String localeAsString = JSFUtilities.getLocaleAsString();
-
-				Map<String, CmsPropertyDefinition> propertyDefinitions = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinitions();
-
 				editedCmsProperties = new ArrayList<CmsPropertyWrapper<?>>();
-
 				List<CmsPropertyDefinition> propertyDefinitionList = new ArrayList<CmsPropertyDefinition>();
 				
+				if (editedComplexCmsProperty != null) {
 				
-				if (MapUtils.isNotEmpty(propertyDefinitions)){
-					propertyDefinitionList.addAll(propertyDefinitions.values());	
-				}
-				
-				// if the root property is edited we should remove the profile and accessibility properties which have dedicated edit forms
-				if (editedComplexCmsProperty instanceof ComplexCmsRootProperty && editedContentObject !=null) {
+					// We should first assemble a list of all edited properties i.e. the child properties of the edited ComplexCmsProperty 
+					Map<String, CmsPropertyDefinition> propertyDefinitions = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinitions();
+	
 					
-					CmsPropertyDefinition profileDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile");
-					CmsPropertyDefinition accessibilityDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("accessibility");
+					if (MapUtils.isNotEmpty(propertyDefinitions)){
+						propertyDefinitionList.addAll(propertyDefinitions.values());	
+					}
 					
-					if (profileDefinition != null) {
-						propertyDefinitionList.remove(profileDefinition);
-					}
+					// if the root property is edited we should remove the profile and accessibility properties which have dedicated edit forms
+					if (editedComplexCmsProperty instanceof ComplexCmsRootProperty && editedContentObject !=null) {
 						
-					if (accessibilityDefinition != null) {
-						propertyDefinitionList.remove(accessibilityDefinition);
+						CmsPropertyDefinition profileDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("profile");
+						CmsPropertyDefinition accessibilityDefinition = editedComplexCmsProperty.getPropertyDefinition().getChildCmsPropertyDefinition("accessibility");
+						
+						if (profileDefinition != null) {
+							propertyDefinitionList.remove(profileDefinition);
+						}
+							
+						if (accessibilityDefinition != null) {
+							propertyDefinitionList.remove(accessibilityDefinition);
+						}
 					}
+					
 				}
-				
-				
-				// if the root property is edited we should also load the dynamic properties (aspects that have been added to this specific object instance)
-				List<String> aspects = null;
-				/*
-				if (editedComplexCmsProperty instanceof ComplexCmsRootProperty && editedContentObject !=null) {
-						
-					// add the dynamic properties
-					loadAvailableAspects(localeAsString);
-					aspects = editedContentObject.getComplexCmsRootProperty().getAspects();
+				else if (editorTab.equals(EditorTab.EXTRA_PROPERTIES)) { // in the top level view of extra properties there is no edited property yet
+					// lets see if the object instance has any extra properties 
+					extraProperties = editedContentObject.getComplexCmsRootProperty().getAspects();
 
-					//Append list with aspect definitions, if any
-					if (CollectionUtils.isNotEmpty(aspects)){
-						//Sorting is not needed at this point but there is no other method available
+					if (CollectionUtils.isNotEmpty(extraProperties)){
 						List<ComplexCmsPropertyDefinition> aspectDefinitionsSortedByLocale = 
-							definitionService.getAspectDefinitionsSortedByLocale(aspects, localeAsString);
+							definitionService.getAspectDefinitionsSortedByLocale(extraProperties, localeAsString);
 						if (CollectionUtils.isEmpty(aspectDefinitionsSortedByLocale))
-							logger.warn("Found no definitions for aspects " + aspects); 
+							logger.warn("Found no definitions for aspects " + extraProperties); 
 						else{
 							propertyDefinitionList.addAll(aspectDefinitionsSortedByLocale);
 
 						}
 					}
-
+					
+					// since we are at the extra properties form we should create the list of available property prototypes
+					// so that the user may choose from this list and create a new extra propererty
+					loadPropertyPrototypes(localeAsString);
 				}
-				*/
-
-
-				//This is disabled for now
+				else {
+					logger.error("The edited cms property is null"); 
+					JSFUtilities.addMessage(null, "object.edit.load.complex.property.error", null, FacesMessage.SEVERITY_ERROR);
+					return null;
+				}
+				
+				//Here we filter the properties according to some rules (security and presentation rules)
+				// This filtering is disabled for now since drools engine has some problems to be resolved
 				//propertyDefinitionList = ruleEngine.filterDefinitionsForEdit(propertyDefinitionList);
 				
 				// we should create wrappers for each child property of edited ComplexCmsProperty
-				//List<CmsPropertyDefinition> definitionsToDisplayLast = new ArrayList<CmsPropertyDefinition>();
-				
 				// wrapperIndex is used to partially update the related UI component in the object form
 				int wrapperIndex = -1;
 				for (CmsPropertyDefinition cmsPropertyDefinition: propertyDefinitionList){
@@ -216,36 +227,32 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 					++wrapperIndex;
 					
 					if (! cmsPropertyDefinition.isObsolete()) {
-						createCmsPropertyWrapperForCmsPropertyDefinition(
-							aspects,
-							cmsPropertyDefinition, wrapperIndex);
+						createCmsPropertyWrapperForCmsPropertyDefinition(cmsPropertyDefinition, wrapperIndex);
 					}
 				}
+
+				//sortCmsPropertyWrappers(localeAsString);
 				
-				/*
-				for (CmsPropertyDefinition cmsPropertyDefinition: definitionsToDisplayLast){
-						createCmsPropertyWrapperForCmsPropertyDefinition(
-								aspects,
-								cmsPropertyDefinition);
-				}
-				*/
-
-				//sortCmsPropertyWrappers(localeAsString);   
-
-				//Set which aspects will be displayed as Available
-				if (availableAspectsPerName != null){
-					availableAspects = new ArrayList<SelectItem>(availableAspectsPerName.values());
+				// If we are at the extra properties tab, during the creation of wrappers the prototype properties map has been filterd and some prototypes have been excluded. 
+				// We have excluded the prototypes that have been already used for creation of an extra property. 
+				// So now we will use this filtered map to create a list of the available property prototypes (as select items) 
+				// in order to present a selection menu to the user and allow her to create more extra properties
+				if (editorTab.equals(EditorTab.EXTRA_PROPERTIES) && propertyPrototypesMap != null){
+					
+					propertyPrototypes = new ArrayList<SelectItem>(propertyPrototypesMap.values());
 					
 					if (selectItemComparator == null){
-						selectItemComparator = new SelectItemComparator(localeAsString);
+						selectItemComparator = new SelectItemComparator(JSFUtilities.getLocaleAsString());
 					}
 					
-					Collections.sort(availableAspects, selectItemComparator);
+					Collections.sort(propertyPrototypes, selectItemComparator);
 				}
+
+				
 			}
 			catch (Exception e){
-				logger.error("",e); 
-				JSFUtilities.addMessage(null, "content.object.edit.load.complex.property.error", null, FacesMessage.SEVERITY_ERROR); 
+				logger.error("An error occured while property wrappers were created for property:" + editedComplexCmsProperty.getPath(), e); 
+				JSFUtilities.addMessage(null, "object.edit.load.complex.property.error", null, FacesMessage.SEVERITY_ERROR); 
 			}
 		}   
 
@@ -257,9 +264,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 		Collections.sort(editedCmsProperties, new CmsPropertyWrapperComparator(localeAsString));
 	}
 
-	private void createCmsPropertyWrapperForCmsPropertyDefinition(
-			List<String> aspects,
-			CmsPropertyDefinition cmsPropertyDefinition, int wrapperIndex) {
+	private void createCmsPropertyWrapperForCmsPropertyDefinition(CmsPropertyDefinition cmsPropertyDefinition, int wrapperIndex) {
 
 		//Check if this property should not be displayed
 		if (! shouldCreateAPropertyWrapper(cmsPropertyDefinition))
@@ -267,12 +272,6 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 			return;
 		}
 		
-		if (aspects == null)
-		{
-			aspects = editedContentObject.getComplexCmsRootProperty().getAspects();
-		}
-
-
 		switch (cmsPropertyDefinition.getValueType()) {
 		case ContentType:
 			logger.warn("Found Cms property of type '"+ValueType.ContentType+"' inside complex cms property "+ editedComplexCmsProperty.getFullPath()); 
@@ -281,12 +280,17 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 			if (!cmsPropertyDefinition.isMultiple()){
 
-				boolean isAspect = aspects != null && aspects.contains(cmsPropertyDefinition.getName());
+				boolean isAspect = extraProperties != null && extraProperties.contains(cmsPropertyDefinition.getName());
 
-				CmsProperty complexCmsProperty = null;
+				CmsProperty<?,?> complexCmsProperty = null;
 				//if (editedComplexCmsProperty.isChildPropertyLoaded(cmsPropertyDefinition.getName()))
 				// we load the property always since we need to get its child properties
-				complexCmsProperty = editedComplexCmsProperty.getChildProperty(cmsPropertyDefinition.getName());
+				if (editedComplexCmsProperty != null) {
+					complexCmsProperty = editedComplexCmsProperty.getChildProperty(cmsPropertyDefinition.getName());
+				}
+				else {
+					complexCmsProperty = editedContentObject.getCmsProperty(cmsPropertyDefinition.getName());
+				}
 
 				//if (complexCmsProperty == null && 
 				//	(cmsPropertyDefinition.isMandatory() || isAspect)){
@@ -298,12 +302,21 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 				//when complex cms property is a SINGLE, OPTIONAL property
 				//Do not call get for single complex cms property. It will be loaded
 				//when user wants to edit it
+				
+				String propertyPath;
+				if (editedComplexCmsProperty != null) {
+					propertyPath = editedComplexCmsProperty.getPath();
+				}
+				else { // extra properties does not have a parent cms property
+					propertyPath = cmsPropertyDefinition.getName();
+				}
+				
 				editedCmsProperties.add(
 						new ComplexCmsPropertyWrapper(
 								complexCmsProperty,  
 								isAspect,
 								cmsPropertyDefinition, 
-								editedComplexCmsProperty.getPath(), 
+								propertyPath, 
 								cmsRepositoryEntityFactory,
 								editedContentObject, wrapperIndex, this));
 				
@@ -321,21 +334,11 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 						cmsPropertyDefinition, cmsRepositoryEntityFactory, editedContentObject, wrapperIndex, this));
 			}
 			
-			//TODO: Fix this by checking the type of each property not by checking the name
-			//Remove any cms property from aspect selection 
-			if (MapUtils.isNotEmpty(availableAspectsPerName)) {
-				if (cmsPropertyDefinition.getName().equals("accessibility") ||
-						cmsPropertyDefinition.getName().equals("webPublication") ||
-						cmsPropertyDefinition.getName().equals("statistic") ||
-						cmsPropertyDefinition.getName().equals("workflow")) {
-					availableAspectsPerName.remove(cmsPropertyDefinition.getName() + "Type");
-				}
-				else if (cmsPropertyDefinition.getName().equals("profile")) {
-					availableAspectsPerName.remove("administrativeMetadataType");
-				}
-				else {
-					availableAspectsPerName.remove(cmsPropertyDefinition.getName());
-				}
+			// Filter the prototypes map to remove the prototypes that have been already used 
+			// (i.e. there is already an extra property named after the name of the prototype)
+			if (editorTab.equals(EditorTab.EXTRA_PROPERTIES) && MapUtils.isNotEmpty(propertyPrototypesMap)) {
+				logger.warn("Find existing property '"+cmsPropertyDefinition.getName()+"' having the same name with one of the available property prototypes. Prototype will be removed from list of available prototypes"); 
+				propertyPrototypesMap.remove(cmsPropertyDefinition.getName());
 			}
 			
 			break;
@@ -345,24 +348,6 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 			//In case the simple property is one of the following use a different way to get or create property template
 			CmsProperty<?,?> simpleCmsProperty = null;
 			String parentPath = editedComplexCmsProperty.getPath();
-			
-			/*
-			if ("profile.title".equals(cmsPropertyDefinition.getPath()) || 
-					"profile.description".equals(cmsPropertyDefinition.getPath()) || 
-					"profile.subject".equals(cmsPropertyDefinition.getPath()) ){ 
-				
-				simpleCmsProperty = editedComplexCmsProperty.getChildProperty(cmsPropertyDefinition.getPath());
-				
-				if (simpleCmsProperty != null){
-					parentPath = simpleCmsProperty.getParentProperty().getPath();
-				}
-					
-			}
-			else{
-			
-				
-			}
-			*/
 			
 			simpleCmsProperty = editedComplexCmsProperty.getChildProperty(cmsPropertyDefinition.getName());
 			
@@ -400,12 +385,12 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 				}
 			}
 			
-			//Perform a check to see if there is an aspect with the same name with this
-			//simple property
-			if (MapUtils.isNotEmpty(availableAspectsPerName)){
-				if (availableAspectsPerName.containsKey(cmsPropertyDefinition.getName())){
-					logger.warn("Find simple property '"+cmsPropertyDefinition.getName()+"' having the same name with an aspect. Aspect will be removed from available list"); 
-					availableAspectsPerName.remove(cmsPropertyDefinition.getName());
+			// Perform a check to see if there is a prototype with the same name with this
+			// simple property
+			if (editorTab.equals(EditorTab.EXTRA_PROPERTIES) && MapUtils.isNotEmpty(propertyPrototypesMap)){
+				if (propertyPrototypesMap.containsKey(cmsPropertyDefinition.getName())){
+					logger.warn("Find simple property '"+cmsPropertyDefinition.getName()+"' having the same name with one of the available property prototypes. Prototype will be removed from list of available prototypes"); 
+					propertyPrototypesMap.remove(cmsPropertyDefinition.getName());
 				}
 				
 			}
@@ -540,28 +525,62 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 		return true;
 	}
 
-	private void loadAvailableAspects(String locale) {
-		availableAspectsPerName = new HashMap<String, SelectItem>();
+	private void loadPropertyPrototypes(String locale) {
+		propertyPrototypesMap = new HashMap<String, SelectItem>();
 
-		List<ComplexCmsPropertyDefinition> availabelAspectDefinitions = definitionService.getAvailableAspectDefinitionsSortedByLocale(locale);
+		List<ComplexCmsPropertyDefinition> availablePropertyPrototypes = definitionService.getAvailableAspectDefinitionsSortedByLocale(locale);
 
-		if (CollectionUtils.isNotEmpty(availabelAspectDefinitions)){
-			for (ComplexCmsPropertyDefinition aspectDefinition : availabelAspectDefinitions){
-				if (!aspectDefinition.isSystemTypeDefinition() && !aspectDefinition.isObsolete()){
-					String localizedLabelForLocale = aspectDefinition.getDisplayName().getLocalizedLabelForLocale(locale);
+		if (CollectionUtils.isNotEmpty(availablePropertyPrototypes)){
+			for (ComplexCmsPropertyDefinition propertyPrototype : availablePropertyPrototypes){
+				if (!propertyPrototype.isSystemTypeDefinition() && !propertyPrototype.isObsolete() && isUserViewablePropertyPrototype(propertyPrototype.getName())){
+					String localizedLabelForLocale = propertyPrototype.getDisplayName().getLocalizedLabelForLocale(locale);
 					if (StringUtils.isBlank(localizedLabelForLocale)){
-						localizedLabelForLocale = aspectDefinition.getName(); 
+						localizedLabelForLocale = propertyPrototype.getName(); 
 					}
 
-					SelectItem availableAspect = new SelectItem(aspectDefinition.getName(), localizedLabelForLocale);
-					availableAspectsPerName.put(aspectDefinition.getName(),  availableAspect);
+					SelectItem availableAspect = new SelectItem(propertyPrototype.getName(), localizedLabelForLocale);
+					propertyPrototypesMap.put(propertyPrototype.getName(),  availableAspect);
 				}
 			}
 		}
 	}
 
+	private boolean isUserViewablePropertyPrototype(String propertyPrototypeName) {
+		if (
+			propertyPrototypeName.equals("ruleType") ||
+			propertyPrototypeName.equals("arrayOfRuleTypeType") ||
+			propertyPrototypeName.equals("arrayOfRuleObjectType") ||
+			propertyPrototypeName.equals("administrativeMetadataType") ||
+			propertyPrototypeName.equals("accessibilityType") ||
+			propertyPrototypeName.equals("cascadingStyleSheetType") ||
+			propertyPrototypeName.equals("arrayOfCascadingStyleSheetTypeType") ||
+			propertyPrototypeName.equals("arrayOfCascadingStyleSheetObjectType") ||
+			propertyPrototypeName.equals("statisticType") ||
+			propertyPrototypeName.equals("arrayOfGenericContentResourceObjectType") ||
+			propertyPrototypeName.equals("arrayOfScriptTypeType") ||
+			propertyPrototypeName.equals("arrayOfScriptObjectType") ||
+		//	propertyPrototypeName.equals("arrayOfEmbeddedMultimediaResourceObjectType") ||
+		//	propertyPrototypeName.equals("arrayOfFileResourceObjectType") ||
+			propertyPrototypeName.equals("arrayOfGeoTagObjectType") ||
+		//	propertyPrototypeName.equals("arrayOfOrganizationObjectType") ||
+		//	propertyPrototypeName.equals("arrayOfPersonObjectType") ||
+		//	propertyPrototypeName.equals("arrayOfWebResourceLinkObjectType") ||
+			propertyPrototypeName.equals("organizationJobPositionType") ||
+			propertyPrototypeName.equals("arrayOfOrganizationJobPositionTypeType") ||
+			propertyPrototypeName.equals("arrayOfOrganizationObjectType") ||
+			propertyPrototypeName.equals("departmentType") ||
+			propertyPrototypeName.equals("arrayOfDepartmentTypeType") ||
+			propertyPrototypeName.equals("personJobPositionType") ||
+			propertyPrototypeName.equals("arrayOfPersonJobPositionTypeType")
+			) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public void setEditedComplexCmsProperty(
-			ComplexCmsProperty editedComplexCmsProperty) {
+			ComplexCmsProperty<?,?> editedComplexCmsProperty) {
 		this.editedComplexCmsProperty = editedComplexCmsProperty;
 	}
 
@@ -599,15 +618,42 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 
 	}
+	
+	public Integer getIndexOfPropertyWrapper(String propertyPath) {
+		if (StringUtils.isBlank(propertyPath)) {
+			return -1;
+		}
+		
+		if (editedCmsProperties == null){
+			getEditedCmsProperties();
+		}
 
-	public ComplexCmsProperty getEditedComplexCmsProperty() {
+		if (editedCmsProperties == null){
+			return -1;
+		}
+		
+		for (CmsPropertyWrapper<?> cmsPropertyWrapper : editedCmsProperties) {
+			if (cmsPropertyWrapper.getPath().equals(propertyPath)) {
+				return cmsPropertyWrapper.wrapperIndex;
+			}
+		}
+		
+		return -1;
+	}
+
+	public ComplexCmsProperty<?,?> getEditedComplexCmsProperty() {
 		return editedComplexCmsProperty;
 	}
 
 
 
-	public List<SelectItem> getAvailableAspects() {
-		return availableAspects;
+	public List<SelectItem> getPropertyPrototypes() {
+		if (propertyPrototypes == null) {
+			// we need to process the edited  extra properties in order to calculate
+			// which prototypes should be available to the user
+			getEditedCmsProperties();
+		}
+		return propertyPrototypes;
 	}
 
 	public void setContentService(ContentService contentService) {
@@ -659,6 +705,14 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 	public void setWrapperIndexesToUpdate(Set<Integer> wrapperIndexesToUpdate) {
 		this.wrapperIndexesToUpdate = wrapperIndexesToUpdate;
+	}
+
+	public EditorTab getEditorTab() {
+		return editorTab;
+	}
+
+	public void setEditorTab(EditorTab editorTab) {
+		this.editorTab = editorTab;
 	}
 
 

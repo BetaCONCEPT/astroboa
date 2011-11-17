@@ -45,16 +45,16 @@ Authors
 		<ui:composition>
 		
 		<ui:param name="tabLabelKey"
-		  value="content.object.edit.accessibility.editor.tab.label.#{typeOfAccessRight}"/>
+		  value="object.edit.accessibility.editor.tab.label.#{typeOfAccessRight}"/>
 		  
 		<ui:param name="tabHeaderKey"
-		  value="content.object.edit.accessibility.editor.tab.header.#{typeOfAccessRight}"/>
+		  value="object.edit.accessibility.editor.tab.header.#{typeOfAccessRight}"/>
 		  
 		<ui:param name="tabPanelHeaderKey"
-		  value="content.object.edit.accessibility.editor.tab.panel.header.#{typeOfAccessRight}"/>
+		  value="object.edit.accessibility.editor.tab.panel.header.#{typeOfAccessRight}"/>
 		
 		<ui:param name="tabDragHeaderKey"
-		  value="content.object.edit.accessibility.editor.tab.drag.label.#{typeOfAccessRight}"/>
+		  value="object.edit.accessibility.editor.tab.drag.label.#{typeOfAccessRight}"/>
 		  
 		<ui:param name="propertyPath" value="accessibility.#{typeOfAccessRight}"/>
 		
@@ -69,13 +69,13 @@ Authors
 							value="#{messages[tabHeaderKey]}"
 							style="font-size: 11px; font-weight: bold;" />
 						<h:outputText
-							value="#{messages['content.object.edit.accessibility.editor.radioButton.all']}"	
+							value="#{messages['object.edit.accessibility.editor.radioButton.all']}"	
 							rendered="#{accessRightPropertyFirstValue eq 'ALL'}"/>
 						<h:outputText
-							value="#{messages['content.object.edit.accessibility.editor.radioButton.none']}"	
+							value="#{messages['object.edit.accessibility.editor.radioButton.none']}"	
 							rendered="#{accessRightPropertyFirstValue eq 'NONE'}"/>
 						<h:outputText
-							value="#{messages['content.object.edit.accessibility.editor.radioButton.selected']}"	
+							value="#{messages['object.edit.accessibility.editor.radioButton.selected']}"	
 							rendered="#{accessRightPropertyFirstValue ne 'ALL' and accessRightPropertyFirstValue ne 'NONE'}"/>
 				</h:panelGrid>
 		

@@ -53,7 +53,7 @@
 	<xs:complexType name="workflowType" bccmsmodel:labelElementPath="managedThroughWorkflow">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				Content Object Workflow
+				Workflow
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
 				Στοιχεία Ροής Εργασίας

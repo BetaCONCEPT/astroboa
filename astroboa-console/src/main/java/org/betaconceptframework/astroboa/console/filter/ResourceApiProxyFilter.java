@@ -61,7 +61,8 @@ public class ResourceApiProxyFilter extends FilterDispatcher {
 				(
 					servletPath.startsWith("/contentObject") || 
 					servletPath.startsWith("/taxonomy") || 
-					servletPath.startsWith("/topic")
+					servletPath.startsWith("/topic") || 
+					servletPath.startsWith("/model")
 				)
 		) {
 			super.doFilter(servletRequest, servletResponse, filterChain);

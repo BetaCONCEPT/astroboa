@@ -50,7 +50,7 @@
 				bccmsmodel:labelElementPath="title" >
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Embedded Multimedia Resource</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Multimedia</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
 					Use this complex type to store multimedia content to be emmbedded in a web page.
@@ -81,8 +81,7 @@
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
 				<bccmsmodel:displayName>
-					Εμβόλιμο Πολυμεσικό Περιεχόμενο (Embedded Video, slide
-					show, ad banner, podcast)
+					Πολυμέσα
 				</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
@@ -169,7 +168,7 @@
 								</p>
 								<p>
 								The property values are restricted from a controlled vocabulary (a taxonomy) which 
-								is named 'contentDesignation'
+								is named 'Content Designation' (system name = 'contentDesignation')
 								</p>
 								</bccmsmodel:description>
 								</xs:documentation>
@@ -266,7 +265,7 @@
 	<xs:complexType name="arrayOfEmbeddedMultimediaResourceTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Embedded Multimedia Resource List</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Multimedia List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 				This complex type represents a list of multimedia resources to be emmbedded in a web page. 
 				In the case that the functioning of multimedia content requires some reusable javascript library code 
@@ -275,7 +274,7 @@
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Εμβόλιμων Πολυμέσων (Embedded Videos, slide shows,	ad banners, podcasts)
+				Πολυμέσα (Λίστα)
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -294,10 +293,10 @@
 	<xs:element name="embeddedMultimediaResourceObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Embedded Multimedia Resource</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Multimedia</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
-					Use this content object type to store multimedia content to be emmbedded in a web page.
+					Use this object type to store multimedia content to be emmbedded in a web page.
 					</p>
 					<p>
 					'Embedded' means that a special application in the form of a plugin or javascript code needs 
@@ -325,8 +324,7 @@
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
 				<bccmsmodel:displayName>
-					Εμβόλιμο Πολυμεσικό Περιεχόμενο (Embedded Video, slide
-					show, ad banner, podcast)
+					Πολυμέσα
 				</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>
@@ -479,13 +477,13 @@
 	<xs:complexType name="arrayOfEmbeddedMultimediaResourceObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to Embedded Multimedia Resource	Objects</bccmsmodel:displayName>
-								<bccmsmodel:description>This complex type represents a list of REFERENCES to embedded multimedia resource objects (i.e. embedded multimedia resource content objects). 
-			This list can be attached to other content objects</bccmsmodel:description>
+				<bccmsmodel:displayName>Multimedia List (References)</bccmsmodel:displayName>
+				<bccmsmodel:description>
+					This complex type represents a list of REFERENCES to multimedia objects. 
+				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αναφορών σε Αντικείμενa Εμβόλιμου Πολυμεσικού
-				Περιεχομένου
+				Πολυμέσα (Λίστα Αναφορών)
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -497,11 +495,11 @@
 						bccmsmodel:acceptedContentTypes="embeddedMultimediaResourceObject">
 						<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Reference to Embedded Multimedia Resource Object</bccmsmodel:displayName>
-					<bccmsmodel:description>Embedded Multimedia Resource Object Instance referenced by another content object instance</bccmsmodel:description>
+				<bccmsmodel:displayName>Multimedia Object</bccmsmodel:displayName>
+					<bccmsmodel:description>A reference to an existing Multimedia Object</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Αναφορά σε Αντικείμενο Εμβόλιμου Πολυμεσικού Περιεχομένου
+				 Αντικείμενο Πολυμέσων
 			</xs:documentation>
 		</xs:annotation>
 					</xs:element>
@@ -514,15 +512,14 @@
 	<xs:element name="arrayOfEmbeddedMultimediaResourceTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>Embedded Multimedia Resource List</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Multimedia List</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Use this content object type to store a list of multimedia resources to be emmbedded in a web page.
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
 				<bccmsmodel:displayName>
-					Λίστα Εμβόλιμων Πολυμέσων (Embedded Videos, slide shows,
-					ad banners, podcasts)
+					Πολυμέσα (Λίστα)
 				</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε μια λίστα από πολυμεσικά αντικείμενα 

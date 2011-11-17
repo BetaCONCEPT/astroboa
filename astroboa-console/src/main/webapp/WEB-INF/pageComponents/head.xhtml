@@ -43,6 +43,9 @@ Authors
 				<meta http-equiv="description"
 					content="This is the main page of Astroboa Semi-Stuctured Information Management Console" />
 
+				
+				<link rel="Shortcut Icon" type="image/x-icon"
+					href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
 					
 				<link rel="stylesheet" type="text/css"
 					href="#{facesContext.externalContext.requestContextPath}/css/jquery.contextmenu.css" />
@@ -50,7 +53,6 @@ Authors
 				<!-- JQUERY STUFF -->
 				   
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/smoothness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />
-				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/js/uniform/css/uniform.default.css" rel="stylesheet" />
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/jquery.fancybox-1.3.4.css" rel="stylesheet" />
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/jquery.loading.1.6.css" rel="stylesheet" />
 				
@@ -69,10 +71,10 @@ Authors
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.contextmenu.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.jeditable.mini.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.easyListSplitter.js" charset="utf-8"></script>
-  				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/uniform/jquery.uniform.min.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.fancybox-1.3.4.pack.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.tableSelect.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.loading.1.6.4.min.js" charset="utf-8"></script>
+  				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/amplify.min.js" charset="utf-8"></script>
   				
   				<!--[if IE]><script src="#{facesContext.externalContext.requestContextPath}/js/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
   				<!--  <script src="#{facesContext.externalContext.requestContextPath}/js/jquery.easing.1.3.js" type="text/javascript" charset="utf-8"></script>-->
@@ -89,9 +91,6 @@ Authors
 				</script>
 				
 				<script src="#{facesContext.externalContext.requestContextPath}/js/jquery.bt.js" type="text/javascript" charset="utf-8"></script>
-				
-				<link rel="Shortcut Icon" type="image/x-icon"
-					href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
 
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/resource/remote.js"></script>
@@ -101,6 +100,9 @@ Authors
 					
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?schemaServiceAsync"></script>
+					
+				<script type="text/javascript"
+					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?editServiceAsync"></script>
 				
 				<!-- 
 				this is the recommended way of loading the script but a number of modifications have been applied and
@@ -125,13 +127,13 @@ Authors
 				
 				<script type="text/javascript">
 				//<![CDATA[
-					var labelForInternalPropertyName = "#{messages['content.object.edit.internalPropertyName']}:"; 
+					var labelForInternalPropertyName = "#{messages['object.edit.internalPropertyName']}:"; 
 					
-					var topicSelectionHelpMessage = "#{messages['content.object.edit.topic.selection.helpMessage']}" +
-						"<ul><li>#{messages['content.object.edit.topic.selection.suggestion.box.helpMessage']}</li><li>#{messages['content.object.edit.topic.selection.drag.and.drop.helpMessage']}</li></ul>";
+					var topicSelectionHelpMessage = "#{messages['object.edit.topic.selection.helpMessage']}" +
+						"<ul><li>#{messages['object.edit.topic.selection.suggestion.box.helpMessage']}</li><li>#{messages['object.edit.topic.selection.drag.and.drop.helpMessage']}</li></ul>";
 					
-					var objectSelectionHelpMessage = "#{messages['content.object.edit.content.object.selection.helpMessage']}" +
-						"<ul><li>#{messages['content.object.edit.content.object.selection.suggestion.box.helpMessage']}</li><li>#{messages['content.object.edit.content.object.selection.drag.and.drop.helpMessage']}</li></ul>";
+					var objectSelectionHelpMessage = "#{messages['object.edit.content.object.selection.helpMessage']}" +
+						"<ul><li>#{messages['object.edit.content.object.selection.suggestion.box.helpMessage']}</li><li>#{messages['object.edit.content.object.selection.drag.and.drop.helpMessage']}</li></ul>";
 				//]]>
 				</script>
 				

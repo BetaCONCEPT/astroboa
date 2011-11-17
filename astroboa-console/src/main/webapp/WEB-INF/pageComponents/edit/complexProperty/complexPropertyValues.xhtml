@@ -41,10 +41,8 @@ Authors
 						cmsPropertyWrapper.valueType eq 'Complex' and
 						cmsPropertyWrapper.multiple and 
 						! empty cmsPropertyWrapper.childComplexCmsPropertyWrappers}">
-						
-				<div class="formElementValuesLabelSpacer">fake label</div>
 					
-				<ol class="formElementValues">
+				<ol class="complexPropertyValues">
 					<a4j:repeat
 						var="childComplexCmsPropertyWrapper"
 						value="#{cmsPropertyWrapper.childComplexCmsPropertyWrappers}"
@@ -56,9 +54,10 @@ Authors
 									rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}"
 									ondrop="destroyTextEditor();"
 									acceptedTypes="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}"
-									reRender="complexCmsPropertyChildPropertiesTable"
+									reRender="#{cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
 									dropListener="#{cmsPropertyWrapper.addDraggedAndDroppedReference_Listener}"
-									dropValue="#{childComplexCmsPropertyWrapper}">
+									dropValue="#{childComplexCmsPropertyWrapper}"
+									ajaxSigle="true">
 									
 								</rich:dropSupport>
 								
@@ -74,8 +73,8 @@ Authors
 				
 								<a4j:commandLink
 									onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-									action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childComplexCmsPropertyWrapper.path)}"
-									reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs">
+									action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childComplexCmsPropertyWrapper.path, cmsPropertyWrapper.complexCmsPropertyEdit)}"
+									reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
 					
 									<h:outputText
 										value="#{childComplexCmsPropertyWrapper.localizedLabelForCurrentLocale}"
@@ -86,52 +85,16 @@ Authors
 			
 							</a4j:outputPanel>
 							
-							<!-- Grab action -->
-							<ui:remove>
-							 <a4j:outputPanel 
-						 		styleClass="dragElementValue"
-							 	rendered="#{cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() gt 1}">
-								<rich:dragSupport 
-									dragIndicator="complexPropertyIndicator"
-									dragType="complexProperty#{childComplexCmsPropertyWrapper.cmsProperty.name}" 
-									dragValue="#{childComplexCmsPropertyWrapper}">
-	
-									<rich:dndParam name="label" type="drag"
-										value="#{childComplexCmsPropertyWrapper.localizedLabelForCurrentLocale}" />
-								</rich:dragSupport>
-								Drag to another position
-							</a4j:outputPanel>
-							</ui:remove>
-							
-							<!-- MoveUp action
-							<a4j:commandLink
-								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index gt 0}"
-								action="#{cmsPropertyWrapper.moveUp_UIAction(childComplexCmsPropertyWrapper)}"
-								reRender="complexCmsPropertyChildPropertiesTable">
-								<h:graphicImage value="/images/cms-icons/16/up_arrow.png" />
-							</a4j:commandLink>
-								
-							MoveDown action 
-							<a4j:commandLink
-								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-								rendered="#{cmsPropertyWrapper.writeGranted and childComplexCmsPropertyWrapper.cmsProperty.index lt cmsPropertyWrapper.childComplexCmsPropertyWrappers.size()-1}"
-								action="#{cmsPropertyWrapper.moveDown_UIAction(childComplexCmsPropertyWrapper)}"
-								reRender="complexCmsPropertyChildPropertiesTable">
-								<h:graphicImage value="/images/cms-icons/16/down_arrow.png" />
-							</a4j:commandLink>
-							-->
-							
-						
 						
 							<!-- Delete action -->
 							<a4j:commandLink
-								value="Delete Complex Property"
 								styleClass="delete"
+								ajaxSingle="true"
 								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 								action="#{cmsPropertyWrapper.deleteComplexCmsProperty_UIAction(childComplexCmsPropertyWrapper.pathRelativeToCmsPropertyParent)}"
-								reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs"
+								reRender="#{cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
 								rendered="#{cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted}">
+								<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/cross-octagon-frame.png"/>
 							</a4j:commandLink>
 	
 					 	

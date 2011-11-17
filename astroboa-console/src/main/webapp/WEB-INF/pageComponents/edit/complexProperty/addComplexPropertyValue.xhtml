@@ -36,43 +36,18 @@ Authors
 
 	<body>
 		<ui:composition>
-			
-			<ui:fragment rendered="#{! empty complexCmsPropertyEdit.availableAspects}">
+			<!-- "Add one more value" Action for a Complex Property with multiple values -->
+			<a4j:commandLink
+				onclick="destroyTextEditor();"
+				rendered="#{
+					cmsPropertyWrapper.writeGranted and cmsPropertyWrapper.multiple and  
+					cmsPropertyWrapper.valueType eq 'Complex'}"
+				action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
+				reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
 				
-				<div>
-					<div id="dynPropTrigger"><a href="#">#{messages['content.object.edit.aspect.panel.label']}</a></div>
-					<div id="dynPropToggleContainer">
-						<ul id="dynPropList">
-							<a4j:repeat
-								value="#{complexCmsPropertyEdit.availableAspects}"
-								var="dynProp">
-								<li class="dynPropItem">
-									<a4j:commandLink
-										onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-										action="#{contentObjectEdit.addAspectToComplexProperty_UIAction(dynProp.value)}"
-										reRender="complexCmsPropertyChildPropertiesTable,complexCmsPropertyBreadCrumbs"
-										title="#{messages['content.object.edit.action.addDynamicProperty']}">
-				
-										<h:outputText value="#{dynProp.label}" />
-									</a4j:commandLink>
-								</li>
-							</a4j:repeat>
-						</ul>
-						
-					</div>
-				</div>
-				
-				<script type="text/javascript">
-				//<![CDATA[
-					bcmslib.jQuery("#dynPropToggleContainer").hide();
-					
-					bcmslib.jQuery("#dynPropTrigger").click(function(){
-						bcmslib.jQuery(this).toggleClass("active").next().toggle("slow");
-					});	
-				//]]>
-				</script>
-			</ui:fragment>
-			
+				title="Add a new complex property">
+				<img src="images/cms-icons/16/fugue/table--plus.png" alt="Add a new complex property"/>
+			</a4j:commandLink>
 		</ui:composition>
 	</body>
 </html>

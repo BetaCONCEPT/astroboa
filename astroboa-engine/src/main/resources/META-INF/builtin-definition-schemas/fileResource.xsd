@@ -178,7 +178,7 @@
 				bccmsmodel:labelElementPath="title">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>File Resource</bccmsmodel:displayName>
+				<bccmsmodel:displayName>File</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Use this complex type to store binary files in Astroboa.</p>
 					<p>
@@ -375,7 +375,7 @@
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
 								<bccmsmodel:displayName>Width (mainly use for video)</bccmsmodel:displayName>
-								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file. 
 								It is relevant for video, image, photo, and drawing types and is may used to properly set the width of the multimedia player</bccmsmodel:description>
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
@@ -391,7 +391,7 @@
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
 								<bccmsmodel:displayName>Height (mainly use for video and images)</bccmsmodel:displayName>
-								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file. 
 								It is relevant for video, image, photo, and drawing types and is may used to properly set the height of the multimedia player</bccmsmodel:description>
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
@@ -409,11 +409,11 @@
 	<xs:complexType name="arrayOfFileResourceTypeType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of File Resources</bccmsmodel:displayName>
-								<bccmsmodel:description>This complex type represents a list of file resources attached to content objects</bccmsmodel:description>
+				<bccmsmodel:displayName>File List</bccmsmodel:displayName>
+								<bccmsmodel:description>This complex type represents a list of files attached to objects</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αρχείων
+				Αρχεία
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -434,9 +434,9 @@
 	<xs:element name="fileResourceObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>File Resource</bccmsmodel:displayName>
+				<bccmsmodel:displayName>File</bccmsmodel:displayName>
 				<bccmsmodel:description>
-					<p>Use this content object type to store binary files in Astroboa.</p>
+					<p>Use this object type to store binary files in Astroboa.</p>
 					<p>
 						This object acts as a wrapper around a binary file and allows to add useful metadata
 						such as the type of content inside the file (e.g. it contains text or a photograph or a drawing, etc.) or 
@@ -566,7 +566,7 @@
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
 									<bccmsmodel:displayName>Width (mainly use for video)</bccmsmodel:displayName>
-								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file. 
 								It is relevant for video, image, photo, and drawing types and is may used to properly set the width of the multimedia player</bccmsmodel:description>
 								</xs:documentation>
 								<xs:documentation xml:lang="el">
@@ -582,7 +582,7 @@
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
 									<bccmsmodel:displayName>Height (mainly use for video and images)</bccmsmodel:displayName>
-								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file resource. 
+								<bccmsmodel:description>This parameter is relevant only for some of the content/media types contained in the file. 
 								It is relevant for video, image, photo, and drawing types and is may used to properly set the height of the multimedia player</bccmsmodel:description>
 								</xs:documentation>
 								<xs:documentation xml:lang="el">
@@ -615,11 +615,12 @@
 	<xs:complexType name="arrayOfFileResourceObjectType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of References to File Resource Objects</bccmsmodel:displayName>
-								<bccmsmodel:description>This complex type represents a list of REFERENCES to file resource objects (i.e. file resource content objects). This list can be attached to other content objects</bccmsmodel:description> 
+				<bccmsmodel:displayName>File List (References)</bccmsmodel:displayName>
+				<bccmsmodel:description>This complex type represents a list of REFERENCES to file objects</bccmsmodel:description> 
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Λίστα Αναφορών σε Αρχεία
+				<bccmsmodel:displayName>Αρχεία (Λίστα αναφορών)</bccmsmodel:displayName>
+				<bccmsmodel:description>Μια λίστα αναφορών σε αντικείνα τύπου Αρχείο</bccmsmodel:description>
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
@@ -632,12 +633,12 @@
 						bccmsmodel:acceptedContentTypes="fileResourceObject">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
-								<bccmsmodel:displayName>References to File Resource Object</bccmsmodel:displayName>
-								<bccmsmodel:description>File Resource Object Instance referenced by another content object instance</bccmsmodel:description> 
+								<bccmsmodel:displayName>File Object</bccmsmodel:displayName>
+								<bccmsmodel:description>A reference to an existing File Object</bccmsmodel:description> 
 							</xs:documentation>
 							<xs:documentation xml:lang="el">
-								<bccmsmodel:displayName>Αναφορά σε Αρχείο</bccmsmodel:displayName>
-								<bccmsmodel:description>Επιλέξτε ένα από τα διαθέσιμα αρχεία (αντικείμενα) που έχουν καταχωρηθεί στο σύστημα για να δημιουργηθεί μια αναφορά σε αυτό</bccmsmodel:description>
+								<bccmsmodel:displayName>Αρχείο (αναφορά)</bccmsmodel:displayName>
+								<bccmsmodel:description>Επιλέξτε ένα από τα διαθέσιμα αρχεία (αντικείμενα) που έχουν καταχωρηθεί στο σύστημα για να δημιουργήσετε μια αναφορά σε αυτό</bccmsmodel:description>
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
@@ -649,13 +650,13 @@
 	<xs:element name="arrayOfFileResourceTypeObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				<bccmsmodel:displayName>List of Files</bccmsmodel:displayName>
+				<bccmsmodel:displayName>File List</bccmsmodel:displayName>
 				<bccmsmodel:description>
-					This element models a content object that holds a list of binary files (i.e a list of file resources)
+					This element models an object that holds a list of binary files
 				</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				<bccmsmodel:displayName>Λίστα Αρχείων</bccmsmodel:displayName>
+				<bccmsmodel:displayName>Αρχεία</bccmsmodel:displayName>
 				<bccmsmodel:description>
 					<p>Χρησιμοποιείστε αυτό το αντικείμενο για να αποθηκεύσετε στο Astroboa μια λίστα απο συναφή ψηφιακά αρχεία, 
 					π.χ. τα αρχεία ενός slideshow.</p>

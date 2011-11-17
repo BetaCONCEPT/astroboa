@@ -34,7 +34,7 @@ Authors
 
 	<body>
 		<ui:composition>
-			<div id="confirmationDialog" title="#{messages['confirmation.panel.header']}">
+			<div id="confirmationDialog" title="#{messages['dialog.confirmation.header']}">
 				<a4j:form id="confirmationDialogForm">
 					<a4j:outputPanel id="confirmationDialogPanel">
 						<ui:fragment rendered="#{! empty confirmationBean.messageKey }">
@@ -50,13 +50,13 @@ Authors
 							
 							<p style="text-align:center; padding: 10px;">
 								<a4j:commandButton style="font-size: 0.9em; color: #333;" 
-									value="#{messages['confirmation.panel.ok']}"
+									value="#{messages['dialog.confirmation.ok']}"
 									oncomplete="#{confirmationBean.oncompleteJsFunction}"
 									action="#{confirmationBean.proceedWithAction_UIAction}"
 									reRender="#{confirmationBean.commaDelimitedReRenderComponentIds}" />
 		
 								<a4j:commandButton style="font-size: 0.9em; color: #333;" 
-									value="#{messages['confirmation.panel.cancel']}"
+									value="#{messages['dialog.confirmation.cancel']}"
 									action="#{confirmationBean.clear_UIAction}"
 									oncomplete="closeConfirmationDialog();" />
 							</p>
@@ -67,18 +67,18 @@ Authors
 								<h:panelGrid columns="1" style="text-align: center;">
 								
 									<a4j:commandButton style="font-size: 0.9em; color: #333;"
-										value="#{messages['confirmation.panel.keepDraftObjects']}"
+										value="#{messages['dialog.confirmation.keepDraftObjects']}"
 										action="#{confirmationBean.clear_UIAction}"
 										oncomplete="closeConfirmationDialog();" />
 									
 									<a4j:commandButton style="font-size: 0.9em; color: #333;" 
-										value="#{messages['confirmation.panel.removeDraftObjects']}"
+										value="#{messages['dialog.confirmation.removeDraftObjects']}"
 										oncomplete="closeConfirmationDialog();"
 										action="#{confirmationBean.proceedWithAction_UIAction}"
 										reRender="#{confirmationBean.commaDelimitedReRenderComponentIds}" />
 										
 									<a4j:commandButton style="font-size: 0.9em; color: #333;"
-										value="#{messages['confirmation.panel.cancelApplicationExit']}"
+										value="#{messages['dialog.confirmation.cancelApplicationExit']}"
 										onclick="closeConfirmationDialog();" />
 								</h:panelGrid>
 							</center>

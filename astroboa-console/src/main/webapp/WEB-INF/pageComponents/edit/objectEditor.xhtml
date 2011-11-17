@@ -35,6 +35,9 @@ Authors
 	<body>
 
 		<ui:composition>
+			<rich:dragIndicator id="propertyReferenceIndicator" />
+			<rich:dragIndicator id="complexPropertyIndicator" />
+			
 			<a4j:outputPanel id="objectEditorAjaxPanel">
 				<ui:fragment rendered="#{!empty contentObjectEdit.selectedContentObjectForEdit}">
 					<script language="javascript" type="text/javascript">
@@ -61,10 +64,10 @@ Authors
 					
 					<div id="objectTabs" style="display:none;">
 						<ul id="objectTabSelectors">
-							<li id="adminMetadataTabSelector"><a href="#adminMetadataTab"><span><strong>Admin</strong></span></a></li>
-							<li id="staticPropertiesTabSelector"><a href="#staticPropertiesTab"><span><strong>Properties</strong></span></a></li>
-							<li id="extraPropertiesTabSelector"><a href="#extraPropertiesTab"><span><strong>Extra Properties</strong></span></a></li>
-							<li id="shareTabSelector"><a href="#shareTab"><span><strong>Share</strong></span></a></li>
+							<li id="adminMetadataTabSelector"><a href="#adminMetadataTab"><span><strong>#{messages['object.edit.tab.profile']}</strong></span></a></li>
+							<li id="staticPropertiesTabSelector"><a href="#staticPropertiesTab"><span><strong>#{messages['object.edit.tab.properties']}</strong></span></a></li>
+							<li id="extraPropertiesTabSelector"><a href="#extraPropertiesTab"><span><strong>#{messages['object.edit.tab.extraProperties']}</strong></span></a></li>
+							<li id="shareTabSelector"><a href="#shareTab"><span><strong>#{messages['object.edit.tab.share']}</strong></span></a></li>
 						</ul>
 						<div id="adminMetadataTab">
 							<a4j:outputPanel id="profilePropertiesPanel">
@@ -85,13 +88,13 @@ Authors
 										</li>
 										<li class="formElement">
 											<label>		
-												#{messages['content.object.edit.system.name']}
+												#{messages['object.edit.system.name']}
 											</label>
 											<h:inputText value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemName}" />
 										</li>
 										<li class="formElement">
 											<label>		
-												#{messages['content.object.edit.system.entity']}
+												#{messages['object.edit.system.entity']}
 											</label>
 											<h:selectBooleanCheckbox
 												value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemBuiltinEntity}"/>
@@ -108,30 +111,46 @@ Authors
 						</div>
 						<div id="staticPropertiesTab">
 							<ui:include
-								src="/WEB-INF/pageComponents/edit/contentObjectEditCmsPropertyBreadCrumbs.xhtml" />
+								src="/WEB-INF/pageComponents/edit/fixedPropertiesBreadCrumbs.xhtml" />
 							<div class="formEditorScrollableArea">
 								<a4j:outputPanel id="complexCmsPropertyChildPropertiesTable">
 									<ui:include
-										src="#{contentObjectEdit.complexCmsPropertyEditorPagePath}" >
+										src="/WEB-INF/pageComponents/edit/fixedPropertiesEditor.xhtml" >
 										<ui:param name="complexCmsPropertyEdit" 
 											value="#{contentObjectEdit.complexCmsPropertyEdit}"/>
 									</ui:include>
-									
-									<ui:remove>
-									<script type="text/javascript">
-										bcmslib.jQuery(function(){
-											bcmslib.jQuery("#staticPropertiesTab input, #staticPropertiesTab textarea, #staticPropertiesTab select").uniform();
-										});
-									</script>
-									</ui:remove>
 								</a4j:outputPanel>
 							</div>
 						</div>
 						<div id="extraPropertiesTab">
-							
+							<div style="float: left;">
+								<ui:fragment rendered="#{! empty contentObjectEdit.extraPropertyEdit.propertyPrototypes}">
+									<a4j:commandButton
+										value="#{messages['object.edit.aspect.panel.label']}"
+										oncomplete="openPropertyPrototypeSelectionDialog();"
+										reRender="propertyPrototypeSelectionDialogPanel"/>
+								</ui:fragment>
+								<ui:fragment rendered="#{empty contentObjectEdit.extraPropertyEdit.propertyPrototypes}">
+									Property Prototypes are not available
+								</ui:fragment>
+							</div>
+							<div style="float: left; margin-left: 15px; padding-top: 8px;">
+								<ui:include
+									src="/WEB-INF/pageComponents/edit/extraPropertiesBreadCrumbs.xhtml" />
+							</div>
+							<div class="extraPropertiesTabScrollableArea">
+								
+								<a4j:outputPanel id="extraPropertiesPanel">
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/extraPropertiesEditor.xhtml" >
+										<ui:param name="complexCmsPropertyEdit" 
+											value="#{contentObjectEdit.extraPropertyEdit}"/>
+									</ui:include>
+								</a4j:outputPanel>
+							</div>
 						</div>
 						<div id="shareTab">
-							<div class="otherFormEditorScrollableArea">
+							<div class="shareTabScrollableArea">
 								<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-editor.xhtml"/>
 							</div>
 						</div>
