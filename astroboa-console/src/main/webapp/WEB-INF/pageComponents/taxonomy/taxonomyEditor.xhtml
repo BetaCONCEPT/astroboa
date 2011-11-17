@@ -92,18 +92,15 @@ Authors
 									var="localizedLabel"
 									rowKeyVar="key">
 									<li class="formElement">
-										<label style="width: 30%;">
-											<h:selectOneMenu
+										<label>
+											<h:selectOneMenu style="width: 200px;"
 												value="#{localizedLabel.locale}">
 												<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
 											</h:selectOneMenu>
 										</label>
 										<h:inputText id="taxonomyLabelInput"
 											value="#{localizedLabel.label}" />
-										<ui:remove>	
-											<h:message for="taxonomyLabelInput" errorClass="errorStyle"
-												warnClass="warnStyle" infoClass="infoStyle" />
-										</ui:remove>
+										
 										<a4j:commandLink
 											rendered="#{key ne 0}"
 											action="#{taxonomyEditor.removeLocalizedLabel_UIAction(localizedLabel)}"
@@ -142,13 +139,6 @@ Authors
 							</center>
 						</div>
 						
-						<script type="text/javascript" charset="utf-8">
-						//<![CDATA[	
-							bcmslib.jQuery(function(){
-								bcmslib.jQuery("#taxonomyNameForm input, #taxonomyLabelsForm input, #taxonomyLabelsForm select, #taxonomySaveButton input[type=button]").uniform();
-							});
-						//]]>
-						</script>
 					</div>
 					
 				</ui:fragment>
