@@ -577,6 +577,9 @@ public class TopicResource extends AstroboaResource{
 			return ContentApiUtils.createResponse(topicAsXMLOrJSONBuilder, output, callback, null);
 			
 		}
+		catch(WebApplicationException wae){
+			throw wae;
+		}
 		catch(Exception e){
 			logger.error("Topic IdOrName: " + topicIdOrName, e);
 			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
