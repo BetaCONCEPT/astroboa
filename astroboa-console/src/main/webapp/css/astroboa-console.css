@@ -171,7 +171,7 @@ div#footerArea {
 }
 
 
-div#formHeader, div#formActions, 
+div#formActions, 
 div#spaces, div#objectListScrollableArea,
 div#cmsDefinitionTreeForSearch, div#systemTopicsTrigger, div#systemTopicsToggleContainer,
 div#objectsTrigger, div#objectsToggleContainer, div#usersTrigger, div#usersToggleContainer, 
@@ -236,11 +236,6 @@ div#objectTypeSelectorScrollableArea, div#scriptsTrigger, div#scriptsToggleConta
 .error {
 	background-color: #D61D2A;
 	color: #FFF;	
-}
-
-div#formHeader {
-	margin: 0;
-	padding: 5px 20px 5px 20px;
 }
 
 div#formActions {
@@ -471,8 +466,9 @@ div#dynPropList {
 }
 
 .formEditorScrollableArea {
+	background: #cccccc;
 	margin: 0 20px 0 20px;
-	padding: 10px;
+	padding: 10px 30px 10px 30px;
 	position: absolute;
 	left: 0px;
 	right: 0px; 
@@ -483,7 +479,7 @@ div#dynPropList {
 
 .shareTabScrollableArea {
 	margin: 0 20px 0 20px;
-	padding: 10px;
+	padding: 10px 30px 10px 30px;
 	position: absolute;
 	left: 0px;
 	right: 0px; 
@@ -494,6 +490,7 @@ div#dynPropList {
 
 .extraPropertiesTabScrollableArea {
 	border: 1px solid #EBE8E4;
+	background: #cccccc;
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
 	margin: 0 20px 0 20px;
@@ -1139,37 +1136,37 @@ ul.horizontalList li {
 }
 
 /* form formatting */
-fieldset { 
-	position: relative;          
-	float: left;      
-	clear: both;      
-	width: 100%;      
-	margin: 0 0 -1em 0;      
-	padding: 0 0 1em 0;      
-	border-style: none;      
-	border-top: 1px solid #BBB8B4;      
-	background-color: #FFF; 
-	/*color: #777777;*/
-	color: #444444;   
-}
-legend {  
-	padding: 0;  
-	font-weight: bold;  
-}
-legend span {      
-	position: absolute;      
-	left: 0.74em;      
-	top: 0;      
-	margin-top: 0.5em;      
-	font-size: 1em;    
-}
 
-
+/* Most Outer List of properties*/
 ol.formElementList {  
-	padding: 1em 1em 0 0;  
-	list-style: none;  
+	padding: 1em 1em 0 0;
+	list-style: none;
 }
 
+/* Most outer list of properties may contain fieldsets for each complex property */
+fieldset { 
+	width: 100%;
+	border: none;
+	margin: 25px 0 25px 0;
+	float: left;      
+	clear: both;
+	
+	/*
+	position: relative;      
+	
+	*/
+}
+
+legend {  
+	color: #383838;
+	font-size: 16px;
+	font-weight: bold;
+	padding-bottom: 8px;
+	text-shadow: 0 1px 1px #c0c0c0;
+  
+}
+
+/* Inner List Of properties, i.e properties inside a complex property without using a fieldset */
 ol.childProperties {
 	position: relative;
 	float: left;
@@ -1185,19 +1182,35 @@ ol.childProperties {
   	-webkit-box-shadow:#999 2px 2px 4px; */
 }
 
-fieldset ol.formElementList {  
-	padding: 3.5em 1em 0 0;   
-}
+
 li.formElement {  
 	float: left;    
 	clear: left;    
 	width: 100%;    
 	padding-bottom: 3px;
-	/*color: #777777;*/  
 	color: #444444;
 }
 
-ol.formElementList label,  ol.childProperties label{
+li.formElementFieldsetView {
+	float: left;    
+	clear: left;
+	width: 99%;
+	background: #e9e9e9;
+	background: rgba(255,255,255,.3);
+	border-color: #f9f9f9;
+	border-color: rgba(255,255,255,.6);
+	border-style: solid;
+	border-width: 2px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	line-height: 30px;
+	list-style: none;
+	padding: 5px 10px;
+	margin: 0 0 2px 0;
+}
+
+li.formElement label {
 	float: left;    
 	width: 20%;    
 	margin-right: 1em;
@@ -1206,16 +1219,16 @@ ol.formElementList label,  ol.childProperties label{
 /*	color: #777777; */
 	color: #444444;
 }
-li.singleValueComplexProperty > label{
-	font-weight: bold;	
+
+li.formElementFieldsetView label {
+	float: left;
+	margin-right: 1em;
+	font-size: 13px;
+	width: 20%;
 }
 
-#formHeader ol.formElementList {
-	padding: 0 10px 5px 0;
-	font-size: 0.9em;
-}
-#formHeader li.formElement {
-	padding-bottom: 0px;	
+li.singleValueComplexProperty > label{
+	font-weight: bold;	
 }
 
 div.formElementValuesLabelSpacer, div.childPropertiesLabelSpacer {
@@ -1224,7 +1237,8 @@ div.formElementValuesLabelSpacer, div.childPropertiesLabelSpacer {
 	width: 20%;    
 	margin-right: 1em;    
 	text-align: left;
-	color: #FFF;
+	color: #e9e9e9;
+	color: rgba(255,255,255,0);
 }
 
 ol.formElementValues {
@@ -1291,7 +1305,7 @@ fieldset.submit {
 }
 
 
-.formEditorScrollableArea input, .shareTabScrollableArea input, .extraPropertiesTabScrollableArea input ,#formHeader input, .formEditorScrollableArea select, .shareTabScrollableArea select, .extraPropertiesTabScrollableArea select {
+li.formElement input, .shareTabScrollableArea input, li.formElement select, .shareTabScrollableArea select {
 	width: 70%;
 }
 
@@ -1308,12 +1322,12 @@ li.inColumnFormElementValue input, li.inColumnFormElementValue select {
 	width: 50%;
 }
 
-.formEditorScrollableArea textarea.plainText, .shareTabScrollableArea textarea.plainText, .extraPropertiesTabScrollableArea textarea.plaintext {
+li.formElement textarea.plainText, .shareTabScrollableArea textarea.plainText {
 	width: 70%;
 	white-space: nowrap;
 }
 
-textarea, input {
+li.formElement textarea, li.formElement input,  .shareTabScrollableArea textarea, .shareTabScrollableArea input {
 /*	background: #EEEEEE;
 	border: none;*/
 	border: 1px solid #CCCCCC;
@@ -1327,11 +1341,11 @@ textarea, input {
 	color:#444444;
 }
 
-textarea:hover, input:hover {
+li.formElement textarea:hover, li.formElement input:hover, .shareTabScrollableArea textarea:hover, .shareTabScrollableArea input:hover {
 	background: #EEEEEE;
 }
 
-textarea:focus, input:focus {
+li.formElement textarea:focus, li.formElement input:focus, .shareTabScrollableArea textarea:focus, .shareTabScrollableArea input:focus {
 	background: #EEEEEE;
 }
 
@@ -1340,6 +1354,31 @@ select {
 	font-size: 11px;
 	color: #444444	;	
 }
+
+
+li.formElementFieldsetView input:not([type=radio]),
+li.formElementFieldsetView textarea,
+li.formElementFieldsetView select {
+	background: #ffffff;
+	border: none;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	border-radius: 3px;
+	font: italic 13px Georgia, "Times New Roman", Times, serif;
+	outline: none;
+	padding: 5px;
+	width: 70%;
+}
+li.formElementFieldsetView input:not([type=submit]):focus,
+li.formElementFieldsetView textarea:focus {
+	background: #eaeaea;
+}
+li.formElementFieldsetView input[type=radio] {
+	float: left;
+	margin-right: 5px;
+}
+
 
 button, input[type=button]{
       padding:4px;
@@ -1363,6 +1402,7 @@ button:HOVER, input[type=button]:hover{
     :focus {
       outline: 0;
     }
+
 
 table.objectTypeSelectorTable td {
 	padding: 0 20px 10px 0;

@@ -58,10 +58,6 @@ Authors
 						reRender="objectEditorAjaxPanel,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" >
 					</a4j:jsFunction>
 					
-					<ui:remove>
-					<ui:include src="/WEB-INF/pageComponents/edit/complexCmsPropertyFormHeader.xhtml"/>
-					</ui:remove>
-					
 					<div id="objectTabs" style="display:none;">
 						<ul id="objectTabSelectors">
 							<li id="adminMetadataTabSelector"><a href="#adminMetadataTab"><span><strong>#{messages['object.edit.tab.profile']}</strong></span></a></li>
@@ -74,25 +70,25 @@ Authors
 								<div class="formEditorScrollableArea">
 									<rich:dragIndicator id="profilePropertyReferenceIndicator" />
 									<ol class="formElementList">
-										<li class="formElement">
+										<li class="formElementFieldsetView">
 											<label>		
 												#{messages['content.object.owner']}
 											</label>
 											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.owner.label}
 										</li>
-										<li class="formElement">
+										<li class="formElementFieldsetView">
 											<label>		
 												#{messages['content.object.identifier']}
 											</label>
 											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.id}
 										</li>
-										<li class="formElement">
+										<li class="formElementFieldsetView">
 											<label>		
 												#{messages['object.edit.system.name']}
 											</label>
 											<h:inputText value="#{contentObjectEdit.selectedContentObjectForEdit.contentObject.systemName}" />
 										</li>
-										<li class="formElement">
+										<li class="formElementFieldsetView">
 											<label>		
 												#{messages['object.edit.system.entity']}
 											</label>

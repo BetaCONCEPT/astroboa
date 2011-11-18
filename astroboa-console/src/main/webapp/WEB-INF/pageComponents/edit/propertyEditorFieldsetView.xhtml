@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:seam="http://jboss.com/products/seam/taglib">
+
+	<body>
+		<ui:composition>
+						
+			<!--  If user has no access we do not show the field --> 
+			<ui:fragment rendered="#{cmsPropertyWrapper.readGranted or cmsPropertyWrapper.writeGranted}">
+			
+				<ui:fragment
+					rendered="#{!empty complexCmsPropertyEdit.childPropertiesOfSingleValueComplexProperties[cmsPropertyWrapper.definitionName]}">
+					
+					<fieldset>
+						<legend id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}">
+							<h:outputText
+								value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+							
+							<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+								#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
+							</span>
+							
+							<ui:include src="/WEB-INF/pageComponents/edit/extraProperties/removeExtraProperty.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
+								
+							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+						</legend>
+					
+						<ol class="childPropertiesFieldsetView">
+							<a4j:repeat 
+								value="#{complexCmsPropertyEdit.childPropertiesOfSingleValueComplexProperties[cmsPropertyWrapper.definitionName]}"
+								var="childPropertyWrapper"
+								rowKeyVar="indexOfChildPropertyWrapper">
+								<li class="formElementFieldsetView">
+									<label id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}">
+										<a4j:commandLink
+											onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+											rendered="#{childPropertyWrapper.valueType eq 'Complex' 
+												and ! childPropertyWrapper.multiple}"
+											action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childPropertyWrapper.path, childPropertyWrapper.complexCmsPropertyEdit)}"
+											reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+									
+											<h:outputText
+												value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+												#{childPropertyWrapper.localizedLabelForCurrentLocale}
+											</span>
+										</a4j:commandLink>
+			
+										<ui:fragment rendered="#{childPropertyWrapper.valueType ne 'Complex' 
+															or childPropertyWrapper.multiple}">
+										<!-- Label all other cms properties -->
+											<h:outputText 
+												value="#{(childPropertyWrapper.mandatory)?'*' : ''}" />
+											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+												#{childPropertyWrapper.localizedLabelForCurrentLocale}
+											</span>
+										</ui:fragment>
+										
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/topicReferenceProperty/openTopicTree.xhtml">
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+										</ui:include>
+										
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/binaryProperty/openUploadDialog.xhtml">
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+										</ui:include>
+										
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/complexProperty/addComplexPropertyValue.xhtml">
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+										</ui:include>
+										
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/objectReferenceProperty/openObjectSelectionDialog.xhtml">
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+										</ui:include>
+										
+										<div class="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+									</label>
+									
+									<!-- binary property with one or multiple values-->
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/binaryProperty/binaryValues.xhtml">
+										<!--  Need to pass valueWrapper to xhtml to render its value -->
+										<ui:param name="cmsPropertyWrapper"
+											value="#{childPropertyWrapper}" />
+									</ui:include>
+					
+
+									<!-- Property with a single and simple value -->
+									<a4j:outputPanel
+										rendered="#{childPropertyWrapper.writeGranted and
+										!childPropertyWrapper.multiple and 
+										childPropertyWrapper.valueType ne 'Binary' and 
+										childPropertyWrapper.valueType ne 'Complex' and 
+										childPropertyWrapper.valueType ne 'TopicReference' and 
+										childPropertyWrapper.valueType ne 'ObjectReference'}"
+										keepTransient="true">
+									
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/simpleTypeValue.xhtml">
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+											<ui:param name="simpleCmsPropertyValueWrapper"
+												value="#{childPropertyWrapper.singleSimpleCmsPropertyValueWrapper}" />
+										</ui:include>
+									</a4j:outputPanel>
+						
+									<!-- Values of a Property with Multiple Simple Values-->
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/simpleTypeValues.xhtml">
+										<!--  Need to pass valueWrapper to xhtml to render its value -->
+										<ui:param name="cmsPropertyWrapper"
+											value="#{childPropertyWrapper}" />
+									</ui:include>
+							
+									<!-- Values of a TOPIC property with single or multiple values-->
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicValues.xhtml">
+										<!--  Need to pass valueWrapper to xhtml to render its value -->
+										<ui:param name="topicPropertyWrapper"
+											value="#{childPropertyWrapper}" />
+									</ui:include>
+				
+									
+									<!-- Values of an Object Reference Property with single or multiple values -->
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceValues.xhtml">
+										<!--  Need to pass valueWrapper to xhtml to render its value -->
+										<ui:param name="cmsPropertyWrapper"
+											value="#{childPropertyWrapper}" />
+									</ui:include>
+									
+									
+									<!-- Values Of a Complex Property with multiple values -->
+									<ui:include
+										src="/WEB-INF/pageComponents/edit/complexProperty/complexPropertyValues.xhtml">
+											<!--  Need to pass valueWrapper to xhtml to render its value -->
+											<ui:param name="cmsPropertyWrapper"
+												value="#{childPropertyWrapper}" />
+									</ui:include>
+
+									<ui:remove>
+									<!-- Delete Action for single-value non mandatory complex cms properties NOT ASPECTS 
+									    exclude profile, accessibility-->
+									<a4j:commandLink
+										onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+										rendered="#{childPropertyWrapper.writeGranted and
+										    ! empty childPropertyWrapper.cmsProperty and  
+											! childPropertyWrapper.multiple and 
+											! childPropertyWrapper.mandatory and 
+											childPropertyWrapper.valueType eq 'Complex' and
+											! childPropertyWrapper.aspect}"
+										
+										action="#{childPropertyWrapper.deleteSingleValue_UIAction}"
+										reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+						
+									<!-- Delete Action for multi-value non mandatory complex cms properties NOT ASPECTS 
+									    exclude profile, accessibility-->
+									<a4j:commandLink
+										onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+										rendered="#{childPropertyWrapper.writeGranted and
+										    ! empty childPropertyWrapper.cmsProperty and  
+											childPropertyWrapper.multiple and 
+											! childPropertyWrapper.mandatory and 
+											childPropertyWrapper.valueType eq 'Complex' and
+											! childPropertyWrapper.aspect and
+											childPropertyWrapper.childComplexCmsPropertyWrappers.size() > 1}"
+										action="#{confirmationBean.initiateConfirmation('object.edit.multiple.complex.cms.property.delete.question',
+														childPropertyWrapper, 
+														'deleteAllChildComplexCmsProperties_UIAction',
+														childPropertyWrapper.localizedLabelForCurrentLocale, 
+														'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs',
+														null,
+														null)}"
+											 oncomplete="openConfirmationDialog();"
+											 reRender="confirmationDialogPanel">
+										<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+									</a4j:commandLink>
+									</ui:remove>
+									
+								</li>	
+							</a4j:repeat>
+						</ol>
+					</fieldset>
+				</ui:fragment>
+						
+					
+				<ui:fragment
+					rendered="#{empty complexCmsPropertyEdit.childPropertiesOfSingleValueComplexProperties[cmsPropertyWrapper.definitionName]}">
+					<li class="formElementFieldsetView">
+						<label id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}">
+							<a4j:commandLink
+								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+								rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
+									and ! cmsPropertyWrapper.multiple}"
+								action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path, cmsPropertyWrapper.complexCmsPropertyEdit)}"
+								reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+						
+								<h:outputText
+									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+								
+								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+									#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
+								</span>
+							</a4j:commandLink>
+							
+							
+							
+							<ui:fragment rendered="#{cmsPropertyWrapper.valueType ne 'Complex' 
+												or cmsPropertyWrapper.multiple}">
+							<!-- Label all other cms properties -->
+								<h:outputText 
+									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
+									
+								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+									#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
+								</span>
+							</ui:fragment>
+							
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/topicReferenceProperty/openTopicTree.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
+							
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/binaryProperty/openUploadDialog.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
+							
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/complexProperty/addComplexPropertyValue.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
+							
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/objectReferenceProperty/openObjectSelectionDialog.xhtml">
+								<ui:param name="cmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+							</ui:include>
+							
+							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+							
+						</label>
+					
+					
+						<!--  If user has no access we do not show any value 
+						<h:outputText
+							rendered="#{ !cmsPropertyWrapper.readGranted and ! cmsPropertyWrapper.writeGranted}"
+							value="Δεν επιτρέπεται η ενημέρωση του στοιχείου"
+							/>
+						-->
+							
+						<!-- binary property with one or multiple values-->
+						<ui:include
+							src="/WEB-INF/pageComponents/edit/binaryProperty/binaryValues.xhtml">
+							<!--  Need to pass valueWrapper to xhtml to render its value -->
+							<ui:param name="cmsPropertyWrapper"
+								value="#{cmsPropertyWrapper}" />
+						</ui:include>
+					
+
+						<!-- Property with a single and simple value -->
+						<a4j:outputPanel
+							rendered="#{cmsPropertyWrapper.writeGranted and
+							!cmsPropertyWrapper.multiple and 
+							cmsPropertyWrapper.valueType ne 'Binary' and 
+							cmsPropertyWrapper.valueType ne 'Complex' and 
+							cmsPropertyWrapper.valueType ne 'TopicReference' and 
+							cmsPropertyWrapper.valueType ne 'ObjectReference'}"
+							keepTransient="true">
+						
+							<ui:include
+								src="/WEB-INF/pageComponents/edit/simpleTypeValue.xhtml">
+								<!--  Need to pass valueWrapper to xhtml to render its value -->
+								<ui:param name="simpleCmsPropertyValueWrapper"
+									value="#{cmsPropertyWrapper.singleSimpleCmsPropertyValueWrapper}" />
+							</ui:include>
+						</a4j:outputPanel>
+						
+						<!-- Values of a Property with Multiple Simple Values-->
+						<ui:include
+							src="/WEB-INF/pageComponents/edit/simpleTypeValues.xhtml">
+							<!--  Need to pass valueWrapper to xhtml to render its value -->
+							<ui:param name="cmsPropertyWrapper"
+								value="#{cmsPropertyWrapper}" />
+						</ui:include>
+				
+						<!-- Values of a TOPIC property with single or multiple values-->
+						<ui:include
+							src="/WEB-INF/pageComponents/edit/topicReferenceProperty/topicValues.xhtml">
+								<!--  Need to pass valueWrapper to xhtml to render its value -->
+							<ui:param name="topicPropertyWrapper"
+								value="#{cmsPropertyWrapper}" />
+						</ui:include>
+				
+
+						<!-- Values of an Object Reference Property with single or multiple values -->
+						<ui:include
+							src="/WEB-INF/pageComponents/edit/objectReferenceProperty/objectReferenceValues.xhtml">
+							<!--  Need to pass valueWrapper to xhtml to render its value -->
+							<ui:param name="cmsPropertyWrapper"
+								value="#{cmsPropertyWrapper}" />
+						</ui:include>
+						
+						
+						<!-- Values Of a Complex Property with multiple values -->
+						<ui:include
+							src="/WEB-INF/pageComponents/edit/complexProperty/complexPropertyValues.xhtml">
+								<!--  Need to pass valueWrapper to xhtml to render its value -->
+								<ui:param name="parentComplexCmsPropertyWrapper"
+									value="#{cmsPropertyWrapper}" />
+						</ui:include>
+
+						<ui:remove>
+						<!-- Delete Action for single-value non mandatory complex cms properties NOT ASPECTS 
+						    exclude profile, accessibility-->
+						<a4j:commandLink
+							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							rendered="#{cmsPropertyWrapper.writeGranted and
+							    ! empty cmsPropertyWrapper.cmsProperty and  
+								! cmsPropertyWrapper.multiple and 
+								! cmsPropertyWrapper.mandatory and 
+								cmsPropertyWrapper.valueType eq 'Complex' and
+								! cmsPropertyWrapper.aspect}"
+							
+							action="#{cmsPropertyWrapper.deleteSingleValue_UIAction}"
+							reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+							<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+						</a4j:commandLink>
+						
+						<!-- Delete Action for multi-value non mandatory complex cms properties NOT ASPECTS 
+						    exclude profile, accessibility-->
+						<a4j:commandLink
+							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							rendered="#{cmsPropertyWrapper.writeGranted and
+							    ! empty cmsPropertyWrapper.cmsProperty and  
+								cmsPropertyWrapper.multiple and 
+								! cmsPropertyWrapper.mandatory and 
+								cmsPropertyWrapper.valueType eq 'Complex' and
+								! cmsPropertyWrapper.aspect and
+								cmsPropertyWrapper.childComplexCmsPropertyWrappers.size() > 1}"
+							action="#{confirmationBean.initiateConfirmation('object.edit.multiple.complex.cms.property.delete.question',
+											cmsPropertyWrapper, 
+											'deleteAllChildComplexCmsProperties_UIAction',
+											cmsPropertyWrapper.localizedLabelForCurrentLocale, 
+											'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs',
+											null,
+											null)}"
+								 oncomplete="openConfirmationDialog();"
+								 reRender="confirmationDialogPanel">
+							<h:graphicImage value="/images/cms-icons/16/deleteTag.png" />
+						</a4j:commandLink>
+						</ui:remove>
+						
+					</li>
+				</ui:fragment>	
+					
+			</ui:fragment>
+						
+		</ui:composition>
+		
+		
+		
+	</body>
+</html>

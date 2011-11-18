@@ -46,7 +46,7 @@ Authors
 							<!--  If user has no access we do not show the field --> 
 							<ui:fragment rendered="#{cmsPropertyWrapper.readGranted or cmsPropertyWrapper.writeGranted}">
 								
-										<li class="formElement">
+										<li class="formElementFieldsetView">
 											<label>
 												<a4j:commandLink
 													onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
