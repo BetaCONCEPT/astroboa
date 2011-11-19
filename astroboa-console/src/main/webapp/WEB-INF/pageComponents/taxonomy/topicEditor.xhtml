@@ -43,17 +43,17 @@ Authors
 							#{tagEdit.editedTag.getAvailableLocalizedLabel(localeSelector.localeString)} 
 							in 
 							#{messages['topic.edit.property.taxonomy']}: #{tagEdit.editedTag.taxonomy.getAvailableLocalizedLabel(localeSelector.localeString)}"
-							style="color: #777777; font-weight: bold;"/>
+							style="color: #777777; font-weight: bold; font-size: 16px;"/>
 					</ui:fragment>
 					
 					<ui:fragment rendered="#{empty tagEdit.editedTag.id}">
 						<h:outputText value="#{messages['topic.edit.panel.header.newTopic']}"
-							style="color: #777777; font-weight: bold;"/>
+							style="color: #777777; font-weight: bold; font-size: 16px;"/>
 					</ui:fragment>
 					
 					<div id="topicEditorScrollableArea">
-						<ol class="formElementList" id="topicPropertiesForm">
-							<li class="formElement">
+						<ol class="formElementList">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.parent']}" />
@@ -74,7 +74,7 @@ Authors
 										<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/arrow-in.png" alt="Drag and Drop Indicator" title="drag a new parent from taxonomy tree and drop it here"/>
 								</a4j:outputPanel>
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.taxonomy.owner']}" />
@@ -84,7 +84,7 @@ Authors
 									value="#{tagEdit.editedTag.owner.label} - #{tagEdit.editedTag.owner.externalId}"/>
 							
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.id']}" />
@@ -94,7 +94,7 @@ Authors
 									value="#{tagEdit.editedTag.id}"/>
 							
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.system.name']}" />
@@ -104,7 +104,7 @@ Authors
 									value="#{tagEdit.editedTag.name}"/>
 							
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.order']}" />
@@ -114,7 +114,7 @@ Authors
 									value="#{tagEdit.editedTag.order}"/>
 							
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.allow.referrer.content.objects']}" />
@@ -124,7 +124,7 @@ Authors
 									value="#{tagEdit.editedTag.allowsReferrerContentObjects}"/>
 							
 							</li>
-							<li class="formElement">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['topic.edit.property.number.referrer.content.objects']}" />
@@ -140,13 +140,13 @@ Authors
 						
 						
 						<fieldset>
-							<legend><span>#{messages['topic.edit.localization']}</span></legend>
-							<ol class="formElementList" id="topicLabelsForm">
+							<legend>#{messages['topic.edit.localization']}</legend>
+							<ol class="formElementList">
 								<a4j:repeat value="#{tagEdit.editedTagLabels}"
 									var="localizedLabel"
 									rowKeyVar="key">
-									<li class="formElement">
-										<label style="width: 30%;">
+									<li class="formElementFieldsetView">
+										<label>
 											<h:selectOneMenu
 												value="#{localizedLabel.locale}">
 												<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
@@ -154,10 +154,7 @@ Authors
 										</label>
 										<h:inputText id="taxonomyLabelInput"
 											value="#{localizedLabel.label}" />
-										<ui:remove>	
-											<h:message for="tagLabelInput" errorClass="errorStyle"
-											warnClass="warnStyle" infoClass="infoStyle" />
-										</ui:remove>
+										
 										<a4j:commandLink
 											rendered="#{key ne 0}"
 											action="#{tagEdit.removeLocalizedLabel_UIAction(localizedLabel)}"
@@ -187,23 +184,14 @@ Authors
 							</ol>
 						</fieldset>
 						
-						<div id="topicSaveButton" style="clear: both; margin: 100px 0 0 0; position: relative; border-top: 1px solid #BBB8B4; padding-top: 20px;">
+						<div id="topicSaveButton" style="clear: both; margin: 100px 0 0 0; position: relative;">
 							<center>
 							<a4j:commandButton value="#{messages['topic.save.button.label']}" 
 								reRender="dynamicTabAjaxPanel,topicTreePanel"
 								action="#{tagEdit.saveTag_UIAction}"
 								title="#{messages['topic.save.button.helpMessage']}" />
 							</center>
-						</div>
-					
-						<script type="text/javascript" charset="utf-8">
-						//<![CDATA[
-							bcmslib.jQuery(function(){
-								bcmslib.jQuery("#topicPropertiesForm input, #topicLabelsForm input, #topicLabelsForm select, #topicSaveButton input[type=button]").uniform();
-							});
-						//]]>
-						</script>	
-									
+						</div>				
 					</div>
 					
 				</ui:fragment>

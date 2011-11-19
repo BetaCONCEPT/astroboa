@@ -44,6 +44,8 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
@@ -96,7 +98,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		//Reset taxonomy tree
 		Events.instance().raiseEvent(SeamEventNames.NEW_TAXONOMY_TREE);
 
-		return pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		return pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	private Taxonomy findSelectedTaxonomy() { 
@@ -106,7 +108,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		}
 	
 		try {
-			return taxonomyService.getTaxonomyById(selectedTaxonomyId);
+			return taxonomyService.getTaxonomy(selectedTaxonomyId, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch (Exception e) {
 			JSFUtilities.addMessage(null, "taxonomy.isNull", null, FacesMessage.SEVERITY_WARN);
@@ -145,7 +147,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 		
 	}
 	
@@ -164,7 +166,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 		
 	}
 	
@@ -304,7 +306,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void addNewTopicToTaxonomy(){
@@ -322,7 +324,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void addNewTaxonomy() {
@@ -332,7 +334,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		taxonomyEditor.addNewTaxonomy();
 		tagEdit.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void editTaxonomy(Taxonomy taxonomy) {
@@ -345,7 +347,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		taxonomyEditor.editTaxonomy(taxonomy);
 		tagEdit.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void editTaxonomy() {
@@ -359,7 +361,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		taxonomyEditor.editTaxonomy(taxonomy);
 		tagEdit.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDITOR.getDynamicUIAreaPageComponent());
 	}
 
 
@@ -373,7 +375,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		tagEdit.editTag_UIAction(topic);
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void editTopic() {
@@ -387,7 +389,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		tagEdit.editTag_UIAction(topic);
 		taxonomyEditor.reset();
 		
-		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TAXONOMY_EDIT.getDynamicUIAreaPageComponent());
+		pageController.loadPageComponentInDynamicUIArea(DynamicUIAreaPageComponent.TOPIC_EDITOR.getDynamicUIAreaPageComponent());
 	}
 	
 	public void addTag_UIAction() {

@@ -34,24 +34,65 @@ Authors
 
 	<body>
 		<ui:composition>
+			<a4j:outputPanel id="taxonomyActionsRerenderedPanel" keepTransient="true" >
+				<ul class="horizontalList">
+					<li>
+						<!--  Upload taxonomy XML-->
+						<ui:remove>
+						<a4j:commandLink id="taxonomyXMLUploadCommnad"
+							style="padding-left: 20px; background: url(images/cms-icons/16/up.png) no-repeat 0px center;"
+							oncomplete="jQuery('#taxonomyImport').show('slow');"
+							immediate="true"
+							value="#{messages['taxonomy.taxonomy.xml.upload.panel.header']}"/>
+						</ui:remove>
+						<button  type="button" onclick="openImportTaxonomyXmlDialog();"
+							style="padding-left: 20px; background: url(images/cms-icons/16/fugue/arrow-090.png) no-repeat;">
+							#{messages['taxonomy.taxonomy.xml.upload.panel.header']}
+						</button>
+					</li>
+					
+					<li>
+						<!--  Export taxonomy to XML-->
+						<a4j:htmlCommandLink
+							rendered="#{!empty taxonomyEditor.editedTaxonomy.name}"
+							style="padding-left: 20px; background: url(images/cms-icons/16/fugue/arrow-270.png) no-repeat 0px center;"
+							action="#{xmlExportBean.exportTaxonomy(taxonomyEditor.editedTaxonomy)}">
+							#{messages['taxonomy.tree.context.menu.export.to.xml']}
+						</a4j:htmlCommandLink>
+					</li>
+										
+					<li>				
+						<a4j:commandLink
+							style="padding-left: 20px; background: url(./images/cms-icons/16/fugue/plus.png) no-repeat 0px center;"
+							action="#{taxonomyEdit.addNewTaxonomy}"
+							reRender="taxonomyActionsRerenderedPanel,taxonomyEditRerenderedPanel"
+							value="#{messages['taxonomy.panel.add.taxonomy']}"
+							ajaxSingle="true"/>
+					</li>
+							
+				</ul>
+			</a4j:outputPanel>
+			
+			<hr style="margin: 5px 0 10px 0; color: #BBB8B4; background-color: #BBB8B4; border: 0; height: 1px;"/>
+			
 			
 			<a4j:outputPanel id="taxonomyEditRerenderedPanel" keepTransient="true" >
 				<ui:fragment rendered="#{!empty taxonomyEditor.editedTaxonomy}">
 					
 					<ui:fragment rendered="#{!empty taxonomyEditor.editedTaxonomy.id}">
 						<h:outputText value="#{messages['taxonomy.edit.panel.header.editedTaxonomy']}  - #{taxonomyEditor.editedTaxonomy.getAvailableLocalizedLabel(localeSelector.localeString)}"
-							style="color: #777777; font-weight: bold;"/>
+							style="color: #777777; font-weight: bold; font-size: 16px;"/>
 					</ui:fragment>
 					
 					<ui:fragment rendered="#{empty taxonomyEditor.editedTaxonomy.id}">
 						<h:outputText value="#{messages['taxonomy.edit.panel.header.newTaxonomy']}"
-							style="color: #777777; font-weight: bold;"/>
+							style="color: #777777; font-weight: bold; font-size: 16px;"/>
 					</ui:fragment>
 					
 					
 					<div id="taxonomyEditorScrollableArea">
-						<ol class="formElementList" id="taxonomyNameForm">
-							<li class="formElement">
+						<ol class="formElementList">
+							<li class="formElementFieldsetView">
 								<label>		
 									<h:outputText
 										value="#{messages['taxonomy.edit.property.system.name']}" />
@@ -86,14 +127,14 @@ Authors
 						
 						<ui:remove>class="text ui-widget-content ui-corner-all"</ui:remove>			
 						<fieldset>
-							<legend><span>#{messages['taxonomy.edit.localization']}</span></legend>
-							<ol class="formElementList" id="taxonomyLabelsForm">
+							<legend>#{messages['taxonomy.edit.localization']}</legend>
+							<ol class="formElementList">
 								<a4j:repeat value="#{taxonomyEditor.editedTaxonomyLabels}"
 									var="localizedLabel"
 									rowKeyVar="key">
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label>
-											<h:selectOneMenu style="width: 200px;"
+											<h:selectOneMenu
 												value="#{localizedLabel.locale}">
 												<f:selectItems value="#{languageSelector.languagesAsSelectItems}" />
 											</h:selectOneMenu>
@@ -130,7 +171,7 @@ Authors
 							</ol>
 						</fieldset>
 					
-						<div id="taxonomySaveButton" style="clear: both; margin: 100px 0 0 0; position: relative; border-top: 1px solid #BBB8B4; padding-top: 20px;">
+						<div id="taxonomySaveButton" style="clear: both; margin: 100px 0 0 0; position: relative;">
 							<center>
 							<a4j:commandButton value="#{messages['taxonomy.save.button.label']}" 
 								reRender="dynamicTabAjaxPanel,topicTreePanel"

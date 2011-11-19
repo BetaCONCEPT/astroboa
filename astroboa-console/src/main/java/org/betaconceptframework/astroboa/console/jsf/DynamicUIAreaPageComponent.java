@@ -34,11 +34,12 @@ import org.apache.commons.collections.CollectionUtils;
 public enum DynamicUIAreaPageComponent {
 	BINARY_CHANNEL_VIEWER("/WEB-INF/pageComponents/binaryChannelViewer.xhtml","console"),
 	SHARED_SPACE_NAVIGATOR("/WEB-INF/pageComponents/space/sharedSpaceNavigator.xhtml", "console","sharedSpaceNavigation"),
+	TAXONOMY_EDITOR("/WEB-INF/pageComponents/taxonomy/taxonomyEditor.xhtml","console", "taxonomyEdit", "tagEdit", "taxonomyEditor"),
+	TOPIC_EDITOR("/WEB-INF/pageComponents/taxonomy/topicEditor.xhtml","console", "taxonomyEdit", "tagEdit"),
 	TAG_EDITOR("/WEB-INF/pageComponents/taxonomy/tagEditor.xhtml","console","taxonomyEdit", "tagEdit"),
 	OBJECT_TYPE_SELECTOR("/WEB-INF/pageComponents/contentObjectTypeSelector.xhtml","console", "contentTypeEditor"),
 	ADVANCED_SEARCH("/WEB-INF/pageComponents/search/advancedSearch.xhtml","console"),
 	PERSON_PROFILE_EDITOR("/WEB-INF/pageComponents/identity/personInfoEditor.xhtml" ,"console", "personInfoEditor"),
-	TAXONOMY_EDIT("/WEB-INF/pageComponents/taxonomy/taxonomyEdit.xhtml","console", "taxonomyEdit", "tagEdit", "taxonomyEditor"),
 	SCRIPT_ENGINE("/WEB-INF/pageComponents/scriptEngine/scriptEngine.xhtml","console","scriptEngine"),
 	REPOSITORY_EDITOR("/WEB-INF/pageComponents/admin/repositoryEditor.xhtml","console");
 

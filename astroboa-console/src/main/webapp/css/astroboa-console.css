@@ -539,7 +539,10 @@ div#objectTypeSelectorScrollableArea {
 
 
 div#taxonomyEditorScrollableArea {
-	margin: 0;
+	background: #cccccc;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	margin: 0 20px 0 20px;
 	padding: 5px 10px 5px 10px;
 	position: absolute; 
 	left: 0px;
@@ -550,12 +553,29 @@ div#taxonomyEditorScrollableArea {
 }
 
 div#topicEditorScrollableArea {
-	margin: 0;
+	background: #cccccc;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	margin: 0 20px 0 20px;
 	padding: 5px 10px 5px 10px;
 	position: absolute; 
 	left: 0px;
 	right: 0px;
-	top: 110px;
+	top: 80px;
+	bottom: 5px;
+	overflow: auto;
+}
+
+div#tagEditorScrollableArea {
+	background: #cccccc;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	margin: 0 20px 0 20px;
+	padding: 5px 10px 5px 10px;
+	position: absolute; 
+	left: 0px;
+	right: 0px;
+	top: 80px;
 	bottom: 5px;
 	overflow: auto;
 }
@@ -1270,7 +1290,7 @@ li.inlineFormElementValue {
 	opacity: 0.8;
 	filter: alpha(opacity=80); 
 	-moz-opacity:0.8;
-	color: #333333;
+	color: #222222;
 	font-size: 0.9em;
 }  
 
@@ -1295,6 +1315,7 @@ li.inlineFormElementValue a.delete {
 li.inColumnFormElementValue {
 	margin: 0 0 5px 0;
 	padding: 0;
+	width: 100%;
 }
 
 fieldset.submit {  
@@ -1313,14 +1334,6 @@ li.inColumnFormElementValue input, li.inColumnFormElementValue select {
 	width: 93.5%;
 }
 
-#topicPropertiesForm input, #taxonomyNameForm input {
-
-	width: 60%;	
-}
-
-#taxonomyLabelsForm input, #topicLabelsForm input {
-	width: 50%;
-}
 
 li.formElement textarea.plainText, .shareTabScrollableArea textarea.plainText {
 	width: 70%;
@@ -1360,16 +1373,39 @@ li.formElementFieldsetView input:not([type=radio]),
 li.formElementFieldsetView textarea,
 li.formElementFieldsetView select {
 	background: #ffffff;
+	color: #222222;
 	border: none;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-khtml-border-radius: 3px;
 	border-radius: 3px;
-	font: italic 13px Georgia, "Times New Roman", Times, serif;
+	/*font: italic 13px Georgia, "Times New Roman", Times, serif;*/
+	font: italic 13px "lucida grande",tahoma,verdana,arial,sans-serif;
 	outline: none;
 	padding: 5px;
 	width: 70%;
 }
+
+li.formElementFieldsetView select {
+	width: 71.2%;
+}
+
+div#taxonomyEditorScrollableArea li.formElementFieldsetView select, 
+div#topicEditorScrollableArea li.formElementFieldsetView select, 
+div#tagEditorScrollableArea li.formElementFieldsetView select {
+	width: 100%;
+	font: 13px "lucida grande",tahoma,verdana,arial,sans-serif;
+}
+
+li.inColumnFormElementValue input:not([type=radio]),
+li.inColumnFormElementValue textarea {
+	width: 93.5%;
+}
+
+li.inColumnFormElementValue select {
+	width: 95.0%;
+}
+
 li.formElementFieldsetView input:not([type=submit]):focus,
 li.formElementFieldsetView textarea:focus {
 	background: #eaeaea;
@@ -1379,30 +1415,43 @@ li.formElementFieldsetView input[type=radio] {
 	margin-right: 5px;
 }
 
-
 button, input[type=button]{
-      padding:4px;
+      margin: auto;
+      padding: 7px 25px;
       display:inline-block;
       cursor:pointer;
-      font:12px/14px Arial, Helvetica, sans-serif;
-      color:#666;
-      border:1px solid #999;
+      font-size: 16px;
+      border: none;
       background-color:#eee;
+      color:#222222;
+      letter-spacing: 1px;
+   /*   text-shadow: 0 1px 1px #BBBBBB;
+      text-transform: uppercase; */
+      
       -moz-border-radius:10px;
       -webkit-border-radius:10px;
+      -khtml-border-radius: 10px;
+      border-radius: 10px;
       -moz-box-shadow:#999 2px 0px 3px;
       -webkit-box-shadow:#999 2px 0px 3px;
-      margin:4px;
-    }
-    
-button:HOVER, input[type=button]:hover{
-      color:#FFF;
-      background-color: orangered;
-    }
-    :focus {
-      outline: 0;
-    }
+}
 
+button:HOVER, input[type=button]:hover {
+	color:#FFF;
+	background-color: orangered;
+}
+
+div#formActions button, div#formActions input[type=button]{
+	margin:4px;
+	padding:4px 15px;
+	display:inline-block;
+	/*font:16px Arial, Helvetica, sans-serif;*/
+	font-size: 13px;
+}
+    
+:focus {
+	outline: 0;
+}
 
 table.objectTypeSelectorTable td {
 	padding: 0 20px 10px 0;
