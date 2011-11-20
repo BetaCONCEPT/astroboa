@@ -58,7 +58,7 @@ import org.testng.annotations.Test;
  */
 public class RepositoryServiceTest extends AbstractRepositoryTest{
 	
-	@Test 
+	//@Test 
 	public void testRepositoryConfigurationReloading() throws Exception{
 	
 		File configuration = retrieveConfigurationFile();
