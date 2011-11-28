@@ -895,7 +895,7 @@ public class ContentObjectResource extends AstroboaResource{
 	
 		long start = System.currentTimeMillis();
 		 
-		Response response = saveContentObjectString(requestContent, HttpMethod.POST, true);
+		Response response = saveContentObjectString(requestContent, HttpMethod.POST, true, true);
 		 
 		logger.debug(" POST ContentObject in {}",  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
 			
@@ -908,6 +908,7 @@ public class ContentObjectResource extends AstroboaResource{
    	  @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	  public Response putContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
+				@QueryParam("updateLastModificationTime") String updateLastModificationTime,
 				String requestContent){
   		  
   		  
@@ -918,7 +919,7 @@ public class ContentObjectResource extends AstroboaResource{
 
   		  long start = System.currentTimeMillis();
  		
-  		  Response response = saveContentObjectByIdOrName(contentObjectIdOrName, requestContent, HttpMethod.PUT);
+  		  Response response = saveContentObjectByIdOrName(contentObjectIdOrName, requestContent, HttpMethod.PUT, ContentApiUtils.shouldUpdateLastModificationTime(updateLastModificationTime));
   		  
   		  logger.debug(" PUT ContentObject {} in {}", contentObjectIdOrName,  DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
 		
@@ -954,7 +955,7 @@ public class ContentObjectResource extends AstroboaResource{
 	  	@POST
 		@Consumes("multipart/related")
 		public Response postObjectMultipartRelated(MultipartRelatedInput multipartRelatedInput){
-			return saveContentFromMultipartRelatedRequest(null, multipartRelatedInput, HttpMethod.POST);
+			return saveContentFromMultipartRelatedRequest(null, multipartRelatedInput, HttpMethod.POST, true);
 	  	}
 
 	  	@PUT
@@ -962,12 +963,13 @@ public class ContentObjectResource extends AstroboaResource{
 		@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}")
 		public Response putObjectMultipartRelated(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
+				@QueryParam("updateLastModificationTime") String updateLastModificationTime,
 				MultipartRelatedInput multipartRelatedInput){
 	  		
-			return saveContentFromMultipartRelatedRequest(contentObjectIdOrName, multipartRelatedInput, HttpMethod.PUT);
+			return saveContentFromMultipartRelatedRequest(contentObjectIdOrName, multipartRelatedInput, HttpMethod.PUT, ContentApiUtils.shouldUpdateLastModificationTime(updateLastModificationTime));
 	  	}
 
-		private Response saveContentFromMultipartRelatedRequest(String contentObjectIdOrName, 	MultipartRelatedInput multipartRelatedInput, String httpMethod) {
+		private Response saveContentFromMultipartRelatedRequest(String contentObjectIdOrName, 	MultipartRelatedInput multipartRelatedInput, String httpMethod, boolean updateLastModificationTime) {
 			
 			try {
 				
@@ -983,8 +985,7 @@ public class ContentObjectResource extends AstroboaResource{
 		   		  
 		   		//Save content object
 				try{
-					contentObjectToBeSaved = astroboaClient.getContentService().save(
-							contentObjectToBeSaved, false, true, null);
+					contentObjectToBeSaved = astroboaClient.getContentService().save(contentObjectToBeSaved, false, updateLastModificationTime, null);
 					
 					return ContentApiUtils.createSuccessfulResponseForPUTOrPOST(contentObjectToBeSaved, httpMethod, resourceRepresentationType, entityIsNew);
 					
@@ -1117,11 +1118,11 @@ public class ContentObjectResource extends AstroboaResource{
   	  
 	private Response saveContentObjectByIdOrName(
 				@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
-				String requestContent, String httpMethod){
+				String requestContent, String httpMethod, boolean updateLastModificationTime){
 		
 		
 		  //Import from xml or json. ContentObject will not be saved
-		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, true, false, null);
+		  ContentObject contentObjectToBeSaved = astroboaClient.getImportService().importContentObject(requestContent, false, updateLastModificationTime, false, null);
 			
 		  if (logger.isDebugEnabled()){
 			  logger.debug("XML output of imported content object \n{}", contentObjectToBeSaved.xml(true));
@@ -1130,7 +1131,7 @@ public class ContentObjectResource extends AstroboaResource{
 		  boolean entityIsNew = objectIsNew(contentObjectIdOrName, httpMethod,	contentObjectToBeSaved);
    		  
    		  //Save content object
-   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent, entityIsNew);
+   		  return saveContentObject(contentObjectToBeSaved, httpMethod, requestContent, entityIsNew, updateLastModificationTime);
   	 }
 
 	private boolean objectIsNew(String contentObjectIdOrName,
@@ -1187,7 +1188,7 @@ public class ContentObjectResource extends AstroboaResource{
 
 
 	 
-	 private Response saveContentObjectString(String contentSource, String httpMethod, boolean entityIsNew) {
+	 private Response saveContentObjectString(String contentSource, String httpMethod, boolean entityIsNew, boolean updateLastModificationTime) {
 		 
 		try{
 			
@@ -1199,7 +1200,7 @@ public class ContentObjectResource extends AstroboaResource{
 			if (contentSource.contains(CmsConstants.RESOURCE_RESPONSE_PREFIXED_NAME) || 
 					contentSource.contains(CmsConstants.RESOURCE_COLLECTION)){
 
-				List<ContentObject> contentObjects = astroboaClient.getContentService().saveContentObjectResourceCollection(contentSource, false, true, null);
+				List<ContentObject> contentObjects = astroboaClient.getContentService().saveContentObjectResourceCollection(contentSource, false, updateLastModificationTime, null);
 
 				//TODO : Improve response details.
 				
@@ -1213,7 +1214,7 @@ public class ContentObjectResource extends AstroboaResource{
 			}
 			else{
 
-				ContentObject contentObject = astroboaClient.getContentService().save(contentSource, false, true, null);
+				ContentObject contentObject = astroboaClient.getContentService().save(contentSource, false, updateLastModificationTime, null);
 
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, contentSource, entityIsNew);
 			}
@@ -1228,10 +1229,10 @@ public class ContentObjectResource extends AstroboaResource{
 		}
 	}
 	 
-	 private Response saveContentObject(ContentObject contentObject, String httpMethod, String requestContent, boolean entityIsNew) {
+	 private Response saveContentObject(ContentObject contentObject, String httpMethod, String requestContent, boolean entityIsNew, boolean updateLastModificationTime) {
 		 
 			try{
-				contentObject = astroboaClient.getContentService().save(contentObject, false, true, null);
+				contentObject = astroboaClient.getContentService().save(contentObject, false, updateLastModificationTime, null);
 				
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(contentObject,httpMethod, requestContent, entityIsNew);
 				
