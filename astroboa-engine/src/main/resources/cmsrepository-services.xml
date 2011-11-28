@@ -54,8 +54,8 @@ Authors
 	
 	<!-- Aspect that secures Content Service -->
 	<bean id="secureContentServiceAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentServiceAspect" autowire="byName"/>
-	<bean id="secureContentOnjectSaveAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectSaveAspect" autowire="byName"/>
-	<bean id="secureContentOnjectDeleteAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectDeleteAspect" autowire="byName"/>
+	<bean id="secureContentObjectSaveAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectSaveAspect" autowire="byName"/>
+	<bean id="secureContentObjectDeleteAspect" class="org.betaconceptframework.astroboa.engine.service.security.aspect.SecureContentObjectDeleteAspect" autowire="byName"/>
 	
 	<!-- Repository Service -->
 	<bean id="repositoryService" class="org.betaconceptframework.astroboa.engine.service.jcr.RepositoryServiceImpl" autowire="byName"/>
