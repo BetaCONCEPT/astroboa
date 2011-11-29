@@ -9,6 +9,9 @@ CKEDITOR.editorConfig = function( config )
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
 	
+	config.language = 'en';
+	config.entities_greek = false;
+//	config.entities_processNumerical = false;
 	config.toolbar = 'astroboa';
 	 
 	config.toolbar_astroboa =
