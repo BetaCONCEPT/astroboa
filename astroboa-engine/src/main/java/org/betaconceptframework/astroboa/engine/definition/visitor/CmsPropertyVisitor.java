@@ -40,6 +40,7 @@ import javax.xml.namespace.QName;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.util.XMLChar;
 import org.betaconceptframework.astroboa.api.model.BetaConceptNamespaceConstants;
@@ -1505,16 +1506,41 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
-	private boolean elementExtendsComplexCmsPropertyType(XSComplexType complexType)
-	{
+	private boolean elementExtendsComplexCmsPropertyType(XSComplexType complexType){
+		
+		Boolean elementExtendsComplexCmsPropertyType = null;
+		
 		//According to XSOM API method getBaseType always returns not null
-		String typeName = complexType.getBaseType().getName();
-		String typeNamespace = complexType.getBaseType().getTargetNamespace();
+		XSType currentElementType = complexType.getBaseType();
+		do {
+			String typeName = currentElementType.getName();
+			String typeNamespace = currentElementType.getTargetNamespace();
+			
+			logger.debug("Checking base type {}{}", 
+					new Object[]{"{"+typeNamespace+"}", typeName});
 
-		ItemQName complexTypeAsItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
-
-		return complexTypeAsItemQName.equals(CmsDefinitionItem.complexCmsPropertyType); //Complex Type must extend ComplexCmsProperty type 
-
+			ItemQName complexTypeAsItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
+			
+			//ComplexType extends complex type ComplexCmsPropertyType
+			if (complexTypeAsItemQName.equals(CmsDefinitionItem.complexCmsPropertyType)){
+				elementExtendsComplexCmsPropertyType = true;
+			}
+			else{
+				//ComplexType may be extending a complex type which represents a complexCmsPropertyType
+				//either this super type or one of its parent extend complexCmsPropertyType
+				ItemQName parentTypeAsItemQName = ItemUtils.createNewItem("", currentElementType.getBaseType().getTargetNamespace(), currentElementType.getBaseType().getName());
+				
+				if (! complexTypeAsItemQName.equals(parentTypeAsItemQName)){
+					currentElementType = currentElementType.getBaseType();
+				}
+				else{
+					break;
+				}
+				
+			}
+		}while (elementExtendsComplexCmsPropertyType == null);
+		
+		return BooleanUtils.isTrue(elementExtendsComplexCmsPropertyType);
 	}
 
 	public void modelGroup(XSModelGroup arg0) {
