@@ -969,6 +969,20 @@
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
+					
+					<xs:element name="photoReferences"
+						minOccurs="0"
+						maxOccurs="1"
+						type="fileResource:arrayOfFileResourceObjectType" >
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Photos (file references)
+							</xs:documentation>
+							<xs:documentation xml:lang="el">
+								Φωτογραφίες (Αναφορές σε αρχεία)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 
 					<xs:element name="tags"
 						minOccurs="0"
