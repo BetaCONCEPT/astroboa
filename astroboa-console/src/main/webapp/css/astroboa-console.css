@@ -170,8 +170,6 @@ div#footerArea {
 	text-align: center;
 }
 
-
-div#formActions, 
 div#spaces, div#objectListScrollableArea,
 div#cmsDefinitionTreeForSearch, div#systemTopicsTrigger, div#systemTopicsToggleContainer,
 div#objectsTrigger, div#objectsToggleContainer, div#usersTrigger, div#usersToggleContainer, 
@@ -238,16 +236,6 @@ div#objectTypeSelectorScrollableArea, div#scriptsTrigger, div#scriptsToggleConta
 	color: #FFF;	
 }
 
-div#formActions {
-	-moz-box-shadow:#999 0px 0px 0px;
-  	-webkit-box-shadow:#999 0px 0px 0px;
-	margin: 0 20px 0 20px;
-	padding: 5px 5px 5px 5px;
-	position: absolute;
-	bottom: 5px;
-	left: 0px;
-	right: 0px;
-}
 
 #scriptEngineEditor {
 	position: absolute; 
@@ -442,7 +430,7 @@ div#dynPropList {
 #objectTabs {
 	position:absolute; 
 	left: 5px; 
-	top: 35px; 
+	top: 70px; 
 	bottom: 0px; 
 	overflow: hidden; 
 	width: 99%;	
@@ -473,7 +461,7 @@ div#dynPropList {
 	left: 0px;
 	right: 0px; 
 	top: 60px;
-	bottom: 55px; 
+	bottom: 5px; 
 	overflow: auto;
 }
 
@@ -484,7 +472,7 @@ div#dynPropList {
 	left: 0px;
 	right: 0px; 
 	top: 30px;
-	bottom: 55px; 
+	bottom: 10px; 
 	overflow: auto;
 }
 
@@ -498,8 +486,8 @@ div#dynPropList {
 	position: absolute;
 	left: 0px;
 	right: 0px; 
-	top: 75px;
-	bottom: 55px; 
+	top: 70px;
+	bottom: 10px; 
 	overflow: auto;
 }
 
@@ -1390,6 +1378,7 @@ li.formElementFieldsetView select {
 	width: 71.2%;
 }
 
+
 div#taxonomyEditorScrollableArea li.formElementFieldsetView select, 
 div#topicEditorScrollableArea li.formElementFieldsetView select, 
 div#tagEditorScrollableArea li.formElementFieldsetView select {
@@ -1417,10 +1406,10 @@ li.formElementFieldsetView input[type=radio] {
 
 button, input[type=button]{
       margin: auto;
-      padding: 7px 25px;
+      padding: 5px 20px;
       display:inline-block;
       cursor:pointer;
-      font-size: 16px;
+      font-size: 13px;
       border: none;
       background-color:#eee;
       color:#222222;
@@ -1428,10 +1417,10 @@ button, input[type=button]{
    /*   text-shadow: 0 1px 1px #BBBBBB;
       text-transform: uppercase; */
       
-      -moz-border-radius:10px;
-      -webkit-border-radius:10px;
-      -khtml-border-radius: 10px;
-      border-radius: 10px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius:8px;
+      -khtml-border-radius: 8px;
+      border-radius: 8px;
       -moz-box-shadow:#999 2px 0px 3px;
       -webkit-box-shadow:#999 2px 0px 3px;
 }
@@ -1441,12 +1430,27 @@ button:HOVER, input[type=button]:hover {
 	background-color: orangered;
 }
 
-div#formActions button, div#formActions input[type=button]{
-	margin:4px;
-	padding:4px 15px;
-	display:inline-block;
-	/*font:16px Arial, Helvetica, sans-serif;*/
-	font-size: 13px;
+div#objectTitleAndSaveAction button, div#objectTitleAndSaveAction input[type=button]{
+	margin: 0 5px;
+	padding:2px 25px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+div#addExtraProperties button, div#addExtraProperties input[type=button]{
+	padding:2px 20px;
+}
+
+div#actionsTab button, div#actionsTab input[type=button]{
+	width: 400px;
+	margin: 5px 0;
+	padding:2px 20px;
+}
+
+ul#logoutDialogButtons button, ul#logoutDialogButtons input[type=button]{
+	width: 450px;
+	margin: 5px 0;
+	padding:2px 20px;
 }
     
 :focus {

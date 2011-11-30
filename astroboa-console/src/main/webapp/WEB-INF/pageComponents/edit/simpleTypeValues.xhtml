@@ -60,12 +60,13 @@ Authors
 						value="0"/>
 				</ui:include>
 				
-				<!-- "Add one more value" Action for a Property with multiple simple values -->
+				<!-- "Add one more value" Action for a Property with multiple simple values 
+				We should not use ajaxSinge=true here since we need to post back all the values of the field 
+				TODO: check if ajax region can be used to avoid posting back the whole form -->
 				<a4j:commandLink
 					onclick="destroyTextEditor();"
 					action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
 					reRender="#{cmsPropertyWrapper.complexCmsPropertyEdit.editorTab.toString()}"
-					ajaxSingle="true"
 					title="Add a new #{cmsPropertyWrapper.valueType eq 'Binary' ? ' binary file path' : ' new value'}">
 					<img src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/plus.png" 
 						width="16"

@@ -64,23 +64,26 @@ Authors
 					
 						<ui:fragment rendered="#{confirmationBean.methodNameToBeExecutedAfterMethodFromOKButtonOrActionFromCancelButton eq 'logout'}">
 							<center>
-								<h:panelGrid columns="1" style="text-align: center;">
-								
-									<a4j:commandButton style="font-size: 0.9em; color: #333;"
-										value="#{messages['dialog.confirmation.keepDraftObjects']}"
-										action="#{confirmationBean.clear_UIAction}"
-										oncomplete="closeConfirmationDialog();" />
-									
-									<a4j:commandButton style="font-size: 0.9em; color: #333;" 
-										value="#{messages['dialog.confirmation.removeDraftObjects']}"
-										oncomplete="closeConfirmationDialog();"
-										action="#{confirmationBean.proceedWithAction_UIAction}"
-										reRender="#{confirmationBean.commaDelimitedReRenderComponentIds}" />
-										
-									<a4j:commandButton style="font-size: 0.9em; color: #333;"
-										value="#{messages['dialog.confirmation.cancelApplicationExit']}"
-										onclick="closeConfirmationDialog();" />
-								</h:panelGrid>
+								<ul id="logoutDialogButtons" class="nostyle">
+									<li>
+										<a4j:commandButton
+											value="#{messages['dialog.confirmation.keepDraftObjects']}"
+											action="#{confirmationBean.clear_UIAction}"
+											oncomplete="closeConfirmationDialog();" />
+									</li>
+									<li>	
+										<a4j:commandButton
+											value="#{messages['dialog.confirmation.removeDraftObjects']}"
+											oncomplete="closeConfirmationDialog();"
+											action="#{confirmationBean.proceedWithAction_UIAction}"
+											reRender="#{confirmationBean.commaDelimitedReRenderComponentIds}" />
+									</li>
+									<li>		
+										<a4j:commandButton
+											value="#{messages['dialog.confirmation.cancelApplicationExit']}"
+											onclick="closeConfirmationDialog();" />
+									</li>
+								</ul>
 							</center>
 						</ui:fragment>
 						

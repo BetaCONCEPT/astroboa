@@ -210,7 +210,7 @@ function callFunctionOnEnterKey(e, func, arg) {
 			{ 
 				autoOpen: false,
 				modal: true,
-				width: 450,
+				width: 550,
 				resizable: true,
 				draggable: false
 			 }
@@ -1381,6 +1381,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     	}
     }
     
+    // preview html text areas
     function previewTextArea(previewButton) {
     	// Find out the div that contains the editor
     	var editorDivParent = bcmslib.jQuery(previewButton).siblings(".editableParent");
@@ -1391,34 +1392,23 @@ function callFunctionOnEnterKey(e, func, arg) {
     		if (!text) {
     			text = 'The field is empty'; 
     		}
-    		bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
-    	//	bcmslib.jQuery.fancybox({'autoscale' : true, 'scrolling': 'auto', 'content': text, 'type': 'inline'});
+    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<textarea style="width: 100%; height: 100%; font-size: 13px;">' + text + "</textarea>", 'width': '90%', 'height': '90%'});
+    		// bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
     	}
     }
     
-    function initObjectProfileForm() {
-    	var profileProperty = bcmslib.jQuery('.profileProperty')
-			.addClass("more")
-			.css({'height' : "220px", 'overflow' : 'hidden'})
-			.append('<a id="profilePropertyMore" class="more" href="#">show all fields...</a>');
-			
-			bcmslib.jQuery("#profilePropertyMore").click(function() {
-				if (bcmslib.jQuery(profileProperty).hasClass('more')) {
-					bcmslib.jQuery(profileProperty).css('height', "100%");
-					
-					bcmslib.jQuery(this).html("show less fields...");
-					
-					bcmslib.jQuery(profileProperty).removeClass('more')
-					.addClass('less');
-				}
-				else {
-					bcmslib.jQuery(profileProperty).css('height', "220px");
-					
-					bcmslib.jQuery(this).html("show all fields...");
-					
-					bcmslib.jQuery(profileProperty).removeClass('less').addClass("more");
-				}
-			});
+    // preview plain text areas
+    function previewPlainTextArea(previewButton) {
+    	// Find out the div that contains the editor
+    	var textAreaToPreview = bcmslib.jQuery(previewButton).siblings(".plainText");
+
+    	if ( textAreaToPreview != null) {
+    		var text = bcmslib.jQuery(textAreaToPreview).val();
+    		if (!text) {
+    			text = 'The field is empty'; 
+    		}
+    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<textarea style="width: 100%; height: 100%; font-size: 13px;">' + text + "</textarea>", 'width': '90%', 'height': '90%'});
+    	}
     }
     
     
@@ -1615,6 +1605,13 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
 		
     
+    function addOnChangeEventToWorkflowProperty() {
+    	bcmslib.jQuery('select[class*="managedThroughWorkflow"]').bind("change", function() 
+    			{
+    				reRenderWorkflowActions();
+    			} 
+    	);
+    }
     
     /*HTTP SESSION CHECKER */
     var timeoutMillis = 180*60*1000+3000;

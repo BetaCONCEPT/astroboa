@@ -48,18 +48,9 @@ Authors
 			<h:outputText value="#{simpleCmsPropertyValueWrapper.value}"
 				rendered="#{cmsPropertyWrapper.path eq 'profile.hasVersion'}">
 			</h:outputText>
-			
-			<!-- Input components for long but not enumerations
-			 <rich:inputNumberSpinner  maxValue="#{cmsPropertyWrapper.cmsProperty.propertyDefinition.maxValue}" minValue="#{cmsPropertyWrapper.cmsProperty.propertyDefinition.minValue}"
-				value="#{simpleCmsPropertyValueWrapper.value}" 
-				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and   
-						 cmsPropertyWrapper.valueType eq 'Long'
-						  and empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration}"
-				readonly="#{!cmsPropertyWrapper.writeGranted}"/>
-			-->
 
 			<!-- Input text for String, Long and Double enumerations -->
-			<h:selectOneMenu
+			<h:selectOneMenu class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-value"
 				value="#{simpleCmsPropertyValueWrapper.value}"
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
 							! empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and
@@ -77,24 +68,24 @@ Authors
 			<h:inputText
 				value="#{simpleCmsPropertyValueWrapper.value}"
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
-							cmsPropertyWrapper.path ne 'profile.hasVersion' and
+							cmsPropertyWrapper.path ne 'profile.hasVersion' and 
+							cmsPropertyWrapper.cmsProperty.path ne 'profile.description' and
 							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and
 							(cmsPropertyWrapper.valueType eq 'Double' or  cmsPropertyWrapper.valueType eq 'Long' or
-							( cmsPropertyWrapper.valueType eq 'String' and
-							  ! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
-							  cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and
-							  cmsPropertyWrapper.cmsProperty.path ne 'profile.description' and  
-						      ( cmsPropertyWrapper.cmsProperty.path eq 'profile.title' or  
-						       (cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength == null or 
-						        (cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength le 100 and
-						      cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 0) )) 
-						      ))}"
+								( cmsPropertyWrapper.valueType eq 'String' and
+									! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+							  		cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and  
+						       		(cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength == null or 
+						        		(cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength le 100 and
+						      			cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 0) 
+						      		)
+						      	) 
+						     )}"
 				readonly="#{!cmsPropertyWrapper.writeGranted}">
 
 			</h:inputText>
 			
 			<!-- Input text for String of type 'Code' -->
-			
 			<ui:fragment
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
 							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and   
@@ -170,40 +161,53 @@ Authors
 			
 			
 			<!-- Input text for String of type 'PlainText' which has been explicitly specified to have an unlimited number of chars (i.e. maxLength was set to 0 in XSD)-->
-			<h:inputTextarea
-				class="plainText"
-				value="#{simpleCmsPropertyValueWrapper.value}"
-				rows="50"
+			<ui:fragment
 				rendered="#{ ( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
-							empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and   
-							cmsPropertyWrapper.valueType eq 'String' and
-							! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
-							cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and
-							cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength != null and 
-						        cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength eq 0 
-							}"
-				readonly="#{!cmsPropertyWrapper.writeGranted}">
-			</h:inputTextarea>
-
+								empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and   
+								cmsPropertyWrapper.valueType eq 'String' and
+								! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and 
+								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' and
+								cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength != null and 
+							        cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength eq 0 
+								}">
+				<h:inputTextarea
+					class="plainText"
+					value="#{simpleCmsPropertyValueWrapper.value}"
+					rows="30"
+					readonly="#{!cmsPropertyWrapper.writeGranted}">
+				</h:inputTextarea>
+				<a href="#" onclick="previewPlainTextArea(this);" title="Preview" style="margin-left: 4px;">
+					<img 
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/magnifier.png"
+						alt="preview text"/>
+				</a>
+			</ui:fragment>
 
 			<!-- Input text for String of type 'PlainText' with length more than 100 chars -->
-			<h:inputTextarea value="#{simpleCmsPropertyValueWrapper.value}"
-				class="plainText"
-				rows="#{cmsPropertyWrapper.cmsProperty.path eq 'profile.description' ? 5 : ( cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength / 116 + 1)}"
-				readonly="#{!cmsPropertyWrapper.writeGranted}"
+			<ui:fragment
 				rendered="#{( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
-					cmsPropertyWrapper.valueType eq 'String' and 
-					! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
-					cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' 
-						and ( cmsPropertyWrapper.cmsProperty.path eq 'profile.description' or 
-						(cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength !=null and 
-						cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 100
-						and empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration ) )}">
-
-			</h:inputTextarea>
-
-			<!-- Input text for String of type 'RichText' -->
+						empty cmsPropertyWrapper.cmsProperty.propertyDefinition.valueEnumeration and
+						cmsPropertyWrapper.valueType eq 'String' and 
+						! cmsPropertyWrapper.cmsProperty.propertyDefinition.passwordType and
+						cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'PlainText' 
+							and ( cmsPropertyWrapper.cmsProperty.path eq 'profile.description' or 
+							(cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength !=null and 
+							cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength gt 100
+							 ) )}">
+				<h:inputTextarea value="#{simpleCmsPropertyValueWrapper.value}"
+					class="plainText"
+					rows="#{(cmsPropertyWrapper.cmsProperty.path eq 'profile.description')? 5 : (cmsPropertyWrapper.cmsProperty.propertyDefinition.maxLength / 116 + 1)}"
+					readonly="#{!cmsPropertyWrapper.writeGranted}">
+	
+				</h:inputTextarea>
+				<a href="#" onclick="previewPlainTextArea(this);" title="Preview" style="margin-left: 4px;">
+					<img 
+						src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/magnifier.png"
+						alt="preview text"/>
+				</a>
+			</ui:fragment>
 			
+			<!-- Input text for String of type 'RichText' -->
 			<ui:fragment 
 				rendered="#{ cmsPropertyWrapper.writeGranted and
 								cmsPropertyWrapper.valueType eq 'String' and 
@@ -211,7 +215,7 @@ Authors
 								cmsPropertyWrapper.cmsProperty.propertyDefinition.stringFormat eq 'RichText'}">
 								
 				<div class="editableParent" style="width: 70%; float: left;">
-					<h:inputTextarea styleClass="editable" value="#{simpleCmsPropertyValueWrapper.value}" style="width:100%;" rows="5"/>
+					<h:inputTextarea styleClass="editable" value="#{simpleCmsPropertyValueWrapper.value}" style="width:100%;" rows="10" />
 				</div>
 				
 				<a href="#" onclick="openTextEditor(this);" title="Edit in Html Editor" style="display: block; float:left; margin-left: 18px;">
@@ -262,7 +266,7 @@ Authors
 			<rich:calendar style="font-size: 0.9em;" popupCalendar="true" size="10"
 				value="#{simpleCmsPropertyValueWrapper.value}"
 				datePattern="#{cmsPropertyWrapper.cmsPropertyDefinition.dateTime? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy'}"
-				enableManualInput="true"
+				enableManualInput="false"
 				rendered="#{( cmsPropertyWrapper.writeGranted or cmsPropertyWrapper.readGranted ) and
 					cmsPropertyWrapper.valueType eq 'Date' and !(cmsPropertyWrapper.path eq 'profile.created' or cmsPropertyWrapper.path eq 'profile.modified')}"
 				disabled="#{ ! cmsPropertyWrapper.writeGranted}" 

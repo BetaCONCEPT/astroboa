@@ -63,43 +63,51 @@ Authors
 						Αν κάνετε αλλαγές στο αντικείμενο αυτές θα αποθηκευτετούν αυτόματα όταν επιλέξετε να εκτελέσετε κάποια ενέργεια στη ροή εργασίας. 
 						Οι ενέργειες που μπορείτε να εκτελέσετε στο τρέχων βήμα της ροής εργασίας εμφανίζονται παρακάτω:"
 				style="font-size: 95%" />
-</ui:remove>
-
+		</ui:remove>
 			
-				<a4j:commandButton value="#{messages['object.edit.workflowActions.activatePublicationScheduling']}"
-					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-					action="#{contentObjectEdit.activatePublicationScheduling_UIAction}"
-					rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and 
-							(empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue or 
-								contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submitted' or
-								contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submittedByExternalUser' or 
+			<div style="margin-top: 20px;">
+				<span style="font-weight: bold;">#{messages['object.edit.workflowActions']} "#{messages['workflow.webPublishing']}"</span>
+				<ul class="nostyle">
+					<li>
+						<a4j:commandButton value="#{messages['object.edit.workflowActions.activatePublicationScheduling']}"
+							onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							action="#{contentObjectEdit.activatePublicationScheduling_UIAction}"
+							rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and 
+									(empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue or 
+										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submitted' or
+										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submittedByExternalUser' or 
+												contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'authored' or 
+												contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'temporarilyRejectedForReauthoring') }" 
+							reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
+					</li>
+	
+					<li>
+						<a4j:commandButton 
+							onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							value="#{messages['object.edit.workflowActions.submitForApproval']}"
+							action="#{contentObjectEdit.submitContentObjectForWebPublication_UIAction}"
+							rendered="#{ !contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and
+									   (empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue or 
 										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'authored' or 
-										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'temporarilyRejectedForReauthoring') }" 
-					reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
-
-
-
-				<a4j:commandButton 
-					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-					value="#{messages['object.edit.workflowActions.submitForApproval']}"
-					action="#{contentObjectEdit.submitContentObjectForWebPublication_UIAction}"
-					rendered="#{ !contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject and
-							   (empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue or 
-								contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'authored' or 
-								contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'temporarilyRejectedForReauthoring') 
-								}" 
-					reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
-
-				<a4j:commandButton 
-					onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-					value="#{messages['object.edit.workflowActions.reject']}"
-					action="#{contentObjectEdit.temporarilyRejectContentObjectForReauthoring_UIAction}"
-					rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue == 'webPublishing' and 
-										 ( contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submitted' or
-										 contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submittedByExternalUser' ) and 
-										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}" 
-					reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
-
+										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'temporarilyRejectedForReauthoring') 
+										}" 
+							reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
+					</li>
+					
+					<li>
+						<a4j:commandButton 
+							onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+							value="#{messages['object.edit.workflowActions.reject']}"
+							action="#{contentObjectEdit.temporarilyRejectContentObjectForReauthoring_UIAction}"
+							rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue == 'webPublishing' and 
+												 ( contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submitted' or
+												 contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'submittedByExternalUser' ) and 
+												contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}" 
+							reRender="objectEditorAjaxPanel,topicTreePanel,myTags, cmsTree,portalTree, clipboardPanel, draftPanel, logoutPanel"/>
+					</li>
+				</ul>
+			</div>
+				
 				
 			<ui:remove>
 

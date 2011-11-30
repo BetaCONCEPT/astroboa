@@ -116,22 +116,25 @@ Authors
 </ui:remove>
 			
 
-					<a4j:commandButton id="saveContentObjectButton" 
-						value="#{messages['object.edit.actions.save']}"
-						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
-						action="#{contentObjectEdit.saveContentObject_UIAction}"
-						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
-						reRender="objectEditorAjaxPanel, topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
-
-					
+			<ul class="nostyle">
+				<li>
+					<a4j:commandButton id="saveContentObjectButton2" 
+									value="#{messages['object.edit.actions.save']}"
+									onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+									action="#{contentObjectEdit.saveContentObject_UIAction}"
+									rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+									reRender="objectEditorAjaxPanel, topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+				</li>
+				<li>
 					<a4j:commandButton id="saveDraftContentObjectButton" 
 						value="#{messages['object.edit.actions.saveDraft']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 						action="#{draft.add(loggedInRepositoryUser.repositoryUser.id, contentObjectEdit.selectedContentObjectForEdit.contentObject)}"
 						rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
 						reRender="draftPanel,logoutPanel"/>
-
-   
+				</li>
+   				
+   				<li>
 					<a4j:commandButton id="removeObjectButton" 
 						value="#{messages['object.edit.actions.delete']}"
 						action="#{confirmationBean.initiateConfirmation(
@@ -146,9 +149,9 @@ Authors
 						reRender="confirmationDialogPanel"
 						rendered="#{! empty contentObjectEdit.selectedContentObjectForEdit.contentObject.id and 
 									contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToDeleteContentObject}" />
+				</li>
 
-
-					
+				<li>
 					<a4j:commandButton id="PublishButton" 
 						value="#{messages['object.edit.actions.publish']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
@@ -156,7 +159,9 @@ Authors
 						rendered="#{contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue ne 'published' and 
 										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
 						reRender="objectEditorAjaxPanel,fixedPropertyBreadCrumbs,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
-						
+				</li>
+				
+				<li>		
 					<a4j:commandButton id="unPublishButton" 
 						value="#{messages['object.edit.actions.cancelPublication']}"
 						onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
@@ -165,13 +170,16 @@ Authors
 										contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.contentObjectStatus'].simpleTypeValue == 'scheduledForPublication') and 
 										contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToPublishAndUnpublishContentObject}"
 						reRender="objectEditorAjaxPanel,fixedPropertyBreadCrumbs,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
-
+				</li>
+				
+				<li>
 					<a4j:commandButton 
 						value="#{messages['object.edit.actions.clearForm']}"
 						action="#{objectEditInit.editNewObject_UIAction(contentObjectEdit.selectedContentObjectForEdit.contentObject.contentObjectType)}" 
 						reRender="objectEditorAjaxPanel"
 						ajaxSingle="true"/>
-
+				</li>
+			</ul>
 
 					<ui:remove>
 						<a4j:commandButton id="archiveObjectButton"

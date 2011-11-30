@@ -58,12 +58,33 @@ Authors
 						reRender="objectEditorAjaxPanel,topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" >
 					</a4j:jsFunction>
 					
+					<a4j:jsFunction
+						name="reRenderWorkflowActions"
+						reRender="workflowTransitionsPanel"/>
+					
+					<div id="objectTitleAndSaveAction" style="margin: 0; padding: 0;">
+						<ul class="horizontalList">
+							<li>
+								<span style="color: #777777; font-weight: bold; font-size: 16px;">#{contentObjectEdit.abbreviateString(contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['profile.title'].simpleTypeValue,60)}</span>
+							</li>
+							<li>
+								<a4j:commandButton id="saveContentObjectButton" 
+									value="#{messages['object.edit.actions.save']}"
+									onclick="destroyTextEditor(); editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
+									action="#{contentObjectEdit.saveContentObject_UIAction}"
+									rendered="#{contentObjectEdit.selectedContentObjectForEdit.loggedInUserAuthorizedToUpdateContentObject}"
+									reRender="objectEditorAjaxPanel, topicTreePanel,myTags,cmsTree,portalTree,clipboardPanel,draftPanel,logoutPanel" />
+							</li>
+						</ul>
+					</div>
+					
 					<div id="objectTabs" style="display:none;">
 						<ul id="objectTabSelectors">
 							<li id="adminMetadataTabSelector"><a href="#adminMetadataTab"><span><strong>#{messages['object.edit.tab.profile']}</strong></span></a></li>
 							<li id="staticPropertiesTabSelector"><a href="#staticPropertiesTab"><span><strong>#{messages['object.edit.tab.properties']}</strong></span></a></li>
 							<li id="extraPropertiesTabSelector"><a href="#extraPropertiesTab"><span><strong>#{messages['object.edit.tab.extraProperties']}</strong></span></a></li>
 							<li id="shareTabSelector"><a href="#shareTab"><span><strong>#{messages['object.edit.tab.share']}</strong></span></a></li>
+							<li id="actionsTabSelector"><a href="#actionsTab"><span><strong>#{messages['object.edit.tab.actions']}</strong></span></a></li>
 						</ul>
 						<div id="adminMetadataTab">
 							<a4j:outputPanel id="profilePropertiesPanel">
@@ -119,7 +140,7 @@ Authors
 							</div>
 						</div>
 						<div id="extraPropertiesTab">
-							<div style="float: left;">
+							<div id="addExtraProperties" style="float: left;">
 								<ui:fragment rendered="#{! empty contentObjectEdit.extraPropertyEdit.propertyPrototypes}">
 									<a4j:commandButton
 										value="#{messages['object.edit.aspect.panel.label']}"
@@ -150,43 +171,35 @@ Authors
 								<ui:include src="/WEB-INF/pageComponents/edit/propertyTemplates/accessibility-editor.xhtml"/>
 							</div>
 						</div>
-					</div>
-					
-						
-						
-						<!-- Show common actions on content object. These actions are allowed if there is no active workflow for the object 
+						<div id="actionsTab">
+							<!-- Show common actions on content object. These actions are allowed if there is no active workflow for the object 
 						 	or the user's role can override the restriction and allows access to common actions despite an active workflow.
-						 -->
-						<div id="formActions">	
-							<ui:include
-								src="/WEB-INF/pageComponents/edit/actionsOnContentObject.xhtml" />
-						
-							<!-- Show actions on content object if there is an active workflow -->
-							<a4j:outputPanel id="workflowTransitionsPanel" ajaxRendered="true">
-								<ui:fragment
-									rendered="#{
-											contentObjectEdit.selectedContentObjectForEdit.contentObjectPropertyDefined['workflow'] and
-											(!empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue)
-										}">
-											
-									<ui:include
-										src="/WEB-INF/pageComponents/edit/workflowTransitionsIfContentObjectIsInWorkflow.xhtml" />
-			
-								</ui:fragment>
-							</a4j:outputPanel>
+							 -->
+								<ui:include
+									src="/WEB-INF/pageComponents/edit/actionsOnContentObject.xhtml" />
 							
+								<!-- Show actions on content object if there is an active workflow -->
+								<a4j:outputPanel id="workflowTransitionsPanel" ajaxRendered="true">
+									<ui:fragment
+										rendered="#{
+												contentObjectEdit.selectedContentObjectForEdit.contentObjectPropertyDefined['workflow'] and
+												(!empty contentObjectEdit.selectedContentObjectForEdit.contentObjectProperty['workflow.managedThroughWorkflow'].simpleTypeValue)
+											}">
+												
+										<ui:include
+											src="/WEB-INF/pageComponents/edit/workflowTransitionsIfContentObjectIsInWorkflow.xhtml" />
+				
+									</ui:fragment>
+								</a4j:outputPanel>
 						</div>
-											
+					</div>				
 				
 					<script type="text/javascript">
 						createObjectTabs();
 						// tweaking of the editors is required besides the script because they block the events (do not bubble them)
 						//activateSaveHotKeyInsideEditors();
 						
-						//bcmslib.jQuery(function(){
-						//	bcmslib.jQuery("#adminMetadataTab input, #adminMetadataTab textarea, #adminMetadataTab select, #formActions input[type=button]").uniform();
-						//});
-						
+						addOnChangeEventToWorkflowProperty();
 						resetContentObjectAutoSave();
 					</script>
 				

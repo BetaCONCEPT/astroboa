@@ -58,7 +58,7 @@ Authors
 													<h:outputText
 														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 													
-													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 														#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 													</span>
 												</a4j:commandLink>
@@ -71,7 +71,7 @@ Authors
 													<h:outputText 
 														value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 														
-													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+													<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 														#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 													</span>
 												</ui:fragment>
@@ -101,7 +101,7 @@ Authors
 														value="#{cmsPropertyWrapper}" />
 												</ui:include>
 												
-												<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+												<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 												
 											</label>
 										
@@ -222,6 +222,7 @@ Authors
 							</ui:fragment>
 						</a4j:outputPanel>
 					</a4j:repeat>
+					
 
 		</ui:composition>
 		

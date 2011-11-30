@@ -44,11 +44,11 @@ Authors
 					rendered="#{!empty complexCmsPropertyEdit.childPropertiesOfSingleValueComplexProperties[cmsPropertyWrapper.definitionName]}">
 					
 					<fieldset>
-						<legend id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}">
+						<legend id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-legend">
 							<h:outputText
 								value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 							
-							<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+							<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-legendText" class="propertyTip">
 								#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 							</span>
 							
@@ -57,7 +57,7 @@ Authors
 									value="#{cmsPropertyWrapper}" />
 							</ui:include>
 								
-							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 						</legend>
 					
 						<ol class="childPropertiesFieldsetView">
@@ -66,7 +66,7 @@ Authors
 								var="childPropertyWrapper"
 								rowKeyVar="indexOfChildPropertyWrapper">
 								<li class="formElementFieldsetView">
-									<label id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}">
+									<label id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}-label">
 										<a4j:commandLink
 											onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 											rendered="#{childPropertyWrapper.valueType eq 'Complex' 
@@ -76,7 +76,7 @@ Authors
 									
 											<h:outputText
 												value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
-											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 												#{childPropertyWrapper.localizedLabelForCurrentLocale}
 											</span>
 										</a4j:commandLink>
@@ -86,7 +86,7 @@ Authors
 										<!-- Label all other cms properties -->
 											<h:outputText 
 												value="#{(childPropertyWrapper.mandatory)?'*' : ''}" />
-											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+											<span id="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 												#{childPropertyWrapper.localizedLabelForCurrentLocale}
 											</span>
 										</ui:fragment>
@@ -115,7 +115,7 @@ Authors
 												value="#{childPropertyWrapper}" />
 										</ui:include>
 										
-										<div class="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+										<div class="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 									</label>
 									
 									<!-- binary property with one or multiple values-->
@@ -231,7 +231,7 @@ Authors
 				<ui:fragment
 					rendered="#{empty complexCmsPropertyEdit.childPropertiesOfSingleValueComplexProperties[cmsPropertyWrapper.definitionName]}">
 					<li class="formElementFieldsetView">
-						<label id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}">
+						<label id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-label">
 							<a4j:commandLink
 								onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 								rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
@@ -242,7 +242,7 @@ Authors
 								<h:outputText
 									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 								
-								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 									#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 								</span>
 							</a4j:commandLink>
@@ -255,7 +255,7 @@ Authors
 								<h:outputText 
 									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 									
-								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}" class="propertyTip">
+								<span id="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-labelText" class="propertyTip">
 									#{cmsPropertyWrapper.localizedLabelForCurrentLocale}
 								</span>
 							</ui:fragment>
@@ -284,7 +284,7 @@ Authors
 									value="#{cmsPropertyWrapper}" />
 							</ui:include>
 							
-							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}"></div>
+							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 							
 						</label>
 					
