@@ -290,7 +290,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 	}
 	
 	/*
-	 * Test for saving XML of JSON with binary content of a property whose name
+	 * Test for saving XML or JSON with binary content of a property whose name
 	 * is 'content' like arrayOfFileResourceTypeObject.fileResource.content
 	 */
 	@Test
