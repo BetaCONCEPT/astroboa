@@ -378,8 +378,7 @@
 				<xs:sequence>
 					<xs:element name="title" 
 						minOccurs="1"
-						maxOccurs="1" 
-						bccmsmodel:order="-3"
+						maxOccurs="1"
 						type="xs:string">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
@@ -395,8 +394,7 @@
 
 					<xs:element name="description" 
 						minOccurs="0"
-						maxOccurs="1" 
-						bccmsmodel:order="-2"
+						maxOccurs="1"
 						type="xs:string">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
@@ -419,8 +417,7 @@
 					<xs:element name="subject" 
 						minOccurs="0"
 						maxOccurs="unbounded" 
-						type="bccmsmodel:topicType"
-						bccmsmodel:order="-1">
+						type="bccmsmodel:topicType">
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
 								<bccmsmodel:displayName>Subject / Keyword</bccmsmodel:displayName>
