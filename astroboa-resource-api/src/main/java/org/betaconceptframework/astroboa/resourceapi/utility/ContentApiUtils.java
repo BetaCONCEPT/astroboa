@@ -515,4 +515,19 @@ public class ContentApiUtils {
 
 	   return defaultValue;
    }
+   
+   public static boolean shouldUpdateLastModificationTime(String updateLastModificationTime) {
+		
+	   //Default value is true
+		if (updateLastModificationTime == null || updateLastModificationTime.trim().length() == 0 ){
+			return true;
+		}
+		
+		try{
+			return BooleanUtils.isTrue(Boolean.valueOf(updateLastModificationTime));
+		}catch(Exception e){
+			logger.warn("Invalid value '{}' for updateLastModificationTime parameter. Last modification time will be updated");
+			return false;
+		}
+	}
 }
