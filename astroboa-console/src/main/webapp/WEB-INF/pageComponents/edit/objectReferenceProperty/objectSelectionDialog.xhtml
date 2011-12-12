@@ -37,15 +37,16 @@ Authors
 			<div id="objectSelectionDialog" title="#{messages['dialog.objectSelection.header']}">
 				<a4j:form id="objectSelectionForm">
 					<a4j:outputPanel id="objectSelectionDialogPanel">
-					
-						<div>
-							<span style="font-weight: bold; width: 150px;">#{messages['dialog.objectSelection.property']}:</span> 
-							<span style="font-weight: bold; color: #AAA;">#{dialogPropertyWrapper.cmsPropertyWrapper.localizedLabelForCurrentLocale}</span>
-						</div>
-						<div>
-							<span style="font-weight: bold; width: 150px;">#{messages['dialog.objectSelection.acceptedObjectTypes']}:</span> 
-							<span style="font-weight: bold; color: #AAA;">#{dialogPropertyWrapper.cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}</span>
-						</div>
+						<ui:fragment rendered="#{dialogPropertyWrapper.cmsPropertyWrapper.valueType eq 'ObjectReference'}">
+							<div>
+								<span style="font-weight: bold; width: 150px;">#{messages['dialog.objectSelection.property']}:</span> 
+								<span style="font-weight: bold; color: #AAA;">#{dialogPropertyWrapper.cmsPropertyWrapper.localizedLabelForCurrentLocale}</span>
+							</div>
+							<div>
+								<span style="font-weight: bold; width: 150px;">#{messages['dialog.objectSelection.acceptedObjectTypes']}:</span> 
+								<span style="font-weight: bold; color: #AAA;">#{dialogPropertyWrapper.cmsPropertyWrapper.localizedLabelsForAcceptedContentTypes}</span>
+							</div>
+						</ui:fragment>
 						<div style="font-size: 9px; color: orangered">* #{messages['dialog.objectSelection.allSearchesAreAutomaticallyFiltered']}</div>
 					
 						<input id="objectSelectionDialogFullPropertyPath" type="hidden" 
