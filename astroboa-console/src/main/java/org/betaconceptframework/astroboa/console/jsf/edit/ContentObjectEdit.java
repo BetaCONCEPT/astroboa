@@ -88,6 +88,7 @@ import org.betaconceptframework.astroboa.util.PropertyPath;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 import org.betaconceptframework.utility.ImageUtils;
+import org.betaconceptframework.utility.ImageUtils.ImageType;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -1624,7 +1625,8 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 				try {
 					// the method name for generating the thumbnail is misleading. It gets a JPEG, PNG or GIF image and generated a thumbnail in PNG format  
-					byte[] thumbnailContent = ImageUtils.generateJpegThumbnailHQ(binaryChannelWhoseThumbnailWillBeCreated.getContent(), 128, 256);
+					byte[] thumbnailContent = ImageUtils.changeAspectRatioAndResize(binaryChannelWhoseThumbnailWillBeCreated.getContent(),
+							"image/png", 128, 0, 1.0, "TOPLEFT");
 
 					BinaryChannel thumbnailBinaryChannel = thumbnailProperty.getSimpleTypeValue();
 					if (thumbnailBinaryChannel == null){
@@ -1639,6 +1641,9 @@ public class ContentObjectEdit extends AbstractUIBean {
 					thumbnailBinaryChannel.setModified(Calendar.getInstance());
 					thumbnailBinaryChannel.setContent(thumbnailContent);
 					thumbnailBinaryChannel.setEncoding(binaryChannelWhoseThumbnailWillBeCreated.getEncoding());
+					
+					// if binary channel has an id reset the id so UI knows it is a new binary channel
+					thumbnailBinaryChannel.setId(null);
 
 					JSFUtilities.addMessage(null, "object.edit.thubnail.created", null, FacesMessage.SEVERITY_INFO);
 					
