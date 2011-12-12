@@ -32,7 +32,7 @@ Authors
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:jdt="http://www.jenia.org/jsf/dataTools">
+	xmlns:sf="http://www.betaconceptframework.org/facelets/cms/staticMethods">
 
 	<body>
 		<ui:composition>
@@ -97,10 +97,6 @@ Authors
 					<rich:column>
 						<center>
 							<input type="checkbox" name="row#{rowKey +1}" />
-							<ui:remove>
-							<jdt:multipleRowsSelector id="selectedContentObjects"
-									selectionList="#{contentObjectStatefulSearchService.contentObjectSelection.selectedContentObjects}"/>
-							</ui:remove>
 						</center>
 					</rich:column>
 								
@@ -127,7 +123,7 @@ Authors
 										rendered="#{!contentObjectUIWrapper.thumbnailAvailable}" />
 		
 									<a4j:outputPanel rendered="#{contentObjectUIWrapper.thumbnailAvailable}">
-								 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail"
+								 		<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{contentObjectUIWrapper.contentObject.id}/thumbnail?t=#{sf:currentTimeInSeconds()}"
 								 	  	width="32" height="32"/>
 									</a4j:outputPanel>
 									
