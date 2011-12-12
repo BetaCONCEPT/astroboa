@@ -130,7 +130,7 @@ Authors
 	<!-- SET this to false when in production -->
 	<context-param>
 		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
 
 	<!-- REMOVE from comment when in production
@@ -475,32 +475,6 @@ components.xml debugging must be disabled ( <core:init debug=false .../>)
       <url-pattern>/seam/resource/*</url-pattern>
    </servlet-mapping>
     
-    <!-- resource loader servlet 
-	<servlet>
-    	<servlet-name>resources</servlet-name>
-    	<servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
-	</servlet>
-    
-    <servlet-mapping>
-    	<servlet-name>resources</servlet-name>
-    	<url-pattern>/adf/*</url-pattern>
-	</servlet-mapping>
-     -->
-	 
-<!-- Load servlet required to handle Jenia Component Resources  -->
-    <servlet>
-        <servlet-name>jenia internal servlet</servlet-name>
-        <servlet-class>org.jenia.faces.util.Servlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-
-
-
-    <servlet-mapping>
-        <servlet-name>jenia internal servlet</servlet-name>
-        <url-pattern>/jenia4faces/*</url-pattern>
-    </servlet-mapping>
-
     <error-page>
         <error-code>500</error-code>
         <location>/error.jsp</location>
