@@ -26,7 +26,6 @@ import org.betaconceptframework.astroboa.resourceapi.utility.IndexExtractor;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.utility.FilenameUtils;
 import org.betaconceptframework.utility.ImageUtils;
-import org.betaconceptframework.utility.ImageUtils.ImageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -379,29 +378,29 @@ public class BinaryChannelResource extends AstroboaResource{
 		}
 
 		if (imageWidth != 0 && imageHeight != 0) {
-			return ImageUtils.resize(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageWidth, imageHeight);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.resize(resourceByteArray, imageWidth, imageHeight), mimeType);
 		}
 
 		if (imageWidth != 0 && imageHeight == 0) {
 			
 			if (StringUtils.isNotBlank(aspectRatio)){
-				resourceByteArray = ImageUtils.cropImage(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageWidth, 0, Double.valueOf(aspectRatio), cropPolicy);
+				return ImageUtils.changeAspectRatioAndResize(resourceByteArray, mimeType, imageWidth, imageHeight, Double.valueOf(aspectRatio), cropPolicy);
 			}
 			
-			return ImageUtils.scaleToWidth(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageWidth);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.scaleToWidth(resourceByteArray, imageWidth), mimeType);
 		}
 
 		if (imageWidth == 0 && imageHeight != 0) {
 
 			if (StringUtils.isNotBlank(aspectRatio)){
-				resourceByteArray = ImageUtils.cropImage(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), 0, imageHeight, Double.valueOf(aspectRatio), cropPolicy);
+				return ImageUtils.changeAspectRatioAndResize(resourceByteArray, mimeType, imageWidth, imageHeight, Double.valueOf(aspectRatio), cropPolicy);
 			}
 
-			return ImageUtils.scaleToHeight(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageHeight);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.scaleToHeight(resourceByteArray, imageHeight), mimeType);
 		}
 		
 		if (imageWidth == 0 && imageHeight == 0 && StringUtils.isNotBlank(aspectRatio)) {
-			return ImageUtils.cropImage(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), 0, 0, Double.valueOf(aspectRatio), cropPolicy);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.changeAspectRatio(resourceByteArray, Double.valueOf(aspectRatio), cropPolicy), mimeType);
 		}
 
 		return resourceByteArray;

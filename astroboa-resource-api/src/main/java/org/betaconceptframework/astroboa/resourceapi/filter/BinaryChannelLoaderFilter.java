@@ -46,7 +46,6 @@ import org.betaconceptframework.astroboa.api.service.RepositoryService;
 import org.betaconceptframework.astroboa.resourceapi.utility.BinaryChannelFileAccessInfoProcessor;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
 import org.betaconceptframework.utility.ImageUtils;
-import org.betaconceptframework.utility.ImageUtils.ImageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,7 +236,7 @@ public class BinaryChannelLoaderFilter implements Filter {
 	}
 
 	private byte[] resizeImageResource(byte[] resourceByteArray, String mimeType, String width, String height) 
-		throws IOException, InterruptedException {
+		throws IOException, InterruptedException, Exception {
 		
 		int imageWidth = 0;
 		int imageHeight = 0;
@@ -251,15 +250,15 @@ public class BinaryChannelLoaderFilter implements Filter {
 		}
 
 		if (imageWidth != 0 && imageHeight != 0) {
-			return ImageUtils.resize(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageWidth, imageHeight);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.resize(resourceByteArray, imageWidth, imageHeight), mimeType);
 		}
 		
 		if (imageWidth != 0 && imageHeight == 0) {
-			return ImageUtils.scaleToWidth(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageWidth);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.scaleToWidth(resourceByteArray, imageWidth), mimeType);
 		}
 		
 		if (imageWidth == 0 && imageHeight != 0) {
-			return ImageUtils.scaleToHeight(resourceByteArray, ImageType.getImageTypeByMimeType(mimeType), imageHeight);
+			return ImageUtils.bufferedImageToByteArray(ImageUtils.scaleToHeight(resourceByteArray, imageHeight), mimeType);
 		}
 
 		return resourceByteArray;
