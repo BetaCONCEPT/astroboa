@@ -719,9 +719,12 @@ a.topmenuLink:hover {
 	text-align: center;
 }
 
-.binaryChannel-thumbArea {
-	width: 120px;
-	border: 5px solid #ACBECE;
+.binaryChannelThumbnail {
+	border: 5px solid #FFFFFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	border-radius: 3px;
 }
 
 .visible {
