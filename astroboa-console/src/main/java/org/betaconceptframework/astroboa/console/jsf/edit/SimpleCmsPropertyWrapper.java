@@ -435,7 +435,8 @@ public class SimpleCmsPropertyWrapper  extends CmsPropertyWrapper<SimpleCmsPrope
 				if (mimeType != null && 
 						( mimeType.equals("image/jpeg")	|| mimeType.equals("image/gif")	|| mimeType.equals("image/png") ||
 								mimeType.equals("image/x-png"))){
-					thumbnailContent = ImageUtils.generateJpegThumbnailHQ(filedata, 128, 256);
+					thumbnailContent = ImageUtils.changeAspectRatioAndResize(filedata,
+							"image/png", 128, 0, 1.0, "TOPLEFT");
 				}
 				else{
 					JSFUtilities.addMessage(null, "object.edit.action.uploadFile.thumbnailCanBeCreatedOnlyFromJPGorPNGorGIFFiles", null, FacesMessage.SEVERITY_WARN);
