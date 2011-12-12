@@ -77,18 +77,19 @@ Authors
 												
 												<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}">
 												
-													<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]"
+													<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?t=#{sf:currentTimeInSeconds()}"
 											 			class="objectPhotosSlideshow" rel="defaultGallery"
 											 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}">
 														
-														<img src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?width=150&amp;t=#{sf:currentTimeInSeconds()}"/>
+														<img class="binaryChannelThumbnail" 
+															src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?width=#{(cmsPropertyWrapper.cmsProperty.name ne 'thumbnail')?'150' : '128'}&amp;t=#{sf:currentTimeInSeconds()}"/>
 														
 													</a>
 													<br/><span style="font-size: 0.8em;">#{messages['object.edit.action.viewFileInline']}</span>
 												</ui:fragment>
 												
 												<ui:fragment rendered="#{empty simpleCmsPropertyValueWrapper.binaryChannelValue.id}" >
-													<seam:graphicImage
+													<seam:graphicImage styleClass="binaryChannelThumbnail"
 														value="#{simpleCmsPropertyValueWrapper.binaryChannelValue.content}">
 														<seam:transformImageSize width="150" maintainRatio="true" />
 													</seam:graphicImage>
