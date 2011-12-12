@@ -27,10 +27,8 @@
 		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../astroboa-parent/pom.xml</relativePath>
 	</parent>
-	<groupId>org.betaconceptframework.astroboa</groupId>
 	<artifactId>astroboa</artifactId>
 	<name>BetaCONCEPT Astroboa</name>
-	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>BetaCONCEPT Astroboa is an Enterprise Content Management System. Its modular architecture allows to be used both as a full featured Web application for managing content across an organization as well as a component in a SOA architecture for creating content applications. This module builds all astroboa components</description>
 	
