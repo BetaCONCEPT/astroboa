@@ -88,7 +88,6 @@ import org.betaconceptframework.astroboa.util.PropertyPath;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 import org.betaconceptframework.utility.ImageUtils;
-import org.betaconceptframework.utility.ImageUtils.ImageType;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
