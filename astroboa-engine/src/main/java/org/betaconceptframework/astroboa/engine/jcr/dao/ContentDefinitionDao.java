@@ -18,6 +18,7 @@
  */
 package org.betaconceptframework.astroboa.engine.jcr.dao;
 
+import java.io.File;
 import java.net.URI;
 
 import org.apache.commons.lang.StringUtils;
@@ -57,6 +58,13 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 				return null;
 			}
 
+			if (StringUtils.equals(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, definitionFullPath)){
+				definitionFullPath = CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION;
+			}
+			else if (StringUtils.equals(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, definitionFullPath)){
+				definitionFullPath = CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION;
+			}
+			
 			if (definitionFullPath.endsWith(".xsd")){
 
 				//First try directly
@@ -100,7 +108,24 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 			}
 
 
-			return definitionCacheRegion.getXMLSchemaForDefinitionFilename(StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), CmsConstants.FORWARD_SLASH));
+			logger.debug("Searching XML schema file for definition {}", cmsDefinitionFileURI);
+			
+			
+			String schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), File.separator);
+			
+			if (StringUtils.isBlank(schemaFilename)){
+				if (!File.separator.equals(CmsConstants.FORWARD_SLASH)){
+					//try with forward slash.
+					schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), CmsConstants.FORWARD_SLASH);
+				}
+			}
+			
+			if (StringUtils.isBlank(schemaFilename)){
+				logger.warn("Could not retrieve XML Schema filename from URI {}", cmsDefinitionFileURI.toString());
+				return null;
+			}
+			
+			return definitionCacheRegion.getXMLSchemaForDefinitionFilename(schemaFilename);
 
 		} catch (Exception e) {
 			logger.error("",e);
