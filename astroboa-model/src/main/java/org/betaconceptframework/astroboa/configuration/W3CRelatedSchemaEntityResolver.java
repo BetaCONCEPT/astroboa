@@ -18,7 +18,6 @@
  */
 package org.betaconceptframework.astroboa.configuration;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -59,8 +58,7 @@ import org.xml.sax.SAXException;
 public class W3CRelatedSchemaEntityResolver implements EntityResolver, LSResourceResolver {
 
 	
-	private String xmlSchemaHomeDir =  "META-INF"+File.separator+"xml-schema-dtd";
-	
+	private String xmlSchemaHomeDir =  CmsConstants.FORWARD_SLASH+"META-INF"+CmsConstants.FORWARD_SLASH+"xml-schema-dtd";
 	
 	private DOMImplementationRegistry registry;
 	
@@ -124,12 +122,21 @@ public class W3CRelatedSchemaEntityResolver implements EntityResolver, LSResourc
 			return null;
 		}
 			
+		String xsdOrDtdFilename =  
+				(systemId.contains(CmsConstants.FORWARD_SLASH) ? StringUtils.substringAfterLast(systemId, CmsConstants.FORWARD_SLASH) : systemId);
+
 		//Check if schema is available locally
 		if (xsdOrDtdLocation == null){
-			String pathToXsdOrDtd = xmlSchemaHomeDir+File.separator+ 
-				(systemId.contains(CmsConstants.FORWARD_SLASH) ? StringUtils.substringAfterLast(systemId, CmsConstants.FORWARD_SLASH) : systemId);
-	
-			xsdOrDtdLocation = this.getClass().getClassLoader().getResource(pathToXsdOrDtd); 
+			xsdOrDtdLocation = this.getClass().getResource(xmlSchemaHomeDir+CmsConstants.FORWARD_SLASH+xsdOrDtdFilename); 
+
+		/*	if (xsdOrDtdLocation == null){
+				//Expect to find configuration xsd in jboss_home/server/default/conf
+				if (xmlSchemaHomeDirInsideConfiguration != null){
+					//We expect to find xml in JBOSS-HOME/server/default/conf directory
+					xsdOrDtdLocation = new URL(xmlSchemaHomeDirInsideConfiguration+File.separator+xsdOrDtdFilename);
+				}
+			}
+		*/
 		}
 		
 		//Try on the WEB
