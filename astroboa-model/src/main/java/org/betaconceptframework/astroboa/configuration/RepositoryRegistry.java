@@ -333,15 +333,6 @@ public enum RepositoryRegistry{
 		//Search in classpath at root level
 		URL configurationSchemaURL = this.getClass().getResource(ASTROBOA_CONFIGURATION_XSD_FILEPATH);
 		
-		/*if (configurationSchemaURL ==null){
-				
-			//Expect to find configuration xsd in jboss_home/server/default/conf
-			if (configurationHomeDir != null){
-				//We expect to find xml in JBOSS-HOME/server/default/conf directory
-				configurationSchemaURL = new URL(configurationHomeDir+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME);
-			}
-		}*/
-			
 		if (configurationSchemaURL ==null){
 			throw new Exception("Could not find "+ASTROBOA_CONFIGURATION_XSD_FILEPATH+ " nor in "+configurationHomeDir+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME+ " in classpath");
 		}

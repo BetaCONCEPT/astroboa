@@ -128,15 +128,6 @@ public class W3CRelatedSchemaEntityResolver implements EntityResolver, LSResourc
 		//Check if schema is available locally
 		if (xsdOrDtdLocation == null){
 			xsdOrDtdLocation = this.getClass().getResource(xmlSchemaHomeDir+CmsConstants.FORWARD_SLASH+xsdOrDtdFilename); 
-
-		/*	if (xsdOrDtdLocation == null){
-				//Expect to find configuration xsd in jboss_home/server/default/conf
-				if (xmlSchemaHomeDirInsideConfiguration != null){
-					//We expect to find xml in JBOSS-HOME/server/default/conf directory
-					xsdOrDtdLocation = new URL(xmlSchemaHomeDirInsideConfiguration+File.separator+xsdOrDtdFilename);
-				}
-			}
-		*/
 		}
 		
 		//Try on the WEB
