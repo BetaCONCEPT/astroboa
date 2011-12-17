@@ -68,12 +68,17 @@ public class DefinitionResource extends AstroboaResource{
 		
 		//This is to server built in Xml Schemas 
 		//Output is ignored since these schemata are served only in XSD
-		if (StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION)){
+		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
 			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
 		}
 		
 		if (output == null){
+			
+			if (propertyPath!=null && propertyPath.endsWith(".xsd")){
+				//user has provided a file name and not a property path
+				return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
+			}
+			
 			return getDefinitionInternal(propertyPath, Output.XML, callback, prettyPrintEnabled);
 		}
 
@@ -96,8 +101,7 @@ public class DefinitionResource extends AstroboaResource{
 		
 		//This is to server built in Xml Schemas 
 		//Output is ignored since these schemata are served only in XSD
-		if (StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION)){
+		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
 			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
 		}
 
@@ -109,6 +113,13 @@ public class DefinitionResource extends AstroboaResource{
 			outputEnum = Output.valueOf(output.toUpperCase());
 		}
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
+	}
+
+	private boolean asrtoboaBuiltInModelIsRequested(String propertyPath) {
+		return StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
+				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION) ||
+				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME) ||
+				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME);
 	}
 
 	
@@ -125,8 +136,7 @@ public class DefinitionResource extends AstroboaResource{
 		
 		//This is to server built in Xml Schemas 
 		//Output is ignored since these schemata are served only in XSD
-		if (StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION)){
+		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
 			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
 		}
 
@@ -202,6 +212,9 @@ public class DefinitionResource extends AstroboaResource{
 		
 			return ContentApiUtils.createResponse(definitionAsXMLOrJSONorXSD, output, callback, null);
 		
+		}
+		catch(WebApplicationException e){
+			throw e;
 		}
 		catch(Exception e){
 			logger.error("Definition For property path: " + propertyPath, e);
