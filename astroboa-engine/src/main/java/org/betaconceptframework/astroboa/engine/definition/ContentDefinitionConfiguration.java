@@ -343,7 +343,7 @@ public class ContentDefinitionConfiguration {
 							fileConf.reload();
 							xsomParser.parse(fileConf.getFile());
 							definitionVisitor.addXMLSchemaDefinitionForFileName(FileUtils.readFileToByteArray(fileConf.getFile()),
-									StringUtils.substringAfterLast(absolutePath, CmsConstants.FORWARD_SLASH));
+									StringUtils.substringAfterLast(absolutePath, File.separator));
 						}
 						catch(Exception e){
 							//Just issue a warning
