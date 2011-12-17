@@ -121,7 +121,8 @@ public class ContentTypeEditor {
 					schemaContainer.setSchemaFile((File)contentTypeFile);
 				}
 				else if (contentTypeFile instanceof byte[]){
-					schemaContainer.setSchema(new String((byte[])contentTypeFile,"UTF-8"));
+					String schema = new String((byte[])contentTypeFile,"UTF-8");
+					schemaContainer.setSchema(schema);
 				}
 				
 				xsdSchemasPerContentType.put(contentType, schemaContainer);
@@ -304,6 +305,8 @@ public class ContentTypeEditor {
 
 				if (! StringUtils.equals(contentTypeFile.getParentFile().getAbsolutePath(), contentDefinitionSchemaPath)){
 					//This way it is ensured that the file is located under the expected directory
+					logger.error("File is there but its parent absolute path {} is not the same with definition parent directory {}", 
+							contentTypeFile.getParentFile().getAbsolutePath(), contentDefinitionSchemaPath);
 					return null;
 				}
 
