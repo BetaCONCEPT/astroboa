@@ -68,7 +68,8 @@ public enum RepositoryRegistry{
 	private  final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String ASTROBOA_CONFIGURATION_FILE = "astroboa-conf.xml";
-	
+	private String ASTROBOA_CONFIGURATION_XSD_FILEPATH = CmsConstants.FORWARD_SLASH+"META-INF"+CmsConstants.FORWARD_SLASH+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME;
+
 	private Unmarshaller configurationUnmarshaller;
 	
 	private Repositories repositories;
@@ -329,14 +330,22 @@ public enum RepositoryRegistry{
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		schemaFactory.setResourceResolver(new W3CRelatedSchemaEntityResolver());
 		
-		
 		//Search in classpath at root level
-		URL configurationSchemaURL = this.getClass().getClassLoader().getResource("META-INF"+File.separator+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME);
+		URL configurationSchemaURL = this.getClass().getResource(ASTROBOA_CONFIGURATION_XSD_FILEPATH);
 		
-		if (configurationSchemaURL ==null)
-		{
-			throw new Exception("Could not find "+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME+ " in classpath");
+		/*if (configurationSchemaURL ==null){
+				
+			//Expect to find configuration xsd in jboss_home/server/default/conf
+			if (configurationHomeDir != null){
+				//We expect to find xml in JBOSS-HOME/server/default/conf directory
+				configurationSchemaURL = new URL(configurationHomeDir+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME);
+			}
+		}*/
+			
+		if (configurationSchemaURL ==null){
+			throw new Exception("Could not find "+ASTROBOA_CONFIGURATION_XSD_FILEPATH+ " nor in "+configurationHomeDir+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME+ " in classpath");
 		}
+
 		
 		return schemaFactory.newSchema(configurationSchemaURL);
 	}
