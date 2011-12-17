@@ -33,17 +33,20 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 public final class SchemaUtils {
 
 	public static String buildSchemaLocationForAstroboaModelSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, false);
 	}
 
 	public static String buildSchemaLocationForAstroboaApiSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, false);
 	}
 
-	public static String buildSchemaLocationAccordingToActiveClient(String schemaFileName){
+	public static String buildSchemaLocationAccordingToActiveClient(String schemaFileName, boolean includeOutputType){
 		
 		UrlProperties urlProperties = new UrlProperties();
-		urlProperties.setResourceRepresentationType(ResourceRepresentationType.XSD);
+		
+		if (includeOutputType){
+			urlProperties.setResourceRepresentationType(ResourceRepresentationType.XSD);
+		}
 		urlProperties.setFriendly(true);
 		urlProperties.setRelative(false);
 		urlProperties.setName(schemaFileName);
