@@ -75,7 +75,13 @@ public class CmsEntityResolverForValidation implements EntityResolver{
 				String schemaFilename = systemId;
 				
 				//We are only interested in file name
-				if (schemaFilename.contains(CmsConstants.FORWARD_SLASH)){
+				if (schemaFilename.contains(File.separator)){
+					schemaFilename = StringUtils.substringAfterLast(systemId, File.separator);
+				}
+				else if (! File.separator.equals(schemaFilename.contains(CmsConstants.FORWARD_SLASH)) && schemaFilename.contains(CmsConstants.FORWARD_SLASH)){
+					//Perform the extra check in case File.separator is not '/' and it 
+					//does not exist in the schema filename.
+					//This case usually appears in a windows environment.
 					schemaFilename = StringUtils.substringAfterLast(systemId, CmsConstants.FORWARD_SLASH);
 				}
 				
