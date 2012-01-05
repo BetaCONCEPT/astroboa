@@ -69,7 +69,7 @@ public class ContentObjectFolderRenderer {
 
 		ContentObjectFolder contentObjectFolder = new ContentObjectFolderImpl();
 
-		contentObjectFolder.setId(contentObjectFolderNode.getUUID());
+		contentObjectFolder.setId(contentObjectFolderNode.getIdentifier());
 		contentObjectFolder.setType(renderType(contentObjectFolderNode));
 		((ContentObjectFolderImpl)contentObjectFolder).setFullPath(getFullPath(contentObjectFolderNode, contentObjectFolder.getType()));
 

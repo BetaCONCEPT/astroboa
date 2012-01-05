@@ -95,9 +95,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springmodules.jcr.JcrSessionFactory;
-import org.springmodules.jcr.SessionFactory;
-import org.springmodules.jcr.SessionFactoryUtils;
+import org.springframework.extensions.jcr.JcrSessionFactory;
+import org.springframework.extensions.jcr.SessionFactory;
+import org.springframework.extensions.jcr.SessionFactoryUtils;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -183,14 +185,8 @@ public class RepositoryDao implements ApplicationListener{
 
 			//Create JcrSessionFactory
 			SessionFactory jcrSessionFactory = createJcrSessionFactory(currentJcrRepositoryJndiName);
-
-			//This is the only wat to retrieve repositoy home dir.
-			//Open a session, create one if none exists and retrieve the Repository object 
-			//related to that session.
-			Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
-			Repository repository = session.getRepository();
-			String repositoryHomeDirPath = JackrabbitDependentUtils.getRepositoryHomeDir(repository);
-			session.logout();
+			
+			String repositoryHomeDirPath = getRepositoryHomeDirectory(jcrSessionFactory);
 	
 			CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
 					repositoryHomeDirPath, 
@@ -205,7 +201,7 @@ public class RepositoryDao implements ApplicationListener{
 			repositories.put(repositoryId, cmsRepository);
 			jcrSessionFactoriesPerRepository.put(repositoryId, jcrSessionFactory);
 			
-			if (fullReloadRepository(repositoryId, repositoryConfiguration, repository)){
+			if (fullReloadRepository(repositoryId, repositoryConfiguration, jcrSessionFactory)){
 				
 				//Initialize repository and load definition to cache
 				SecurityContext securityContext = new SecurityContext(repositoryId, null, 30, null);
@@ -361,7 +357,8 @@ public class RepositoryDao implements ApplicationListener{
 	}
 
 
-	private boolean fullReloadRepository(String repositoryId,	RepositoryType repositoryConfiguration, Repository repository) {
+	@Transactional(readOnly=false, rollbackFor = CmsException.class, propagation = Propagation.REQUIRED)
+	private boolean fullReloadRepository(String repositoryId,	RepositoryType repositoryConfiguration, SessionFactory jcrSessionFactory) {
 		
 		//Reload repository if repository has not been loaded
 		if (! repositories.containsKey(repositoryId)){
@@ -369,9 +366,15 @@ public class RepositoryDao implements ApplicationListener{
 		}
 		
 		//Check if cache manager settings have changed
+		Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
+
+		Repository repository = session.getRepository();
+
 		if (JackrabbitDependentUtils.cacheManagerSettingsHaveChanged(repositoryConfiguration, repository)){
 			return true;
 		}
+		
+		session.logout();
 		
 		return false;
 	}
@@ -939,6 +942,21 @@ public class RepositoryDao implements ApplicationListener{
 		}
 
 		return securityContext.getAuthenticationToken();
+	}
+	
+
+	//This is the only way to retrieve repository home directory.
+	//which is provided in the Jackrabbit JCA configuration file
+	//Open a session inside a transaction, create one if none exists and retrieve the Repository object 
+	//related to that session.
+	@Transactional(readOnly=false, rollbackFor = CmsException.class, propagation = Propagation.REQUIRED)
+	private String getRepositoryHomeDirectory(SessionFactory jcrSessionFactory){
+		Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
+		Repository repository = session.getRepository();
+		String repositoryHomeDirPath = JackrabbitDependentUtils.getRepositoryHomeDir(repository);
+		session.logout();
+		
+		return repositoryHomeDirPath;
 	}
 
 }

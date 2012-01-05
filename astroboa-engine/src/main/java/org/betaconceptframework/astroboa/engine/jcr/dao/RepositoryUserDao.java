@@ -44,6 +44,7 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.RepositoryUserCriteria;
@@ -809,11 +810,11 @@ public class RepositoryUserDao extends JcrDaoSupport {
 
 			Node parent = spaceNode.getParent();
 			
-			if (!parent.isNodeType(CmsBuiltInItem.RepositoryUser.getJcrName()) && !spacesToBeDeleted.containsKey(spaceNode.getUUID())){
+			if (!parent.isNodeType(CmsBuiltInItem.RepositoryUser.getJcrName()) && !spacesToBeDeleted.containsKey(spaceNode.getIdentifier())){
 				boolean found = false;
 				//Iterate through space tree to see if its parent is marked for deletion
 				while (parent != null && parent.isNodeType(CmsBuiltInItem.Space.getJcrName())){
-					if (!spacesToBeDeleted.containsKey(parent.getUUID())){
+					if (!spacesToBeDeleted.containsKey(parent.getIdentifier())){
 						parent = parent.getParent();
 					}
 					else{
@@ -823,7 +824,7 @@ public class RepositoryUserDao extends JcrDaoSupport {
 				}
 
 				if (!found){
-					spacesToBeDeleted.put(spaceNode.getUUID(), spaceNode);
+					spacesToBeDeleted.put(spaceNode.getIdentifier(), spaceNode);
 				}
 			}
 		}

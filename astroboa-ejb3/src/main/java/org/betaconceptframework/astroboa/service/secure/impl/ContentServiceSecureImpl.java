@@ -283,4 +283,12 @@ public class ContentServiceSecureImpl extends AbstractSecureAstroboaService impl
 			String authenticationToken) {
 		return contentService.saveContentObjectResourceCollection(contentSource, version, updateLastModificationTime, lockToken);
 	}
+
+	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
+	public byte[] getBinaryChannelContent(
+			String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel,
+			String authenticationToken) {
+
+		return contentService.getBinaryChannelContent(jcrNodeUUIDWhichCorrespondsToTheBinaryChannel);
+	}
 }

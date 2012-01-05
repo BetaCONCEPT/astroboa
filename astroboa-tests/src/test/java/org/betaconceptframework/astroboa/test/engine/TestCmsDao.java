@@ -24,8 +24,8 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryDao;
 import org.betaconceptframework.astroboa.test.AstroboaTestContext;
-import org.springmodules.jcr.SessionFactory;
-import org.springmodules.jcr.SessionFactoryUtils;
+import org.springframework.extensions.jcr.SessionFactory;
+import org.springframework.extensions.jcr.SessionFactoryUtils;
 
 
 /**

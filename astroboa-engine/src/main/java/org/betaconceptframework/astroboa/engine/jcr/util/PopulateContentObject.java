@@ -138,16 +138,16 @@ public class PopulateContentObject {
 			contentObjectPropertyContainerPopulateTask.setSaveMode(saveMode);
 			contentObjectPropertyContainerPopulateTask.setSession(session);
 			contentObjectPropertyContainerPopulateTask.setComplexPropertyNode(contentObjectNode);
-			contentObjectPropertyContainerPopulateTask.setContentObjectNodeUUID(contentObjectNode.getUUID());
+			contentObjectPropertyContainerPopulateTask.setContentObjectNodeUUID(contentObjectNode.getIdentifier());
 			contentObjectPropertyContainerPopulateTask.setContext(context);
 			contentObjectPropertyContainerPopulateTask.populate();
 			
 			if ( StringUtils.isBlank(((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).getContentObjectNodeUUID())){
-				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setContentObjectNodeUUID(contentObjectNode.getUUID());
+				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setContentObjectNodeUUID(contentObjectNode.getIdentifier());
 			}
 			
 			if ( StringUtils.isBlank(((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).getPropertyContainerUUID())){
-				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setPropertyContainerNodeUUID(contentObjectNode.getUUID());
+				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setPropertyContainerNodeUUID(contentObjectNode.getIdentifier());
 			}
 
 		}
@@ -199,7 +199,7 @@ public class PopulateContentObject {
 				//mandatory and normally this should never happen
 				//system name must not be blank. Therefore we create 
 				//a value using path to content object node plus its UUID
-				systemName = JcrNodeUtils.getYearMonthDayPathForContentObjectNode(contentObjectNode)+contentObjectNode.getUUID();
+				systemName = JcrNodeUtils.getYearMonthDayPathForContentObjectNode(contentObjectNode)+contentObjectNode.getIdentifier();
 			}
 			
 			//Filter created system name

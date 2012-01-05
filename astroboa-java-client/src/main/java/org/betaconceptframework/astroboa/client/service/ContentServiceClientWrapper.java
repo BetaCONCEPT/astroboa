@@ -514,4 +514,19 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 			throw new CmsException("ContentService reference was not found");
 		}
 	}
+
+	@Override
+	public byte[] getBinaryChannelContent(
+			String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel) {
+		if (contentServiceSecure != null){
+			if (successfullyConnectedToRemoteService){  
+				client.activateClientContext();
+			}
+			
+			return contentServiceSecure.getBinaryChannelContent(jcrNodeUUIDWhichCorrespondsToTheBinaryChannel, getAuthenticationToken());
+		}
+		else{
+			throw new CmsException("ContentService reference was not found");
+		}
+	}
 }

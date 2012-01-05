@@ -529,7 +529,7 @@ public class PopulateComplexCmsProperty{
 						childComplexPropertyNode = existingChildComplexNodes.get(childComplexContentObjectPropertyId);
 						
 						childComplexContentObjectProperty.setId(childComplexContentObjectPropertyId);
-						((LazyCmsProperty) childComplexContentObjectProperty).setPropertyContainerNodeUUID(childComplexPropertyNode.getUUID());
+						((LazyCmsProperty) childComplexContentObjectProperty).setPropertyContainerNodeUUID(childComplexPropertyNode.getIdentifier());
 						((LazyCmsProperty) childComplexContentObjectProperty).setContentObjectNodeUUID(contentObjectNodeUUID);
 
 					}
@@ -641,7 +641,7 @@ public class PopulateComplexCmsProperty{
 		context.getCmsRepositoryEntityUtils().createCmsIdentifier(childComplexPropertyNode, childComplexContentObjectProperty, useProvidedId);
 		
 		//Also append UUIDs necessary for lazy loading
-		((LazyCmsProperty) childComplexContentObjectProperty).setPropertyContainerNodeUUID(childComplexPropertyNode.getUUID());
+		((LazyCmsProperty) childComplexContentObjectProperty).setPropertyContainerNodeUUID(childComplexPropertyNode.getIdentifier());
 		((LazyCmsProperty) childComplexContentObjectProperty).setContentObjectNodeUUID(contentObjectNodeUUID);
 		
 		return childComplexPropertyNode;

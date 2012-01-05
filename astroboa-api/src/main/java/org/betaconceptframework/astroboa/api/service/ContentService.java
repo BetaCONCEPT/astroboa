@@ -938,4 +938,19 @@ public interface ContentService {
 	 */
 	List<ContentObject> saveContentObjectResourceCollection(Object contentSource,boolean version, boolean updateLastModificationTime, String lockToken);
 
+	/**
+	 * Return the content of a binary channel.
+	 * 
+	 * <p>
+ 	 * Used mainly for lazy loading the content of a {@link BinaryChannel} when calling method {@link BinaryChannel#getContent()} or
+ 	 * {@link BinaryChannel#getContentAsStream()} 
+	 * 
+	 * Users are STRONLGY encouraged to use the aforementioned methods for retrieving the content of a bunary channel.
+	 * </p>
+	 * 
+	 * @param jcrNodeUUIDWhichCorrespondsToTheBinaryChannel UUID of Jcr Node which corresponds to the binary channel
+	 * 
+	 * @return <code>true</code> if value exists for the provided property, <code>false</code> otherwise
+	 */
+	byte[] getBinaryChannelContent(String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel);
 }

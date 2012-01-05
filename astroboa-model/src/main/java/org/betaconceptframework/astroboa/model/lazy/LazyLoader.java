@@ -439,4 +439,12 @@ public class LazyLoader  {
 		return definitionService.getDefinitionHierarchyDepthPerContentType();
 	}
 
+
+	public byte[] lazyLoadBinaryValue(String binaryChannelId, String authenticationToken) {
+
+		activateClientContextForAuthenticationToken(authenticationToken);
+
+		return contentService.getBinaryChannelContent(binaryChannelId);
+	}
+
 }

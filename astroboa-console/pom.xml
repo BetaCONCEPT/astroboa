@@ -293,6 +293,23 @@
 			<artifactId>richfaces-impl</artifactId>
 		</dependency>
 		
+		<!-- This dependency is marked as optional in  org.richfaces.framework:richfaces-impl 
+			and it should be declared explicitly since NEKO parser is used, that is, it 
+			is defined in web.xml in parameter org.ajax4jsf.xmlparser.ORDER
+			-->		
+		<dependency>
+			<groupId>nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>

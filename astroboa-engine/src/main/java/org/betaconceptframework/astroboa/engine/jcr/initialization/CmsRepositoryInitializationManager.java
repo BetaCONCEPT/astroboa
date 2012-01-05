@@ -60,5 +60,5 @@ public class CmsRepositoryInitializationManager {
 		cmsIdentityStoreManager.createSystemPerson(cmsRepositoryId, identityStore.getId());
 		
 	}
-
+	
 }

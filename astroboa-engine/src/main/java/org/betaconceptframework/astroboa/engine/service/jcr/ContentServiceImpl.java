@@ -494,4 +494,17 @@ public class ContentServiceImpl  implements ContentService {
 			throw new CmsException(e); 		
 		}
 	}
+
+	@Override
+	public byte[] getBinaryChannelContent(String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel) {
+		try{ 
+			return contentDao.getBinaryChannelContent(jcrNodeUUIDWhichCorrespondsToTheBinaryChannel);
+		}
+		catch(CmsException e){
+			throw e;
+		}
+		catch (Exception e) { 
+			throw new CmsException(e); 		
+		}
+	}
 }

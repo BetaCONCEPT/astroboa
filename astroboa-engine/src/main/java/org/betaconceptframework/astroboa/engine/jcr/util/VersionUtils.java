@@ -53,7 +53,7 @@ public class VersionUtils {
 			return null;
 		}
 		
-		return contentObjectNode.getVersionHistory();
+		return session.getWorkspace().getVersionManager().getVersionHistory(contentObjectNode.getPath());
 		
 	}
 	

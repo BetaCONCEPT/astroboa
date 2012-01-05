@@ -40,47 +40,28 @@ public class OrderByClauseHelper {
 
 	private Map<String, Order> orderProperties;
 
-	//Represents the projection of XPath
-	//Used when properties in order by clause are not direct
-	//children of the jcr node to be queried
-	//otherwise order by will not be considered
-	//This is due to the lack of support of child axis in order by clause
-	//by Jackrabbit
-	private String columnProjectionInXPath = "";
-
-	private String orderByClause = "";
-
-	private int numberOfColumnsParticipatingInProjection = 0;
-
-	public int getNumberOfColumnsParticipatingInProjection() {
-		return numberOfColumnsParticipatingInProjection;
-	}
-
-	public String getOrderByClause() {
-		return orderByClause;
-	}
-
-	public String getColumnProjectionInXPath() {
-		return columnProjectionInXPath;
-	}
-
 	public OrderByClauseHelper(Map<String, Order> orderProperties) {
 		this.orderProperties = orderProperties;
 	}
 
-	public void generateOrderBy() {
-		orderByClause = CmsConstants.EMPTY_SPACE + CmsConstants.ORDER_BY + CmsConstants.EMPTY_SPACE;
-
-		if (MapUtils.isEmpty(orderProperties))
-		{
-			columnProjectionInXPath = "";
-			orderByClause = "";
-			numberOfColumnsParticipatingInProjection = 0;
+	public OrderByClauseHelper(String property, Order order) {
+		this.orderProperties = new HashMap<String, Order>();
+		
+		if (StringUtils.isNotBlank(property) && order != null){
+			this.orderProperties.put(property, order);
 		}
-		else 
-		{
+	}
+	
+	public String generateOrderBy() {
+
+		if (MapUtils.isEmpty(orderProperties)){
+			return  "";
+		}
+		else {
+			String orderByClause = CmsConstants.EMPTY_SPACE + CmsConstants.ORDER_BY + CmsConstants.EMPTY_SPACE;
+
 			boolean orderByStart = true;
-			boolean selectedColumnsStart = true;
+			
 			for (Entry<String, Order> propertyEntry : orderProperties.entrySet()) {
 
 				final String property = propertyEntry.getKey();
@@ -90,23 +71,7 @@ public class OrderByClauseHelper {
 					
 					String propertyXPathRepresentation = XPathUtils.generateJcrPathForPropertyPath(property, true);
 					
-					String valueToBePlacedInColumnProjection = null;
-					String valueToBePlacedInOrderByClause = null;
-					
-					if (propertyXPathRepresentation.startsWith(CmsConstants.AT_CHAR) ){
-						valueToBePlacedInColumnProjection ="";
-						valueToBePlacedInOrderByClause = propertyXPathRepresentation;
-					}
-					else{
-						
-						valueToBePlacedInColumnProjection = StringUtils.substringBeforeLast(propertyXPathRepresentation, CmsConstants.FORWARD_SLASH);
-						valueToBePlacedInOrderByClause = StringUtils.substringAfterLast(propertyXPathRepresentation, CmsConstants.FORWARD_SLASH);
-						
-						if (StringUtils.isBlank(valueToBePlacedInOrderByClause)){
-							valueToBePlacedInOrderByClause = propertyXPathRepresentation;						
-						}
-					}
-					
+					String valueToBePlacedInOrderByClause = propertyXPathRepresentation;
 					
 					//Build orderBy
 					orderByClause = orderByClause.concat((orderByStart ? "" : CmsConstants.COMMA)
@@ -116,45 +81,12 @@ public class OrderByClauseHelper {
 						orderByStart = false;
 					}
 
-					//Build selectedColumns
-					if (propertyEntry.getValue() == Order.ascending || propertyEntry.getValue() == Order.descending)
-					{
-						//Generate appropriate column specifier only if property 
-						//is a complex one (i.e. its path contains '.' or '/' character)
-						if (isNotJcrFunction(property) && StringUtils.isNotBlank(valueToBePlacedInColumnProjection)){
-							numberOfColumnsParticipatingInProjection++;
-							columnProjectionInXPath = columnProjectionInXPath.concat(
-									(selectedColumnsStart ? CmsConstants.LEFT_PARENTHESIS_WITH_LEADING_AND_TRAILING_SPACE : " | ")
-									+ CmsConstants.EMPTY_SPACE+ valueToBePlacedInColumnProjection);
-
-							if (selectedColumnsStart){
-								selectedColumnsStart = false;
-							}
-						}
-					}
 				}
 			}
-
-			if (StringUtils.isNotBlank(columnProjectionInXPath))
-				columnProjectionInXPath = CmsConstants.FORWARD_SLASH +  columnProjectionInXPath + CmsConstants.RIGHT_PARENTHESIS_WITH_LEADING_AND_TRAILING_SPACE;
-
-			//Now Jackrabbit seems to ignore more than one columns in projection in respect to order by clause
-			//especially if these properties are NOT properties of the queried node type. If this is the case
-			//then selected columns will not appear in query. Ordering must take place outside repository query
-			//Also any all properties must not appear in order by clause as well
-			if (astroboaEngineWillOrderResults())
-			{
-				columnProjectionInXPath = "";
-				orderByClause = "";
-			}
+			
+			return orderByClause;
 		}
 
-	}
-
-	public boolean astroboaEngineWillOrderResults() {
-		return numberOfColumnsParticipatingInProjection > 1 || 
-			(numberOfColumnsParticipatingInProjection == 1 &&
-				orderProperties.size() > numberOfColumnsParticipatingInProjection );
 	}
 
 	private static String getOrderByProperty(String property, Order order) {
@@ -196,14 +128,6 @@ public class OrderByClauseHelper {
 		+ (propertyNameIsJcrScore ? "" : property)
 		+ CmsConstants.RIGHT_PARENTHESIS+CmsConstants.EMPTY_SPACE
 		+ order.toString();
-	}
-
-	private static boolean isNotJcrFunction(String item) {
-
-		return ( ! JcrBuiltInItem.JcrDeref.getJcrName().equals(item) &&
-				! JcrBuiltInItem.JcrScore.getJcrName().equals(item) &&
-				! JcrBuiltInItem.JcrContains.getJcrName().equals(item) && 
-				! JcrBuiltInItem.JcrLike.getJcrName().equals(item));
 	}
 
 	public static Map<String, Order> extractOrderPropertiesFromQuery(String xpathSearchQuery) {

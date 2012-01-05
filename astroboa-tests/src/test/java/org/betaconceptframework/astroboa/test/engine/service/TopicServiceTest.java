@@ -956,37 +956,67 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 	@Test
 	public void testCheckFlatTaxonomyQuery(){
 		
+		Topic parentTopic = JAXBTestUtils.createTopic("check-flat-taxonomy-query-parent", 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+
+		
+		Topic childTopic = JAXBTestUtils.createTopic("checkFlatTaxonomyQueryChildTopic-1", 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+
+		parentTopic.addChild(childTopic);
+
+		Topic childTopic2 = JAXBTestUtils.createTopic("checkFlatTaxonomyQueryChildTopic-2", 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
+
+		parentTopic.addChild(childTopic2);
+		topicService.save(parentTopic);
+		
+		addEntityToBeDeletedAfterTestIsFinished(parentTopic);
+		
 		TopicCriteria rootTopicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		rootTopicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.SUBJECT_TAXONOMY_NAME);
 		rootTopicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		rootTopicCriteria.searchInDirectAncestorOnly();
-		rootTopicCriteria.addCriterion(CriterionFactory.isNotNull(CmsBuiltInItem.Name.getJcrName()));
 
 		
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.searchInDirectAncestorOnly();
-		topicCriteria.setOffsetAndLimit(0, 0);
+		topicCriteria.setOffsetAndLimit(0, 4);
 		topicCriteria.setAncestorCriteria(rootTopicCriteria);
+		topicCriteria.addCriterion(CriterionFactory.contains(CmsBuiltInItem.Name.getJcrName(), "checkFlatTaxonomyQueryChildTopic*"));
 		
 		logger.debug("XPATH "+topicCriteria.getXPathQuery());
 		
 		CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		
 		logger.debug(String.valueOf(outcome.getCount()));
+		Assert.assertEquals(outcome.getCount(), 2, "Problem in flat taxonomy query");
 		
-		for (Topic topic : outcome.getResults()){
-			logger.debug("{} {}", topic.getName(), topic.getParent().getName());
+		
+		Map<String, Topic> topics = new HashMap<String, Topic>();
+		
+		for (Topic result : outcome.getResults()){
+			logger.debug("{} {}", result.getName(), result.getParent().getName());
+			topics.put(result.getName(), result);
+			
 		}
 		
-		String query ="bccms:system/bccms:taxonomyRoot/bccms:subjectTaxonomy/bccms:topic/element ( *,bccms:topic )";
+		String query ="bccms:system/bccms:taxonomyRoot/bccms:subjectTaxonomy/bccms:topic/element ( *,bccms:topic ) [ jcr:contains(., \"checkFlatTaxonomyQueryChildTopic*\") ] order by jcr:score() descending";
 		
 		TopicCriteria topic2Criteria = CmsCriteriaFactory.newTopicCriteria();
 		topic2Criteria.setXPathQuery(query);
 		
 		CmsOutcome<Topic> outcome2 = topicService.searchTopics(topic2Criteria, ResourceRepresentationType.TOPIC_LIST);
 		
-		Assert.assertEquals(outcome.getCount(), outcome2.getCount(), "Problem in flat taxonomy query");
+		logger.debug(taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.JSON, FetchLevel.FULL, true));
+		
+		Assert.assertEquals(outcome.getCount(), outcome2.getCount(), "Problem in flat taxonomy query. Query "+topicCriteria.getXPathQuery() + " did not return the same results with the query "+ topic2Criteria.getXPathQuery());
+		
+		for (Topic result : outcome2.getResults()){
+			
+			Assert.assertTrue(topics.containsKey(result.getName()), "Topic "+result.getName()+ " does not belong to the results of the query "+ topicCriteria.getXPathQuery());
+		}
 		
 	}
 	

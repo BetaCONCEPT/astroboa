@@ -64,7 +64,7 @@ public class CmsQueryHandler  {
 			Query query = queryManager.createQuery(xpathQuery, queryFormat);
 
 			//Inform query about offset and limit
-			query = JackrabbitDependentUtils.setOffsetAndLimitToQuery(query, offset, limit);
+			setOffsetAndLimitToQuery(query, offset, limit);
 
 			//Run query
 			QueryResult queryResultForAllNodes = executeQuery(query);
@@ -125,15 +125,7 @@ public class CmsQueryHandler  {
 		
 		String pathQuery = cmsCriteria.getXPathQuery();
 		
-		//If XPath Query does not have order by and at the same time there are order properties in criteria
-		//do not provide offset and limit as ordering will
-		//be done later and not by Jackrabbit
-		if (!StringUtils.contains(pathQuery, CmsConstants.ORDER_BY) && MapUtils.isNotEmpty(cmsCriteria.getOrderProperties())){
-			return getNodesFromXPathQuery(session, pathQuery, 0,-1, retrieveNodeIterator);
-		}
-		else{
-			return getNodesFromXPathQuery(session, pathQuery, offset, limit, retrieveNodeIterator);
-		}
+		return getNodesFromXPathQuery(session, pathQuery, offset, limit, retrieveNodeIterator);
 	}
 
 	public CmsQueryResult getNodesFromXPathQuery(Session session,
@@ -145,5 +137,26 @@ public class CmsQueryHandler  {
 			CmsCriteria cmsCriteria, boolean retrieveNodeIterator) throws RepositoryException {
 		return getNodesFromXPathQuery(session, cmsCriteria, cmsCriteria.getOffset(), cmsCriteria.getLimit(), retrieveNodeIterator);
 	}
+
+	public void setOffsetAndLimitToQuery(Query query, int offset, int limit) {
+
+		query.setOffset(offset);
+		
+		if (limit > 0){
+			query.setLimit(limit);
+		}
+		else if (limit == 0){
+			//Jackrabbit uses limit only if this is greater than 0
+			//In all other cases it fetches all results.
+			//In Astroboa, however, limit 0 denotes that no result should be rendered, 
+			//that is only result count is needed.
+			//So in order to 'limit' Jackrabbit to bring the minimum results possible
+			//we set the limit to 1. This way Jackrabbit will only bring one result
+			//which is acceptable since Astroboa requires no result to be fetched.
+			//Total result count is not affected at all by limit
+			query.setLimit(1);
+		}
+	}
+
 
 }

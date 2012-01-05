@@ -152,9 +152,6 @@ Authors
 	<bean id="rendererUtils" autowire="byName"
 		class="org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils"/>
 	
-	<bean id="queryUtils" autowire="byName"
-		class="org.betaconceptframework.astroboa.engine.jcr.util.QueryUtils"/>
-
 	<bean id="spaceUtils" autowire="byName"
 		class="org.betaconceptframework.astroboa.engine.jcr.util.SpaceUtils"/>
 

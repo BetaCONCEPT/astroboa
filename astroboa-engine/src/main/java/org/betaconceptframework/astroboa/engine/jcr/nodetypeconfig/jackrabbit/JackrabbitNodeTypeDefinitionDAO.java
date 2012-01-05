@@ -69,7 +69,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 	
 	/**
 	 * This file contains new node type definitions needed
-	 * for Astroboa v3.x.x . It is used when initialising 
+	 * for Astroboa v3.x.x . It is used for 
 	 * repositories which were created by Astroboa v2.x.x
 	 */
 	private Resource newNodeTypeDefinitionFile;
@@ -146,7 +146,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 			
 			//Check if node Types have already been registered
 			if ( ! isAstroboaUriRegistered(namespaceRegistry)){
-				registerRepositoryCND(session, workspace, false);
+				registerRepositoryCND(session, false);
 
 				createSystemNode(session);
 
@@ -165,8 +165,8 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 					workspace.getNodeTypeManager().getNodeType(CmsBuiltInItem.GenericHourFolder.getJcrName());
 				}
 				catch(NoSuchNodeTypeException nsnte){
-					registerAdditionalNodeTypes(session, workspace, newNodeTypeDefinitionFile, false);
-					registerAdditionalNodeTypes(session, workspace, updatedNodeTypeDefinitionFile, true);
+					registerAdditionalNodeTypes(session, newNodeTypeDefinitionFile, false);
+					registerAdditionalNodeTypes(session, updatedNodeTypeDefinitionFile, true);
 				}
 				
 			}
@@ -190,7 +190,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 			Node organizationSpaceNode = JcrNodeUtils.addSpaceNode(systemNode, CmsBuiltInItem.OrganizationSpace.getJcrName());
 			
 			//Create new CmsIdentifier
-			organizationSpaceNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), organizationSpaceNode.getUUID());
+			organizationSpaceNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), organizationSpaceNode.getIdentifier());
 			
 			//Populate Node with default values
 			organizationSpaceNode.setProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName(), systemUserId);
@@ -250,7 +250,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 
 				cmsLocalizationUtils.updateCmsLocalization(subjectTaxonomyLocalization, subjectTaxonomyNode);
 				
-				subjectTaxonomyNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), subjectTaxonomyNode.getUUID());
+				subjectTaxonomyNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), subjectTaxonomyNode.getIdentifier());
 
 				session.save();
 			}
@@ -276,8 +276,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 	}
 
 
-	private void registerRepositoryCND(Session session,
-			Workspace workspace, boolean reregisterExisting) throws FileNotFoundException, IOException,
+	private void registerRepositoryCND(Session session,boolean reregisterExisting) throws FileNotFoundException, IOException,
 			RepositoryException, AccessDeniedException, ItemExistsException,
 			ConstraintViolationException, InvalidItemStateException,
 			VersionException, LockException, NoSuchNodeTypeException {
@@ -290,7 +289,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 
 			logger.debug("Loading CND {}", repositoryNodeTypeDefinitionFile.getFilename());
 
-			JackrabbitDependentUtils.register(workspace, repositoryNodeTypeDefinitionInputStream, reregisterExisting);
+			JackrabbitDependentUtils.register(session, repositoryNodeTypeDefinitionInputStream, reregisterExisting);
 
 			session.save();
 
@@ -312,8 +311,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 		}
 	}
 	
-	private void registerAdditionalNodeTypes(Session session,
-			Workspace workspace, Resource nodeTypeDefinitionFile, boolean reregisterExisting) throws FileNotFoundException, IOException,
+	private void registerAdditionalNodeTypes(Session session, Resource nodeTypeDefinitionFile, boolean reregisterExisting) throws FileNotFoundException, IOException,
 			RepositoryException, AccessDeniedException, ItemExistsException,
 			ConstraintViolationException, InvalidItemStateException,
 			VersionException, LockException, NoSuchNodeTypeException {
@@ -330,7 +328,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 
 				logger.debug("Loading CND {}", nodeTypeDefinitionFile.getFilename());
 
-				JackrabbitDependentUtils.register(workspace, nodeTypeDefinitionInputStream, reregisterExisting);
+				JackrabbitDependentUtils.register(session, nodeTypeDefinitionInputStream, reregisterExisting);
 
 				session.save();
 

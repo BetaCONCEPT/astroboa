@@ -230,7 +230,7 @@ public class JcrNodeUtils  {
 	
 	public static Node getNodeByNativeRepositoryIdentifier(Session session, String nativeRepositoryIdentifier) throws RepositoryException
 	{
-		return session.getNodeByUUID(nativeRepositoryIdentifier);
+		return session.getNodeByIdentifier(nativeRepositoryIdentifier);
 	}
 
 	
@@ -360,9 +360,14 @@ public class JcrNodeUtils  {
 	}
 
 	public static void addBinaryProperty(SaveMode saveMode, Node node, ItemQName propertyName, byte[] value, ValueFactory valueFactory) throws  RepositoryException {
-		if (value != null)
-			node.setProperty(propertyName.getJcrName(), JcrValueUtils.getJcrBinary(value, valueFactory));
-		else if (saveMode == SaveMode.UPDATE_ALL)
+		if (value != null) {
+			Value binary = JcrValueUtils.getJcrBinary(value, valueFactory);
+			node.setProperty(propertyName.getJcrName(), binary);
+			
+			if (binary !=null){
+				binary.getBinary().dispose();
+			}
+		} else if (saveMode == SaveMode.UPDATE_ALL)
 			removeProperty(node, propertyName, false);
 		
 	}
