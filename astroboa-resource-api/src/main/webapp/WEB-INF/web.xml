@@ -63,19 +63,19 @@ Authors
 	</context-param>
  	-->
 
-    <context-param>
+    <!-- <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-        	<!-- we directly load the repository services from the spring context which is available in JNDI. 
-        	The services are used by the BinaryChannel and CmsDefiniton Filters which do not utilize the astroboa client -->
-			classpath:astroboa-engine.xml
+        	we directly load the repository services from the spring context which is available in JNDI. 
+        	The services are used by the BinaryChannel and CmsDefiniton Filters which do not utilize the astroboa client
+			<classpath:astroboa-engine.xml
 			
-			<!-- load spring beans from astroboa-resource-api module -->
+			load spring beans from astroboa-resource-api module
 			classpath:Filters.xml
 			classpath:Singletons.xml
 		
         </param-value>
-    </context-param>
+    </context-param> -->
     
     <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
     <context-param>
@@ -167,7 +167,7 @@ Authors
 	
 	<!-- RestEasy as a Filter. This way we can server static content 
             org.jboss.resteasy.plugins.server.servlet.FilterDispatcher -->
-	 <filter>
+<!-- 	 <filter>
         <filter-name>Resteasy</filter-name>
         <filter-class>
         	org.betaconceptframework.astroboa.resourceapi.filter.AstroboaResourceApiDispatcher
@@ -178,21 +178,25 @@ Authors
         <filter-name>Resteasy</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+ -->    
 	<!-- 
    <listener>
       <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
    </listener>
 	 -->
 	 
-	<listener>
+	<!-- <listener>
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener>
+    </listener> -->
     
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
     
+    <servlet-mapping>
+   		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+   		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
     <!--  
     <servlet>
 		<servlet-name>faces</servlet-name>

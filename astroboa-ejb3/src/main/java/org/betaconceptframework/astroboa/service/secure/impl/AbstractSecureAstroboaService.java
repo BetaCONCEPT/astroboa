@@ -34,13 +34,15 @@ import org.springframework.context.ApplicationContext;
  */
 public abstract class AbstractSecureAstroboaService{
 
-	@Resource(name="astroboa.engine.context", mappedName="astroboa.engine.context")
+	@Resource(name="astroboa.engine.context", mappedName="java:jboss/astroboa.engine.context")
 	ApplicationContext springManagedRepositoryServicesContext;
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@PostConstruct
 	public void initialize() {
+		
+		System.out.println("Normal "+ System.identityHashCode(springManagedRepositoryServicesContext));
 		
 		initializeOtherRemoteServices();
 		

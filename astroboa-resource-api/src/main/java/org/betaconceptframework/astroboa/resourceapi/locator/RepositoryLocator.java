@@ -37,8 +37,6 @@ import org.betaconceptframework.astroboa.resourceapi.utility.AstroboaClientCache
 import org.betaconceptframework.astroboa.resourceapi.utility.RepositoryConfigurationBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.sun.jersey.core.util.Base64;
 
@@ -135,18 +133,7 @@ public class RepositoryLocator {
 	private String retrievePermanentKeyForAnonymousUser(String repositoryId,ServletContext servletContext) {
 		
 		// get the key for permanent connections
-		String anonymousUserPermanentKey = null;
-		
-		ApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		if (springContext != null && springContext.containsBean("repositoryConfigurationBean")) {
-			RepositoryConfigurationBean repositoryConfigurationBean = 
-				(RepositoryConfigurationBean) springContext.getBean("repositoryConfigurationBean");
-				anonymousUserPermanentKey = repositoryConfigurationBean.getAnonymousPermanentKeyPerRepository().get(repositoryId);
-		}
-		else {
-			logger.warn("Could not find the repositoryConfigurationBean is Spring Context. The anonymous user permanent key cannot be retrieved. " +
-					"Login will be performed without a permanent key. This is not a problem. However it results in creating a new user token per connection and consumes more server memory");
-		}
+		String anonymousUserPermanentKey = RepositoryConfigurationBean.INSTANCE.getAnonymousPermanentKeyPerRepository().get(repositoryId);
 		
 		if (anonymousUserPermanentKey != null) {
 			return anonymousUserPermanentKey;

@@ -203,7 +203,7 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -229,12 +229,45 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 
+		<!--  Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Spring dependencies that must be explicitly defined -->
+		
+		<!-- Spring-Aop -->
+		
+		<!-- 
+			aspectj/aspectjweaver.jar, aspectj/aspectjrt.jar, (aspectj/aspectjtools.jar)
+			required at runtime when using Spring's AspectJ support and since they are marked as
+			optional in Spring-Aop POM, we must explicitly define them as well
+		-->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
 		<!--
 			javassist and el-api are included in jboss and produce a conflict if
 			not excluded

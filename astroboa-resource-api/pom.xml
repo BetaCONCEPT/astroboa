@@ -87,12 +87,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 		  <groupId>javax.activation</groupId>
 		  <artifactId>activation</artifactId>
 		  <scope>provided</scope>
@@ -103,12 +97,25 @@
 		  <artifactId>jsr311-api</artifactId>
 		  <version>1.1.1</version>
 		</dependency>
-				
+
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+				
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>org.betaconceptframework</groupId>
@@ -216,7 +223,12 @@
   		  <artifactId>jackson-mapper-lgpl</artifactId>
   		  <scope>provided</scope>
 		</dependency>
-
+	
+		<dependency>
+		  <groupId>org.apache.poi</groupId>
+  		  <artifactId>poi</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<scm>

@@ -106,7 +106,7 @@ Authors
 	
 	<dependencies>
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -198,11 +198,6 @@ Authors
 		</dependency>
 		
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-		</dependency>
-		
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
@@ -245,13 +240,15 @@ Authors
 		</dependency>
 		
 		<!-- 
-			Required by seam for validation. 3.1.0.GA is the version
-			of the module which ships with JBoss 5.1.0.GA 
+			Required by seam for validation. The version used is 3.0.0.GA
+			which is specified in org.betaconceptframework:betaconceptframework
+			pom. Although JBoss AS 7.1.0 ships with version 4.2.0.Final, 
+			we keep 3.0.0.GA as Seam 2.2.0.GA is havin ga hard
+			depedency in Hibernate validator 3 
 		-->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>3.1.0.GA</version>
 		</dependency>
 		 	
 		<dependency>

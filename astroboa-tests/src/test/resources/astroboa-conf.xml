@@ -30,8 +30,7 @@ Authors
 
 <repository 
 		id="repository"
-		jcr-repository-jndi-name="repositoryJcrJNDI"
-		db-jndi-name="repositoryDbJNDI"
+		repository-home-directory="${project.build.testOutputDirectory}/repository"
 		serverAliasURL="http://localhost:8080"
 		authenticationTokenTimeout="1"
 		identity-store-repository-id="identityStoreRepository">
@@ -58,8 +57,7 @@ Authors
 
 <repository 
 		id="identityStoreRepository"
-		jcr-repository-jndi-name="identityStoreRepositoryJcrJNDI"
-		db-jndi-name="identityStoreRepositoryDbJNDI">
+		repository-home-directory="${project.build.testOutputDirectory}/identityStoreRepository">
 		
 		<localization>
 			<label xml:lang="el">Astroboa Test Identity Store</label>
@@ -81,8 +79,7 @@ Authors
 
 <repository 
 		id="cloneRepository"
-		jcr-repository-jndi-name="cloneRepositoryJcrJNDI"
-		db-jndi-name="cloneRepositoryDbJNDI"
+		repository-home-directory="${project.build.testOutputDirectory}/cloneRepository"
 		serverAliasURL="http://localhost:8080"
 		identity-store-repository-id="identityStoreRepository">
 		

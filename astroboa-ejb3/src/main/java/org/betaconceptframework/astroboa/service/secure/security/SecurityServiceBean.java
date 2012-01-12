@@ -21,8 +21,11 @@ package org.betaconceptframework.astroboa.service.secure.security;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Local;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -30,7 +33,6 @@ import org.betaconceptframework.astroboa.api.model.exception.TokenExpirationExce
 import org.betaconceptframework.astroboa.api.service.CacheService;
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
-import org.jboss.ejb3.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -52,7 +54,7 @@ import org.springframework.context.ApplicationContext;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-@Service(name="SecurityService") //In future it should be replaced by @Singleton annotation of EJB3.1
+@Singleton(name="SecurityService")
 @Local({SecurityService.class})
 public class SecurityServiceBean implements SecurityService {
 
@@ -62,10 +64,15 @@ public class SecurityServiceBean implements SecurityService {
 
 	private final Timer authenticationTokenRemovalTimer = new Timer();
 
-	@Resource(name="astroboa.engine.context", mappedName="astroboa.engine.context")
+	@Resource(name="astroboa.engine.context", mappedName="java:jboss/astroboa.engine.context")
 	private ApplicationContext springManagedRepositoryServicesContext;
 
 	private CacheService cacheService;	
+
+	@PostConstruct
+	public void start() throws Exception {
+		cacheService = (CacheService) springManagedRepositoryServicesContext.getBean("cacheService");
+	}
 
 	public void registerAndActivateClientContextForAuthenticationToken(String authenticationToken){
 
@@ -211,11 +218,6 @@ public class SecurityServiceBean implements SecurityService {
 		}
 
 
-	}
-
-	@Override
-	public void start() throws Exception {
-				cacheService = (CacheService) springManagedRepositoryServicesContext.getBean("cacheService");
 	}
 
 	@Override

@@ -40,7 +40,7 @@ import org.betaconceptframework.astroboa.service.secure.security.SecurityService
 @TransactionManagement(TransactionManagementType.BEAN)
 public class RepositoryServiceSecureLocalImpl extends RepositoryServiceSecureImpl implements RepositoryServiceSecure{
 
-	@Resource(name="SecurityService", mappedName="SecurityService/local")
+	@Resource(name="SecurityService", mappedName="java:module/SecurityService!org.betaconceptframework.astroboa.service.secure.security.SecurityService")
 	private SecurityService securityService;
 
 	@Override

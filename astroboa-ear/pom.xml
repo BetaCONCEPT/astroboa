@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Copyright (C) 2005-2011 BetaCONCEPT LP.
+
+		  This file is part of Astroboa.
+		 
+		  Astroboa is free software: you can redistribute it and/or modify
+		  it under the terms of the GNU Lesser General Public License as published by
+		  the Free Software Foundation, either version 3 of the License, or
+		  (at your option) any later version.
+		 
+		  Astroboa is distributed in the hope that it will be useful,
+		  but WITHOUT ANY WARRANTY; without even the implied warranty of
+		  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		  GNU Lesser General Public License for more details.
+		 
+		  You should have received a copy of the GNU Lesser General Public License
+		  along with Astroboa.  If not, see <http://www.gnu.org/licenses />.
+		 
+Authors 
+		  Gregory Chomatas (gchomatas@betaconcept.com)
+		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
+		 		    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.betaconceptframework.astroboa</groupId>
+		<artifactId>astroboa-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>astroboa-ear</artifactId>
+	<packaging>ear</packaging>
+	<name>Astroboa EAR</name>
+	<description>
+		This modules is responsible to generate Astroboa EAR
+	</description>
+
+	<build>
+		<plugins>
+			 <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+				   
+				   <finalName>astroboa</finalName>
+				
+					<fileNameMapping>no-version</fileNameMapping>
+					
+				   <!-- This is the default directory INSIDE ear where library jars are located -->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<!-- Resource encoding -->
+					 <encoding>UTF-8</encoding>
+					 <!-- The version of the application.xml to generate. Valid values are 1.3, 1.4, 5 and 6. -->
+			         <version>6</version>
+			         
+			         <!-- <generateModuleId>true</generateModuleId> -->
+			         <filtering>true</filtering>
+			         
+			         <!-- 
+			         	Defines the value of the initialize in order element to be used when the application.xml 
+			         	file is auto-generated. When set to true, modules must be initialized in the order they're
+			         	listed in this deployment descriptor, with the exception of application client modules, which
+			         	can be initialized in any order. If initialize-in-order is not set or set to false, the order 
+			         	of initialization is unspecified and may be product-dependent. Since JavaEE6.
+			          -->
+			         <initializeInOrder>true</initializeInOrder>
+			         
+					<modules>
+						<jarModule>
+							<groupId>org.betaconceptframework.astroboa</groupId>
+							<artifactId>astroboa-engine</artifactId>
+							<uri>astroboa-engine.spring</uri>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						
+						<!-- <ejbModule>
+							<groupId>org.betaconceptframework.astroboa</groupId>
+							<artifactId>astroboa-ejb3</artifactId>
+						</ejbModule>
+
+						<webModule>
+							<groupId>org.betaconceptframework.astroboa</groupId>
+							<artifactId>astroboa-resource-api</artifactId>
+							<bundleFileName>resource-api.war</bundleFileName>
+							<contextRoot>/resource-api</contextRoot>
+							<unpack>false</unpack>
+						</webModule>
+ -->
+						<!-- <webModule>
+							<groupId>org.betaconceptframework.astroboa</groupId>
+							<artifactId>astroboa-console</artifactId>
+							<bundleFileName>console.war</bundleFileName>
+							<contextRoot>/console</contextRoot>
+							<unpack>false</unpack>
+						</webModule> -->
+						
+						
+						<!--
+							 Jaxb-impl-2.1.12 that ships with astroboa-engine requires the following
+							 dependency to have the name jaxb-api.jar and not jaxb-api-2.1.jar .
+							 The name 'jaxb-api.jar' is hard defined inside the META-INF/MANIFEST.MF
+							 file of the jaxb-impl-2.1.12.jar 
+						<jarModule>
+			               <groupId>javax.xml.bind</groupId>
+			               <artifactId>jaxb-api</artifactId>
+			               <bundleFileName>jaxb-api.jar</bundleFileName>
+			               <includeInApplicationXml>true</includeInApplicationXml>
+			            </jarModule>
+						-->
+						
+					</modules>
+					 <jboss>
+             			<version>5</version>
+           				<module-order>strict</module-order>
+           			 </jboss>
+				</configuration>
+	  		</plugin>
+		
+		</plugins>
+	</build>
+	
+	<dependencies>
+			<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-model</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+	
+<!-- 		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-resource-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-console</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+ -->				
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-engine</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<exclusions>
+				<!-- These are Spring dependencies that ship with Snwodrop and therefore there are provided -->
+				<exclusion>
+					<artifactId>cglib-nodep</artifactId>
+					<groupId>cglib</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjrt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjweaver</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-jaas</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+		
+<!-- 		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-ejb3</artifactId>
+			<type>ejb</type>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+ -->
+		<!-- 
+			We need to explicitly define xercesImpl dependency so that it is installed
+			in the EAR's lib. Also we have to setup a dependency in the jboss-deployment-structure.xml
+			between the astroboa-engine module and the org.apache.xerces module that ships with JBoss AS 7
+			in order for astroboa-engine to load successfully 
+		-->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		
+		<!-- 
+			This dependency is marked as provided in astroboa-resource-api
+			and thus we need to specify it here in order to be placed in the
+			lib directory
+		 -->		
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-mapper-lgpl</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.0-801.jdbc4</version>
+		</dependency>
+
+	</dependencies>
+
+	<scm>
+		<connection>
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
+		</connection>
+		<developerConnection>
+			scm:git:git@github.com:BetaCONCEPT/astroboa.git
+		</developerConnection>
+		<url>scm:git:git@github.com:BetaCONCEPT/astroboa.git
+		</url>
+	</scm>
+
+</project>
+

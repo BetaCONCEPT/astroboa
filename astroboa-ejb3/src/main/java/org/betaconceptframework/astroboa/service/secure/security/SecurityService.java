@@ -19,26 +19,17 @@
 package org.betaconceptframework.astroboa.service.secure.security;
 
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
-import org.jboss.ejb3.annotation.Management;
 
 
 /**
  * This interface provides various methods for managing security contexts
  * based on an authentication token which is created during login.
  * 
- * @Management This annotation will wrap the bean as an MBean and install 
- * it in the JBoss MBean Server. The operations and attributes defined in the @Management 
- * interfaces become MBean operations and attributes for the installed MBean.. 
- * The underlying bean instance is the same as the one accessed via the @Local or @Remote interfaces.
- *  
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-@Management
 public interface SecurityService {
-
-	void start() throws Exception;
 
 	/**
 	 * Searches AstroboaClientContext for provided authentication token, registers it to current execution Thread

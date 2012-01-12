@@ -261,5 +261,8 @@ public final class CmsConstants {
 	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
 	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
-	
+
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME = "org.betaconceptframework.astroboa.configuration.dir";
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY = System.getProperty(ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME);
+
 }

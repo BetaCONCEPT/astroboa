@@ -20,7 +20,12 @@ package org.betaconceptframework.astroboa.test;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.objectweb.jotm.Jotm;
+import org.objectweb.transaction.jta.TMService;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
@@ -34,6 +39,19 @@ public class TestJtaTransactionManager extends JtaTransactionManager {
 	 * 
 	 */
 	private static final long serialVersionUID = -1096034511566275687L;
+
+	private TMService jotm;
+
+	
+	public TestJtaTransactionManager() {
+		super();
+		try {
+			this.jotm = new Jotm(true, false);
+		} catch (NamingException e) {
+			throw new CmsException(e);
+		}
+
+	}
 
 	@Override
 	public void afterPropertiesSet()  {
@@ -58,11 +76,18 @@ public class TestJtaTransactionManager extends JtaTransactionManager {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-		
-		
-
-		
-		
 	}
+
+	@Override
+	public UserTransaction getUserTransaction() {
+		return jotm.getUserTransaction();
+	}
+
+	@Override
+	public TransactionManager getTransactionManager() {
+		return jotm.getTransactionManager();
+	}
+	
+	
 
 }

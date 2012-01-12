@@ -10,11 +10,13 @@ import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
 import org.betaconceptframework.astroboa.configuration.RepositoryType;
 import org.betaconceptframework.astroboa.configuration.SecurityType.PermanentUserKeyList.PermanentUserKey;
 
-public class RepositoryConfigurationBean {
+public enum RepositoryConfigurationBean {
+	
+	INSTANCE; 
 	
 	private final Map<String,String> anonymousPermanentKeyPerRepository;
 
-	public RepositoryConfigurationBean() {
+	private RepositoryConfigurationBean() {
 		
 		Map<String, String> permanentUserKeyMap = new HashMap<String, String>();
 		

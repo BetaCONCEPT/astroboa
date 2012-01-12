@@ -20,11 +20,9 @@ package org.betaconceptframework.astroboa.test.engine.service;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.Subject;
 
@@ -47,6 +45,7 @@ import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.test.AstroboaTestContext;
 import org.betaconceptframework.astroboa.test.TestConstants;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -67,7 +66,7 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		
 		Thread.sleep(15000); //Sleep 15 seconds 
 		
-		Assert.assertTrue(RepositoryRegistry.INSTANCE.configurationHasChanged(), "Configuration file "+ configuration.getAbsolutePath() + " was not reloaded. Parent directory "+ System.getProperty("jboss.server.config.url"));
+		Assert.assertTrue(RepositoryRegistry.INSTANCE.configurationHasChanged(), "Configuration file "+ configuration.getAbsolutePath() + " was not reloaded. Parent directory "+ CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY);
 		
 		String configurationContent = FileUtils.readFileToString(configuration);
 		
@@ -94,7 +93,7 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 	}
 
 	private File retrieveConfigurationFile() {
-		String configurationHomeDir = System.getProperty("jboss.server.config.url");
+		String configurationHomeDir = new String(CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY);
 		
 		if (configurationHomeDir.startsWith("file:")){
 			configurationHomeDir = StringUtils.removeStart(configurationHomeDir, "file:");
@@ -123,9 +122,8 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		Calendar lastModified = Calendar.getInstance();
 		configuration.setLastModified(lastModified.getTimeInMillis());
 		
-		//Configure files in test context
-		AstroboaTestContext.INSTANCE.configureRepository(repositoryId, new InitialContext());
-		
+		//Clear files in test context
+		AstroboaTestContext.INSTANCE.removeRepositoryResources(repositoryId);
 		
 		//Login to the repository. We expect to load the new repository at runtime
 		loginToRepository(repositoryId, "SYSTEM", "betaconcept", false);
@@ -165,8 +163,6 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 		Assert.assertNotNull(clientContext.getRepositoryContext().getSecurityContext().getAuthenticationToken(), "No active authentication token time out found");
 		
 		Assert.assertNotNull(clientContext.getRepositoryContext().getCmsRepository(), "No  active cms repository found");
-		
-		Assert.assertNotNull(clientContext.getRepositoryContext().getCmsRepository().getApplicationPolicyName(), "No  active jaas application policy name found");
 		
 		Assert.assertEquals(clientContext.getRepositoryContext().getCmsRepository().getAdministratorUserId(), IdentityPrincipal.SYSTEM);
 		

@@ -66,7 +66,7 @@ Authors
                 				</manifestSection>
               				</manifestSections>
             			</archive>
-					<ejbVersion>3.0</ejbVersion>
+					<ejbVersion>3.1</ejbVersion>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -80,11 +80,11 @@ Authors
 		</dependency>
 		
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-	
+		
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
@@ -101,20 +101,10 @@ Authors
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-context</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
-		<!-- This dependency is used because @Management and @Service are used
-			Version 1.0.0 is the version used in JBoss 5.1.0.GA -->
-		<dependency>  
-			<groupId>org.jboss.ejb3</groupId>
-  			<artifactId>jboss-ejb3-ext-api</artifactId>
-  			<version>1.0.0</version>
-    		<scope>provided</scope>
-  		</dependency>
-  		
-  		
   		<!-- SLF4J API is an abstraction of various logging systems. This allows the
 		use of any logging framework at the time of deployment -->
 		<dependency>

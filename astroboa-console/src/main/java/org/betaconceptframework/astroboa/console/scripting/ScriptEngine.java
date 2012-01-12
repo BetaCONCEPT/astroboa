@@ -151,7 +151,7 @@ public class ScriptEngine {
 	}
 	
 	public String getConfirmationMessageForScriptSave() {
-		File scriptFile = new File(System.getProperty("jboss.server.config.url").substring(5) + SCRIPTS_HOME_DIR + File.separator + currentScriptFileName );
+		File scriptFile = new File(System.getProperty("jboss.server.config.dir").substring(5) + SCRIPTS_HOME_DIR + File.separator + currentScriptFileName );
 		if (scriptFile.exists()) {
 			return "The file already exists. Are you sure you want to update it? If not press cancel and choose another file name.";
 		}
@@ -161,7 +161,7 @@ public class ScriptEngine {
 	}
 	
 	public void saveScriptToFileSystem() {
-		File scriptFile = new File(System.getProperty("jboss.server.config.url").substring(5) + SCRIPTS_HOME_DIR + File.separator + currentScriptFileName );
+		File scriptFile = new File(System.getProperty("jboss.server.config.dir").substring(5) + SCRIPTS_HOME_DIR + File.separator + currentScriptFileName );
 
 		try {
 			FileOutputStream fos = new FileOutputStream(scriptFile);
@@ -202,8 +202,8 @@ public class ScriptEngine {
 		
 		List<File> scriptFileList = new ArrayList<File>();
 		
-		if (System.getProperty("jboss.server.config.url") != null){
-			File scriptHomeDir = new File(System.getProperty("jboss.server.config.url").substring(5) + SCRIPTS_HOME_DIR + File.separator);
+		if (System.getProperty("jboss.server.config.dir") != null){
+			File scriptHomeDir = new File(System.getProperty("jboss.server.config.dir").substring(5) + SCRIPTS_HOME_DIR + File.separator);
 			if (scriptHomeDir.isDirectory()) {
 				FileFilter groovySriptFileFilter = new FileFilter() {
 					@Override
@@ -228,10 +228,10 @@ public class ScriptEngine {
 		URL[] roots;    // A list of directories to search for Groovy scripts (think of it as a PATH).
 		
 		URI scriptsAbsolutePath = null;
-		if (System.getProperty("jboss.server.config.url") != null){
+		if (System.getProperty("jboss.server.config.dir") != null){
 			//We expect to find the scripts in JBOSS-HOME/server/default/conf/astroboa-scripts directory
 			try {
-				scriptsAbsolutePath = new URI(System.getProperty("jboss.server.config.url")+SCRIPTS_HOME_DIR+File.separator);
+				scriptsAbsolutePath = new URI(System.getProperty("jboss.server.config.dir")+SCRIPTS_HOME_DIR+File.separator);
 				roots = new URL[]{scriptsAbsolutePath.toURL()};   // The root list is filled with the locations to be searched for the script
 			}
 			catch (URISyntaxException e) {

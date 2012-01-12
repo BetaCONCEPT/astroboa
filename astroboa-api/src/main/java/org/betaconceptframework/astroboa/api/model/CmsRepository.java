@@ -88,14 +88,6 @@ public interface CmsRepository extends Serializable {
 	public String getRestfulApiBasePath();
 	
 	/**
-	 * Return the application policy name which contains all necessary 
-	 * JAAS configuration parameters
-	 * 
-	 * @return Application Policy Name as defined in astroboa-conf.xml
-	 */
-	String getApplicationPolicyName();
-	
-	/**
 	 * Return the id of the repository which represents the identity store of this repository
 	 * 
 	 * @return IdentityStore reposiotry id as defined in astroboa-conf.xml 
