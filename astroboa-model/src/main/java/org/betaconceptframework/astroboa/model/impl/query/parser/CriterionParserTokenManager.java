@@ -12,6 +12,7 @@ import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.util.ISO8601;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;

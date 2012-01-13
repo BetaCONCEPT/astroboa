@@ -14,6 +14,7 @@ import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.util.ISO8601;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -217,42 +218,7 @@ import java.util.regex.Pattern;
                         Matcher dateTimeMatcher = ISO8601Pattern.matcher(value);
 
                         if (dateTimeMatcher.matches()){
-
-                                StringBuilder pattern = new StringBuilder("yyyy-MM-dd'T'HH:mm:ss");
-                                String timeZoneId = null;
-                                //We must decide which pattern to use
-                                //At this point this is the minimum
-
-                                //Group 7 corresponds to milli seconds
-                                if (dateTimeMatcher.groupCount()>=7 && dateTimeMatcher.group(7) != null){
-                                        pattern.append(".SSS");
-                                }
-                                if (dateTimeMatcher.groupCount()>=8 && dateTimeMatcher.group(8) != null){
-                                        if (!"Z".equals(dateTimeMatcher.group(8))){
-                                                //Keep UTC info to look for time zone when Calendar object will be created, 
-                                                //as SimpleDateformat which is used in DateUtils
-                                                //cannot handle time zone designator
-                                                timeZoneId = "GMT"+dateTimeMatcher.group(8);
-                                                value = value.replace(dateTimeMatcher.group(8), "");
-                                        }
-                                        else{
-                                                timeZoneId = "GMT";
-                                                value = value.replace("Z", "");
-                                        }
-                                }
-
-                                date = (Calendar) DateUtils.fromString(value, pattern.toString());
-
-                                if (timeZoneId!= null){
-                                        //Now that date is found we should define its TimeZone
-                                        TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
-                                        if (!timeZone.getID().equals(timeZoneId)) {
-                                                // Time Zone is not valid
-                                                throw new ParseException("Invalid time zone in date value "+ value);
-                                        }
-
-                                        date.setTimeZone(timeZone);
-                                }
+                                date = ISO8601.parse(value);
                         }
                         else{
                                 //check for simple date
@@ -786,36 +752,6 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     finally { jj_save(1, xla); }
   }
 
-  private boolean jj_3R_8() {
-    if (jj_scan_token(IS_NOT_NULL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_7() {
-    if (jj_scan_token(IS_NULL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_5() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_7()) {
-    jj_scanpos = xsp;
-    if (jj_3R_8()) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_6() {
-    if (jj_3R_9()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_10()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
   private boolean jj_3R_26() {
     if (jj_scan_token(CONTAINS)) return true;
     return false;
@@ -955,6 +891,36 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
 
   private boolean jj_3R_12() {
     if (jj_3R_14()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_8() {
+    if (jj_scan_token(IS_NOT_NULL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_7() {
+    if (jj_scan_token(IS_NULL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_5() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_8()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_6() {
+    if (jj_3R_9()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_10()) { jj_scanpos = xsp; break; }
+    }
     return false;
   }
 
