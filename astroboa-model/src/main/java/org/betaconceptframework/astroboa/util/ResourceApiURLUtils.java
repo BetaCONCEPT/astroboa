@@ -18,6 +18,9 @@
  */
 package org.betaconceptframework.astroboa.util;
 
+import java.io.File;
+import java.net.URI;
+
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
@@ -30,10 +33,14 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.model.impl.CmsPropertyImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectTypeDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 
 /**
@@ -211,13 +218,29 @@ public class ResourceApiURLUtils {
 		}
 		else if (cmsEntity instanceof ContentObjectTypeDefinition){
 			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
-			.append(CmsConstants.FORWARD_SLASH)
-			.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+			.append(CmsConstants.FORWARD_SLASH);
+			
+			String schemaFilename = retrieveSchemaFileName((ContentObjectTypeDefinition)cmsEntity);
+				
+			if (schemaFilename != null){
+					sb.append(schemaFilename);
+			}
+			else{
+				sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+			}
 		}
 		else if (cmsEntity instanceof CmsPropertyDefinition){
 			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
-			.append(CmsConstants.FORWARD_SLASH)
-			.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+			.append(CmsConstants.FORWARD_SLASH);
+			
+			String schemaFilename = retrieveSchemaFileName((CmsPropertyDefinition)cmsEntity);
+				
+			if (schemaFilename != null){
+				sb.append(schemaFilename);
+			}
+			else{
+				sb.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+			}
 		}
 
 	}
@@ -226,9 +249,14 @@ public class ResourceApiURLUtils {
 			StringBuilder sb, Class<?> type) {
 		
 		//Add output. XML is considered default value and therefore it is not added
-		if (resourceRepresentationType != null && resourceRepresentationType != ResourceRepresentationType.XML){
-			sb.append("?output=");
-			sb.append(resourceRepresentationType.getTypeAsString().toLowerCase());
+		if (resourceRepresentationType != null && ! resourceRepresentationType.equals(ResourceRepresentationType.XML)){
+			
+			//Special case. if entity is a definition and output is XSD then do not add this parameter as well
+			// since in this case, the schema filename is provided in the URL
+			if (! CmsDefinition.class.isAssignableFrom(type) || ! resourceRepresentationType.equals(ResourceRepresentationType.XSD)){
+				sb.append("?output=");
+				sb.append(resourceRepresentationType.getTypeAsString().toLowerCase());
+			}
 		}
 	}
 
@@ -339,4 +367,42 @@ public class ResourceApiURLUtils {
 		return contentApiURLBuilder.toString();
 	}
 
+	
+	public static String retrieveSchemaFileName(CmsDefinition cmsDefinition){
+		
+		URI cmsDefinitionFileURI = null;
+
+		if (cmsDefinition instanceof ContentObjectTypeDefinition){
+			cmsDefinitionFileURI = ((ContentObjectTypeDefinitionImpl)cmsDefinition).getDefinitionFileURI();
+		}
+		else if (cmsDefinition instanceof ComplexCmsPropertyDefinition){
+			cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getDefinitionFileURI();
+		}
+		else if (cmsDefinition instanceof SimpleCmsPropertyDefinition){
+			//It is a simple property. Get its parent to provide with the URI
+			CmsDefinition parentDefinition = ((SimpleCmsPropertyDefinition)cmsDefinition).getParentDefinition();
+			if (parentDefinition != null && parentDefinition instanceof ComplexCmsPropertyDefinition){
+				cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)parentDefinition).getDefinitionFileURI();
+			}
+		}
+
+		if (cmsDefinitionFileURI == null){
+			return null;
+		}
+
+		String schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), File.separator);
+		
+		if (StringUtils.isBlank(schemaFilename)){
+			if (!File.separator.equals(CmsConstants.FORWARD_SLASH)){
+				//try with forward slash.
+				schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), CmsConstants.FORWARD_SLASH);
+			}
+		}
+		
+		if (StringUtils.isBlank(schemaFilename)){
+			return null;
+		}
+		
+		return schemaFilename;
+	}
 }
