@@ -314,7 +314,7 @@ public class CmsDefinitionVisitor implements XSVisitor{
 					definitionsUnderProcess.remove(typeQName);
 				}
 				
-				xmlSchemaDefinitionURLsPerQName.put(definition.getQualifiedName(), definition.url(ResourceRepresentationType.XML));
+				xmlSchemaDefinitionURLsPerQName.put(definition.getQualifiedName(), definition.url(ResourceRepresentationType.XSD));
 				
 				//Get base content types
 				if (ValueType.ContentType == definition.getValueType()){
