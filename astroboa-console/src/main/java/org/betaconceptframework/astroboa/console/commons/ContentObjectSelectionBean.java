@@ -99,7 +99,8 @@ public class ContentObjectSelectionBean {
 	
 	public void addAllObjectsOfCurrentPage_UIAction(PagedListDataModel pagedListDataModel, HtmlDataTable htmlDataTable){
 		
-		selectedContentObjects = (List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData();
+		// shallow copy the list of all objects in the page to the list of selected objects
+		selectedContentObjects = new ArrayList<ContentObjectUIWrapper>((List<ContentObjectUIWrapper>) pagedListDataModel.getWrappedData());
 		
 		atLeastOneContentObjectIsSelected = true;
 
