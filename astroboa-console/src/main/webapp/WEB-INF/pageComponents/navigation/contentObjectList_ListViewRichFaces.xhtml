@@ -232,6 +232,10 @@ Authors
 							
 							<!-- Clone content object action -->
 							<a4j:commandLink
+								rendered="#{identity.hasRole('ROLE_CMS_EDITOR') and 
+									(contentObjectUIWrapper.contentObject.contentObjectType ne 'personObject' or
+									! contentObjectUIWrapper.contentObject.hasValueForProperty('personAuthentication.username') or
+									contentObjectUIWrapper.contentObject.getCmsProperty('personAuthentication.username').simpleTypeValue ne 'SYSTEM')}"
 								ajaxSingle="true"
 								action="#{copier.createACopyAndSaveContentObject_UIAction(contentObjectUIWrapper.contentObject.id)}"
 								reRender="searchResultsAjaxPanel">
