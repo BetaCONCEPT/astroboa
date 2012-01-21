@@ -26,8 +26,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -66,12 +68,6 @@ public class DefinitionResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-		
 		if (output == null){
 			
 			if (propertyPath!=null && propertyPath.endsWith(".xsd")){
@@ -83,6 +79,14 @@ public class DefinitionResource extends AstroboaResource{
 		}
 
 		Output outputEnum = Output.valueOf(output.toUpperCase());
+		
+		if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+			//User has requested astroboa-model or astroboa-api built in schemata
+			//but at the same time, the "output" request parameter was not XSD
+			//In this case an HTTP NOT FOUND error should be returned.
+			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+		}
+
 
 		return getDefinitionInternal(propertyPath, outputEnum, callback,prettyPrintEnabled);
 
@@ -99,27 +103,27 @@ public class DefinitionResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
 		Output outputEnum = Output.JSON;
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
+			
+			if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+				//User has requested astroboa-model or astroboa-api built in schemata
+				//but at the same time, the "output" request parameter was not XSD
+				//In this case an HTTP NOT FOUND error should be returned.
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
 		}
+		
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
 	}
 
 	private boolean asrtoboaBuiltInModelIsRequested(String propertyPath) {
 		return StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION) ||
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME) ||
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME);
+				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION) ;
 	}
 
 	
@@ -130,25 +134,51 @@ public class DefinitionResource extends AstroboaResource{
 			@PathParam("propertyPath") String propertyPath,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback, 
-			@QueryParam("prettyPrint") String prettyPrint) {
+			@QueryParam("prettyPrint") String prettyPrint, 
+			@Context UriInfo uriInfo) {
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
 		Output outputEnum = Output.XML;
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
+			
+			if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+				//User has requested astroboa-model or astroboa-api built in schemata
+				//but at the same time, the "output" request parameter was not XSD
+				//In this case an HTTP NOT FOUND error should be returned.
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
 		}
+		else{
+			//User did not provide value for the "output" parameter therefore 
+			//the output at this point is XML. However there is one case where the
+			//user may have provide the suffix ".xsd" in the URL, requesting this
+			//way the output to be an XML Schema. This case can only be traced by 
+			//examining the path of the request and whether it ends in ".xsd" or not
+			String path = uriInfo.getPath();
+			
+			if (StringUtils.endsWith(path, ".xsd")){
+				//User has provided the suffix ".xsd". 
+				//Therefore an XML Schema sholud be returned
+				//We have to attach the suffix to the propertyPath variable
+				//since the user may have specified a filename instead of 
+				//a property path.
+				outputEnum = Output.XSD;
+				if (propertyPath != null){
+					propertyPath += ".xsd";
+				}
+			}
+		}
+		
+		
+
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
 	}
+
 	
 	private Response getDefinitionInternal(String propertyPath, Output output, String callback, boolean prettyPrint){
 		
