@@ -181,6 +181,7 @@ public class ContentApiUtils {
 		{
 			switch (output) {
 			case XML:
+			case XSD:
 				responseBuilder.type(MediaType.APPLICATION_XML + "; charset=utf-8");
 				break;
 			case JSON:
