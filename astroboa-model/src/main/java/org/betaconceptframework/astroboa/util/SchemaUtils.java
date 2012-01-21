@@ -33,11 +33,11 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 public final class SchemaUtils {
 
 	public static String buildSchemaLocationForAstroboaModelSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, false);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION, false);
 	}
 
 	public static String buildSchemaLocationForAstroboaApiSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, false);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION, false);
 	}
 
 	public static String buildSchemaLocationAccordingToActiveClient(String schemaFileName, boolean includeOutputType){

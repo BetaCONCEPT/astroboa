@@ -52,13 +52,6 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 				return null;
 			}
 
-			if (StringUtils.equals(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, definitionFullPath)){
-				definitionFullPath = CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION;
-			}
-			else if (StringUtils.equals(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, definitionFullPath)){
-				definitionFullPath = CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION;
-			}
-			
 			if (definitionFullPath.endsWith(".xsd")){
 
 				//First try directly
