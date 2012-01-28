@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.betaconceptframework.astroboa.api.model.definition.BooleanPropertyDefinition;
@@ -81,7 +82,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		closeStartTagIfOutputIsXML(CmsConstants.OBJECT_TYPE_ELEMENT_NAME);
 
-		exportDisplayName(contentObjectTypeDefinition);
+		exportDisplayNameAndDescription(contentObjectTypeDefinition);
 
 	
 	}
@@ -95,7 +96,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
 		
-		exportDisplayName(complexPropertyDefinition);
+		exportDisplayNameAndDescription(complexPropertyDefinition);
 
 	}
 
@@ -138,7 +139,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 			
 			closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
 			
-			exportDisplayName(simplePropertyDefinition);
+			exportDisplayNameAndDescription(simplePropertyDefinition);
 
 			if (rootDefinition != null && rootDefinition != simplePropertyDefinition){
 				serializer.endElement(CmsConstants.PROPERTY_ELEMENT_NAME, false,true);
@@ -321,16 +322,26 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML)); 
 	}
 
-	private void exportDisplayName(LocalizableCmsDefinition cmsDefinition) {
+	private void exportDisplayNameAndDescription(LocalizableCmsDefinition cmsDefinition) {
 		if (cmsDefinition.getDisplayName() != null && cmsDefinition.getDisplayName().hasLocalizedLabels()){
 
 			serializer.startElement("label",true,true);
 			
 			for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
-				serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
+				serializer.writeAttribute(localizedLabel.getKey(),StringEscapeUtils.escapeHtml(localizedLabel.getValue()));
 			}
 			
 			serializer.endElement("label",true,true);
+		}
+		if (cmsDefinition.getDescription() != null && cmsDefinition.getDescription().hasLocalizedLabels()){
+
+			serializer.startElement("description",true,true);
+			
+			for (Entry<String,String> localizedDescription : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
+				serializer.writeAttribute(localizedDescription.getKey(),StringEscapeUtils.escapeHtml(localizedDescription.getValue()));
+			}
+			
+			serializer.endElement("description",true,true);
 		}
 	}
 
