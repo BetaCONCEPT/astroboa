@@ -24,9 +24,9 @@ Authors
 		 		    
 -->          
 
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 
     <display-name>Astroboa Resource api</display-name>
@@ -96,7 +96,7 @@ Authors
 		relying on the Spring application context to manage the lifecycle of that bean. 
 		Specifying the "targetFilterLifecycle" filter init-param as "true" will enforce invocation of the Filter.init 
 		and Filter.destroy lifecycle methods on the target bean, letting the servlet container manage the filter lifecycle.'
-	-->
+	
 	<filter>
 		<filter-name>binaryChannelLoaderFilter</filter-name>
 		<filter-class>
@@ -108,8 +108,8 @@ Authors
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<!-- BinaryChannel dynamic loader filter mapping  -->
+-->
+	<!-- BinaryChannel dynamic loader filter mapping  
 	<filter-mapping>
 		<filter-name>binaryChannelLoaderFilter</filter-name>
 		<url-pattern>/f/binaryChannel/*</url-pattern>
@@ -126,13 +126,13 @@ Authors
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<!-- BinaryChannel dynamic loader filter mapping  -->
+-->
+	<!-- BinaryChannel dynamic loader filter mapping  
 	<filter-mapping>
 		<filter-name>contentObjectTypeDefinitionSchemaFilter</filter-name>
 		<url-pattern>/f/definitionSchema/*</url-pattern>
 	</filter-mapping>
-	
+	-->
 	
 	<!-- Seam Framework-->
 	<!-- Seam Framework filter and mapping  
@@ -187,16 +187,17 @@ Authors
 	 
 	<!-- <listener>
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener> -->
+    </listener> 
     
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    </listener>-->
     
-    <servlet-mapping>
+    <!-- <servlet-mapping>
    		<servlet-name>javax.ws.rs.core.Application</servlet-name>
    		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping
+	-->
     <!--  
     <servlet>
 		<servlet-name>faces</servlet-name>

@@ -21,10 +21,12 @@ package org.betaconceptframework.astroboa.resourceapi.locator;
 import java.net.HttpURLConnection;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 
 import org.apache.commons.lang.StringUtils;
@@ -51,8 +53,9 @@ import com.sun.jersey.core.util.Base64;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
+@ApplicationPath("/")
 @Path("/")
-public class RepositoryLocator {
+public class RepositoryLocator extends Application{
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	

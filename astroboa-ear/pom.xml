@@ -76,7 +76,7 @@ Authors
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
 						
-						<!-- <ejbModule>
+						<ejbModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-ejb3</artifactId>
 						</ejbModule>
@@ -88,7 +88,7 @@ Authors
 							<contextRoot>/resource-api</contextRoot>
 							<unpack>false</unpack>
 						</webModule>
- -->
+ 
 						<!-- <webModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-console</artifactId>
@@ -112,10 +112,6 @@ Authors
 						-->
 						
 					</modules>
-					 <jboss>
-             			<version>5</version>
-           				<module-order>strict</module-order>
-           			 </jboss>
 				</configuration>
 	  		</plugin>
 		
@@ -135,13 +131,14 @@ Authors
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 	
-<!-- 		<dependency>
+ 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-resource-api</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
-		
+
+<!-- 		
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-console</artifactId>
@@ -176,13 +173,13 @@ Authors
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		
-<!-- 		<dependency>
+ 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-ejb3</artifactId>
 			<type>ejb</type>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
- -->
+
 		<!-- 
 			We need to explicitly define xercesImpl dependency so that it is installed
 			in the EAR's lib. Also we have to setup a dependency in the jboss-deployment-structure.xml

@@ -36,7 +36,7 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<resteasy.version>2.0.1.GA</resteasy.version>
+		<resteasy.version>2.3.1.GA</resteasy.version>
 	</properties>
 	
 	<dependencies>
@@ -104,7 +104,7 @@
 			<scope>provided</scope>
 		</dependency>
 				
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<scope>provided</scope>
@@ -115,7 +115,7 @@
 			<artifactId>spring-beans</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+ -->		
 
 		<dependency>
 			<groupId>org.betaconceptframework</groupId>
@@ -160,12 +160,14 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>${resteasy.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
   			<groupId>org.jboss.resteasy</groupId>
   			<artifactId>resteasy-multipart-provider</artifactId>
   			<version>${resteasy.version}</version>
+  			<scope>provided</scope>
   			<exclusions>
   				<exclusion>
   					<groupId>org.jboss.resteasy</groupId>
