@@ -328,7 +328,13 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 			serializer.startElement("label",true,true);
 			
 			for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
-				serializer.writeAttribute(localizedLabel.getKey(),StringEscapeUtils.escapeHtml(localizedLabel.getValue()));
+				
+				if (serializer.outputIsJSON()){
+					serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
+				}
+				else {
+					serializer.writeAttribute(localizedLabel.getKey(),StringEscapeUtils.escapeXml(localizedLabel.getValue()));
+				}
 			}
 			
 			serializer.endElement("label",true,true);
@@ -338,7 +344,12 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 			serializer.startElement("description",true,true);
 			
 			for (Entry<String,String> localizedDescription : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
-				serializer.writeAttribute(localizedDescription.getKey(),StringEscapeUtils.escapeHtml(localizedDescription.getValue()));
+				if (serializer.outputIsJSON()){
+					serializer.writeAttribute(localizedDescription.getKey(),localizedDescription.getValue());
+				}
+				else {
+					serializer.writeAttribute(localizedDescription.getKey(),StringEscapeUtils.escapeXml(localizedDescription.getValue()));
+				}
 			}
 			
 			serializer.endElement("description",true,true);
