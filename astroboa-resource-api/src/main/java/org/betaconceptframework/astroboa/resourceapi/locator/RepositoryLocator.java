@@ -76,7 +76,9 @@ public class RepositoryLocator {
 			
 			if (authorization != null) {
 				
-				astroboaClient = AstroboaClientCache.Instance.get(authorization);
+				String cacheKey = authorization+repositoryId;
+				
+				astroboaClient = AstroboaClientCache.Instance.get(cacheKey);
 				
 				if (astroboaClient == null){
 					String encodedUsernamePass = authorization.substring(5);
@@ -89,7 +91,7 @@ public class RepositoryLocator {
 						AstroboaCredentials credentials = new AstroboaCredentials(usernamePassSplitted[0], usernamePassSplitted[1]);
 						astroboaClient.login(repositoryId, credentials);
 						
-						astroboaClient = AstroboaClientCache.Instance.cache(astroboaClient, authorization);
+						astroboaClient = AstroboaClientCache.Instance.cache(astroboaClient, cacheKey);
 						
 					}
 					else {
