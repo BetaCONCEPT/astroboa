@@ -520,7 +520,7 @@ div#objectTypeSelectorScrollableArea {
 	position: absolute; 
 	left: 0px;
 	right: 0px;
-	top: 100px;
+	top: 75px;
 	bottom: 5px;
 	overflow: auto;
 }
@@ -574,7 +574,7 @@ div#myAccountFormScrollableArea {
 	position: absolute; 
 	left: 0px;
 	right: 0px;
-	top: 80px;
+	top: 50px;
 	bottom: 5px;
 	overflow: auto;
 }
@@ -1461,13 +1461,19 @@ ul#logoutDialogButtons button, ul#logoutDialogButtons input[type=button]{
 }
 
 table.objectTypeSelectorTable td {
-	padding: 0 20px 10px 0;
-	border-bottom: 1px dotted #BBB8B4; 	
+	padding: 10px 20px 10px 10px;
+	border-bottom: 2px dotted #BBB8B4; 	
 }
 
-table.objectTypeSelectorTable td.actionIcon {
-	padding: 0 5px 10px 0; 	
+table.objectTypeSelectorTable td.objectTypeLabel {
+	width: 300px;
+	vertical-align: top;
 }
+
+table.objectTypeSelectorTable td.loadXSD {
+	vertical-align: top;
+}
+
 
 .ajaxActivityIndicator {
 	position: fixed;
