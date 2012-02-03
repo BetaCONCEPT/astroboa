@@ -171,7 +171,7 @@ public class ContentApiUtils {
 		
 		if (callback != null) 
 		{
-			responseBuilder.type(MediaType.TEXT_PLAIN + "; charset=utf-8");
+			responseBuilder.type("application/javascript; charset=utf-8");
 		}
 		else if (output == null)
 		{
@@ -185,7 +185,7 @@ public class ContentApiUtils {
 				responseBuilder.type(MediaType.APPLICATION_XML + "; charset=utf-8");
 				break;
 			case JSON:
-				responseBuilder.type(MediaType.TEXT_PLAIN + "; charset=utf-8");
+				responseBuilder.type(MediaType.APPLICATION_JSON + "; charset=utf-8");
 				break;
 			case XHTML:
 				responseBuilder.type(MediaType.APPLICATION_XHTML_XML + "; charset=utf-8");
