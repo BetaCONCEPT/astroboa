@@ -195,13 +195,20 @@ Authors
 					</div>				
 				
 					<script type="text/javascript">
-						createObjectTabs();
-						// tweaking of the editors is required besides the script because they block the events (do not bubble them)
-						//activateSaveHotKeyInsideEditors();
-						
-						addOnChangeEventToWorkflowProperty();
-						resetContentObjectAutoSave();
+					//<![CDATA[
+							bcmslib.jQuery(document).ready(function(){
+								createObjectTabs();
+								// tweaking of the editors is required besides the script because they block the events (do not bubble them)
+								//activateSaveHotKeyInsideEditors();
+								
+								addOnChangeEventToWorkflowProperty();
+								resetContentObjectAutoSave();
+								addHelpMessageToProperties();
+								createSlideshow('.objectPhotosSlideshow');
+							});
+						//]]>
 					</script>
+					
 				
 				</ui:fragment>
 			</a4j:outputPanel>
