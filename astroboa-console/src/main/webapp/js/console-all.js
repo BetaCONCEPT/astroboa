@@ -28,7 +28,7 @@ var editor;
 
 // create references to remote services
 var editServiceAsync = Seam.Component.getInstance("editServiceAsync");
-var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
+//var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
 var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
 
 
@@ -749,7 +749,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     				gravity: bcmslib.jQuery.fn.tipsy.autoWE, 
     				fallback: "No description available", 
     				title: function() { 
-    									var fullPropertyPath =  bcmslib.jQuery(this).attr('id').replace(/-.*/,"");
+    									var fullPropertyPath =  bcmslib.jQuery(this).attr('id').replace(/-.*/,"").replace(/\[.*\]/,"");
     									return objectPropertyDescriptionMap[fullPropertyPath];
     								} 
     			});
@@ -759,7 +759,6 @@ function callFunctionOnEnterKey(e, func, arg) {
     								var tipsy = bcmslib.jQuery.data(this, 'tipsy');
 									bcmslib.jQuery.when(getPropertyDescription(this)).then(function(){
 										tipsy.show();
-										console.debug(tipsy);
 									});
 								} 
     		);
@@ -793,7 +792,6 @@ function callFunctionOnEnterKey(e, func, arg) {
     
     amplify.subscribe('objectForm.getPropertyModel.success', function( settings, data, status, eventContext ) {
 		if (data != null) {
-			console.debug(data);
 			var localizedPropertyDescription = data.description[locale];
 			if (localizedPropertyDescription == null) {
 				localizedPropertyDescription = data.description['en'];
@@ -812,111 +810,6 @@ function callFunctionOnEnterKey(e, func, arg) {
     
     
     
-    /*
-    function createObjectTypeHelpMessage(tooltipTextSelector, tooltipImageSelector) {
-    	bcmslib.jQuery(tooltipTextSelector).hide();
-		bcmslib.jQuery(tooltipImageSelector).bt(
-			{
-				closeWhenOthersOpen: true,
-				killTitle: false,
-				contentSelector: 'bcmslib.jQuery("'+tooltipTextSelector+'").html()', //get text of inner content of hidden div
-				offsetParent: "#tipArea",
-				width: 500,
-				shrinkToFit: true,
-				fill: '#FFF',
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, //no stroke
-				spikeLength: 15,
-				spikeGirth: 5,
-			//	positions: ['right'],
-				padding: 20,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
-		);
-    }
-    
-    function createUrlCreationDialogHelpMessages() {
-    	bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeTooltip').hide();
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeTooltip').hide();
-		
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeHelp').bt(
-			{
-				textzIndex:       15002,                  // z-index for the text
-			    boxzIndex:        15001,                  // z-index for the "talk" box (should always be less than textzIndex)
-			    wrapperzIndex:    15000,
-				contentSelector: "bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeTooltip').html()",
-				offsetParent: null,
-				closeWhenOthersOpen: true,
-				killTitle: true,
-				width: 350,
-				shrinkToFit: true,
-				fill: '#FFF',
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, // no stroke
-				spikeLength: 10,
-				spikeGirth: 5,
-				positions: ['most'],
-				padding: 10,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
-		);
-
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeHelp').bt(
-				{
-					textzIndex:       15002,                  // z-index for the text
-				    boxzIndex:        15001,                  // z-index for the "talk" box (should always be less than textzIndex)
-				    wrapperzIndex:    15000,
-					contentSelector: "bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeTooltip').html()",
-					offsetParent: null,
-					closeWhenOthersOpen: true,
-					killTitle: true,
-					width: 350,
-					shrinkToFit: true,
-					fill: '#FFF',
-					strokeStyle: '#ABABAB',
-					strokeWidth: 1, // no stroke
-					spikeLength: 10,
-					spikeGirth: 5,
-					positions: ['most'],
-					padding: 10,
-					cornerRadius: 15,
-					cssStyles:	{
-					    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-					    			fontSize: '11px'
-								},
-					shadow: true,
-				    shadowOffsetX: 3,
-				    shadowOffsetY: 3,
-				    shadowBlur: 8,
-				    shadowColor: 'rgba(0,0,0,.9)',
-				    shadowOverlap: false,
-				    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-				}
-			);
-    }
-    */
     
     /* TOP MENU */
     function createObjectTypeSelectionMenuInFolderTab() {
@@ -1185,6 +1078,8 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
     
     // preview html text areas
+    bcmslib.jQuery.htmlClean.defaults.removeTags = ["<script>"];
+    
     function previewTextArea(previewButton) {
     	// Find out the div that contains the editor
     	var editorDivParent = bcmslib.jQuery(previewButton).siblings(".editableParent");
@@ -1195,7 +1090,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     		if (!text) {
     			text = 'The field is empty'; 
     		}
-    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<textarea style="width: 100%; height: 100%; font-size: 13px;">' + text + "</textarea>", 'width': '90%', 'height': '90%'});
+    		else {
+    			text = bcmslib.jQuery.htmlClean(text);
+    		}
+    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<div style="width: 100%; height: 100%; font-size: 13px;">' + text + "</div>", 'width': '90%', 'height': '90%'});
     		// bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
     	}
     }

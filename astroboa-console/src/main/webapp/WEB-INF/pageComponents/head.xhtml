@@ -79,6 +79,7 @@ Authors
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/amplify.min.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.colorbox-min.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.tipsy.js" charset="utf-8"></script>
+  				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.htmlClean-min.js"></script>
   				
   				
   				<!--[if IE]><script src="#{facesContext.externalContext.requestContextPath}/js/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
@@ -104,10 +105,12 @@ Authors
 
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?httpSessionChecker"></script>
-					
+				
+				<ui:remove>
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?schemaServiceAsync"></script>
-					
+				</ui:remove>
+				
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?editServiceAsync"></script>
 				

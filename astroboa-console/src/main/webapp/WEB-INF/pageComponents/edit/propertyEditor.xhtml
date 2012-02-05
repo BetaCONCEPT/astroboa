@@ -56,8 +56,6 @@ Authors
 								<ui:param name="cmsPropertyWrapper"
 									value="#{cmsPropertyWrapper}" />
 							</ui:include>
-								
-							<div class="#{cmsPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 						</label>
 					
 						<ol class="childProperties">
@@ -72,7 +70,8 @@ Authors
 											rendered="#{childPropertyWrapper.valueType eq 'Complex' 
 												and ! childPropertyWrapper.multiple}"
 											action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childPropertyWrapper.path, childPropertyWrapper.complexCmsPropertyEdit)}"
-											reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+											reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
+											oncomplete="addHelpMessageToProperties();">
 									
 											<h:outputText
 												value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
@@ -115,7 +114,6 @@ Authors
 												value="#{childPropertyWrapper}" />
 										</ui:include>
 										
-										<div class="#{childPropertyWrapper.cmsPropertyDefinition.fullPath}-tip"></div>
 									</label>
 									
 									<!-- binary property with one or multiple values-->
@@ -237,7 +235,8 @@ Authors
 								rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
 									and ! cmsPropertyWrapper.multiple}"
 								action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path, cmsPropertyWrapper.complexCmsPropertyEdit)}"
-								reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+								reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
+								oncomplete="addHelpMessageToProperties();">
 						
 								<h:outputText
 									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
