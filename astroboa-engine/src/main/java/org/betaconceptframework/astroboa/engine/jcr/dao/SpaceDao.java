@@ -176,7 +176,7 @@ public class SpaceDao extends JcrDaoSupport {
 
 
 
-	public void deleteSpace(String spaceId) {
+	public boolean deleteSpace(String spaceId) {
 		if (StringUtils.isBlank(spaceId)){
 			throw new CmsException("Undefined space id ");
 		}
@@ -197,6 +197,7 @@ public class SpaceDao extends JcrDaoSupport {
 			removeSpaceNode(spaceNode, context);
 
 			session.save();
+			return true;
 		}
 		catch(CmsException e){
 			throw e;

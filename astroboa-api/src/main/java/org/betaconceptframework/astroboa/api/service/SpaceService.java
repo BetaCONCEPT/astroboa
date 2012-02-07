@@ -97,8 +97,10 @@ public interface SpaceService {
 	 * All associations to this space will be deleted as well.
 	 * 
 	 * @param spaceId Space's id to be deleted.
+	 * @return <code>true</code> if space has been successfully deleted, <code>false</code> otherwise
+	 *  
 	 */
-	void deleteSpace(String spaceId);
+	boolean deleteSpace(String spaceId);
 	
 	/**
 	 * Returns a space for the specified <code>spaceId</code>.

@@ -64,7 +64,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		space = spaceService.save(space);
 		
 		//Now delete space
-		spaceService.deleteSpace(space.getId());
+		Assert.assertTrue(spaceService.deleteSpace(space.getId()), "Space was not deleted");
 		
 		//Check with Jcr
 		try{
