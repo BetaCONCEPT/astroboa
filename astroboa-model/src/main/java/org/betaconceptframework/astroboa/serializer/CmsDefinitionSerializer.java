@@ -18,15 +18,10 @@
  */
 package org.betaconceptframework.astroboa.serializer;
 
-import static org.betaconceptframework.astroboa.util.CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX;
-
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.xml.XMLConstants;
-
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.betaconceptframework.astroboa.api.model.definition.BooleanPropertyDefinition;
@@ -311,6 +306,9 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		//Url
 		exportUrl(cmsDefinition);
 		
+		//Schema URL
+		exportSchemaUrl(cmsDefinition);
+		
 		if (cmsDefinition instanceof CmsPropertyDefinition){
 			//Cardinality
 			exportCardinality((CmsPropertyDefinition)cmsDefinition);
@@ -323,7 +321,11 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	}
 
 	private void exportUrl(LocalizableCmsDefinition cmsDefinition) {
-		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML)); 
+		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML));
+	}
+	
+	private void exportSchemaUrl(LocalizableCmsDefinition cmsDefinition) {
+		serializer.writeAttribute("schemaUrl",cmsDefinition.url(ResourceRepresentationType.XSD));
 	}
 
 	private void exportDisplayNameAndDescription(LocalizableCmsDefinition cmsDefinition) {
