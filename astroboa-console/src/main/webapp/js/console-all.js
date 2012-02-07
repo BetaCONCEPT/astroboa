@@ -544,6 +544,12 @@ function callFunctionOnEnterKey(e, func, arg) {
     //	bcmslib.jQuery("#objectTabs").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
     //	bcmslib.jQuery("#objectTabs li").removeClass('ui-corner-top').addClass('ui-corner-left');
     	bcmslib.jQuery("#objectTabs").css("display","block");
+    	
+    	// if an existing object is loaded them show the object properties tab and not the profile tab 
+    	var objectId = bcmslib.jQuery("#objectId span").text();
+    	if (objectId) {
+    		bcmslib.jQuery( "#objectTabs" ).tabs( "option", "selected", 1);
+    	}
     }
     
     // SET BUTTON IN SCRIPT ENGINE CONSOLE TO TOGGLE DIV TO FULLSCREEN
