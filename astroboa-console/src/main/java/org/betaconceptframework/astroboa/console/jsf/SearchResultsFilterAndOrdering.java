@@ -37,9 +37,7 @@ package org.betaconceptframework.astroboa.console.jsf;
 
 
 import java.util.Date;
-import java.util.List;
 
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 
 /**
@@ -58,7 +56,7 @@ public class SearchResultsFilterAndOrdering extends AbstractUIBean {
 	 * the filters are utilized during browsing and are used to generate extra search criteria besides those set by the browsing action.
 	 */
 	
-	private List<String> ownerIdsFilterList;
+	private static final long serialVersionUID = 1L;
 	
 	// holds the user selection about searching / filtering by content object
 	// owner
@@ -96,8 +94,6 @@ public class SearchResultsFilterAndOrdering extends AbstractUIBean {
 	private String queryLocalizedLabel;
 	
 	private String selectedContentObjectSystemName;
-	
-	private SearchMode selectedSearchModeFilter ;
 	
 	public boolean isFilteringDuringBrowsingEnabled() {
 		return filteringDuringBrowsingEnabled;
@@ -197,14 +193,5 @@ public class SearchResultsFilterAndOrdering extends AbstractUIBean {
 			String selectedContentObjectSystemName) {
 		this.selectedContentObjectSystemName = selectedContentObjectSystemName;
 	}
-
-	public SearchMode getSelectedSearchModeFilter() {
-		return selectedSearchModeFilter;
-	}
-
-	public void setSelectedSearchModeFilter(SearchMode selectedSearchModeFilter) {
-		this.selectedSearchModeFilter = selectedSearchModeFilter;
-	}
-
 	
 }

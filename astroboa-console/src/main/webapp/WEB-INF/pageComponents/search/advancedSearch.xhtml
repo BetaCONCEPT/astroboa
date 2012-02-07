@@ -49,42 +49,31 @@ Authors
 					
 				
 			<div id="advancedSearchFormFields">
+				
 				<ol class="formElementList">
 					<!-- Content Object Identifier -->
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label for="contentObjectIdentifier">#{messages['advancedSearch.criteria.tab.global.contentObject.id']}</label>
 						<h:inputText id="contentObjectIdentifier" 
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectIdentifier}" />
 					</li>
 					
 					<!-- System Name -->
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label for="contentObjectSystemName">#{messages['advancedSearch.criteria.tab.global.contentObject.system.name']}</label>
 						<h:inputText id="contentObjectSystemName" 
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectSystemName}" />
 					</li>
 	
 					<!-- Search text -->
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label for="searchedText">#{messages['advancedSearch.criteria.tab.global.contain']}</label>
 						<h:inputText id="searchedText"
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.searchedText}" />
 					</li>
 					
-					<!-- System Entities -->
-					<li class="formElement">
-						<label for="searchModeFilter">#{messages['advancedSearch.criteria.tab.global.search.mode']}</label>
-				
-						<h:selectOneRadio id="searchModeFilter"
-							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedSearchModeFilter}">
-							<f:selectItem itemValue="SEARCH_ALL_ENTITIES" itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.all.entities']}" />
-							<f:selectItem itemValue="SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES"	itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.system.entities']}" />
-							<f:selectItem itemValue="SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES" itemLabel="#{messages['advancedSearch.criteria.tab.global.search.mode.non.system.entities']}" />
-						</h:selectOneRadio>
-					</li>
-					
 					<!-- Owner Criteria -->
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label for="ownerFilter">#{messages['advancedSearch.criteria.tab.global.owner']}</label>
 						<h:selectOneRadio id="ownerFilter"
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedOwnerFilter}">
@@ -96,7 +85,7 @@ Authors
 					</li>
 					
 					<!-- Type criteria. Do not forget value change listener -->
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label for="typeFilter">#{messages['advancedSearch.criteria.tab.global.content.type']}</label>
 						<h:selectOneMenu id="typeFilter"
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedContentObjectType}"
@@ -110,7 +99,7 @@ Authors
 					
 					<!-- Modified date -->
 					
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label>#{messages['advancedSearch.criteria.tab.global.created.modified.from']}</label>
 						<rich:calendar
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedFromDate}"
@@ -118,7 +107,7 @@ Authors
 							showApplyButton="false" />
 					</li>
 					
-					<li class="formElement">
+					<li class="formElementFieldsetView">
 						<label>#{messages['advancedSearch.criteria.tab.global.created.modified.to']}</label>
 						<rich:calendar
 							value="#{contentObjectSearchByCriteria.searchResultsFilterAndOrdering.selectedToDate}"
@@ -127,28 +116,9 @@ Authors
 					</li>
 				</ol>
 				
-				<div id="advancedSearchButtons">
-					<center>
-						<a4j:commandButton
-							action="#{contentObjectSearchByCriteria.searchForContentWithPagedResults_UIAction}"
-							reRender="searchResultsAjaxPanel" 
-							oncomplete="showTab('searchResultsTab');"
-							value="#{messages['advancedSearch.criteria.table.search.button']}" />
-							
-						<a4j:commandButton
-							action="#{contentObjectSearchByCriteria.initialize_UIAction}"
-							reRender="dynamicTabAjaxPanel" 
-							value="#{messages['advancedSearch.criteria.table.reset.button']}"/>
-							
-					</center>
-				</div>
-				
-			
-				
-				
-				
-				<div style="margin-top: 40px; border: 1px solid #AAAAAA;">					
-				<a4j:outputPanel id="criteriaPanel" >
+				<div style="clear: both;"/>
+				<div id="advancedSearchCriteria">					
+					<a4j:outputPanel id="criteriaPanel" layout="block">
 					
 					<h4>#{messages['advancedSearch.criteria.panel.header']}</h4>
 					
@@ -331,20 +301,26 @@ Authors
 								</rich:column>
 							</rich:dataTable>
 
-						
-					
 					</a4j:outputPanel>
-					</div>	
-				</div>			
+				</div>
+				
+				<div id="advancedSearchButtons">
+					<center>
+						<a4j:commandButton style="margin-right: 20px;"
+							action="#{contentObjectSearchByCriteria.searchForContentWithPagedResults_UIAction}"
+							reRender="searchResultsAjaxPanel" 
+							oncomplete="showTab('searchResultsTab');"
+							value="#{messages['advancedSearch.criteria.table.search.button']}" />
+							
+						<a4j:commandButton
+							action="#{contentObjectSearchByCriteria.initialize_UIAction}"
+							reRender="dynamicTabAjaxPanel" 
+							value="#{messages['advancedSearch.criteria.table.reset.button']}"/>
+				
+					</center>
+				</div>	
+			</div>			
 			
-			
-			<script type="text/javascript" charset="utf-8">
-			//<![CDATA[
-				bcmslib.jQuery(function(){
-					bcmslib.jQuery("#advancedSearchFormFields input, #advancedSearchFormFields textarea, #advancedSearchFormFields select, #advancedSearchFormFields input[type=button]").uniform();
-				});
-			//]]>
-			</script>
 			
 		</ui:composition>
 	</body>
