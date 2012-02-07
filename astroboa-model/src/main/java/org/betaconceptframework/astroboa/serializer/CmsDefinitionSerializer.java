@@ -18,8 +18,12 @@
  */
 package org.betaconceptframework.astroboa.serializer;
 
+import static org.betaconceptframework.astroboa.util.CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX;
+
 import java.util.List;
 import java.util.Map.Entry;
+
+import javax.xml.XMLConstants;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -325,34 +329,47 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	private void exportDisplayNameAndDescription(LocalizableCmsDefinition cmsDefinition) {
 		if (cmsDefinition.getDisplayName() != null && cmsDefinition.getDisplayName().hasLocalizedLabels()){
 
-			serializer.startElement("label",true,true);
-			
-			for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
+			if (serializer.outputIsJSON()){
+				serializer.startElement("label",true,true);
 				
-				if (serializer.outputIsJSON()){
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
 					serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
 				}
-				else {
-					serializer.writeAttribute(localizedLabel.getKey(),StringEscapeUtils.escapeXml(localizedLabel.getValue()));
+				
+				serializer.endElement("label",true,true);
+			}
+			else{
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
+					serializer.startElement("label",true,true);
+					serializer.writeAttribute(CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX, localizedLabel.getKey());
+					serializer.endElement("label",true,false);
+					serializer.writeContent(localizedLabel.getValue(), true);
+					serializer.endElement("label",false,true);
 				}
 			}
 			
-			serializer.endElement("label",true,true);
 		}
 		if (cmsDefinition.getDescription() != null && cmsDefinition.getDescription().hasLocalizedLabels()){
 
-			serializer.startElement("description",true,true);
-			
-			for (Entry<String,String> localizedDescription : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
-				if (serializer.outputIsJSON()){
-					serializer.writeAttribute(localizedDescription.getKey(),localizedDescription.getValue());
+			if (serializer.outputIsJSON()){
+				serializer.startElement("description",true,true);
+				
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
+					serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
 				}
-				else {
-					serializer.writeAttribute(localizedDescription.getKey(),StringEscapeUtils.escapeXml(localizedDescription.getValue()));
+				
+				serializer.endElement("description",true,true);
+			}
+			else{
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
+					serializer.startElement("description",true,true);
+					serializer.writeAttribute(CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX, localizedLabel.getKey());
+					serializer.endElement("description",true,false);
+					serializer.writeContent(localizedLabel.getValue(), true);
+					serializer.endElement("description",false,true);
 				}
 			}
-			
-			serializer.endElement("description",true,true);
+
 		}
 	}
 

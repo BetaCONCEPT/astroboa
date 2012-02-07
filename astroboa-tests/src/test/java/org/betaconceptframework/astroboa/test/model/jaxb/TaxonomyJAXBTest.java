@@ -27,6 +27,7 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
 import org.betaconceptframework.astroboa.test.util.TestUtils;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -268,7 +269,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		
 		String xsiNamesplaceDeclaration = "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
 		String xmlNamespaceDeclaration = "xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"";
-		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/model/astroboa-model");
+		String astroboaModelScehmaLocation =removeWhitespacesIfNecessary("http://www.betaconceptframework.org/schema/astroboa/model http://localhost:8080/resource-api/repository/models/"+CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION);
 		String xmlScehmaLocation = removeWhitespacesIfNecessary("http://www.w3.org/XML/1998/namespace http://www.w3.org/2001/03/xml.xsd");
 		
 		String xmlFromApi = taxonomy.xml(prettyPrint);
