@@ -255,11 +255,15 @@ public final class CmsConstants {
 	}
 	
 	
-	public static final String RESOURCE_API_CONTENT_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
-	public static final String RESOURCE_API_TAXONOMY_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
-	public static final String RESOURCE_API_TOPIC_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
+	public static final String RESOURCE_API_OBJECTS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"objects";
+	public static final String DEPRECATED_RESOURCE_API_OBJECTS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
+	public static final String RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomies";
+	public static final String DEPRECATED_RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
+	public static final String RESOURCE_API_TOPICS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"topics";
+	public static final String DEPRECATED_RESOURCE_API_TOPICS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
 	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
-	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
+	public static final String RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"models";
+	public static final String DEPRECATED_RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
 	
 }
