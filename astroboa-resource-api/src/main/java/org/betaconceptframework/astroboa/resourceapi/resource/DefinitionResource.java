@@ -276,7 +276,7 @@ public class DefinitionResource extends AstroboaResource{
 
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
+		Output outputEnum = ContentApiUtils.getOutputType(output, Output.JSON);
 
 		return getModelInternal(callback, prettyPrintEnabled, outputEnum);
 
