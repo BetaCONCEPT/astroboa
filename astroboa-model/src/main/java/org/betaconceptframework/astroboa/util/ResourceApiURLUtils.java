@@ -220,23 +220,36 @@ public class ResourceApiURLUtils {
 			sb.append(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH);
 			
-			String schemaFilename = retrieveSchemaFileName((ContentObjectTypeDefinition)cmsEntity);
-				
-			if (schemaFilename != null){
-					sb.append(schemaFilename);
+			if (urlProperties.getResourceRepresentationType() !=null && 
+					urlProperties.getResourceRepresentationType().equals(ResourceRepresentationType.XSD)){
+				String schemaFilename = retrieveSchemaFileName((ContentObjectTypeDefinition)cmsEntity);
+					
+				if (schemaFilename != null){
+						sb.append(schemaFilename);
+				}
+				else{
+					sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+				}
 			}
 			else{
-				sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+				sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());	
 			}
 		}
 		else if (cmsEntity instanceof CmsPropertyDefinition){
 			sb.append(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH)
 			.append(CmsConstants.FORWARD_SLASH);
-			
-			String schemaFilename = retrieveSchemaFileName((CmsPropertyDefinition)cmsEntity);
+
+			if (urlProperties.getResourceRepresentationType() !=null && 
+					urlProperties.getResourceRepresentationType().equals(ResourceRepresentationType.XSD)){
+
+				String schemaFilename = retrieveSchemaFileName((CmsPropertyDefinition)cmsEntity);
 				
-			if (schemaFilename != null){
-				sb.append(schemaFilename);
+				if (schemaFilename != null){
+					sb.append(schemaFilename);
+				}
+				else{
+					sb.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+				}
 			}
 			else{
 				sb.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
