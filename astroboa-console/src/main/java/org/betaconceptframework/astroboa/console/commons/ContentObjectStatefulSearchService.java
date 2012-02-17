@@ -31,11 +31,14 @@ import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.ContentService;
+import org.betaconceptframework.astroboa.console.jsf.PageController;
+import org.betaconceptframework.astroboa.console.jsf.UIComponentBinding;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.ui.jsf.AbstractUIBean;
 import org.betaconceptframework.ui.jsf.DataPage;
 import org.betaconceptframework.ui.jsf.PagedListDataModel;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
+import org.jboss.seam.contexts.Contexts;
 
 /**
  * This class provides stateful as well as stateless content search facilities 
@@ -249,13 +252,15 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 											// Model only if there are results
 			
 			// we reset instead of nullify the results variable since nullification causes data scroller to not synchronize with the new data model 
+			/*
 			if (returnedContentObjects != null){
 				returnedContentObjects.reset();
 				contentObjectSelection.clearAllSelectedContentObjects_UIAction();
 			}
 			else
 				returnedContentObjects = new ContentObjectDataModel(pageSize);
-			
+			*/
+			returnedContentObjects = new ContentObjectDataModel(pageSize);
 			searchResultSetSize = (int) cmsOutcome.getCount();
 			
 			
@@ -418,7 +423,20 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		}
 
 	}
-
+	
+	
+	public void changeRowsPerDataTablePage_UIAction(int rowsPerPage){
+		PageController pageController = (PageController) JSFUtilities.getBeanFromSpringContext("pageController");
+		pageController.changeRowsPerDataTablePage(rowsPerPage);
+		// we need to run the query again with a new limit
+		localContentObjectCriteria.setOffsetAndLimit(0, rowsPerPage);
+		searchForContentWithPagedResults(localContentObjectCriteria, true, JSFUtilities.getLocaleAsString(), rowsPerPage);
+		UIComponentBinding uiComponentBinding = (UIComponentBinding) Contexts.getEventContext().get("uiComponentBinding");
+		if (uiComponentBinding != null){
+			uiComponentBinding.resetContentObjectTableScrollerComponent();
+		}
+	}
+	
 	public void setLocalContentObjectCriteria(
 			ContentObjectCriteria localContentObjectCriteria) {
 		this.localContentObjectCriteria = localContentObjectCriteria;

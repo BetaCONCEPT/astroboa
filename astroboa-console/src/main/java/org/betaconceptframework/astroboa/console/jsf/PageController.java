@@ -141,7 +141,7 @@ public class PageController extends AbstractUIBean {
 		dynamicUIAreaCurrentPageComponentEnum = null;
 	}
 	
-	public void changeRowsPerDataTablePage_UIAction(int rowsPerPage){
+	public void changeRowsPerDataTablePage(int rowsPerPage){
 		
 		if (rowsPerPage <= 0){
 			rowsPerDataTablePage = 20;
