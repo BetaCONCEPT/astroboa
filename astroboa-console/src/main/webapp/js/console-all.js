@@ -761,7 +761,7 @@ function callFunctionOnEnterKey(e, func, arg) {
     			});
     	
     	bcmslib.jQuery(document)
-    		.delegate('.propertyTip', 'mouseenter', function() {
+    		.delegate('.propertyTip', 'click', function() {
     								var tipsy = bcmslib.jQuery.data(this, 'tipsy');
 									bcmslib.jQuery.when(getPropertyDescription(this)).then(function(){
 										tipsy.show();
@@ -1254,10 +1254,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     					acceptedObjectTypeList = acceptedObjectTypes.split(',');
     					
     					for(i = 0; i < acceptedObjectTypeList.length - 1; i++){
-    						query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[i]) + '" OR '; 
+    						query += 'objectType = "' + $.trim(acceptedObjectTypeList[i]) + '" OR '; 
     					}
 	    				
-    					query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[acceptedObjectTypeList.length - 1]) + '") AND ';
+    					query += 'objectType = "' + $.trim(acceptedObjectTypeList[acceptedObjectTypeList.length - 1]) + '") AND ';
     				}
     			
     				var title = $('#objectTitle').val();
