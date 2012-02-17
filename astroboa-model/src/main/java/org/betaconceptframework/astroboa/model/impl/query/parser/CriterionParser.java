@@ -89,8 +89,12 @@ import java.util.regex.Pattern;
 
 
         //Reserved property paths for content object criteria
+        // contentTypeName is considered obsolete and will be removed in next major version, i.e. 4.x, use objectType instead
         if ("contentTypeName".equals(propertyPath) && contentObjectCriteria != null){
                         return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
+        }
+        else if ("objectType".equals(propertyPath) && contentObjectCriteria != null){
+            return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
         }
         else if ("textSearched".equals(propertyPath) && contentObjectCriteria != null){
                         contentObjectCriteria.addFullTextSearchCriterion(value);

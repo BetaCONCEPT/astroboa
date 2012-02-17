@@ -77,10 +77,10 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 	@Test  
 	public void testBaseContentTypeCriterion() throws Exception {  
 
-		checkExpression("contentTypeName=\""+TEST_CONTENT_TYPE+"Type\"", 
+		checkExpression("objectType=\""+TEST_CONTENT_TYPE+"Type\"", 
 				CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), Condition.OR, Arrays.asList(EXTENDED_TEST_CONTENT_TYPE,DIRECT_EXTENDED_TEST_CONTENT_TYPE,TEST_CONTENT_TYPE)));
 		
-		checkExpression("contentTypeName=\""+EXTENDED_TEST_CONTENT_TYPE+"Type\"", 
+		checkExpression("objectType=\""+EXTENDED_TEST_CONTENT_TYPE+"Type\"", 
 				CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), Condition.OR, Arrays.asList(EXTENDED_TEST_CONTENT_TYPE,DIRECT_EXTENDED_TEST_CONTENT_TYPE)));
 	}
 	

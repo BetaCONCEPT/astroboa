@@ -773,7 +773,7 @@ public class CriterionFactory  {
 	 * <p>
 	 * For convenience , there are several reserved property paths:
 	 * <ul>
-	 * <li><b>contentType</b>, which refers to built in property {@link CmsBuiltInItem#ContentObjectTypeName}</li>
+	 * <li><b>objectType</b>, which refers to built in property {@link CmsBuiltInItem#ContentObjectTypeName}</li>
 	 * <li><b>textSearched</b>, which enabled full text search by calling {@link ContentObjectCriteria#addFullTextSearchCriterion(String)}</li>
 	 * </ul>
 	 * </p>

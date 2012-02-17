@@ -412,15 +412,15 @@ public class SerializationBean extends JcrDaoSupport{
 		}
 	}
 
-	private void createRootElement(Serializer serializer, String rootEntityName, ResourceRepresentationType<?>  resourceRepresentationType, boolean createContentTypeNamespaces)	throws Exception {
+	private void createRootElement(Serializer serializer, String rootEntityName, ResourceRepresentationType<?>  resourceRepresentationType, boolean createObjectTypeNamespaces)	throws Exception {
 		
-		AttributesImpl atts = generateRootElementAttributes(serializer,rootEntityName, resourceRepresentationType, createContentTypeNamespaces);
+		AttributesImpl atts = generateRootElementAttributes(serializer,rootEntityName, resourceRepresentationType, createObjectTypeNamespaces);
 		
 		serializer.openEntity(rootEntityName, atts);
 	}
 
 	private AttributesImpl generateRootElementAttributes(
-			Serializer serializer, String rootEntityName, ResourceRepresentationType<?>  resourceRepresentationType, boolean createContentTypeNamespaces) {
+			Serializer serializer, String rootEntityName, ResourceRepresentationType<?>  resourceRepresentationType, boolean createObjectTypeNamespaces) {
 		AttributesImpl atts = new AttributesImpl();
 		
 		//Add repository identifier
@@ -456,7 +456,7 @@ public class SerializationBean extends JcrDaoSupport{
 			}
 
 
-			if (createContentTypeNamespaces && (entityTypeToSerialize == null || CmsEntityType.REPOSITORY == entityTypeToSerialize || CmsEntityType.CONTENT_OBJECT == entityTypeToSerialize)){
+			if (createObjectTypeNamespaces && (entityTypeToSerialize == null || CmsEntityType.REPOSITORY == entityTypeToSerialize || CmsEntityType.CONTENT_OBJECT == entityTypeToSerialize)){
 				Map<String, String> prefixesPerType = new HashMap<String, String>();
 
 				createXSISchemaLocationValueForAllDefinitions(atts, xsiSchemaLocations, prefixesPerType);

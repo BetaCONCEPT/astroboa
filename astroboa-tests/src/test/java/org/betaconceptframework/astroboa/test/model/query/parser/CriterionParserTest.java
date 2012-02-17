@@ -105,7 +105,7 @@ public class CriterionParserTest {
 		String propertyPath3="profile.language";
 
 		//Reserved property paths
-		checkExpressionForContentObjectCriteria("contentTypeName=\"1\"", CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), "1"));
+		checkExpressionForContentObjectCriteria("objectType=\"1\"", CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("id=\"1\"", CriterionFactory.equals(CmsBuiltInItem.CmsIdentifier.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("systemName=\"1\"", CriterionFactory.equals(CmsBuiltInItem.SystemName.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("systemName%%\"1\"", CriterionFactory.like(CmsBuiltInItem.SystemName.getJcrName(), "1"));

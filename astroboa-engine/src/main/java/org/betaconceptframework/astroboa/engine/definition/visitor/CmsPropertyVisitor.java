@@ -137,7 +137,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	private String namespaceUri;
 	private URI definitionFileURI;
 	private Integer order;
-	private Set<String> acceptedContentTypes;
+	private Set<String> acceptedObjectTypes;
 	private List<String> acceptedTaxonomies;
 
 	private String calendarPattern;
@@ -321,7 +321,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			case ObjectReference:
 				
 				definition = new ObjectReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null, acceptedContentTypes);
+						restrictWriteToRoles, parentDefinition,	null, acceptedObjectTypes);
 				
 				break;
 			case ContentType:
@@ -1026,21 +1026,21 @@ public class CmsPropertyVisitor  implements XSVisitor{
 								//Expecting a comma delimited string
 								if (attribute.equals(CmsDefinitionItem.acceptedContentTypes)){
 									try{
-										String[] acceptedContentTypeArray = StringUtils.split(valueToBeSet, ",");
+										String[] acceptedObjectTypeArray = StringUtils.split(valueToBeSet, ",");
 										//	Trim values
-										if (!ArrayUtils.isEmpty(acceptedContentTypeArray)){
-											acceptedContentTypes = new HashSet<String>();
+										if (!ArrayUtils.isEmpty(acceptedObjectTypeArray)){
+											acceptedObjectTypes = new HashSet<String>();
 
-											for (String acceptedContentTypeName : acceptedContentTypeArray){
-												String trimmedValue = StringUtils.trimToNull(acceptedContentTypeName);
+											for (String acceptedObjectType : acceptedObjectTypeArray){
+												String trimmedValue = StringUtils.trimToNull(acceptedObjectType);
 												if (trimmedValue != null)
-													acceptedContentTypes.add(trimmedValue);
+													acceptedObjectTypes.add(trimmedValue);
 											}
 										}
 									}catch(Exception e){
-										logger.warn("While splitting accepted content types {} in element {}",valueToBeSet, name);
+										logger.warn("While splitting accepted object types {} in element {}",valueToBeSet, name);
 										logger.warn("",e);
-										acceptedContentTypes = null;
+										acceptedObjectTypes = null;
 									}
 
 								}

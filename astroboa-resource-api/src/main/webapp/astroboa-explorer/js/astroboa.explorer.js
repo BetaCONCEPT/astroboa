@@ -965,7 +965,7 @@
 					var contentTypeCriterion = null;
 					
 					if (contentTypeSelectedValue != defaultValueForSelector){
-						contentTypeCriterion = 'contentTypeName="'+contentTypeSelectedValue+'"';
+						contentTypeCriterion = 'objectType="'+contentTypeSelectedValue+'"';
 					}
 
 					var selectedPropertyPath = extractPropertyPath(propertySelectedValue);
@@ -1218,7 +1218,7 @@
 								 var attachContentTypeLabelToCategory = true;
 								 
 								 	if (contentType != defaultValueForSelector){
-										 contentTypeCriterion =  ' contentTypeName="'+contentType+'" AND ';
+										 contentTypeCriterion =  ' objectType="'+contentType+'" AND ';
 										 category = retrieveLabel(repositoryModel[contentType].label, configuration.locale);
 										 attachContentTypeLabelToCategory = false;
 									 }
