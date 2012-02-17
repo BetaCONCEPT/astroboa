@@ -5,7 +5,7 @@
  *
  */
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *

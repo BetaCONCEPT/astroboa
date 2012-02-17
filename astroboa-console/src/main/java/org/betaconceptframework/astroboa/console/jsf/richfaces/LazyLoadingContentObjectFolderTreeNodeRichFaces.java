@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *

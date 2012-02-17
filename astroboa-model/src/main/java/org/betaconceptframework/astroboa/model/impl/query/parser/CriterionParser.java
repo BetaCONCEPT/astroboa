@@ -94,7 +94,7 @@ import java.util.regex.Pattern;
                         return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
         }
         else if ("objectType".equals(propertyPath) && contentObjectCriteria != null){
-            return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
+                        return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
         }
         else if ("textSearched".equals(propertyPath) && contentObjectCriteria != null){
                         contentObjectCriteria.addFullTextSearchCriterion(value);
@@ -756,26 +756,6 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     finally { jj_save(1, xla); }
   }
 
-  private boolean jj_3R_26() {
-    if (jj_scan_token(CONTAINS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_25() {
-    if (jj_scan_token(LIKE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_24() {
-    if (jj_scan_token(LESS_EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_23() {
-    if (jj_scan_token(LESS)) return true;
-    return false;
-  }
-
   private boolean jj_3R_22() {
     if (jj_scan_token(GREATER_EQUAL)) return true;
     return false;
@@ -925,6 +905,26 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
       xsp = jj_scanpos;
       if (jj_3R_10()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  private boolean jj_3R_26() {
+    if (jj_scan_token(CONTAINS)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_25() {
+    if (jj_scan_token(LIKE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_24() {
+    if (jj_scan_token(LESS_EQUAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_23() {
+    if (jj_scan_token(LESS)) return true;
     return false;
   }
 
