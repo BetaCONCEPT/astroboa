@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.0.0.GA</version>
 	</parent>
 	<artifactId>astroboa-resource-api</artifactId>
 	<packaging>war</packaging>
@@ -125,21 +125,21 @@
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.0.GA</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.0.GA</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-java-client</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.0.GA</version>
 			<exclusions>
 				<!-- If running inside JBoss this jar is already available -->
 				<exclusion>
