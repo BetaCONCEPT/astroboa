@@ -239,6 +239,7 @@ public final class CmsConstants {
 	public final static String INCLUDE_CHILDREN_EXPRESSION = CmsConstants.FORWARD_SLASH+CmsConstants.ANY_NAME;
 
 	
+	
 	private static String loadVersion() {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("astroboa");
 		
@@ -267,6 +268,7 @@ public final class CmsConstants {
 	public static final String DEPRECATED_RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
 
+	public static final String NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT = "value";
 	/**
 	 * Use {@link #RESOURCE_API_CONTENT_URI_PATH} instead
 	 */
@@ -293,4 +295,46 @@ public final class CmsConstants {
 
 	
 	public static final String EXCHANGE_NAME = "AstroboaExchange";
+	
+	/*
+	 * Regular expression for the pattern of the values of an element
+	 * of type {http://www.w3.org/2001/XMLSchema.xsd}language (xml:lang)
+	 */
+	public static final String XML_SCHEMA_LANGUAGE_TYPE_REG_EXP = "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*";
+	
+	/*
+	 * ISO 8601 regular expressions for XML Schema types
+	 * gYear, gMonth, gYearMonth, gDay, gMonthDay
+	 */
+	public static final String TIME_ZONE_REG_EXP = "Z|[+-](?:2[0-3]|[01]?[0-9])(?::?(?:[0-5]?[0-9]))?";
+	public static final String YEAR_REG_EXP = "\\d{4}";
+	public static final String MONTH_REG_EXP = "1[0-2]|0[1-9]";
+	public static final String DAY_REG_EXP = "3[0-1]|0[1-9]|[1-2][0-9]";
+	
+	/*
+	 * The lexical representation of year object CCYY
+     * with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GYEAR_REG_EXP = YEAR_REG_EXP+"("+TIME_ZONE_REG_EXP+")?";
+	
+	/*	The lexical representation of gMonth object --MM
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GMONTH_REG_EXP = "--("+MONTH_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gYearMonth object CCYY-MM
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GYEAR_MONTH_REG_EXP = YEAR_REG_EXP+"-("+MONTH_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gDay object ---DD
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GDAY_REG_EXP = "---("+DAY_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gMonthDay object --MM-DD
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GMONTH_DAY_REG_EXP = "--("+MONTH_REG_EXP+")-("+DAY_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
 }

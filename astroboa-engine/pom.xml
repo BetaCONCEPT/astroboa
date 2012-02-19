@@ -306,12 +306,6 @@ Authors
   			<artifactId>xsom</artifactId>
 		</dependency>
 		
-		
-		<dependency>
-			<groupId>com.sun.xml</groupId>
-			<artifactId>relaxngDatatype</artifactId>
-		</dependency>
-		
 		<!-- SLF4J API is an abstraction of various logging systems. This allows the
 		use of any logging framework at the time of deployment -->
 		<dependency>

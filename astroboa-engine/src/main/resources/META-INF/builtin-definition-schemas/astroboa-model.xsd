@@ -31,7 +31,8 @@
 	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/model"
 	xmlns:administrativeMetadataType="http://www.betaconceptframework.org/schema/astroboa/admin/administrativeMetadataType"
 	xmlns:accessibilityType="http://www.betaconceptframework.org/schema/astroboa/admin/accessibilityType"
-	elementFormDefault="unqualified" version="${project.version}">
+	elementFormDefault="unqualified" version="${project.version}"
+	attributeFormDefault="unqualified">
 
 
 	<xs:import

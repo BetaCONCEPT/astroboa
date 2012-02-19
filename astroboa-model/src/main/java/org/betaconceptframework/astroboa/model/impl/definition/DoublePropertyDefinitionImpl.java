@@ -59,11 +59,11 @@ public final class DoublePropertyDefinitionImpl extends
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			Double defaultValue, String repositoryObjectRestriction,  
 			Map<Double, Localization> valueRange,
-			Double minValue, boolean minValueExclusive, Double maxValue, boolean maxValueExclusive) {
+			Double minValue, boolean minValueExclusive, Double maxValue, boolean maxValueExclusive,boolean representsAnXmlAttribute) {
 		
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				defaultValue, repositoryObjectRestriction, valueRange);
+				defaultValue, repositoryObjectRestriction, valueRange,representsAnXmlAttribute);
 
 		this.minValue = minValue; 
 		this.maxValue = maxValue; 
@@ -90,7 +90,7 @@ public final class DoublePropertyDefinitionImpl extends
 		return new DoublePropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getDefaultValue(), getRepositoryObjectRestriction(), getValueEnumeration(), getMinValue(), minValueExclusive, getMaxValue(), maxValueExclusive);
+				getDefaultValue(), getRepositoryObjectRestriction(), getValueEnumeration(), getMinValue(), minValueExclusive, getMaxValue(), maxValueExclusive, isRepresentsAnXmlAttribute());
 	}
 
 	@Override

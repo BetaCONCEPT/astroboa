@@ -14,7 +14,10 @@ import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
+<<<<<<< HEAD
 import org.apache.jackrabbit.util.ISO8601;
+=======
+>>>>>>> improve-schema-support
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -753,6 +756,54 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     finally { jj_save(1, xla); }
   }
 
+<<<<<<< HEAD
+=======
+  private boolean jj_3R_4() {
+    if (jj_scan_token(PROPERTY_PATH)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_12() {
+    if (jj_3R_14()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_8() {
+    if (jj_scan_token(IS_NOT_NULL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_7() {
+    if (jj_scan_token(IS_NULL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_5() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_8()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_6() {
+    if (jj_3R_9()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_10()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  private boolean jj_3R_26() {
+    if (jj_scan_token(CONTAINS)) return true;
+    return false;
+  }
+
+>>>>>>> improve-schema-support
   private boolean jj_3R_25() {
     if (jj_scan_token(LIKE)) return true;
     return false;
@@ -880,6 +931,7 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     return false;
   }
 
+<<<<<<< HEAD
   private boolean jj_3R_12() {
     if (jj_3R_14()) return true;
     return false;
@@ -925,6 +977,8 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     return false;
   }
 
+=======
+>>>>>>> improve-schema-support
   /** Generated Token Manager. */
   public CriterionParserTokenManager token_source;
   JavaCharStream jj_input_stream;

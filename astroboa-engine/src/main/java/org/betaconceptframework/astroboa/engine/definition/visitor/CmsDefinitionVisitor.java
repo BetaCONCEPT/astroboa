@@ -408,20 +408,17 @@ public class CmsDefinitionVisitor implements XSVisitor{
 
 	public void elementDecl(XSElementDecl element) {
 		//NOTE in this method only global elements are processed
-		if (element.isGlobal())
-		{
+		if (element.isGlobal()){
 			CmsPropertyVisitor contentObjectPropertyVisitor = new CmsPropertyVisitor(builtInAttributes, null, false, false, 0, this);
 			element.visit(contentObjectPropertyVisitor);
 
 			LocalizableCmsDefinition definition = contentObjectPropertyVisitor.getDefinition();
-
+			
 			cacheDefinition(definition);
 
 			//Check if this element refers to a complex type 
 			//In this case complexType Definition should be removed from ComlpexTypeDeclaration map
-
-			if (element.getType()!= null)
-			{
+			if (definition != null && element.getType()!= null){
 				String complexTypeRefName = element.getType().getName();
 
 				if (complexTypeRefName != null)
@@ -551,5 +548,14 @@ public class CmsDefinitionVisitor implements XSVisitor{
 			String typeNamespace) {
 		return typeName != null && typeNamespace != null && definitionsUnderProcess.contains("{"+typeNamespace+"}"+typeName);
 	}
-
+	 
+	public XSComplexType getComplexType(String complexTypeName){
+		
+		if (complexTypeName == null){
+			return null;
+		}
+		
+		return complexTypeDeclarations.get(complexTypeName);
+		
+	}
 }

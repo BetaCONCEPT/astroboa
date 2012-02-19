@@ -47,10 +47,10 @@ public final class BooleanPropertyDefinitionImpl extends SimpleCmsPropertyDefini
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory,Integer order,  String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
-			Boolean defaultValue, String repositoryObjectRestriction) {
+			Boolean defaultValue, String repositoryObjectRestriction,boolean representsAnXmlAttribute) {
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				defaultValue, repositoryObjectRestriction, null);
+				defaultValue, repositoryObjectRestriction, null,representsAnXmlAttribute);
 		
 	}
 
@@ -63,7 +63,7 @@ public final class BooleanPropertyDefinitionImpl extends SimpleCmsPropertyDefini
 		return new BooleanPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getDefaultValue(), getRepositoryObjectRestriction());
+				getDefaultValue(), getRepositoryObjectRestriction(),isRepresentsAnXmlAttribute());
 	}
 
 }

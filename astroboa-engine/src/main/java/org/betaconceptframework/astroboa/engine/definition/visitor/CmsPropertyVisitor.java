@@ -95,6 +95,7 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
+import com.sun.xml.xsom.XSUnionSimpleType;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.XmlString;
@@ -169,6 +170,20 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	private String pattern;
 	
+	private boolean typeDefinitionExtendsBaseObjectType;
+	
+	private boolean propertyRepresentsTheSimpleContentOfAComplexProperty;
+	private boolean propertyRepresentsAnXmlAttribute;
+	
+	public boolean propertyRepresentsTheSimpleContentOfAComplexProperty() {
+		return propertyRepresentsTheSimpleContentOfAComplexProperty;
+	}
+
+	public void setPropertyRepresentsTheSimpleContentOfAComplexProperty(
+			boolean propertyRepresentsTheSimpleContentOfAComplexProperty) {
+		this.propertyRepresentsTheSimpleContentOfAComplexProperty = propertyRepresentsTheSimpleContentOfAComplexProperty;
+	}
+
 	private QName generatedQNameForDefinition(){
 		if (parentDefinition != null && parentDefinition.getQualifiedName() != null && parentDefinition.getQualifiedName().getPrefix() != null){
 			return new QName(namespaceUri,name,parentDefinition.getQualifiedName().getPrefix());
@@ -202,13 +217,13 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			switch (valueType) {
 			case Binary:
 				definition = new BinaryPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition, null, binaryChannelIsUnmanaged);
+						restrictWriteToRoles, parentDefinition, null, binaryChannelIsUnmanaged,propertyRepresentsAnXmlAttribute);
 				break;
 			case Boolean:
 				definition = new BooleanPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Boolean.valueOf(defaultValue): null) , 
-						null);
+						null,propertyRepresentsAnXmlAttribute);
 				break;
 			case Complex:
 				
@@ -320,7 +335,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			case ObjectReference:
 				
 				definition = new ObjectReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null, acceptedObjectTypes);
+						restrictWriteToRoles, parentDefinition,	null, acceptedObjectTypes,propertyRepresentsAnXmlAttribute);
 				
 				break;
 			case ContentType:
@@ -329,7 +344,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				contentTypePropertyDefinitionHelper3.setChildPropertyDefinitions(childPropertyDefinitions);
 
 				definition = new ContentObjectTypeDefinitionImpl(generatedQNameForDefinition(), description, displayName,	
-						contentTypePropertyDefinitionHelper3,definitionFileURI, superTypes, labelElementPath);
+						contentTypePropertyDefinitionHelper3,definitionFileURI, superTypes, typeDefinitionExtendsBaseObjectType, labelElementPath);
 				
 				logger.debug("Created definition for content type '{}'",name);
 				
@@ -338,7 +353,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new CalendarPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? DateUtils.fromString(defaultValue, calendarPattern): null) , 
-						null,calendarPattern);
+						null,calendarPattern,propertyRepresentsAnXmlAttribute);
 				break;
 			case Double:
 				Map<Double, Localization> acceptedValues = null;
@@ -353,7 +368,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new DoublePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Double.valueOf(defaultValue): null) , 
-						null, acceptedValues, (Double)minValue, minValueIsExclusive, (Double)maxValue, maxValueIsExclusive);
+						null, acceptedValues, (Double)minValue, minValueIsExclusive, (Double)maxValue, maxValueIsExclusive,propertyRepresentsAnXmlAttribute);
 				break;
 			case Long:
 				Map<Long, Localization> longAcceptedValues = null;
@@ -368,17 +383,17 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				definition = new LongPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						(StringUtils.isNotBlank(defaultValue)? Long.valueOf(defaultValue): null) , 
-						null, longAcceptedValues, (Long)minValue, minValueIsExclusive, (Long)maxValue, maxValueIsExclusive);
+						null, longAcceptedValues, (Long)minValue, minValueIsExclusive, (Long)maxValue, maxValueIsExclusive,propertyRepresentsAnXmlAttribute);
 				break;
 			case String:
 				definition = new StringPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory,order, restrictReadToRoles, 
 						restrictWriteToRoles, parentDefinition,
 						defaultValue, null, maxLength, minLength, stringFormat, definitionValueRange, 
-						passwordEncryptorClassName, passwordType, pattern);
+						passwordEncryptorClassName, passwordType, pattern,propertyRepresentsAnXmlAttribute);
 				break;
 			case TopicReference:
 				definition = new TopicReferencePropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
-						restrictWriteToRoles, parentDefinition,	null, acceptedTaxonomies);
+						restrictWriteToRoles, parentDefinition,	null, acceptedTaxonomies,propertyRepresentsAnXmlAttribute);
 				break;
 
 			default:
@@ -474,24 +489,68 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	}
 
-	public void attributeUse(XSAttributeUse arg0) {
+	public void attributeUse(XSAttributeUse attribute) {
+	
+		propertyRepresentsAnXmlAttribute = true;
+		
+		determineValueTypeForSimpleType(attribute.getDecl().getName(), attribute.getDecl().getType());
 
+		logger.debug("Constructing definition with type '{}' for attribute '{}'",valueType , attribute.getDecl().getName());
 
+		populateDefinition(attribute);
+
+		
+	}
+	
+	
+	private void addAttributeAsChildProperty(XSAttributeUse attribute){
+	
+		boolean mandatory = attribute.isRequired();
+		boolean multiple = false;
+
+		LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();
+			
+		cmsDefinitionVisitor.cacheDefinitionWhichIsUnderProcess(definitionForCurrentProperty);
+			
+		CmsPropertyVisitor propertyVisitor = new CmsPropertyVisitor(builtInAttributes, 
+				definitionForCurrentProperty, mandatory, multiple, childPropertyDefinitions.size(), 
+				cmsDefinitionVisitor);
+		attribute.visit(propertyVisitor);
+
+		LocalizableCmsDefinition subPropertyDefinition = propertyVisitor.getDefinition();
+		if (subPropertyDefinition == null){
+			logger.warn("Unable to define sub property '{}'", "{"+attribute.getDecl().getTargetNamespace()+"}"+attribute.getDecl().getName());
+		}
+		else{
+			logger.debug("Adding child property definition '{}' to definition '{}'", subPropertyDefinition.getQualifiedName(), 
+					"{"+namespaceUri+"}"+name);
+			childPropertyDefinitions.put(subPropertyDefinition.getName(), (CmsPropertyDefinition)subPropertyDefinition);
+		}
+
+		
 	}
 
 	public void complexType(XSComplexType complexType) {
 
-			valueType = ValueType.Complex;
-			complexPropertyTypeName = complexType.getName();
-			
-			logger.debug("Instantiated definition of type '{}'",valueType);
-
-			if (elementExtendsComplexCmsPropertyType(complexType)){
-				complexDefinitionContainsCommonAttributes = true;
+			//Special case where complex type contains simple content
+			//whose type is Base64Binary
+			if (complexTypeExtendsBase64Binary(complexType)){
+				valueType = ValueType.Binary;
 			}
 			else{
-				complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(complexType);
-			}
+				valueType = ValueType.Complex;
+
+				complexPropertyTypeName = complexType.getName();
+			
+				if (elementExtendsComplexCmsPropertyType(complexType)){
+					complexDefinitionContainsCommonAttributes = true;
+				}
+				else{
+					complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(complexType);
+				}
+			}	
+			
+			logger.debug("Instantiated definition of type '{}'",valueType);
 			
 			populateDefinition(complexType);
 		
@@ -541,51 +600,48 @@ public class CmsPropertyVisitor  implements XSVisitor{
 							}
 							
 							//Create a stack of all parent elements
-							Deque<XSType> elementInheritance = new ArrayDeque<XSType>();
-							
-							XSType currentElement = element.getType();
-							boolean elementIsContentObjectType = false;
-							
-							while (! elementIsContentObjectType){
-								elementIsContentObjectType = 
-									currentElement.getName() != null &&
-									CmsDefinitionItem.contentObjectType.equals(ItemUtils.createNewItem(null, currentElement.getTargetNamespace(), currentElement.getName()));
-
-								if (currentElement.isComplexType()){
-									elementInheritance.push(currentElement);
-								}
-								
-								if (elementIsContentObjectType){
-									break; //Need to go no further
-								}
-								else{
-									currentElement = currentElement.getBaseType();
-								}
-							}
-							
+							Deque<XSType> elementTypes = collectAllSuperTypesIncludingProvidedElement(element);
 							
 							if (superTypes == null){
 								superTypes = new ArrayList<String>();
 							}
 
 							//Now visit properties for each element stored
-							int elementTypesCount = elementInheritance.size();
-
-							while (!elementInheritance.isEmpty()){
+							boolean elementExtendsBaseContentObjectType = false;
+							
+							while (!elementTypes.isEmpty()){
+								
 								//Retrieve the first item in queue and remove it at the same time
-								final XSComplexType complexType = elementInheritance.pollFirst().asComplexType();
+								final XSComplexType complexType = elementTypes.pollFirst().asComplexType();
 								
-								//The first element type in the queue is always the contentObjectType
-								final boolean modelGroupBelongsToContentObjectType = elementInheritance.size() == elementTypesCount-1;
+								final boolean complexTypeRepresentsContentObjectType =  
+										complexType.getName() != null &&
+										CmsDefinitionItem.contentObjectType.equals(ItemUtils.createNewItem(null, complexType.getTargetNamespace(), complexType.getName()));
 								
+								elementExtendsBaseContentObjectType = elementExtendsBaseContentObjectType || complexTypeRepresentsContentObjectType;
 								
-								if (!modelGroupBelongsToContentObjectType && complexType.getName() != null){
+								if (! complexTypeRepresentsContentObjectType && complexType.getName() != null){
+									
 									logger.debug("Adding superType {} for definition {}", complexType.getName(), name);
 									
 									superTypes.add(complexType.getName());
 								}
 								
-								visitSubProperties(complexType,	modelGroupBelongsToContentObjectType);
+								visitSubProperties(complexType,	complexTypeRepresentsContentObjectType);
+							}
+							
+							if (! elementExtendsBaseContentObjectType){
+								//Element is a global one and does not extend base contentObjectType.
+								//In this case we should dynamically load contentObjectType properties
+
+								XSComplexType contentObjectType = cmsDefinitionVisitor.getComplexType("contentObjectType");
+								
+								if (contentObjectType == null){
+									throw new CmsException("Could not locate complex type contentObjectType.");
+								}
+								
+								visitSubProperties(contentObjectType, true);
+								
 							}
 						}
 						else {
@@ -613,11 +669,56 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
+	private Deque<XSType> collectAllSuperTypesIncludingProvidedElement(XSElementDecl element){
+		
+		Deque<XSType> types = new ArrayDeque<XSType>();
+		
+		XSType currentElement = element.getType();
+		
+		boolean elementIsContentObjectType = false;
+		
+		while (! elementIsContentObjectType){
+			
+			elementIsContentObjectType = 
+				currentElement.getName() != null &&
+				CmsDefinitionItem.contentObjectType.equals(ItemUtils.createNewItem(null, currentElement.getTargetNamespace(), currentElement.getName()));
+
+			if (elementIsContentObjectType){
+
+				if (currentElement.isComplexType()){
+					types.push(currentElement);
+				}
+
+				break; //Need to go no further
+			}
+			else{
+				
+				//Method getBaseType is always non-null.
+				//According to the documentation, 
+				//"Note that if this type represents xs:anyType, this method returns itself. "
+				//Threrefore break loop if we come across to such case
+				if (currentElement == currentElement.getBaseType()){
+					break;
+				}
+				else{
+					if (currentElement.isComplexType()){
+						types.push(currentElement);
+					}
+
+					currentElement = currentElement.getBaseType();
+				}
+			}
+		}
+		
+		return types;
+
+	}
+	
 	private boolean isDefinitionComplex(){
 		return valueType != null && ValueType.Complex == valueType;
 	}
 
-	private void visitSubProperties(final XSComplexType complexType, boolean modelGroupBelongsToContentObjectType) throws Exception {
+	private void visitSubProperties(final XSComplexType complexType, boolean complexTypeRepresentsContentObjectType) throws Exception {
 
 		logger.debug("Visiting sub properties for definition '{}'",name );
 
@@ -628,13 +729,98 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				annotation(complexType.getAnnotation());
 		}
 
-		XSParticle particle = complexType.getContentType().asParticle();
+		XSContentType complexTypeContent = complexType.getContentType();
+		
+		//1. ComplexType has Complex Content
+		if (complexTypeContent.asParticle() != null){
+			addSubElementsAsChildProperties(complexTypeContent.asParticle().getTerm().asModelGroup(), complexTypeRepresentsContentObjectType);
+		}
+		//2. ComplexType has Simple Content
+		else if (complexTypeContent.asSimpleType() != null){
+			addPropertyWhichRepresentsTheSimpleContentOfAComplexType(complexTypeContent.asSimpleType());
+		}
+		//3. ComplexType is empty
+		else if (complexTypeContent.asEmpty() != null){
+			logger.warn("Type {}{} is empty", namespaceUri, name);
+		}
+		else{
+			//Something weird is happenning. Throw an exception
+			throw new Exception("Complex Type {"+ namespaceUri+ "}" +name+" definition is not supported by ASTROBOA");
+		}
 
-		if (particle == null)
-			throw new Exception("Complex Type "+ complexType.getName()+ " is not valid");
-
-		setSubProperties(particle.getTerm().asModelGroup(), modelGroupBelongsToContentObjectType);
+		//Visit complex type attributes
+		if (complexType.getAttributeUses() != null ){
+			
+			String complexTypeTargetNamespace = retrieveComplexTypeTargetNamespace(complexType);
+					
+			for (XSAttributeUse attribute : complexType.getAttributeUses()){
+				
+				String attributeTargetNamespace = getAttributeNamespace(attribute, complexTypeTargetNamespace);
+				
+				//Check if complex type defines any attributes, excluding ASTROBOA's built-in attributes
+				if (! StringUtils.equals(attributeTargetNamespace, BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI)){
+					
+					ItemQName attr = ItemUtils.createNewItem("", attributeTargetNamespace, attribute.getDecl().getName());
+					ItemQName attrType = ItemUtils.createNewItem("", attribute.getDecl().getType().getTargetNamespace(), attribute.getDecl().getType().getName());
+					
+					logger.debug("Found attribute {} with type {}", attr, attrType);
+					
+					addAttributeAsChildProperty(attribute);
+					
+				}
+			}
+		}
+		
 	}
+
+	private String getAttributeNamespace(XSAttributeUse attribute, String parentNamespace){
+		
+		//Get attribute' namespace 
+		String attributeNamespace = null;
+		
+		if (attribute.getDecl() != null){
+			attributeNamespace = attribute.getDecl().getTargetNamespace();
+		}
+		
+		//Get the namespace of the schema where this attribute is defined
+		//We are interested where this attribute is defined. 
+		if (StringUtils.isBlank(attributeNamespace) && attribute.getOwnerSchema() != null){
+			attributeNamespace = attribute.getOwnerSchema().getTargetNamespace();
+		}
+		
+		//Get the namespace of the parent component (element or complex type)
+		if (StringUtils.isBlank(attributeNamespace)){
+			attributeNamespace = parentNamespace;
+		}
+		
+		return attributeNamespace;
+	}
+	
+	private String retrieveComplexTypeTargetNamespace(XSComplexType complexType) {
+		
+		String targetNamespace = complexType.getTargetNamespace();
+		
+		if (StringUtils.isBlank(targetNamespace)){
+			
+			if (!complexType.isGlobal()){
+				//Get namespace of its parent if any
+				XSElementDecl parentElement = complexType.getScope();
+			
+				if (parentElement != null){
+					targetNamespace = parentElement.getTargetNamespace();
+				}
+			}
+			
+			if (StringUtils.isBlank(targetNamespace) && complexType.getOwnerSchema() != null){
+				//Retrieve tagetNamespace as defined in the schema where this complexType exists
+				targetNamespace = complexType.getOwnerSchema().getTargetNamespace();
+			}
+			
+		}
+		
+		return targetNamespace;
+	}
+
 
 	private void setComplexReference(XSElementDecl element) throws Exception {
 
@@ -715,7 +901,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
-	private void setSubProperties(XSModelGroup modelGroup, boolean modelGroupBelongsToContentObjectType) {
+	private void addSubElementsAsChildProperties(XSModelGroup modelGroup, boolean modelGroupBelongsToContentObjectType) {
 
 		//Expected that all elements are defined in xs:sequence or xs:all
 		if (modelGroup != null && 
@@ -747,11 +933,11 @@ public class CmsPropertyVisitor  implements XSVisitor{
 							XSParticle[] particleChildren = subElement.getTerm().asModelGroup().getChildren();
 
 							for (XSParticle anotherSubElement: particleChildren){
-								particle(anotherSubElement);
+								addChildProperty(anotherSubElement);
 							}
 						}
 						else{
-							particle(subElement);
+							addChildProperty(subElement);
 						}
 					}
 				}
@@ -765,8 +951,18 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void setBasicProperties(XSComponent component) throws Exception {
-		//Attributes defined by XML Schema
-		name = ((XSDeclaration)component).getName();
+		
+		if (propertyRepresentsTheSimpleContentOfAComplexProperty){
+			//Special case. This property represents the simple content of a complex type
+			//In this case, its name is fixed
+			name = CmsConstants.NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT;
+		}
+		else if (component instanceof XSDeclaration){
+			name = ((XSDeclaration)component).getName();
+		}
+		else if (component instanceof XSAttributeUse){
+			name = ((XSAttributeUse)component).getDecl().getName();
+		}
 
 		//Validate name
 		if (! XMLChar.isValidNCName(name)){
@@ -775,155 +971,20 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 		logger.debug("Setting basic properties for definition '{}'", name);
 
-		//		Set CmsAnnotation
-		if (component.getAnnotation() != null)
+		//		Retrieve annotation to build display name and description
+		if (component.getAnnotation() != null){
 			annotation(component.getAnnotation());
+		}
+		else if (component instanceof XSAttributeUse && ((XSAttributeUse)component).getDecl().getAnnotation() != null){
+			annotation(((XSAttributeUse)component).getDecl().getAnnotation());
+		}
 
-		//Default value for simple properties 
 		if (isDefinitionSimple()){
-			if (component instanceof XSElementDecl){
-				XSElementDecl elementDecl = ((XSElementDecl) component);
-
-				XmlString defaultValueFromXml = elementDecl.getDefaultValue();
-				if (defaultValueFromXml != null){
-
-					defaultValue = defaultValueFromXml.value;
-
-					logger.debug("Set default value '{}' for definition '{}'",defaultValue, name);
-
-				}
+			
+			getDefaultValue(component);
 				
-				
-				//Also if it is a restriction then it is probably an enumeration
-				if (elementDecl.getType() != null && elementDecl.getType().isSimpleType() && 
-						elementDecl.getType().asSimpleType().isRestriction()){
-					
-					XSRestrictionSimpleType restriction = elementDecl.getType().asSimpleType().asRestriction();
-					Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
-					
-					definitionValueRange = new LinkedHashMap<String, Localization>();
-					
-					for (XSFacet facet : facets){
-						if (XSFacet.FACET_ENUMERATION.equals(facet.getName())){
-							
-							Localization localization = new LocalizationImpl();
+			getValueRange(component);
 
-							XSAnnotation annotation = facet.getAnnotation();
-							if (annotation != null && annotation.getAnnotation() != null && 
-									annotation.getAnnotation() instanceof CmsAnnotation){
-								
-								CmsAnnotation cmsAnnotation = (CmsAnnotation) annotation.getAnnotation();
-								
-								if (cmsAnnotation.getDisplayName() != null)
-								{
-									//We are only interested for the displayName of the value
-									localization = cmsAnnotation.getDisplayName();
-								}
-							}
-							else{
-								logger.warn("Found no localization for enumeration entry {} for element {}", facet.getValue().value, name);
-							}
-							
-							definitionValueRange.put(facet.getValue().value, localization);
-						}
-						else if (XSFacet.FACET_MAXEXCLUSIVE.equals(facet.getName())){
-							maxValueIsExclusive = true;
-							
-							if (valueType == ValueType.Long){
-								maxValue = retrieveLongValue(facet.getValue().value);	
-							}
-							else if (valueType == ValueType.Double){
-								maxValue = retrieveDoubleValue(facet.getValue().value);
-							}
-							else{
-								logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_MAXINCLUSIVE.equals(facet.getName())){
-							maxValueIsExclusive = false;
-							
-							if (valueType == ValueType.Long){
-								maxValue = retrieveLongValue(facet.getValue().value);	
-							}
-							else if (valueType == ValueType.Double){
-								maxValue = retrieveDoubleValue(facet.getValue().value);
-							}
-							else{
-								logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_MINEXCLUSIVE.equals(facet.getName())){
-							minValueIsExclusive = true;
-							
-							if (valueType == ValueType.Long){
-								minValue = retrieveLongValue(facet.getValue().value);	
-							}
-							else if (valueType == ValueType.Double){
-								minValue = retrieveDoubleValue(facet.getValue().value);
-							}
-							else{
-								logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_MININCLUSIVE.equals(facet.getName())){
-							minValueIsExclusive = false;
-							
-							if (valueType == ValueType.Long){
-								minValue = retrieveLongValue(facet.getValue().value);	
-							}
-							else if (valueType == ValueType.Double){
-								minValue = retrieveDoubleValue(facet.getValue().value);
-							}
-							else{
-								logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_MINLENGTH.equals(facet.getName())){
-							if (valueType == ValueType.String){
-								minLength = retrieveIntegerValue(facet.getValue().value);	
-							}
-							else{
-								logger.warn("Found minLength restriction entry {} for non string element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_MAXLENGTH.equals(facet.getName())){
-							if (valueType == ValueType.String){
-								maxLength = retrieveIntegerValue(facet.getValue().value);	
-							}
-							else{
-								logger.warn("Found maxLength restriction entry {} for non string element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_LENGTH.equals(facet.getName())){
-							if (valueType == ValueType.String){
-								minLength = retrieveIntegerValue(facet.getValue().value);
-								maxLength = minLength;
-							}
-							else{
-								logger.warn("Found length restriction entry {} for non string element {}", facet.getValue().value, name);
-							}
-						}
-						else if (XSFacet.FACET_PATTERN.equals(facet.getName())){
-							if (valueType == ValueType.String){
-								pattern = facet.getValue().value;
-								
-								if (StringUtils.isBlank(pattern)){
-									pattern = null;
-									logger.warn("Found blank pattern for string element {}", name);
-								}
-							}
-							else{
-								logger.warn("Found pattern restriction entry {} for non string element {}", facet.getValue().value, name);
-							}
-						}
-					}
-					
-					if (definitionValueRange.size() == 0){
-						definitionValueRange = null;
-					}
-				}
-
-			}
 		}
 
 		//Attributes defined by repository
@@ -1051,6 +1112,267 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
+	private void getValueRange(XSComponent component) {
+		XSType componentType = null;
+		
+		if (component instanceof XSElementDecl){
+			componentType = ((XSElementDecl) component).getType();
+		}
+		else if (component instanceof XSAttributeUse ){
+			componentType = ((XSAttributeUse)component).getDecl().getType();
+		}
+
+		//Also if it is a restriction then it is probably an enumeration
+		if (componentType != null && componentType.isSimpleType() ){
+			
+			if (definitionValueRange == null){
+				definitionValueRange = new LinkedHashMap<String, Localization>();
+			}
+
+			if (componentType.asSimpleType().isRestriction()){
+			
+				XSRestrictionSimpleType restriction = componentType.asSimpleType().asRestriction();
+				
+				loadRestrictionFacets(restriction);
+				
+			}
+			else if (componentType.asSimpleType().isUnion()){
+				
+				XSUnionSimpleType unionType = componentType.asSimpleType().asUnion();
+				
+				int memberCount = unionType.getMemberSize();
+				
+				for (int i=0;i<memberCount;i++){
+					XSSimpleType member = unionType.getMember(i);
+					
+					if (member.isRestriction()){
+						loadRestrictionFacets(member.asRestriction());
+					}
+				}
+
+			}
+			
+			if (definitionValueRange.size() == 0){
+				definitionValueRange = null;
+			}
+		}
+	}
+
+	private void loadRestrictionFacets(XSRestrictionSimpleType restriction) {
+		
+		if (StringUtils.equals(restriction.getName(), XSSchemaItem.Language.getLocalPart()) &&
+				StringUtils.equals(restriction.getTargetNamespace(), XSSchemaItem.Language.getNamespaceURI())
+			){
+			
+			/*
+			 * XSOM library uses file xsom-20110809.jar/com.sun.xml.xsom.impl.parser.datatypes.xsd,
+			 * which contains a list of built in datatypes defined by XML Schema,
+			 * when information about one or more of these types is required. 
+			 * 
+			 * Unfortunately, it contains wrong information
+			 * about the pattern of the 'language' simple type. In this file, 'language'
+			 * simple type is defined as 
+			 * 
+			   <xs:simpleType name="language" >
+			    <xs:restriction base="xs:token">
+			      <xs:pattern
+			        value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*"
+			                >
+			        <xs:annotation>
+			          <xs:documentation
+			                source="http://www.w3.org/TR/REC-xml#NT-LanguageID">
+			            pattern specifies the content of section 2.12 of XML 1.0e2
+			            and RFC 1766
+			          </xs:documentation>
+			        </xs:annotation>
+			      </xs:pattern>
+			    </xs:restriction>
+			  </xs:simpleType>
+			  
+			 * where as in http://www.w3.org/2001/XMLSchema.xsd  (The XML Schema for the ... XML Schema)
+			 * 'language' type is defined as
+			    
+			   	<xs:simpleType name="language" id="language">
+			   		<xs:annotation>
+			   			<xs:documentation source="http://www.w3.org/TR/xmlschema-2/#language"/>
+			   		</xs:annotation>
+			   		<xs:restriction base="xs:token">
+			   			<xs:pattern value="[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*" id="language.pattern">
+				   			<xs:annotation>
+				   				<xs:documentation source="http://www.ietf.org/rfc/rfc3066.txt">
+						            pattern specifies the content of section 2.12 of XML 1.0e2
+						            and RFC 3066 (Revised version of RFC 1766).
+	          					</xs:documentation>
+	          				</xs:annotation>
+          				</xs:pattern>
+          			</xs:restriction>
+          		</xs:simpleType>
+          		
+          		Every time we ask  XSOM about the pattern of the 'language' type, it is returning the one
+          		provided in the datatypes.xsd file and not the valid value provided by the XML Schema's xsd. 
+          		Therefore we have defined the constant CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP 
+          		which contains the true value of the pattern and use this instead. 
+          		
+          		Thus, in the context of this method, if the restriction whose facets we want to load 
+          		is the 'language' type restriction, there is no point in processing its facets at all. 
+          		We know apriori that there is only one facet, the pattern and it has a specific value.
+			 */
+			
+			return ;
+		}
+		
+		Collection<? extends XSFacet> facets = restriction.getDeclaredFacets();
+		
+		for (XSFacet facet : facets){
+			if (XSFacet.FACET_ENUMERATION.equals(facet.getName())){
+				
+				Localization localization = new LocalizationImpl();
+
+				XSAnnotation annotation = facet.getAnnotation();
+				if (annotation != null && annotation.getAnnotation() != null && 
+						annotation.getAnnotation() instanceof CmsAnnotation){
+					
+					CmsAnnotation cmsAnnotation = (CmsAnnotation) annotation.getAnnotation();
+					
+					if (cmsAnnotation.getDisplayName() != null)
+					{
+						//We are only interested for the displayName of the value
+						localization = cmsAnnotation.getDisplayName();
+					}
+				}
+				else{
+					logger.warn("Found no localization for enumeration entry {} for element {}", facet.getValue().value, name);
+				}
+				
+				definitionValueRange.put(facet.getValue().value, localization);
+
+			}
+			else if (XSFacet.FACET_MAXEXCLUSIVE.equals(facet.getName())){
+				maxValueIsExclusive = true;
+				
+				if (valueType == ValueType.Long){
+					maxValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					maxValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MAXINCLUSIVE.equals(facet.getName())){
+				maxValueIsExclusive = false;
+				
+				if (valueType == ValueType.Long){
+					maxValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					maxValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MINEXCLUSIVE.equals(facet.getName())){
+				minValueIsExclusive = true;
+				
+				if (valueType == ValueType.Long){
+					minValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					minValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MININCLUSIVE.equals(facet.getName())){
+				minValueIsExclusive = false;
+				
+				if (valueType == ValueType.Long){
+					minValue = retrieveLongValue(facet.getValue().value);	
+				}
+				else if (valueType == ValueType.Double){
+					minValue = retrieveDoubleValue(facet.getValue().value);
+				}
+				else{
+					logger.warn("Found maxExclusive restriction entry {} for non double and non long element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MINLENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					minLength = retrieveIntegerValue(facet.getValue().value);	
+				}
+				else{
+					logger.warn("Found minLength restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_MAXLENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					maxLength = retrieveIntegerValue(facet.getValue().value);	
+				}
+				else{
+					logger.warn("Found maxLength restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_LENGTH.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					minLength = retrieveIntegerValue(facet.getValue().value);
+					maxLength = minLength;
+				}
+				else{
+					logger.warn("Found length restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+			else if (XSFacet.FACET_PATTERN.equals(facet.getName())){
+				if (valueType == ValueType.String){
+					pattern = facet.getValue().value;
+					
+					if (StringUtils.isBlank(pattern)){
+						pattern = null;
+						logger.warn("Found blank pattern for string element {}", name);
+					}
+				}
+				else{
+					logger.warn("Found pattern restriction entry {} for non string element {}", facet.getValue().value, name);
+				}
+			}
+		}
+		
+		
+		//Continue if restriction extends another restriction
+		//CAUTION : In case parent restriction has facets other than Enumeration
+		//then these facets will override equivalent facets of this type
+		//This code must be reviewed
+		XSType baseType = restriction.getBaseType();
+		
+		if (baseType.isSimpleType() && 
+				! baseType.asSimpleType().isPrimitive() &&
+				baseType.asSimpleType().isRestriction() && 
+				! StringUtils.equals(baseType.getTargetNamespace(), XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+			
+			loadRestrictionFacets(baseType.asSimpleType().asRestriction());
+		}
+
+	}
+
+	private void getDefaultValue(XSComponent component) {
+		XmlString defaultValueFromXml = null;
+		
+		if (component instanceof XSElementDecl){
+			defaultValueFromXml = ((XSElementDecl) component).getDefaultValue();
+		}
+		else if (component instanceof XSAttributeUse ){
+			defaultValueFromXml = ((XSAttributeUse)component).getDefaultValue();
+		}
+			
+		if (defaultValueFromXml != null){
+				defaultValue = defaultValueFromXml.value;
+	
+				logger.debug("Set default value '{}' for definition '{}'",defaultValue, name);
+		}
+	}
+
 	private Integer retrieveIntegerValue(String valueToBeSet) {
 		try{
 			return Integer.valueOf(valueToBeSet);
@@ -1134,14 +1456,17 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	public void particle(XSParticle particle) {
+		addChildProperty(particle);
+	}
+	
+	private void addChildProperty(XSParticle particle) {
 		//Process particles of Element type
 		if (particle.getTerm().isElementDecl()){
 
 			//this is the only place where these values can be set
 			//There is no access to these properties from Element perspective
-			boolean isSubPropertyMandatory = particle.getMinOccurs() == 1;
-			boolean isSubPropertyMultiple = particle.getMaxOccurs() == XSParticle.UNBOUNDED;
-
+			boolean mandatory = particle.getMinOccurs() != null && particle.getMinOccurs().intValue() == 1;
+			boolean multiple = particle.getMaxOccurs() != null && particle.getMaxOccurs().intValue() == XSParticle.UNBOUNDED;
 
 			final XSElementDecl elementDecl = particle.getTerm().asElementDecl();
 			LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();
@@ -1149,7 +1474,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			cmsDefinitionVisitor.cacheDefinitionWhichIsUnderProcess(definitionForCurrentProperty);
 			
 			CmsPropertyVisitor propertyVisitor = new CmsPropertyVisitor(builtInAttributes, 
-					definitionForCurrentProperty, isSubPropertyMandatory, isSubPropertyMultiple, childPropertyDefinitions.size(), 
+					definitionForCurrentProperty, mandatory, multiple, childPropertyDefinitions.size(), 
 					cmsDefinitionVisitor);
 			elementDecl.visit(propertyVisitor);
 
@@ -1166,7 +1491,45 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		}
 	}
 
-	public void simpleType(XSSimpleType arg0) {
+	private void addPropertyWhichRepresentsTheSimpleContentOfAComplexType(XSSimpleType simpleContent){
+		
+		LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();
+		
+		cmsDefinitionVisitor.cacheDefinitionWhichIsUnderProcess(definitionForCurrentProperty);
+		
+		CmsPropertyVisitor propertyVisitor = new CmsPropertyVisitor(builtInAttributes, 
+				definitionForCurrentProperty, false, false, childPropertyDefinitions.size(), 
+				cmsDefinitionVisitor);
+		propertyVisitor.setPropertyRepresentsTheSimpleContentOfAComplexProperty(true);
+		
+		simpleContent.visit(propertyVisitor);
+
+		LocalizableCmsDefinition subPropertyDefinition = propertyVisitor.getDefinition();
+		
+		if (subPropertyDefinition == null){
+			logger.warn("Unable to define sub property '{}'", "{"+simpleContent.getTargetNamespace()+"}"+simpleContent.getName());
+		}
+		else{
+			logger.debug("Adding child property definition '{}' to definition '{}'", subPropertyDefinition.getQualifiedName(), 
+					"{"+namespaceUri+"}"+name);
+			childPropertyDefinitions.put(subPropertyDefinition.getName(), (CmsPropertyDefinition)subPropertyDefinition);
+		}
+		
+	}
+	
+	public void simpleType(XSSimpleType simpleType) {
+		
+		determineValueTypeForSimpleType(simpleType.getName(), simpleType);
+
+		if (valueType != null){
+			logger.debug("Constructing definition with type '{}' for element '{}'",valueType , simpleType.getName());
+
+			populateDefinition(simpleType);
+
+		}
+		else{
+			createDefinition = false;
+		}
 
 
 	}
@@ -1174,7 +1537,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	public void elementDecl(XSElementDecl element) {
 
 		//Determine type of element
-		determineValueTypeForElement(element);
+		determineValueTypeForElement(element, element.getType());
 
 		if (valueType != null){
 			logger.debug("Constructing definition with type '{}' for element '{}'",valueType , element.getName());
@@ -1188,10 +1551,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 	}
 
-	private void determineValueTypeForElement(XSElementDecl element) {
+	private void determineValueTypeForElement(XSDeclaration element, XSType elementType) {
 
-		XSType elementType = element.getType();
-		
 		if (element.isGlobal()){
 			determineValueTypeForGlobalElement(element, elementType);
 		}
@@ -1206,10 +1567,10 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				String typeNamespace = elementType.getTargetNamespace();
 
 				logger.debug("Type for sub element '{}' has target namespace '{}' and local part '{}'",
-						new Object[]{element.getName(),	elementType.getTargetNamespace(), typeName});
+						new Object[]{element.getName(),	typeNamespace, typeName});
 
 				if (elementType.isSimpleType()){
-					determineValueTypeForSimpleTypeElement(element, elementType, typeName, typeNamespace);
+					determineValueTypeForSimpleType(element.getName(), elementType);
 				}
 				else if (elementType.isComplexType()){
 
@@ -1224,7 +1585,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				//Check if value type has been defined
 				if (valueType == null)
 					throw new CmsException("Unknown complex type for element "+ element.getName()+ " Type details "+
-							" Target namespace "+	elementType.getTargetNamespace() + " and name "+ typeName);
+							" Target namespace "+	typeNamespace + " and name "+ typeName);
 
 			}
 			else{
@@ -1268,7 +1629,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	}
 
 	private void determineValueTypeForExternalComplexTypeElement(
-			XSElementDecl element, XSType elementType, String typeName,
+			XSDeclaration element, XSType elementType, String typeName,
 			String typeNamespace) {
 		
 		ItemQName typeItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
@@ -1304,6 +1665,26 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				complexDefinitionContainsCommonAttributes = true;
 			}
 			else{
+				
+				//Special case where complex type contains simple content
+				//whose type is Base64Binary
+				if (complexTypeExtendsBase64Binary(elementType.asComplexType())){
+					valueType = ValueType.Binary;
+				}
+				else{
+
+					//Allow element to extend any complex type regardless of its location
+					valueType = ValueType.Complex;
+					namespaceUri = elementType.getTargetNamespace();
+					complexPropertyTypeName = elementType.asComplexType().getName();
+					
+					//Disable caching this definition since it does not extend complexCmsPropertyType
+					//and thus it cannot be global
+					cacheComplexDefinitionReference = false;
+					complexDefinitionContainsCommonAttributes = complexTypeContainsCommonEntityAttributeGroup(elementType.asComplexType());
+	
+				}
+				/*
 				//Type is a complex type which does not extend CmsDefinitionItem.complexCmsPropertyType 
 				//This is only acceptable only if this type resides in the same XSD file
 				String elementSchemaURI = (element.getSourceDocument() != null ? element.getSourceDocument().getSystemId() : null);
@@ -1328,37 +1709,63 @@ public class CmsPropertyVisitor  implements XSVisitor{
 						" where element "+element.getName() + " resides in file "+elementSchemaURI
 						);
 				}
+				*/
 			}
 		}
 	}
 
-	private void determineValueTypeForSimpleTypeElement(XSElementDecl element,
-			XSType elementType, String typeName, String typeNamespace) {
+	private void determineValueTypeForSimpleType(String componentName, XSType simpleType) {
 		
 		ItemQName typeItemQName = null;
 		
-		//Check if element is an enumeration
-		if (!elementType.asSimpleType().isPrimitive() && elementType.asSimpleType().isRestriction()
-				&& typeNamespace != null && ! typeNamespace.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)){
-			XSRestrictionSimpleType restriction = elementType.asSimpleType().asRestriction();
+		String typeName = simpleType.getName();
+		String typeNamespace = simpleType.getTargetNamespace();
+
+		//Check if simple type is primitive
+		if (!simpleType.asSimpleType().isPrimitive() ) {
 			
-				typeName = restriction.getBaseType().getName();
-				typeNamespace = restriction.getBaseType().getTargetNamespace();
+			//Check if element is a restriction
+			if (simpleType.asSimpleType().isRestriction() && 
+					! StringUtils.equals(typeNamespace, XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+				
+				XSRestrictionSimpleType restriction = simpleType.asSimpleType().asRestriction();
+			
+				XSType baseType = retrieveBaseTypeFromRestriction(restriction);
+				
+				typeName = baseType.getName();
+				typeNamespace = baseType.getTargetNamespace();
+			}
+			else if (simpleType.asSimpleType().isUnion()){
+
+				XSUnionSimpleType union = simpleType.asSimpleType().asUnion();
+				
+				//All members must have the same type.
+				//Union with members of different types is not supported
+				ItemQName unionCommonType = getUnionMemberCommonType(union);
+						
+				if (unionCommonType == null){
+					throw new CmsException("Component "+ componentName+ " Target namespace "+	simpleType.getTargetNamespace() + 
+						" is a union of "+ union.getMemberSize() + " simple types which are not of the same base type. Unions whose members are not of the same base type are not supported");
+				}
+				
+				typeName = unionCommonType.getLocalPart();
+				typeNamespace = unionCommonType.getNamespaceURI();
+			}
 		}
 		
 		if (typeName == null){
-			throw new CmsException("Unknown simple type for element "+ element.getName()+ " Namespace "+
-					" Target namespace "+	elementType.getTargetNamespace());
+			throw new CmsException("Unknown simple type for component "+ componentName+ " Target namespace "+	simpleType.getTargetNamespace());
 		}
 		
 		typeItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
 
 		//Check what kind of type this element is
 		if (typeItemQName.equals(XSSchemaItem.String) ||
-				typeItemQName.equals(XSSchemaItem.NormalizedString)){
+				typeItemQName.equals(XSSchemaItem.NormalizedString) ||
+				typeItemQName.equals(XSSchemaItem.AnyURI)){
 			valueType = ValueType.String;
 			
-			if (StringUtils.equals(elementType.getName(), CmsDefinitionItem.passwordType.getLocalPart())){
+			if (StringUtils.equals(simpleType.getName(), CmsDefinitionItem.passwordType.getLocalPart())){
 				passwordType = true;	
 			}
 			
@@ -1382,6 +1789,26 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				typeItemQName.equals(XSSchemaItem.UnsignedByte)){
 			valueType = ValueType.Long;
 		}
+		else if (typeItemQName.equals(XSSchemaItem.GYear)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GYEAR_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GMonth)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GMONTH_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GYearMonth)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GYEAR_MONTH_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GDay)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GDAY_REG_EXP;
+		}
+		else if (typeItemQName.equals(XSSchemaItem.GMonthDay)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.GMONTH_DAY_REG_EXP;
+		}
 		else if (typeItemQName.equals(XSSchemaItem.Boolean)){
 			valueType = ValueType.Boolean;
 		}
@@ -1393,27 +1820,82 @@ public class CmsPropertyVisitor  implements XSVisitor{
 			valueType = ValueType.Date;
 			calendarPattern = CmsConstants.DATE_PATTERN;
 		}
+		else if (typeItemQName.equals(XSSchemaItem.Language)){
+			valueType = ValueType.String;
+			pattern = CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP;
+		}
 		else
-			throw new CmsException("Unknown simple type for element "+ element.getName()+ " Type details "+
-					" Target namespace "+	elementType.getTargetNamespace() + " and name "+ typeName);
+			throw new CmsException("Unknown type for component(element or attribute) "+ componentName+ ". Type details: "+
+					" Target namespace "+	simpleType.getTargetNamespace() + " and name "+ typeName);
 		
 	}
 
-	private void determineValueTypeForGlobalElement(XSElementDecl element,
+	private XSType retrieveBaseTypeFromRestriction(XSRestrictionSimpleType restriction) {
+		
+		XSType baseType = restriction.getBaseType();
+		
+		if (baseType.isSimpleType() && 
+				! baseType.asSimpleType().isPrimitive() &&
+				baseType.asSimpleType().isRestriction() && 
+				! StringUtils.equals(baseType.getTargetNamespace(), XMLConstants.W3C_XML_SCHEMA_NS_URI)){
+			
+			return retrieveBaseTypeFromRestriction(baseType.asSimpleType().asRestriction());
+		}
+		
+		return baseType;
+	}
+
+	private ItemQName getUnionMemberCommonType(XSUnionSimpleType union) {
+		
+		int memberCount = union.getMemberSize();
+		
+		ItemQName commonType = null;
+		
+		for (int i=0;i<memberCount;i++){
+			XSSimpleType member = union.getMember(i);
+			
+			String typeNamespace = member.getTargetNamespace();
+			String typeName = member.getName();
+			
+			if (member.isRestriction()){
+				typeNamespace = member.asRestriction().getBaseType().getTargetNamespace();
+				typeName = member.asRestriction().getBaseType().getName();
+			}
+			
+			if (commonType == null){
+				commonType = ItemUtils.createNewItem("", typeNamespace, typeName);
+			}
+			else{
+				ItemQName memberType = ItemUtils.createNewItem("", typeNamespace, typeName);
+				
+				if (! memberType.equals(commonType)){
+					return null;
+				}
+			}
+		}
+		
+		return commonType;
+	}
+
+	private void determineValueTypeForGlobalElement(XSDeclaration element,
 			XSType elementType) {
+		
 		logger.debug("Determine type for global element {}{}", "{"+element.getTargetNamespace() + "}", element.getName());
 
-		//Global element, that is no parents.
-		//PREVIOUS CODE
-		//valueType = ValueType.ContentType;
+		if (globalElementIsBuiltIn(ItemUtils.createNewItem("", element.getTargetNamespace(), element.getName()))){
+			return;
+		}
 
-		//NEW CODE
-		//In order for a global element to be a valid content type
-		//it must extend the built in Astroboa content object type
+		valueType = ValueType.ContentType;
+		typeDefinitionExtendsBaseObjectType = false;
+		
+		//Check element type and super types to see whether it extends
+		//Astroboa base contentObjectType.
+		
 		String typeName = null;
 		String typeNamespace = null;
-		if (elementType != null && ! globalElementIsBuiltIn(ItemUtils.createNewItem("", element.getTargetNamespace(), element.getName()))){
-			
+		
+		if (elementType != null){
 			
 			XSType currentElementType = elementType.getBaseType();
 			do {
@@ -1421,39 +1903,35 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				typeName = currentElementType.getName();
 				typeNamespace = currentElementType.getTargetNamespace();
 				
-				logger.debug("Checking base type {}{}", 
-						new Object[]{"{"+typeNamespace+"}", typeName});
+				logger.debug("Checking base type {}{}",	new Object[]{"{"+typeNamespace+"}", typeName});
 
 				ItemQName elementTypeAsItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
 				
 				//Element extends complex type ContentObjectType
 				//This means that it is a content type
-				if (elementTypeAsItemQName.equals(CmsDefinitionItem.contentObjectType))
-				{
-					valueType = ValueType.ContentType;
+				if (elementTypeAsItemQName.equals(CmsDefinitionItem.contentObjectType)){
+					typeDefinitionExtendsBaseObjectType = true;
 				}
-				else
-				{
+				else{
 					//Element may be extending a complex type which represents a ContentObjectType
 					//either this super type or one of its parent extend ContentObjectType
 					ItemQName parentTypeAsItemQName = ItemUtils.createNewItem("", currentElementType.getBaseType().getTargetNamespace(), currentElementType.getBaseType().getName());
 					
-					if (! elementTypeAsItemQName.equals(parentTypeAsItemQName))
-					{
+					if (! elementTypeAsItemQName.equals(parentTypeAsItemQName)){
 						currentElementType = currentElementType.getBaseType();
 					}
-					else
-					{
+					else{
 						break;
 					}
 					
 				}
-			}while (valueType == null);
+			}while (! typeDefinitionExtendsBaseObjectType);
 		}
 
-		if (valueType == null && ! globalElementIsBuiltIn(ItemUtils.createNewItem("", element.getTargetNamespace(), element.getName()))){
-			logger.warn("Global element '{}' is not a valid extension of ContentObjectType. Element Type Name : ''{}'', " +
-					" element type namespace :''{}''", 
+		if (! typeDefinitionExtendsBaseObjectType){
+			
+			logger.info("Global element '{}' does not extend Astroboa base object type 'contentObjectType'. Element Type Name : '{}', " +
+					" element type namespace :'{}'.", 
 					new Object[]{element.getName(), typeName, typeNamespace});
 		}
 	}
@@ -1538,6 +2016,19 @@ public class CmsPropertyVisitor  implements XSVisitor{
 		
 		return BooleanUtils.isTrue(elementExtendsComplexCmsPropertyType);
 	}
+	
+	private boolean complexTypeExtendsBase64Binary(XSComplexType complexType){
+		
+		//According to XSOM API method getBaseType always returns not null
+		String typeName = complexType.getBaseType().getName();
+		String typeNamespace = complexType.getBaseType().getTargetNamespace();
+
+		ItemQName complexTypeAsItemQName = ItemUtils.createNewItem("", typeNamespace, typeName);
+
+		return complexTypeAsItemQName.equals(XSSchemaItem.Base64Binary);  
+
+	}
+
 
 	public void modelGroup(XSModelGroup arg0) {
 

@@ -688,12 +688,92 @@
 									</xs:documentation>
 							</xs:annotation>
 						</xs:element>
+						
+						<xs:element name="unionOfStringTypes" minOccurs="0" maxOccurs="1" type="tns:colorVariationType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Union Of String types
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Union Of String types
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="alternativeBinaryChannel" minOccurs="0" maxOccurs="1" type="tns:binaryChannelAlternativeType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Binary Channel Alternative Type</xs:documentation>
+								<xs:documentation xml:lang="el">Binary Channel Alternative Type</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="year" type="xs:gYear" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Year</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="month" type="xs:gMonth" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Month</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="yearMonth" type="xs:gYearMonth" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Year Month</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="day" type="xs:gDay" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Day</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="monthDay" type="xs:gMonthDay" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Month Day</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="multilevelStringEnumeration" minOccurs="0" maxOccurs="1" type="tns:ExtendedRedColorVariationType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Multi Level String Enumeration
+									</xs:documentation>
+								<xs:documentation xml:lang="el">Multi Level String Enumeration
+									</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="language" type="xs:language" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Language</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="complexWithSimpleContent" type="tns:ComplexWithSimpleContentType" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Complex with simple content</xs:documentation>
+							</xs:annotation>
+						</xs:element>
 
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 
+
+<xs:complexType name="ComplexWithSimpleContentType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Complex type with simple content 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="color" type="tns:ExtendedRedColorVariationType" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 
 <xs:complexType name="moderatedAndRankedUserCommentType">
 		<xs:annotation>
@@ -1135,4 +1215,87 @@
    </xs:complexContent>
  </xs:complexType>
  
+ <xs:simpleType name="colorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+	<bccmsmodel:displayName>Color Variation Type</bccmsmodel:displayName>  
+                <bccmsmodel:description>Color Variation Type</bccmsmodel:description>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="tns:RedColorVariationType 
+                            tns:GreenColorVariationType
+                            tns:BlueColorVariationType"/>
+</xs:simpleType>
+
+ <xs:simpleType name="RedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Pink"/>
+        <xs:enumeration value="Salmon"/>
+        <xs:enumeration value="Coral pink"/>
+        <xs:enumeration value="Crimson red"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="MoreRedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            More Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Candy apple red"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="ExtendedRedColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Extended Red color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="tns:RedColorVariationType
+    						tns:MoreRedColorVariationType"/>
+ </xs:simpleType>
+ 
+  <xs:simpleType name="GreenColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Green color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Asparagus"/>
+        <xs:enumeration value="Dark green"/>
+        <xs:enumeration value="Forest green"/>
+        <xs:enumeration value="Mantis"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="BlueColorVariationType">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Blue color variations
+        </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Powder blue"/>
+        <xs:enumeration value="Light blue"/>
+        <xs:enumeration value="Baby blue"/>
+    </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:complexType name="binaryChannelAlternativeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">BinaryChannelAlternativeType</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:base64Binary"/>
+		</xs:simpleContent>
+	</xs:complexType>
+  
 </xs:schema>

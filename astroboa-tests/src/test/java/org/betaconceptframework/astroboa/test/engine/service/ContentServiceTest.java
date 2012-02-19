@@ -110,6 +110,109 @@ import org.testng.annotations.Test;
  */
 public class ContentServiceTest extends AbstractRepositoryTest {
 	
+
+	@Test
+	public void testRemovePropertiesWhichRepresentXmlAttributesViaXMLorJSONSave() throws Throwable {
+		
+		RepositoryUser systemUser = getSystemUser();
+		
+		ContentObject contentObject = createContentObjectForType(INDENPENDENT_CONTENT_TYPE_NAME, systemUser,  "test-remove-property-which-represent-xml-attribute-via-xml-json");
+		String attributeValue = "attribute-value";
+		((StringProperty)contentObject.getCmsProperty("mandatorySimpleStringFromAttribute")).addSimpleTypeValue(attributeValue);
+
+		contentObject = contentService.save(contentObject, false, true, null);
+		markObjectForRemoval(contentObject);
+		
+		List<ResourceRepresentationType<String>> types = Arrays.asList(ResourceRepresentationType.XML,ResourceRepresentationType.JSON);
+		
+		//cmsPropertyPath = CmsPropertyPath.statisticTypeMultiple;
+		StringBuilder message = new StringBuilder();
+			
+		for (ResourceRepresentationType<String> resourceRepresentationType : types){
+				
+			try{
+				contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+					
+				String propertyPath = "simpleStringFromAttribute";
+		
+					//Create value
+					addValueForProperty(contentObject, propertyPath);
+					
+					//Save object
+					if (resourceRepresentationType.equals(ResourceRepresentationType.JSON)){
+						message.append("\nAbout to save  value for property "+propertyPath+"\n"+contentObject.json(true, false, propertyPath));
+					}
+					else if (resourceRepresentationType.equals(ResourceRepresentationType.XML)){
+						message.append("\nAbout to save  value for property "+propertyPath+"\n"+contentObject.xml(true, false, propertyPath));
+					}
+					
+					//Save object
+					contentObject = contentService.save(contentObject, false, true, null);
+					
+					//Nullify value
+					String contentWithNullifiedProperty = nullifyValueForProperty(propertyPath, contentObject, resourceRepresentationType);
+					
+					message.append("\nAbout to save with the nullified property "+ contentWithNullifiedProperty);
+					
+					contentObject = contentService.save(contentWithNullifiedProperty, false, true, null);
+					
+					//Assert that property does not exist anymore
+					contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+					
+					Assert.assertFalse(contentObject.hasValueForProperty(propertyPath), "Property "+propertyPath+ "was not removed although a null value is provided upon save. Imported content \n"+ contentWithNullifiedProperty+ " \n Content existing in repository \n"+contentObject.json(true, false, propertyPath));
+				
+					if (resourceRepresentationType.equals(ResourceRepresentationType.JSON)){
+						message.append("\nAFTER REMOVAL\n" + contentObject.json(true, false, propertyPath));
+					}
+					else if (resourceRepresentationType.equals(ResourceRepresentationType.XML)){
+						message.append("\nAFTER REMOVAL\n" + contentObject.xml(true, false, propertyPath));
+					} 
+				}
+				catch(Throwable t){
+					logger.error(message.toString());
+					throw t;
+				}
+			}
+	}
+
+	@Test
+	public void testSaveObjectWhosePropertyRepresentsAnXmlAttribute(){
+
+		ContentObject independentObject = createContentObjectForType(INDENPENDENT_CONTENT_TYPE_NAME, getSystemUser(), "test-save-with-property-as-an-attribute");
+		String attributeValue = "attribute-value";
+		((StringProperty)independentObject.getCmsProperty("mandatorySimpleStringFromAttribute")).addSimpleTypeValue(attributeValue);
+
+		String xml = independentObject.xml(false);
+		independentObject = contentService.save(xml, false, true, null);
+		markObjectForRemoval(independentObject);
+		
+		//Reload object
+		independentObject = contentService.getContentObject(independentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.FULL, CacheRegion.NONE, null, false);
+		assertPropertyExistsAndHasTheExpectedValue(independentObject, "mandatorySimpleStringFromAttribute", attributeValue);
+		
+		//Change value and save again
+		attributeValue = "attribute-value-new";
+		((StringProperty)independentObject.getCmsProperty("mandatorySimpleStringFromAttribute")).addSimpleTypeValue(attributeValue);
+		xml = independentObject.xml(false);
+		independentObject = contentService.save(xml, false, true, null);
+
+		//Reload object
+		independentObject = contentService.getContentObject(independentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.FULL, CacheRegion.NONE, null, false);
+		assertPropertyExistsAndHasTheExpectedValue(independentObject, "mandatorySimpleStringFromAttribute", attributeValue);
+
+
+		//Now try JSON
+		attributeValue = "attribute-value-new-for-json";
+		((StringProperty)independentObject.getCmsProperty("mandatorySimpleStringFromAttribute")).addSimpleTypeValue(attributeValue);
+		String json = independentObject.json(false);
+		independentObject = contentService.save(json, false, true, null);
+
+		//Reload object
+		independentObject = contentService.getContentObject(independentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.FULL, CacheRegion.NONE, null, false);
+		assertPropertyExistsAndHasTheExpectedValue(independentObject, "mandatorySimpleStringFromAttribute", attributeValue);
+
+
+	}
 	
 	@Test
 	public void testRemovePropertyThatHasNotBeenLoaded(){
@@ -3084,7 +3187,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		//Export to XML as String
 		long time = System.currentTimeMillis();
 		String xml = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.XML);
-		logger.debug("Brought 20 content objects in XML string in {}", (System.currentTimeMillis() - time) +" ms");
+		logger.debug("Brought 10 content objects in XML string in {}", (System.currentTimeMillis() - time) +" ms");
 		jaxbValidationUtils.validateUsingSAX(xml);
 
 		//Export to XML as String but use the same name for all content object. Do not validate it
@@ -3956,5 +4059,17 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		Assert.assertTrue(((ObjectReferenceProperty)propertyReference).hasValues(), "Property "+property+ " has no values in object "+ object.getSystemName());
 		
 		Assert.assertEquals(referencedObjectId, ((ObjectReferenceProperty)propertyReference).getSimpleTypeValue().getId(), "Property "+property+ " value is an invalid reference in object "+ object.getSystemName());
+	}
+	
+	private void assertPropertyExistsAndHasTheExpectedValue(ContentObject object, String propertyPath, String expectedValue){
+		
+		StringProperty property = (StringProperty)object.getCmsProperty(propertyPath);
+		
+		Assert.assertNotNull(property, "Property "+ propertyPath+ " was not saved ");
+		
+		Assert.assertTrue(property.hasValues(), " Property "+ propertyPath+ " does not contain a value");
+
+		Assert.assertEquals(property.getSimpleTypeValue(), expectedValue, "Property "+ propertyPath+ " contains invalid value.");
+
 	}
 }

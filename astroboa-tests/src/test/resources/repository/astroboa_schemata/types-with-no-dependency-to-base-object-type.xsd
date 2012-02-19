@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model"
+	xmlns:tns="http://www.betaconceptframework.org/schema/astroboa/content/independendTypes"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.betaconceptframework.org/schema/astroboa/content/independendTypes"
+	version="${project.version}">
+
+	<xs:import namespace="http://www.betaconceptframework.org/schema/astroboa/model"
+		schemaLocation="astroboa-model-${project.version}.xsd" />
+		
+		
+	<xs:element name="independentObject">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				This type represents an extension of extended test content type
+			</xs:documentation>
+			<xs:documentation xml:lang="el"><![CDATA[Extended Test ]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+		<xs:sequence>
+				<xs:element 
+					maxOccurs="1" minOccurs="0" name="simpleString" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							<bccmsmodel:displayName>String</bccmsmodel:displayName>
+							<bccmsmodel:description><![CDATA[Simple <b>String</b> property]]></bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el">String
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="simpleStringFromAttribute" use="optional" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						<bccmsmodel:displayName>String Property defined by Attribute</bccmsmodel:displayName>
+						<bccmsmodel:description><![CDATA[String <b>Property</b> defined by Attribute]]></bccmsmodel:description>
+					</xs:documentation>
+					<xs:documentation xml:lang="el">String</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="mandatorySimpleStringFromAttribute" use="required" type="xs:string" />
+		</xs:complexType>		
+	</xs:element>
+	
+		
+	<xs:element name="directlyExtendingIndependentBaseTypeIndependentObject" type="tns:independentBaseType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				This element is of type  independentBaseType. It does not extended in any way
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<xs:element name="extendingIndependentBaseTypeIndependentObject">
+
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				This type represents an extension of extended test content type
+			</xs:documentation>
+			<xs:documentation xml:lang="el"><![CDATA[Extended Test ]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="tns:independentBaseType"/>
+			</xs:complexContent>
+		</xs:complexType>		
+	</xs:element>
+	
+	<xs:complexType name="independentBaseType">   
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<bccmsmodel:displayName>Independent Base type</bccmsmodel:displayName>
+			</xs:documentation>
+			<xs:documentation xml:lang="el"><![CDATA[Test <b>type</b>]]>
+			</xs:documentation>
+		</xs:annotation>
+			<xs:sequence>
+				<xs:element 
+					maxOccurs="1" minOccurs="0" name="simpleString" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							<bccmsmodel:displayName>String</bccmsmodel:displayName>
+							<bccmsmodel:description><![CDATA[Simple <b>String</b> property]]></bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el">String
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			
+			<xs:attribute name="simpleStringFromAttribute" use="optional" type="xs:string">
+				<xs:annotation>
+						<xs:documentation xml:lang="en">
+							<bccmsmodel:displayName>String Property defined by Attribute</bccmsmodel:displayName>
+							<bccmsmodel:description><![CDATA[String <b>Property</b> defined by Attribute]]></bccmsmodel:description>
+						</xs:documentation>
+						<xs:documentation xml:lang="el">String
+						</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="mandatorySimpleStringFromAttribute" use="required" type="xs:string" />
+		</xs:complexType>
+	
+</xs:schema>

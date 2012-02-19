@@ -133,6 +133,11 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	protected final String EXTENDED_TEST_CONTENT_TYPE = "extendedTest";
 	protected final String DIRECT_EXTENDED_TEST_CONTENT_TYPE = "extendedTestDirectlyUsingType";
 	
+	protected final String INDENPENDENT_CONTENT_TYPE_NAME = "independentObject";
+	protected final String DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME = "directlyExtendingIndependentBaseTypeIndependentObject";
+	protected final String EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME = "extendingIndependentBaseTypeIndependentObject";
+	
+	
 	protected JAXBValidationUtils jaxbValidationUtils;
 	protected SerializationDao serializationDao;
 	protected ImportDao importDao;
@@ -409,6 +414,10 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	
 	protected List<String> getTestContentTypes(){
 		return Arrays.asList(TEST_CONTENT_TYPE, EXTENDED_TEST_CONTENT_TYPE);
+	}
+	
+	protected List<String> getIndependentContentTypes(){
+		return Arrays.asList(INDENPENDENT_CONTENT_TYPE_NAME, EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME, DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME);
 	}
 
 	protected Future<SerializationReport> serializeAllEntitiesOfType(final CmsEntityType entityTypeToBeSerialized, final SerializationConfiguration serializationConfiguration) {

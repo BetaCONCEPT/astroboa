@@ -20,8 +20,10 @@ package org.betaconceptframework.astroboa.test.engine.definition;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.DoubleProperty;
 import org.betaconceptframework.astroboa.api.model.LongProperty;
@@ -29,6 +31,7 @@ import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.BinaryPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.DoublePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
@@ -37,6 +40,7 @@ import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePro
 import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.model.impl.definition.SimpleCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.security.AstroboaPasswordEncryptor;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -50,12 +54,303 @@ import org.testng.annotations.Test;
  */
 public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
+	
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-169
+	 */
+	@Test
+	public void testSupportForComplexTypesWithSimpleContent(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition complexWithSimpleContentDefinition = testDefinition.getCmsPropertyDefinition("complexWithSimpleContent");
+		
+		Assert.assertNotNull(complexWithSimpleContentDefinition);
+
+		Assert.assertEquals(ValueType.Complex, complexWithSimpleContentDefinition.getValueType());
+		Assert.assertTrue(complexWithSimpleContentDefinition instanceof ComplexCmsPropertyDefinition );
+		
+		Assert.assertEquals(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).getChildCmsPropertyDefinitions().size(), 2, "Property complexWithSimpleContent should have 2 child properties");
+
+		Assert.assertTrue(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).hasChildCmsPropertyDefinition("color"));
+		Assert.assertTrue(((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).hasChildCmsPropertyDefinition(CmsConstants.NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT));
+
+		CmsPropertyDefinition colorEnumerationDefinition = ((ComplexCmsPropertyDefinition)complexWithSimpleContentDefinition).getChildCmsPropertyDefinition("color");
+		
+		Assert.assertNotNull(colorEnumerationDefinition);
+		
+		Assert.assertEquals(ValueType.String, colorEnumerationDefinition.getValueType());
+		Assert.assertTrue(colorEnumerationDefinition instanceof StringPropertyDefinition );
+
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Pink"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Salmon"),colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Coral pink"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Crimson red"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)colorEnumerationDefinition).isValueValid("Candy apple red"), colorEnumerationDefinition.getFullPath()+" Definition does not have value 'Candy apple red'");
+
+	
+	}
+
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-168
+	 */
+	@Test
+	public void testSupportForXSDLanguageType(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition languageDefinition = testDefinition.getCmsPropertyDefinition("language");
+		
+		Assert.assertNotNull(languageDefinition);
+		
+		Assert.assertEquals(ValueType.String, languageDefinition.getValueType());
+		Assert.assertTrue(languageDefinition instanceof StringPropertyDefinition );
+		Assert.assertEquals(CmsConstants.XML_SCHEMA_LANGUAGE_TYPE_REG_EXP, ((StringPropertyDefinition)languageDefinition).getPattern());
+
+
+	}
+
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-167
+	 */
+	@Test
+	public void testMultiLevelStringEnumerationSupport(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition multiLevelStringEnumerationDefinition = testDefinition.getCmsPropertyDefinition("multilevelStringEnumeration");
+		
+		Assert.assertNotNull(multiLevelStringEnumerationDefinition);
+		
+		Assert.assertEquals(ValueType.String, multiLevelStringEnumerationDefinition.getValueType());
+		Assert.assertTrue(multiLevelStringEnumerationDefinition instanceof StringPropertyDefinition );
+
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Pink"), "multiLevelStringEnumerationDefinition Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Salmon"),"multiLevelStringEnumerationDefinition Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Coral pink"), "multiLevelStringEnumerationDefinition Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Crimson red"), "multiLevelStringEnumerationDefinition Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)multiLevelStringEnumerationDefinition).isValueValid("Candy apple red"), "multiLevelStringEnumerationDefinition Definition does not have value 'Candy apple red'");
+	}
+
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-166
+	 */
+	@Test
+	public void testGYearGMonthGYearMonthGDayGMonthDaySupport(){
+		
+		//Test regular expressions
+		Pattern gYearPattern = Pattern.compile(CmsConstants.GYEAR_REG_EXP);
+		Assert.assertTrue(gYearPattern.matcher("2011").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001Z").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001+07:00").matches());
+		Assert.assertTrue(gYearPattern.matcher("0001-03:00").matches());
+		Assert.assertFalse(gYearPattern.matcher("a001").matches());
+		Assert.assertFalse(gYearPattern.matcher("a0a 01").matches());
+		Assert.assertFalse(gYearPattern.matcher("001").matches());
+		Assert.assertFalse(gYearPattern.matcher("001 ").matches());
+		Assert.assertFalse(gYearPattern.matcher("23").matches());
+		
+		Pattern gMonthPattern = Pattern.compile(CmsConstants.GMONTH_REG_EXP);
+		Assert.assertTrue(gMonthPattern.matcher("--12").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--01").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--10Z").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--12+07:00").matches());
+		Assert.assertTrue(gMonthPattern.matcher("--02-03:00").matches());
+		Assert.assertFalse(gMonthPattern.matcher("12").matches());
+		Assert.assertFalse(gMonthPattern.matcher("--00").matches());
+		Assert.assertFalse(gMonthPattern.matcher("-02").matches());
+		Assert.assertFalse(gMonthPattern.matcher("-02 ").matches());
+		Assert.assertFalse(gMonthPattern.matcher("--0 2").matches());
+		
+		Pattern gYearMonthPattern = Pattern.compile(CmsConstants.GYEAR_MONTH_REG_EXP);
+		Assert.assertTrue(gYearMonthPattern.matcher("2011-12").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("1990-01").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("0000-10Z").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("0102-12+07:00").matches());
+		Assert.assertTrue(gYearMonthPattern.matcher("1928-02-03:00").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("192012").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1000--00").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("123-02").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1233-02 ").matches());
+		Assert.assertFalse(gYearMonthPattern.matcher("1234-0 2").matches());
+		
+		Pattern gDayPattern = Pattern.compile(CmsConstants.GDAY_REG_EXP);
+		Assert.assertTrue(gDayPattern.matcher("---12").matches());
+		Assert.assertTrue(gDayPattern.matcher("---31").matches());
+		Assert.assertTrue(gDayPattern.matcher("---05Z").matches());
+		Assert.assertTrue(gDayPattern.matcher("---12+07:00").matches());
+		Assert.assertTrue(gDayPattern.matcher("---02-03:00").matches());
+		Assert.assertFalse(gDayPattern.matcher("192012").matches());
+		Assert.assertFalse(gDayPattern.matcher("--00").matches());
+		Assert.assertFalse(gDayPattern.matcher("-02").matches());
+		Assert.assertFalse(gDayPattern.matcher("---02 ").matches());
+		Assert.assertFalse(gDayPattern.matcher("---0 2").matches());
+
+		Pattern gMonthDayPattern = Pattern.compile(CmsConstants.GMONTH_DAY_REG_EXP);
+		Assert.assertTrue(gMonthDayPattern.matcher("--01-12").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--10-31").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--12-05Z").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--01-12+07:00").matches());
+		Assert.assertTrue(gMonthDayPattern.matcher("--11-02-03:00").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("192012").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("---00").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("-01-02").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("01---02 ").matches());
+		Assert.assertFalse(gMonthDayPattern.matcher("--13-02").matches());
+
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition yearDefinition = testDefinition.getCmsPropertyDefinition("year");
+		
+		Assert.assertNotNull(yearDefinition);
+		
+		Assert.assertEquals(ValueType.String, yearDefinition.getValueType());
+		Assert.assertTrue(yearDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GYEAR_REG_EXP, ((StringPropertyDefinition)yearDefinition).getPattern());
+
+		
+		CmsPropertyDefinition monthDefinition = testDefinition.getCmsPropertyDefinition("month");
+		
+		Assert.assertNotNull(monthDefinition);
+		
+		Assert.assertEquals(ValueType.String, monthDefinition.getValueType());
+		Assert.assertTrue(monthDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GMONTH_REG_EXP, ((StringPropertyDefinition)monthDefinition).getPattern());
+
+		CmsPropertyDefinition yearMonthDefinition = testDefinition.getCmsPropertyDefinition("yearMonth");
+		
+		Assert.assertNotNull(yearMonthDefinition);
+		
+		Assert.assertEquals(ValueType.String, yearMonthDefinition.getValueType());
+		Assert.assertTrue(yearMonthDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GYEAR_MONTH_REG_EXP, ((StringPropertyDefinition)yearMonthDefinition).getPattern());
+
+		CmsPropertyDefinition dayDefinition = testDefinition.getCmsPropertyDefinition("day");
+		
+		Assert.assertNotNull(dayDefinition);
+		
+		Assert.assertEquals(ValueType.String, dayDefinition.getValueType());
+		Assert.assertTrue(dayDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GDAY_REG_EXP, ((StringPropertyDefinition)dayDefinition).getPattern());
+
+		CmsPropertyDefinition monthDayDefinition = testDefinition.getCmsPropertyDefinition("monthDay");
+		
+		Assert.assertNotNull(monthDayDefinition);
+		
+		Assert.assertEquals(ValueType.String, monthDayDefinition.getValueType());
+		Assert.assertTrue(monthDayDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertEquals(CmsConstants.GMONTH_DAY_REG_EXP, ((StringPropertyDefinition)monthDayDefinition).getPattern());
+
+	}
+
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-165
+	 */
+	@Test
+	public void testAlternateDeclarationOfBinaryChannelSupport(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition binaryChannelAlterantiveTypeDefinition = testDefinition.getCmsPropertyDefinition("alternativeBinaryChannel");
+		
+		Assert.assertNotNull(binaryChannelAlterantiveTypeDefinition);
+		
+		Assert.assertEquals(ValueType.Binary, binaryChannelAlterantiveTypeDefinition.getValueType());
+		Assert.assertTrue(binaryChannelAlterantiveTypeDefinition instanceof BinaryPropertyDefinition );
+
+	}
+	
+	/*
+	 * Test for JIRA issue http://jira.betaconceptframework.org/browse/ASTROBOA-164
+	 */
+	@Test
+	public void testUnionOfSimpleTypes(){
+		
+		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+		
+		CmsPropertyDefinition unionOfStringTypesDefinition = testDefinition.getCmsPropertyDefinition("unionOfStringTypes");
+		
+		Assert.assertNotNull(unionOfStringTypesDefinition);
+		
+		Assert.assertEquals(ValueType.String, unionOfStringTypesDefinition.getValueType());
+		Assert.assertTrue(unionOfStringTypesDefinition instanceof StringPropertyDefinition );
+		
+		Assert.assertNotNull(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration(), "Enumerated Valued for unionOfStringTypes definition do not exist");
+		Assert.assertFalse(((StringPropertyDefinition)unionOfStringTypesDefinition).getValueEnumeration().isEmpty(), "Enumerated Valued for unionOfStringTypes definition do not exist");
+		
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Pink"), "unionOfStringTypes Definition does not have value 'Pink'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Salmon"),"unionOfStringTypes Definition does not have value 'Salmon'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Coral pink"), "unionOfStringTypes Definition does not have value 'Coral pink'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Crimson red"), "unionOfStringTypes Definition does not have value 'Crimson red'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Asparagus"), "unionOfStringTypes Definition does not have value 'Asparagus'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Dark green"), "unionOfStringTypes Definition does not have value 'Dark green'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Forest green"), "unionOfStringTypes Definition does not have value 'Forest green'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Mantis"), "unionOfStringTypes Definition does not have value 'Mantis'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Powder blue"), "unionOfStringTypes Definition does not have value 'Powder blue'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Light blue"), "unionOfStringTypes Definition does not have value 'Light blue'");
+		Assert.assertTrue(((StringPropertyDefinition)unionOfStringTypesDefinition).isValueValid("Baby blue"), "unionOfStringTypes Definition does not have value 'Baby blue'");
+	}
+	
+	@Test
+	public void testIndependentContentTypes(){
+	
+		for (String typeName : getIndependentContentTypes()){
+
+			ContentObjectTypeDefinition independentDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(typeName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+			
+			Assert.assertFalse(independentDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+typeName+ " faulty specifies  that the schema of the type extends contentObjectType");
+
+			checkPropertyExistsAndIsOfType(independentDefinition, "profile", ComplexCmsPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "accessibility", ComplexCmsPropertyDefinition.class);
+			
+			//These properties  are assumed to be provided in all independent types
+			//Normal properties
+			checkPropertyExistsAndIsOfType(independentDefinition, "simpleString", StringPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "simpleStringFromAttribute", StringPropertyDefinition.class);
+			checkPropertyExistsAndIsOfType(independentDefinition, "mandatorySimpleStringFromAttribute", StringPropertyDefinition.class);
+			
+			//Properties which are defined using 'attribute' tag
+			Assert.assertTrue(independentDefinition.hasCmsPropertyDefinition("simpleStringFromAttribute"), "Property simpleStringFromAttribute is found in type "+typeName);
+			Assert.assertTrue(independentDefinition.hasCmsPropertyDefinition("mandatorySimpleStringFromAttribute"), "Property simpleStringFromAttribute is found in type "+typeName);
+			
+			CmsPropertyDefinition simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("simpleStringFromAttribute");
+			Assert.assertFalse(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is mandatory");
+			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+			Assert.assertTrue(((SimpleCmsPropertyDefinitionImpl)simpleStringDefinition).isRepresentsAnXmlAttribute(), "Property "+simpleStringDefinition.getFullPath()+" does not represent an xml attribute");
+
+			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
+					"String <b>Property</b> defined by Attribute", "String Property defined by Attribute");
+
+			simpleStringDefinition = independentDefinition.getCmsPropertyDefinition("mandatorySimpleStringFromAttribute");
+			Assert.assertTrue(simpleStringDefinition.isMandatory(), "Property "+simpleStringDefinition.getFullPath()+" is optional");
+			Assert.assertFalse(simpleStringDefinition.isMultiple(), "Property "+simpleStringDefinition.getFullPath()+" is multiple");
+			Assert.assertTrue(((SimpleCmsPropertyDefinitionImpl)simpleStringDefinition).isRepresentsAnXmlAttribute(), "Property "+simpleStringDefinition.getFullPath()+" does not represent an xml attribute");
+			
+			assertDescriptionAndDisplayNameExistsForPropertyAndLocale(simpleStringDefinition, "simpleStringFromAttribute", "en", 
+					"mandatorySimpleStringFromAttribute", "mandatorySimpleStringFromAttribute");
+			
+			
+			if (StringUtils.equals(typeName, EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME) || 
+					StringUtils.equals(typeName, DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME)){
+				Assert.assertTrue(independentDefinition.isTypeOf("independentBaseType"), "Independent type "+ typeName +" does not extend super type independentBaseType");
+			}
+		}
+	}
+	
+	
 	@Test
 	public void testExtendedContentTypes()
 	{
 		ContentObjectTypeDefinition testDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		Assert.assertFalse(testDefinition.hasCmsPropertyDefinition("simpleExtendedString"), "Property simpleExtendedString is found in type "+TEST_CONTENT_TYPE);		
 		Assert.assertTrue(testDefinition.isTypeOf("testType"), "Test content type does not have super type testType");
+		Assert.assertTrue(testDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
 		
 		ContentObjectTypeDefinition extendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(extendedTestDefinition, "simpleExtendedString", StringPropertyDefinition.class);
@@ -65,13 +360,17 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		
 		Assert.assertTrue(extendedTestDefinition.isTypeOf("testType"), "Extended Test Type does not have super type testType");
 		Assert.assertTrue(extendedTestDefinition.isTypeOf("extendedTestType"), "Extended Test Type does not have super type extendedTestType");
-		
+
+		Assert.assertTrue(extendedTestDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+EXTENDED_TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
+
 		ContentObjectTypeDefinition directExtendedTestDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(DIRECT_EXTENDED_TEST_CONTENT_TYPE, ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(directExtendedTestDefinition, "simpleExtendedString", StringPropertyDefinition.class);
 		
 		Assert.assertTrue(directExtendedTestDefinition.isTypeOf("testType"), "Extended Test Type does not have super type testType");
 		Assert.assertTrue(directExtendedTestDefinition.isTypeOf("extendedTestType"), "Extended Test Type does not have super type extendedTestType");
-		
+
+		Assert.assertTrue(directExtendedTestDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type "+DIRECT_EXTENDED_TEST_CONTENT_TYPE+ " faulty specifies  that the schema of the type does not extend contentObjectType");
+
 		ContentObjectTypeDefinition personDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("personObject", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(personDefinition, "name.familyName", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(personDefinition, "thumbnail", BinaryPropertyDefinition.class);
@@ -79,7 +378,10 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertNull(definitionService.getCmsDefinition("personType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type personType was loaded");
 		
 		Assert.assertTrue(personDefinition.isTypeOf("personType"), "PersonObject Type does not have super type personType");
-		
+
+		Assert.assertTrue(personDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type personType faulty specifies  that the schema of the type does not extend contentObjectType");
+
+
 		ContentObjectTypeDefinition organizationDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition("organizationObject", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "about", StringPropertyDefinition.class);
 		checkPropertyExistsAndIsOfType(organizationDefinition, "thumbnail", BinaryPropertyDefinition.class);
@@ -87,6 +389,9 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertNull(definitionService.getCmsDefinition("organizationType", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint), "Base Complex Type organizationType was loaded");
 		
 		Assert.assertTrue(organizationDefinition.isTypeOf("organizationType"), "OrganizationObject Type does not have super type organizationType");
+		
+		Assert.assertTrue(organizationDefinition.schemaExtendsBaseObjectTypeDefinition(), "Definition for type organizationType faulty specifies  that the schema of the type does not extend contentObjectType");
+
 	}
 	
 	@Test
@@ -125,13 +430,15 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 	private void assertDescriptionAndDisplayNameExistsForPropertyAndLocale(LocalizableCmsDefinition definition, String property, String locale, String expectedDescription, String expectedDisplayName)
 	{
-		Assert.assertNotNull(definition.getDescription(), "'"+property+"' does not have a description");
-		Assert.assertTrue(definition.getDescription().hasLocalizedLabels(), "'"+property+"' has a description but has no localized labels");
-		Assert.assertEquals(definition.getDescription().getLocalizedLabelForLocale(locale),expectedDescription, "Invalid description for "+property+" for locale '"+locale+"'");
+		String fullPath = (definition instanceof CmsPropertyDefinition ? ((CmsPropertyDefinition)definition).getFullPath() : definition.getName());
+		
+		Assert.assertNotNull(definition.getDescription(), "'"+fullPath+"' does not have a description");
+		Assert.assertTrue(definition.getDescription().hasLocalizedLabels(), "'"+fullPath+"' has a description but has no localized labels");
+		Assert.assertEquals(definition.getDescription().getLocalizedLabelForLocale(locale),expectedDescription, "Invalid description for "+fullPath+" for locale '"+locale+"'");
 
 		Assert.assertNotNull(definition.getDisplayName(), "'"+property+"' does not have a display name");
-		Assert.assertTrue(definition.getDisplayName().hasLocalizedLabels(), "'"+property+"' does not have a display name at all");
-		Assert.assertEquals(definition.getDisplayName().getLocalizedLabelForLocale(locale),expectedDisplayName, "Invalid display name for "+property+" for locale '"+locale+"'");
+		Assert.assertTrue(definition.getDisplayName().hasLocalizedLabels(), "'"+fullPath+"' does not have a display name at all");
+		Assert.assertEquals(definition.getDisplayName().getLocalizedLabelForLocale(locale),expectedDisplayName, "Invalid display name for "+fullPath+" for locale '"+locale+"'");
 	}
 
 	@Test
