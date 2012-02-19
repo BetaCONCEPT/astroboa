@@ -209,7 +209,7 @@ public class SimpleCriterionImpl implements SimpleCriterion, Serializable{
 				QueryOperator.LESS == operator || QueryOperator.LESS_EQUAL == operator){
 			
 			if (property == null || property.trim().length() == 0 ||  //Property is blank
-					property.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":") || 
+					property.startsWith(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":") || 
 					property.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||  // All JCR native properties that are used are not of type long or double
 					property.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||  // All mixin properties that are used are not of type long or double
 					property.startsWith(JcrNamespaceConstants.NT_PREFIX+":") ||   // All properties with nt: prefix that are used are not of type long or double
@@ -300,7 +300,7 @@ public class SimpleCriterionImpl implements SimpleCriterion, Serializable{
 
 	private void checkThatPropertyPathRefersToSimpleProperty() {
 		
-		if (property == null || property.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":") || 
+		if (property == null || property.startsWith(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":") || 
 				property.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||
 				property.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||
 				property.startsWith(JcrNamespaceConstants.NT_PREFIX+":") ||

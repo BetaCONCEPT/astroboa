@@ -75,13 +75,13 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			loginToTestRepositoryAsSystem();
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByALLAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 			
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).removeValues();
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EDITOR));
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			loginAsTestUser();
 
@@ -131,12 +131,12 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsSystem"+
-						contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 				contentObject = executeMethodOnContentService(methodName, contentObject, false,
 						methodArgumentsApartFromContentObject, parameterTypes);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 			}
 			catch (Throwable e) {
 				throw new CmsException(e);
@@ -162,12 +162,12 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			try{
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleAdmin"+
-						contentServiceMethodDeclarations.indexOf(getContentObjectMethod),true);
+						contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 				contentObject = executeMethodOnContentService(methodName, contentObject, false,
 						methodArgumentsApartFromContentObject, parameterTypes);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				Assert.assertNotNull(contentObject.getId(),"User "+TestConstants.TEST_USER_NAME+" could not saved content object although it had "+CmsRole.ROLE_ADMIN);
 
@@ -203,7 +203,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithNoRoleAdmin"
-						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 				contentObject = executeMethodOnContentService(methodName, contentObject, false,
 						methodArgumentsApartFromContentObject, parameterTypes);
@@ -251,7 +251,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithProvidedIdAsNonSystemButWithNoRoleAdmin"
-						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 				contentObject.setId(TestUtils.generateRandomUUID());
 
 				contentObject = executeMethodOnContentService(methodName, contentObject, false,
@@ -301,14 +301,14 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleCmsEditorButNotTheOwner"
-						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 				
 				//First save content object. The first time content object will be saved
 				//as test user has role ROLE_CMS_EDITOR although she has provided SYSTEM as
 				//the owner of the content object (do we want that to happen?)
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				//but the second time, especially since accessibility are the defaults
 				//testUser should not be able to re-save it
@@ -356,7 +356,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByALLAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 			
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(ContentAccessMode.ALL.toString());
 
@@ -365,7 +365,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -394,7 +394,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByUserOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 			
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(TestConstants.TEST_USER_NAME);
 
@@ -403,7 +403,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -434,7 +434,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByGroupOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 			
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(group);
 
@@ -443,7 +443,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -475,7 +475,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByDifferentGroupAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 				
 				String group = "group@"+AstroboaClientContextHolder.getActiveRepositoryId();
 				((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(group);
@@ -485,7 +485,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				//the owner of the content object (do we want that to happen?)
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				//but the second time, especially since accessibility are the defaults
 				//testUser should not be able to re-save it
@@ -535,7 +535,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				
 
 				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByDifferentUserAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+						+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 				
 				String user = "otherUser";
 				((StringProperty)contentObject.getCmsProperty("accessibility.canBeUpdatedBy")).addSimpleTypeValue(user);
@@ -545,7 +545,7 @@ public class ContentObjectSaveSecurityTest extends AbstractRepositoryTest{
 				//the owner of the content object (do we want that to happen?)
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				//but the second time, especially since accessibility are the defaults
 				//testUser should not be able to re-save it

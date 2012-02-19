@@ -125,7 +125,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
@@ -142,7 +141,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
@@ -156,7 +154,6 @@ import java.util.regex.Pattern;
                                 TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
                                 if (ancestorCriteria == null){
                                         ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-                                        ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
                                         topicCriteria.setAncestorCriteria(ancestorCriteria);
                                 }
 
@@ -756,6 +753,21 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     finally { jj_save(1, xla); }
   }
 
+  private boolean jj_3R_25() {
+    if (jj_scan_token(LIKE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_24() {
+    if (jj_scan_token(LESS_EQUAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_23() {
+    if (jj_scan_token(LESS)) return true;
+    return false;
+  }
+
   private boolean jj_3R_22() {
     if (jj_scan_token(GREATER_EQUAL)) return true;
     return false;
@@ -868,13 +880,13 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
     return false;
   }
 
-  private boolean jj_3R_4() {
-    if (jj_scan_token(PROPERTY_PATH)) return true;
+  private boolean jj_3R_12() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
-  private boolean jj_3R_12() {
-    if (jj_3R_14()) return true;
+  private boolean jj_3R_4() {
+    if (jj_scan_token(PROPERTY_PATH)) return true;
     return false;
   }
 
@@ -910,21 +922,6 @@ jjtree.openNodeScope(jjtn000);Token valueToken;
 
   private boolean jj_3R_26() {
     if (jj_scan_token(CONTAINS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_25() {
-    if (jj_scan_token(LIKE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_24() {
-    if (jj_scan_token(LESS_EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_23() {
-    if (jj_scan_token(LESS)) return true;
     return false;
   }
 

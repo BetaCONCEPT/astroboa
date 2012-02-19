@@ -19,8 +19,8 @@
 
 package org.betaconceptframework.astroboa.service.secure.impl;
 
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
+import java.util.concurrent.Future;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Local;
@@ -35,6 +35,7 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.service.ImportService;
 import org.betaconceptframework.astroboa.api.service.secure.ImportServiceSecure;
@@ -72,42 +73,41 @@ public class ImportServiceSecureImpl extends AbstractSecureAstroboaService imple
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_CMS_PORTAL_EDITOR","ROLE_CMS_TAXONOMY_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
-	public ImportReport importRepositoryContentFromString(String contentSource,String authenticationToken) {
-		return importService.importRepositoryContentFromString(contentSource);
+	public Future<ImportReport> importRepositoryContentFromString(String contentSource, ImportConfiguration configuration,String authenticationToken) {
+		return importService.importRepositoryContentFromString(contentSource, configuration);
 	}
 
 
 	@RolesAllowed({"ROLE_CMS_EDITOR","ROLE_CMS_PORTAL_EDITOR","ROLE_CMS_TAXONOMY_EDITOR","ROLE_CMS_IDENTITY_STORE_EDITOR"})
-	public ImportReport importRepositoryContentFromURL(URL contentSource,	String authenticationToken) {
-		return importService.importRepositoryContentFromURL(contentSource);
+	public Future<ImportReport> importRepositoryContentFromURI(URI contentSource, ImportConfiguration configuration,	String authenticationToken) {
+		return importService.importRepositoryContentFromURI(contentSource,configuration);
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR", "ROLE_CMS_PORTAL_EDITOR", "ROLE_CMS_IDENTITY_STORE_EDITOR"})
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save, 
-			Map<String, byte[]> binaryContent,
+	public ContentObject importContentObject(String contentSource,ImportConfiguration configuration,
 			String authenticationToken) {
-		return importService.importContentObject(contentSource,version, updateLastModificationDate,save, binaryContent);
+		return importService.importContentObject(contentSource,configuration);
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR"})
-	public RepositoryUser importRepositoryUser(String repositoryUserSource, boolean save,
+	public RepositoryUser importRepositoryUser(String repositoryUserSource, ImportConfiguration configuration,
 			String authenticationToken) {
-		return importService.importRepositoryUser(repositoryUserSource,save);
+		return importService.importRepositoryUser(repositoryUserSource,configuration);
 	}
 
 	@RolesAllowed({"ROLE_CMS_EDITOR"})
-	public Space importSpace(String spaceSource, boolean save, String authenticationToken) {
-		return importService.importSpace(spaceSource,save);
+	public Space importSpace(String spaceSource, ImportConfiguration configuration, String authenticationToken) {
+		return importService.importSpace(spaceSource,configuration);
 	}
 
 	@RolesAllowed({"ROLE_CMS_TAXONOMY_EDITOR"})
-	public Taxonomy importTaxonomy(String taxonomySource, boolean save,
+	public Taxonomy importTaxonomy(String taxonomySource, ImportConfiguration configuration,
 			String authenticationToken) {
-		return importService.importTaxonomy(taxonomySource,save);
+		return importService.importTaxonomy(taxonomySource,configuration);
 	}
 
 	@RolesAllowed({"ROLE_CMS_TAXONOMY_EDITOR"})
-	public Topic importTopic(String topicSource, boolean save, String authenticationToken) {
-		return importService.importTopic(topicSource,save);
+	public Topic importTopic(String topicSource, ImportConfiguration configuration, String authenticationToken) {
+		return importService.importTopic(topicSource,configuration);
 	}
 }

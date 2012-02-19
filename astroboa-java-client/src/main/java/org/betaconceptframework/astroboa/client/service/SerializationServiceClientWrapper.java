@@ -18,8 +18,12 @@
  */
 package org.betaconceptframework.astroboa.client.service;
 
+import java.util.concurrent.Future;
+
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.service.SerializationService;
 import org.betaconceptframework.astroboa.api.service.secure.SerializationServiceSecure;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
@@ -37,6 +41,7 @@ public class SerializationServiceClientWrapper extends AbstractClientServiceWrap
 
 
 	private SerializationServiceSecure serializationServiceSecure;
+	
 
 	public SerializationServiceClientWrapper(
 			AstroboaClient client, String serverHostNameOrIpAndPortToConnectTo) {
@@ -55,7 +60,9 @@ public class SerializationServiceClientWrapper extends AbstractClientServiceWrap
 				serializationServiceSecure = (SerializationServiceSecure) connectToLocalService(SerializationServiceSecure.class);
 			}
 			else{
-				serializationServiceSecure = (SerializationServiceSecure) connectToRemoteService(SerializationServiceSecure.class);
+				logger.warn("Serialization Service is not supported for remote clients");
+				serializationServiceSecure = null;
+				return true;  // return true so that no exception is thrown during initialization
 			}
 
 		}catch(Exception e){
@@ -67,68 +74,78 @@ public class SerializationServiceClientWrapper extends AbstractClientServiceWrap
 	}
 
 	@Override
-	public SerializationReport serializeObjects(boolean exportBinary) {
+	public Future<SerializationReport> serializeObjects(ContentObjectCriteria objectCriteria, SerializationConfiguration serializationConfiguration) {
 		
 		if (serializationServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return serializationServiceSecure.serializeContentObjects(exportBinary, getAuthenticationToken());
+			return serializationServiceSecure.serializeObjects(objectCriteria, serializationConfiguration, getAuthenticationToken());
 		}
 		else{
-			throw new CmsException("SerializationService reference was not found");
+			if (client.isConnectedToARemoteServer()){
+				throw new CmsException("SerializationService is not supported in remote clients.");
+			}
+			else{
+				throw new CmsException("SerializationService reference was not found");
+			}
 		}
 	}
 
 	@Override
-	public SerializationReport serializeRepository(boolean exportBinary) {
+	public Future<SerializationReport> serializeRepository(SerializationConfiguration serializationConfiguration) {
 		if (serializationServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return serializationServiceSecure.serializeRepository(exportBinary,getAuthenticationToken());
+			return serializationServiceSecure.serializeRepository(serializationConfiguration,getAuthenticationToken());
 		}
 		else{
-			throw new CmsException("SerializationService reference was not found");
+			if (client.isConnectedToARemoteServer()){
+				throw new CmsException("SerializationService is not supported in remote clients.");
+			}
+			else{
+				throw new CmsException("SerializationService reference was not found");
+			}
 		}
 	}
 
 	@Override
-	public SerializationReport serializeOrganizationSpace() {
+	public Future<SerializationReport> serializeOrganizationSpace() {
 		if (serializationServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
 			return serializationServiceSecure.serializeOrganizationSpace(getAuthenticationToken());
 		}
 		else{
-			throw new CmsException("SerializationService reference was not found");
+			if (client.isConnectedToARemoteServer()){
+				throw new CmsException("SerializationService is not supported in remote clients.");
+			}
+			else{
+				throw new CmsException("SerializationService reference was not found");
+			}
 		}
 	}
 
 	@Override
-	public SerializationReport serializeRepositoryUsers() {
+	public Future<SerializationReport> serializeRepositoryUsers() {
 		if (serializationServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
 			return serializationServiceSecure.serializeRepositoryUsers(getAuthenticationToken());
 		}
 		else{
-			throw new CmsException("SerializationService reference was not found");
+			if (client.isConnectedToARemoteServer()){
+				throw new CmsException("SerializationService is not supported in remote clients.");
+			}
+			else{
+				throw new CmsException("SerializationService reference was not found");
+			}
 		}
 	}
 
 	@Override
-	public SerializationReport serializeTaxonomies() {
+	public Future<SerializationReport> serializeTaxonomies() {
 		if (serializationServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
 			return serializationServiceSecure.serializeTaxonomies(getAuthenticationToken());
 		}
 		else{
-			throw new CmsException("SerializationService reference was not found");
+			if (client.isConnectedToARemoteServer()){
+				throw new CmsException("SerializationService is not supported in remote clients.");
+			}
+			else{
+				throw new CmsException("SerializationService reference was not found");
+			}
 		}
 
 	}

@@ -392,7 +392,6 @@ public class IdentityStoreImpl implements IdentityStore{
 		List<String> grantableRoles = new ArrayList<String>();
 
 		ContentObjectCriteria roleObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("roleObject");
-		roleObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		roleObjectCriteria.doNotCacheResults();
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(roleObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -417,7 +416,6 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		//Find all persons which are members of the role
 		ContentObjectCriteria personObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personType");
-		personObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		personObjectCriteria.doNotCacheResults();
 		personObjectCriteria.addCriterion(CriterionFactory.equals("personAuthorization.role", roleObject.getId()));
 
@@ -442,7 +440,6 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		//Find all role which are member of the role
 		ContentObjectCriteria roleObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("roleObject");
-		roleObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		roleObjectCriteria.doNotCacheResults();
 		roleObjectCriteria.addCriterion(CriterionFactory.equals("isMemberOf", roleObject.getId()));
 
@@ -486,7 +483,6 @@ public class IdentityStoreImpl implements IdentityStore{
 			contentObjectCriteria.addCriterion(CriterionFactory.contains("personAuthentication.username", "*"+filter+"*"));
 		}
 
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 		contentObjectCriteria.addPropertyPathWhoseValueWillBePreLoaded("personAuthentication.username");
 
@@ -544,7 +540,6 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personType");
 		contentObjectCriteria.addCriterion(CriterionFactory.equalsCaseInsensitive("personAuthentication.username", username));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 
@@ -589,7 +584,6 @@ public class IdentityStoreImpl implements IdentityStore{
 
 		ContentObjectCriteria roleObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("roleObject");
 		roleObjectCriteria.addCriterion(CriterionFactory.equals("name", name));
-		roleObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		roleObjectCriteria.doNotCacheResults();
 		roleObjectCriteria.setOffsetAndLimit(0,1);
 
@@ -704,7 +698,6 @@ public class IdentityStoreImpl implements IdentityStore{
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personType");
 
 			contentObjectCriteria.addCriterion(CriterionFactory.equals("personAuthorization.role", roleObject.getId()));
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			contentObjectCriteria.doNotCacheResults();
 
 			CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -736,7 +729,6 @@ public class IdentityStoreImpl implements IdentityStore{
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("personType");
 
 		contentObjectCriteria.addCriterion(CriterionFactory.isNull("personAuthorization.role"));
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -764,8 +756,6 @@ public class IdentityStoreImpl implements IdentityStore{
 		
 		contentObjectCriteria.addFullTextSearchCriterion(filter+"*");
 		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-
 		contentObjectCriteria.doNotCacheResults();
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
@@ -792,7 +782,6 @@ public class IdentityStoreImpl implements IdentityStore{
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("roleObject");
 
 		contentObjectCriteria.addFullTextSearchCriterion(filter+"*");
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectCriteria.doNotCacheResults();
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);

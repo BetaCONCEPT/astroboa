@@ -44,6 +44,8 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.RepositoryUserCriteria;
@@ -51,7 +53,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.RepositoryUserRenderer;
@@ -214,7 +215,11 @@ public class RepositoryUserDao extends JcrDaoSupport {
 			//and to save it as well.
 			//What is happened is that importDao will create a RepositoryUser
 			//and will pass it here again to save it. 
-			return importDao.importRepositoryUser((String)repositoryUserSource, ImportMode.SAVE_ENTITY);
+			ImportConfiguration configuration = ImportConfiguration.repositoryUser()
+					  .persist(PersistMode.PERSIST_MAIN_ENTITY)
+					  .build();
+
+			return importDao.importRepositoryUser((String)repositoryUserSource, configuration);
 		}
 		
 		if (! (repositoryUserSource instanceof RepositoryUser)){
@@ -427,7 +432,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 		RepositoryUserCriteria userCriteria = CmsCriteriaFactory.newRepositoryUserCriteria();
 		userCriteria.doNotCacheResults();
 		userCriteria.setLimit(1);
-		userCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		userCriteria.addExternalIdEqualsCriterion(CmsApiConstants.SYSTEM_REPOSITORY_USER_EXTRENAL_ID);
 
 		CmsQueryResult systemUserQueryResult = cmsQueryHandler.getNodesFromXPathQuery(session, userCriteria);
@@ -492,8 +496,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 			}
 		}
 
-		cmsRepositoryEntityUtils.setSystemProperties(repositoryUserNode, repositoryUser);
-
 		//Label
 		repositoryUserNode.setProperty(CmsBuiltInItem.Label.getJcrName(), repositoryUser.getLabel());
 
@@ -519,7 +521,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 		RepositoryUserCriteria userCriteria = CmsCriteriaFactory.newRepositoryUserCriteria();
 		userCriteria.doNotCacheResults();
 		userCriteria.setLimit(2);
-		userCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		userCriteria.addExternalIdEqualsCriterion(repositoryUserToBeSaved.getExternalId());
 
 		CmsQueryResult usersWithTheSameExternalId = cmsQueryHandler.getNodesFromXPathQuery(session, userCriteria);
@@ -778,7 +779,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectCriteria.addOwnerIdEqualsCriterion(repositoryUserId);
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		NodeIterator contentObjectNodesFound = cmsQueryHandler.getNodesFromXPathQuery(session, contentObjectCriteria).getNodeIterator();
 
@@ -795,7 +795,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 
 		SpaceCriteria spaceCriteria = CmsCriteriaFactory.newSpaceCriteria();
 		spaceCriteria.addOwnerIdEqualsCriterion(repositoryUserId);
-		spaceCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		NodeIterator spacesFound = cmsQueryHandler.getNodesFromXPathQuery(session, spaceCriteria).getNodeIterator();
 
@@ -845,7 +844,6 @@ public class RepositoryUserDao extends JcrDaoSupport {
 
 		RepositoryUserCriteria repositoryUserCriteria = CmsCriteriaFactory.newRepositoryUserCriteria();
 		repositoryUserCriteria.addExternalIdEqualsCriterion(externalId);
-		repositoryUserCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		repositoryUserCriteria.setOffsetAndLimit(0, 1);
 
 		List<RepositoryUser> repositoryUsers = searchRepositoryUsers(repositoryUserCriteria);

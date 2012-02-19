@@ -22,6 +22,10 @@ package org.betaconceptframework.astroboa.engine.jcr.dao;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -30,6 +34,7 @@ import javax.jcr.Session;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -46,10 +51,7 @@ import org.betaconceptframework.astroboa.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * This class is abstract so that method newSerializationBean can be abstract.
  * 
- * This way every time method newSerializationBean is called a new instance is automatically
- * created by SPRING which makes this instance Transaction aware
  * 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
@@ -68,7 +70,11 @@ public class SerializationDao {
 	@Autowired
 	public PrototypeFactory prototypeFactory;
 	
-	public long serializeSearchResults(Session session, CmsCriteria cmsCriteria, OutputStream os, FetchLevel fetchLevel, ResourceRepresentationType<?>  resourceRepresentationType, boolean serializeBinaryContent) throws Exception{
+	//TODO : The use of the ExecutorService must be reviewed. 
+	private	ExecutorService executorService = Executors.newCachedThreadPool();
+	
+	public long serializeSearchResults(Session session, CmsCriteria cmsCriteria, OutputStream os, FetchLevel fetchLevel, 
+			SerializationConfiguration serializationConfiguration) throws Exception{
 
 		CmsQueryResult cmsQueryResult = null;
 		
@@ -86,21 +92,22 @@ public class SerializationDao {
 			nodeIterator = cmsQueryResult.getNodeIterator();
 		}
 
-		 serializationBean.serializeNodesAsResourceCollection(nodeIterator, os, cmsCriteria, fetchLevel, resourceRepresentationType, serializeBinaryContent, cmsQueryResult.getTotalRowCount());
+		 serializationBean.serializeNodesAsResourceCollection(nodeIterator, os, cmsCriteria, fetchLevel, serializationConfiguration, cmsQueryResult.getTotalRowCount());
 		 
 		 return nodeIterator.getSize();
 
 	}
 
-	public void serializeCmsRepositoryEntity(Node nodeRepresentingEntity, OutputStream os, ResourceRepresentationType<?>  resourceRepresentationType, CmsEntityType entityTypeToSerialize, 
-			List<String> propertyPathsWhoseValuesAreIncludedInTheSerialization, FetchLevel fetchLevel, boolean nodeRepresentsRootElement, boolean serializeBinaryContent, boolean prettyPrint) throws Exception{
+	public void serializeCmsRepositoryEntity(Node nodeRepresentingEntity, OutputStream os, CmsEntityType entityTypeToSerialize, 
+			List<String> propertyPathsWhoseValuesAreIncludedInTheSerialization, FetchLevel fetchLevel, boolean nodeRepresentsRootElement, 
+			SerializationConfiguration serializationConfiguration) throws Exception{
 
-		serializationBean.serializeNode(nodeRepresentingEntity, os, entityTypeToSerialize, resourceRepresentationType, propertyPathsWhoseValuesAreIncludedInTheSerialization, fetchLevel, nodeRepresentsRootElement, serializeBinaryContent, prettyPrint);
+		serializationBean.serializeNode(nodeRepresentingEntity, os, entityTypeToSerialize, serializationConfiguration, propertyPathsWhoseValuesAreIncludedInTheSerialization, fetchLevel, nodeRepresentsRootElement);
 		
 	}
 
 
-	public SerializationReport serializeAllInstancesOfEntity(final CmsEntityType entityTypeToSerialize, final boolean serializeBinaryContent) {
+	public Future<SerializationReport> serializeAllInstancesOfEntity(final CmsEntityType entityTypeToSerialize, final SerializationConfiguration serializationConfiguration) {
 		
 		Calendar now = Calendar.getInstance();
 		
@@ -114,15 +121,49 @@ public class SerializationDao {
 		
 		final SerializationReport serializationReport = new SerializationReportImpl(filename+".zip", serializationPath);
 		
-		new Thread( new Runnable() {
-			
+		Future<SerializationReport> future = executorService.submit(new Callable<SerializationReport>() {
+
 			@Override
-			public void run() {
-				serializationBean.serialize(entityTypeToSerialize, serializationPath, filename, clientContext, serializationReport, serializeBinaryContent);
+			public SerializationReport call() throws Exception {
+				serializationBean.serialize(entityTypeToSerialize, serializationPath, filename, clientContext, serializationReport, serializationConfiguration);
+				return serializationReport;
 			}
-		}).start();
+
+		});
 		
-		return serializationReport;
+		
+		return future;
+	}
+	
+	public Future<SerializationReport> serializeObjectsUsingCriteria(final ContentObjectCriteria contentObjectCriteria, final SerializationConfiguration serializationConfiguration) {
+		
+		Calendar now = Calendar.getInstance();
+		
+		final String serializationPath = DateUtils.format(now, "yyyy/MM/dd");
+		
+		final AstroboaClientContext clientContext = AstroboaClientContextHolder.getActiveClientContext();
+		
+		final String filename = createFilename(now, CmsEntityType.OBJECT, clientContext);
+		
+		final SerializationBean serializationBean = prototypeFactory.newSerializationBean();
+		
+		final SerializationReport serializationReport = new SerializationReportImpl(filename+".zip", serializationPath);
+		
+
+		Future<SerializationReport> future = executorService.submit(new Callable<SerializationReport>() {
+
+			@Override
+			public SerializationReport call() throws Exception {
+				
+				serializationBean.serializeObjectsUsingCriteria(contentObjectCriteria, serializationPath, filename, clientContext, serializationReport, serializationConfiguration);
+				
+				return serializationReport;
+			}
+
+		});
+		
+		
+		return future;
 	}
 	
 	public  String createFilename(Calendar date, CmsEntityType entityTypeToSerialize, AstroboaClientContext clientContext){
@@ -148,7 +189,7 @@ public class SerializationDao {
 		if (entityTypeToSerialize != null)
 		{
 			switch (entityTypeToSerialize) {
-			case CONTENT_OBJECT:
+			case OBJECT:
 				sb.append("-objects");
 				break;
 			case ORGANIZATION_SPACE:

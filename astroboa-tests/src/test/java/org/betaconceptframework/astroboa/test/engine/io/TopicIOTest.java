@@ -27,12 +27,13 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.engine.jcr.io.Deserializer;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportBean;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.jaxb.AstroboaValidationEventHandler;
@@ -73,6 +74,11 @@ public class TopicIOTest extends AbstractRepositoryTest{
 		topic.setTaxonomy(subjectTaxonomy);
 
 		String xml = null;
+		
+		ImportConfiguration configuration = ImportConfiguration.topic()
+				.persist(PersistMode.PERSIST_ENTITY_TREE)
+				.build();
+
 		try{
 			xml = topic.xml(prettyPrint).replaceAll("owner", "ownerTest");
 
@@ -80,7 +86,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 			TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 			TestLogPolicy.setLevelForLogger(Level.FATAL, AstroboaValidationEventHandler.class.getName());
 			
-			importService.importTopic(xml, true);
+			importService.importTopic(xml, configuration);
 
 			TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 			TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
@@ -129,7 +135,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 			String json = null;
 
 			FetchLevel fetchLevelForLog = null;
-			ImportMode importModeForLog = null;
+			PersistMode persistModeForLog = null;
 
 			try{
 				for (FetchLevel fetchLevel : FetchLevel.values()){
@@ -145,19 +151,23 @@ public class TopicIOTest extends AbstractRepositoryTest{
 
 					boolean compareChildTopics = fetchLevel != FetchLevel.ENTITY;
 
-					for (ImportMode importMode : ImportMode.values()){
+					for (PersistMode persistMode : PersistMode.values()){
 
-						importModeForLog = importMode;
+						persistModeForLog = persistMode;
 						
+						ImportConfiguration configuration = ImportConfiguration.topic()
+								.persist(persistMode)
+								.build();
+
 						xml = topic.xml(prettyPrint);
 
-						Topic topicUnMarshalledFromXML = importDao.importTopic(xml, importMode); 
+						Topic topicUnMarshalledFromXML = importDao.importTopic(xml, configuration); 
 
 						repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromXML, compareChildTopics, compareChildTopics);
 
 						json = topic.json(prettyPrint);
 
-						Topic topicUnMarshalledFromJSON = importDao.importTopic(json, importMode); 
+						Topic topicUnMarshalledFromJSON = importDao.importTopic(json, configuration); 
 
 						repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromJSON, compareChildTopics, compareChildTopics);
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromXML, topicUnMarshalledFromJSON, compareChildTopics, compareChildTopics);
@@ -165,7 +175,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 						//Now create XML and JSON from Service and compare each other
 						json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, fetchLevel, prettyPrint);
 
-						Topic topicUnMarshalledFromJSONService = importDao.importTopic(json, importMode); 
+						Topic topicUnMarshalledFromJSONService = importDao.importTopic(json, configuration); 
 
 						repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromJSONService, compareChildTopics, compareChildTopics);
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromJSON, topicUnMarshalledFromJSONService, compareChildTopics, compareChildTopics);
@@ -173,7 +183,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 
 						xml = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, fetchLevel, prettyPrint);
 
-						Topic topicUnMarshalledFromXMLService = importDao.importTopic(xml, importMode); 
+						Topic topicUnMarshalledFromXMLService = importDao.importTopic(xml, configuration); 
 
 						repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromXMLService, compareChildTopics, compareChildTopics);
 						repositoryContentValidator.compareTopics(topicUnMarshalledFromJSON, topicUnMarshalledFromXMLService, compareChildTopics, compareChildTopics);
@@ -188,7 +198,7 @@ public class TopicIOTest extends AbstractRepositoryTest{
 			catch(Throwable e){
 
 				logger.error("Fetch Level {}", fetchLevelForLog);
-				logger.error("Import Mode {}", importModeForLog);
+				logger.error("Import Mode {}", persistModeForLog);
 				logger.error("xml {}", xml);
 				logger.error("JSON {}", json);
 
@@ -231,16 +241,20 @@ public class TopicIOTest extends AbstractRepositoryTest{
 		//Export to json
 		String json = topic.json(prettyPrint);
 
+		ImportConfiguration configuration = ImportConfiguration.topic()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
+
 		try{
 
 			//Create a new instance for the same user using importService and its xml
-			Topic topicFromXml = importDao.importTopic(xml, ImportMode.DO_NOT_SAVE);
+			Topic topicFromXml = importDao.importTopic(xml, configuration);
 
 			//Compare two instances
 			repositoryContentValidator.compareTopics(topic, topicFromXml, true, true);
 
 			//Create a new instance for the same user using importService and its xml
-			Topic topicFromJson = importDao.importTopic(json, ImportMode.DO_NOT_SAVE);
+			Topic topicFromJson = importDao.importTopic(json, configuration);
 
 			//Compare two instances
 			repositoryContentValidator.compareTopics(topic, topicFromJson, true, true);

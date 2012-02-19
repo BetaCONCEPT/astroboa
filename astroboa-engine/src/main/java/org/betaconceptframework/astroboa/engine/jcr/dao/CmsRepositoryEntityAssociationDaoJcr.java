@@ -395,7 +395,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		
 		ContentObjectCriteria topicAssociatedWithContentObjectsCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		topicAssociatedWithContentObjectsCriteria.doNotCacheResults();
-		topicAssociatedWithContentObjectsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		Criterion topicCriterion = CriterionFactory.newTopicReferenceCriterion(null, topicId, QueryOperator.EQUALS, false);
 		topicAssociatedWithContentObjectsCriteria.addCriterion(topicCriterion);
@@ -408,7 +407,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		
 		contentObjectAssociatedWithContentObjectsCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		contentObjectAssociatedWithContentObjectsCriteria.doNotCacheResults();
-		contentObjectAssociatedWithContentObjectsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		//Normally this should be a ContentObjectPropertyCriterion
 		//Criterion contentObjectCriterion = CriterionFactory.newTopicPropertyCriterion(null, REFERENCED_ENTITY_ID, QueryOperator.EQUALS, false);
@@ -422,7 +420,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		repositoryUserAssociatedWithContentObjectsCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		
 		repositoryUserAssociatedWithContentObjectsCriteria.doNotCacheResults();
-		repositoryUserAssociatedWithContentObjectsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		repositoryUserAssociatedWithContentObjectsCriteria.addOwnerIdEqualsCriterion(REFERENCED_ENTITY_ID);
 	}
 
@@ -514,7 +511,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		repositoryUserAssociatedWithTopicsCriteria = CmsCriteriaFactory.newTopicCriteria();
 		
 		repositoryUserAssociatedWithTopicsCriteria.doNotCacheResults();
-		repositoryUserAssociatedWithTopicsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		repositoryUserAssociatedWithTopicsCriteria.addOwnerIdEqualsCriterion(REFERENCED_ENTITY_ID);
 		
 	}
@@ -524,7 +520,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		repositoryUserAssociatedWithSpacesCriteria = CmsCriteriaFactory.newSpaceCriteria();
 		
 		repositoryUserAssociatedWithSpacesCriteria.doNotCacheResults();
-		repositoryUserAssociatedWithSpacesCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		repositoryUserAssociatedWithSpacesCriteria.addOwnerIdEqualsCriterion(REFERENCED_ENTITY_ID);
 		
 	}
@@ -534,7 +529,6 @@ class CmsRepositoryEntityAssociationDaoJcr extends JcrDaoSupport implements CmsR
 		contentObjectAssociatedWithSpacesCriteria = CmsCriteriaFactory.newSpaceCriteria();
 		
 		contentObjectAssociatedWithSpacesCriteria.doNotCacheResults();
-		contentObjectAssociatedWithSpacesCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		contentObjectAssociatedWithSpacesCriteria.addCriterion(CriterionFactory.equals(CmsBuiltInItem.ContentObjectReferences.getJcrName(), REFERENCED_ENTITY_ID));
 		
 	}

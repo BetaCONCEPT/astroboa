@@ -149,11 +149,6 @@ public class UIMenu extends AbstractUIBean {
 			return false;
 		}
 		
-		if (contentObjectTypeDefinition.isSystemTypeDefinition())
-		{
-			return false;
-		}
-		
 		/*
 		 * When the following occur then type should not be available
 		 * 

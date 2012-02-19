@@ -19,9 +19,12 @@
 package org.betaconceptframework.astroboa.engine.jcr.dao;
 
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
@@ -29,12 +32,12 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.PrototypeFactory;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportBean;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.model.jaxb.Repository;
 import org.betaconceptframework.astroboa.model.impl.RepositoryUserImpl;
 import org.betaconceptframework.astroboa.model.impl.SpaceImpl;
@@ -59,9 +62,11 @@ public class ImportDao {
 	@Autowired
 	private ImportBean importBean;
 	
+	//TODO : The use of the ExecutorService must be reviewed. 
+	private	ExecutorService executorService = Executors.newCachedThreadPool();
 
 	
-	public ImportReport importRepositoryContentFromURL(final URL contentSource) {
+	public Future<ImportReport> importRepositoryContentFromURI(final URI contentSource, final ImportConfiguration importConfiguration) {
 		
 		final AstroboaClientContext clientContext = AstroboaClientContextHolder.getActiveClientContext();
 		
@@ -69,18 +74,22 @@ public class ImportDao {
 		
 		final ImportReport importReport = new ImportReportImpl();
 		
-		new Thread( new Runnable() {
-			
+		Future<ImportReport> future = executorService.submit(new Callable<ImportReport>() {
+
 			@Override
-			public void run() {
-				importBean.importRepositoryContentFromURL(contentSource, clientContext, importReport);
+			public ImportReport call() throws Exception {
+				importBean.importRepositoryContentFromURI(contentSource, clientContext, importReport, importConfiguration);
+				return importReport;
 			}
-		}).start();
+
+		});
 		
-		return importReport;
+		
+		return future;
+
 	}
 
-	public ImportReport importRepositoryContentFromString(final String contentSource) {
+	public Future<ImportReport> importRepositoryContentFromString(final String contentSource,final ImportConfiguration importConfiguration) {
 
 		final AstroboaClientContext clientContext = AstroboaClientContextHolder.getActiveClientContext();
 		
@@ -88,70 +97,66 @@ public class ImportDao {
 		
 		final ImportReport importReport = new ImportReportImpl();
 		
-		new Thread( new Runnable() {
-			
+		Future<ImportReport> future = executorService.submit(new Callable<ImportReport>() {
+
 			@Override
-			public void run() {
-				importBean.importContentFromString(contentSource, importReport, ImportMode.SAVE_ENTITY_TREE, Repository.class, clientContext, false, true, null);
+			public ImportReport call() throws Exception {
+				importBean.importContentFromString(contentSource, importReport, Repository.class, clientContext, importConfiguration);
+				return importReport;
 			}
-		}).start();
+
+		});
 		
-		return importReport;
+		
+		return future;
 		
 	}
 
-	public ContentObject importContentObject(String contentSource,
-			boolean version, boolean updateLastModificationDate, ImportMode importMode, Map<String, byte[]> binaryContent) {
+	public ContentObject importContentObject(String contentSource,ImportConfiguration importConfiguration) {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(contentSource, importReport, importMode,ContentObject.class, null, version, updateLastModificationDate, binaryContent);
-
-	}
-	
-	public <T extends CmsRepositoryEntity> List<T> importResourceCollection(String contentSource,
-			boolean version, boolean updateLastModificationDate, ImportMode importMode) {
-		
-		ImportReport importReport = new ImportReportImpl();
-		
-		return importBean.importContentFromString(contentSource, importReport, importMode, List.class, null, version, updateLastModificationDate, null);
+		return importBean.importContentFromString(contentSource, importReport, ContentObject.class, null, importConfiguration);
 
 	}
 	
-	public RepositoryUser importRepositoryUser(String repositoryUserSource,
-			ImportMode importMode) {
+	public <T extends CmsRepositoryEntity> List<T> importResourceCollection(String contentSource,ImportConfiguration importConfiguration) {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(repositoryUserSource, importReport, importMode, RepositoryUserImpl.class, null, false, true, null);
+		return importBean.importContentFromString(contentSource, importReport, List.class, null, importConfiguration);
 
 	}
 	
-	public Topic importTopic(String topicSource,
-			ImportMode importMode) {
+	public RepositoryUser importRepositoryUser(String repositoryUserSource,ImportConfiguration importConfiguration) {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(topicSource, importReport, importMode,TopicImpl.class, null, false, true, null);
+		return importBean.importContentFromString(repositoryUserSource, importReport, RepositoryUserImpl.class, null, importConfiguration);
 
 	}
-
-	public Taxonomy importTaxonomy(String taxonomySource,
-			ImportMode importMode) {
-		
 	
+	public Topic importTopic(String topicSource,ImportConfiguration importConfiguration) {
+		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(taxonomySource, importReport, importMode,TaxonomyImpl.class, null, false, true, null);
+		return importBean.importContentFromString(topicSource, importReport, TopicImpl.class, null, importConfiguration);
 
 	}
 
-	public Space importSpace(String spaceSource,
-			ImportMode importMode) {
+	public Taxonomy importTaxonomy(String taxonomySource,ImportConfiguration importConfiguration) {
 		
 		ImportReport importReport = new ImportReportImpl();
 		
-		return importBean.importContentFromString(spaceSource, importReport, importMode,SpaceImpl.class, null, false, true, null);
+		return importBean.importContentFromString(taxonomySource, importReport, TaxonomyImpl.class, null, importConfiguration);
+
+	}
+
+	public Space importSpace(String spaceSource,ImportConfiguration importConfiguration) {
+		
+		ImportReport importReport = new ImportReportImpl();
+		
+		return importBean.importContentFromString(spaceSource, importReport, SpaceImpl.class, null, importConfiguration);
 
 	}
 

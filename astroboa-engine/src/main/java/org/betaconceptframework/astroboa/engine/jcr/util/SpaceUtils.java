@@ -73,15 +73,8 @@ public class SpaceUtils {
 		return populateSpaceJcrNode(space, session, spaceJcrNode,useProvidedId, context);
 	}
 
-	private void updateSystemBuiltin(Space space, Node spaceJcrNode) throws RepositoryException {
-		cmsRepositoryEntityUtils.setSystemProperties(spaceJcrNode, space);
-	}
-
-
 	private Node populateSpaceJcrNode(Space space, Session session, Node spaceJcrNode, boolean useProvidedId, Context context) throws RepositoryException {
 
-		updateSystemBuiltin(space, spaceJcrNode);
-		
 		//Update OwnerId
 		updateOwner(space.getOwner(), spaceJcrNode, session, context);
 
@@ -197,8 +190,6 @@ public class SpaceUtils {
 				throw new CmsException("Found no space with id "+space.getId());
 		}
 		
-		updateSystemBuiltin(space, spaceJcrNode);
-
 		updateOwner(space.getOwner(), spaceJcrNode, session, context);
 
 		updateLocalizedLabels(space, spaceJcrNode);

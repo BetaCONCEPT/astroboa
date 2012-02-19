@@ -276,7 +276,6 @@ public class JcrUtils {
 		ContentObjectCriteria criteria = CmsCriteriaFactory.newContentObjectCriteria();
 		
 		criteria.addIdEqualsCriterion(contetnObjectId);
-		criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		String xpathQuery = criteria.getXPathQuery();
 
@@ -317,7 +316,6 @@ public class JcrUtils {
 		TopicCriteria criteria = CmsCriteriaFactory.newTopicCriteria();
 		
 		criteria.addIdEqualsCriterion(referencedEntityId);
-		criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		String xpathQuery = criteria.getXPathQuery();
 
@@ -360,7 +358,6 @@ public class JcrUtils {
 		SpaceCriteria criteria = CmsCriteriaFactory.newSpaceCriteria();
 		
 		criteria.addIdEqualsCriterion(spaceId);
-		criteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		String xpathQuery = criteria.getXPathQuery();
 

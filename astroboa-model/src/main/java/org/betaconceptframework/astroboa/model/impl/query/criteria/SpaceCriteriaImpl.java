@@ -69,19 +69,19 @@ public class SpaceCriteriaImpl extends CmsCriteriaImpl  implements SpaceCriteria
 		return ancestorCriteria;
 	}
 
-	public void addOwnerIdEqualsCriterion(String topicOwnerId)
+	public void addOwnerIdEqualsCriterion(String spaceOwnerId)
 	{
-		if (topicOwnerId != null)
+		if (spaceOwnerId != null)
 		{
-			List<String> topicOwnerIds = new ArrayList<String>();
-			topicOwnerIds.add(topicOwnerId);
+			List<String> spaceOwnerIds = new ArrayList<String>();
+			spaceOwnerIds.add(spaceOwnerId);
 			
-			addOwnerIdsCriterion(QueryOperator.EQUALS, topicOwnerIds, Condition.AND);
+			addOwnerIdsCriterion(QueryOperator.EQUALS, spaceOwnerIds, Condition.AND);
 		}
 	}
 	
-	public void addOwnerIdsCriterion(QueryOperator queryOperator, List<String> topicOwnerIds, Condition internalCondition){
-		if (CollectionUtils.isNotEmpty(topicOwnerIds))
+	public void addOwnerIdsCriterion(QueryOperator queryOperator, List<String> spaceOwnerIds, Condition internalCondition){
+		if (CollectionUtils.isNotEmpty(spaceOwnerIds))
 		{
 			SimpleCriterion ownerCriterion = CriterionFactory.newSimpleCriterion();
  
@@ -95,9 +95,9 @@ public class SpaceCriteriaImpl extends CmsCriteriaImpl  implements SpaceCriteria
 			
 			ownerCriterion.setOperator(queryOperator);
 			
-			for (String topicOwnerId: topicOwnerIds){
-				if (StringUtils.isNotBlank(topicOwnerId))
-					ownerCriterion.addValue(topicOwnerId);
+			for (String spaceOwnerId: spaceOwnerIds){
+				if (StringUtils.isNotBlank(spaceOwnerId))
+					ownerCriterion.addValue(spaceOwnerId);
 			}
 			
 			addCriterion(ownerCriterion);
@@ -106,20 +106,19 @@ public class SpaceCriteriaImpl extends CmsCriteriaImpl  implements SpaceCriteria
 	
 	
 	
-	public void addAncestorSpaceIdEqualsCriterion(String parentTopicId) {
+	public void addAncestorSpaceIdEqualsCriterion(String parentSpaceId) {
 		if (getAncestorCriteria() == null){
 			createAncestorCriteria();
 		}
 		
 		if (getAncestorCriteria() != null){
-			getAncestorCriteria().addCriterion(CriterionFactory.equals(CmsBuiltInItem.CmsIdentifier.getJcrName(), parentTopicId));
+			getAncestorCriteria().addCriterion(CriterionFactory.equals(CmsBuiltInItem.CmsIdentifier.getJcrName(), parentSpaceId));
 		}
 
 	}
 
 	private void createAncestorCriteria() {
 		ancestorCriteria = new SpaceCriteriaImpl();
-		ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 	}
 
 	public void addNameEqualsCriterion(String name) {

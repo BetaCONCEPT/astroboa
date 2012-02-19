@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <personObject:personObject
 	systemName="IDENTITY_STORE_USERNAME"   
-	contentObjectTypeName="personObject" systemBuiltinEntity="true"
+	contentObjectTypeName="personObject" 
 	xsi:schemaLocation=" http://www.betaconceptframework.org/schema/astroboa/identity/person http://www.betaconceptframework.org/schema/identity/person-${project.version}.xsd"
 	xmlns:personObject="http://www.betaconceptframework.org/schema/astroboa/identity/person"
 	xmlns:ns2="http://www.betaconceptframework.org/schema/astroboa/model"

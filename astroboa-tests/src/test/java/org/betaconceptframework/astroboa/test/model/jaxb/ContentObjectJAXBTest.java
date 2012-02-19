@@ -46,13 +46,14 @@ import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.engine.jcr.io.Deserializer;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportBean;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
 import org.betaconceptframework.astroboa.model.impl.ComplexCmsRootPropertyImpl;
@@ -82,14 +83,14 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 	@Test
 	public void testExportObjectReference() throws Throwable{
 
-		ContentObject contentObjectForTestExportObjectReference = createContentObject(getSystemUser(), "testExportObjectReference", false);
+		ContentObject contentObjectForTestExportObjectReference = createContentObject(getSystemUser(),  "testExportObjectReference");
 		contentObjectForTestExportObjectReference = contentService.save(contentObjectForTestExportObjectReference, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObjectForTestExportObjectReference);
+		markObjectForRemoval(contentObjectForTestExportObjectReference);
 
 
-		ContentObject referencedObject = createContentObject(getSystemUser(), "referencedObjectForTestExportObjectReference", false);
+		ContentObject referencedObject = createContentObject(getSystemUser(),  "referencedObjectForTestExportObjectReference");
 		referencedObject = contentService.save(referencedObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(referencedObject);
+		markObjectForRemoval(referencedObject);
 
 		((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObject")).addSimpleTypeValue(referencedObject);
 		((ObjectReferenceProperty)contentObjectForTestExportObjectReference.getCmsProperty("simpleContentObjectMultiple")).addSimpleTypeValue(referencedObject);
@@ -420,7 +421,11 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 
 		logger.debug("Processing {} contentObjects", cmsOutcome.getCount() );
 
-		ImportMode importMode = ImportMode.SAVE_ENTITY;
+		ImportConfiguration configuration = ImportConfiguration.object()
+				.persist(PersistMode.PERSIST_MAIN_ENTITY)
+				.version(false)
+				.updateLastModificationTime(false)
+				.build();
 
 		for (ContentObject contentObject : cmsOutcome.getResults()){
 
@@ -430,12 +435,12 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 			try{
 				xml = contentObject.xml(prettyPrint, false, "accessibility");
 
-				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode, null);
+				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, configuration);
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXML, true);
 
 				json = contentObject.json(prettyPrint, false,"accessibility");
-				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode, null); 
+				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, configuration); 
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSON, true);
 				repositoryContentValidator.compareContentObjects(contentObjectUnMarshalledFromXML, contentObjectUnMarshalledFromJSON, true);
@@ -454,7 +459,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsPropertyImpl.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsRootPropertyImpl.class.getName());
-					importDao.importContentObject(xml, false, false, importMode, null);
+					importDao.importContentObject(xml, configuration);
 					TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ComplexCmsPropertyImpl.class.getName());
@@ -472,7 +477,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsPropertyImpl.class.getName());
 					TestLogPolicy.setLevelForLogger(Level.FATAL, ComplexCmsRootPropertyImpl.class.getName());
-					importDao.importContentObject(json, false, false, importMode, null);
+					importDao.importContentObject(json, configuration);
 					TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
 					TestLogPolicy.setDefaultLevelForLogger(ComplexCmsPropertyImpl.class.getName());
@@ -515,13 +520,13 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 	@Test
 	public void testFullContentObjectExport() throws Throwable{
 
-		ContentObject co =  createContentObjectAndPopulateAllProperties(getSystemUser(), "testFullContentObjectExport", false);
+		ContentObject co =  createContentObjectAndPopulateAllProperties(getSystemUser(), "testFullContentObjectExport");
 
 		((LongProperty)co.getCmsProperty("statisticTypeMultiple.viewCounter")).setSimpleTypeValue((long)1);
 		((LongProperty)co.getCmsProperty("statisticType.viewCounter")).setSimpleTypeValue((long)1);
 
 		co = contentService.save(co, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(co);
+		markObjectForRemoval(co);
 
 
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
@@ -718,7 +723,9 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 
 		logger.debug("Processing {} contentObjects", cmsOutcome.getCount() );
 
-		ImportMode importMode = ImportMode.DO_NOT_SAVE;
+		ImportConfiguration configuration = ImportConfiguration.object()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
 
 		long start = System.currentTimeMillis();
 
@@ -734,8 +741,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject XML using xml() method in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, false, false, importMode, null);
-				logTimeElapsed("Import ContentObject XML in {}, ImportMode {}, ", start, importMode.toString());
+				ContentObject contentObjectUnMarshalledFromXML = importDao.importContentObject(xml, configuration);
+				logTimeElapsed("Import ContentObject XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXML, true);
 
@@ -745,8 +752,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject JSON using json() method in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, false, false, importMode, null); 
-				logTimeElapsed("Import ContentObject JSON in {}, ImportMode {}, ", start, importMode.toString());
+				ContentObject contentObjectUnMarshalledFromJSON = importDao.importContentObject(json, configuration); 
+				logTimeElapsed("Import ContentObject JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSON, true);
 				repositoryContentValidator.compareContentObjects(contentObjectUnMarshalledFromXML, contentObjectUnMarshalledFromJSON, true);
@@ -759,8 +766,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject JSON using service in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromJSONService = importDao.importContentObject(json, false, false, importMode, null); 
-				logTimeElapsed("Import ContentObject JSON in {}, ImportMode {}, ", start, importMode.toString());
+				ContentObject contentObjectUnMarshalledFromJSONService = importDao.importContentObject(json, configuration); 
+				logTimeElapsed("Import ContentObject JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromJSONService, true);
 				repositoryContentValidator.compareContentObjects(contentObjectUnMarshalledFromJSON, contentObjectUnMarshalledFromJSONService, true);
@@ -773,8 +780,8 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export ContentObject XML using service in {}", start);
 
 				start = System.currentTimeMillis();
-				ContentObject contentObjectUnMarshalledFromXMLService = importDao.importContentObject(xml, false, false, importMode, null); 
-				logTimeElapsed("Import ContentObject XML in {}, ImportMode {}, ", start, importMode.toString());
+				ContentObject contentObjectUnMarshalledFromXMLService = importDao.importContentObject(xml, configuration); 
+				logTimeElapsed("Import ContentObject XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 
 				repositoryContentValidator.compareContentObjects(contentObject, contentObjectUnMarshalledFromXMLService, true);
 				repositoryContentValidator.compareContentObjects(contentObjectUnMarshalledFromJSON, contentObjectUnMarshalledFromXMLService, true);
@@ -816,19 +823,18 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 		topic.addChild(childTopic1);
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		//Create one contentObject to be used as a value to a content object property
-		ContentObject contentObjectForContentObjectPropertyValue = createContentObjectAndPopulateAllProperties(systemUser, "valueForContentObjectProperty", false);
+		ContentObject contentObjectForContentObjectPropertyValue = createContentObjectAndPopulateAllProperties(systemUser, "valueForContentObjectProperty");
 		contentObjectForContentObjectPropertyValue = contentService.save(contentObjectForContentObjectPropertyValue, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObjectForContentObjectPropertyValue);
+		markObjectForRemoval(contentObjectForContentObjectPropertyValue);
 
-		ContentObject contentObject = createContentObject(systemUser, topic, childTopic1,"1");
-
+		ContentObject contentObject = createContentObject(systemUser,  topic, childTopic1,"1");
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
-		ContentObject contentObject2 = createContentObject(systemUser, topic, childTopic1,"2");
+		ContentObject contentObject2 = createContentObject(systemUser,  topic, childTopic1,"2");
 
 		//Reference one another
 
@@ -836,14 +842,14 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 		((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
 
 		contentObject2 = contentService.save(contentObject2, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject2);
+		markObjectForRemoval(contentObject2);
 
 
 		//Create a content object to be used in test testMultiplePropertiesExportedAsArrayInJSON
-		ContentObject contentObject3 = createContentObject(systemUser, topic, childTopic1,"testMultiplePropertiesExportedAsArrayInJSON");
+		ContentObject contentObject3 = createContentObject(systemUser,  topic, childTopic1,"testMultiplePropertiesExportedAsArrayInJSON");
 
 		contentObject3 = contentService.save(contentObject3, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject3);
+		markObjectForRemoval(contentObject3);
 
 
 
@@ -852,7 +858,7 @@ public class ContentObjectJAXBTest extends AbstractRepositoryTest{
 	private ContentObject createContentObject(RepositoryUser systemUser,
 			Topic topic, Topic childTopic1, String systemName) throws IOException {
 
-		ContentObject contentObject = createContentObjectAndPopulateAllProperties(systemUser, "testContentObjectForJAXB"+systemName, false);
+		ContentObject contentObject = createContentObjectAndPopulateAllProperties(systemUser, "testContentObjectForJAXB"+systemName);
 
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object : for JAXB test");
 

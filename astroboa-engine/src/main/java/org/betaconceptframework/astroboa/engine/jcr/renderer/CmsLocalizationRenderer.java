@@ -50,7 +50,7 @@ public class CmsLocalizationRenderer  {
 
 				while ( locales.hasNext() ){
 					Property localeProperty = locales.nextProperty();
-					String localePropertyName = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":", "");
+					String localePropertyName = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":", "");
 
 					render(cmsLocalization, localePropertyName, localeProperty.getString());
 				}

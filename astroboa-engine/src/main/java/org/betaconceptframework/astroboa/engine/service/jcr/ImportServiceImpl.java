@@ -20,9 +20,9 @@
 package org.betaconceptframework.astroboa.engine.service.jcr;
 
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
@@ -30,10 +30,10 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.service.ImportService;
 import org.betaconceptframework.astroboa.engine.jcr.dao.ImportDao;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +49,9 @@ class ImportServiceImpl  implements ImportService {
 	private ImportDao importDao;
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public ImportReport importRepositoryContentFromString(String contentSource) {
+	public Future<ImportReport> importRepositoryContentFromString(String contentSource,ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importRepositoryContentFromString(contentSource);
+			return importDao.importRepositoryContentFromString(contentSource,importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -62,9 +62,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public ImportReport importRepositoryContentFromURL(URL contentSource) {
+	public Future<ImportReport> importRepositoryContentFromURI(URI contentSource,ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importRepositoryContentFromURL(contentSource);
+			return importDao.importRepositoryContentFromURI(contentSource,importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -76,9 +76,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public ContentObject importContentObject(String contentSource,boolean version, boolean updateLastModificationDate, boolean save,Map<String, byte[]> binaryContent) {
+	public ContentObject importContentObject(String contentSource,ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importContentObject(contentSource, version, updateLastModificationDate, save ? ImportMode.SAVE_ENTITY_TREE :ImportMode.DO_NOT_SAVE, binaryContent);
+			return importDao.importContentObject(contentSource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -89,9 +89,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public RepositoryUser importRepositoryUser(String repositoryUserSource, boolean save) {
+	public RepositoryUser importRepositoryUser(String repositoryUserSource, ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importRepositoryUser(repositoryUserSource, save? ImportMode.SAVE_ENTITY_TREE: ImportMode.DO_NOT_SAVE);
+			return importDao.importRepositoryUser(repositoryUserSource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -102,9 +102,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public Space importSpace(String spaceSource, boolean save) {
+	public Space importSpace(String spaceSource, ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importSpace(spaceSource, save? ImportMode.SAVE_ENTITY_TREE: ImportMode.DO_NOT_SAVE);
+			return importDao.importSpace(spaceSource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -115,9 +115,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public Taxonomy importTaxonomy(String taxonomySource, boolean save) {
+	public Taxonomy importTaxonomy(String taxonomySource, ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importTaxonomy(taxonomySource, save? ImportMode.SAVE_ENTITY_TREE:ImportMode.DO_NOT_SAVE);
+			return importDao.importTaxonomy(taxonomySource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -128,9 +128,9 @@ class ImportServiceImpl  implements ImportService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public Topic importTopic(String topicSource, boolean save) {
+	public Topic importTopic(String topicSource, ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importTopic(topicSource, save? ImportMode.SAVE_ENTITY_TREE:ImportMode.DO_NOT_SAVE);
+			return importDao.importTopic(topicSource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -142,10 +142,9 @@ class ImportServiceImpl  implements ImportService {
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
 	public List<ContentObject> importContentObjectResourceCollection(
-			String contentSource, boolean version,
-			boolean updateLastModificationTime, boolean save) {
+			String contentSource, ImportConfiguration importConfiguration) {
 		try{ 
-			return importDao.importResourceCollection(contentSource, version, updateLastModificationTime, ImportMode.SAVE_ENTITY_TREE);
+			return importDao.importResourceCollection(contentSource, importConfiguration);
 		}
 		catch(CmsException e){
 			throw e;

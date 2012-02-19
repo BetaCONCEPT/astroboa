@@ -27,8 +27,9 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
@@ -71,7 +72,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 		String json = null;
 
 		FetchLevel fetchLevelForLog = null;
-		ImportMode importModeForLog = null;
+		PersistMode persistModeForLog = null;
 
 		try{
 			for (FetchLevel fetchLevel : FetchLevel.values()){
@@ -82,33 +83,37 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 
 				taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, fetchLevel, false);
 				
-				for (ImportMode importMode : ImportMode.values()){
+				for (PersistMode persistMode : PersistMode.values()){
 					
-					importModeForLog = importMode;
+					persistModeForLog = persistMode;
 					
+					ImportConfiguration configuration = ImportConfiguration.taxonomy()
+							.persist(persistMode)
+							.build();
+
 					xml = taxonomy.xml(prettyPrint);
 					
-					Taxonomy taxonomyUnMarshalledFromXML = importDao.importTaxonomy(xml, importMode); 
+					Taxonomy taxonomyUnMarshalledFromXML = importDao.importTaxonomy(xml, configuration); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromXML, true, compareRootTopics);
 
 					json = taxonomy.json(prettyPrint);
 
-					Taxonomy taxonomyUnMarshalledFromJSON = importDao.importTaxonomy(json, importMode); 
+					Taxonomy taxonomyUnMarshalledFromJSON = importDao.importTaxonomy(json, configuration); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromJSON, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromXML, taxonomyUnMarshalledFromJSON, true, compareRootTopics);
 
 					//Now create XML and JSON from Service and compare each other
 					json = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.JSON, fetchLevel, prettyPrint);
-					Taxonomy taxonomyUnMarshalledFromJSONService = importDao.importTaxonomy(json, importMode); 
+					Taxonomy taxonomyUnMarshalledFromJSONService = importDao.importTaxonomy(json, configuration); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromJSON, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromXML, taxonomyUnMarshalledFromJSONService, true, compareRootTopics);
 
 					xml = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.XML, fetchLevel, prettyPrint);
-					Taxonomy taxonomyUnMarshalledFromXMLService = importDao.importTaxonomy(xml,importMode); 
+					Taxonomy taxonomyUnMarshalledFromXMLService = importDao.importTaxonomy(xml,configuration); 
 
 					repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromXMLService, true, compareRootTopics);
 					repositoryContentValidator.compareTaxonomies(taxonomyUnMarshalledFromJSON, taxonomyUnMarshalledFromXMLService, true, compareRootTopics);
@@ -121,7 +126,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 		}
 		catch(Throwable e){
 			logger.error("Fetch Level {}", fetchLevelForLog);
-			logger.error("Import Mode {}", importModeForLog);
+			logger.error("Import Mode {}", persistModeForLog);
 			logger.error("XML {}", xml);
 			logger.error("JSON {}", json);
 
@@ -149,7 +154,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 
 		secondTopic.setTaxonomy(taxonomy);
 		taxonomy.addRootTopic(secondTopic);
-
+		
 		String xml = taxonomy.xml(prettyPrint);
 
 		//Export to json
@@ -157,14 +162,18 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 
 		try{
 
+			ImportConfiguration configuration = ImportConfiguration.taxonomy()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.build();
+
 			//Create a new instance for the same user using importService and its xml
-			Taxonomy taxonomyFromXml = importDao.importTaxonomy(xml, ImportMode.DO_NOT_SAVE);
+			Taxonomy taxonomyFromXml = importDao.importTaxonomy(xml, configuration);
 
 			//Compare two instances
 			repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyFromXml, true, true);
 
 			//Create a new instance for the same user using importService and its xml
-			Taxonomy taxonomyFromJson = importDao.importTaxonomy(json, ImportMode.DO_NOT_SAVE);
+			Taxonomy taxonomyFromJson = importDao.importTaxonomy(json, configuration);
 
 			//Compare two instances
 			repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyFromJson, true, true);
@@ -203,14 +212,18 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 
 		try{
 		
+			ImportConfiguration configuration = ImportConfiguration.taxonomy()
+					.persist(PersistMode.PERSIST_ENTITY_TREE)
+					.build();
+
 			//Check plain Taxonomy
 			//We expect to have the same id with Subject Taxonomy
-			Taxonomy taxonomyFromXml = importService.importTaxonomy(xml, true);
+			Taxonomy taxonomyFromXml = importService.importTaxonomy(xml, configuration);
 			repositoryContentValidator.compareTaxonomies(subjectTaxonomy, taxonomyFromXml, true, false);
 			
 			json = taxonomyFromXml.json(prettyPrint);
 			
-			Taxonomy taxonomyFromJson = importService.importTaxonomy(json, true);
+			Taxonomy taxonomyFromJson = importService.importTaxonomy(json, configuration);
 			repositoryContentValidator.compareTaxonomies(subjectTaxonomy, taxonomyFromJson, true, false);
 			
 			repositoryContentValidator.compareTaxonomies(taxonomyFromXml, taxonomyFromJson, true, false);
@@ -234,7 +247,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 			taxonomy.addRootTopic(topic);
 
 			xml = taxonomy.xml(prettyPrint);
-			taxonomyFromXml = importService.importTaxonomy(xml,true);
+			taxonomyFromXml = importService.importTaxonomy(xml,configuration);
 			
 			//Load subject taxonomy root topics
 			subjectTaxonomy = taxonomyService.getBuiltInSubjectTaxonomy("en");
@@ -243,7 +256,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 			
 			//Same with JSON
 			json = taxonomyFromXml.json(prettyPrint);
-			taxonomyFromJson = importService.importTaxonomy(json, true);
+			taxonomyFromJson = importService.importTaxonomy(json, configuration);
 			repositoryContentValidator.compareTaxonomies(subjectTaxonomy, taxonomyFromJson, true, false);
 			
 			repositoryContentValidator.compareTaxonomies(taxonomyFromXml, taxonomyFromJson, true, false);
@@ -253,7 +266,7 @@ public class TaxonomyIOTest extends AbstractRepositoryTest{
 			assertTopicOwnerIsSystem(taxonomyFromXml.getRootTopics(), getSystemUser());
 			assertTopicOwnerIsSystem(taxonomyFromJson.getRootTopics(), getSystemUser());
 
-			addEntityToBeDeletedAfterTestIsFinished(taxonomyFromXml.getRootTopics().get(0));
+			markTopicForRemoval(taxonomyFromXml.getRootTopics().get(0));
 		}
 		catch(Throwable e){
 			try{

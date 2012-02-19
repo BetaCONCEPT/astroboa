@@ -32,15 +32,14 @@ Authors
 	<xs:import namespace="http://www.betaconceptframework.org/schema/astroboa/model"
 		schemaLocation="astroboa-model-${project.version}.xsd" />
 
-	<xs:complexType name="multilingualStringPropertyType"
-		bccmsmodel:systemType="true">
+	<xs:complexType name="multilingualStringPropertyType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				<bccmsmodel:displayName>MultiLingual String	Property</bccmsmodel:displayName>
 								<bccmsmodel:description>This complex type represents a multilingual string property type</bccmsmodel:description>
 			</xs:documentation>
 			<xs:documentation xml:lang="el">
-				Πολυγλωσσικό 	αλφαριθμητικό
+				Πολυγλωσσικό αλφαριθμητικό
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>

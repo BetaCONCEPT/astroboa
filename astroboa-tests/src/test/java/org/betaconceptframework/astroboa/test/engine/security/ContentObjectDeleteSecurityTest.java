@@ -33,7 +33,6 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
@@ -82,13 +81,13 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			loginToTestRepositoryAsSystem();
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeUpdatedByALLAsNonSystemButWithRoleCmsEditorAndNotTheOwner"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), true);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 			
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).removeValues();
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EDITOR));
 			
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			loginAsTestUser();
 
@@ -139,10 +138,10 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 
 			try{
 
-				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsSystem", true);
+				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsSystem");
 				contentObject = contentService.save(contentObject, false, true, null);
 				
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				executeMethodOnContentService(methodName, contentObject.getId(), false,
 						methodArgumentsApartFromContentObject, parameterTypes);
@@ -169,7 +168,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			try{
 				
 
-				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleAdmin", true);
+				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleAdmin");
 				contentObject = contentService.save(contentObject, false, true, null);
 
 				loginAsTestUser();
@@ -211,10 +210,10 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			try{
 				
 
-				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleCmsEditorButNotTheOwner", true);
+				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"AsNonSystemButWithRoleCmsEditorButNotTheOwner");
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				loginAsTestUser();
 				
@@ -265,7 +264,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			removeRoleFromActiveSubject(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_ADMIN));
 
 
-			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByALLAsNonSystemButWithRoleCmsEditorAndNotTheOwner", true);
+			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByALLAsNonSystemButWithRoleCmsEditorAndNotTheOwner");
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(ContentAccessMode.ALL.toString());
 
 			//First save content object. The first time content object will be saved
@@ -273,7 +272,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -300,7 +299,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 
 			addRoleToActiveSubject(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EDITOR));
 
-			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByUserOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner", true);
+			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByUserOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner");
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(TestConstants.TEST_USER_NAME);
 
 			//First save content object. The first time content object will be saved
@@ -308,7 +307,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -338,7 +337,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			String group = "group@"+AstroboaClientContextHolder.getActiveRepositoryId();
 			addRoleToActiveSubject(group);
 
-			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByGroupOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner", true);
+			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByGroupOnlyAsNonSystemButWithRoleCmsEditorAndNotTheOwner");
 			((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(group);
 
 			//First save content object. The first time content object will be saved
@@ -346,7 +345,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 			//the owner of the content object (do we want that to happen?)
 			contentObject = contentService.save(contentObject, false, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//but the second time, especially since accessibility are the defaults
 			//testUser should not be able to re-save it
@@ -377,7 +376,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 
 			try{
 
-				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+methodName, true);
+				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+methodName);
 				String group = "group@"+AstroboaClientContextHolder.getActiveRepositoryId();
 				((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(group);
 				
@@ -386,7 +385,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 				//the owner of the content object (do we want that to happen?)
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				//but the second time, especially since accessibility are the defaults
 				//testUser should not be able to re-save it
@@ -434,7 +433,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 
 			try{
 
-				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByDifferentUserAsNonSystemButWithRoleCmsEditorAndNotTheOwner", true);
+				ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"WithAccessibilityCanBeDeletedByDifferentUserAsNonSystemButWithRoleCmsEditorAndNotTheOwner");
 				String user = "otherUser";
 				((StringProperty)contentObject.getCmsProperty("accessibility.canBeDeletedBy")).addSimpleTypeValue(user);
 				
@@ -443,7 +442,7 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 				//the owner of the content object (do we want that to happen?)
 				contentObject = contentService.save(contentObject, false, true, null);
 
-				addEntityToBeDeletedAfterTestIsFinished(contentObject);
+				markObjectForRemoval(contentObject);
 
 				//but the second time, especially since accessibility are the defaults
 				//testUser should not be able to re-save it
@@ -491,7 +490,6 @@ public class ContentObjectDeleteSecurityTest extends AbstractRepositoryTest{
 				personCriteria.addCriterion(CriterionFactory.equals("personAuthentication.username",IdentityPrincipal.SYSTEM));
 				personCriteria.setOffsetAndLimit(0, 1);
 				personCriteria.doNotCacheResults();
-				personCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 				CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(personCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				

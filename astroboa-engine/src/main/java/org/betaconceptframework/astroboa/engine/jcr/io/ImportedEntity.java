@@ -233,12 +233,6 @@ public class ImportedEntity{
 				return true;
 			}
 		}
-		else if (StringUtils.equals(attributeName, CmsBuiltInItem.SystemBuiltinEntity.getLocalPart())){
-			if (entity instanceof CmsRepositoryEntity){
-				((CmsRepositoryEntity)entity).setSystemBuiltinEntity(BooleanUtils.isTrue(Boolean.valueOf(attributeValue)));
-				return true;
-			}
-		}
 		else if (StringUtils.equals(attributeName, CmsConstants.REPOSITORY_ID_ATTRIBUTE_NAME)){
 			if (entity instanceof Repository){
 				((Repository)entity).setId(attributeValue);

@@ -92,9 +92,7 @@ public class ResourceLocator {
 	// this path will not be supported in the next major version, i.e. 4.0
 	@Path(CmsConstants.DEPRECATED_RESOURCE_API_TOPICS_COLLECTION_URI_PATH)
 	public TopicResource getTopicResource(){
-		
 		return new TopicResource(astroboaClient);
-		
 	}
 	
 	@Path(CmsConstants.RESOURCE_API_BINARY_CHANNEL_URI_PATH)

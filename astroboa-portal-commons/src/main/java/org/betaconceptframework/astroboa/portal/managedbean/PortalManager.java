@@ -93,7 +93,6 @@ public class PortalManager {
 			ContentObjectCriteria portalCriteria = CmsCriteriaFactory.newContentObjectCriteria(CmsConstants.PORTAL_CONTENT_OBJECT_TYPE);
 
 			portalCriteria.addSystemNameEqualsCriterion(currentlyConnectedPortalSytemName);
-			portalCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			//portalCriteria.addCriterion(CriterionFactory.equals("portalSystemName", currentlyConnectedPortalSytemName));
 
 			portalCriteria.setCacheable(CacheRegion.TEN_MINUTES);

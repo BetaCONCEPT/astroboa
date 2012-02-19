@@ -31,8 +31,8 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.Order;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -58,11 +58,11 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 	@Test  
 	public void testCmsOutcomeOfContentObjectWithLimitZero() throws Throwable {
 		
+		createContent();
+		
 		for (String testContentType : getTestContentTypes()){
 			
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(testContentType);
-		
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 			contentObjectCriteria.addSystemNameContainsCriterion("*testCmsOutcomeForJAXB*");
 		
@@ -100,11 +100,12 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 	
 	@Test  
 	public void testCmsOutcomeForJSON() throws Throwable {
+		
+		createContent();
+		
 		for (String testContentType : getTestContentTypes()){
 			
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(testContentType);
-		
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 			contentObjectCriteria.addSystemNameContainsCriterion("*testCmsOutcomeForJAXB*");
 		
@@ -141,10 +142,11 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 	@Test  
 	public void testCmsOutcomeForProjectedProperties() throws Throwable {
 		
-		for (String testContentType : getTestContentTypes()){
-			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(testContentType);
+		createContent();
 		
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
+		for (String testContentType : getTestContentTypes()){
+		
+			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(testContentType);
 		
 			contentObjectCriteria.addSystemNameContainsCriterion("*testCmsOutcomeForJAXB*");
 		
@@ -176,11 +178,11 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 	@Test  
 	public void testCmsOutcomeForContentObjectJAXBMarshallingUnMarshalling() throws Throwable {
 		
+		createContent();
+		
 		for (String testContentType : getTestContentTypes()){
 
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(testContentType);
-
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			contentObjectCriteria.addSystemNameContainsCriterion("*testCmsOutcomeForJAXB*");
 
@@ -218,7 +220,6 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.addOrderByLocale("en", Order.ascending);
 		
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -226,7 +227,13 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		String xml = null;
 		
 		try{
-			serializationDao.serializeSearchResults(getSession(), topicCriteria, os, FetchLevel.ENTITY, ResourceRepresentationType.XML, false);
+			
+			SerializationConfiguration serializationConfiguration = SerializationConfiguration.topic()
+					.prettyPrint(prettyPrint)
+					.representationType(ResourceRepresentationType.XML)
+					.build();
+
+			serializationDao.serializeSearchResults(getSession(), topicCriteria, os, FetchLevel.ENTITY, serializationConfiguration);
 
 			xml = new String(os.toByteArray(), "UTF-8");
 
@@ -262,17 +269,17 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		topic.setTaxonomy(subjectTaxonomy);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		
 		//Create objects which contain only references
-		ContentObject simpleContentObject = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB", false);
+		ContentObject simpleContentObject = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB");
 		
 		((StringProperty)simpleContentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object With references for JAXB test");
 		simpleContentObject = contentService.save(simpleContentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(simpleContentObject);
+		markObjectForRemoval(simpleContentObject);
 
-		ContentObject contentObjectWithReferences = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB2", false);
+		ContentObject contentObjectWithReferences = createContentObjectForType(TEST_CONTENT_TYPE, getSystemUser(), "testReferencesAtCmsOutcomeForJAXB2");
 		
 		((ObjectReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.hasPart")).addSimpleTypeValue(simpleContentObject);
 		((ObjectReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.references")).addSimpleTypeValue(simpleContentObject);
@@ -280,13 +287,11 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		((TopicReferenceProperty)contentObjectWithReferences.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		((TopicReferenceProperty)contentObjectWithReferences.getCmsProperty("simpleTopic")).addSimpleTypeValue(topic);
 		contentObjectWithReferences = contentService.save(contentObjectWithReferences, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObjectWithReferences);
+		markObjectForRemoval(contentObjectWithReferences);
 
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(TEST_CONTENT_TYPE);
 		
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-	
 		contentObjectCriteria.addSystemNameContainsCriterion("testReferencesAtCmsOutcomeForJAXB*");
 		contentObjectCriteria.doNotCacheResults();
 	
@@ -331,10 +336,8 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		
 	}
 	
-	@Override
-	protected void postSetup() throws Exception {
-		
-		super.postSetup();
+	
+	private void createContent() throws Exception {
 		
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
@@ -356,14 +359,14 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 		topic.addChild(childTopic1);
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		for (String testContentType : getTestContentTypes()){
 
 			ContentObject contentObject = createContentObjectForType(testContentType,systemUser, topic, childTopic1, "1"+testContentType);
 		
 			contentObject = contentService.save(contentObject, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 		
 		
 			ContentObject contentObject2 = createContentObjectForType(testContentType, systemUser, topic, childTopic1, "2"+testContentType);
@@ -374,14 +377,14 @@ public class CmsOutcomeJAXBTest extends AbstractRepositoryTest{
 			((ObjectReferenceProperty)contentObject2.getCmsProperty("profile.references")).addSimpleTypeValue(contentObject);
 		
 			contentObject2 = contentService.save(contentObject2, false, true, null);
-			addEntityToBeDeletedAfterTestIsFinished(contentObject2);
+			markObjectForRemoval(contentObject2);
 		}
 
 	}
 
 	private ContentObject createContentObjectForType(String contentType, RepositoryUser systemUser,
 			Topic topic, Topic childTopic1, String systemName) {
-		ContentObject contentObject = createContentObjectAndPopulateAllPropertiesForType(contentType, systemUser, "testCmsOutcomeForJAXB"+systemName, true);
+		ContentObject contentObject = createContentObjectAndPopulateAllPropertiesForType(contentType, systemUser, "testCmsOutcomeForJAXB"+systemName);
 		
 		((StringProperty)contentObject.getCmsProperty("profile.title")).setSimpleTypeValue("Content Object for JAXB test");
 		((StringProperty)contentObject.getCmsProperty("profile.description")).setSimpleTypeValue("");

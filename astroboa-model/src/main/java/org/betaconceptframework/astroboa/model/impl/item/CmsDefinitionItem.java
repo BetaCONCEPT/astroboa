@@ -71,7 +71,6 @@ public enum CmsDefinitionItem implements ItemQName{
 	//Refers to global built in element space
 	space,
 	labelElementPath, 
-	systemType, 
 	unmanagedBinaryChannel,
 	passwordEncryptorClassName,
 	passwordType,
@@ -89,8 +88,8 @@ public enum CmsDefinitionItem implements ItemQName{
 	private ItemQName cmsDefinitionItem;
 
 	private CmsDefinitionItem(){
-		cmsDefinitionItem = new ItemQNameImpl(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX,
-				BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_URI, this.name()); 
+		cmsDefinitionItem = new ItemQNameImpl(BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX,
+				BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI, this.name()); 
 	}
 
 	public String getJcrName()

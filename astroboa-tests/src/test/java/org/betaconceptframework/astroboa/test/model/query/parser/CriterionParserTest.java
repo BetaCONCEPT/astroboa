@@ -294,10 +294,7 @@ public class CriterionParserTest {
 				
 			}
 			
-			parserCmsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-			
 			expectedCmsCriteria.addCriterion(expectedCriterion);
-			expectedCmsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			if (useContentObjectCriteria){
 				CriterionFactory.parse(expression, (ContentObjectCriteria) parserCmsCriteria);
@@ -321,11 +318,9 @@ public class CriterionParserTest {
 		try{
 			ContentObjectCriteria parserContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			CriterionFactory.parse(expression, parserContentOjectCriteria);
-			parserContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			ContentObjectCriteria expectedContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			expectedContentOjectCriteria.addFullTextSearchCriterion(textSearch);
-			expectedContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			assertCriterionEquals(parserContentOjectCriteria, expectedContentOjectCriteria);
 
@@ -342,12 +337,10 @@ public class CriterionParserTest {
 		try{
 			ContentObjectCriteria parserContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			CriterionFactory.parse(expression, parserContentOjectCriteria);
-			parserContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			ContentObjectCriteria expectedContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			expectedContentOjectCriteria.addFullTextSearchCriterion(textSearch);
 			expectedContentOjectCriteria.addCriterion(additionalExpression);
-			expectedContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			assertCriterionEquals(parserContentOjectCriteria, expectedContentOjectCriteria);
 

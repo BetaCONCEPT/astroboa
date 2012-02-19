@@ -80,10 +80,10 @@ public class IOUtils {
 		if (atts != null){
 			atts.addAttribute(
 					XMLConstants.XMLNS_ATTRIBUTE_NS_URI, 
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX, 
-					XMLConstants.XMLNS_ATTRIBUTE+CmsConstants.QNAME_PREFIX_SEPARATOR+BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX, 
+					BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX, 
+					XMLConstants.XMLNS_ATTRIBUTE+CmsConstants.QNAME_PREFIX_SEPARATOR+BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX, 
 					CDATA, 
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_URI);
+					BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI);
 		}
 	}
 	
@@ -116,10 +116,10 @@ public class IOUtils {
 		if (atts != null){
 			atts.addAttribute(
 					XMLConstants.XMLNS_ATTRIBUTE_NS_URI, 
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX, 
-					XMLConstants.XMLNS_ATTRIBUTE+CmsConstants.QNAME_PREFIX_SEPARATOR+BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX, 
+					BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX, 
+					XMLConstants.XMLNS_ATTRIBUTE+CmsConstants.QNAME_PREFIX_SEPARATOR+BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX, 
 					CDATA, 
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_URI);
+					BetaConceptNamespaceConstants.ASTROBOA_API_URI);
 		}
 		
 	}

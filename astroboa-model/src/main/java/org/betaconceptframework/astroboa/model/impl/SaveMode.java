@@ -26,9 +26,8 @@ package org.betaconceptframework.astroboa.model.impl;
  */
 public enum SaveMode
 {
-	INSERT, // Insert all values 
-	UPDATE_NOT_NULL, // Update all non-null values 
-	UPDATE_ALL; 
+	INSERT, 
+	UPDATE; 
 	
 	
 }

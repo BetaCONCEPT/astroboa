@@ -105,7 +105,7 @@ public class CmsDefinitionTreeForContentObjectSearch extends AbstractUIBean{
 			for (ComplexCmsPropertyDefinition aspectDefinition : aspectDefinitions){
 				//Add Aspect Definition only if content object type definition is null
 				//or aspect is not defined in this
-				if (! aspectDefinition.isSystemTypeDefinition() && 
+				if ( 
 						( contentObjectTypeDefinition == null || !contentObjectTypeDefinition.hasCmsPropertyDefinition(aspectDefinition.getName()) )
 					){
 					addAspectDefinitionToTree(aspectDefinition, aspectContainer);

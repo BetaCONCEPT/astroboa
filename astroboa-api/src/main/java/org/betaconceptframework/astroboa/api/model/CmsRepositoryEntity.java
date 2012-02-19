@@ -20,7 +20,6 @@
 package org.betaconceptframework.astroboa.api.model;
 
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 
 
 /**
@@ -59,22 +58,6 @@ public interface CmsRepositoryEntity {
 	 * @return A {@link java.lang.String} representing entity's identifier.
 	 */
 	String getId();
-	
-	/**
-	 * Check whether this entity is a system built in entity.
-	 * 
-	 * A system built in entity is a special case of a cms repository entity in that it does not
-	 * participates in queries unless explicitly specified in {@link CmsCriteria}.
-	 * 
-	 * @return <code>true</code> if entity is system built in entity, <code>false</code> otherwise.
-	 */
-	boolean isSystemBuiltinEntity();
-	
-	/**
-	 * Specify whether this entity should be a system built in entity or not
-	 * @param systemBuiltinEntity <code>true</code> to set this entity as system built in, <code>false</code> otherwise.
-	 */
-	void setSystemBuiltinEntity(boolean systemBuiltinEntity);
 	
 	/**
 	 * Provides an xml representation of specified <code>cmsRepositoryEntity</code>

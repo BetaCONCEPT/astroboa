@@ -48,8 +48,6 @@ public final  class ComplexCmsPropertyDefinitionImpl extends AbstractComplexCmsP
 	
 	private String propertyPathsWhoseValuesCanBeUsedAsALabel;
 	
-	private final boolean systemTypeDefinition;
-	
 	private final boolean global;
 
 	private final boolean cmmonAttributesAreDefined;
@@ -60,14 +58,13 @@ public final  class ComplexCmsPropertyDefinitionImpl extends AbstractComplexCmsP
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper,
 			URI definitionFileURI, 
-			String propertyPathsWhoseValuesCanBeUsedAsALabel,boolean systemTypeDefinition, 
+			String propertyPathsWhoseValuesCanBeUsedAsALabel, 
 			boolean global,QName qNameOfParentDefinitionWithTheSameType, String typeName, boolean cmmonAttributesAreDefined) {
 		
 			super(qualifiedName, description, displayName, obsolete, multiple, mandatory, 
 				restrictReadToRoles, restrictWriteToRoles,order, parentDefinition,
 				complexPropertyDefinitionHelper, definitionFileURI, qNameOfParentDefinitionWithTheSameType, typeName);
 		
-		this.systemTypeDefinition =  systemTypeDefinition;
 		this.global = global;
 		this.cmmonAttributesAreDefined = cmmonAttributesAreDefined;  
 		
@@ -88,7 +85,7 @@ public final  class ComplexCmsPropertyDefinitionImpl extends AbstractComplexCmsP
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
 				complexPropertyDefinitionHelper, getDefinitionFileURI(),  
-				propertyPathsWhoseValuesCanBeUsedAsALabel, systemTypeDefinition, global, qNameOfParentDefinitionWithTheSameType, typeName, cmmonAttributesAreDefined);
+				propertyPathsWhoseValuesCanBeUsedAsALabel, global, qNameOfParentDefinitionWithTheSameType, typeName, cmmonAttributesAreDefined);
 		
 		//Clone its child property definitions only if this definition is not the same with its parent
 		//Otherwise this will take place when a child property definition will be needed
@@ -117,10 +114,6 @@ public final  class ComplexCmsPropertyDefinitionImpl extends AbstractComplexCmsP
 	@Override
 	public String getPropertyPathWhoseValueCanBeUsedAsALabel() {
 		return getPropertyPathsWhoseValuesCanBeUsedAsALabel();
-	}
-
-	public boolean isSystemTypeDefinition() {
-		return systemTypeDefinition;
 	}
 
 	public boolean isGlobal() {

@@ -57,7 +57,7 @@ public class JcrCacheTest extends AbstractRepositoryTest{
 		//Create content object for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "testContentObjectCache",false);
+		ContentObject contentObject = createContentObject(systemUser,  "testContentObjectCache");
 
 		contentObject = contentService.save(contentObject, false, true, null);
 
@@ -65,7 +65,7 @@ public class JcrCacheTest extends AbstractRepositoryTest{
 		contentObject.setSystemName("testContentObjectCache");
 		contentObject = contentService.save(contentObject, false, true, null);
 
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 
 		contentObject = contentService.getContentObject(contentObject.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
@@ -186,7 +186,7 @@ public class JcrCacheTest extends AbstractRepositoryTest{
 
 		topic = topicService.save(topic);
 
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		//Create a simple query
 

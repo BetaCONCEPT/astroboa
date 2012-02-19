@@ -97,8 +97,8 @@ public interface SpaceService {
 	 * All associations to this space will be deleted as well.
 	 * 
 	 * @param spaceId Space's id to be deleted.
-	 * @return <code>true</code> if space has been successfully deleted, <code>false</code> otherwise
-	 *  
+	 * @return <code>true</code> if space has been successfully deleted, <code>false</code> if no space with the provided id or name is found.
+	 * 
 	 */
 	boolean deleteSpace(String spaceId);
 	
@@ -395,7 +395,7 @@ public interface SpaceService {
 	 * 				<bccmsapi:resourceResponse 
 	 * 					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	 * 					xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model" 
-	 * 					xmlns:bccmsapi="http://www.betaconceptframework.org/schema/astroboa/api" 
+	 * 					xmlns:astroboa-api="http://www.betaconceptframework.org/schema/astroboa/api" 
 	 * 				 	offset="0"
 	 * 					totalResourceCount="0"
 	 * 				/>

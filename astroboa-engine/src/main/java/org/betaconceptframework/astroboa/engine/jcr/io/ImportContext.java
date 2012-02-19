@@ -53,8 +53,7 @@ public class ImportContext {
 				Arrays.asList(CmsBuiltInItem.SystemName.getLocalPart(),
 						CmsConstants.URL_ATTRIBUTE_NAME,
 							  CmsBuiltInItem.ContentObjectTypeName.getLocalPart(),
-							  CmsBuiltInItem.CmsIdentifier.getLocalPart(), 
-							  CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+							  CmsBuiltInItem.CmsIdentifier.getLocalPart()));
 
 		reservedAttributeNamesPerEntityType.put(ComplexCmsProperty.class, 
 				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart()));
@@ -67,8 +66,7 @@ public class ImportContext {
 						      CmsBuiltInItem.Name.getLocalPart(),
 						      CmsBuiltInItem.AllowsReferrerContentObjects.getLocalPart(),
 						      CmsBuiltInItem.Order.getLocalPart(),
-						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME, 
-						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME));
 
 		reservedAttributeNamesPerEntityType.put(Space.class, 
 				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
@@ -77,8 +75,7 @@ public class ImportContext {
 						      CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
 						      CmsBuiltInItem.Name.getLocalPart(),
 						      CmsBuiltInItem.Order.getLocalPart(),
-						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME, 
-						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME));
 
 		reservedAttributeNamesPerEntityType.put(Taxonomy.class, 
 				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
@@ -86,8 +83,7 @@ public class ImportContext {
 						CmsConstants.LANG_ATTRIBUTE_NAME,
 						      CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX,
 						      CmsBuiltInItem.Name.getLocalPart(),
-						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME,
-						      CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+						      CmsConstants.NUMBER_OF_CHILDREN_ATTRIBUTE_NAME));
 
 		reservedAttributeNamesPerEntityType.put(BinaryChannel.class, 
 				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
@@ -96,14 +92,12 @@ public class ImportContext {
 						CmsBuiltInItem.MimeType.getLocalPart(),
 						CmsBuiltInItem.Encoding.getLocalPart(),
 						CmsBuiltInItem.SourceFileName.getLocalPart(),
-						CmsConstants.LAST_MODIFICATION_DATE_ATTRIBUTE_NAME,
-						CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+						CmsConstants.LAST_MODIFICATION_DATE_ATTRIBUTE_NAME));
 
 		reservedAttributeNamesPerEntityType.put(RepositoryUser.class, 
 				Arrays.asList(CmsBuiltInItem.CmsIdentifier.getLocalPart(),
 						CmsBuiltInItem.ExternalId.getLocalPart(), 
-						CmsBuiltInItem.Label.getLocalPart(),
-						CmsBuiltInItem.SystemBuiltinEntity.getLocalPart()));
+						CmsBuiltInItem.Label.getLocalPart()));
 
 		reservedAttributeNamesPerEntityType.put(Repository.class, 
 				Arrays.asList(CmsConstants.REPOSITORY_ID_ATTRIBUTE_NAME,

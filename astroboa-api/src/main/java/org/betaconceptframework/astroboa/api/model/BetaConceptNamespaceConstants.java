@@ -41,80 +41,91 @@ public final class BetaConceptNamespaceConstants {
 	/**
 	 * BetaConcept CMS namespace URI.
 	 */
-	public final static String BETA_CONCEPT_CMS_URI = BETA_CONCEPT_URI + "/astroboa";
+	public final static String ASTROBOA_URI = BETA_CONCEPT_URI + "/astroboa";
 	/**
 	 * BetaConcept CMS namespace prefix.
 	 */
-	public final static String BETA_CONCEPT_CMS_PREFIX = BETA_CONCEPT_PREFIX + "cms";
-
-	/**
-	 * BetaConcept CMS schema namespace URI.
-	 */
-	public final static String BETA_CONCEPT_CMS_SCHEMA_URI = BETA_CONCEPT_URI + "/schema/astroboa";
+	public final static String ASTROBOA_PREFIX = BETA_CONCEPT_PREFIX + "cms";
 	
 	/**
-	 * BetaConcept CMS schema api namespace URI.
+	 * This will be the new prefix which will replace the above
+	 * For now it is used only in any XML element which follow the 
+	 * types defined in astroboa-api.xsd
 	 */
-	public final static String BETA_CONCEPT_CMS_API_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/api";
+	public final static String ASTROBOA_NEW_PREFIX = "astroboa";
 
 	/**
-	 * BetaConcept CMS api namespace prefix.
+	 * ASTROBOA schema namespace URI.
 	 */
-	public final static String BETA_CONCEPT_CMS_API_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "api";
-
-	/**
-	 * BetaConcept CMS schema model namespace URI.
-	 */
-	public final static String BETA_CONCEPT_CMS_MODEL_DEFINITION_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/model";
-	/**
-	 * BetaConcept CMS model definition namespace prefix.
-	 */
-	public final static String BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "model";
-
-	/**
-	 * BetaConcept CMS schema admin namespace URI.
-	 */
-	public final static String BETA_CONCEPT_CMS_ADMIN_DEFINITION_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/admin";
-	/**
-	 * BetaConcept CMS admin definition namespace prefix.
-	 */
-	public final static String BETA_CONCEPT_CMS_ADMIN_DEFINITION_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "admin";
+	public final static String ASTROBOA_SCHEMA_URI = BETA_CONCEPT_URI + "/schema/astroboa";
 	
 	/**
-	 * BetaConcept CMS schema web namespace URI.
+	 * ASTROBOA schema api namespace URI.
 	 */
-	public final static String BETA_CONCEPT_CMS_WEB_DEFINITION_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/web";
+	public final static String ASTROBOA_API_URI = ASTROBOA_SCHEMA_URI + "/api";
+
 	/**
-	 * BetaConcept CMS web definition namespace prefix.
+	 * ASTROBOA api namespace prefix.
 	 */
-	public final static String BETA_CONCEPT_CMS_WEB_DEFINITION_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "web";
+	public final static String ASTROBOA_API_PREFIX = ASTROBOA_NEW_PREFIX+ "-api";
+
+	/**
+	 * ASTROBOA schema model namespace URI.
+	 */
+	public final static String ASTROBOA_MODEL_DEFINITION_URI = ASTROBOA_SCHEMA_URI + "/model";
 	
 	/**
-	 * BetaConcept CMS schema utilTypes namespace URI.
+	 * ASTROBOA model definition namespace prefix.
 	 */
-	public final static String BETA_CONCEPT_CMS_UTILTYPES_DEFINITION_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/utilTypes";
+	public final static String ASTROBOA_MODEL_DEFINITION_PREFIX = ASTROBOA_PREFIX+ "model";
+
 	/**
-	 * BetaConcept CMS utilTypes definition namespace prefix.
+	 * ASTROBOA schema admin namespace URI.
 	 */
-	public final static String BETA_CONCEPT_CMS_UTILTYPES_DEFINITION_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "utilTypes";
+	public final static String ASTROBOA_ADMIN_DEFINITION_URI = ASTROBOA_SCHEMA_URI + "/admin";
+	
+	/**
+	 * ASTROBOA admin definition namespace prefix.
+	 */
+	public final static String ASTROBOA_ADMIN_DEFINITION_PREFIX = ASTROBOA_PREFIX+ "admin";
+	
+	/**
+	 * ASTROBOA schema web namespace URI.
+	 */
+	public final static String ASTROBOA_WEB_DEFINITION_URI = ASTROBOA_SCHEMA_URI + "/web";
+	
+	/**
+	 * ASTROBOA web definition namespace prefix.
+	 */
+	public final static String ASTROBOA_WEB_DEFINITION_PREFIX = ASTROBOA_PREFIX+ "web";
+	
+	/**
+	 * ASTROBOA schema utilTypes namespace URI.
+	 */
+	public final static String ASTROBOA_UTILTYPES_DEFINITION_URI = ASTROBOA_SCHEMA_URI + "/utilTypes";
+	
+	/**
+	 * ASTROBOA utilTypes definition namespace prefix.
+	 */
+	public final static String ASTROBOA_UTILTYPES_DEFINITION_PREFIX = ASTROBOA_PREFIX+ "utilTypes";
 	
 	/**
 	 * Namespace URI for BetaConcept CMS mixin JCR node types.
 	 */
-	public final static String BETA_CONCEPT_CMS_MIX_URI = BETA_CONCEPT_CMS_URI + "/mix";
+	public final static String ASTROBOA_MIX_URI = ASTROBOA_URI + "/mix";
 	/**
 	 * Namespace prefix for BetaConcept CMS mixin JCR node types.
 	 */
-	public final static String BETA_CONCEPT_CMS_MIX_PREFIX = BETA_CONCEPT_CMS_PREFIX + "mix";
+	public final static String ASTROBOA_MIX_PREFIX = ASTROBOA_PREFIX + "mix";
 	
 	/**
 	 * BetaConcept CMS schema webservice namespace URI.
 	 */
-	public final static String BETA_CONCEPT_CMS_WEBSERVICE_URI = BETA_CONCEPT_CMS_SCHEMA_URI + "/webservice";
+	public final static String ASTROBOA_WEBSERVICE_URI = ASTROBOA_SCHEMA_URI + "/webservice";
 
 	/**
 	 * BetaConcept CMS model webservice namespace prefix.
 	 */
-	public final static String BETA_CONCEPT_CMS_WEBSERVICE_PREFIX = BETA_CONCEPT_CMS_PREFIX+ "web";
+	public final static String ASTROBOA_WEBSERVICE_PREFIX = ASTROBOA_PREFIX+ "web";
 
 }

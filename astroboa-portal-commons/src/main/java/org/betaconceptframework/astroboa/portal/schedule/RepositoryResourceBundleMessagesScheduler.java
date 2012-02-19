@@ -144,7 +144,6 @@ public class RepositoryResourceBundleMessagesScheduler {
 
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.addTaxonomyNameEqualsCriterion(taxonomyResourceBundleName);
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			//We do not want to cache query
 			topicCriteria.setCacheable(CacheRegion.NONE);

@@ -113,7 +113,7 @@ public class  EntityAssociationUpdateHelper<T extends CmsRepositoryEntity> exten
 		//Replace values in JCR Node
 		if (isReferrerPropertyNameMultivalue){
 			JcrNodeUtils.addMultiValueProperty(referrerNodeWhichContainsProperty, 
-					referrerPropertyName, SaveMode.UPDATE_ALL, listOfNewIdsToBeAdded, ValueType.String, valueFactory);	
+					referrerPropertyName, SaveMode.UPDATE, listOfNewIdsToBeAdded, ValueType.String, valueFactory);	
 		}
 		else{
 			if (newValuesMapToBeAdded != null && newValuesMapToBeAdded.size() >1){
@@ -122,7 +122,7 @@ public class  EntityAssociationUpdateHelper<T extends CmsRepositoryEntity> exten
 						newValuesMapToBeAdded.toString());
 			}
 
-			JcrNodeUtils.addSimpleProperty(SaveMode.UPDATE_ALL, 
+			JcrNodeUtils.addSimpleProperty(SaveMode.UPDATE, 
 					referrerNodeWhichContainsProperty, referrerPropertyName, 
 					CollectionUtils.isEmpty(listOfNewIdsToBeAdded)? null : listOfNewIdsToBeAdded.get(0), //Expecting at most one value 
 							valueFactory, ValueType.String);

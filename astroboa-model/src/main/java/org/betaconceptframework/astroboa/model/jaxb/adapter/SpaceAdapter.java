@@ -48,7 +48,6 @@ public class SpaceAdapter extends XmlAdapter<SpaceType, Space>{
 			SpaceType spaceType = new SpaceType();
 			spaceType.setId(space.getId());
 			spaceType.setName(space.getName());
-			spaceType.setSystemBuiltinEntity(space.isSystemBuiltinEntity());
 			spaceType.getLocalizedLabels().putAll(space.getLocalizedLabels());
 			spaceType.setOwner(space.getOwner());
 			
@@ -89,7 +88,6 @@ public class SpaceAdapter extends XmlAdapter<SpaceType, Space>{
 
 			space.setId(spaceType.getId());
 			space.setName(spaceType.getName());
-			space.setSystemBuiltinEntity(spaceType.isSystemBuiltinEntity());
 			space.getLocalizedLabels().putAll(spaceType.getLocalizedLabels());
 			space.setOwner(spaceType.getOwner());
 

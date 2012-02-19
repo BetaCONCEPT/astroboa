@@ -85,6 +85,9 @@
 		
 		<xs:attributeGroup ref="tns:commonEntityAttributes"/>
 		
+		<!-- This attribute has been deprecated and will be removed in the future releases.
+		All functionality regarding this feature has been removed but this attribute remains
+		for backwards compatibility reasons-->
 		<xs:attribute name="systemBuiltinEntity" type="xs:boolean" use="optional"/>
 	</xs:complexType>
 
@@ -391,7 +394,11 @@
 
 		<!--
 			Used mainly by global elements which describe content object type
-			definitions
+			definitions.
+			
+			This attribute has been deprecated and will be removed in the future releases.
+			All functionality regarding this feature has been removed but this attribute remains
+			for backwards compatibility reasons.
 		-->
 		<xs:attribute name="systemType" type="xs:boolean" />
 		

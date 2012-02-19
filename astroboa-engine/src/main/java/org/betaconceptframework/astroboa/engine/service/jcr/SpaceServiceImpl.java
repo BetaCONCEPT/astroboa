@@ -47,7 +47,7 @@ class SpaceServiceImpl  implements SpaceService{
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
 	public boolean deleteSpace(String spaceId) {
 		try{
-		return spaceDao.deleteSpace(spaceId);
+			return spaceDao.deleteSpace(spaceId);
 		}
 		catch(CmsException e){
 			throw e;

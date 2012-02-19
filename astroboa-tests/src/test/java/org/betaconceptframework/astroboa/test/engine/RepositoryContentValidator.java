@@ -366,7 +366,8 @@ public class RepositoryContentValidator {
 		compareLocalization(source, target);
 
 		if (compareRootTopics && source.getNumberOfRootTopics() > 0){
-			Assert.assertEquals(source.getNumberOfRootTopics(), target.getNumberOfRootTopics(), "Invalid number of root topics , source: "+ sourceTaxonomyName + " target : "+targetTaxonomyName);
+			Assert.assertEquals(source.getNumberOfRootTopics(), target.getNumberOfRootTopics(), "Invalid number of root topics , source: "+ sourceTaxonomyName 
+					+ "\n "+ source.xml(true)+ " target : "+targetTaxonomyName+ "\n "+ target.xml(true));
 
 			compareTopicList(source.getRootTopics(), target.getRootTopics(), true, false, compareIdentifiers);
 		}
@@ -527,11 +528,7 @@ public class RepositoryContentValidator {
 		if (compareIdentifiers){
 			Assert.assertEquals(sourceEntity.getId(), targetEntity.getId(), "Invalid identifiers, source: "+ sourceSystemName + " target : "+targetSystemName);
 		}
-
-		Assert.assertEquals(sourceEntity.isSystemBuiltinEntity(), targetEntity.isSystemBuiltinEntity(), "Invalid system built in property, source: "+ sourceSystemName + " target : "+targetSystemName);
 	}
-
-
 
 	private <T extends CmsRepositoryEntity> Map<String, T> createMap(List<T> list){
 		Map<String, T> map = new HashMap<String, T>();

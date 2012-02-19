@@ -20,15 +20,15 @@
 package org.betaconceptframework.astroboa.api.service.secure;
 
 
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
+import java.util.concurrent.Future;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.security.AstroboaCredentials;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
@@ -52,7 +52,7 @@ import org.betaconceptframework.astroboa.api.service.ImportService;
 public interface ImportServiceSecure {
 
 	/**
-	 * Same semantics with {@link ImportService#importRepositoryContentFromURL(URL)}
+	 * Same semantics with {@link ImportService#importRepositoryContentFromURI(URI)}
 	 * augmented with the requirement of providing an authentication token.
 	 * 
  	 *<p>
@@ -68,12 +68,13 @@ public interface ImportServiceSecure {
 	 * token.
 	 *</p>
 	 *
-	 * @param contentSource Import source location. 
+	 * @param contentSource Import source location.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return A report about import progress. In local invocations of this method it is possible to follow import progress.
 	 */
-	ImportReport importRepositoryContentFromURL(URL contentSource, String authenticationToken);
+	Future<ImportReport> importRepositoryContentFromURI(URI contentSource, ImportConfiguration configuration, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link ImportService#importRepositoryContentFromString(String)}
@@ -92,12 +93,13 @@ public interface ImportServiceSecure {
 	 * token.
 	 *</p>
 	 * 
-	 * @param contentSource Import source. 
+	 * @param contentSource Import source.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return A report about import progress. In local invocations of this method it is possible to follow import progress.
 	 */
-	ImportReport importRepositoryContentFromString(String contentSource, String authenticationToken);
+	Future<ImportReport> importRepositoryContentFromString(String contentSource, ImportConfiguration configuration, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link ImportService#importContentObject(String)}
@@ -111,20 +113,12 @@ public interface ImportServiceSecure {
 	 *</p>
 	 * 
 	 * @param contentSource Import source. 
-	 * @param version
-	 *            <code>true</code> to create a new version for content
-	 *            object, <code>false</code> otherwise.
-	 * @param updateLastModificationDate <code>true</code> to change last modification date, <code>false</code> otherwise
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
-	 * @param binaryContent Map containing the binary content of one or more properties of type {@link ValueType#Binary}. 
-	 * 	The key of the map must match the value of the 'url' attribute of the property in the XML/JSON representation of the
-	 * content.  
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Imported {@link ContentObject}
 	 */
-	ContentObject importContentObject(String contentSource, boolean version, boolean updateLastModificationDate, boolean save, Map<String, byte[]> binaryContent,  String authenticationToken);
+	ContentObject importContentObject(String contentSource, ImportConfiguration configuration,  String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link ImportService#importRepositoryUser(String)}
@@ -138,13 +132,12 @@ public interface ImportServiceSecure {
 	 *</p>
 	 * 
 	 * @param repositoryUserSource Xml or JSON representation of a {@link RepositoryUser}.
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Newly created or updated RepositoryUser
 	 */
-	RepositoryUser importRepositoryUser(String repositoryUserSource, boolean save, String authenticationToken);
+	RepositoryUser importRepositoryUser(String repositoryUserSource, ImportConfiguration configuration, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link ImportService#importTopic(String)}
@@ -158,13 +151,12 @@ public interface ImportServiceSecure {
 	 *</p>
 	 * 
 	 * @param topicSource Xml or JSON representation of a {@link Topic}.
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Newly created or updated Topic
 	 */
-	Topic importTopic(String topicSource, boolean save, String authenticationToken);
+	Topic importTopic(String topicSource, ImportConfiguration configuration, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link ImportService#importSpace(String)}
@@ -178,13 +170,12 @@ public interface ImportServiceSecure {
 	 *</p>
 	 * 
 	 * @param spaceSource Xml or JSON representation of a {@link Space}.
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Newly created or updated Space
 	 */
-	Space importSpace(String spaceSource, boolean save, String authenticationToken);
+	Space importSpace(String spaceSource, ImportConfiguration configuration, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link ImportService#importTaxonomy(String)}
@@ -198,12 +189,11 @@ public interface ImportServiceSecure {
 	 *</p>
 	 * 
 	 * @param taxonomySource Xml or JSON representation of a {@link Taxonomy}.
-	 * @param save
-	 *            <code>true</code> to save content object, <code>false</code> otherwise.
+	 * @param configuration Import configuration.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return Newly created or updated Taxonomy
 	 */
-	Taxonomy importTaxonomy(String taxonomySource, boolean save, String authenticationToken);
+	Taxonomy importTaxonomy(String taxonomySource, ImportConfiguration configuration, String authenticationToken);
 	
 }

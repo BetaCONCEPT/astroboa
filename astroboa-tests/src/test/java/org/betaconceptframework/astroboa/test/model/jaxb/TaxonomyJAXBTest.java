@@ -21,8 +21,9 @@ package org.betaconceptframework.astroboa.test.model.jaxb;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
@@ -50,7 +51,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		taxonomy.addRootTopic(childTopic1);
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 
 		//Taxonomy has one child topic
 		String json  = taxonomy.json(prettyPrint);
@@ -111,7 +112,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
 
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 
 		//Taxonomy has 2 localized labels
 		String json  = taxonomy.json(prettyPrint);
@@ -182,8 +183,10 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		String xml = null;
 		String json = null;
 		
-		ImportMode importMode = ImportMode.DO_NOT_SAVE;
-		
+		ImportConfiguration configuration = ImportConfiguration.taxonomy()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
+
 		long start = System.currentTimeMillis();
 		
 			try{
@@ -194,8 +197,8 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Taxonomy XML using xml() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Taxonomy taxonomyUnMarshalledFromXML = importDao.importTaxonomy(xml, importMode);
-				logTimeElapsed("Import Taxonomy XML in {}, ImportMode {}, ", start, importMode.toString());
+				Taxonomy taxonomyUnMarshalledFromXML = importDao.importTaxonomy(xml, configuration);
+				logTimeElapsed("Import Taxonomy XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(taxonomyUnMarshalledFromXML.getRootTopics().get(0));
 				
 				repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromXML, true, true);
@@ -205,8 +208,8 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Taxonomy JSON using json() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Taxonomy taxonomyUnMarshalledFromJSON = importDao.importTaxonomy(json, importMode); 
-				logTimeElapsed("Import Taxonomy JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Taxonomy taxonomyUnMarshalledFromJSON = importDao.importTaxonomy(json, configuration); 
+				logTimeElapsed("Import Taxonomy JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(taxonomyUnMarshalledFromJSON.getRootTopics().get(0));
 				
 				repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromJSON, true,true);
@@ -221,8 +224,8 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Taxonomy JSON using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Taxonomy taxonomyUnMarshalledFromJSONService = importDao.importTaxonomy(json, importMode); 
-				logTimeElapsed("Import Taxonomy JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Taxonomy taxonomyUnMarshalledFromJSONService = importDao.importTaxonomy(json, configuration); 
+				logTimeElapsed("Import Taxonomy JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(taxonomyUnMarshalledFromJSONService.getRootTopics().get(0));
 
 				
@@ -236,8 +239,8 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Taxonomy XML using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Taxonomy taxonomyUnMarshalledFromXMLService = importDao.importTaxonomy(xml, importMode); 
-				logTimeElapsed("Import Taxonomy XML in {}, ImportMode {}, ", start, importMode.toString());
+				Taxonomy taxonomyUnMarshalledFromXMLService = importDao.importTaxonomy(xml, configuration); 
+				logTimeElapsed("Import Taxonomy XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(taxonomyUnMarshalledFromXMLService.getRootTopics().get(0));
 				
 				repositoryContentValidator.compareTaxonomies(taxonomy, taxonomyUnMarshalledFromXMLService, true, true);
@@ -265,7 +268,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		taxonomy.addLocalizedLabel("en", "taxonomyTestXmlLang");
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		String xsiNamesplaceDeclaration = "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
 		String xmlNamespaceDeclaration = "xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"";
@@ -306,7 +309,7 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		taxonomy.addLocalizedLabel("en", "taxonomyTestNumberOfChildren");
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		String xmlFromApi = taxonomy.xml(prettyPrint);
 		String xmlFromService = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);

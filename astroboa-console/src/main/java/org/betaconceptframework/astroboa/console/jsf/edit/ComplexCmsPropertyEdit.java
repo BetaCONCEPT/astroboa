@@ -532,7 +532,7 @@ public class ComplexCmsPropertyEdit extends AbstractUIBean {
 
 		if (CollectionUtils.isNotEmpty(availablePropertyPrototypes)){
 			for (ComplexCmsPropertyDefinition propertyPrototype : availablePropertyPrototypes){
-				if (!propertyPrototype.isSystemTypeDefinition() && !propertyPrototype.isObsolete() && isUserViewablePropertyPrototype(propertyPrototype.getName())){
+				if (!propertyPrototype.isObsolete() && isUserViewablePropertyPrototype(propertyPrototype.getName())){
 					String localizedLabelForLocale = propertyPrototype.getDisplayName().getLocalizedLabelForLocale(locale);
 					if (StringUtils.isBlank(localizedLabelForLocale)){
 						localizedLabelForLocale = propertyPrototype.getName(); 

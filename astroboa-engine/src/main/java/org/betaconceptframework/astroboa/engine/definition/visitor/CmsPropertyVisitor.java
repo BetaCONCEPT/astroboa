@@ -143,7 +143,6 @@ public class CmsPropertyVisitor  implements XSVisitor{
 	private String calendarPattern;
 	private String labelElementPath;
 	
-	private boolean systemType;
 	private boolean global;
 
 	private Map<String, Localization> definitionValueRange;
@@ -289,7 +288,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				//Create definition
 				definition = new ComplexCmsPropertyDefinitionImpl(generatedQNameForDefinition(), description, displayName,	obsolete, multiple, mandatory, order,restrictReadToRoles, 
 							restrictWriteToRoles, parentDefinition, complexPropertyDefinitionHelper, definitionFileURI, 
-							labelElementPath, systemType, global, qNameOfParentDefinitionWithTheSameType, complexPropertyTypeName, complexDefinitionContainsCommonAttributes);
+							labelElementPath, global, qNameOfParentDefinitionWithTheSameType, complexPropertyTypeName, complexDefinitionContainsCommonAttributes);
 
 				logger.debug("Created definition for complex type '{}' which {}", 
 						new Object[]{name, 
@@ -330,7 +329,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 				contentTypePropertyDefinitionHelper3.setChildPropertyDefinitions(childPropertyDefinitions);
 
 				definition = new ContentObjectTypeDefinitionImpl(generatedQNameForDefinition(), description, displayName,	
-						contentTypePropertyDefinitionHelper3,definitionFileURI, systemType, superTypes, labelElementPath);
+						contentTypePropertyDefinitionHelper3,definitionFileURI, superTypes, labelElementPath);
 				
 				logger.debug("Created definition for content type '{}'",name);
 				
@@ -957,10 +956,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 				//BuiltIn attributes must be known a priori in order to map to ContentObjectPropertyDefinition
 				if (valueToBeSet != null){
-					if (attribute.equals(CmsDefinitionItem.systemType)){
-						systemType = Boolean.valueOf(valueToBeSet);
-					}
-					else if (attribute.equals(CmsDefinitionItem.obsolete)){
+					if (attribute.equals(CmsDefinitionItem.obsolete)){
 						if (ValueType.ContentType == valueType){
 							//Complex Type cannot be obsolete. Issue a warning if any such value has been set
 							//Regardless if actual value is false

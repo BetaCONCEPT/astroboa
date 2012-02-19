@@ -23,7 +23,6 @@ package org.betaconceptframework.astroboa.api.model;
 import java.util.List;
 import java.util.Locale;
 
-import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.MultipleOccurenceException;

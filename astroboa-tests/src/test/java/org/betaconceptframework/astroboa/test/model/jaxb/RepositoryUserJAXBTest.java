@@ -21,7 +21,8 @@ package org.betaconceptframework.astroboa.test.model.jaxb;
 import javax.xml.bind.JAXBException;
 
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
@@ -58,14 +59,19 @@ public class RepositoryUserJAXBTest extends AbstractRepositoryTest{
 		
 		try{
 			
+			ImportConfiguration configuration = ImportConfiguration.repositoryUser()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.build();
+
+			
 			//Create a new instance for the same user using importService and its xml
-			RepositoryUser repositoryUserFromXml = importDao.importRepositoryUser(xml, ImportMode.DO_NOT_SAVE);
+			RepositoryUser repositoryUserFromXml = importDao.importRepositoryUser(xml, configuration);
 			
 			//Compare two instances
 			repositoryContentValidator.compareRepositoryUsers(repUser, repositoryUserFromXml, true, true);
 			
 			//Create a new instance for the same user using importService and its xml
-			RepositoryUser repositoryUserFromJson = importDao.importRepositoryUser(json, ImportMode.DO_NOT_SAVE);
+			RepositoryUser repositoryUserFromJson = importDao.importRepositoryUser(json, configuration);
 			
 			//Compare two instances
 			repositoryContentValidator.compareRepositoryUsers(repUser, repositoryUserFromJson, true, true);

@@ -19,14 +19,14 @@
 package org.betaconceptframework.astroboa.engine.jcr.io;
 
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
 
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
@@ -91,7 +91,7 @@ public class ImportBean extends JcrDaoSupport{
 	private BinaryChannelUtils binaryChannelUtils;
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class, propagation=Propagation.REQUIRES_NEW)
-	public void importRepositoryContentFromURL(URL contentSource, AstroboaClientContext clientContext, ImportReport importReport){
+	public void importRepositoryContentFromURI(URI contentSource, AstroboaClientContext clientContext, ImportReport importReport, ImportConfiguration importConfiguration){
 
 		long start = System.currentTimeMillis();
 		
@@ -115,7 +115,7 @@ public class ImportBean extends JcrDaoSupport{
 					throw new Exception("Could not locate xml content source in URL "+contentSource.toString());
 				}
 				
-				performImport(importReport, streamSource, false, ImportMode.SAVE_ENTITY_TREE, Repository.class, false, false, getSession(), null);
+				performImport(importReport, streamSource, false, Repository.class, getSession(), importConfiguration);
 			}
 
 		}
@@ -139,8 +139,7 @@ public class ImportBean extends JcrDaoSupport{
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class, propagation=Propagation.REQUIRED)
 	public <T> T importContentFromString(String contentSource, ImportReport importReport, 
-			ImportMode importMode, Class<T> classToBeImported, AstroboaClientContext clientContext, 
-			boolean version, boolean updateLastModificationDate, Map<String, byte[]> binaryContent){
+			Class<T> classToBeImported, AstroboaClientContext clientContext,ImportConfiguration importConfiguration){
 
 		long start = System.currentTimeMillis();
 		
@@ -163,7 +162,7 @@ public class ImportBean extends JcrDaoSupport{
 					throw new Exception("Content source is invalid "+ contentSource);
 				}
 				
-				return performImport(importReport, xml, ! sourceIsXML, importMode, classToBeImported, version, updateLastModificationDate, getSession(), binaryContent);
+				return performImport(importReport, xml, ! sourceIsXML, classToBeImported, getSession(), importConfiguration);
 			}
 		}
 		catch(CmsException e){
@@ -183,7 +182,7 @@ public class ImportBean extends JcrDaoSupport{
 	}
 
 	private <T> T performImport(ImportReport importReport, InputStream source, boolean jsonSource,  
-			ImportMode importMode, Class<T> classToBeImported, boolean version, boolean updateLastModificationDate, Session session, Map<String, byte[]> binaryContent) {
+			Class<T> classToBeImported, Session session, ImportConfiguration importConfiguration) {
 		
 		Deserializer deserializer = new Deserializer();
 		deserializer.setContentService(contentService);
@@ -198,16 +197,13 @@ public class ImportBean extends JcrDaoSupport{
 		deserializer.setImportReport(importReport);
 		deserializer.setBinaryChannelUtils(binaryChannelUtils);
 		
-		return (T) deserializer.deserializeContent(source, jsonSource, importMode, classToBeImported, 
-				version, updateLastModificationDate,binaryContent);
+		return (T) deserializer.deserializeContent(source, jsonSource, classToBeImported,importConfiguration);
 		
 	}
 
 	private void completeImport(ImportReport importReport, long start,
 			InputStream xml) {
 
-		((ImportReportImpl)importReport).setFinished(true);
-		
 		logger.debug("Imported {} entities (" +
 				"{} repository users, {} taxonomies, " +
 				"{} spaces, {} contentObjects"+

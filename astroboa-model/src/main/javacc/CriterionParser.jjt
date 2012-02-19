@@ -150,7 +150,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 				
@@ -167,7 +166,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 
@@ -181,7 +179,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 

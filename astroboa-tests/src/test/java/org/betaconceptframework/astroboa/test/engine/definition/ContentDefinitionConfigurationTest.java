@@ -331,9 +331,9 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		Assert.assertTrue( ((DoublePropertyDefinition)doubleEnumDefinition).isValueValid(3.4), "doubleEnum Definition does not have value '3.4'");
 
 
-		ContentObject testContentObject = createContentObjectForType(testContentType, getSystemUser(), "testEnumerationsObject"+testContentType, false);
+		ContentObject testContentObject = createContentObjectForType(testContentType, getSystemUser(), "testEnumerationsObject"+testContentType);
 		testContentObject = contentService.save(testContentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(testContentObject);
+		markObjectForRemoval(testContentObject);
 		
 		StringProperty stringProperty = (StringProperty) testContentObject.getCmsProperty("stringEnum");
 		stringProperty.addSimpleTypeValue("GREEN");

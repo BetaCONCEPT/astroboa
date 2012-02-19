@@ -364,7 +364,7 @@ class JackrabbitNodeTypeDefinitionDao extends JcrDaoSupport implements CmsNodeTy
 
 	private boolean isAstroboaUriRegistered(NamespaceRegistry namespaceRegistry) throws RepositoryException {
 		try {
-			namespaceRegistry.getURI(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX);
+			namespaceRegistry.getURI(BetaConceptNamespaceConstants.ASTROBOA_PREFIX);
 		} catch (NamespaceException e) {
 			return false;
 		}

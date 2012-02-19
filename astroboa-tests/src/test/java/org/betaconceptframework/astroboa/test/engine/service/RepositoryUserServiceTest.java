@@ -67,7 +67,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 				user);
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Create space
 		Space space = JAXBTestUtils.createSpace("test-user-delete-and-replace-with-system-space", 
@@ -75,10 +75,10 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 				user);
 		space.setParent(getOrganizationSpace());
 		space = spaceService.save(space);
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 		
 		//Create content object
-		ContentObject contentObject = createContentObject(user, "test-user-delete-and-replace-with-system-contentObject", false);
+		ContentObject contentObject = createContentObject(user, "test-user-delete-and-replace-with-system-contentObject");
 		contentObject = contentService.save(contentObject, false, true, null);
 	
 		//Delete user
@@ -159,7 +159,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 				user);
 
 		topicInSubjectTaxonomy = topicService.save(topicInSubjectTaxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(topicInSubjectTaxonomy);
+		markTopicForRemoval(topicInSubjectTaxonomy);
 
 		//Create topic which will be saved under user folskonomy
 		Topic topicInFolksonomy = JAXBTestUtils.createTopic("test-user-delete-all-topic-folskonomy", 
@@ -175,7 +175,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 				user);
 		spaceInOrganizationSpace.setParent(getOrganizationSpace());
 		spaceInOrganizationSpace = spaceService.save(spaceInOrganizationSpace);
-		addEntityToBeDeletedAfterTestIsFinished(spaceInOrganizationSpace);
+		markSpaceForRemoval(spaceInOrganizationSpace);
 
 		//Create space which will be saved under the User Space
 		Space spaceInUserSpace = JAXBTestUtils.createSpace("test-user-delete-all-user-space", 
@@ -186,7 +186,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		spaceInUserSpace = spaceService.save(spaceInUserSpace);
 
 		//Create content object
-		ContentObject contentObject = createContentObject(user, "test-user-delete-all-contentObject", false);
+		ContentObject contentObject = createContentObject(user, "test-user-delete-all-contentObject");
 		contentObject = contentService.save(contentObject, false, true, null);
 	
 		//Delete user

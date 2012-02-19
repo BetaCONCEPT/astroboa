@@ -20,8 +20,12 @@
 package org.betaconceptframework.astroboa.engine.service.jcr;
 
 
+import java.util.concurrent.Future;
+
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.service.SerializationService;
 import org.betaconceptframework.astroboa.engine.jcr.dao.SerializationDao;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
@@ -40,9 +44,9 @@ class SerializationServiceImpl  implements SerializationService {
 	private SerializationDao serializationDao;
 
 	@Override
-	public SerializationReport serializeObjects(boolean serializeBinaryContent) {
+	public Future<SerializationReport> serializeObjects(ContentObjectCriteria objectCriteria, SerializationConfiguration serializationConfiguration) {
 		try{ 
-			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.CONTENT_OBJECT, serializeBinaryContent);
+			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.OBJECT, serializationConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -53,9 +57,9 @@ class SerializationServiceImpl  implements SerializationService {
 	}
 
 	@Override
-	public SerializationReport serializeRepository(boolean serializeBinaryContent) {
+	public Future<SerializationReport> serializeRepository(SerializationConfiguration serializationConfiguration) {
 		try{ 
-			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.REPOSITORY, serializeBinaryContent);
+			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.REPOSITORY, serializationConfiguration);
 		}
 		catch(CmsException e){
 			throw e;
@@ -67,9 +71,9 @@ class SerializationServiceImpl  implements SerializationService {
 	}
 
 	@Override
-	public SerializationReport serializeOrganizationSpace() {
+	public Future<SerializationReport> serializeOrganizationSpace() {
 		try{ 
-			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.ORGANIZATION_SPACE, false);
+			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.ORGANIZATION_SPACE, SerializationConfiguration.space().build());
 		}
 		catch(CmsException e){
 			throw e;
@@ -79,9 +83,9 @@ class SerializationServiceImpl  implements SerializationService {
 		}	}
 
 	@Override
-	public SerializationReport serializeRepositoryUsers() {
+	public Future<SerializationReport> serializeRepositoryUsers() {
 		try{ 
-			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.REPOSITORY_USER, false);
+			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.REPOSITORY_USER, SerializationConfiguration.repositoryUser().build());
 		}
 		catch(CmsException e){
 			throw e;
@@ -91,9 +95,9 @@ class SerializationServiceImpl  implements SerializationService {
 		}	}
 
 	@Override
-	public SerializationReport serializeTaxonomies() {
+	public Future<SerializationReport> serializeTaxonomies() {
 		try{ 
-			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.TAXONOMY, false);
+			return serializationDao.serializeAllInstancesOfEntity(CmsEntityType.TAXONOMY, SerializationConfiguration.taxonomy().build());
 		}
 		catch(CmsException e){
 			throw e;

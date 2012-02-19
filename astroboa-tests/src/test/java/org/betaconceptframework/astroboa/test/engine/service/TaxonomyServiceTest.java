@@ -33,11 +33,12 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.engine.jcr.io.Deserializer;
 import org.betaconceptframework.astroboa.engine.jcr.io.ImportBean;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
@@ -57,6 +58,61 @@ import org.testng.annotations.Test;
  * 
  */
 public class TaxonomyServiceTest extends AbstractRepositoryTest{
+
+	@Test
+	/*
+	 * Test for http://jira.betaconceptframework.org/browse/ASTROBOA-156
+	 */
+	public void testUpdateTaxonomyUsingOnlyItsIdentifier(){
+
+		String taxonomyName = "taxonomyUpdateWithoutName";
+		
+		Taxonomy taxonomy = JAXBTestUtils.createTaxonomy(taxonomyName, 
+				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
+		
+		taxonomy = taxonomyService.save(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
+		
+		//Remove Name
+		taxonomy.setName(null);
+		
+		//Export to XML and json
+		String xml = taxonomy.xml(prettyPrint);
+		String json = taxonomy.json(prettyPrint);
+		
+		//Save the instance
+		taxonomy = taxonomyService.save(taxonomy);
+		
+		//Assert update operation
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+
+		taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
+		Assert.assertNotNull(taxonomy, "Taxonomy '"+ taxonomyName +"' was not found");
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+		
+		//Save the XML
+		ImportConfiguration importConfiguration = ImportConfiguration.taxonomy().persist(PersistMode.PERSIST_MAIN_ENTITY).build();
+		
+		taxonomy = importService.importTaxonomy(xml, importConfiguration);
+		
+		//Assert update operation
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+
+		taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
+		Assert.assertNotNull(taxonomy, "Taxonomy '"+ taxonomyName +"' was not found");
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+
+		//Save the JSON
+		taxonomy = importService.importTaxonomy(json, importConfiguration);
+		
+		//Assert update operation
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+
+		taxonomy = taxonomyService.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
+		Assert.assertNotNull(taxonomy, "Taxonomy '"+ taxonomyName +"' was not found");
+		Assert.assertEquals(taxonomy.getName(), taxonomyName, "Taxonomy Name was changed");
+
+	}
 
 	@Test
 	public void testGetTaxonomyAsTaxonomyOutcome() throws Throwable{
@@ -83,7 +139,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		
 		taxonomy = taxonomyService.save(taxonomy);
 		
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		Taxonomy taxonomyById = taxonomyService.getTaxonomy(taxonomy.getId(), ResourceRepresentationType.TAXONOMY_INSTANCE,FetchLevel.ENTITY, false);
 		
@@ -118,7 +174,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		//Change case
 		taxonomy.setName("myTaxonomy");
@@ -141,7 +197,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		
 		//Now provide invalid system name
@@ -172,7 +228,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 	
 		newTaxonomy = taxonomyService.save(newTaxonomy);
 		
-		addEntityToBeDeletedAfterTestIsFinished(newTaxonomy);
+		markTaxonomyForRemoval(newTaxonomy);
 		
 		CmsOutcome<Taxonomy> outcome = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false);
 		
@@ -199,7 +255,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		newTaxonomy.clearLocalizedLabels();
 		newTaxonomy = taxonomyService.save(newTaxonomy);
 		
-		addEntityToBeDeletedAfterTestIsFinished(newTaxonomy);
+		markTaxonomyForRemoval(newTaxonomy);
 		
 		String allTaxonomies = null;
 		
@@ -261,6 +317,10 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 
 		try{
 			
+			ImportConfiguration configuration = ImportConfiguration.taxonomy()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.build();
+
 			for (ResourceRepresentationType<String> output : outputs){
 				
 				Taxonomy subjectTaxonomy = taxonomyService.getTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
@@ -277,7 +337,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				}
 
 				//Create instance from Service export
-				Taxonomy taxonomyFromService = importDao.importTaxonomy(taxonomyExportFromService, ImportMode.DO_NOT_SAVE);
+				Taxonomy taxonomyFromService = importDao.importTaxonomy(taxonomyExportFromService, configuration);
 				
 				//Compare two taxonomies
 				repositoryContentValidator.compareTaxonomies(subjectTaxonomy, taxonomyFromService, true, false);
@@ -295,7 +355,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				}
 
 				//Create instance from Service export
-				taxonomyFromService = importDao.importTaxonomy(taxonomyExportFromService, ImportMode.DO_NOT_SAVE); 
+				taxonomyFromService = importDao.importTaxonomy(taxonomyExportFromService, configuration); 
 
 				//Compare two taxonomies
 				repositoryContentValidator.compareTaxonomies(subjectTaxonomy, taxonomyFromService, true, true);
@@ -340,7 +400,11 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		
 		logger.debug("Importing XML {}",newTaxonomy.xml(prettyPrint));
 		
-		Taxonomy importedTaxonomy = importDao.importTaxonomy(newTaxonomy.xml(prettyPrint), ImportMode.SAVE_ENTITY_TREE);
+		ImportConfiguration configuration = ImportConfiguration.taxonomy()
+				.persist(PersistMode.PERSIST_ENTITY_TREE)
+				.build();
+
+		Taxonomy importedTaxonomy = importDao.importTaxonomy(newTaxonomy.xml(prettyPrint), configuration);
 
 		logger.debug("XML of imported taxonomy {}", importedTaxonomy.xml(prettyPrint));
 		
@@ -351,7 +415,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		
 		checkTopicOwner(importedTaxonomy.getRootTopics(), systemUser);
 
-		addEntityToBeDeletedAfterTestIsFinished(importedTaxonomy);
+		markTaxonomyForRemoval(importedTaxonomy);
 
 	}
 	
@@ -375,7 +439,11 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		Taxonomy newTaxonomy = JAXBTestUtils.createTaxonomy(Taxonomy.SUBJECT_TAXONOMY_NAME, 
 				cmsRepositoryEntityFactory.newTaxonomy());
 
-		Taxonomy importedTaxonomy = importDao.importTaxonomy(newTaxonomy.xml(prettyPrint), ImportMode.SAVE_ENTITY);
+		ImportConfiguration configuration = ImportConfiguration.taxonomy()
+				.persist(PersistMode.PERSIST_MAIN_ENTITY)
+				.build();
+
+		Taxonomy importedTaxonomy = importDao.importTaxonomy(newTaxonomy.xml(prettyPrint), configuration);
 
 		validateImportedTaxonomy(importedTaxonomy, false);
 
@@ -385,7 +453,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 
 			TestLogPolicy.setLevelForLogger(Level.FATAL, ImportBean.class.getName());
 			TestLogPolicy.setLevelForLogger(Level.FATAL, Deserializer.class.getName());
-			importedTaxonomy = importDao.importTaxonomy(importedTaxonomy.xml(prettyPrint), ImportMode.SAVE_ENTITY);
+			importedTaxonomy = importDao.importTaxonomy(importedTaxonomy.xml(prettyPrint), configuration);
 			TestLogPolicy.setDefaultLevelForLogger(ImportBean.class.getName());
 			TestLogPolicy.setDefaultLevelForLogger(Deserializer.class.getName());
 			
@@ -434,21 +502,16 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				cmsRepositoryEntityFactory.newTaxonomy());
 		aNewTaxonomy = taxonomyService.save(aNewTaxonomy);
 		
-		try {
-			boolean isTaxonomyDeleted = taxonomyService
-					.deleteTaxonomyTree(aNewTaxonomy.getId());
+		boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(aNewTaxonomy.getId());
 
-			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(
+		Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(
 					aNewTaxonomy.getName(),
 					ResourceRepresentationType.TAXONOMY_INSTANCE,
 					FetchLevel.ENTITY, false);
-			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted
-					&& (retrievedTaxonomy == null);
-			Assert.assertTrue(taxonomySuccessfullyDeleted);
-		} catch (CmsException e) {
-			String errorMsg = "Could not find taxonomy with id or name "+ aNewTaxonomy.getId() + " in order to delete it";
-			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
-		}
+		
+		boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null);
+		Assert.assertTrue(taxonomySuccessfullyDeleted);
+		
 		
 		// create another new taxonomy & delete it with using its name
 		// also verify that taxonomy is deleted
@@ -457,33 +520,24 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 				cmsRepositoryEntityFactory.newTaxonomy());
 		anotherNewTaxonomy = taxonomyService.save(anotherNewTaxonomy);
 		
-		try {
-			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
+		isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
 		
-			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
+		retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
 					ResourceRepresentationType.TAXONOMY_INSTANCE, 
 					FetchLevel.ENTITY, false);
-			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null); 
-			Assert.assertTrue(taxonomySuccessfullyDeleted);
-		} catch (CmsException e) {
-			String errorMsg = "Could not find taxonomy with id or name "+ anotherNewTaxonomy.getName() + " in order to delete it";
-			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
-		}
+		taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null); 
+		Assert.assertTrue(taxonomySuccessfullyDeleted);
 		
 		// try to delete an already deleted taxonomy
-		try {
-			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
-		
-			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
+		retrievedTaxonomy = taxonomyService.getTaxonomy(anotherNewTaxonomy.getName(), 
 					ResourceRepresentationType.TAXONOMY_INSTANCE, 
 					FetchLevel.ENTITY, false);
-			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null); 
-			Assert.assertTrue(taxonomySuccessfullyDeleted);
-		} catch (CmsException e) {
-			String errorMsg = "Could not find taxonomy with id or name "+ anotherNewTaxonomy.getName() + " in order to delete it";
-			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
-		}
+			
+		Assert.assertNull(retrievedTaxonomy, "Taxonomy "+anotherNewTaxonomy.getName()+ " was not deleted");
+			
+		isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(anotherNewTaxonomy.getName());
 		
+		Assert.assertFalse(isTaxonomyDeleted, "Taxonomy "+anotherNewTaxonomy.getName()+ " was not deleted");
 		
 		// create a taxonomy, add a topic, and then delete the taxonomy by its name
 		// verify that both the taxonomy and topic are deleted 
@@ -497,27 +551,17 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		aTopic.setTaxonomy(taxonomyWithTopic);
 		aTopic = topicService.save(aTopic);
 		
-		try {
-			boolean isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(taxonomyWithTopic.getName());
+		isTaxonomyDeleted = taxonomyService.deleteTaxonomyTree(taxonomyWithTopic.getName());
 		
-			Taxonomy retrievedTaxonomy = taxonomyService.getTaxonomy(taxonomyWithTopic.getName(), 
+		retrievedTaxonomy = taxonomyService.getTaxonomy(taxonomyWithTopic.getName(), 
 					ResourceRepresentationType.TAXONOMY_INSTANCE, 
 					FetchLevel.ENTITY, false);
 			
-			Topic retrievedTopic = topicService.getTopic(aTopic.getName(), ResourceRepresentationType.TOPIC_INSTANCE,
+		Topic retrievedTopic = topicService.getTopic(aTopic.getName(), ResourceRepresentationType.TOPIC_INSTANCE,
 					FetchLevel.ENTITY, false);
 			
-			boolean taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null) && (retrievedTopic == null); 
-			Assert.assertTrue(taxonomySuccessfullyDeleted);
-		} catch (CmsException e) {			
-			String errorMsg = "Could not find taxonomy with id or name "+ taxonomyWithTopic.getName() + " in order to delete it";
-			Assert.assertTrue(e.getMessage() != null && e.getMessage().contains(errorMsg));
-		}
-		
-		
-		
-		
-		
+		taxonomySuccessfullyDeleted = isTaxonomyDeleted && (retrievedTaxonomy == null) && (retrievedTopic == null); 
+		Assert.assertTrue(taxonomySuccessfullyDeleted);
 	}
 
 	private void checkExceptionIsThrownIfTaxonomyToBeDeletedIsAFolksonomy() {
@@ -606,7 +650,7 @@ public class TaxonomyServiceTest extends AbstractRepositoryTest{
 		for (File taxonomyXML : taxonomyXmls){
 			
 			Taxonomy taxonomy = taxonomyService.save(FileUtils.readFileToString(taxonomyXML, "UTF-8"));
-			addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+			markTaxonomyForRemoval(taxonomy);
 		}
 		
 	}

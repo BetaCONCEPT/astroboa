@@ -263,7 +263,6 @@ public class ResourceApiURLUtils {
 		
 		//Add output. XML is considered default value and therefore it is not added
 		if (resourceRepresentationType != null && ! resourceRepresentationType.equals(ResourceRepresentationType.XML)){
-			
 			//Special case. if entity is a definition and output is XSD then do not add this parameter as well
 			// since in this case, the schema filename is provided in the URL
 			if (! CmsDefinition.class.isAssignableFrom(type) || ! resourceRepresentationType.equals(ResourceRepresentationType.XSD)){
@@ -339,7 +338,7 @@ public class ResourceApiURLUtils {
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
 		// http://server/resource-api/
-		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
+		// <reposiotry-id>/objects/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
 		contentApiURLBuilder.append(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH);

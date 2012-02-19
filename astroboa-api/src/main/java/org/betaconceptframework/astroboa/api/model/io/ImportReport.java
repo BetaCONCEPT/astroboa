@@ -71,10 +71,4 @@ public interface ImportReport {
 	 */
 	List<String> getErrors();
 	
-	/**
-	 * Flag indicated whether import has finished or not.
-	 * 
-	 * @return <code>true</code> if import has finished, <code>false</code> otherwise
-	 */
-	boolean isImportFinished();
 }
