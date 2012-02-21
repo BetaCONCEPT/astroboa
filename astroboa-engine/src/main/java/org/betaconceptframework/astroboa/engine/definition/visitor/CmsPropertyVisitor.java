@@ -1215,7 +1215,7 @@ public class CmsPropertyVisitor  implements XSVisitor{
           		
           		Thus, in the context of this method, if the restriction whose facets we want to load 
           		is the 'language' type restriction, there is no point in processing its facets at all. 
-          		We know apriori that there is only one facet, the pattern and it has a specific value.
+          		We know apriori that there is only one facet with a known pattern.
 			 */
 			
 			return ;
