@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               jaxb:version="2.0">
+  <jaxb:bindings schemaLocation="astroboa-conf.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.betaconceptframework.astroboa.configuration"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+</jaxb:bindings>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -40,7 +40,6 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
-import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
@@ -75,10 +74,10 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	@Test 
 	public void testPropertyExtractor() throws Exception{
 		
-		ContentObject object = createContentObjectAndPopulateAllProperties(getSystemUser(), "testPropertyExtractor", false);
+		ContentObject object = createContentObjectAndPopulateAllProperties(getSystemUser(), "testPropertyExtractor");
 		
 		object = contentService.save(object, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(object);
+		markObjectForRemoval(object);
 		
 		object = contentService.getContentObject(object.getId(), ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.FULL, CacheRegion.NONE, null, false);
 		
@@ -145,7 +144,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	@Test
 	public void testPermanentPath(){
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "testPermanentPath", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "testPermanentPath");
 		
 		((StringProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultiple.simpleString")).setSimpleTypeValue("allPropertyTypeContainerMultipleSimpleString");
 		((StringProperty)contentObject.getCmsProperty("allPropertyTypeContainerMultiple[1].simpleString")).setSimpleTypeValue("allPropertyTypeContainerMultipleSecondSimpleString");
@@ -156,7 +155,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		((StringProperty)contentObject.getCmsProperty("allPropertyTypeContainer.allPropertyTypeContainer.commentMultiple[2].body")).setSimpleTypeValue("allPropertyTypeContainerThirdCommentMultipleString");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		assertVariousPathsForProperty(contentObject, "allPropertyTypeContainerMultiple", "simpleString", 3);
 		assertVariousPathsForProperty(contentObject, "allPropertyTypeContainer.allPropertyTypeContainer.commentMultiple", "body", 3);
@@ -215,7 +214,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	public void testValueExistsForProperty(){
 
 		//Check unsaved content object
-		ContentObject contentObject = createContentObject(getSystemUser(), "testValueExistsForProperty", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "testValueExistsForProperty");
 
 		assertValueExistenceInVairousCases(contentObject);
 		
@@ -661,11 +660,11 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 
 		systemName = ( systemName != null ? systemName.replaceAll("\\.", "") : "");
 		
-		ContentObject contentObject = createContentObject(systemUser, systemName, false);
+		ContentObject contentObject = createContentObject(systemUser,  systemName);
 
 		contentObject = contentService.save(contentObject, false, true, null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		return contentObject;
 	}
@@ -967,7 +966,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	
 	private <T> void assertSaveLazyLoadAndRemoveSimpleCmsProperty(String propertyPath, List propertyValues, Class<T> propertyValueClass, List newValues, boolean multiple, RepositoryUser systemUser){
 
-		ContentObject contentObject = createContentObject(systemUser, "saveLazyLoadAndRemoveSimpleCmsProperty"+propertyPath.replaceAll("\\.", ""), true);
+		ContentObject contentObject = createContentObject(systemUser,  "saveLazyLoadAndRemoveSimpleCmsProperty"+propertyPath.replaceAll("\\.", ""));
 
 		//Add values
 		if (CollectionUtils.isNotEmpty(propertyValues)){
@@ -978,7 +977,7 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		
 		contentObject = contentService.save(contentObject, false, true ,null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		
 		assertPropertyHasTheCorrectValues(propertyPath, contentObject, propertyValues, multiple);
@@ -1038,14 +1037,14 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	private <T> void assertSaveLazyLoadAndRemoveComplexCmsProperty(String propertyPath, boolean multiple, RepositoryUser systemUser){
 
 		ContentObject contentObject = createContentObject(systemUser, "saveLazyLoadAndRemoveComplexCmsProperty"+
-				propertyPath.replaceAll("[^"+CmsConstants.SYSTEM_NAME_ACCEPTABLE_CHARACTERS+"]", "-"), true);
+				propertyPath.replaceAll("[^"+CmsConstants.SYSTEM_NAME_ACCEPTABLE_CHARACTERS+"]", "-"));
 
 		//Create property
 		contentObject.getCmsProperty(propertyPath);
 		
 		contentObject = contentService.save(contentObject, false, true, null);
 		
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		if (multiple)
 		{
@@ -1121,13 +1120,13 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser,"testRemovalOfACmsProperty", true);
+		ContentObject contentObject = createContentObject(systemUser, "testRemovalOfACmsProperty");
 
 		//Add complex cms property
 		((CalendarProperty)contentObject.getCmsProperty("webPublication.webPublicationStartDate")).setSimpleTypeValue(Calendar.getInstance());
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 	
 		Assert.assertNotNull(contentObject.getCmsProperty("webPublication.webPublicationStartDate"), "webPublication.webPublicationStartDate was not saved.");
@@ -1225,10 +1224,10 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 	{
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser,"testSwapComplexCmsProperty", true);
+		ContentObject contentObject = createContentObject(systemUser, "testSwapComplexCmsProperty");
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		Assert.assertFalse(contentObject.getComplexCmsRootProperty().swapChildPropertyValues("test[0]", 0, 1), "Method swap child property values retuned true for property test[0]");
 		Assert.assertFalse(contentObject.getComplexCmsRootProperty().swapChildPropertyValues("test[]", 0, 1), "Method swap child property values retuned true for property test[]");
@@ -1346,12 +1345,12 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 
 		ContentObject referencedContentObject = retrieveSystemPersonObject();
 
-		ContentObject contentObject = createContentObject(systemUser,"testRemovalOfAMultipleRecursiveComplexCmsProperty", true);
+		ContentObject contentObject = createContentObject(systemUser, "testRemovalOfAMultipleRecursiveComplexCmsProperty");
 
 		((StringProperty)contentObject.getCmsProperty("departments.department[0].name")).setSimpleTypeValue("Test department");
 		
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		String propertyPath = "departments.department[0].jobPositions.jobPosition";
 		
@@ -1402,7 +1401,6 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		ContentObjectCriteria coCriteria = CmsCriteriaFactory.newContentObjectCriteria("personObject");
 		
 		coCriteria.addSystemNameEqualsCriterion("SYSTEM");
-		coCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		coCriteria.doNotCacheResults();
 		coCriteria.setOffsetAndLimit(0, 1);
 		

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -33,11 +33,11 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 public final class SchemaUtils {
 
 	public static String buildSchemaLocationForAstroboaModelSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, false);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION, false);
 	}
 
 	public static String buildSchemaLocationForAstroboaApiSchemaAccordingToActiveClient(){
-		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, false);
+		return buildSchemaLocationAccordingToActiveClient(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION, false);
 	}
 
 	public static String buildSchemaLocationAccordingToActiveClient(String schemaFileName, boolean includeOutputType){

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -57,11 +57,11 @@ public final class LongPropertyDefinitionImpl extends SimpleCmsPropertyDefinitio
 			boolean mandatory,Integer order,  String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			Long defaultValue, String repositoryObjectRestriction, Map<Long, Localization> valueRange, 
-			Long minValue, boolean minValueExclusive, Long maxValue,  boolean maxValueExclusive) {
+			Long minValue, boolean minValueExclusive, Long maxValue,  boolean maxValueExclusive,boolean representsAnXmlAttribute) {
 		
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				defaultValue, repositoryObjectRestriction,valueRange);
+				defaultValue, repositoryObjectRestriction,valueRange,representsAnXmlAttribute);
 		
 		this.minValue = minValue; 
 		this.maxValue = maxValue; 
@@ -87,7 +87,7 @@ public final class LongPropertyDefinitionImpl extends SimpleCmsPropertyDefinitio
 		return new LongPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getDefaultValue(), getRepositoryObjectRestriction(), getValueEnumeration(), getMinValue(), minValueExclusive, getMaxValue(), maxValueExclusive);
+				getDefaultValue(), getRepositoryObjectRestriction(), getValueEnumeration(), getMinValue(), minValueExclusive, getMaxValue(), maxValueExclusive,isRepresentsAnXmlAttribute());
 	}
 
 	@Override

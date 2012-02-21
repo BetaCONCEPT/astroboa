@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -136,10 +136,10 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 	
 		loginToTestRepositoryAsSystem();
 		
-		checkExpression("contentTypeName=\""+TEST_CONTENT_TYPE+"Type\"", 
+		checkExpression("objectType=\""+TEST_CONTENT_TYPE+"Type\"", 
 				CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), Condition.OR, Arrays.asList(EXTENDED_TEST_CONTENT_TYPE,DIRECT_EXTENDED_TEST_CONTENT_TYPE,TEST_CONTENT_TYPE)));
 		
-		checkExpression("contentTypeName=\""+EXTENDED_TEST_CONTENT_TYPE+"Type\"", 
+		checkExpression("objectType=\""+EXTENDED_TEST_CONTENT_TYPE+"Type\"", 
 				CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), Condition.OR, Arrays.asList(EXTENDED_TEST_CONTENT_TYPE,DIRECT_EXTENDED_TEST_CONTENT_TYPE)));
 		 
 		

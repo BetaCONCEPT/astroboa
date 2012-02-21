@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -53,16 +53,17 @@ import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeD
 import org.betaconceptframework.astroboa.api.model.exception.CmsConcurrentModificationException;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.query.CalendarInfo;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
@@ -167,7 +168,13 @@ public class ContentDao  extends JcrDaoSupport{
 			//and will pass it to ContentServiceImpl to save it. 
 			//It will end up in this method again as a ContentObject
 			//if it passes the check of SecureContentObjectSaveAspect
-			return importDao.importContentObject((String)contentSource,version, updateLastModificationTime, ImportMode.SAVE_ENTITY_TREE, null);
+			ImportConfiguration configuration = ImportConfiguration.object()
+				  .persist(PersistMode.PERSIST_ENTITY_TREE)
+				  .version(version)
+				  .updateLastModificationTime(updateLastModificationTime)
+				  .build();
+
+			return importDao.importContentObject((String)contentSource, configuration);
 		}
 		
 		
@@ -212,8 +219,7 @@ public class ContentDao  extends JcrDaoSupport{
 				contentObjectNode = createNewContentObjectNode(contentObject, session, false);
 
 				break;
-			case UPDATE_ALL:
-			case UPDATE_NOT_NULL:
+			case UPDATE:
 				contentObjectNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(session, contentObject.getId());
 
 				if (contentObjectNode == null){
@@ -555,6 +561,7 @@ public class ContentDao  extends JcrDaoSupport{
 				return true;
 			}
 
+			logger.info("Object [] does not exist and therefore cannot be deleted", objectIdOrSystemName);
 			return false;
 			//Clear cache
 			//jcrQueryCacheRegion.removeRegion();
@@ -660,7 +667,13 @@ public class ContentDao  extends JcrDaoSupport{
 				//User requested output to be XML or JSON
 				os = new ByteArrayOutputStream();
 
-				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), contentObjectCriteria, os, FetchLevel.ENTITY, contentObjectOutput, false);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.object()
+						.prettyPrint(contentObjectCriteria.getRenderProperties().isPrettyPrintEnabled())
+						.representationType(contentObjectOutput)
+						.serializeBinaryContent(false)
+						.build();
+
+				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), contentObjectCriteria, os, FetchLevel.ENTITY, serializationConfiguration);
 
 				queryReturnedAtLeastOneResult = numberOfResutls > 0;
 				
@@ -954,7 +967,6 @@ public class ContentDao  extends JcrDaoSupport{
 
 			session = getSession();
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria(contentType);
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 
 			CmsQueryResult contentObjectResults = cmsQueryHandler.getNodesFromXPathQuery(session, contentObjectCriteria, true);
@@ -1067,7 +1079,6 @@ public class ContentDao  extends JcrDaoSupport{
 			else{
 				ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 				contentObjectCriteria.addSystemNameEqualsCriterion(contentObjectIdOrSystemName);
-				contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				contentObjectCriteria.setOffsetAndLimit(0, 1);
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(getSession(), contentObjectCriteria, true);
@@ -1158,7 +1169,13 @@ public class ContentDao  extends JcrDaoSupport{
 
 				os = new ByteArrayOutputStream();
 
-				serializationDao.serializeCmsRepositoryEntity(contentObjectNode, os, contentObjectOutput, CmsEntityType.CONTENT_OBJECT, propertyPathsToInclude, fetchLevel, true, serializeBinaryContent,prettyPrint);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.object()
+						.prettyPrint(prettyPrint)
+						.representationType(contentObjectOutput)
+						.serializeBinaryContent(serializeBinaryContent)
+						.build();
+
+				serializationDao.serializeCmsRepositoryEntity(contentObjectNode, os, CmsEntityType.OBJECT, propertyPathsToInclude, fetchLevel, true, serializationConfiguration);
 
 				contentObject =  (T) new String(os.toByteArray(), "UTF-8");
 			}
@@ -1258,7 +1275,6 @@ public class ContentDao  extends JcrDaoSupport{
 			contentObjectCriteria.addSystemNameContainsCriterion("*"+systemNameToSearch);
 			contentObjectCriteria.setOffsetAndLimit(0, 0);
 			contentObjectCriteria.setCacheable(CacheRegion.NONE);
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			CmsOutcome<ContentObject> outcome = searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 
@@ -1329,7 +1345,13 @@ public class ContentDao  extends JcrDaoSupport{
 			//and will pass it to ContentServiceImpl to save it. 
 			//It will end up in this method again as a ContentObject
 			//if it passes the check of SecureContentObjectSaveAspect
-			return importDao.importResourceCollection((String)contentSource, version, updateLastModificationTime, ImportMode.SAVE_ENTITY_TREE);
+			ImportConfiguration configuration = ImportConfiguration.object()
+					  .persist(PersistMode.PERSIST_ENTITY_TREE)
+					  .version(version)
+					  .updateLastModificationTime(updateLastModificationTime)
+					  .build();
+
+			return importDao.importResourceCollection((String)contentSource, configuration);
 		}
 		
 		

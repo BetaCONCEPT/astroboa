@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -18,6 +18,15 @@
  */
 package org.betaconceptframework.astroboa.test.model.query.parser;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.util.ISO8601;
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
@@ -40,6 +49,17 @@ import org.testng.annotations.Test;
  * 
  */
 public class CriterionParserTest {
+
+    private final static String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
+
+	private final static String DATE_REG_EXP = "((?:19|20)(?:\\d\\d))-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
+	private final static String TIME_REG_EXP = "T([01][0-9]|2[0123]):([0-5][0-9]):([0-5][0-9])(.\\d\\d\\d)?";
+	private final static String TIME_ZONE_REG_EXP ="(Z|((?:\\+|-)[0-5][0-9]:[0-5][0-9]))?";
+
+	private final static String ISO8601_REG_EXP="^"+DATE_REG_EXP+TIME_REG_EXP+TIME_ZONE_REG_EXP+"$";
+
+	private Pattern ISO8601Pattern = Pattern.compile(ISO8601_REG_EXP);
+	private Pattern ISO8601DatePattern = Pattern.compile(DATE_REG_EXP);
 
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -85,7 +105,7 @@ public class CriterionParserTest {
 		String propertyPath3="profile.language";
 
 		//Reserved property paths
-		checkExpressionForContentObjectCriteria("contentTypeName=\"1\"", CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), "1"));
+		checkExpressionForContentObjectCriteria("objectType=\"1\"", CriterionFactory.equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("id=\"1\"", CriterionFactory.equals(CmsBuiltInItem.CmsIdentifier.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("systemName=\"1\"", CriterionFactory.equals(CmsBuiltInItem.SystemName.getJcrName(), "1"));
 		checkExpressionForContentObjectCriteria("systemName%%\"1\"", CriterionFactory.like(CmsBuiltInItem.SystemName.getJcrName(), "1"));
@@ -134,8 +154,9 @@ public class CriterionParserTest {
 		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"FALSE\")", CriterionFactory.equals(propertyPath1, false));
 
 		//Date Values
-		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14T19:21:51.000+03:00\")", CriterionFactory.equals(propertyPath1, DateUtils.fromString("2009-04-14T19:21:51.000+0300", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")));
-		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14T19:21:51+03:00\")", CriterionFactory.equals(propertyPath1, DateUtils.fromString("2009-04-14T19:21:51+0300", "yyyy-MM-dd'T'HH:mm:ssZ")));
+		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14T19:21:51.000+01:00\")", CriterionFactory.equals(propertyPath1, ISO8601.parse("2009-04-14T19:21:51.000+01:00")));
+		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14T19:21:51.000+03:00\")", CriterionFactory.equals(propertyPath1, ISO8601.parse("2009-04-14T19:21:51.000+03:00")));
+		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14T19:21:51.000-05:00\")", CriterionFactory.equals(propertyPath1, ISO8601.parse("2009-04-14T19:21:51.000-05:00")));
 		checkExpressionForContentObjectCriteria("("+propertyPath1+"=\"2009-04-14\")", CriterionFactory.equals(propertyPath1, DateUtils.fromString("2009-04-14", "yyyy-MM-dd")));
 
 		//Topic values
@@ -273,10 +294,7 @@ public class CriterionParserTest {
 				
 			}
 			
-			parserCmsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-			
 			expectedCmsCriteria.addCriterion(expectedCriterion);
-			expectedCmsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			if (useContentObjectCriteria){
 				CriterionFactory.parse(expression, (ContentObjectCriteria) parserCmsCriteria);
@@ -300,11 +318,9 @@ public class CriterionParserTest {
 		try{
 			ContentObjectCriteria parserContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			CriterionFactory.parse(expression, parserContentOjectCriteria);
-			parserContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			ContentObjectCriteria expectedContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			expectedContentOjectCriteria.addFullTextSearchCriterion(textSearch);
-			expectedContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			assertCriterionEquals(parserContentOjectCriteria, expectedContentOjectCriteria);
 
@@ -321,12 +337,10 @@ public class CriterionParserTest {
 		try{
 			ContentObjectCriteria parserContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			CriterionFactory.parse(expression, parserContentOjectCriteria);
-			parserContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			ContentObjectCriteria expectedContentOjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			expectedContentOjectCriteria.addFullTextSearchCriterion(textSearch);
 			expectedContentOjectCriteria.addCriterion(additionalExpression);
-			expectedContentOjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			assertCriterionEquals(parserContentOjectCriteria, expectedContentOjectCriteria);
 
@@ -349,4 +363,82 @@ public class CriterionParserTest {
 		Assert.assertEquals(parserCmsCriteria.getXPathQuery(), expectedCmsCriteria.getXPathQuery());
 	}
 
+	/**
+	 * If provided value is a valid ISO8601 date then equivalent calendar is returned
+	 * 
+	 * @param value
+	 * @return
+	 * @throws ParseException 
+	 */
+		private Calendar checkIfValueIsISO8601Date(String value){
+
+		if (StringUtils.isBlank(value)){
+			return null;
+		}
+
+		Calendar date = null;
+
+
+		try{
+			Matcher dateTimeMatcher = ISO8601Pattern.matcher(value);
+
+			if (dateTimeMatcher.matches()){
+
+				StringBuilder pattern = new StringBuilder("yyyy-MM-dd'T'HH:mm:ss");
+				String timeZoneId = null;
+				//We must decide which pattern to use
+				//At this point this is the minimum
+
+				//Group 7 corresponds to milli seconds
+				if (dateTimeMatcher.groupCount()>=7 && dateTimeMatcher.group(7) != null){
+					pattern.append(".SSS");
+				}
+				if (dateTimeMatcher.groupCount()>=8 && dateTimeMatcher.group(8) != null){
+					if (!"Z".equals(dateTimeMatcher.group(8))){
+						//Keep UTC info to look for time zone when Calendar object will be created, 
+						//as SimpleDateformat which is used in DateUtils
+						//cannot handle time zone designator
+						timeZoneId = "GMT"+dateTimeMatcher.group(8);
+						value = value.replace(dateTimeMatcher.group(8), "");
+					}
+					else{
+						timeZoneId = "GMT";
+						value = value.replace("Z", "");
+					}
+				}
+
+				date = (Calendar) DateUtils.fromString(value, pattern.toString());
+
+				if (timeZoneId!= null){
+					//Now that date is found we should define its TimeZone
+					TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
+					if (!timeZone.getID().equals(timeZoneId)) {
+						// Time Zone is not valid
+						throw new CmsException("Invalid time zone in date value "+ value);
+					}
+
+					date.setTimeZone(timeZone);
+				}
+			}
+			else{
+				//check for simple date
+				Matcher dateMatcher = ISO8601DatePattern.matcher(value);
+
+				if (dateMatcher.matches()){
+					date = (Calendar) DateUtils.fromString(value, ISO8601_DATE_FORMAT);
+				}
+			}
+
+		}
+		catch(Exception e){
+			//Probably not a date value. Ignore exception
+			return null;
+		}
+
+		return date;
+
+
+	}
+
+	
 }

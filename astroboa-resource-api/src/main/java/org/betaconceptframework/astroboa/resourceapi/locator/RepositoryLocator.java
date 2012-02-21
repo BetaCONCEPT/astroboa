@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -77,7 +77,9 @@ public class RepositoryLocator extends Application{
 			
 			if (authorization != null) {
 				
-				astroboaClient = AstroboaClientCache.Instance.get(authorization);
+				String cacheKey = authorization+repositoryId;
+				
+				astroboaClient = AstroboaClientCache.Instance.get(cacheKey);
 				
 				if (astroboaClient == null){
 					String encodedUsernamePass = authorization.substring(5);
@@ -90,7 +92,7 @@ public class RepositoryLocator extends Application{
 						AstroboaCredentials credentials = new AstroboaCredentials(usernamePassSplitted[0], usernamePassSplitted[1]);
 						astroboaClient.login(repositoryId, credentials);
 						
-						astroboaClient = AstroboaClientCache.Instance.cache(astroboaClient, authorization);
+						astroboaClient = AstroboaClientCache.Instance.cache(astroboaClient, cacheKey);
 						
 					}
 					else {

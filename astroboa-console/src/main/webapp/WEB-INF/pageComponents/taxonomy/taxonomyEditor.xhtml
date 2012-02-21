@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -101,24 +101,14 @@ Authors
 								<h:inputText id="taxonomySystemNameInput" 
 									rendered="#{
 												empty taxonomyEditor.editedTaxonomy.name 
-												or 
-												(
-													taxonomyEditor.editedTaxonomy.name ne 'bccms:subjectTaxonomy' 
-													and 
-													! taxonomyEditor.editedTaxonomy.systemBuiltinEntity
-												)
+												or taxonomyEditor.editedTaxonomy.name ne 'bccms:subjectTaxonomy'
 											}"
 									value="#{taxonomyEditor.editedTaxonomy.name}"/>
 							
 								<h:outputText id="taxonomySystemNameOutput" 
 									rendered="#{
 												! empty taxonomyEditor.editedTaxonomy.name 
-												and 
-												(
-													taxonomyEditor.editedTaxonomy.name eq 'bccms:subjectTaxonomy' 
-													or 
-													taxonomyEditor.editedTaxonomy.systemBuiltinEntity
-												)
+												and taxonomyEditor.editedTaxonomy.name eq 'bccms:subjectTaxonomy'
 											}"
 									value="#{taxonomyEditor.editedTaxonomy.name}"/>
 							

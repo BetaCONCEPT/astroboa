@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -36,9 +36,9 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
+import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
@@ -350,22 +350,11 @@ public class CmsRepositoryEntityUtils {
 	private Node getUniqueNodeForCriteria(Session session,String cmsRepositoryEntityId, CmsCriteria cachedCmsCriteria) throws RepositoryException {
 
 		cachedCmsCriteria.addIdEqualsCriterion(cmsRepositoryEntityId);
-		cachedCmsCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		cachedCmsCriteria.setOffsetAndLimit(0, 1);
 		
 		return JcrNodeUtils.uniqueNode(cmsQueryHandler.getNodesFromXPathQuery(session, cachedCmsCriteria));
 	}
 
-	public void setSystemProperties(Node cmsRepositoryEntityNode, CmsRepositoryEntity cmsRepositoryEntity) throws RepositoryException{
-		
-		if (cmsRepositoryEntityNode == null){
-			throw new CmsException("No node is provided for cms repository entity. Unable to set "+CmsBuiltInItem.SystemBuiltinEntity.getJcrName() + " property");
-		}
-		
-		cmsRepositoryEntityNode.setProperty(CmsBuiltInItem.SystemBuiltinEntity.getJcrName(), cmsRepositoryEntity.isSystemBuiltinEntity());
-		
-	}
-	
 	public void createCmsIdentifier(Node newCmsRepositoryNode, CmsRepositoryEntity cmsRepositoryEntity, boolean useProvidedIdentifierIfAny) throws RepositoryException {
 		
 		if (!newCmsRepositoryNode.isNew() || hasCmsIdentifier(newCmsRepositoryNode))
@@ -401,7 +390,7 @@ public class CmsRepositoryEntityUtils {
 
 	public SaveMode determineSaveMode(CmsRepositoryEntity cmsRepositoryEntiy) throws RepositoryException {
 		if (StringUtils.isNotBlank(cmsRepositoryEntiy.getId()))
-			return SaveMode.UPDATE_ALL;
+			return SaveMode.UPDATE;
 		
 		return SaveMode.INSERT;
 	}
@@ -507,5 +496,15 @@ public class CmsRepositoryEntityUtils {
 		
 		return nodeIdentity;
 		
+	}
+	
+	public void addDefaultTaxonomyToTopic(Topic topic){
+		
+		if (topic != null){
+			Taxonomy defaultTaxonomy = CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy();
+			defaultTaxonomy.setName(CmsBuiltInItem.SubjectTaxonomy.getJcrName());
+			topic.setTaxonomy(defaultTaxonomy);
+		}
+
 	}
 }

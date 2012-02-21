@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -34,8 +34,8 @@ import org.betaconceptframework.astroboa.model.impl.ItemQName;
 public final class ItemUtils {
 
 	public static ItemQName createNewBetaConceptItem(String localPart) {
-		return createNewItem(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-				BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, localPart);
+		return createNewItem(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+				BetaConceptNamespaceConstants.ASTROBOA_URI, localPart);
 	}
 
 	public static ItemQName createNewItem(String prefix, String url,

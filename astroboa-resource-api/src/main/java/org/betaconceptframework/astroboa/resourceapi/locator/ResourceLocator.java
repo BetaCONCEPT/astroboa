@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -52,25 +52,47 @@ public class ResourceLocator {
 		}
 	}
 
-	@Path(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+	@Path(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH)
+	public ContentObjectResource getObjectsCollectionResource(){
+		
+		return new ContentObjectResource(astroboaClient);
+		
+	}
+	
+	// this path will not be supported in the next major version, i.e. 4.0
+	@Path(CmsConstants.DEPRECATED_RESOURCE_API_OBJECTS_COLLECTION_URI_PATH)
 	public ContentObjectResource getContentObjectResource(){
 		
 		return new ContentObjectResource(astroboaClient);
 		
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
+	@Path(CmsConstants.RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH)
+	public TaxonomyResource getTaxonomiesCollectionResource(){
+		
+		return new TaxonomyResource(astroboaClient);
+		
+	}
+	
+	// this path will not be supported in the next major version, i.e. 4.0
+	@Path(CmsConstants.DEPRECATED_RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH)
 	public TaxonomyResource getTaxonomyResource(){
 		
 		return new TaxonomyResource(astroboaClient);
 		
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
-	public TopicResource getTopicResource(){
+	@Path(CmsConstants.RESOURCE_API_TOPICS_COLLECTION_URI_PATH)
+	public TopicResource getTopicsCollectionResource(){
 		
 		return new TopicResource(astroboaClient);
 		
+	}
+	
+	// this path will not be supported in the next major version, i.e. 4.0
+	@Path(CmsConstants.DEPRECATED_RESOURCE_API_TOPICS_COLLECTION_URI_PATH)
+	public TopicResource getTopicResource(){
+		return new TopicResource(astroboaClient);
 	}
 	
 	@Path(CmsConstants.RESOURCE_API_BINARY_CHANNEL_URI_PATH)
@@ -80,7 +102,15 @@ public class ResourceLocator {
 
 	}
 	
-	@Path(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
+	@Path(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH)
+	public DefinitionResource getModelsCollectionResource(){
+		
+		return new DefinitionResource(astroboaClient);
+		
+	}
+	
+	// this path will not be supported in the next major version, i.e. 4.0
+	@Path(CmsConstants.DEPRECATED_RESOURCE_API_MODELS_COLLECTION_URI_PATH)
 	public DefinitionResource getDefinitionResource(){
 		
 		return new DefinitionResource(astroboaClient);

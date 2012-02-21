@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -149,7 +149,7 @@ public class ConsistencyCheckerDao extends JcrDaoSupport{
 							continue;
 						}
 						
-						if (propertyName.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":") || 
+						if (propertyName.startsWith(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":") || 
 								propertyName.startsWith(JcrNamespaceConstants.JCR_PREFIX+":") ||
 								propertyName.startsWith(JcrNamespaceConstants.MIX_PREFIX+":") ||
 								propertyName.startsWith(JcrNamespaceConstants.NT_PREFIX+":")){

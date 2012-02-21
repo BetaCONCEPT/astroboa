@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -29,6 +29,8 @@ import javax.faces.application.FacesMessage.Severity;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.console.seam.SeamEventNames;
 import org.betaconceptframework.astroboa.util.SchemaUtils;
@@ -138,7 +140,11 @@ public class ImportTaxonomyXMLDialogue extends AbstractUIBean {
 		try {
 			
 			//astroboaClient.getTaxonomyService().importTaxonomyFromXml(filedata);
-			astroboaClient.getImportService().importTaxonomy(filedata,true);
+		  ImportConfiguration configuration = ImportConfiguration.taxonomy()
+				  .persist(PersistMode.PERSIST_ENTITY_TREE)
+				  .build();
+
+			astroboaClient.getImportService().importTaxonomy(filedata,configuration);
 
 			//All went well . Raise event to reload taxomomy tree
 			Events.instance().raiseEvent(SeamEventNames.NEW_TAXONOMY_TREE);

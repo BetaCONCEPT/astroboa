@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -18,6 +18,9 @@
  */
 package org.betaconceptframework.astroboa.util;
 
+import java.io.File;
+import java.net.URI;
+
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel.ContentDispositionType;
@@ -30,10 +33,14 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.model.impl.CmsPropertyImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectTypeDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 
 /**
@@ -108,20 +115,20 @@ public class ResourceApiURLUtils {
 			
 			if (ContentObject.class.isAssignableFrom(type) || CmsProperty.class.isAssignableFrom(type) 
 					|| BinaryChannel.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
+				sb.append(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH);
 			}
 			else if (Topic.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH);
+				sb.append(CmsConstants.RESOURCE_API_TOPICS_COLLECTION_URI_PATH);
 			}
 			else if (Space.class.isAssignableFrom(type)){
 				sb.append(CmsConstants.FORWARD_SLASH);
 				sb.append(CmsBuiltInItem.Space.getLocalPart());
 			}
 			else if (Taxonomy.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH);
+				sb.append(CmsConstants.RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH);
 			}
 			else if (CmsDefinition.class.isAssignableFrom(type)){
-				sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH);
+				sb.append(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH);
 			}
 			
 			sb.append(CmsConstants.FORWARD_SLASH);
@@ -150,7 +157,7 @@ public class ResourceApiURLUtils {
 		
 		
 		if (cmsEntity instanceof Taxonomy){
-			sb.append(CmsConstants.RESOURCE_API_TAXONOMY_URI_PATH)
+			sb.append(CmsConstants.RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -161,7 +168,7 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof Topic){
-			sb.append(CmsConstants.RESOURCE_API_TOPIC_URI_PATH)
+			sb.append(CmsConstants.RESOURCE_API_TOPICS_COLLECTION_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 
 			if (urlProperties.isFriendly()){
@@ -184,7 +191,7 @@ public class ResourceApiURLUtils {
 			}
 		}
 		else if (cmsEntity instanceof ContentObject){
-			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+			sb.append(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -196,7 +203,7 @@ public class ResourceApiURLUtils {
 			
 		}
 		else if (cmsEntity instanceof CmsProperty<?,?>){
-			sb.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH)
+			sb.append(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH)
 				.append(CmsConstants.FORWARD_SLASH);
 			
 			if (urlProperties.isFriendly()){
@@ -210,14 +217,43 @@ public class ResourceApiURLUtils {
 				.append(((CmsProperty<?,?>)cmsEntity).getPermanentPath());
 		}
 		else if (cmsEntity instanceof ContentObjectTypeDefinition){
-			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
-			.append(CmsConstants.FORWARD_SLASH)
-			.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+			sb.append(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH)
+			.append(CmsConstants.FORWARD_SLASH);
+			
+			if (urlProperties.getResourceRepresentationType() !=null && 
+					urlProperties.getResourceRepresentationType().equals(ResourceRepresentationType.XSD)){
+				String schemaFilename = retrieveSchemaFileName((ContentObjectTypeDefinition)cmsEntity);
+					
+				if (schemaFilename != null){
+						sb.append(schemaFilename);
+				}
+				else{
+					sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());
+				}
+			}
+			else{
+				sb.append(((ContentObjectTypeDefinition)cmsEntity).getName());	
+			}
 		}
 		else if (cmsEntity instanceof CmsPropertyDefinition){
-			sb.append(CmsConstants.RESOURCE_API_MODEL_URI_PATH)
-			.append(CmsConstants.FORWARD_SLASH)
-			.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+			sb.append(CmsConstants.RESOURCE_API_MODELS_COLLECTION_URI_PATH)
+			.append(CmsConstants.FORWARD_SLASH);
+
+			if (urlProperties.getResourceRepresentationType() !=null && 
+					urlProperties.getResourceRepresentationType().equals(ResourceRepresentationType.XSD)){
+
+				String schemaFilename = retrieveSchemaFileName((CmsPropertyDefinition)cmsEntity);
+				
+				if (schemaFilename != null){
+					sb.append(schemaFilename);
+				}
+				else{
+					sb.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+				}
+			}
+			else{
+				sb.append(((CmsPropertyDefinition)cmsEntity).getFullPath());
+			}
 		}
 
 	}
@@ -226,9 +262,13 @@ public class ResourceApiURLUtils {
 			StringBuilder sb, Class<?> type) {
 		
 		//Add output. XML is considered default value and therefore it is not added
-		if (resourceRepresentationType != null && resourceRepresentationType != ResourceRepresentationType.XML){
-			sb.append("?output=");
-			sb.append(resourceRepresentationType.getTypeAsString().toLowerCase());
+		if (resourceRepresentationType != null && ! resourceRepresentationType.equals(ResourceRepresentationType.XML)){
+			//Special case. if entity is a definition and output is XSD then do not add this parameter as well
+			// since in this case, the schema filename is provided in the URL
+			if (! CmsDefinition.class.isAssignableFrom(type) || ! resourceRepresentationType.equals(ResourceRepresentationType.XSD)){
+				sb.append("?output=");
+				sb.append(resourceRepresentationType.getTypeAsString().toLowerCase());
+			}
 		}
 	}
 
@@ -298,10 +338,10 @@ public class ResourceApiURLUtils {
 		
 		// Astroboa RESTful API URL pattern for accessing the value of content object properties
 		// http://server/resource-api/
-		// <reposiotry-id>/contentObject/<contentObjectId>/<binaryChannelPropertyValuePath>
+		// <reposiotry-id>/objects/<contentObjectId>/<binaryChannelPropertyValuePath>
 		// ?contentDispositionType=<contentDispositionType>&width=<width>&height=<height>
 			
-		contentApiURLBuilder.append(CmsConstants.RESOURCE_API_CONTENT_URI_PATH);
+		contentApiURLBuilder.append(CmsConstants.RESOURCE_API_OBJECTS_COLLECTION_URI_PATH);
 
 		contentApiURLBuilder.append(CmsConstants.FORWARD_SLASH+contentObjectIdOrSystemName);
 		
@@ -339,4 +379,42 @@ public class ResourceApiURLUtils {
 		return contentApiURLBuilder.toString();
 	}
 
+	
+	public static String retrieveSchemaFileName(CmsDefinition cmsDefinition){
+		
+		URI cmsDefinitionFileURI = null;
+
+		if (cmsDefinition instanceof ContentObjectTypeDefinition){
+			cmsDefinitionFileURI = ((ContentObjectTypeDefinitionImpl)cmsDefinition).getDefinitionFileURI();
+		}
+		else if (cmsDefinition instanceof ComplexCmsPropertyDefinition){
+			cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getDefinitionFileURI();
+		}
+		else if (cmsDefinition instanceof SimpleCmsPropertyDefinition){
+			//It is a simple property. Get its parent to provide with the URI
+			CmsDefinition parentDefinition = ((SimpleCmsPropertyDefinition)cmsDefinition).getParentDefinition();
+			if (parentDefinition != null && parentDefinition instanceof ComplexCmsPropertyDefinition){
+				cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)parentDefinition).getDefinitionFileURI();
+			}
+		}
+
+		if (cmsDefinitionFileURI == null){
+			return null;
+		}
+
+		String schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), File.separator);
+		
+		if (StringUtils.isBlank(schemaFilename)){
+			if (!File.separator.equals(CmsConstants.FORWARD_SLASH)){
+				//try with forward slash.
+				schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), CmsConstants.FORWARD_SLASH);
+			}
+		}
+		
+		if (StringUtils.isBlank(schemaFilename)){
+			return null;
+		}
+		
+		return schemaFilename;
+	}
 }

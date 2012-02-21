@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -18,24 +18,39 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.resource;
 
+import java.io.File;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.resourceapi.utility.ContentApiUtils;
+import org.betaconceptframework.astroboa.resourceapi.utility.XmlSchemaGenerator;
 import org.betaconceptframework.astroboa.serializer.ModelSerializer;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
+import org.betaconceptframework.astroboa.util.UrlProperties;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,12 +81,6 @@ public class DefinitionResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-		
 		if (output == null){
 			
 			if (propertyPath!=null && propertyPath.endsWith(".xsd")){
@@ -83,6 +92,14 @@ public class DefinitionResource extends AstroboaResource{
 		}
 
 		Output outputEnum = Output.valueOf(output.toUpperCase());
+		
+		if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+			//User has requested astroboa-model or astroboa-api built in schemata
+			//but at the same time, the "output" request parameter was not XSD
+			//In this case an HTTP NOT FOUND error should be returned.
+			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+		}
+
 
 		return getDefinitionInternal(propertyPath, outputEnum, callback,prettyPrintEnabled);
 
@@ -99,27 +116,27 @@ public class DefinitionResource extends AstroboaResource{
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
 		Output outputEnum = Output.JSON;
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
+			
+			if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+				//User has requested astroboa-model or astroboa-api built in schemata
+				//but at the same time, the "output" request parameter was not XSD
+				//In this case an HTTP NOT FOUND error should be returned.
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
 		}
+		
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
 	}
 
 	private boolean asrtoboaBuiltInModelIsRequested(String propertyPath) {
 		return StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION) || 
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION) ||
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME) ||
-				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME);
+				StringUtils.equals(propertyPath, CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION) ;
 	}
 
 	
@@ -130,26 +147,101 @@ public class DefinitionResource extends AstroboaResource{
 			@PathParam("propertyPath") String propertyPath,
 			@QueryParam("output") String output, 
 			@QueryParam("callback") String callback, 
-			@QueryParam("prettyPrint") String prettyPrint) {
+			@QueryParam("prettyPrint") String prettyPrint, 
+			@Context UriInfo uriInfo) {
 		
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		//This is to server built in Xml Schemas 
-		//Output is ignored since these schemata are served only in XSD
-		if (asrtoboaBuiltInModelIsRequested(propertyPath)){
-			return getDefinitionInternal(propertyPath, Output.XSD, callback, prettyPrintEnabled);
-		}
-
 		// URL-based negotiation overrides any Accept header sent by the client
 		//i.e. if the url specifies the desired response type in the "output" parameter this method
 		// will return the media type specified in "output" request parameter.
 		Output outputEnum = Output.XML;
 		if (StringUtils.isNotBlank(output)) {
 			outputEnum = Output.valueOf(output.toUpperCase());
+			
+			if (outputEnum != Output.XSD && asrtoboaBuiltInModelIsRequested(propertyPath)){
+				//User has requested astroboa-model or astroboa-api built in schemata
+				//but at the same time, the "output" request parameter was not XSD
+				//In this case an HTTP NOT FOUND error should be returned.
+				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+			}
 		}
+		else{
+			//User did not provide value for the "output" parameter therefore 
+			//the output at this point is XML. However there is one case where the
+			//user may have provide the suffix ".xsd" in the URL, requesting this
+			//way the output to be an XML Schema. This case can only be traced by 
+			//examining the path of the request and whether it ends in ".xsd" or not
+			String path = uriInfo.getPath();
+			
+			if (StringUtils.endsWith(path, ".xsd")){
+				//User has provided the suffix ".xsd". 
+				//Therefore an XML Schema sholud be returned
+				//We have to attach the suffix to the propertyPath variable
+				//since the user may have specified a filename instead of 
+				//a property path.
+				outputEnum = Output.XSD;
+				if (propertyPath != null){
+					propertyPath += ".xsd";
+				}
+			}
+		}
+		
+		
+
 		return getDefinitionInternal(propertyPath, outputEnum, callback, prettyPrintEnabled);
 	}
+
 	
+	 @POST
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 public Response postDefinition(String source) {
+		 
+		 try {
+			 
+			 ObjectMapper mapper = new ObjectMapper();
+			 Map<String,Object> objectType = mapper.readValue(source, Map.class);
+			 
+			XmlSchemaGenerator xmlSchemaTemplate = new XmlSchemaGenerator();
+			
+			String schema = xmlSchemaTemplate.generateXmlSchema(objectType);
+			
+			//Save schema to schemata folder
+			String objectTypeName = (String)objectType.get("name");
+			
+			File schemaFile = new File(astroboaClient.getRepositoryService().getCurrentConnectedRepository().getRepositoryHomeDirectory()+File.separator+"astroboa_schemata", objectTypeName+".xsd");
+
+			FileUtils.writeStringToFile(schemaFile,schema);
+			
+			//Call definition service to force Astroboa to load newly created definition
+			CmsDefinition newlyCreatedDefinition = astroboaClient.getDefinitionService().getCmsDefinition(objectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE, false);
+			
+			if (newlyCreatedDefinition == null){
+				throw new Exception("Object type "+objectTypeName+ " was not created.");
+			}
+			
+			//Generate Response
+			ResponseBuilder responseBuilder = Response.status(Status.CREATED);
+			
+			UrlProperties urlProperties = new UrlProperties();
+			urlProperties.setResourceRepresentationType(null);
+			urlProperties.setFriendly(false);
+			urlProperties.setRelative(false);
+			urlProperties.setIdentifier(newlyCreatedDefinition.getName());
+			
+			responseBuilder.location(URI.create(ResourceApiURLUtils.generateUrlForEntity(newlyCreatedDefinition, urlProperties)));
+			
+			return Response.ok().build();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ContentApiUtils.createResponseForException(Status.BAD_REQUEST, e, true, "Definition source "+source);
+		}
+		 
+		 
+	  }
+
+
 	private Response getDefinitionInternal(String propertyPath, Output output, String callback, boolean prettyPrint){
 		
 		try {
@@ -246,7 +338,7 @@ public class DefinitionResource extends AstroboaResource{
 
 		boolean prettyPrintEnabled = ContentApiUtils.isPrettyPrintEnabled(prettyPrint);
 		
-		Output outputEnum = ContentApiUtils.getOutputType(output, Output.XML);
+		Output outputEnum = ContentApiUtils.getOutputType(output, Output.JSON);
 
 		return getModelInternal(callback, prettyPrintEnabled, outputEnum);
 

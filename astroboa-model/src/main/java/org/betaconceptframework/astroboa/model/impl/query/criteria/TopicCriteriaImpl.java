@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -146,7 +146,6 @@ public class TopicCriteriaImpl  extends CmsCriteriaImpl implements TopicCriteria
 
 	private void createAncestorCriteria() {
 		ancestorCriteria = new TopicCriteriaImpl();
-		ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 	}
 
 	public void addNameEqualsCriterion(String name) {
@@ -241,7 +240,6 @@ public class TopicCriteriaImpl  extends CmsCriteriaImpl implements TopicCriteria
 		if (StringUtils.isNotBlank(taxonomyId)){
 			TaxonomyCriteria taxonomyCriteria = CmsCriteriaFactory.newTaxonomyCriteria();
 			taxonomyCriteria.addIdEqualsCriterion(taxonomyId);
-			taxonomyCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			setPathCriterion(taxonomyCriteria.getXPathQuery());
 		}

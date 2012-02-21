@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -47,7 +47,7 @@ public interface Space extends LocalizableEntity {
 	/**
 	 * Name for Astroboa built in space representing organization's space.
 	 */
-	final static String ORGANIZATION_SPACE_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":organizationSpace";
+	final static String ORGANIZATION_SPACE_NAME = BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":organizationSpace";
 	
 	/**
 	 * Sets the name of space.

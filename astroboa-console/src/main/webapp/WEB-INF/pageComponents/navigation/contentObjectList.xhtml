@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -115,7 +115,7 @@ Authors
 							<ul class="horizontalList rowsPerPage">
 								<li>#{messages['object.action.export.to.excel']}:</li>
 								<li>
-									<a4j:htmlCommandLink 
+									<a4j:htmlCommandLink
 										value="#{messages['object.action.bulk.option.all']}"
 										action="#{excelExportBean.exportContentObjectList(contentObjectStatefulSearchService.localContentObjectCriteria, localeSelector.localeString)}"/>
 											
@@ -182,7 +182,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel" 
 									style="#{pageController.rowsPerDataTablePage eq 10 ? 'text-decoration: underline;': ''}"
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(10)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(10)}"/>
 							</li>
 							
 							<li>
@@ -191,7 +191,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel"  
 									style="#{pageController.rowsPerDataTablePage eq 15 ? 'text-decoration: underline;': ''}"
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(15)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(15)}"/>
 											
 							</li>
 								
@@ -201,7 +201,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel"
 									style="#{pageController.rowsPerDataTablePage eq 20 ? 'text-decoration: underline;': ''}" 
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(20)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(20)}"/>
 							</li>
 											
 							<li>	
@@ -210,7 +210,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel"
 									style="#{pageController.rowsPerDataTablePage eq 25 ? 'text-decoration: underline;': ''}" 
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(25)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(25)}"/>
 							</li>
 							
 							<li>	
@@ -219,7 +219,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel"
 									style="#{pageController.rowsPerDataTablePage eq 30 ? 'text-decoration: underline;': ''}" 
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(30)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(30)}"/>
 							</li>
 							
 							<li>
@@ -228,7 +228,7 @@ Authors
 									ajaxSingle="true"  
 									reRender="searchResultsAjaxPanel"
 									style="#{pageController.rowsPerDataTablePage eq 50 ? 'text-decoration: underline;': ''}"
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(50)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(50)}"/>
 							</li>
 								
 							<li>
@@ -237,7 +237,7 @@ Authors
 									ajaxSingle="true" 
 									reRender="searchResultsAjaxPanel"
 									style="#{pageController.rowsPerDataTablePage eq 100 ? 'text-decoration: underline;': ''}" 
-									action="#{pageController.changeRowsPerDataTablePage_UIAction(100)}"/>
+									action="#{contentObjectStatefulSearchService.changeRowsPerDataTablePage_UIAction(100)}"/>
 							</li>
 						</ul>
 					</div>

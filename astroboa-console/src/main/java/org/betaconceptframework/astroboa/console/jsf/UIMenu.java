@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -145,11 +145,6 @@ public class UIMenu extends AbstractUIBean {
 			ContentObjectTypeDefinition contentObjectTypeDefinition) {
 		
 		if (contentObjectTypeDefinition == null)
-		{
-			return false;
-		}
-		
-		if (contentObjectTypeDefinition.isSystemTypeDefinition())
 		{
 			return false;
 		}

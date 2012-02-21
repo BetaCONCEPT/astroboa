@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -369,7 +369,7 @@ public interface ContentService {
 	 * @param objectIdOrSystemName 
 	 *            Object {@link ContentObject#getId() id} or {@link ContentObject#getSystemName() system name}.
 	 *            
-	 * @return <code>true</code> if object has been successfully deleted, <code>false</code> otherwise
+	 * @return <code>true</code> if object has been successfully deleted, <code>false</code> if no object with the provided id or name is found.
 	 */
 	boolean deleteContentObject(
 			String objectIdOrSystemName);
@@ -826,7 +826,7 @@ public interface ContentService {
 	 * 				<bccmsapi:resourceResponse 
 	 * 					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	 * 					xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model" 
-	 * 					xmlns:bccmsapi="http://www.betaconceptframework.org/schema/astroboa/api" 
+	 * 					xmlns:astroboa-api="http://www.betaconceptframework.org/schema/astroboa/api" 
 	 * 				 	offset="0"
 	 * 					totalResourceCount="0"
 	 * 				/>

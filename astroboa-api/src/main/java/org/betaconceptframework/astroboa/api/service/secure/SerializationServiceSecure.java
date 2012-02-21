@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -21,7 +21,11 @@ package org.betaconceptframework.astroboa.api.service.secure;
 
 
 
+import java.util.concurrent.Future;
+
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.security.AstroboaCredentials;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.service.SerializationService;
@@ -54,13 +58,13 @@ public interface SerializationServiceSecure {
 	 * token.
 	 *</p>
 	 *
-	 * @param serializeBinaryContent <code>true</code> to serialize binary content, i.e. serialize binary properties, 
-	 * <code>false</code> otherwise.
+	 * @param objectCriteria Criteria to control which objects to serialize
+	 * @param serializationConfiguration Configuration to control various aspects of the export process
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to an Astroboa repository.
 	 * 
 	 * @return A report about serialization progress.  
 	 */
-	SerializationReport serializeContentObjects(boolean serializeBinaryContent, String authenticationToken);
+	Future<SerializationReport> serializeObjects(ContentObjectCriteria objectCriteria, SerializationConfiguration serializationConfiguration, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link SerializationService#serializeRepository()}
@@ -79,7 +83,7 @@ public interface SerializationServiceSecure {
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeRepository(boolean serializeBinaryContent,String authenticationToken);
+	Future<SerializationReport> serializeRepository(SerializationConfiguration serializationConfiguration, String authenticationToken);
 	
 	/**
 	 * Same semantics with {@link SerializationService#serializeRepositoryUsers()}
@@ -96,7 +100,7 @@ public interface SerializationServiceSecure {
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeRepositoryUsers(String authenticationToken);
+	Future<SerializationReport> serializeRepositoryUsers(String authenticationToken);
 
 	/**
 	 * Same semantics with {@link SerializationService#serializeTaxonomies()}
@@ -113,7 +117,7 @@ public interface SerializationServiceSecure {
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeTaxonomies(String authenticationToken);
+	Future<SerializationReport> serializeTaxonomies(String authenticationToken);
 
 	/**
 	 * Same semantics with {@link SerializationService#serializeOrganizationSpace()}
@@ -130,7 +134,7 @@ public interface SerializationServiceSecure {
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeOrganizationSpace(String authenticationToken);
+	Future<SerializationReport> serializeOrganizationSpace(String authenticationToken);
 
 
 }

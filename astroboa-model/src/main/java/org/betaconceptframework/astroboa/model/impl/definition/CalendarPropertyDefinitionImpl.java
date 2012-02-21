@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -56,11 +56,11 @@ public final class CalendarPropertyDefinitionImpl extends
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory,Integer order,  String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
-			Calendar defaultValue, String repositoryObjectRestriction, String calendarPattern) {
+			Calendar defaultValue, String repositoryObjectRestriction, String calendarPattern,boolean representsAnXmlAttribute) {
 		
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				defaultValue, repositoryObjectRestriction, null);
+				defaultValue, repositoryObjectRestriction, null, representsAnXmlAttribute);
 		
 		
 		if (StringUtils.isBlank(calendarPattern)){
@@ -81,7 +81,7 @@ public final class CalendarPropertyDefinitionImpl extends
 		return new CalendarPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getDefaultValue(), getRepositoryObjectRestriction(), calendarPattern);
+				getDefaultValue(), getRepositoryObjectRestriction(), calendarPattern,isRepresentsAnXmlAttribute());
 	}
 
 	public String getPattern() {

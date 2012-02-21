@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -28,7 +28,7 @@ Authors
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>astroboa-model</artifactId>
 	<packaging>jar</packaging>
@@ -66,9 +66,9 @@ Authors
 			                </goals>
 			              </pluginExecutionFilter>
 			              <action>
-			                <execute >
+			                <execute>
 			                  <runOnIncremental>false</runOnIncremental>
-			                </execute >
+			                </execute>
 			              </action>
 			            </pluginExecution>
 			            <pluginExecution>
@@ -81,9 +81,9 @@ Authors
 			                </goals>
 			              </pluginExecutionFilter>
 			              <action>
-			                <execute >
+			                <execute>
 			                  <runOnIncremental>false</runOnIncremental>
-			                </execute >
+			                </execute>
 			              </action>
 			            </pluginExecution>
 			          </pluginExecutions>
@@ -99,33 +99,46 @@ Authors
 		<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.7.4</version>
+				<version>0.8.0</version>
 
-				<!--
-					This plugin is executed once by running 
-						mvn org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:generate
-					
-					 Automatic
-					execution is disabled as it does not takes into consideration the
-					forceRegenerate value and it is creating java code every time
-					module is compiled, which is annoying. <executions> <execution>
-					<goals> <goal>generate</goal> </goals> </execution> </executions>
-				-->
 				<configuration>
-					<schemaDirectory>src/main/resources/META-INF</schemaDirectory>
-					<generateDirectory>src/main/java</generateDirectory>
-					<generatePackage>
-						org.betaconceptframework.astroboa.configuration
-					</generatePackage>
-					<includeSchemas>
-						<includeSchema>
-							astroboa-conf.xsd
-						</includeSchema>
-					</includeSchemas>
+					<specVersion>2.1</specVersion>                                                                                         
 					<strict>true</strict>
 					<verbose>true</verbose>
-					<forceRegenerate>false</forceRegenerate>
-
+					<generateDirectory>src/main/java</generateDirectory>
+					<!--
+						This plugin is executed once by running 
+							mvn org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:generate
+						
+						 Automatic
+						execution is disabled as it does not takes into consideration the
+						forceRegenerate value and it is creating java code every time
+						module is compiled, which is annoying. <executions> <execution>
+						<goals> <goal>generate</goal> </goals> </execution> </executions>
+					-->
+					<forceRegenerate>true</forceRegenerate> 
+					<bindings>
+						<binding>
+							<fileset>                                                                       
+								<directory>${basedir}/src/main/resources/META-INF</directory>                                 
+								<includes>                                                              
+									<include>*.xjb</include>                                          
+								</includes>                                                             
+							</fileset>
+						</binding>
+					</bindings>
+					<schemas>                                                                                       
+						<schema>                                                                                
+							<fileset>                                                                       
+								<!-- Defaults to schemaDirectory -->                                    
+								<directory>${basedir}/src/main/resources/META-INF</directory>                                 
+								<!-- Defaults to schemaIncludes -->                                     
+								<includes>                                                              
+									<include>astroboa-conf.xsd</include>
+								</includes>                                                             
+							</fileset>
+						</schema>                                                                               
+					</schemas>      
 				</configuration>
 			</plugin>
 			
@@ -233,7 +246,7 @@ Authors
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.1.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>

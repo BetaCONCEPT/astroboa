@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -35,7 +35,7 @@ import org.betaconceptframework.astroboa.api.model.visitor.DefinitionVisitor;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-abstract class  SimpleCmsPropertyDefinitionImpl<T> extends CmsPropertyDefinitionImpl implements SimpleCmsPropertyDefinition<T>, Serializable{
+public abstract class  SimpleCmsPropertyDefinitionImpl<T> extends CmsPropertyDefinitionImpl implements SimpleCmsPropertyDefinition<T>, Serializable{
 	
 	/**
 	 * 
@@ -48,13 +48,15 @@ abstract class  SimpleCmsPropertyDefinitionImpl<T> extends CmsPropertyDefinition
 	
 	private Map<T, Localization> valueEnumeration;
 
+	//This information is needed when exporting in XML format
+	private final boolean representsAnXmlAttribute; 
 	
 	public SimpleCmsPropertyDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory, Integer order, String restrictReadToRoles, 
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			T defaultValue, String repositoryObjectRestriction,
-			Map<T, Localization> acceptedValues) {
+			Map<T, Localization> acceptedValues, boolean representsAnXmlAttribute) {
 		
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order,
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition);
@@ -62,6 +64,7 @@ abstract class  SimpleCmsPropertyDefinitionImpl<T> extends CmsPropertyDefinition
 		this.defaultValue = defaultValue;
 		this.repositoryObjectRestriction =repositoryObjectRestriction;
 		this.valueEnumeration = acceptedValues;
+		this.representsAnXmlAttribute = representsAnXmlAttribute;
 	}
 
 	public void accept(DefinitionVisitor visitor) {
@@ -95,5 +98,10 @@ abstract class  SimpleCmsPropertyDefinitionImpl<T> extends CmsPropertyDefinition
 		}
 		return valueEnumeration.containsKey(value);
 	}
+
+	public boolean isRepresentsAnXmlAttribute() {
+		return representsAnXmlAttribute;
+	}
+
 	
 }

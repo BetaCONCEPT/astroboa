@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -58,7 +58,7 @@
 			//it is a map whose key is the name of the type and value type's model
 			repositoryModel = {},
 			
-			//http://server/resource-api/repositoty-id/contentObject
+			//http://server/resource-api/repositoty-id/objects
 			//Its value is updated each time user selects a repository
 			baseContentSearchURL,
 			baseModelURL,
@@ -330,10 +330,10 @@
 
 					baseRepositoryURL = baseURL+'/'+configuration.repository;
 
-					baseContentSearchURL = baseRepositoryURL+'/contentObject';
-				    baseTopicSearchURL = baseRepositoryURL+'/topic';
-					baseTaxonomySearchURL = baseRepositoryURL+'/taxonomy';
-					baseModelURL = baseRepositoryURL+'/model';
+					baseContentSearchURL = baseRepositoryURL+'/objects';
+				    baseTopicSearchURL = baseRepositoryURL+'/topics';
+					baseTaxonomySearchURL = baseRepositoryURL+'/taxonomies';
+					baseModelURL = baseRepositoryURL+'/models';
 
 				}
 				
@@ -965,7 +965,7 @@
 					var contentTypeCriterion = null;
 					
 					if (contentTypeSelectedValue != defaultValueForSelector){
-						contentTypeCriterion = 'contentTypeName="'+contentTypeSelectedValue+'"';
+						contentTypeCriterion = 'objectType="'+contentTypeSelectedValue+'"';
 					}
 
 					var selectedPropertyPath = extractPropertyPath(propertySelectedValue);
@@ -1218,7 +1218,7 @@
 								 var attachContentTypeLabelToCategory = true;
 								 
 								 	if (contentType != defaultValueForSelector){
-										 contentTypeCriterion =  ' contentTypeName="'+contentType+'" AND ';
+										 contentTypeCriterion =  ' objectType="'+contentType+'" AND ';
 										 category = retrieveLabel(repositoryModel[contentType].label, configuration.locale);
 										 attachContentTypeLabelToCategory = false;
 									 }

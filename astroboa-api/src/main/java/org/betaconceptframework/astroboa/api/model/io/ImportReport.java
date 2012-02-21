@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -71,10 +71,4 @@ public interface ImportReport {
 	 */
 	List<String> getErrors();
 	
-	/**
-	 * Flag indicated whether import has finished or not.
-	 * 
-	 * @return <code>true</code> if import has finished, <code>false</code> otherwise
-	 */
-	boolean isImportFinished();
 }

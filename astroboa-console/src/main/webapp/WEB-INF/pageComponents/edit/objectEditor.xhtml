@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -97,11 +97,11 @@ Authors
 											</label>
 											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.owner.label}
 										</li>
-										<li class="formElementFieldsetView">
+										<li class="formElementFieldsetView" id="objectId">
 											<label>		
 												#{messages['content.object.identifier']}
 											</label>
-											#{contentObjectEdit.selectedContentObjectForEdit.contentObject.id}
+											<span>#{contentObjectEdit.selectedContentObjectForEdit.contentObject.id}</span>
 										</li>
 										<li class="formElementFieldsetView">
 											<label>		
@@ -195,13 +195,20 @@ Authors
 					</div>				
 				
 					<script type="text/javascript">
-						createObjectTabs();
-						// tweaking of the editors is required besides the script because they block the events (do not bubble them)
-						//activateSaveHotKeyInsideEditors();
-						
-						addOnChangeEventToWorkflowProperty();
-						resetContentObjectAutoSave();
+					//<![CDATA[
+							bcmslib.jQuery(document).ready(function(){
+								createObjectTabs();
+								// tweaking of the editors is required besides the script because they block the events (do not bubble them)
+								//activateSaveHotKeyInsideEditors();
+								
+								addOnChangeEventToWorkflowProperty();
+								resetContentObjectAutoSave();
+								addHelpMessageToProperties();
+								createSlideshow('.objectPhotosSlideshow');
+							});
+						//]]>
 					</script>
+					
 				
 				</ui:fragment>
 			</a4j:outputPanel>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -72,13 +72,13 @@ public class SpaceServiceClientWrapper extends AbstractClientServiceWrapper impl
 	}
 
 
-	public void deleteSpace(String spaceId) {
+	public boolean deleteSpace(String spaceId) {
 
 		if (spaceServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			spaceServiceSecure.deleteSpace(spaceId, getAuthenticationToken());
+			return spaceServiceSecure.deleteSpace(spaceId, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("SpaceService reference was not found");

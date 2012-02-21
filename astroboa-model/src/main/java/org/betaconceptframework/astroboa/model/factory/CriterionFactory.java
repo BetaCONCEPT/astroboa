@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -773,7 +773,7 @@ public class CriterionFactory  {
 	 * <p>
 	 * For convenience , there are several reserved property paths:
 	 * <ul>
-	 * <li><b>contentType</b>, which refers to built in property {@link CmsBuiltInItem#ContentObjectTypeName}</li>
+	 * <li><b>objectType</b>, which refers to built in property {@link CmsBuiltInItem#ContentObjectTypeName}</li>
 	 * <li><b>textSearched</b>, which enabled full text search by calling {@link ContentObjectCriteria#addFullTextSearchCriterion(String)}</li>
 	 * </ul>
 	 * </p>

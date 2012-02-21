@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -47,20 +47,21 @@ Authors
 				<link rel="Shortcut Icon" type="image/x-icon"
 					href="#{facesContext.externalContext.requestContextPath}/favicon.ico" />
 					
+				<!-- JQUERY PLUGINS CSS FILES -->
 				<link rel="stylesheet" type="text/css"
 					href="#{facesContext.externalContext.requestContextPath}/css/jquery.contextmenu.css" />
-					
-				<!-- JQUERY STUFF -->
-				   
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/smoothness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/jquery.fancybox-1.3.4.css" rel="stylesheet" />
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/colorbox.css" rel="stylesheet" />
 				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/jquery.loading.1.6.css" rel="stylesheet" />
+				<link type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/tipsy.css" rel="stylesheet" />
 				
+				<!-- LAST BUT NOT LEAST ASTROBOA MAIN CSS FILE -->
 				<link rel="stylesheet" type="text/css"
 					href="#{facesContext.externalContext.requestContextPath}/css/astroboa-console.css" />
   				
-				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-1.4.4.min.js"></script>
+  				<!-- JQUERY PLUGINS THAT LOAD BEFORE WE REMAP JQUERY TO ANOTHER NAMESPACE IN ORDER TO SIMULTANEOUSLY USE A NEWER VERSION FOR THE PLUGINS AND THE OLDER VERSION THAT JQUERY REQUIRES -->
+				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-1.6.1.min.js"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-ui-1.8.4.custom.min.js"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.hoverIntent.minified.js"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.metadata.js"></script>
@@ -77,6 +78,8 @@ Authors
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.loading.1.6.4.min.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/amplify.min.js" charset="utf-8"></script>
   				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.colorbox-min.js" charset="utf-8"></script>
+  				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.tipsy.js" charset="utf-8"></script>
+  				<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.htmlClean-min.js"></script>
   				
   				
   				<!--[if IE]><script src="#{facesContext.externalContext.requestContextPath}/js/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
@@ -93,17 +96,21 @@ Authors
 				//]]>
 				</script>
 				
+				<!--  
 				<script src="#{facesContext.externalContext.requestContextPath}/js/jquery.bt.js" type="text/javascript" charset="utf-8"></script>
-
+				-->
+				
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/resource/remote.js"></script>
 
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?httpSessionChecker"></script>
-					
+				
+				<ui:remove>
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?schemaServiceAsync"></script>
-					
+				</ui:remove>
+				
 				<script type="text/javascript"
 					src="#{facesContext.externalContext.requestContextPath}/seam/resource/remoting/interface.js?editServiceAsync"></script>
 				

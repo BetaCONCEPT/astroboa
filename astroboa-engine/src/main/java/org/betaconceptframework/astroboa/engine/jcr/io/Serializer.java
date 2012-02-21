@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -24,8 +24,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -59,10 +62,12 @@ import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinit
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
+import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
-import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.commons.comparator.PropertyRepresentingXmlAttributeComparator;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.io.contenthandler.ExportContentHandler;
@@ -73,6 +78,7 @@ import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtil
 import org.betaconceptframework.astroboa.engine.jcr.util.JcrNodeUtils;
 import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
 import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
+import org.betaconceptframework.astroboa.model.impl.definition.SimpleCmsPropertyDefinitionImpl;
 import org.betaconceptframework.astroboa.model.impl.io.SerializationReportImpl;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.ItemUtils;
@@ -113,7 +119,7 @@ public class Serializer {
 
 	private List<String> processedCmsRepositoryEntityIdentifiers = new ArrayList<String>();
 
-	private final static String BCCMS_PREFIX_WITH_SEMICOLON = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+CmsConstants.QNAME_PREFIX_SEPARATOR;
+	private final static String BCCMS_PREFIX_WITH_SEMICOLON = BetaConceptNamespaceConstants.ASTROBOA_PREFIX+CmsConstants.QNAME_PREFIX_SEPARATOR;
 
 	private static final String NT_PREFIX_WITH_SEMI_COLON = JcrNamespaceConstants.NT_PREFIX+CmsConstants.QNAME_PREFIX_SEPARATOR;
 
@@ -127,11 +133,9 @@ public class Serializer {
 
 	private SerializationReport serializationReport;
 
-	private String qNameOfRootElement = null;
+	//private String qNameOfEntityCurrentlySerialized = null;
 
 	private Session session;
-
-	private boolean serializeBinaryContent;
 
 	private DefinitionServiceDao definitionServiceDao;
 
@@ -155,14 +159,21 @@ public class Serializer {
 		Topic, Space
 	}
 
-	private ResourceRepresentationType<?>  resourceRepresentationType;
+	private SerializationConfiguration serializationConfiguration;
 
+	private Comparator<CmsPropertyDefinition> cmsPropertyDefinitionComparator = new PropertyRepresentingXmlAttributeComparator();
+	
+	
+	public Serializer(OutputStream out, CmsRepositoryEntityUtils cmsRepositoryEntityUtils, Session session, SerializationConfiguration serializationConfiguration) throws Exception{
 
-	public Serializer(OutputStream out, CmsRepositoryEntityUtils cmsRepositoryEntityUtils, Session session, ResourceRepresentationType<?>  resourceRepresentationType, boolean prettyPrint) throws Exception{
-
-		this.resourceRepresentationType = resourceRepresentationType;
-
-		createNewExportContentHandler(out,prettyPrint);
+		this.serializationConfiguration = serializationConfiguration;
+		
+		if (this.serializationConfiguration == null){
+			//Default value to avoid NPE
+			this.serializationConfiguration = SerializationConfiguration.repository().build();
+		}
+		
+		createNewExportContentHandler(out);
 
 		this.cmsRepositoryEntityUtils = cmsRepositoryEntityUtils;
 
@@ -181,18 +192,17 @@ public class Serializer {
 		}
 	}
 
-	private void createNewExportContentHandler(OutputStream out, boolean prettyPrint) throws IOException {
+	private void createNewExportContentHandler(OutputStream out) throws IOException {
 
-		if (resourceRepresentationType == null || ResourceRepresentationType.XML.equals(resourceRepresentationType)){
-			exportContentHandler = new XmlExportContentHandler(out,prettyPrint);
+		if (serializationConfiguration.isXMLRepresentationTypeEnabled()){
+			exportContentHandler = new XmlExportContentHandler(out,serializationConfiguration.prettyPrint());
 		}
-		else if (ResourceRepresentationType.JSON.equals(resourceRepresentationType)){
-			exportContentHandler = new JsonExportContentHandler(out, true, prettyPrint);
+		else if (serializationConfiguration.isJSONRepresentationTypeEnabled()){
+			exportContentHandler = new JsonExportContentHandler(out, true, serializationConfiguration.prettyPrint());
 		}
 		else{
-			logger.warn("Resource Representation {} is not valid within export context. Export to XML is chosen", resourceRepresentationType);
-			exportContentHandler = new XmlExportContentHandler(out,prettyPrint);
-			resourceRepresentationType = ResourceRepresentationType.XML;
+			logger.warn("Resource Representation {} is not valid within export context. Export to XML is chosen", serializationConfiguration.getResourceRepresentationType());
+			exportContentHandler = new XmlExportContentHandler(out,serializationConfiguration.prettyPrint());
 		}
 	}
 
@@ -230,7 +240,7 @@ public class Serializer {
 		exportContentHandler.start();
 	}
 
-	private void serializeNode(Node node, boolean nodeRepresentsCmsProperty, FetchLevel fetchLevel, boolean nodeRepresentsResourceCollectionItem, boolean nodeRepresentsRootElement) throws Exception {
+	public void serializeNode(Node node, boolean nodeRepresentsCmsProperty, FetchLevel fetchLevel, boolean nodeRepresentsResourceCollectionItem, boolean nodeRepresentsRootElement) throws Exception {
 
 		if (logger.isDebugEnabled()){
 			logger.debug("Serializing node {}", node.getPath());
@@ -281,7 +291,7 @@ public class Serializer {
 		}
 
 		if (nodeRepresentsRootElement){
-			spaceQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+spaceQName;
+			spaceQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+spaceQName;
 		}
 		else if (nodeRepresentsResourceCollectionItem){
 			if (outputIsJSON()){
@@ -296,7 +306,7 @@ public class Serializer {
 				//In XML corresponding element should be prefixed
 				//as its parent (resourceCollection) does not share the
 				//same namespace
-				spaceQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+ spaceQName;
+				spaceQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+ spaceQName;
 			}
 		}
 		else if (parentSpaceNode){
@@ -320,10 +330,11 @@ public class Serializer {
 			
 			processLocalization(node);
 
+			closeEntity(spaceQName);
 
 		}
 		else{
-			startedNodeSerialization(spaceQName);
+			startedNewEntitySerialization(spaceQName);
 
 			openEntityWithAttribute(spaceQName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), spaceCmsIdentifier);
 
@@ -351,11 +362,12 @@ public class Serializer {
 					closeEntity(CmsConstants.CHILD_SPACES);
 				}
 			}
+			
+			closeEntity(spaceQName);
+			
+			finishedEntitySerialization(CmsEntityType.SPACE, spaceQName);
+			
 		}
-
-		closeEntity(spaceQName);
-
-		finishedNodeSerialization(CmsEntityType.SPACE, spaceQName);
 
 	}
 
@@ -366,7 +378,7 @@ public class Serializer {
 		String topicQName = CmsBuiltInItem.Topic.getLocalPart();
 
 		if (nodeRepresentsRootElement){
-			topicQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Topic.getLocalPart();
+			topicQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Topic.getLocalPart();
 		}
 		else if (nodeRepresentsResourceCollectionItem){
 
@@ -382,7 +394,7 @@ public class Serializer {
 				//In XML corresponding element should be prefixed
 				//as its parent (resourceCollection) does not share the
 				//same namespace
-				topicQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Topic.getLocalPart();
+				topicQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Topic.getLocalPart();
 			}
 		}
 		else if (parentTopicNode){
@@ -398,9 +410,11 @@ public class Serializer {
 			if (CmsConstants.PARENT_TOPIC == topicQName){
 				addOwnerAsElement(node);
 			}
+			
+			closeEntity(topicQName);
 		}
 		else{
-			startedNodeSerialization(topicQName);
+			startedNewEntitySerialization(topicQName);
 
 			openEntityWithAttribute(topicQName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), topicCmsIdentifier);
 
@@ -445,11 +459,12 @@ public class Serializer {
 					closeEntity(CmsConstants.CHILD_TOPICS);
 				}
 			}
+			
+			closeEntity(topicQName);
+			
+			finishedEntitySerialization(CmsEntityType.TOPIC, topicQName);
 		}
 
-		closeEntity(topicQName);
-
-		finishedNodeSerialization(CmsEntityType.TOPIC, topicQName);
 
 	}
 
@@ -468,7 +483,7 @@ public class Serializer {
 	}
 
 	private boolean outputIsJSON() {
-		return resourceRepresentationType != null && resourceRepresentationType == ResourceRepresentationType.JSON;
+		return serializationConfiguration.isJSONRepresentationTypeEnabled();
 	}
 
 	private void serializeChildNodes(Node node, boolean childNodesAreCmsProperties, FetchLevel fetchLevel) throws Exception {
@@ -516,10 +531,12 @@ public class Serializer {
 				addToParentPropertyDefinitionQueueDefinitionForName(nodeName,false);
 				removeDefinitionFromParentPropertyDefinitionQueue = true;
 			}
+			
+			closeEntity(qName);
 		}
 		else{
-			if (! nodeRepresentsCmsProperty){
-				startedNodeSerialization(qName);
+			if (! nodeRepresentsCmsProperty && qName.endsWith("repositoryUser")){
+				startedNewEntitySerialization(qName);
 			}
 
 			boolean exportCommonAttributes = ! nodeRepresentsCmsProperty || propertyDefinitionDefinesCommonAttributes(nodeName);
@@ -553,20 +570,19 @@ public class Serializer {
 
 				serializeChildNodes(node, nodeRepresentsCmsProperty, FetchLevel.FULL);
 			}
+			
+			closeEntity(qName);
+			
+			if (! nodeRepresentsCmsProperty && qName.endsWith("repositoryUser")){
+				finishedEntitySerialization(CmsEntityType.REPOSITORY_USER, qName);
+			}
 
 		}
-
-		closeEntity(qName);
 
 		if (removeDefinitionFromParentPropertyDefinitionQueue){
 			removeTheHeadDefinitionFromParentPropertyDefinitionQueue();
 		}
 		
-		if (! nodeRepresentsCmsProperty){
-			if (qName.endsWith("repositoryUser")){
-				finishedNodeSerialization(CmsEntityType.REPOSITORY_USER, qName);
-			}
-		}
 	}
 
 	private boolean propertyCanHaveMultiplevalues(String name) throws Exception {
@@ -625,7 +641,7 @@ public class Serializer {
 		
 		writeAttribute(CmsConstants.URL_ATTRIBUTE_NAME, url);
 
-		if (serializeBinaryContent && node.hasProperty(JcrBuiltInItem.JcrData.getJcrName())){
+		if (serializationConfiguration.serializeBinaryContent() && node.hasProperty(JcrBuiltInItem.JcrData.getJcrName())){
 			exportContentHandler.closeOpenElement();
 
 			openEntityWithNoAttributes("content");
@@ -803,7 +819,7 @@ public class Serializer {
 						numberOfJcrPropertiesLeftToProcess > 0){
 					
 					if (node.hasProperty(cmsPropertyName)){
-						serializePropertyAsElement(node.getProperty(cmsPropertyName), objectPath);
+						serializeProperty(node.getProperty(cmsPropertyName), objectPath);
 						numberOfJcrPropertiesLeftToProcess--;
 					}
 				}
@@ -861,7 +877,7 @@ public class Serializer {
 		}
 		else{
 			//	Could not serialize properties in order. Follow the default procedure
-			serializePropertiesAsElements(node);
+			serializeProperties(node);
 
 			serializeChildNodes(node, true, FetchLevel.FULL);
 		}
@@ -888,13 +904,27 @@ public class Serializer {
 		LocalizableCmsDefinition currentDefinition = parentPropertyDefinitionQueue.peek();
 
 		if (currentDefinition != null){
+			
+			Map<String, CmsPropertyDefinition> definitions = new LinkedHashMap<String, CmsPropertyDefinition>();
+			List<CmsPropertyDefinition> listOfDefinitionEntries = new ArrayList<CmsPropertyDefinition>();
+			
 			if (currentDefinition instanceof ComplexCmsPropertyDefinition){
-				return ((ComplexCmsPropertyDefinition)currentDefinition).getChildCmsPropertyDefinitions();
+				listOfDefinitionEntries.addAll(((ComplexCmsPropertyDefinition)currentDefinition).getChildCmsPropertyDefinitions().values());
 			}
+			else if (currentDefinition instanceof ContentObjectTypeDefinition){
+				listOfDefinitionEntries.addAll(((ContentObjectTypeDefinition)currentDefinition).getPropertyDefinitions().values());
+			}
+			
+			//Sort entries
+			Collections.sort(listOfDefinitionEntries, cmsPropertyDefinitionComparator);
+			
+			for (CmsPropertyDefinition definition : listOfDefinitionEntries){
+				definitions.put(definition.getName(), definition);
+			}
+			
+			
+			return definitions;
 
-			if (currentDefinition instanceof ContentObjectTypeDefinition){
-				return ((ContentObjectTypeDefinition)currentDefinition).getPropertyDefinitions();
-			}
 		}
 
 		return null;
@@ -980,7 +1010,7 @@ public class Serializer {
 		while ( locales.hasNext() ){
 			Property localeProperty = locales.nextProperty();
 
-			String locale = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":", "");
+			String locale = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":", "");
 
 			String localizedLabel = localeProperty.getString();
 
@@ -1000,7 +1030,7 @@ public class Serializer {
 		while ( locales.hasNext() ){
 			Property localeProperty = locales.nextProperty();
 		
-			String locale = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":", "");
+			String locale = localeProperty.getName().replaceAll(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":", "");
 		
 			String localizedLabel = localeProperty.getString();
 			
@@ -1018,7 +1048,7 @@ public class Serializer {
 		String taxonomyQName = CmsBuiltInItem.Taxonomy.getLocalPart();
 
 		if (nodeRepresentsRootElement){
-			taxonomyQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Taxonomy.getLocalPart();
+			taxonomyQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Taxonomy.getLocalPart();
 		}
 
 		if (nodeRepresentsResourceCollectionItem){
@@ -1034,7 +1064,7 @@ public class Serializer {
 				//In XML corresponding element should be prefixed
 				//as its parent (resourceCollection) does not share the
 				//same namespace
-				taxonomyQName = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Taxonomy.getLocalPart();
+				taxonomyQName = BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_PREFIX +":"+ CmsBuiltInItem.Taxonomy.getLocalPart();
 			}
 		}
 
@@ -1049,9 +1079,11 @@ public class Serializer {
 			addUrlForEntityRepresentedByNode(node);
 			
 			processLocalization(node);
+			
+			closeEntity(taxonomyQName);
 		}
 		else{
-			startedNodeSerialization(taxonomyQName);
+			startedNewEntitySerialization(taxonomyQName);
 
 			openEntityWithAttribute(taxonomyQName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), taxonomyCmsIdentifier);
 
@@ -1078,11 +1110,12 @@ public class Serializer {
 					closeEntity(CmsConstants.ROOT_TOPICS);
 				}
 			}
+			
+			closeEntity(taxonomyQName);
+			
+			finishedEntitySerialization(CmsEntityType.TAXONOMY, taxonomyQName);
 		}
 
-		closeEntity(taxonomyQName);
-
-		finishedNodeSerialization(CmsEntityType.TAXONOMY, taxonomyQName);
 
 	}
 
@@ -1108,9 +1141,11 @@ public class Serializer {
 			serializeCmsRepositoryEntityIdentifierForAnAlreadySerializedEntity(contentObjectQName, cmsIdentifier);
 
 			serializeBasicContentObjectInformation(cmsIdentifier, node);
+			
+			closeEntity(contentObjectQName);
 		}
 		else{
-			startedNodeSerialization(contentObjectQName);
+			startedNewEntitySerialization(contentObjectQName);
 
 			openEntityWithAttribute(contentObjectQName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), cmsIdentifier);
 
@@ -1123,26 +1158,31 @@ public class Serializer {
 			serializeChildCmsProperties(node);
 
 			serializeAspects(node);
+
+			closeEntity(contentObjectQName);
+			
+			finishedEntitySerialization(CmsEntityType.OBJECT, contentObjectQName);
 		}
 
-		closeEntity(contentObjectQName);
+		
 
-		finishedNodeSerialization(CmsEntityType.CONTENT_OBJECT, contentObjectQName);
 	}
 
-	private void finishedNodeSerialization(CmsEntityType cmsEntity, String qName) {
-		if (StringUtils.equals(qNameOfRootElement, qName)){
+	private void finishedEntitySerialization(CmsEntityType cmsEntity, String qName) {
+		
+		//if (StringUtils.equals(qNameOfEntityCurrentlySerialized, qName)){
+	
 			increaseNumberOfSerializedEntities(cmsEntity);
 
-			qNameOfRootElement = null;
-		}
+		//	qNameOfEntityCurrentlySerialized = null;
+		//}
 	}
 
-	private void startedNodeSerialization(String qName) {
+	private void startedNewEntitySerialization(String qName) {
 
-		if (qNameOfRootElement == null){
-			qNameOfRootElement = qName;
-		}
+		//if (qNameOfEntityCurrentlySerialized == null){
+		//	qNameOfEntityCurrentlySerialized = qName;
+		//}
 	}
 
 	private void addXsiTypeAttribute(String qName) throws Exception {
@@ -1157,17 +1197,21 @@ public class Serializer {
 		{
 			switch (entity) {
 			case TAXONOMY:
-				((SerializationReportImpl)serializationReport).increaseTaxonomiesSerialized(1);	
+				((SerializationReportImpl)serializationReport).increaseNumberOfCompletedSerializedTaxonomies(1);	
 				break;
-			case CONTENT_OBJECT:
-				((SerializationReportImpl)serializationReport).increaseNumberOfObjectsSerialized(1);	
+			case OBJECT:
+				((SerializationReportImpl)serializationReport).increaseNumberOfCompletedSerializedObjects(1);	
 				break;
 			case REPOSITORY_USER:
-				((SerializationReportImpl)serializationReport).increaseRepositoryUsersSerialized(1);	
+				((SerializationReportImpl)serializationReport).increaseNumberOfCompletedSerializedRepositoryUsers(1);	
 				break;
 			case SPACE:
-				((SerializationReportImpl)serializationReport).increaseSpacesSerialized(1);	
+				((SerializationReportImpl)serializationReport).increaseNumberOfCompletedSerializedSpaces(1);	
 				break;
+			case TOPIC:
+				((SerializationReportImpl)serializationReport).increaseNumberOfCompletedSerializedTopics(1);	
+				break;
+				
 			default:
 				break;
 			}
@@ -1217,9 +1261,6 @@ public class Serializer {
 			}
 			else if (property.getName().equals(CmsBuiltInItem.ContentObjectTypeName.getJcrName())){
 				writeAttribute(CmsBuiltInItem.ContentObjectTypeName.getLocalPart(), property.getString());
-			}
-			else if (property.getName().equals(CmsBuiltInItem.SystemBuiltinEntity.getJcrName()) && property.getBoolean()){
-				writeAttribute(CmsBuiltInItem.SystemBuiltinEntity.getLocalPart(), String.valueOf(property.getBoolean()));
 			}
 			else if (property.getName().equals(CmsBuiltInItem.AllowsReferrerContentObjects.getJcrName())){
 				if (! nodeRepresentsParentNodeOfTopicOrSpace){
@@ -1280,7 +1321,7 @@ public class Serializer {
 		
 		UrlProperties urlProperties = new UrlProperties();
 		urlProperties.setRelative(false);
-		urlProperties.setResourceRepresentationType(resourceRepresentationType);
+		urlProperties.setResourceRepresentationType(serializationConfiguration.getResourceRepresentationType());
 
 		if (node.isNodeType(CmsBuiltInItem.StructuredContentObject.getJcrName())){
 			if (node.hasProperty(CmsBuiltInItem.SystemName.getJcrName())){
@@ -1370,7 +1411,7 @@ public class Serializer {
 		}
 	}
 
-	private void serializePropertiesAsElements(Node node) throws Exception{
+	private void serializeProperties(Node node) throws Exception{
 
 		PropertyIterator properties = node.getProperties();
 
@@ -1390,13 +1431,13 @@ public class Serializer {
 				continue;
 			}
 
-			serializePropertyAsElement(property, objectPath);
+			serializeProperty(property, objectPath);
 
 		}
 
 	}
 
-	private void serializePropertyAsElement(Property property, String objectPath)  throws Exception{
+	private void serializeProperty(Property property, String objectPath)  throws Exception{
 		String propertyName = property.getName();
 
 		if (shouldSerializeProperty(propertyName)){
@@ -1438,11 +1479,12 @@ public class Serializer {
 			
 			boolean userHasDefinedPropertyAsMultiple = propertyDefinition != null && propertyDefinition.isMultiple();
 			boolean jcrHasMarkedPropertyAsMultiple = property.getDefinition() != null && property.getDefinition().isMultiple();
+			boolean exportAsAnAttribute = propertyDefinition instanceof SimpleCmsPropertyDefinition && ((SimpleCmsPropertyDefinitionImpl)propertyDefinition).isRepresentsAnXmlAttribute();
 
 			if (jcrHasMarkedPropertyAsMultiple){
 				
 				for (Value value : property.getValues()){
-					createElementWithValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple, objectPath);
+					writeValueForProperty(propertyName, value, valueType, dateTimePattern, userHasDefinedPropertyAsMultiple, objectPath,exportAsAnAttribute);
 					
 					if (!userHasDefinedPropertyAsMultiple){
 						logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a single value property. Property's instance " +
@@ -1453,7 +1495,7 @@ public class Serializer {
 				}
 			}
 			else{
-				createElementWithValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple,objectPath);
+				writeValueForProperty(propertyName, property.getValue(), valueType, dateTimePattern, userHasDefinedPropertyAsMultiple,objectPath,exportAsAnAttribute);
 				
 				if (userHasDefinedPropertyAsMultiple){
 					logger.warn("Property "+propertyDefinition.getFullPath() + " has been defined as a multi value property. Property's instance " +
@@ -1532,39 +1574,52 @@ public class Serializer {
 		}
 	}
 
-	private void createElementWithValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath) throws Exception {
+	private void writeValueForProperty(String propertyName, Value value, ValueType valueType, boolean dateTimePattern, boolean propertyMayHaveMultipltValues, String objectPath, boolean exportAsAnAttribute) throws Exception {
 		if (value != null){
-			if (ValueType.TopicReference == valueType){
-				addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
-			}
-			else if (ValueType.ObjectReference == valueType){
-				addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
-			}
-			else{
-
-				if (propertyMayHaveMultipltValues && outputIsJSON()){
-					openEntityWithAttribute(propertyName, CmsConstants.EXPORT_AS_AN_ARRAY_INSTRUCTION, "true");
+			
+			if (exportAsAnAttribute){
+				
+				if (ValueType.Date == valueType){
+					String dateValue = convertCalendarToXMLFormat(value.getDate(), dateTimePattern);
+					writeAttribute(propertyName, dateValue);
 				}
 				else{
-					openEntityWithNoAttributes(propertyName);
+					writeAttribute(propertyName, value.getString());
 				}
-
-				if (ValueType.Binary == valueType){
-					exportContentHandler.closeOpenElement();
-
-					serializeBinaryValue(value);
-
+			}
+			else{
+				if (ValueType.TopicReference == valueType){
+					addTopicReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues,objectPath);
 				}
-				else if (ValueType.Date == valueType){
-					char[] ch = convertCalendarToXMLFormat(value.getDate(), dateTimePattern).toCharArray();
-					writeElementContent(ch);
+				else if (ValueType.ObjectReference == valueType){
+					addContentObjectReferenceElement(propertyName, value.getString(), propertyMayHaveMultipltValues, objectPath);
 				}
-				else {
-					char[] ch = value.getString().toCharArray();
-					writeElementContent(ch);
-				}
+				else{
 
-				closeEntity(propertyName);
+					if (propertyMayHaveMultipltValues && outputIsJSON()){
+						openEntityWithAttribute(propertyName, CmsConstants.EXPORT_AS_AN_ARRAY_INSTRUCTION, "true");
+					}
+					else{
+						openEntityWithNoAttributes(propertyName);
+					}
+
+					if (ValueType.Binary == valueType){
+						exportContentHandler.closeOpenElement();
+
+						serializeBinaryValue(value);
+
+					}
+					else if (ValueType.Date == valueType){
+						char[] ch = convertCalendarToXMLFormat(value.getDate(), dateTimePattern).toCharArray();
+						writeElementContent(ch);
+					}
+					else {
+						char[] ch = value.getString().toCharArray();
+						writeElementContent(ch);
+					}
+
+					closeEntity(propertyName);
+				}
 			}
 		}
 	}
@@ -1629,8 +1684,6 @@ public class Serializer {
 			return;
 		}
 		
-		startedNodeSerialization(propertyName);
-
 		openEntityWithAttribute(propertyName, CmsBuiltInItem.CmsIdentifier.getLocalPart(), contentObjectId);
 
 		if (referenceMayHaveMultipleValues){
@@ -1646,8 +1699,6 @@ public class Serializer {
 		
 		closeEntity(propertyName);
 		
-		finishedNodeSerialization(CmsEntityType.CONTENT_OBJECT, propertyName);
-
 	}
 
 	private void serializeBasicContentObjectInformation(String contentObjectId,
@@ -1659,7 +1710,7 @@ public class Serializer {
 
 		UrlProperties urlProperties = new UrlProperties();
 		urlProperties.setRelative(false);
-		urlProperties.setResourceRepresentationType(resourceRepresentationType);
+		urlProperties.setResourceRepresentationType(serializationConfiguration.getResourceRepresentationType());
 
 		if (contentObjectJcrNode != null){
 			
@@ -1849,10 +1900,6 @@ public class Serializer {
 
 	public void setPropertyPathsWhoseValuesWillBeIncludedInTheSerialization(List<String> propertyPathsWhoseValuesWillBeIncludedInTheSerialization) {
 		this.propertyPathsWhoseValuesWillBeIncludedInTheSerialization = propertyPathsWhoseValuesWillBeIncludedInTheSerialization;
-	}
-
-	public void serializeBinaryContent(boolean serializeBinaryContent){
-		this.serializeBinaryContent = serializeBinaryContent;
 	}
 
 	public void useTheSameNameForAllObjects(

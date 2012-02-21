@@ -28,7 +28,7 @@ var editor;
 
 // create references to remote services
 var editServiceAsync = Seam.Component.getInstance("editServiceAsync");
-var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
+//var schemaServiceAsync = Seam.Component.getInstance("schemaServiceAsync");
 var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
 
 
@@ -544,6 +544,12 @@ function callFunctionOnEnterKey(e, func, arg) {
     //	bcmslib.jQuery("#objectTabs").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
     //	bcmslib.jQuery("#objectTabs li").removeClass('ui-corner-top').addClass('ui-corner-left');
     	bcmslib.jQuery("#objectTabs").css("display","block");
+    	
+    	// if an existing object is loaded them show the object properties tab and not the profile tab 
+    	var objectId = bcmslib.jQuery("#objectId span").text();
+    	if (objectId) {
+    		bcmslib.jQuery( "#objectTabs" ).tabs( "option", "selected", 1);
+    	}
     }
     
     // SET BUTTON IN SCRIPT ENGINE CONSOLE TO TOGGLE DIV TO FULLSCREEN
@@ -738,382 +744,78 @@ function callFunctionOnEnterKey(e, func, arg) {
     } 
     
     
-    /* create property help message boxes */
-    function generatePropertyDescriptionElement(propertyDescription) {
-    	var escapedTipDivClassSelector = "." + propertyDescription[0].replace(/\./g, "\\.");
-    	bcmslib.jQuery(escapedTipDivClassSelector).hide()
-    	.append(labelForInternalPropertyName + " <strong>" + propertyDescription[0] + "</strong><hr /><br/>")
-    	.append(propertyDescription[1]);
+    
+    
+    /* GENERATE HELP MESSAGES FOR PROPERTIES */
+    function addHelpMessageToProperties() {
+    	bcmslib.jQuery('.propertyTip').tipsy(
+    			{
+    				trigger: 'manual',
+    				html: true, 
+    				gravity: bcmslib.jQuery.fn.tipsy.autoWE, 
+    				fallback: "No description available", 
+    				title: function() { 
+    									var fullPropertyPath =  bcmslib.jQuery(this).attr('id').replace(/-.*/,"").replace(/\[.*\]/,"");
+    									return objectPropertyDescriptionMap[fullPropertyPath];
+    								} 
+    			});
     	
-    	if (objectPropertyDescriptionMap[propertyDescription[0]] == null) {
-    		objectPropertyDescriptionMap[propertyDescription[0]] = propertyDescription;
-    	}
-    }
-    
-    function getPropertyDescription(fullPropertyPath) {
-    	if (objectPropertyDescriptionMap[fullPropertyPath] != null) {
-    		generatePropertyDescriptionElement(objectPropertyDescriptionMap[fullPropertyPath]);
-    	}
-    	else {
-    		schemaServiceAsync.getPropertyDescription(fullPropertyPath, generatePropertyDescriptionElement);
-    		//	waitForPropertyDescriptionTimeoutInterval = setInterval(waitForPropertyDescription, 20, fullPropertyPath);
-    	}
-    }
-    
-    function waitForPropertyDescription(fullPropertyPath) {
-    	var escapedTipDivClassSelector = "." + fullPropertyPath.replace(/\./g, "\\.");
-    	if (bcmslib.jQuery(escapedTipDivClassSelector + ":empty").length == 0) {
-    		clearInterval(waitForPropertyDescriptionTimeoutInterval);
-    	}
-    }
-    
-    function createPropertyHelpMessage() {
-		bcmslib.jQuery(".propertyTip").each(function(){
-				
-				var fullPropertyPath =  bcmslib.jQuery(this).attr('id');
-				var escapedTipDivClassSelector = "." + fullPropertyPath.replace(/\./g, "\\\\.");
-				
-				bcmslib.jQuery(this).bt(
-					{
-						trigger: 'click',
-						closeWhenOthersOpen: true,
-						killTitle: false,
-						preBuild: getPropertyDescription(fullPropertyPath),
-						contentSelector: 'bcmslib.jQuery("' + escapedTipDivClassSelector + '").html()',
-						offsetParent: "#tipArea",
-						width: 700,
-						shrinkToFit: true,
-						fill: '#FFF',
-						/* centerPointX: .9, */
-						strokeStyle: '#ABABAB',
-						strokeWidth: 1,
-						spikeLength: 15,
-						spikeGirth: 5,
-						positions: ['most'],
-						padding: 20,
-						cornerRadius: 15,
-						cssStyles:	{
-						    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-						    			fontSize: '11px'
-									},
-						shadow: true,
-					    shadowOffsetX: 3,
-					    shadowOffsetY: 3,
-					    shadowBlur: 8,
-					    shadowColor: 'rgba(0,0,0,.9)',
-					    shadowOverlap: false,
-					    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-					}
-				);
-				
-		});
+    	bcmslib.jQuery(document)
+    		.delegate('.propertyTip', 'click', function() {
+    								var tipsy = bcmslib.jQuery.data(this, 'tipsy');
+									bcmslib.jQuery.when(getPropertyDescription(this)).then(function(){
+										tipsy.show();
+									});
+								} 
+    		);
     	
-    }
-    
-    /* create property help message boxes OLD Implementation*/
-    function createPropertyHelpMessageOLD(tooltipTextSelector, tooltipImageSelector) {
-    	bcmslib.jQuery(tooltipTextSelector).hide();
-		bcmslib.jQuery(tooltipImageSelector).bt(
-			{
-				/*trigger: 'click',*/
-				closeWhenOthersOpen: true,
-				/*postShow: function(box){alert("test");} ,*/
-				killTitle: false,
-				contentSelector: 'bcmslib.jQuery("'+tooltipTextSelector+'").html()', /*get text of inner content of hidden div*/
-				/*offsetParent: "#dynamicAreaForm\\:complexCmsPropertyChildPropertiesTable",*/
-				/*offsetParent: ".editorTableClass",*/
-				offsetParent: "#tipArea",
-				width: 700,
-				shrinkToFit: true,
-				fill: '#FFF',
-				/* centerPointX: .9, */
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, /*no stroke*/
-				spikeLength: 15,
-				spikeGirth: 5,
-			/*	spikeLength: 40,
-				spikeGirth: 10, 
-				overlap: 10,*/
-				positions: ['right'],
-				padding: 20,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
-		);
-    	
-    }
-    
-    
-    function generateTopicPropertyHelpElement(allowedTaxonomies) {
-    	var escapedTipDivClassSelector = ".topicTip_" + allowedTaxonomies[0].replace(/\./g, "\\.");
-    	bcmslib.jQuery(escapedTipDivClassSelector).hide()
-    	.append(allowedTaxonomies[1] + "<hr /><br/>")
-    	.append(topicSelectionHelpMessage);
-    	
-    	if (topicPropertyHelpMessageMap[allowedTaxonomies[0]] == null) {
-    		topicPropertyHelpMessageMap[allowedTaxonomies[0]] = allowedTaxonomies;
-    	}
-    }
-    
-    function getTopicPropertyHelpMessage(fullPropertyPath) {
-    	if (topicPropertyHelpMessageMap[fullPropertyPath] != null) {
-    		generateTopicPropertyHelpElement(topicPropertyHelpMessageMap[fullPropertyPath]);
-    	}
-    	else {
-    		schemaServiceAsync.getTopicPropertyAllowedTaxonomies(fullPropertyPath, generateTopicPropertyHelpElement);
-    	}
-    }
-    
-    function createTopicReferenceHelpMessage() {
-		bcmslib.jQuery(".topicTipImg").each(function(){
-				
-				var fullPropertyPath =  bcmslib.jQuery(this).attr('id');
-				var escapedTipDivClassSelector = ".topicTip_" + fullPropertyPath.replace(/\./g, "\\\\.");
-				
-				bcmslib.jQuery(this).bt(
-						{
-							closeWhenOthersOpen: true,
-							killTitle: false,
-							preBuild: getTopicPropertyHelpMessage(fullPropertyPath),
-							contentSelector: 'bcmslib.jQuery("' + escapedTipDivClassSelector + '").html()',
-							offsetParent: "#tipArea",
-							width: 400,
-							shrinkToFit: true,
-							fill: '#FFF',
-							strokeStyle: '#ABABAB',
-							strokeWidth: 1, /*no stroke*/
-							spikeLength: 15,
-							spikeGirth: 5,
-							positions: ['most'],
-							padding: 20,
-							cornerRadius: 15,
-							cssStyles:	{
-							    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-							    			fontSize: '11px'
-										},
-							shadow: true,
-						    shadowOffsetX: 3,
-						    shadowOffsetY: 3,
-						    shadowBlur: 8,
-						    shadowColor: 'rgba(0,0,0,.9)',
-						    shadowOverlap: false,
-						    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-						}
-					);
-		});
-    }
-    
-    function generateObjectRefPropertyHelpElement(allowedObjectTypes) {
-    	var escapedTipDivClassSelector = ".objectRefTip_" + allowedObjectTypes[0].replace(/\./g, "\\.");
-    	bcmslib.jQuery(escapedTipDivClassSelector).hide()
-    	.append(allowedObjectTypes[1] + "<hr /><br/>")
-    	.append(objectSelectionHelpMessage);
-    	
-    	if (objectRefPropertyHelpMessageMap[allowedObjectTypes[0]] == null) {
-    		objectRefPropertyHelpMessageMap[allowedObjectTypes[0]] = allowedObjectTypes;
-    	}
-    }
-    
-    function getObjectRefPropertyHelpMessage(fullPropertyPath) {
-    	if (objectRefPropertyHelpMessageMap[fullPropertyPath] != null) {
-    		generateObjectRefPropertyHelpElement(objectRefPropertyHelpMessageMap[fullPropertyPath]);
-    	}
-    	else {
-    		schemaServiceAsync.getObjectRefPropertyAllowedObjectTypes(fullPropertyPath, generateObjectRefPropertyHelpElement);
-    	}
-    }
-    
-    function createtObjectReferenceHelpMessage() {
-		bcmslib.jQuery(".objectRefTipImg").each(function(){
-				
-				var fullPropertyPath =  bcmslib.jQuery(this).attr('id');
-				var escapedTipDivClassSelector = ".objectRefTip_" + fullPropertyPath.replace(/\./g, "\\\\.");
-				
-				bcmslib.jQuery(this).bt(
-						{
-							closeWhenOthersOpen: true,
-							killTitle: false,
-							preBuild: getObjectRefPropertyHelpMessage(fullPropertyPath),
-							contentSelector: 'bcmslib.jQuery("' + escapedTipDivClassSelector + '").html()',
-							offsetParent: "#tipArea",
-							width: 400,
-							shrinkToFit: true,
-							fill: '#FFF',
-							strokeStyle: '#ABABAB',
-							strokeWidth: 1, /*no stroke*/
-							spikeLength: 15,
-							spikeGirth: 5,
-							positions: ['most'],
-							padding: 20,
-							cornerRadius: 15,
-							cssStyles:	{
-							    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-							    			fontSize: '11px'
-										},
-							shadow: true,
-						    shadowOffsetX: 3,
-						    shadowOffsetY: 3,
-						    shadowBlur: 8,
-						    shadowColor: 'rgba(0,0,0,.9)',
-						    shadowOverlap: false,
-						    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-						}
-					);
-		});
-    }
-    
-    /* create property help message boxes OLD Implementation*/
-	function createtObjectReferenceHelpMessageOLD(tooltipTextSelector, tooltipImageSelector) {
-    	bcmslib.jQuery(tooltipTextSelector).hide();
-		bcmslib.jQuery(tooltipImageSelector).bt(
-			{
-				/*trigger: 'click',*/
-				closeWhenOthersOpen: true,
-				killTitle: false,
-				contentSelector: 'bcmslib.jQuery("'+tooltipTextSelector+'").html()', /*get text of inner content of hidden div*/
-				offsetParent: "#tipArea",
-				width: 400,
-				shrinkToFit: true,
-				fill: '#FFF',
-				/* centerPointX: .9, */
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, /*no stroke*/
-				spikeLength: 15,
-				spikeGirth: 5,
-			/*	spikeLength: 40,
-				spikeGirth: 10, 
-				overlap: 10,*/
-			/*	positions: ['right'],*/
-				padding: 20,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
+    	bcmslib.jQuery(document)
+		.delegate('.propertyTip', 'mouseleave', function() { 
+								var tipsy = bcmslib.jQuery.data(this, 'tipsy');
+								bcmslib.jQuery.when(getPropertyDescription(this)).then(function(){
+									tipsy.hide();
+								});
+							} 
 		);
     }
     
-    function createObjectTypeHelpMessage(tooltipTextSelector, tooltipImageSelector) {
-    	bcmslib.jQuery(tooltipTextSelector).hide();
-		bcmslib.jQuery(tooltipImageSelector).bt(
-			{
-				closeWhenOthersOpen: true,
-				killTitle: false,
-				contentSelector: 'bcmslib.jQuery("'+tooltipTextSelector+'").html()', /*get text of inner content of hidden div*/
-				offsetParent: "#tipArea",
-				width: 500,
-				shrinkToFit: true,
-				fill: '#FFF',
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, /*no stroke*/
-				spikeLength: 15,
-				spikeGirth: 5,
-			/*	positions: ['right'],*/
-				padding: 20,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
-		);
-    }
-    
-    function createUrlCreationDialogHelpMessages() {
-    	bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeTooltip').hide();
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeTooltip').hide();
-		
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeHelp').bt(
-			{
-				textzIndex:       15002,                  // z-index for the text
-			    boxzIndex:        15001,                  // z-index for the "talk" box (should always be less than textzIndex)
-			    wrapperzIndex:    15000,
-				contentSelector: "bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeTooltip').html()",
-				offsetParent: null,
-				closeWhenOthersOpen: true,
-				killTitle: true,
-				width: 350,
-				shrinkToFit: true,
-				fill: '#FFF',
-				strokeStyle: '#ABABAB',
-				strokeWidth: 1, /*no stroke*/
-				spikeLength: 10,
-				spikeGirth: 5,
-				positions: ['most'],
-				padding: 10,
-				cornerRadius: 15,
-				cssStyles:	{
-				    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				    			fontSize: '11px'
-							},
-				shadow: true,
-			    shadowOffsetX: 3,
-			    shadowOffsetY: 3,
-			    shadowBlur: 8,
-			    shadowColor: 'rgba(0,0,0,.9)',
-			    shadowOverlap: false,
-			    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-			}
-		);
+    function getPropertyDescription(propertyElement) {
+    	// We will return a promise and pass the deferred object to the success event so that the subscriber will be able to resolve it when the query data has been processed 
+		var dfd = bcmslib.jQuery.Deferred();
+    	
+    	var fullPropertyPath =  bcmslib.jQuery(propertyElement).attr('id').replace(/-.*/,"");
 
-		bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeHelp').bt(
-				{
-					textzIndex:       15002,                  // z-index for the text
-				    boxzIndex:        15001,                  // z-index for the "talk" box (should always be less than textzIndex)
-				    wrapperzIndex:    15000,
-					contentSelector: "bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeTooltip').html()",
-					offsetParent: null,
-					closeWhenOthersOpen: true,
-					killTitle: true,
-					width: 350,
-					shrinkToFit: true,
-					fill: '#FFF',
-					strokeStyle: '#ABABAB',
-					strokeWidth: 1, /*no stroke*/
-					spikeLength: 10,
-					spikeGirth: 5,
-					positions: ['most'],
-					padding: 10,
-					cornerRadius: 15,
-					cssStyles:	{
-					    			fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-					    			fontSize: '11px'
-								},
-					shadow: true,
-				    shadowOffsetX: 3,
-				    shadowOffsetY: 3,
-				    shadowBlur: 8,
-				    shadowColor: 'rgba(0,0,0,.9)',
-				    shadowOverlap: false,
-				    noShadowOpts: {strokeStyle: '#ABABAB', strokeWidth: 1}
-				}
-			);
+    	if (objectPropertyDescriptionMap[fullPropertyPath] != null) {
+    		dfd.resolve();
+    	}
+    	else {
+    		//schemaServiceAsync.getPropertyDescription(fullPropertyPath, returnPropertyDescription);
+    		getObjectModel(fullPropertyPath, 'objectForm.getPropertyModel.success', null, {'fullPropertyPath' : fullPropertyPath, 'dfd': dfd});
+    	}
+    	
+    	return dfd.promise();
     }
+    
+    amplify.subscribe('objectForm.getPropertyModel.success', function( settings, data, status, eventContext ) {
+		if (data != null) {
+			var localizedPropertyDescription = data.description[locale];
+			if (localizedPropertyDescription == null) {
+				localizedPropertyDescription = data.description['en'];
+				if (localizedPropertyDescription == null) {
+					localizedPropertyDescription = 'There is no localized description';
+				}
+			}
+			
+			var fullPropertyPath = eventContext['fullPropertyPath'];
+			var description = '<div style="width: 500px;">' + labelForInternalPropertyName + " <strong>" + fullPropertyPath + "</strong><hr /><br/>" + localizedPropertyDescription + '</div>';
+			objectPropertyDescriptionMap[fullPropertyPath] = description;
+			var dfd = eventContext['dfd'];
+			dfd.resolve();
+		}
+	});
+    
+    
+    
     
     /* TOP MENU */
     function createObjectTypeSelectionMenuInFolderTab() {
@@ -1382,6 +1084,8 @@ function callFunctionOnEnterKey(e, func, arg) {
     }
     
     // preview html text areas
+    bcmslib.jQuery.htmlClean.defaults.removeTags = ["<script>"];
+    
     function previewTextArea(previewButton) {
     	// Find out the div that contains the editor
     	var editorDivParent = bcmslib.jQuery(previewButton).siblings(".editableParent");
@@ -1392,7 +1096,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     		if (!text) {
     			text = 'The field is empty'; 
     		}
-    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<textarea style="width: 100%; height: 100%; font-size: 13px;">' + text + "</textarea>", 'width': '90%', 'height': '90%'});
+    		else {
+    			text = bcmslib.jQuery.htmlClean(text);
+    		}
+    		bcmslib.jQuery.colorbox({'opacity': 0.95, 'html': '<div style="width: 100%; height: 100%; font-size: 13px;">' + text + "</div>", 'width': '90%', 'height': '90%'});
     		// bcmslib.jQuery.fancybox({'content': text, 'autoDimensions': false, 'width': 600, 'height': 500});
     	}
     }
@@ -1547,10 +1254,10 @@ function callFunctionOnEnterKey(e, func, arg) {
     					acceptedObjectTypeList = acceptedObjectTypes.split(',');
     					
     					for(i = 0; i < acceptedObjectTypeList.length - 1; i++){
-    						query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[i]) + '" OR '; 
+    						query += 'objectType = "' + $.trim(acceptedObjectTypeList[i]) + '" OR '; 
     					}
 	    				
-    					query += 'contentTypeName = "' + $.trim(acceptedObjectTypeList[acceptedObjectTypeList.length - 1]) + '") AND ';
+    					query += 'objectType = "' + $.trim(acceptedObjectTypeList[acceptedObjectTypeList.length - 1]) + '") AND ';
     				}
     			
     				var title = $('#objectTitle').val();

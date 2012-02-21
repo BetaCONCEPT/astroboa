@@ -1,5 +1,5 @@
 /*
-i * Copyright (C) 2005-2011 BetaCONCEPT LP.
+i * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -69,10 +69,10 @@ public final class ObjectReferencePropertyDefinitionImpl extends SimpleCmsProper
 			boolean mandatory, Integer order, String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			String repositoryObjectRestriction,
-			Set<String> acceptedContentTypes) {
+			Set<String> acceptedContentTypes,boolean representsAnXmlAttribute) {
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				null, repositoryObjectRestriction, null);
+				null, repositoryObjectRestriction, null,representsAnXmlAttribute);
 		
 		this.acceptedContentTypes = acceptedContentTypes;
 		
@@ -100,7 +100,7 @@ public final class ObjectReferencePropertyDefinitionImpl extends SimpleCmsProper
 		ObjectReferencePropertyDefinitionImpl cloneDefinition = new ObjectReferencePropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getRepositoryObjectRestriction(), acceptedContentTypes);
+				getRepositoryObjectRestriction(), acceptedContentTypes, isRepresentsAnXmlAttribute());
 		
 		cloneDefinition.addExpandedAcceptedContentTypes(expandedAcceptedContentTypes);
 		

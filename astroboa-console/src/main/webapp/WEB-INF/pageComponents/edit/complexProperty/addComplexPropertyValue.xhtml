@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -44,7 +44,7 @@ Authors
 					cmsPropertyWrapper.valueType eq 'Complex'}"
 				action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
 				reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
-				
+				oncomplete="addHelpMessageToProperties();"
 				title="Add a new complex property">
 				<img src="images/cms-icons/16/fugue/table--plus.png" alt="Add a new complex property"/>
 			</a4j:commandLink>

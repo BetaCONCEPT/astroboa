@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -58,8 +58,8 @@ public class SpaceServiceSecureImpl  extends AbstractSecureAstroboaService imple
 	}
 
 	@RolesAllowed("ROLE_CMS_EDITOR")
-	public void deleteSpace(String spaceId, String authenticationToken) {
-		spaceService.deleteSpace(spaceId);
+	public boolean deleteSpace(String spaceId, String authenticationToken) {
+		return spaceService.deleteSpace(spaceId);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")

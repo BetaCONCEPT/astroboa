@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -42,7 +42,6 @@ import org.betaconceptframework.astroboa.api.model.definition.TopicReferenceProp
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
 import org.betaconceptframework.astroboa.api.model.query.Order;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
@@ -209,14 +208,13 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 			searchResultsFilterAndOrdering.setSearchedText(null);
 			searchResultsFilterAndOrdering.setSelectedContentObjectType(null);
 			searchResultsFilterAndOrdering.setSelectedFromDate(null);
-			searchResultsFilterAndOrdering.setSelectedOwnerFilter(null);
+			searchResultsFilterAndOrdering.setSelectedOwnerFilter(3);
 			searchResultsFilterAndOrdering.setSelectedToDate(null);
 			searchResultsFilterAndOrdering.setSelectedContentObjectIdentifier(null);
 			searchResultsFilterAndOrdering.setQueryName(null);
 			searchResultsFilterAndOrdering.setQueryLocalizedLabel(null);
 			searchResultsFilterAndOrdering.setQueryTitle(null);
 			searchResultsFilterAndOrdering.setSelectedContentObjectSystemName(null);
-			searchResultsFilterAndOrdering.setSelectedSearchModeFilter(SearchMode.SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES);
 		}
 
 	}
@@ -469,9 +467,9 @@ public class ContentObjectSearchByCriteria extends AbstractUIBean{
 	private void setCriteriaFromUserSelection() throws InvalidInputForCmsPropertyTypeException {
 
 		//set search mode
-		if (searchResultsFilterAndOrdering.getSelectedSearchModeFilter() != null){
-			contentObjectCriteria.setSearchMode(searchResultsFilterAndOrdering.getSelectedSearchModeFilter());
-		}
+		//if (searchResultsFilterAndOrdering.getSelectedSearchModeFilter() != null){
+		//	contentObjectCriteria.setSearchMode(searchResultsFilterAndOrdering.getSelectedSearchModeFilter());
+		//}
 		
 		// set content type criteria by user selection
 		if (StringUtils.isNotBlank(searchResultsFilterAndOrdering.getSelectedContentObjectType())) 

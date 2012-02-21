@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -49,7 +49,6 @@ public class TopicAdapter extends XmlAdapter<TopicType, Topic>{
 			TopicType topicType = new TopicType();
 			topicType.setId(topic.getId());
 			topicType.setName(topic.getName());
-			topicType.setSystemBuiltinEntity(topic.isSystemBuiltinEntity());
 			topicType.getLocalizedLabels().putAll(topic.getLocalizedLabels());
 			topicType.setOwner(topic.getOwner());
 			
@@ -103,7 +102,6 @@ public class TopicAdapter extends XmlAdapter<TopicType, Topic>{
 
 			topic.setId(topicType.getId());
 			topic.setName(topicType.getName());
-			topic.setSystemBuiltinEntity(topicType.isSystemBuiltinEntity());
 			topic.getLocalizedLabels().putAll(topicType.getLocalizedLabels());
 			topic.setTaxonomy(topicType.getTaxonomy());
 			topic.setOwner(topicType.getOwner());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -31,6 +31,8 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -41,7 +43,6 @@ import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
 import org.betaconceptframework.astroboa.context.AstroboaClientContext;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.service.security.exception.NonAuthenticatedOperationException;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.query.render.RenderPropertiesImpl;
@@ -86,7 +87,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			//Create content object for test
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)+"GetContentObjectBlankIdProvided"+
-					contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -94,7 +95,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"GetContentObjectBlankIdProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod))));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			ContentObject refreshedContentObject = executeMethodOnContentService(getContentObjectMethod, null);
 
@@ -130,7 +131,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			//Create content object for test
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"BlankUserIdInSecurityContextProvided"+
-					contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -138,7 +139,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"BlankUserIdInSecurityContextProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			activeContext.getRepositoryContext().getSecurityContext().getSubject().getPrincipals().remove(systemIdentityPrincipal);
 
@@ -168,7 +169,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 
 			//Create content object for test
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"InvalidIdProvided"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -176,7 +177,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"InvalidIdProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			ContentObject refreshedContentObject = executeMethodOnContentService(getContentObjectMethod, "some-fake-id");
 
@@ -199,7 +200,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 
 			//Create content object for test
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromSYSTEMUserWithNoRoleCmsInternalViewerProvided"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -207,7 +208,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromSYSTEMUserWithNoRoleCmsInternalViewerProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			removeRoleFromActiveSubject(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_INTERNAL_VIEWER));
 
@@ -256,7 +257,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			//Create content object for test
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromSYSTEMUserWithRoleCmsInternalViewerProvided"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -264,7 +265,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromSYSTEMUserWithRoleCmsInternalViewerProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			//		1. Content Object has no status
 			ContentObject refreshedContentObject = executeMethodOnContentService(getContentObjectMethod, contentObject.getId());
@@ -311,7 +312,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			//Create content object for test
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromNonSYSTEMUserWithNoRoleCmsInternalViewerProvided"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -319,7 +320,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromNonSYSTEMUserWithNoRoleCmsInternalViewerProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			loginToTestRepositoryAsTestUser();
 			
@@ -375,7 +376,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			//Create content object for test
 
 			ContentObject contentObject = createContentObject(systemUser, TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromNonSYSTEMUserWithRoleCmsInternalViewerProvided"
-					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod), false);
+					+contentServiceMethodDeclarations.indexOf(getContentObjectMethod));
 
 			contentObject = contentService.save(contentObject, false, true, null);
 
@@ -383,7 +384,7 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 			contentObject.setSystemName(TestUtils.createValidSystemName(TEST_CONTENT_TYPE+random.nextInt()+methodName+"FromNonSYSTEMUserWithRoleCmsInternalViewerProvided"+contentServiceMethodDeclarations.indexOf(getContentObjectMethod)));
 			contentObject = contentService.save(contentObject, true, true, null);
 
-			addEntityToBeDeletedAfterTestIsFinished(contentObject);
+			markObjectForRemoval(contentObject);
 
 			loginToTestRepositoryAsTestUser();
 			
@@ -496,7 +497,11 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 				if (result instanceof String){
 					//Method may return string. 
 					//Create ContentObject from import
-					return importDao.importContentObject((String)result, false, true, ImportMode.DO_NOT_SAVE, null);
+					ImportConfiguration configuration = ImportConfiguration.object()
+							.persist(PersistMode.DO_NOT_PERSIST)
+							.build();
+
+					return importDao.importContentObject((String)result, configuration);
 				}
 				else if (result instanceof CmsOutcome){
 					final long count = ((CmsOutcome)result).getCount();
@@ -529,13 +534,13 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 
-		ContentObject contentObject = createContentObject(systemUser, "secureContentObject", false);
+		ContentObject contentObject = createContentObject(systemUser, "secureContentObject");
 
 		//Provide empty value for string
 		((StringProperty)contentObject.getCmsProperty("profile.contentObjectStatus")).setSimpleTypeValue(ContentObjectStatus.submitted.toString());
 
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		//Login as anonymous
 		loginToTestRepositoryAsAnonymous();

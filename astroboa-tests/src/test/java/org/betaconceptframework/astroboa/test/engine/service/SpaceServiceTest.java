@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -31,9 +31,10 @@ import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
@@ -55,16 +56,16 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		
 		Space space =  createRootSpaceForOrganizationSpace("space-test-delete");
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-space-delete-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-space-delete-reference");
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		space.addContentObjectReference(contentObject.getId());
 		
 		space = spaceService.save(space);
 		
 		//Now delete space
-		spaceService.deleteSpace(space.getId());
+		Assert.assertTrue(spaceService.deleteSpace(space.getId()), "Space was not deleted");
 		
 		//Check with Jcr
 		try{
@@ -101,9 +102,9 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 	@Test
 	public void testSaveSpace() throws ItemNotFoundException, RepositoryException{
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-space-save-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-space-save-reference");
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		
 		Space space =  createRootSpaceForOrganizationSpace("space-test-save");
@@ -195,6 +196,10 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		
 		try{
 			
+			ImportConfiguration configuration = ImportConfiguration.space()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.build();
+
 			for (ResourceRepresentationType<String> output : outputs){
 				//Reload space without its children
 				space = spaceService.getSpace(space.getId(), ResourceRepresentationType.SPACE_INSTANCE, FetchLevel.ENTITY);
@@ -209,7 +214,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 					spaceXmlFromServiceUsingId = spaceService.getSpace(space.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY);
 				}
 				
-				Space spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 
+				Space spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, configuration); 
 
 				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, false, true, true,true, true);
 
@@ -224,7 +229,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 					spaceXmlFromServiceUsingId = spaceService.getSpace(space.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL);
 				}
 
-				spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 
+				spaceFromServiceWithId = importDao.importSpace(spaceXmlFromServiceUsingId, configuration); 
 
 				repositoryContentValidator.compareSpaces(space, spaceFromServiceWithId, true, true, true,true, true);
 			
@@ -243,7 +248,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		//Create content objects for test
 		RepositoryUser systemUser = getSystemUser();
 		
-		Space space = JAXBTestUtils.createSpace("spaceName", 
+		Space space = JAXBTestUtils.createSpace("testSpaceWithVariousNames", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newSpace(),
 				systemUser);
 		
@@ -252,7 +257,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		space.setParent(systemUser.getSpace());
 		
 		space = spaceService.save(space);
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 		
 		
 		//Now provide invalid system name

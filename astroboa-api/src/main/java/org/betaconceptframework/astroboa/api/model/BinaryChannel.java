@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -406,7 +406,7 @@ public interface BinaryChannel extends CmsRepositoryEntity {
 	 * 
 	 * <p>
 	 * The generated URL follows the general Astroboa RESTful API URL pattern for accessing content object properties
-	 * <code>http://server/resource-api/{repository-id}/contentObject/{contentObjectId}/{binaryChannelPath}</code>
+	 * <code>http://server/resource-api/{repository-id}/objects/{contentObjectId}/{binaryChannelPath}</code>
 	 * The {binaryChannelPath} is the path to the binary property that contains the binary channel possibly followed by a value index in brackets if the
 	 * binary property contains multiple binary channels.
 	 * 

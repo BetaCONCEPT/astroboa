@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -81,7 +81,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		closeStartTagIfOutputIsXML(CmsConstants.OBJECT_TYPE_ELEMENT_NAME);
 
-		exportDisplayName(contentObjectTypeDefinition);
+		exportDisplayNameAndDescription(contentObjectTypeDefinition);
 
 	
 	}
@@ -95,7 +95,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		
 		closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
 		
-		exportDisplayName(complexPropertyDefinition);
+		exportDisplayNameAndDescription(complexPropertyDefinition);
 
 	}
 
@@ -138,7 +138,7 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 			
 			closeStartTagIfOutputIsXML(CmsConstants.PROPERTY_ELEMENT_NAME);
 			
-			exportDisplayName(simplePropertyDefinition);
+			exportDisplayNameAndDescription(simplePropertyDefinition);
 
 			if (rootDefinition != null && rootDefinition != simplePropertyDefinition){
 				serializer.endElement(CmsConstants.PROPERTY_ELEMENT_NAME, false,true);
@@ -306,6 +306,9 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 		//Url
 		exportUrl(cmsDefinition);
 		
+		//Schema URL
+		exportSchemaUrl(cmsDefinition);
+		
 		if (cmsDefinition instanceof CmsPropertyDefinition){
 			//Cardinality
 			exportCardinality((CmsPropertyDefinition)cmsDefinition);
@@ -318,19 +321,57 @@ public class CmsDefinitionSerializer extends AbstractCmsPropertyDefinitionVisito
 	}
 
 	private void exportUrl(LocalizableCmsDefinition cmsDefinition) {
-		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML)); 
+		serializer.writeAttribute("url",cmsDefinition.url(serializer.outputIsJSON()? ResourceRepresentationType.JSON : ResourceRepresentationType.XML));
+	}
+	
+	private void exportSchemaUrl(LocalizableCmsDefinition cmsDefinition) {
+		serializer.writeAttribute("schemaUrl",cmsDefinition.url(ResourceRepresentationType.XSD));
 	}
 
-	private void exportDisplayName(LocalizableCmsDefinition cmsDefinition) {
+	private void exportDisplayNameAndDescription(LocalizableCmsDefinition cmsDefinition) {
 		if (cmsDefinition.getDisplayName() != null && cmsDefinition.getDisplayName().hasLocalizedLabels()){
 
-			serializer.startElement("label",true,true);
-			
-			for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
-				serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
+			if (serializer.outputIsJSON()){
+				serializer.startElement("label",true,true);
+				
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
+					serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
+				}
+				
+				serializer.endElement("label",true,true);
+			}
+			else{
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDisplayName().getLocalizedLabels().entrySet()){
+					serializer.startElement("label",true,true);
+					serializer.writeAttribute(CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX, localizedLabel.getKey());
+					serializer.endElement("label",true,false);
+					serializer.writeContent(localizedLabel.getValue(), true);
+					serializer.endElement("label",false,true);
+				}
 			}
 			
-			serializer.endElement("label",true,true);
+		}
+		if (cmsDefinition.getDescription() != null && cmsDefinition.getDescription().hasLocalizedLabels()){
+
+			if (serializer.outputIsJSON()){
+				serializer.startElement("description",true,true);
+				
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
+					serializer.writeAttribute(localizedLabel.getKey(),localizedLabel.getValue());
+				}
+				
+				serializer.endElement("description",true,true);
+			}
+			else{
+				for (Entry<String,String> localizedLabel : cmsDefinition.getDescription().getLocalizedLabels().entrySet()){
+					serializer.startElement("description",true,true);
+					serializer.writeAttribute(CmsConstants.LANG_ATTRIBUTE_NAME_WITH_PREFIX, localizedLabel.getKey());
+					serializer.endElement("description",true,false);
+					serializer.writeContent(localizedLabel.getValue(), true);
+					serializer.endElement("description",false,true);
+				}
+			}
+
 		}
 	}
 

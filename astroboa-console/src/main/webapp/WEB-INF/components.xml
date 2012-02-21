@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -374,10 +374,12 @@ Authors
 	    <property name="contentService">#{contentService}</property>
 	</component>
 	
+	<!--  
 	<component name="schemaServiceAsync">
 	    <property name="definitionService">#{definitionService}</property>
 	    <property name="taxonomyService">#{taxonomyService}</property>
 	</component>
+	-->
 	
 	<component name="editServiceAsync">
 	  <property name="astroboaClient">#{astroboaClient}</property>

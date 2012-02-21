@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -71,10 +71,10 @@ public final class StringPropertyDefinitionImpl extends SimpleCmsPropertyDefinit
 			String defaultValue, String repositoryObjectRestriction, 
 			Integer maxLength,Integer minLength, StringFormat stringFormat, 
 			Map<String, Localization> valueRange, 
-			String passwordEncryptorClassName, boolean passwordType, String patternExpression) {
+			String passwordEncryptorClassName, boolean passwordType, String patternExpression,boolean representsAnXmlAttribute) {
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				defaultValue, repositoryObjectRestriction, valueRange);
+				defaultValue, repositoryObjectRestriction, valueRange,representsAnXmlAttribute);
 
 		
 		if (stringFormat == null){
@@ -159,7 +159,8 @@ public final class StringPropertyDefinitionImpl extends SimpleCmsPropertyDefinit
 				getDefaultValue(), getRepositoryObjectRestriction(), maxLength, minLength, stringFormat, 
 				getValueEnumeration(), 
 				passwordEncryptorClassName, passwordType, 
-				pattern!=null? pattern.pattern() : null);
+				pattern!=null? pattern.pattern() : null,
+						isRepresentsAnXmlAttribute());
 	}
 
 

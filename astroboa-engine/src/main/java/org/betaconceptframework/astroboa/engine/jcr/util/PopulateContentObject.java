@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -123,9 +123,6 @@ public class PopulateContentObject {
 				contentObjectNode.setProperty(CmsBuiltInItem.ContentObjectTypeName.getJcrName(), contentObjectTypeDefinition.getName());
 			}
 			
-			//Set System Properties
-			context.getCmsRepositoryEntityUtils().setSystemProperties(contentObjectNode, contentObject);
-
 			populateSystemName();
 			
 			//Set content object's owner
@@ -235,7 +232,7 @@ public class PopulateContentObject {
 		}
 		
 		
-		JcrNodeUtils.addSimpleProperty(SaveMode.UPDATE_ALL, contentObjectNode, 
+		JcrNodeUtils.addSimpleProperty(SaveMode.UPDATE, contentObjectNode, 
 				CmsBuiltInItem.SystemName, systemName, session.getValueFactory(), ValueType.String);
 		
 	}
@@ -248,7 +245,6 @@ public class PopulateContentObject {
 		 */
 		ContentObjectCriteria coCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		coCriteria.addSystemNameEqualsCriterionIgnoreCase(systemName);
-		coCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		if (contentObject.getId() != null){
 			coCriteria.addIdNotEqualsCriterion(contentObject.getId());

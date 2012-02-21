@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -144,7 +144,6 @@ public class RepositoryResourceBundleMessagesScheduler {
 
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.addTaxonomyNameEqualsCriterion(taxonomyResourceBundleName);
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			//We do not want to cache query
 			topicCriteria.setCacheable(CacheRegion.NONE);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -34,221 +34,214 @@ import org.betaconceptframework.astroboa.model.impl.ItemQName;
 public enum CmsBuiltInItem implements ItemQName {
 
 	// CMS SYSTEM
-	SYSTEM(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	SYSTEM(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"system"), 
 	
 	CmsIdentifier(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"cmsIdentifier"),
 			
-	SystemBuiltinEntity(
-				BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-				BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
-				"systemBuiltinEntity"),
-	SystemName(
-						BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-						BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
-						"systemName"),
-									
-				
+	SystemName(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+				BetaConceptNamespaceConstants.ASTROBOA_URI,
+				"systemName"),
 
 	Localization(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"localization"),
 
 	// Taxonomy
-	SubjectTaxonomy(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	SubjectTaxonomy(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"subjectTaxonomy"),
 	
 	TaxonomyRoot(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"taxonomyRoot"),
 	
-	Taxonomy(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	Taxonomy(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"taxonomy"), 
 			
 	Topic(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"topic"), 
 			
-	Space(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "space"), 
+	Space(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "space"), 
 			
 	Order(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"order"), 
 			
 	AllowsReferrerContentObjects(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"allowsReferrerContentObjects"), 
 			
 	ContentObjectReferences(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"contentObjectReferences"),
 
-	ContentTypeSpecificTaxonomyRoot(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, 
+	ContentTypeSpecificTaxonomyRoot(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI, 
 			"contentTypeSpecificTaxonomyRoot"), 
 			
 	Vocabularies(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"vocabularies"),
 			
 	OrganizationSpace(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"organizationSpace"),
 			
 
 	// Content Object
-	ContentObject(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	ContentObject(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"contentObject"), 
 			
 	ContentObjectRoot(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"contentObjectRoot"), 
 			
 	ContentObjectTypeName(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"contentObjectTypeName"), 
 			
 	GenericContentTypeFolder(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"genericContentTypeFolder"), 
 
 	GenericHourFolder(
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+					BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+					BetaConceptNamespaceConstants.ASTROBOA_URI,
 					"genericHourFolder"),
 					
 	GenericMinuteFolder(
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+					BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+					BetaConceptNamespaceConstants.ASTROBOA_URI,
 					"genericMinuteFolder"),
 					
 	GenericSecondFolder(
-							BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-							BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+							BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+							BetaConceptNamespaceConstants.ASTROBOA_URI,
 							"genericSecondFolder"),
 
 	GenericDayFolder(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"genericDayFolder"), 
 			
 	GenericMonthFolder(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"genericMonthFolder"), 
 			
 	GenericYearFolder(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"genericYearFolder"), 
 			
 	StructuredContentObject(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"structuredContentObject"),
 			
 	OwnerCmsIdentifier(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"ownerBetaCmsIdentifier"),
 			
 	ManagedThroughWorkflow(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"managedThroughWorkflow"), 
 			
 	ContentObjectStatus(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"contentObjectStatus"), 
 			
 	Aspects(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"aspects"),
 			
-	StructuredComplexCmsProperty(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-					BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	StructuredComplexCmsProperty(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+					BetaConceptNamespaceConstants.ASTROBOA_URI,
 					"structuredComplexCmsProperty"), 
 
 	// Repository User
-	RepositoryUserRoot(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	RepositoryUserRoot(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"repositoryUserRoot"), 
 			
 	RepositoryUser(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"repositoryUser"), 
 	UserType(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"userType"), 
 			
-	Label(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "label"), 
+	Label(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "label"), 
 			
 	ExternalId(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"externalId"), 
 			
 	Preferences(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"preferences"), 
 			
 	Folksonomy(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"folksonomy"),
 
 	// BinaryChannel
-	BinaryChannel(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+	BinaryChannel(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"binaryChannel"), 
 			
-	Name(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "name"), 
+	Name(BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "name"), 
 			
 	Size(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "size"), 
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "size"), 
 
-	MimeType(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "mimeType"), 
+	MimeType(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "mimeType"), 
 			
 	Encoding(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"encoding"), 
 			
 	SourceFileName(
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX,
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI,
+			BetaConceptNamespaceConstants.ASTROBOA_PREFIX,
+			BetaConceptNamespaceConstants.ASTROBOA_URI,
 			"sourceFileName"), 
 			
-	Legend(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX, 
-			BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_URI, "legend");
+	Legend(BetaConceptNamespaceConstants.ASTROBOA_PREFIX, 
+			BetaConceptNamespaceConstants.ASTROBOA_URI, "legend");
 	
 	
 

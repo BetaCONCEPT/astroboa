@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -126,7 +126,6 @@ public abstract class AbstractSecureContentObjectAspect extends JcrDaoSupport{
 			else{
 				ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 				contentObjectCriteria.addSystemNameEqualsCriterion(contentObjectIdOrSystemName);
-				contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				contentObjectCriteria.setOffsetAndLimit(0, 1);
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(getSession(), contentObjectCriteria, true);

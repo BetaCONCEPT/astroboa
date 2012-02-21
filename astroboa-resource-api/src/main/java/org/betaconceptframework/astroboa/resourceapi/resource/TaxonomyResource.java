@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -38,9 +38,10 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedAccessException;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
@@ -336,7 +337,11 @@ public class TaxonomyResource extends AstroboaResource{
 				String requestContent, String httpMethod){
 			
 		  //Import from xml or json. Taxonomy will not be saved
-		  Taxonomy taxonomyToBeSaved = astroboaClient.getImportService().importTaxonomy(requestContent, false);
+		  ImportConfiguration configuration = ImportConfiguration.taxonomy()
+				  .persist(PersistMode.DO_NOT_PERSIST)
+				  .build();
+		  
+		  Taxonomy taxonomyToBeSaved = astroboaClient.getImportService().importTaxonomy(requestContent, configuration);
 
 		  //Bring taxonomy from repository
 		  Taxonomy existedTaxonomy  = astroboaClient.getTaxonomyService().getTaxonomy(taxonomyIdOrName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
@@ -395,7 +400,12 @@ public class TaxonomyResource extends AstroboaResource{
 		logger.debug("Want to save a new taxonomy {}",taxonomySource);
 		
 		try{
-			Taxonomy taxonomy = astroboaClient.getImportService().importTaxonomy(taxonomySource, true);
+			
+			  ImportConfiguration configuration = ImportConfiguration.taxonomy()
+					  .persist(PersistMode.PERSIST_ENTITY_TREE)
+					  .build();
+
+			Taxonomy taxonomy = astroboaClient.getImportService().importTaxonomy(taxonomySource, configuration);
 			
 			return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(taxonomy,httpMethod, taxonomySource, entityIsNew);
 			
@@ -665,7 +675,6 @@ public class TaxonomyResource extends AstroboaResource{
 			else {
 				topicCriteria.addNameEqualsCriterion(topicIdOrName);
 			}
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			topicCriteria.searchInDirectAncestorOnly();
 
 			if (rootTopicCriteria==null){

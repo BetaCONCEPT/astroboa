@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -50,7 +50,8 @@ Authors
 						<a4j:commandLink
 							onclick="destroyTextEditor(); codeEditorAreas=[]; editAreaLoader.prepare_areas_for_betacms_submit('dynamicAreaForm');"
 							action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(complexCmsPropertyBreadCrumb.path, contentObjectEdit.extraPropertyEdit)}"
-							reRender="extraPropertiesPanel,extraPropertyBreadCrumbs">
+							reRender="extraPropertiesPanel,extraPropertyBreadCrumbs"
+							oncomplete="addHelpMessageToProperties();">
 		
 							<h:outputText value="#{complexCmsPropertyBreadCrumb.localizedLabel}" style="font-size: 1em;"/>
 		

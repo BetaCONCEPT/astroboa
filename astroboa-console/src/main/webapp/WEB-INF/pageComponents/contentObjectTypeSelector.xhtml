@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -50,147 +50,50 @@ Authors
 			
 			<a4j:outputPanel id="objectTypeSelectorAjaxPanel">
 				<div id="objectTypeSelectorScrollableArea">
-					<ui:remove>
-					<ul class="contentTypeEditorSplittedObjectTypeList">	
-						<a4j:repeat 
-							value="#{contentObjectTypesAsSelectItems}"
-							var="contentType"
-							rowKeyVar="rowKey">
-							<li>
-								<a4j:commandLink 
-									value="#{contentType.label}"
-									action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
-									reRender="objectEditorAjaxPanel"
-									onclick="resetEditors();"
-									oncomplete="showTab('objectEditorTab');"
-									disabled="#{contentType.disabled}"
-									ajaxSingle="true"/>
-								
-								<a4j:commandLink
-											action="#{contentTypeEditor.loadXSDSchemaForContentType(contentType.value)}"
-											style="font-size: 95%"
-											reRender="XSDEditorPanel"
-											oncomplete="openXSDEditor();">
-										<img 
-											src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-											alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
-								</a4j:commandLink>
-								
-								<img id="contentTypeLeftTooltipIcon#{rowKey}" src="images/cms-icons/12/info.png"/>
-								<div id="contentTypeLeftTooltipText#{rowKey}">
-									Internal Type Name: #{contentType.value}
-									<hr />
-									<br/>
-									<h:outputText value="#{contentType.description}" escape="false"/>
-								</div>
-								<script type="text/javascript" >
-								//<![CDATA[
-									createObjectTypeHelpMessage('#contentTypeLeftTooltipText#{rowKey}', '#contentTypeLeftTooltipIcon#{rowKey}');
-								//]]>
-								</script> 
-							</li>
-						</a4j:repeat>
-					</ul>
-					</ui:remove>
 					
-					<div style="float: left; width: 50%;">
-						<table class="objectTypeSelectorTable">	
+					<table class="objectTypeSelectorTable">	
 							<a4j:repeat value="#{contentObjectTypesAsSelectItems}"
 								var="contentType" 
-								rowKeyVar="rowKey"
-								rows="#{(contentObjectTypesAsSelectItems.size() mod 2 == 0)? contentObjectTypesAsSelectItems.size() / 2 : contentObjectTypesAsSelectItems.size() / 2 + 1}">
-								<tr>
-									<td>
-										<a4j:commandLink 
-											value="#{contentType.label}"
-											action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
-											reRender="objectEditorAjaxPanel"
-											onclick="resetEditors();"
-											oncomplete="showTab('objectEditorTab');"
-											disabled="#{contentType.disabled}"
-											ajaxSingle="true">
-										</a4j:commandLink>
-									</td>
-									<td class="actionIcon">
-										<a4j:commandLink
-												action="#{contentTypeEditor.loadXSDSchemaForContentType(contentType.value)}"
-												style="font-size: 95%"
-												reRender="XSDEditorPanel"
-												oncomplete="openXSDEditor();">
-											<img 
-												src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-												alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
-										</a4j:commandLink>
-									</td>
-									<td class="actionIcon">
-										<img id="contentTypeLeftTooltipIcon#{rowKey}" src="images/cms-icons/12/info.png"/>
-										<div id="contentTypeLeftTooltipText#{rowKey}">
-											Internal Type Name: #{contentType.value}
-											<hr />
-											<br/>
-											<h:outputText value="#{contentType.description}" escape="false"/>
-										</div>
-										<script type="text/javascript" >
-										//<![CDATA[
-											createObjectTypeHelpMessage('#contentTypeLeftTooltipText#{rowKey}', '#contentTypeLeftTooltipIcon#{rowKey}');
-										//]]>
-										</script> 
-									</td>
-								</tr>
+								rowKeyVar="rowKey">
+								<ui:fragment rendered="#{contentType.value ne 'arrayOfRuleTypeObject' and contentType.value ne 'ruleObject'}">
+									<tr>
+										<td class="objectTypeLabel">
+											<strong>
+											<a4j:commandLink 
+												value="#{contentType.label}"
+												action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
+												reRender="objectEditorAjaxPanel"
+												onclick="resetEditors();"
+												oncomplete="showTab('objectEditorTab');"
+												disabled="#{contentType.disabled}"
+												ajaxSingle="true">
+											</a4j:commandLink>
+											</strong>
+											
+										</td>
+										<td class="loadXSD">
+											<a4j:commandLink
+													action="#{contentTypeEditor.loadXSDSchemaForContentType(contentType.value)}"
+													style="font-size: 95%"
+													reRender="XSDEditorPanel"
+													oncomplete="openXSDEditor();">
+												<img 
+													src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/32/xml-1.png"
+													alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
+											</a4j:commandLink>
+										</td>
+										<td>
+											<div id="contentTypeLeftTooltipText#{rowKey}">
+												<strong>Internal Type Name: #{contentType.value}</strong>
+												
+												<br/>
+												<h:outputText value="#{contentType.description}" escape="false"/>
+											</div>
+										</td>
+									</tr>
+								</ui:fragment>
 							</a4j:repeat>
 						</table>
-					</div>
-					
-					<div style="float: left; width: 50%;">
-						<table class="objectTypeSelectorTable">
-						<a4j:repeat value="#{contentObjectTypesAsSelectItems}"
-							var="contentType" 
-							rowKeyVar="rowKey">
-							<ui:fragment rendered="#{rowKey ge (contentObjectTypesAsSelectItems.size() / 2)}">
-								<tr>
-									<td>
-										<a4j:commandLink 
-											value="#{contentType.label}"
-											action="#{objectEditInit.editNewObject_UIAction(contentType.value)}" 
-											reRender="objectEditorAjaxPanel"
-											onclick="resetEditors();"
-											oncomplete="showTab('objectEditorTab');"
-											disabled="#{contentType.disabled}"
-											ajaxSingle="true">
-										</a4j:commandLink> 
-									</td>
-									
-									<td class="actionIcon">
-										<a4j:commandLink
-											action="#{contentTypeEditor.loadXSDSchemaForContentType(contentType.value)}"
-											style="font-size: 95%"
-											reRender="XSDEditorPanel"
-											oncomplete="openXSDEditor();">
-											<img 
-												src="#{facesContext.externalContext.requestContextPath}/images/cms-icons/16/fugue/document--pencil.png"
-												alt="#{messages['object.type.select.table.edit.link.label']}" title="#{messages['object.type.select.table.edit.link.label']}" />
-										</a4j:commandLink>
-									</td>
-									<td class="actionIcon">
-										<img id="contentTypeRightTooltipIcon#{rowKey}" src="images/cms-icons/12/info.png"/>
-										<div id="contentTypeRightTooltipText#{rowKey}">
-											Internal Type Name: #{contentType.value}
-											<hr />
-											<br/>
-											<h:outputText value="#{contentType.description}" escape="false"/>
-										</div>
-										<script type="text/javascript" >
-										//<![CDATA[
-											createObjectTypeHelpMessage('#contentTypeRightTooltipText#{rowKey}', '#contentTypeRightTooltipIcon#{rowKey}');
-										//]]>
-										</script> 
-									</td>
-								</tr>
-							</ui:fragment>
-						</a4j:repeat>
-						</table>
-					</div>
-					
 					
 				</div>
 			</a4j:outputPanel>	

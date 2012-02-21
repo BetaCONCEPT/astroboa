@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -28,7 +28,9 @@ import javax.jcr.Session;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
@@ -57,25 +59,23 @@ public class Context {
 	
 	private Session session;
 	
-	
-	private Map<String, byte[]> binaryContent = new HashMap<String, byte[]>();
+	private ImportConfiguration importConfiguration;
 	
 	public Context(CmsRepositoryEntityUtils cmsRepositoryEntityUtils, CmsQueryHandler cmsQueryHandler,
 			Session session) {
 		this.cmsRepositoryEntityUtils = cmsRepositoryEntityUtils;
 		this.cmsQueryHandler = cmsQueryHandler;
 		this.session = session;
+		this.importConfiguration = ImportConfiguration.repository().build(); //Default values
 	}
 
 	public Context(CmsRepositoryEntityUtils cmsRepositoryEntityUtils,
-			CmsQueryHandler cmsQueryHandler, Session session,
-			Map<String, byte[]> binaryContent) {
+			CmsQueryHandler cmsQueryHandler, Session session, ImportConfiguration importConfiguration) {
 		
 		this(cmsRepositoryEntityUtils, cmsQueryHandler, session);
 		
-		if (binaryContent!=null){
-			this.binaryContent.putAll(binaryContent);
-		}
+		this.importConfiguration = importConfiguration;
+		
 	}
 
 	public CmsRepositoryEntityUtils getCmsRepositoryEntityUtils() {
@@ -123,7 +123,21 @@ public class Context {
 
 	}
 	
-	
+
+	public Node retrieveNodeForObject(String objectIdOrName) throws RepositoryException{
+		
+		Node node = getNodeFromCache(objectIdOrName);
+		
+		if (node == null && objectIdOrName != null){
+			node = getObjectNodeByIdOrName(objectIdOrName);
+			
+			cacheNode(node, objectIdOrName);
+		}
+		
+		return node;
+		
+	}
+
 	public Node retrieveNodeForTopic(String topicIdOrName) throws RepositoryException{
 		
 		Node node = getNodeFromCache(topicIdOrName);
@@ -172,6 +186,46 @@ public class Context {
 		cachedNodes.clear();
 	}
 	
+	private Node getObjectNodeByIdOrName(String objectIdOrName){
+		try{
+			if (StringUtils.isEmpty(objectIdOrName)){
+				return null;
+			}
+			
+			Node objectNode = null;
+			
+			if (CmsConstants.UUIDPattern.matcher(objectIdOrName).matches()){
+				objectNode = cmsRepositoryEntityUtils.retrieveUniqueNodeForContentObject(session, objectIdOrName);
+
+				if (objectNode != null){
+					return objectNode;
+				}
+			}
+			else{
+				ContentObjectCriteria coCriteria = CmsCriteriaFactory.newContentObjectCriteria();
+				coCriteria.addSystemNameEqualsCriterionIgnoreCase(objectIdOrName);
+				
+				//At most 1 object must exist
+				coCriteria.setOffsetAndLimit(0, 1);
+				
+				CmsQueryResult nodesWithSameSystemName = cmsQueryHandler.getNodesFromXPathQuery(session, coCriteria);
+				
+				if (nodesWithSameSystemName.getTotalRowCount() > 1){
+					throw new CmsException("There are "+nodesWithSameSystemName.getTotalRowCount()+" objects with name "+objectIdOrName);
+				}
+				
+				if (nodesWithSameSystemName.getTotalRowCount() > 0){
+					return nodesWithSameSystemName.getNodeIterator().nextNode();
+				}
+			}
+			
+			return null;
+		}
+		catch (Exception e) {
+			throw new CmsException(e);
+		}
+	}
+	
 	private Node getTopicNodeByIdOrName(String topicIdOrName){
 		try{
 			if (StringUtils.isEmpty(topicIdOrName)){
@@ -190,7 +244,6 @@ public class Context {
 			else{
 				TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 				topicCriteria.addNameEqualsCriterion(topicIdOrName);
-				topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				topicCriteria.setOffsetAndLimit(0, 1);
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(session, topicCriteria);
@@ -234,19 +287,19 @@ public class Context {
 		return session;
 	}
 	
-	public void addBinaryContent(String key, byte[] content){
-		
-		if (key != null && content != null && content.length>0){
-			binaryContent.put(key, content);
-		}
-	}
-	
 	public byte[] getBinaryContentForKey(String key){
 		
-		if (key == null){
+		if (key == null || importConfiguration == null || importConfiguration.getBinaryContent() == null){
 			return null;
 		}
 		
-		return binaryContent.get(key);
+		return importConfiguration.getBinaryContent().get(key);
 	}
+
+	public ImportConfiguration getImportConfiguration() {
+		return importConfiguration;
+	}
+
+	
+	
 }

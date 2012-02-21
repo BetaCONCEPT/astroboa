@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -65,6 +65,14 @@ public class SimpleCmsPropertyType implements CmsPropertyType{
 	 */
 	@XmlAttribute(name=CmsConstants.EXPORT_AS_AN_ARRAY_INSTRUCTION)
     private Boolean exportAsAnArray;
+	
+	/*
+	 * <code>true</code> indicates that this property should be 
+	 * exported as an attribute when XML export is enabled,
+	 * <code>false</code> otherwise 
+	 */
+	@XmlTransient
+	private Boolean exportAsAnAttribute;
     
 	public String getContent() {
 		return content;
@@ -89,5 +97,14 @@ public class SimpleCmsPropertyType implements CmsPropertyType{
 		this.exportAsAnArray = exportAsAnArray;
 	}
 
+	public Boolean exportAsAnAttribute() {
+		return exportAsAnAttribute;
+	}
+
+	public void setExportAsAnAttribute(Boolean exportAsAnAttribute) {
+		this.exportAsAnAttribute = exportAsAnAttribute;
+	}
+
+	
 	
 }

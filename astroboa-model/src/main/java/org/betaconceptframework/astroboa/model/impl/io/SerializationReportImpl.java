@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -40,22 +42,31 @@ public class SerializationReportImpl implements SerializationReport, Serializabl
 	private String filename;
 	private String absolutePath;
 	
-	private boolean finished;
+	private int completedSerializedObjects;
+	private int totalNumberOfObjectsToBeSerialized;
 	
-	private int objectsSerialized;
+	private int completedSerializedRepositoryUsers;
+	private int totalNumberOfRepositoryUsersToBeSerialized;
 	
-	private int repositoryUsersSerialized;
-	
-	private int taxonomiesSerialized;
+	private int completedSerializedTaxonomies;
+	private int totalNumberOfTaxonomiesToBeSerialized;
 
-	private int spacesSerialized;
+	private int completedSerializedTopics;
+	private int totalNumberOfTopicsToBeSerialized;
+
+	private int completedSerializedSpaces;
+	private int totalNumberOfSpacesToBeSerialized;
 
 	private List<String> errors = new ArrayList<String>();
 
+
 	
 	public SerializationReportImpl(String filename, String filePath) {
+
+		String repositoryHomeDir = AstroboaClientContextHolder.getActiveClientContext().getRepositoryContext().getCmsRepository().getRepositoryHomeDirectory();
+
 		this.filename = filename;
-		this.absolutePath = filePath+File.separator+filename;
+		this.absolutePath = repositoryHomeDir+File.separator+ CmsConstants.SERIALIZATION_DIR_NAME+File.separator+filePath+File.separator+filename;
 	}
 
 	@Override
@@ -68,17 +79,8 @@ public class SerializationReportImpl implements SerializationReport, Serializabl
 		return absolutePath;
 	}
 
-	@Override
-	public boolean hasSerializationFinished() {
-		return finished;
-	}
-
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
-
-	public int getCountOfSerializedEntities() {
-		return objectsSerialized+taxonomiesSerialized+repositoryUsersSerialized+spacesSerialized;
+	public int getCountOfCompletedSerializedEntities() {
+		return completedSerializedObjects+completedSerializedTaxonomies+completedSerializedRepositoryUsers+completedSerializedSpaces+completedSerializedTopics;
 	}
 
 	public List<String> getErrors() {
@@ -86,41 +88,98 @@ public class SerializationReportImpl implements SerializationReport, Serializabl
 	}
 
 	@Override
-	public int getNumberOfObjectsSerialized() {
-		return objectsSerialized;
+	public int getNumberOfCompletedSerializedObjects() {
+		return completedSerializedObjects;
 	}
 
 	@Override
-	public int getNumberOfRepositoryUsersSerialized() {
-		return repositoryUsersSerialized;
+	public int getNumberOfCompletedSerializedRepositoryUsers() {
+		return completedSerializedRepositoryUsers;
 	}
 
 	@Override
-	public int getNumberOfTaxonomiesSerialized() {
-		return taxonomiesSerialized;
+	public int getNumberOfCompletedSerializedTaxonomies() {
+		return completedSerializedTaxonomies;
 	}
 	
 	@Override
-	public int getNumberOfSpacesSerialized() {
-		return spacesSerialized;
+	public int getNumberOfCompletedSerializedSpaces() {
+		return completedSerializedSpaces;
 	}
 
+	public void increaseNumberOfCompletedSerializedObjects(int completedSerializedObjects) {
+		this.completedSerializedObjects += completedSerializedObjects;
+	}
+
+	public void increaseNumberOfCompletedSerializedRepositoryUsers(int completedSerializedRepositoryUsers) {
+		this.completedSerializedRepositoryUsers += completedSerializedRepositoryUsers;
+	}
+
+	public void increaseNumberOfCompletedSerializedTaxonomies(int completedSerializedTaxonomies) {
+		this.completedSerializedTaxonomies += completedSerializedTaxonomies;
+	}
+
+	public void increaseNumberOfCompletedSerializedSpaces(int completedSerializedSpaces) {
+		this.completedSerializedSpaces += completedSerializedSpaces;
+	}
 	
-	public void increaseNumberOfObjectsSerialized(int objectsSerialized) {
-		this.objectsSerialized += objectsSerialized;
+	public void increaseNumberOfCompletedSerializedTopics(int completedSerializedTopics) {
+		this.completedSerializedTopics += completedSerializedTopics;
 	}
 
-	public void increaseRepositoryUsersSerialized(int repositoryUsersSerialized) {
-		this.repositoryUsersSerialized += repositoryUsersSerialized;
+	@Override
+	public int getTotalNumberOfObjects() {
+		return totalNumberOfObjectsToBeSerialized;
 	}
 
-	public void increaseTaxonomiesSerialized(int taxonomiesSerialized) {
-		this.taxonomiesSerialized += taxonomiesSerialized;
+	@Override
+	public int getTotalNumberOfRepositoryUsers() {
+		return totalNumberOfRepositoryUsersToBeSerialized;
 	}
 
-	public void increaseSpacesSerialized(int spacesSerialized) {
-		this.spacesSerialized += spacesSerialized;
+	@Override
+	public int getTotalNumberOfTaxonomies() {
+		return totalNumberOfTaxonomiesToBeSerialized;
+	}
+
+	@Override
+	public int getTotalNumberOfSpaces() {
+		return totalNumberOfSpacesToBeSerialized;
+	}
+
+	@Override
+	public int getTotalNumberOfTopics() {
+		return totalNumberOfTopicsToBeSerialized;
+	}
+
+	public void setTotalNumberOfObjectsToBeSerialized(
+			int totalNumberOfObjectsToBeSerialized) {
+		this.totalNumberOfObjectsToBeSerialized = totalNumberOfObjectsToBeSerialized;
+	}
+
+	public void setTotalNumberOfRepositoryUsersToBeSerialized(
+			int totalNumberOfRepositoryUsersToBeSerialized) {
+		this.totalNumberOfRepositoryUsersToBeSerialized = totalNumberOfRepositoryUsersToBeSerialized;
+	}
+
+	public void setTotalNumberOfTaxonomiesToBeSerialized(
+			int totalNumberOfTaxonomiesToBeSerialized) {
+		this.totalNumberOfTaxonomiesToBeSerialized = totalNumberOfTaxonomiesToBeSerialized;
+	}
+
+	public void setTotalNumberOfSpacesToBeSerialized(
+			int totalNumberOfSpacesToBeSerialized) {
+		this.totalNumberOfSpacesToBeSerialized = totalNumberOfSpacesToBeSerialized;
+	}
+
+	public void setTotalNumberOfTopicsToBeSerialized(int totalNumberOfTopicsToBeSerialized) {
+		this.totalNumberOfTopicsToBeSerialized = totalNumberOfTopicsToBeSerialized;
 		
+	}
+
+	@Override
+	public int getNumberOfCompletedSerializedTopics() {
+		return this.completedSerializedTopics;
 	}
 
 

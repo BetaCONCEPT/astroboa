@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -56,8 +56,7 @@ Authors
 	So we keep the system name as "portalObject" to preserve compatibility with written code and we choose to 
 	use the term "web site" for the localized labels of the object and thus users will see this object as the top level 
 	object of a "web site" rather than a "portal"-->	
-	<xs:element name="portalObject"
-		bccmsmodel:systemType="true">
+	<xs:element name="portalObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				<bccmsmodel:displayName>Web Site</bccmsmodel:displayName>

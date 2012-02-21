@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -104,8 +104,6 @@ public class TopicUtils {
 
 	private Node populateTopicJcrNode(Topic topic, Session session, Node topicJcrNode, boolean useProvidedId, Context context) throws RepositoryException {
 
-		updateSystemBuiltin(topic, topicJcrNode);
-
 		//Update OwnerId
 		updateOwner(topic, topicJcrNode, session, context);
 
@@ -127,11 +125,6 @@ public class TopicUtils {
 		return topicJcrNode;
 	}
 
-
-	private void updateSystemBuiltin(Topic topic, Node topicJcrNode)
-			throws RepositoryException {
-		cmsRepositoryEntityUtils.setSystemProperties(topicJcrNode, topic);
-	}
 
 	private  void saveOrUpdateChildren(Topic topic, Session session, Node topicJcrNode, Context context) throws RepositoryException {
 
@@ -368,6 +361,13 @@ public class TopicUtils {
 			if (topic.getId() != null){
 				//User has specified an id for TaxonomyNode. Create a new one
 				if(parentTopicJcrNode == null){
+
+					if (topic.getTaxonomy() == null){
+						//Taxonomy is not provided and topic is a new topic. 
+						//Add new topic to the default taxonomy
+						cmsRepositoryEntityUtils.addDefaultTaxonomyToTopic(topic);
+					}
+
 					parentTopicJcrNode = retrieveParentTopicNode(session, topic, context);
 				}
 
@@ -377,8 +377,6 @@ public class TopicUtils {
 				throw new CmsException("Found no topic with id "+topic.getId());
 		}
 		
-		updateSystemBuiltin(topic, topicJcrNode);
-
 		updateOwner(topic, topicJcrNode, session,context);
 
 		updateLocalizedLabels(topic, topicJcrNode);

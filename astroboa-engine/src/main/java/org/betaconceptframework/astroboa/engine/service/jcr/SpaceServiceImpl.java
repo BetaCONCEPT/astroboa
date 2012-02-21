@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -45,9 +45,9 @@ class SpaceServiceImpl  implements SpaceService{
 	private SpaceDao spaceDao;
 	
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public void deleteSpace(String spaceId) {
+	public boolean deleteSpace(String spaceId) {
 		try{
-		spaceDao.deleteSpace(spaceId);
+			return spaceDao.deleteSpace(spaceId);
 		}
 		catch(CmsException e){
 			throw e;

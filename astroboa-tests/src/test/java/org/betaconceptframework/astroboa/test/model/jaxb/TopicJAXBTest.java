@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -21,8 +21,9 @@ package org.betaconceptframework.astroboa.test.model.jaxb;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.test.engine.AbstractRepositoryTest;
 import org.betaconceptframework.astroboa.test.util.JAXBTestUtils;
@@ -50,7 +51,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 		topic.addChild(childTopic1);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Topic has one child topic
 		String json  = topic.json(prettyPrint);
@@ -113,7 +114,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newRepositoryUser());
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		//Topic has 2 localized labels
 		String json  = topic.json(prettyPrint);
@@ -183,8 +184,10 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 		String xml = null;
 		String json = null;
 		
-		ImportMode importMode = ImportMode.DO_NOT_SAVE;
-		
+		ImportConfiguration configuration = ImportConfiguration.topic()
+				.persist(PersistMode.DO_NOT_PERSIST)
+				.build();
+
 		long start = System.currentTimeMillis();
 		
 			try{
@@ -194,8 +197,8 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Topic XML using xml() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Topic topicUnMarshalledFromXML = importDao.importTopic(xml, importMode);
-				logTimeElapsed("Import Topic XML in {}, ImportMode {}, ", start, importMode.toString());
+				Topic topicUnMarshalledFromXML = importDao.importTopic(xml, configuration);
+				logTimeElapsed("Import Topic XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(topicUnMarshalledFromXML);
 				
 				repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromXML, true, true, true, true, true);
@@ -205,8 +208,8 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Topic JSON using json() method in {}", start);
 				
 				start = System.currentTimeMillis();
-				Topic topicUnMarshalledFromJSON = importDao.importTopic(json, importMode); 
-				logTimeElapsed("Import Topic JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Topic topicUnMarshalledFromJSON = importDao.importTopic(json, configuration); 
+				logTimeElapsed("Import Topic JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(topicUnMarshalledFromJSON);
 				
 				repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromJSON, true,true,true, true, true);
@@ -214,7 +217,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				
 				//Now create XML and JSON from Service and compare each other
 				topic = topicService.save(topic);
-				addEntityToBeDeletedAfterTestIsFinished(topic);
+				markTopicForRemoval(topic);
 				
 				start = System.currentTimeMillis();
 				json = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
@@ -222,8 +225,8 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Topic JSON using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Topic topicUnMarshalledFromJSONService = importDao.importTopic(json, importMode); 
-				logTimeElapsed("Import Topic JSON in {}, ImportMode {}, ", start, importMode.toString());
+				Topic topicUnMarshalledFromJSONService = importDao.importTopic(json, configuration); 
+				logTimeElapsed("Import Topic JSON in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(topicUnMarshalledFromJSONService);
 
 				
@@ -238,8 +241,8 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 				logTimeElapsed("Export Topic XML using service in {}", start);
 				
 				start = System.currentTimeMillis();
-				Topic topicUnMarshalledFromXMLService = importDao.importTopic(xml, importMode); 
-				logTimeElapsed("Import Topic XML in {}, ImportMode {}, ", start, importMode.toString());
+				Topic topicUnMarshalledFromXMLService = importDao.importTopic(xml, configuration); 
+				logTimeElapsed("Import Topic XML in {}, PersistMode {}, ", start, configuration.getPersistMode().toString());
 				JAXBTestUtils.assertParentTopicAndTaxonomyAreTheSameObjectsAmongTopicChildren(topicUnMarshalledFromXMLService);
 				
 				repositoryContentValidator.compareTopics(topic, topicUnMarshalledFromXMLService, true, true, true, true, true);
@@ -270,7 +273,7 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 
 		topic = topicService.save(topic);
 		
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		String xmlFromApi = topic.xml(prettyPrint);
 		String xmlFromService = topicService.getTopic(topic.getId(), ResourceRepresentationType.XML, FetchLevel.FULL,prettyPrint);

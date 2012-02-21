@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -37,7 +37,9 @@ public final class CmsConstants {
 	public final static String ASTROBOA_VERSION = loadVersion();
 	
 	public final static String ASTROBOA_CONFIGURATION_XSD_FILENAME = "astroboa-conf-"+CmsConstants.ASTROBOA_VERSION+".xsd";
-	
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME = "org.betaconceptframework.astroboa.configuration.dir";
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY = System.getProperty(ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME);
+
 	public final static String LOCALE_GREEK = "el";
 	public final static String BETACONCEPT_CONTENT_DEFINITION_SCHEMA_DIR = "astroboa.schemata.home.dir";
 	public final static String TYPE_FOLDER = "TypeFolder";
@@ -133,11 +135,11 @@ public final class CmsConstants {
 	public static final String XML_DATATYPES_DTD_LOCATION  = "http://www.w3.org/2001/03/datatypes.dtd";
 	
 	public final static String REPOSITORY_ELEMENT_NAME = "repository";
-	public final static String REPOSITORY_PREFIXED_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX+":"+REPOSITORY_ELEMENT_NAME;
+	public final static String REPOSITORY_PREFIXED_NAME = BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX+":"+REPOSITORY_ELEMENT_NAME;
 	public final static String REPOSITORY_ID_ATTRIBUTE_NAME = "id";
 	public final static String REPOSITORY_SERIALIZATION_CREATION_DATE_ATTRIBUTE_NAME = "created";
 	public final static String RESOURCE_RESPONSE = "resourceResponse";
-	public final static String RESOURCE_RESPONSE_PREFIXED_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_API_PREFIX+":"+RESOURCE_RESPONSE;
+	public final static String RESOURCE_RESPONSE_PREFIXED_NAME = BetaConceptNamespaceConstants.ASTROBOA_API_PREFIX+":"+RESOURCE_RESPONSE;
 	public final static String RESOURCE_COLLECTION = "resourceCollection";
 	public final static String RESOURCE = "resource";
 	public final static String TOTAL_RESOURCE_COUNT = "totalResourceCount";
@@ -160,7 +162,8 @@ public final class CmsConstants {
 	public static final String CONTENT_ELEMENT_NAME = "content";
 	public static final String REPOSITORY_USERS_ELEMENT_NAME ="repositoryUsers";
 	public static final String TAXONOMIES_ELEMENT_NAME ="taxonomies";
-	public static final String CONTENT_OBJECTS_ELEMENT_NAME ="contentObjects";
+	public static final String TOPICS_ELEMENT_NAME ="topics";
+	public static final String OBJECTS_ELEMENT_NAME ="objects";
 	public static final String TITLE_ELEMENT_NAME = "title";
 	public static final String PROFILE_ELEMENT_NAME = "profile";
 	public static final String ARRAY_OF_OBJECT_TYPE_ELEMENT_NAME = "arrayOfObjectTypes";
@@ -171,7 +174,7 @@ public final class CmsConstants {
 	//exported as an array or not. This is mostly useful in cases where json object contains only one value
 	//abut must be exported as an array which has a single item rather than a single value object.
 	//This flag is the name of a fake attribute passed in JSONXmlStreamWriter (located in astroboa-model module)
-	public static final String EXPORT_AS_AN_ARRAY_INSTRUCTION =BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+"exportAsAnArrayInstruction";
+	public static final String EXPORT_AS_AN_ARRAY_INSTRUCTION =BetaConceptNamespaceConstants.ASTROBOA_PREFIX+"exportAsAnArrayInstruction";
 	
 	/**
 	 * The actual value for ${version} will be provided during process-resources phase by Maven resource plugin.
@@ -238,6 +241,7 @@ public final class CmsConstants {
 	public final static String INCLUDE_CHILDREN_EXPRESSION = CmsConstants.FORWARD_SLASH+CmsConstants.ANY_NAME;
 
 	
+	
 	private static String loadVersion() {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("astroboa");
 		
@@ -255,14 +259,86 @@ public final class CmsConstants {
 	}
 	
 	
-	public static final String RESOURCE_API_CONTENT_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
-	public static final String RESOURCE_API_TAXONOMY_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
-	public static final String RESOURCE_API_TOPIC_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
+	public static final String RESOURCE_API_OBJECTS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"objects";
+	public static final String DEPRECATED_RESOURCE_API_OBJECTS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"contentObject";
+	public static final String RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomies";
+	public static final String DEPRECATED_RESOURCE_API_TAXONOMIES_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"taxonomy";
+	public static final String RESOURCE_API_TOPICS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"topics";
+	public static final String DEPRECATED_RESOURCE_API_TOPICS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"topic";
 	public static final String RESOURCE_API_BINARY_CHANNEL_URI_PATH = CmsConstants.FORWARD_SLASH+"binaryChannel";
-	public static final String RESOURCE_API_MODEL_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
+	public static final String RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"models";
+	public static final String DEPRECATED_RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
 
-	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME = "org.betaconceptframework.astroboa.configuration.dir";
-	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY = System.getProperty(ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME);
+	/**
+	 * Use {@link #RESOURCE_API_CONTENT_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_CONTENT_URI_PATH = "contentObject";
+
+	/**
+	 * Use {@link #RESOURCE_API_TAXONOMY_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_TAXONOMY_URI_PATH = "taxonomy";
+	
+	/**
+	 * Use {@link #RESOURCE_API_TOPIC_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_TOPIC_URI_PATH = "topic";
+
+	/**
+	 * Use {@link #RESOURCE_API_MODEL_URI_PATH} instead
+	 */
+	@Deprecated
+	public static final String DEPRECATED_RESOURCE_API_MODEL_URI_PATH = "model";
+
+	
+	public static final String EXCHANGE_NAME = "AstroboaExchange";
+	
+	/*
+	 * Regular expression for the pattern of the values of an element
+	 * of type {http://www.w3.org/2001/XMLSchema.xsd}language (xml:lang)
+	 */
+	public static final String XML_SCHEMA_LANGUAGE_TYPE_REG_EXP = "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*";
+	
+	/*
+	 * ISO 8601 regular expressions for XML Schema types
+	 * gYear, gMonth, gYearMonth, gDay, gMonthDay
+	 */
+	public static final String TIME_ZONE_REG_EXP = "Z|[+-](?:2[0-3]|[01]?[0-9])(?::?(?:[0-5]?[0-9]))?";
+	public static final String YEAR_REG_EXP = "\\d{4}";
+	public static final String MONTH_REG_EXP = "1[0-2]|0[1-9]";
+	public static final String DAY_REG_EXP = "3[0-1]|0[1-9]|[1-2][0-9]";
+	
+	/*
+	 * The lexical representation of year object CCYY
+     * with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GYEAR_REG_EXP = YEAR_REG_EXP+"("+TIME_ZONE_REG_EXP+")?";
+	
+	/*	The lexical representation of gMonth object --MM
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GMONTH_REG_EXP = "--("+MONTH_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gYearMonth object CCYY-MM
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GYEAR_MONTH_REG_EXP = YEAR_REG_EXP+"-("+MONTH_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gDay object ---DD
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GDAY_REG_EXP = "---("+DAY_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	/*	The lexical representation of gMonthDay object --MM-DD
+	 *      with possible time zone Z or (-),(+)hh:mm
+	 */
+	public static final String GMONTH_DAY_REG_EXP = "--("+MONTH_REG_EXP+")-("+DAY_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	public static final String NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT = "value";
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -21,7 +21,6 @@ package org.betaconceptframework.astroboa.engine.jcr.io;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Session;
 import javax.xml.stream.XMLStreamReader;
@@ -39,6 +38,8 @@ import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.engine.definition.RepositoryEntityResolver;
@@ -83,11 +84,11 @@ public class Deserializer {
 
 	private SpaceDao spaceDao;
 
-	private ImportMode importMode;
+	private PersistMode persistMode;
 
 	private boolean version;
 
-	private boolean updateLastModificationDate = true;
+	private boolean updateLastModificationDate;
 
 	private Context context;
 
@@ -141,25 +142,24 @@ public class Deserializer {
 		this.binaryChannelUtils = binaryChannelUtils;
 	}
 
-	public <T> T deserializeContent(InputStream source, boolean jsonSource, ImportMode importMode, Class<T> classWhoseContentIsImported, 
-			boolean version, boolean updateLastModificationDate, Map<String, byte[]> binaryContent){
+	public <T> T deserializeContent(InputStream source, boolean jsonSource, Class<T> classWhoseContentIsImported,ImportConfiguration configuration){
 
-		this.importMode = importMode;
-		this.version = version;
-		this.updateLastModificationDate = updateLastModificationDate;
-
-		if (importMode == null){
+		if (configuration != null){
+			persistMode = configuration.getPersistMode();
+			version = configuration.isVersion();
+			updateLastModificationDate = configuration.isUpdateLastModificationTime();
+		}
+		
+		if (persistMode == null){
 			if (classWhoseContentIsImported == Repository.class || List.class.isAssignableFrom(classWhoseContentIsImported)){
-				this.importMode = ImportMode.SAVE_ENTITY_TREE;
+				persistMode = PersistMode.PERSIST_ENTITY_TREE;
 			}
 			else{
-				this.importMode = ImportMode.DO_NOT_SAVE;
+				persistMode = PersistMode.DO_NOT_PERSIST;
 			}
 		}
 		
-		if (MapUtils.isNotEmpty(binaryContent) || classWhoseContentIsImported == Repository.class || List.class.isAssignableFrom(classWhoseContentIsImported)){
-			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session, binaryContent);
-		}
+		context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session, configuration);
 
 
 		XMLStreamReader xmlStreamReader = null;
@@ -315,11 +315,11 @@ public class Deserializer {
 	}
 
 	private boolean shouldSaveEntity() {
-		return importMode != null && importMode != ImportMode.DO_NOT_SAVE;
+		return persistMode != null && persistMode != PersistMode.DO_NOT_PERSIST;
 	}
 
 	private boolean shouldSaveEntityTree(){
-		return importMode != null && importMode == ImportMode.SAVE_ENTITY_TREE;
+		return persistMode != null && persistMode == PersistMode.PERSIST_ENTITY_TREE;
 	}
 
 	public void setImportReport(ImportReport importReport) {

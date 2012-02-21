@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -51,11 +51,11 @@ public final class TopicReferencePropertyDefinitionImpl extends
 			Localization displayName, boolean obsolete, boolean multiple,
 			boolean mandatory, Integer order, String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
-			String repositoryObjectRestriction, List<String> acceptedTaxonomies) {
+			String repositoryObjectRestriction, List<String> acceptedTaxonomies,boolean representsAnXmlAttribute) {
 		
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				null, repositoryObjectRestriction, null);
+				null, repositoryObjectRestriction, null,representsAnXmlAttribute);
 		
 		this.acceptedTaxonomies = acceptedTaxonomies;
 	}
@@ -78,6 +78,6 @@ public final class TopicReferencePropertyDefinitionImpl extends
 		return new TopicReferencePropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getRepositoryObjectRestriction(), acceptedTaxonomies);
+				getRepositoryObjectRestriction(), acceptedTaxonomies, isRepresentsAnXmlAttribute());
 		}
 }

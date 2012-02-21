@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -50,61 +50,67 @@ Authors
               		</a4j:jsFunction>
               
 					<a4j:outputPanel id="objectPropertyUrlCreationDialogPanel" >
-						<div style="margin-top: 35px;">
-							<img id="objectPropertyUrlCreationDialogDispositionTypeHelp" src="images/cms-icons/12/info.png"/>
-							#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend']}
-						</div>
-
-						<ol class="formElementList">
-							<li class="formElement">
-								<label for="objectPropertyUrlCreationDialogDispostitionInline">#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline']}</label>
-								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionInline" name="dispositionType" checked="checked" value="INLINE"/>
-							</li>
-							<li>
-								<label for="objectPropertyUrlCreationDialogDispostitionAttachment">#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment']}</label>
-								<input type="radio" id="objectPropertyUrlCreationDialogDispostitionAttachment" name="dispositionType" value="ATTACHMENT" />
-							</li>
-						</ol>
-						<div id="objectPropertyUrlCreationDialogDispositionTypeTooltip">
-							<h:outputText escape="false" 
-								value="#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip']}" />
-						</div>
+						
+						<fieldset>
+							<legend>
+								<span>#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetLegend']}</span>
+								<img 
+									id="objectPropertyUrlCreationDialogDispositionTypeHelp" src="images/cms-icons/12/info.png"
+									tip="#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeFieldsetTooltip']}"
+								/>
+							</legend>
+							<ol class="formElementList">
+								<li class="formElementFieldsetView">
+									<label>#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeInline']}</label>
+									<input type="radio" id="objectPropertyUrlCreationDialogDispostitionInline" name="dispositionType" checked="checked" value="INLINE"/>
+								</li>
+								<li class="formElementFieldsetView">
+									<label>#{messages['object.edit.action.createObjectPropertyURL.dialogDispositionTypeAttachment']}</label>
+									<input type="radio" id="objectPropertyUrlCreationDialogDispostitionAttachment" name="dispositionType" value="ATTACHMENT" />
+								</li>
+							</ol>
+						</fieldset>
 						
 						<ui:fragment 
 							rendered="#{clipboard.selectedCmsPropertyWrapper.simpleCmsPropertyValueWrappers[clipboard.selectedCmsPropertyWrapper.indexOfPropertyValueToBeProcessed].isJPGorPNGorGIFImage()}">
 							<hr/>
-							<img  id="objectPropertyUrlCreationDialogImageSizeHelp" src="images/cms-icons/12/info.png"/>
-							#{messages['object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend']}
+							<fieldset>
+								<legend>
+									<span>#{messages['object.edit.action.createObjectPropertyURL.dialogImageSizeFieldsetLegend']}</span>
+									<img 
+										id="objectPropertyUrlCreationDialogImageSizeHelp" src="images/cms-icons/12/info.png"
+										tip="#{messages['object.edit.action.createObjectPropertyURL.dialogImageResizeAndCropTooltip']}"
+									/>
+								</legend>
 						
 								<ol class="formElementList">
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label for="objectPropertyUrlCreationDialogImageWidth">#{messages['object.edit.action.createObjectPropertyURL.dialogImageWidth']}</label>
 										<input id="objectPropertyUrlCreationDialogImageWidth" type="text" style="float: left; width: 50px;"/>
+									</li>
+									<li class="formElementFieldsetView">
 										<label for="objectPropertyUrlCreationDialogImageHeight">#{messages['object.edit.action.createObjectPropertyURL.dialogImageHeight']}</label>
 										<input id="objectPropertyUrlCreationDialogImageHeight" type="text" style="float: left; width: 50px;"/>
 									</li>
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageAspectRatio']}</label>
 										<input id="objectPropertyUrlCreationDialogImageAspectRatio" type="text"/>
 									</li>
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyTop']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyTop" type="radio" name="cropPolicy" checked="checked" value="top"/>
 									</li>
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyCenter']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyCenter" type="radio" name="cropPolicy" value="center"/>
 									</li>
-									<li class="formElement">
+									<li class="formElementFieldsetView">
 										<label>#{messages['object.edit.action.createObjectPropertyURL.dialogImageCroppingPolicyBottom']}</label>
 										<input id="objectPropertyUrlCreationDialogImageCroppingPolicyBottom" type="radio" name="cropPolicy" value="bottom"/>
 									</li>
 								</ol>
+							</fieldset>
 							
-							<div id="objectPropertyUrlCreationDialogImageSizeTooltip">
-								<h:outputText escape="false"
-									value="#{messages['object.edit.action.createObjectPropertyURL.dialogImageResizeAndCropTooltip']}" />
-							</div>
 						</ui:fragment>
 						
 						<div style="clear:both; border: 1px solid #ABABAB; margin: 10px 10px 10px 10px; padding: 10px 10px 10px 10px; font-size: 9px; color: blue;">
@@ -125,7 +131,25 @@ Authors
 						
 						<script type="text/javascript">
 						//<![CDATA[
-							createUrlCreationDialogHelpMessages();
+						    bcmslib.jQuery('#objectPropertyUrlCreationDialogDispositionTypeHelp').tipsy(
+			    			{
+			    				trigger: 'hover',
+			    				html: true,
+			    				live: true,
+			    				gravity: bcmslib.jQuery.fn.tipsy.autoWE, 
+			    				fallback: "No description available",
+			    				title: "tip"
+			    			});       
+						           
+							bcmslib.jQuery('#objectPropertyUrlCreationDialogImageSizeHelp').tipsy(
+			    			{
+			    				trigger: 'hover',
+			    				html: true,
+			    				live: true,
+			    				gravity: bcmslib.jQuery.fn.tipsy.autoWE, 
+			    				fallback: "No description available", 
+			    				title: "tip"
+			    			});
 						//]]>
 						</script>
 						

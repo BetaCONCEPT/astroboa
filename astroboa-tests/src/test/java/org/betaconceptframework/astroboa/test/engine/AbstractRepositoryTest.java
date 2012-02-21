@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.jcr.Session;
@@ -68,14 +70,16 @@ import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ImportReport;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.RepositoryUserCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
@@ -89,7 +93,6 @@ import org.betaconceptframework.astroboa.engine.jcr.dao.ImportDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.SerializationDao;
 import org.betaconceptframework.astroboa.engine.jcr.identitystore.jackrabbit.JackrabbitIdentityStoreDao;
 import org.betaconceptframework.astroboa.engine.jcr.io.ContentSourceExtractor;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.util.JcrNodeUtils;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -129,6 +132,11 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	protected final String TEST_CONTENT_TYPE = "test";
 	protected final String EXTENDED_TEST_CONTENT_TYPE = "extendedTest";
 	protected final String DIRECT_EXTENDED_TEST_CONTENT_TYPE = "extendedTestDirectlyUsingType";
+	
+	protected final String INDENPENDENT_CONTENT_TYPE_NAME = "independentObject";
+	protected final String DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME = "directlyExtendingIndependentBaseTypeIndependentObject";
+	protected final String EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME = "extendingIndependentBaseTypeIndependentObject";
+	
 	
 	protected JAXBValidationUtils jaxbValidationUtils;
 	protected SerializationDao serializationDao;
@@ -200,7 +208,13 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 
 			testUserXml = StringUtils.replace(testUserXml, "USERNAME", username);
 			
-			ContentObject testUser = importDao.importContentObject(testUserXml, false, true, ImportMode.SAVE_ENTITY_TREE, null);
+			ImportConfiguration configuration = ImportConfiguration.object()
+					.persist(PersistMode.PERSIST_ENTITY_TREE)
+					.version(false)
+					.updateLastModificationTime(true)
+					.build();
+
+			ContentObject testUser = importDao.importContentObject(testUserXml, configuration);
 			logger.debug("Created "+testUser.getContentObjectType() + " with id "+ 
 					testUser.getId() + " and system name "+testUser.getSystemName() +" representing user "+username + " in " +
 							" repository "+AstroboaClientContextHolder.getActiveRepositoryId());
@@ -311,15 +325,14 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		
 	}
 
-	protected ContentObject createContentObject(RepositoryUser systemUser, String systemName, boolean systemEntity) {
-		return createContentObjectForType(TEST_CONTENT_TYPE, systemUser, systemName, systemEntity);
+	protected ContentObject createContentObject(RepositoryUser systemUser, String systemName) {
+		return createContentObjectForType(TEST_CONTENT_TYPE, systemUser, systemName);
 	}
 	
-	protected ContentObject createContentObjectForType(String contentType, RepositoryUser systemUser, String systemName, boolean systemEntity) {
+	protected ContentObject createContentObjectForType(String contentType, RepositoryUser systemUser, String systemName) {
 
 		ContentObject contentObject = cmsRepositoryEntityFactory.newObjectForType(contentType);
 		contentObject.setOwner(systemUser);
-		contentObject.setSystemBuiltinEntity(systemEntity);
 		contentObject.setSystemName(TestUtils.createValidSystemName(systemName));
 		
 		contentObject.getCmsProperty("accessibility.canBeReadBy");
@@ -400,10 +413,14 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	protected List<String> getTestContentTypes(){
 		return Arrays.asList(TEST_CONTENT_TYPE, EXTENDED_TEST_CONTENT_TYPE);
 	}
+	
+	protected List<String> getIndependentContentTypes(){
+		return Arrays.asList(INDENPENDENT_CONTENT_TYPE_NAME, EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME, DIRECT_EXTENDED_INDEPENDENT_CONTENT_TYPE_NAME);
+	}
 
-	protected SerializationReport testEntityTypeSerialization(final CmsEntityType entityTypeToBeSerialized) {
+	protected Future<SerializationReport> serializeAllEntitiesOfType(final CmsEntityType entityTypeToBeSerialized, final SerializationConfiguration serializationConfiguration) {
 		
-		return serializationDao.serializeAllInstancesOfEntity(entityTypeToBeSerialized, true);
+		return serializationDao.serializeAllInstancesOfEntity(entityTypeToBeSerialized, serializationConfiguration);
 	}
 	
 	@Override
@@ -451,7 +468,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			final Session session = getSession();
 				
 			switch (cmsEntity) {
-			case CONTENT_OBJECT:
+			case OBJECT:
 				session.exportDocumentView(JcrNodeUtils.getContentObjectRootNode(session).getPath(), os, false, false);
 				break;
 			case REPOSITORY_USER:
@@ -500,25 +517,46 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		}
 	}	
 
-	protected void assertIOOfEntity(CmsEntityType cmsEntityTypeToBeSerialized) throws Throwable{
+	protected void assertIOOfEntity(CmsEntityType cmsEntityTypeToBeSerialized, ImportConfiguration configuration, SerializationConfiguration serializationConfiguration) throws Throwable{
 		
 		loginToTestRepositoryAsSystem();
 		
-		SerializationReport serializationReport = exportEntity(cmsEntityTypeToBeSerialized);
+		SerializationReport serializationReport = exportEntity(cmsEntityTypeToBeSerialized, serializationConfiguration);
 		
-		URL serializationURL = retrieveURLOfExportOutcome(serializationReport);
+		URI serializationURI = retrieveURΙOfExportOutcome(serializationReport);
 		
-		validateExportXml(serializationURL);
+		validateExportXml(serializationURI);
 		
-		ImportReport importReport = importExportedEntityToCloneRepository(serializationURL);
+		ImportReport importReport = importExportedEntityToCloneRepository(serializationURI, configuration);
 
-		validateImport(importReport, serializationURL, cmsEntityTypeToBeSerialized);
+		validateImport(importReport, serializationURI, cmsEntityTypeToBeSerialized);
 		
 		loginToTestRepositoryAsSystem();
 		
 	}
 
-	private void validateImport(ImportReport importReport, URL exportURL, CmsEntityType cmsEntityToExport) throws Throwable {
+	protected void assertIOOfObjectsUsingCriteria(ContentObjectCriteria contentObjectCriteria, ImportConfiguration configuration, SerializationConfiguration serializationConfiguration) throws Throwable{
+		
+		loginToTestRepositoryAsSystem();
+		
+		SerializationReport serializationReport = exportObjects(contentObjectCriteria, serializationConfiguration);
+		
+		URI serializationURI = retrieveURΙOfExportOutcome(serializationReport);
+		
+		validateExportXml(serializationURI);
+		
+		ImportReport importReport = importExportedEntityToCloneRepository(serializationURI, configuration);
+
+		validateImport(importReport, serializationURI, CmsEntityType.OBJECT);
+		validateImport(importReport, serializationURI, CmsEntityType.TAXONOMY);
+		validateImport(importReport, serializationURI, CmsEntityType.TOPIC);
+		
+		loginToTestRepositoryAsSystem();
+		
+	}
+
+	
+	protected void validateImport(ImportReport importReport, URI exportURI, CmsEntityType cmsEntityToExport) throws Throwable {
 		
 		try{
 			Assert.assertTrue(importReport.getErrors().isEmpty(), "Import failed \n "+importReport.getErrors());
@@ -527,7 +565,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			
 		}
 		catch(Throwable e){
-			logExportXml(exportURL);
+			logExportXml(exportURI);
 			throw e;
 		}
 	}
@@ -547,7 +585,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		case  SPACE:
 			assertCloneRepositoryContainsExactlyTheSameSpaces();
 			break;
-		case  CONTENT_OBJECT:
+		case  OBJECT:
 			assertCloneRepositoryContainsExactlyTheSameContentObjects();
 			break;
 		case REPOSITORY:
@@ -567,7 +605,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	private void assertCloneRepositoryContainsExactlyTheSameContentObjects() throws Throwable {
 		ContentObjectCriteria newContentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 		newContentObjectCriteria.doNotCacheResults();
-		newContentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		newContentObjectCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		newContentObjectCriteria.addOrderProperty("profile.title", Order.descending);
 		
@@ -585,7 +622,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	private void assertCloneRepositoryContainsExactlyTheSameSpaces() {
 		SpaceCriteria newSpaceCriteria = CmsCriteriaFactory.newSpaceCriteria();
 		newSpaceCriteria.doNotCacheResults();
-		newSpaceCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		newSpaceCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		
 		loginToTestRepositoryAsSystem();
@@ -595,7 +631,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		loginToCloneRepositoryAsSystem();
 		newSpaceCriteria.reset();
 		newSpaceCriteria.doNotCacheResults();
-		newSpaceCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		newSpaceCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		newSpaceCriteria.addAncestorSpaceIdEqualsCriterion(spaceService.getOrganizationSpace().getId());
 		CmsOutcome<Space> targetSpaces = spaceService.searchSpaces(newSpaceCriteria, ResourceRepresentationType.SPACE_LIST);
@@ -609,7 +644,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		
 		RepositoryUserCriteria newRepositoryUserCriteria = CmsCriteriaFactory.newRepositoryUserCriteria();
 		newRepositoryUserCriteria.doNotCacheResults();
-		newRepositoryUserCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		newRepositoryUserCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		
 		loginToTestRepositoryAsSystem();
@@ -649,18 +683,21 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		
 	}
 
-	private void validateExportXml(URL exportURL) throws Exception {
+	protected void validateExportXml(URI exportURI) throws Exception {
 		
 		InputStream sourceInputStream = null;
 		
 		try{
-			sourceInputStream = contentSourceExtractor.extractStream(exportURL);
+			
+			logExportXml(exportURI);
+			
+			sourceInputStream = contentSourceExtractor.extractStream(exportURI);
 
 			jaxbValidationUtils.validateUsingSAX(sourceInputStream);
 
 		}
 		catch(Exception e){
-			logExportXml(exportURL);
+			logExportXml(exportURI);
 			throw e;
 		}
 		finally{
@@ -668,13 +705,12 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		}
 	}
 
-	private void logExportXml(URL exportURL) throws IOException, Exception
-		{
+	private void logExportXml(URI exportURI) throws IOException, Exception{
 		
-		final String xml = IOUtils.toString(contentSourceExtractor.extractStream(exportURL));
+		final String xml = IOUtils.toString(contentSourceExtractor.extractStream(exportURI));
 		
 		try{
-			logger.info(TestUtils.prettyPrintXml(xml));
+			logger.debug(TestUtils.prettyPrintXml(xml));
 		}
 		catch(Exception e)
 		{
@@ -683,63 +719,68 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		}
 	}
 
-	private ImportReport importExportedEntityToCloneRepository(URL exportURL) {
+	protected ImportReport importExportedEntityToCloneRepository(URI exportURI, ImportConfiguration configuration) throws InterruptedException, ExecutionException {
 		
 		loginToCloneRepositoryAsSystem();
 		
 		long timeStart = System.currentTimeMillis();
 		
-		ImportReport importReport = importDao.importRepositoryContentFromURL(exportURL);
+		Future<ImportReport> importReportFuture = importDao.importRepositoryContentFromURI(exportURI, configuration);
 		
-		while (! importReport.isImportFinished()){
-			logger.debug("Imported contentObjects {}, repositoryUsers {}, taxonomies {}", 
-					new Object[]{importReport.getNumberOfContentObjectsImported(), importReport.getNumberOfRepositoryUsersImported(), importReport.getNumberOfTaxonomiesImported()});
-			
+		while (! importReportFuture.isDone()){
 			final long timePassed = System.currentTimeMillis() - timeStart;
 			Assert.assertTrue(timePassed < (5 * 60 * 1000), "Import does not seem to have finished.");
 			
 		}
 		
-		return importReport;
+		return importReportFuture.get();
 	}
 
-	private URL retrieveURLOfExportOutcome(SerializationReport exportReport)
+	protected URI retrieveURΙOfExportOutcome(SerializationReport exportReport)
 			throws MalformedURLException {
-		String repositoryHomeDir = AstroboaClientContextHolder.getActiveClientContext().getRepositoryContext().getCmsRepository().getRepositoryHomeDirectory();
+		File exportXml = new File(exportReport.getAbsolutePath());
 
-		File exportHomeDir = new File(
-				repositoryHomeDir+File.separator+
-				CmsConstants.SERIALIZATION_DIR_NAME);
-
-		File exportXml = new File(exportHomeDir, exportReport.getAbsolutePath());
-
-		URL contentSource = exportXml.toURI().toURL();
-		return contentSource;
+		return exportXml.toURI();
 	}
 
-	private SerializationReport exportEntity(CmsEntityType cmsEntityToExport) {
+	protected SerializationReport exportEntity(CmsEntityType cmsEntityToExport, SerializationConfiguration serializationConfiguration) throws InterruptedException, ExecutionException {
 		long timeStart = System.currentTimeMillis();
 
-		SerializationReport exportReport = serializationDao.serializeAllInstancesOfEntity(cmsEntityToExport, true);
+		Future<SerializationReport> exportReportFuture  = serializationDao.serializeAllInstancesOfEntity(cmsEntityToExport, serializationConfiguration);
 		
 		//Wait until export is finished
-		while (! exportReport.hasSerializationFinished()){
+		while (! exportReportFuture.isDone()){
 			final long timePassed = System.currentTimeMillis() - timeStart;
 
-			Assert.assertTrue(timePassed < (5 * 60 * 1000), "Export does not seem to have finished. File path "+exportReport.getAbsolutePath()+ " Time passed "+timePassed +" ms");
+			Assert.assertTrue(timePassed < (5 * 60 * 1000), "Export does not seem to have finished. Time passed "+timePassed +" ms");
 		}
 		
-		return exportReport;
+		
+		return exportReportFuture.get();
 	}	
 
-	protected ContentObject createContentObjectAndPopulateAllProperties(RepositoryUser systemUser,
-			String systemName, boolean systemEntity){
-		return createContentObjectAndPopulateAllPropertiesForType(TEST_CONTENT_TYPE, systemUser, systemName, systemEntity);	
+	protected SerializationReport exportObjects(ContentObjectCriteria contentObjectCriteria, SerializationConfiguration serializationConfiguration) throws InterruptedException, ExecutionException {
+		long timeStart = System.currentTimeMillis();
+
+		Future<SerializationReport> exportReportFuture  = serializationDao.serializeObjectsUsingCriteria(contentObjectCriteria, serializationConfiguration);
+		
+		//Wait until export is finished
+		while (! exportReportFuture.isDone()){
+			final long timePassed = System.currentTimeMillis() - timeStart;
+
+			Assert.assertTrue(timePassed < (5 * 60 * 1000), "Export does not seem to have finished. Time passed "+timePassed +" ms");
+		}
+		
+		
+		return exportReportFuture.get();
+	}	
+
+	protected ContentObject	createContentObjectAndPopulateAllProperties(RepositoryUser systemUser, String systemName){
+		return createContentObjectAndPopulateAllPropertiesForType(TEST_CONTENT_TYPE, systemUser, systemName);	
 	}
 	
-	protected ContentObject createContentObjectAndPopulateAllPropertiesForType(String contentType, RepositoryUser systemUser,
-			String systemName, boolean systemEntity){
-		ContentObject contentObject = createContentObjectForType(contentType, systemUser, systemName, systemEntity);
+	protected ContentObject createContentObjectAndPopulateAllPropertiesForType(String contentType, RepositoryUser systemUser, String systemName){
+		ContentObject contentObject = createContentObjectForType(contentType, systemUser, systemName);
 		
 		try{
 			//Fill content object with all possible types of properties
@@ -770,7 +811,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			contentObjectCriteria.doNotCacheResults();
 			contentObjectCriteria.setOffsetAndLimit(0, 2);
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			if (contentObject.getId()!=null){
 				contentObjectCriteria.addIdNotEqualsCriterion(contentObject.getId());
@@ -810,7 +850,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.doNotCacheResults();
 			topicCriteria.setOffsetAndLimit(0, 2);
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			CmsOutcome<Topic> topics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			
@@ -860,7 +899,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		topic.setTaxonomy(getSubjectTaxonomy());
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		return topic;
 	}
@@ -875,6 +914,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		parentTopic.addChild(topic);
 		
 		topic = topicService.save(topic);
+		markTopicForRemoval(topic);
 
 		return topic;
 	}
@@ -887,7 +927,7 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 		space.setParent(spaceService.getOrganizationSpace());
 		
 		space = spaceService.save(space);
-		addEntityToBeDeletedAfterTestIsFinished(space);
+		markSpaceForRemoval(space);
 
 		return space;
 	}

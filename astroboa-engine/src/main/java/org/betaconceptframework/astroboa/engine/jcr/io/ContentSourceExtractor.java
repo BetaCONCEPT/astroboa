@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -21,7 +21,7 @@ package org.betaconceptframework.astroboa.engine.jcr.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.Enumeration;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -46,11 +46,11 @@ public class ContentSourceExtractor {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public InputStream extractStream(URL contentSource) throws Exception
+	public InputStream extractStream(URI contentSource) throws Exception
 	{
 		dispose();
 		
-		String filename = contentSource.getFile();
+		String filename = contentSource.toURL().getFile();
 		
 		if (StringUtils.isBlank(filename))
 		{
@@ -62,7 +62,7 @@ public class ContentSourceExtractor {
 		{
 			tmpZip = File.createTempFile("rep",".zip");
 			
-			FileUtils.copyURLToFile(contentSource, tmpZip);
+			FileUtils.copyURLToFile(contentSource.toURL(), tmpZip);
 			
 			zipFile = new ZipFile(tmpZip);
 			
@@ -82,7 +82,7 @@ public class ContentSourceExtractor {
 		}
 		else if (filename.endsWith(".xml"))
 		{
-			return contentSource.openStream();
+			return contentSource.toURL().openStream();
 		}
 		else
 		{

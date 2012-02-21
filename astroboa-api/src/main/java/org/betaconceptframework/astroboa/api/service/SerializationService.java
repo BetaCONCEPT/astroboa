@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -20,12 +20,16 @@
 package org.betaconceptframework.astroboa.api.service;
 
 
+import java.util.concurrent.Future;
+
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
+import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 
 /**
  * Service providing methods for serializing the content of a Astroboa repository 
@@ -69,35 +73,34 @@ import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
 public interface SerializationService {
 
 	/**
-	 * Serialize all objects of a repository into an XML file.
+	 * Serialize all objects matching the provided criteria into a single file.
 	 * 
 	 * <p>
-	 * It serializes content objects in a single XML file which is compressed and stored
+	 * It serializes objects in a single file which is compressed and stored
 	 * under the <code>serializations</code> directory inside repository's home directory. 
 	 * </p>
 	 * 
-	 * @param serializeBinaryContent <code>true</code> to export binary content, i.e. serialize binary properties, 
-	 * <code>false</code> otherwise. In both cases, a URL which serves the binary content is always provided.
-	 * 
+	 * @param objectCriteria Criteria to control which objects to serialize
+	 * @param serializationConfiguration Configuration to control various aspects of the export process
+	 *    
 	 * @return A report about serialization progress.
 	 * 
 	 */
-	SerializationReport serializeObjects(boolean serializeBinaryContent);
+	Future<SerializationReport> serializeObjects(ContentObjectCriteria objectCriteria, SerializationConfiguration serializationConfiguration);
 	
 	/**
-	 * Serialize the content of a repository into an XML file.
+	 * Serialize the content of a repository into a single file.
 	 * 
 	 * <p>
-	 * It serializes the content of a repository in a single XML file which is compressed and stored
+	 * It serializes the content of a repository in a single file which is compressed and stored
 	 * under the <code>serializations</code> directory inside repository's home directory. 
 	 * </p>
 	 * 
-	 * @param serializeBinaryContent <code>true</code> to export binary content, i.e. serialize binary properties, 
-	 * <code>false</code> otherwise.In both cases, a URL which serves the binary content is always provided.
+	 * @param serializationConfiguration Configuration to control various aspects of the export process
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeRepository(boolean serializeBinaryContent);
+	Future<SerializationReport> serializeRepository(SerializationConfiguration serializationConfiguration);
 
 	/**
 	 * Serialize all {@link RepositoryUser}s of a repository into an XML file.
@@ -107,9 +110,11 @@ public interface SerializationService {
 	 * under the <code>serializations</code> directory inside repository's home directory. 
 	 * </p>
 	 * 
+	 * @param serializationConfiguration Configuration to control various aspects of the export process
+     *
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeRepositoryUsers();
+	Future<SerializationReport> serializeRepositoryUsers();
 
 	/**
 	 * Serialize all {@link Taxonomy taxonomies} of a repository into an XML file.
@@ -121,7 +126,7 @@ public interface SerializationService {
 	 * 
 	 * @return A report about serialization progress. 
 	 */
-	SerializationReport serializeTaxonomies();
+	Future<SerializationReport> serializeTaxonomies();
 
 	/**
 	 * Serialize the {@link Space organization space} of a repository into an XML file.
@@ -134,5 +139,5 @@ public interface SerializationService {
 	 * 
 	 * @return A report about export progress. 
 	 */
-	SerializationReport serializeOrganizationSpace();
+	Future<SerializationReport> serializeOrganizationSpace();
 }

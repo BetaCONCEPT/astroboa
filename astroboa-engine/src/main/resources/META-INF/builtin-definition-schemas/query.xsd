@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -48,8 +48,7 @@ Authors
 		namespace="http://www.betaconceptframework.org/schema/astroboa/admin/workflowType"
 		schemaLocation="workflowType-${project.version}.xsd" />
 	
-	<xs:element name="queryObject"
-		bccmsmodel:systemType="true">
+	<xs:element name="queryObject">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				<bccmsmodel:displayName>CMS Query</bccmsmodel:displayName>

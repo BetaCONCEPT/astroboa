@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -47,6 +47,7 @@ import org.betaconceptframework.astroboa.api.model.definition.BinaryPropertyDefi
 import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.TopicDao;
 import org.betaconceptframework.astroboa.model.impl.BinaryChannelImpl;
@@ -78,7 +79,8 @@ public class PopulateSimpleCmsProperty {
 	private TopicDao topicDao;
 	@Autowired
 	private BinaryChannelUtils binaryChannelUtils;
-
+	@Autowired
+	private TopicUtils topicUtils;
 
 	private SaveMode saveMode;
 	private Session session;
@@ -339,7 +341,14 @@ public class PopulateSimpleCmsProperty {
 							continue;
 						}
 						
-						topicNode = createJcrNodeForTopicAndCacheJcrNode(topic);
+						try{
+							topicNode = createAndCacheTopic(topic);
+						}
+						catch(Exception e){
+							logger.warn("Could not create a new topic with id: "+topic.getId() + " name: "+topic.getName() + " labels: "+topic.getLocalizedLabels()+ " Topic will not be added as a value to proeprty "
+									+ simpleCmsPropertyToBeSaved.getFullPath(), e);
+							continue;
+						}
 					}
 					else{
 						appendTopicWithIdIfTopicIsNew(topic, topicNode);
@@ -411,27 +420,38 @@ public class PopulateSimpleCmsProperty {
 		}
 	}
 
-	private Node createJcrNodeForTopicAndCacheJcrNode(Topic topic)
+	private Node createAndCacheTopic(Topic topic)
 			throws RepositoryException {
-		Node topicNode;
-		//No topic exists. Create it first
-		topicNode = topicDao.insertTopicNode(session, topic, context);
+		
+		//It is high likely that taxonomy is not set inside topic's context
+		if (topic.getTaxonomy() == null){
+			context.getCmsRepositoryEntityUtils().addDefaultTaxonomyToTopic(topic);
+		}
+		
+		if (!topic.isAllowsReferrerContentObjects()){
+			//Topic must allow objects to refer to it
+			//otherwise this object will not be successfully saved
+			topic.setAllowsReferrerContentObjects(true);
+		}
 
+		topic = topicDao.saveTopic(topic, context);
+		
+		Node topicNode = context.retrieveNodeForTopic(topic.getId());
+		
 		if (topicNode == null){
 			throw new RepositoryException("Could not find or create topic with id "+topic.getId()+" and name "+topic.getName());
 		}
 		else{
-			//Cache topic node
-			context.cacheTopicNode(topicNode, false);
 			logger.debug("Found and cached jcr node {} for topic {}", topicNode.getPath(), topic.getName());
 		}
+		
 		return topicNode;
 	}
 
 	private Node retrieveTopicNode(Topic topic) throws RepositoryException {
 
 		if (topic.getId()!=null){
-			return  context.retrieveNodeForTopic(topic.getId());
+			return context.retrieveNodeForTopic(topic.getId());
 		}
 		else if (topic.getName()!=null){
 			return context.retrieveNodeForTopic(topic.getName());
@@ -483,15 +503,40 @@ public class PopulateSimpleCmsProperty {
 		if (CollectionUtils.isNotEmpty(contentObjects)){
 			for (ContentObject contentObject : contentObjects){
 
+				Node objectNode = null;
+				
+				//Check that the referenced object exists
+				logger.debug("Retrieving content object {} {} from repository", ((ContentObject) contentObject).getId(), 
+						((ContentObject) contentObject).getSystemName());
+				
 				if (StringUtils.isBlank( ((ContentObject) contentObject).getId() )){
-					throw new CmsException("Content Object without id cannot be saved as a reference in property "+simpleCmsPropertyToBeSaved.getLocalizedLabelForCurrentLocale()+". Save content object first");
+					if (StringUtils.isBlank( ((ContentObject) contentObject).getSystemName())){
+						throw new CmsException("Object reference does not have an id nor a system name and therefore cannot be saved as a value for property "+simpleCmsPropertyToBeSaved.getLocalizedLabelForCurrentLocale()+". Save object reference first");
+					}
+					else{
+						//Try to load object reference using its system name
+						objectNode = context.retrieveNodeForObject(((ContentObject) contentObject).getSystemName());
+						
+						if (objectNode != null){
+							//Set object id although it has not been provided
+							((ContentObject) contentObject).setId(context.getCmsRepositoryEntityUtils().getCmsIdentifier(objectNode));
+						}
+					}
 				}
 				else{
-					//Check its existence
-					logger.debug("Retrieving content object {} from repository", ((ContentObject) contentObject).getId());
+					objectNode = context.retrieveNodeForObject(((ContentObject) contentObject).getId());
+				}
 						
-					if (context.getCmsRepositoryEntityUtils().retrieveUniqueNodeForContentObject(session, ((ContentObject) contentObject).getId()) == null){
+				if (objectNode == null){
+					
+					if (!context.getImportConfiguration().saveMissingObjectReferences()){
 						throw new CmsException("No content object found in repository with id "+ ((ContentObject) contentObject).getId() + " and name "+ ((ContentObject) contentObject).getSystemName());
+					}
+					else{
+						//Issue a warning and proceed with the rest
+						logger.warn("Property {}'s value contains a reference to object {} {} which does not exist in the repository {}. However, the value will be saved because the flag 'saveMissingReferences' in import configuration has been set to true",
+								new Object[]{simpleCmsPropertyToBeSaved.getFullPath(), ((ContentObject) contentObject).getId(), ((ContentObject) contentObject).getSystemName(), 
+								AstroboaClientContextHolder.getActiveRepositoryId()});
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -26,12 +26,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.model.jaxb.CmsEntitySerialization;
-import org.betaconceptframework.astroboa.model.jaxb.adapter.SystemBuiltInEntityAdapter;
 import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
 import org.betaconceptframework.astroboa.util.UrlProperties;
 
@@ -45,8 +43,7 @@ import org.betaconceptframework.astroboa.util.UrlProperties;
 @XmlType(
 	propOrder = {
 		    "cmsIdentifier",
-		    "url",
-		    "systemBuiltinEntity"
+		    "url"
 		}
 )
 public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , Serializable{
@@ -59,18 +56,6 @@ public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , 
 	
 	@XmlAttribute
 	private String cmsIdentifier;
-	
-	@XmlAttribute
-	//When marshaling a CmsRepositoryEntity to an XML 
-	//this attribute is meaningful only when its value is true.
-	//Since this variable is a boolean it will always has a value and therefore
-	//JAXB will always marshal it to an XML attribute.
-	//That is why an adapter is chosen in order to filter this
-	//value and only generate an attribute when value is true.
-	//Moreover this variable needs to be a Boolean as XmlAdapters 
-	//do not apply for primitive types
-	@XmlJavaTypeAdapter(SystemBuiltInEntityAdapter.class)
-	private Boolean systemBuiltinEntity;
 	
 	@XmlAttribute
 	protected String url;
@@ -86,15 +71,6 @@ public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , 
 	public void setId(String cmsIdentifier) {
 		this.cmsIdentifier = cmsIdentifier;
 	}
-	
-	public boolean isSystemBuiltinEntity() {
-		return systemBuiltinEntity != null && systemBuiltinEntity;
-	}
-	
-	public void setSystemBuiltinEntity(boolean systemBuiltinEntity) {
-		this.systemBuiltinEntity = systemBuiltinEntity;
-	}
-	
 	
 	public void setAuthenticationToken(String authenticationToken){
 		this.authenticationToken = authenticationToken;

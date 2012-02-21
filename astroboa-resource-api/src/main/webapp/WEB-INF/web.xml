@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited
 
 		  This file is part of Astroboa.
 		 
@@ -83,7 +83,16 @@ Authors
         <param-value>true</param-value>
     </context-param>
     
-    
+    <!-- 
+    	Some clients, like browsers, cannot use the Accept headers to negotiation the representation's media type.
+    	RESTEasy allows you to map file name suffixes like (.xml, .txt) to media types. These file name suffixes 
+    	take the place and override any Accept header sent by the client. 
+    	You configure this using the resteasy.media.type.mappings context-param variables within your web.xml 
+     -->
+     <context-param>
+        <param-name>resteasy.media.type.mappings</param-name>
+        <param-value>html : text/html, json : application/json, xml : application/xml, xsd : application/xml</param-value>
+    </context-param>
     
 		<!--  
 		BinaryChannel dynamic loader filter. Filter class is a Spring bean and use of 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -279,7 +279,7 @@ public class JcrNodeUtils  {
 				node.setProperty(property.getJcrName(), values);
 			}
 		}
-		else if (saveMode == SaveMode.UPDATE_ALL){
+		else if (saveMode == SaveMode.UPDATE){
 			if (node.hasProperty(property.getJcrName()) && 
 					node.getProperty(property.getJcrName()).getDefinition() != null && 
 					! node.getProperty(property.getJcrName()).getDefinition().isMultiple()){
@@ -341,7 +341,7 @@ public class JcrNodeUtils  {
 			JcrValueUtils.addValue(node, property, JcrValueUtils.getJcrValue(value, valueType, valueFactory), false);
 			logger.debug("Added value {} for property {} in node {}", new Object[]{value, property.getJcrName(), node.getPath()});
 		}
-		else if (saveMode == SaveMode.UPDATE_ALL){
+		else if (saveMode == SaveMode.UPDATE){
 			removeProperty(node, property, false);
 			logger.debug("Removed property {} from node {}", new Object[]{property.getJcrName(), node.getPath()});
 		}
@@ -367,8 +367,9 @@ public class JcrNodeUtils  {
 			if (binary !=null){
 				binary.getBinary().dispose();
 			}
-		} else if (saveMode == SaveMode.UPDATE_ALL)
+		} else if (saveMode == SaveMode.UPDATE){
 			removeProperty(node, propertyName, false);
+		}
 		
 	}
 
@@ -377,7 +378,7 @@ public class JcrNodeUtils  {
 		Node taxonomyNode = topicNode;
 		
 		if (! taxonomyNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName())){
-			//Try to find contentObjectNode
+			//Try to find  taxonomy node
 				taxonomyNode = topicNode.getParent();
 				while (taxonomyNode != null && !taxonomyNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName()))
 					taxonomyNode = taxonomyNode.getParent();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -62,7 +62,7 @@ public class CmsLocalizationUtils {
 				//Create a new cms localization node
 				cmsLocalizationNode = JcrNodeUtils.addLocalizationNode(cmsRepositoryEntityNode);
 				
-			 PropertyIterator localeProperties = cmsLocalizationNode.getProperties(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+"*");
+			 PropertyIterator localeProperties = cmsLocalizationNode.getProperties(BetaConceptNamespaceConstants.ASTROBOA_PREFIX+"*");
 			 Map<String, Property> propertiesPerLocale = new HashMap<String, Property>();
 			 //remove all previous locales
 			 while (localeProperties.hasNext()) {

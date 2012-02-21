@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -50,17 +50,18 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 	
 	private final ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper;
 	
-	private final boolean systemTypeDefinition;
-	
 	private List<String> superTypes;
+	
+	private final boolean schemaExtendsBaseObjectType;
 	
 	private String propertyPathsWhoseValuesCanBeUsedAsALabel;
 
 	public ContentObjectTypeDefinitionImpl(QName qualifiedName, Localization description,
 			Localization displayName,
 			ComplexPropertyDefinitionHelper complexPropertyDefinitionHelper,
-			URI definitionFileURI, boolean systemTypeDefinition, 
+			URI definitionFileURI,  
 			List<String> superTypes, 
+			boolean schemaExtendsBaseObjectType,
 			String propertyPathsWhoseValuesCanBeUsedAsALabel) {
 		
 		super(qualifiedName, description, displayName);
@@ -69,9 +70,9 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 		
 		this.definitionFileURI = definitionFileURI;
 		
-		this.systemTypeDefinition = systemTypeDefinition;
-		
 		this.superTypes = superTypes;
+		
+		this.schemaExtendsBaseObjectType = schemaExtendsBaseObjectType;
 		
 		this.propertyPathsWhoseValuesCanBeUsedAsALabel = propertyPathsWhoseValuesCanBeUsedAsALabel;
 	}
@@ -142,11 +143,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 		return definitionFileURI;
 	}
 
-	public boolean isSystemTypeDefinition() {
-		return systemTypeDefinition;
-	}
-
-
 	public boolean isTypeOf(String superType) {
 		return superType != null && superTypes != null && superTypes.contains(superType);
 	}
@@ -163,8 +159,6 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 				.append(definitionFileURI)
 				.append(", superTypes=")
 				.append(superTypes)
-				.append(", systemTypeDefinition=")
-				.append(systemTypeDefinition)
 				.append(super.toString())
 				.append("]").toString();
 	}
@@ -186,6 +180,11 @@ public final class ContentObjectTypeDefinitionImpl  extends LocalizableCmsDefini
 	}
 
 
+	@Override
+	public boolean schemaExtendsBaseObjectTypeDefinition() {
+		return schemaExtendsBaseObjectType;
+	}
+	
 	@Override
 	public String getPropertyPathsWhoseValuesCanBeUsedAsALabel(){
 		return propertyPathsWhoseValuesCanBeUsedAsALabel;

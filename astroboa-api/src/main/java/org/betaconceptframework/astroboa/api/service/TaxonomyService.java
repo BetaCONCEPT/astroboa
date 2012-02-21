@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -95,7 +95,7 @@ public interface TaxonomyService {
 	 * and  {@link RepositoryUser repository users} folksonomies.
 	 *   
 	 * @param taxonomyIdOrName Taxonomy identifier or name
-	 * @return <code>true</code> if taxonomy has been successfully deleted, <code>false</code> otherwise
+	 * @return <code>true</code> if taxonomy has been successfully deleted, <code>false</code> if or no taxonomy with the provided id or name is found.
 	 */
 	boolean deleteTaxonomyTree(String taxonomyIdOrName);
 	

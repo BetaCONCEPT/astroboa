@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -37,6 +37,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
@@ -182,7 +184,11 @@ public class TopicResource extends AstroboaResource{
 				String requestContent, String httpMethod){
 			
 		  //Import from xml or json. Topic will not be saved
-   		  Topic topicToBeSaved = astroboaClient.getImportService().importTopic(requestContent, false);
+		  ImportConfiguration configuration = ImportConfiguration.topic()
+				  .persist(PersistMode.DO_NOT_PERSIST)
+				  .build();
+
+   		  Topic topicToBeSaved = astroboaClient.getImportService().importTopic(requestContent, configuration);
 
    		  Topic existingTopic = astroboaClient.getTopicService().getTopic(topicNameOrId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
    		  
@@ -252,7 +258,12 @@ public class TopicResource extends AstroboaResource{
 			logger.debug("Want to save a new topic {}",topicSource);
 			
 			try{
-				Topic topic = astroboaClient.getImportService().importTopic(topicSource, true);
+				
+			  ImportConfiguration configuration = ImportConfiguration.topic()
+					  .persist(PersistMode.PERSIST_ENTITY_TREE)
+					  .build();
+
+				Topic topic = astroboaClient.getImportService().importTopic(topicSource, configuration);
 				
 				return ContentApiUtils.createResponseForPutOrPostOfACmsEntity(topic,httpMethod, topicSource, entityIsNew);
 				
@@ -486,8 +497,6 @@ public class TopicResource extends AstroboaResource{
 
 		topicCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 		topicCriteria.getRenderProperties().prettyPrint(prettyPrint);
-		
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		//Parse query
 		if (StringUtils.isNotBlank(cmsQuery)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -18,21 +18,15 @@
  */
 package org.betaconceptframework.astroboa.engine.jcr.dao;
 
-import java.io.File;
-import java.net.URI;
-
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.SimpleCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
-import org.betaconceptframework.astroboa.model.impl.definition.ComplexCmsPropertyDefinitionImpl;
-import org.betaconceptframework.astroboa.model.impl.definition.ContentObjectTypeDefinitionImpl;
 import org.betaconceptframework.astroboa.service.dao.DefinitionServiceDao;
 import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.PropertyPath;
+import org.betaconceptframework.astroboa.util.ResourceApiURLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,13 +52,6 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 				return null;
 			}
 
-			if (StringUtils.equals(CmsConstants.ASTROBOA_API_SCHEMA_FILENAME, definitionFullPath)){
-				definitionFullPath = CmsConstants.ASTROBOA_API_SCHEMA_FILENAME_WITH_VERSION;
-			}
-			else if (StringUtils.equals(CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME, definitionFullPath)){
-				definitionFullPath = CmsConstants.ASTROBOA_MODEL_SCHEMA_FILENAME_WITH_VERSION;
-			}
-			
 			if (definitionFullPath.endsWith(".xsd")){
 
 				//First try directly
@@ -86,42 +73,10 @@ public class ContentDefinitionDao extends DefinitionServiceDao{
 
 			CmsDefinition cmsDefinition = retrieveDefinition(definitionFullPath);
 
-			URI cmsDefinitionFileURI = null;
-
-			if (cmsDefinition instanceof ContentObjectTypeDefinition){
-				cmsDefinitionFileURI = ((ContentObjectTypeDefinitionImpl)cmsDefinition).getDefinitionFileURI();
-			}
-			else if (cmsDefinition instanceof ComplexCmsPropertyDefinition){
-				cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)cmsDefinition).getDefinitionFileURI();
-			}
-			else if (cmsDefinition instanceof SimpleCmsPropertyDefinition){
-				//It is a simple property. Get its parent to provide with the URI
-				CmsDefinition parentDefinition = ((SimpleCmsPropertyDefinition)cmsDefinition).getParentDefinition();
-				if (parentDefinition != null && parentDefinition instanceof ComplexCmsPropertyDefinition){
-					cmsDefinitionFileURI = ((ComplexCmsPropertyDefinitionImpl)parentDefinition).getDefinitionFileURI();
-				}
-			}
-
-			if (cmsDefinitionFileURI == null){
-				logger.warn("Found no XML schema file for definition "+ definitionFullPath);
-				return null;
-			}
-
-
-			logger.debug("Searching XML schema file for definition {}", cmsDefinitionFileURI);
-			
-			
-			String schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), File.separator);
+			String schemaFilename = ResourceApiURLUtils.retrieveSchemaFileName(cmsDefinition);
 			
 			if (StringUtils.isBlank(schemaFilename)){
-				if (!File.separator.equals(CmsConstants.FORWARD_SLASH)){
-					//try with forward slash.
-					schemaFilename = StringUtils.substringAfterLast(cmsDefinitionFileURI.toString(), CmsConstants.FORWARD_SLASH);
-				}
-			}
-			
-			if (StringUtils.isBlank(schemaFilename)){
-				logger.warn("Could not retrieve XML Schema filename from URI {}", cmsDefinitionFileURI.toString());
+				logger.warn("Could not retrieve XML Schema filename for definition {}", cmsDefinition.getName());
 				return null;
 			}
 			

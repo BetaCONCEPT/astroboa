@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -19,17 +19,23 @@
 package org.betaconceptframework.astroboa.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
+import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.security.AstroboaCredentials;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
 import org.betaconceptframework.astroboa.api.security.management.IdentityStore;
@@ -45,6 +51,7 @@ import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 /**
@@ -71,13 +78,13 @@ public abstract class AbstractAstroboaTest {
 	protected String authenticationToken;
 	
 	private RepositoryUser systemUser;
-	private List<CmsRepositoryEntity> entitiesToBeDeleted = new ArrayList<CmsRepositoryEntity>();
+	private Map<String, Class<? extends CmsRepositoryEntity>> entitiesToBeDeleted = new HashMap<String, Class<? extends CmsRepositoryEntity>>();
 	private Taxonomy subjectTaxonomy;
 	
 	@BeforeClass
 	public void setup() throws Exception{
 		
-		logger.info("Starting Test {}", this.getClass().getSimpleName());
+		logger.debug("Starting Test {}", this.getClass().getSimpleName());
 
 		preSetup();
 		
@@ -207,74 +214,152 @@ public abstract class AbstractAstroboaTest {
 	
 	protected abstract void postSetup() throws Exception ;
 	
-	protected void addEntityToBeDeletedAfterTestIsFinished(CmsRepositoryEntity cmsRepositoryEntity){
+	protected void markObjectForRemoval(ContentObject object){
+		if (object != null && object.getId() != null){
+			markEntityForRemoval(object.getId(), ContentObject.class);
+		}
+	}
+
+	protected void markTopicForRemoval(Topic topic){
+		if (topic != null && topic.getId() != null){
+			markEntityForRemoval(topic.getId(), Topic.class);
+		}
+	}
+
+	protected void markSpaceForRemoval(Space space){
+		if (space != null && space.getId() != null){
+			markEntityForRemoval(space.getId(), Space.class);
+		}
+	}
+
+	protected void markTaxonomyForRemoval(Taxonomy taxonomy){
+		if (taxonomy != null && taxonomy.getId() != null){
+			markEntityForRemoval(taxonomy.getId(), Taxonomy.class);
+		}
+	}
+
+	protected void markRepositoryUserForRemoval(RepositoryUser repUser){
+		if (repUser != null && repUser.getId() != null){
+			markEntityForRemoval(repUser.getId(), RepositoryUser.class);
+		}
+	}
+
+	private void markEntityForRemoval(String entityId, Class<? extends CmsRepositoryEntity> entityClass){
 		
-		if (cmsRepositoryEntity != null){
-			entitiesToBeDeleted.add(cmsRepositoryEntity);
+		if (StringUtils.isNotBlank(entityId) && entityClass != null){
+			entitiesToBeDeleted.put(entityId, entityClass);
 		}
 	}
 	
 	
-	@AfterClass
+	@AfterMethod
 	protected void cleanup() throws Exception{
+		
+		logger.debug("About to remove entities");
 		
 		preCleanup();
 		
-		if (CollectionUtils.isNotEmpty(entitiesToBeDeleted)){
+		if (MapUtils.isNotEmpty(entitiesToBeDeleted)){
 			
 			loginToTestRepositoryAsSystem();
 
-			for (CmsRepositoryEntity cmsRepositoryEntity : entitiesToBeDeleted){
-				
-				if (cmsRepositoryEntity instanceof Taxonomy){
-					
-					final Taxonomy taxonomy = (Taxonomy)cmsRepositoryEntity;
-					
-					if (StringUtils.equals(taxonomy.getName(), Taxonomy.SUBJECT_TAXONOMY_NAME)){
-						//Subject Taxonomy cannot be deleted. Delete its children instead
-						if (taxonomy.getNumberOfRootTopics() > 0){
-							for (Topic topic: taxonomy.getRootTopics()){
-								topicService.deleteTopicTree(topic.getId());
-							}
-						}
-					}
-					else{
-						taxonomyService.deleteTaxonomyTree(taxonomy.getId());
-					}
-				}
-				else if (cmsRepositoryEntity instanceof Topic){
-					String id = ((Topic)cmsRepositoryEntity).getId();
-					
-					if (StringUtils.isBlank(id)){
-						String name = ((Topic)cmsRepositoryEntity).getName();
-						
-						if (StringUtils.isNotBlank(name)){
-							Topic topic = topicService.getTopic(name, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
-							
-							if (topic!=null){
-								topicService.deleteTopicTree(topic.getId());
-							}
-						}
-					}
-					else{
-						topicService.deleteTopicTree(id);
-					}
-				}
-				else if (cmsRepositoryEntity instanceof ContentObject){
-					
-					if (((ContentObject)cmsRepositoryEntity).getSystemName() != null){
-						contentService.deleteContentObject(((ContentObject)cmsRepositoryEntity).getSystemName());
-					}
-					
-					contentService.deleteContentObject(((ContentObject)cmsRepositoryEntity).getId());
-				}
-				else if (cmsRepositoryEntity instanceof RepositoryUser){
-					repositoryUserService.deleteRepositoryUser(((RepositoryUser)cmsRepositoryEntity).getId(), null);
-				}
-			}
+			removeEntities();
+			
+			loginToCloneRepositoryAsSystem();
+			
+			removeEntities();
 		}
 		
 		postCleanup();
+		
+		loginToTestRepositoryAsSystem();
+
+	}
+
+
+	private void removeEntities() {
+		for (Entry<String, Class<? extends CmsRepositoryEntity>> entityToBeRemoval : entitiesToBeDeleted.entrySet()){
+			
+			Class<? extends CmsRepositoryEntity> entityClass = entityToBeRemoval.getValue();
+			String entityIdentifier = entityToBeRemoval.getKey();
+			
+			if (entityClass == Taxonomy.class){
+				
+				final Taxonomy taxonomy = taxonomyService.getTaxonomy(entityIdentifier, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
+				
+				if (taxonomy == null){
+					continue;
+				}
+				
+				logger.debug("Removing taxonomy {} - {}", taxonomy.getName(), taxonomy.getId());
+				
+				if (StringUtils.equals(taxonomy.getName(), Taxonomy.SUBJECT_TAXONOMY_NAME)){
+					//Subject Taxonomy cannot be deleted. Delete its children instead
+					if (taxonomy.getNumberOfRootTopics() > 0){
+						for (Topic topic: taxonomy.getRootTopics()){
+							topicService.deleteTopicTree(topic.getId());
+						}
+					}
+				}
+				else{
+					taxonomyService.deleteTaxonomyTree(taxonomy.getId());
+				}
+			}
+			else if (entityClass == Topic.class){
+					
+				final Topic topic = topicService.getTopic(entityIdentifier, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
+					
+				if (topic == null){
+					continue;
+				}
+
+				logger.debug("Removing topic {} - {}", topic.getName(), topic.getId());
+				
+				topicService.deleteTopicTree(topic.getId());
+				
+			}
+			else if (entityClass == Space.class){
+				
+				final Space space = spaceService.getSpace(entityIdentifier, ResourceRepresentationType.SPACE_INSTANCE, FetchLevel.ENTITY);
+					
+				if (space == null){
+					continue;
+				}
+				
+				logger.debug("Removing space {} - {}", space.getName(), space.getId());
+				
+				spaceService.deleteSpace(space.getId());
+			}
+			else if (entityClass == ContentObject.class){
+				
+				final ContentObject contentObject = contentService.getContentObject(entityIdentifier, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, 
+						CacheRegion.NONE, null, false);
+					
+				if (contentObject == null){
+					continue;
+				}
+				
+				logger.debug("Removing object {} - {}", contentObject.getSystemName(), contentObject.getId());
+				
+				if (contentObject.getSystemName() != null){
+					contentService.deleteContentObject(contentObject.getSystemName());
+				}
+				
+				contentService.deleteContentObject(contentObject.getId());
+			}
+			else if (entityClass == RepositoryUser.class){
+				
+				RepositoryUser repositoryUser = repositoryUserService.getRepositoryUser(entityIdentifier);
+				
+				if (repositoryUser == null){
+					continue;
+				}
+				
+				logger.debug("Removing repository user {} - {}", repositoryUser.getExternalId(), repositoryUser.getId());
+
+				repositoryUserService.deleteRepositoryUser(repositoryUser.getId(), null);
+			}
+		}
 	}
 
 

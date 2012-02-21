@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -97,8 +97,10 @@ public interface SpaceService {
 	 * All associations to this space will be deleted as well.
 	 * 
 	 * @param spaceId Space's id to be deleted.
+	 * @return <code>true</code> if space has been successfully deleted, <code>false</code> if no space with the provided id or name is found.
+	 * 
 	 */
-	void deleteSpace(String spaceId);
+	boolean deleteSpace(String spaceId);
 	
 	/**
 	 * Returns a space for the specified <code>spaceId</code>.
@@ -393,7 +395,7 @@ public interface SpaceService {
 	 * 				<bccmsapi:resourceResponse 
 	 * 					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	 * 					xmlns:bccmsmodel="http://www.betaconceptframework.org/schema/astroboa/model" 
-	 * 					xmlns:bccmsapi="http://www.betaconceptframework.org/schema/astroboa/api" 
+	 * 					xmlns:astroboa-api="http://www.betaconceptframework.org/schema/astroboa/api" 
 	 * 				 	offset="0"
 	 * 					totalResourceCount="0"
 	 * 				/>

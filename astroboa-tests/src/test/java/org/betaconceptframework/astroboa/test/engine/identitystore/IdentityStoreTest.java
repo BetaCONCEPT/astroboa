@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -92,7 +92,6 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 		personCriteria.addCriterion(CriterionFactory.equals("name",roleName));
 		personCriteria.setOffsetAndLimit(0, 1);
 		personCriteria.doNotCacheResults();
-		personCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		return contentService.searchContentObjects(personCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 	}
@@ -228,7 +227,6 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 		contentObjectCriteria.addCriterion(CriterionFactory.equals("personAuthentication.username", IdentityPrincipal.SYSTEM));
 		contentObjectCriteria.setOffsetAndLimit(0,1);
 		contentObjectCriteria.doNotCacheResults();
-		contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 

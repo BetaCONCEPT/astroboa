@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -67,7 +67,7 @@ public class EntityResolverForBuiltInSchemas implements EntityResolver{
 	public InputSource resolveEntity(String publicId, String systemId)
 	throws SAXException, IOException {
 
-		if (publicId != null && publicId.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_SCHEMA_URI) && 
+		if (publicId != null && publicId.startsWith(BetaConceptNamespaceConstants.ASTROBOA_SCHEMA_URI) && 
 				systemId != null){
 
 			try {
@@ -118,7 +118,7 @@ public class EntityResolverForBuiltInSchemas implements EntityResolver{
 					is.setSystemId(definitionFileURL.toString());
 					is.setPublicId(publicId);
 
-					if (systemId.startsWith(BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_SCHEMA_URI)){
+					if (systemId.startsWith(BetaConceptNamespaceConstants.ASTROBOA_SCHEMA_URI)){
 						logger.warn("Schema Location for XSD Schema "+ schemaFilename + ", which contains built in Astroboa model, is not relative but absolute." +
 								" Unless this absolute location really 'serves' XSD, there will be a problem " +
 								" when importing XML which contain xml elements derived from this Schema If this location is not real, then you are advised to delete it and leave only" +

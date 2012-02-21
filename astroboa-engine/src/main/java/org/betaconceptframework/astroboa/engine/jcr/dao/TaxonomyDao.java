@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -35,10 +35,12 @@ import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TaxonomyCriteria;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.TaxonomyRenderer;
@@ -109,7 +111,8 @@ public class TaxonomyDao extends JcrDaoSupport{
 
 			Node taxonomyNode = getTaxonomyNodeByIdOrName(session, taxonomyIdOrName);
 			if (taxonomyNode == null){
-				throw new CmsException("Could not find taxonomy with id or name "+taxonomyIdOrName+ " in order to delete it");
+				logger.info("Taxonomy with id or name {} does not exist and therefore cannot delete it", taxonomyIdOrName);
+				return false;
 			}
 
 			//Check taxonomy node found is a custom taxonomy and not a built in folksonomy
@@ -168,7 +171,11 @@ public class TaxonomyDao extends JcrDaoSupport{
 			//and to save it as well.
 			//What is happened is that importDao will create a Taxonomy
 			//and will pass it here again to save it. 
-			return importDao.importTaxonomy((String)taxonomySource, ImportMode.SAVE_ENTITY_TREE);
+			ImportConfiguration configuration = ImportConfiguration.taxonomy()
+					  .persist(PersistMode.PERSIST_ENTITY_TREE)
+					  .build();
+
+			return importDao.importTaxonomy((String)taxonomySource, configuration);
 		}
 		
 		if (! (taxonomySource instanceof Taxonomy)){
@@ -178,10 +185,29 @@ public class TaxonomyDao extends JcrDaoSupport{
 		Taxonomy taxonomy = (Taxonomy) taxonomySource;
 
 		if (StringUtils.isBlank(taxonomy.getName())){
-			throw new CmsException("Undefined taxonomy name");
+			
+			//user did not provide any name
+			if (! StringUtils.isBlank(taxonomy.getId())){
+				try {
+					//Check if taxonomy already exists
+					Node taxonomyNode = getTaxonomyNodeByIdOrName(getSession(), taxonomy.getId());
+					
+					if (taxonomyNode == null){
+						throw new CmsException("Cannot update taxonomy with "+taxonomy.getId()+" because no taxonomy with this id exists in the repository. A new one cannot be created because no name is provided");
+					}
+					else{
+						taxonomy.setName(taxonomyNode.getName());
+					}
+				} catch (RepositoryException e) {
+					throw new CmsException(e);
+				}
+			}
+			else{
+				throw new CmsException("Cannot save taxonomy. Neither id nor name is provided");
+			}
 		}
 		
-		//Check if this taxonomy is built in and change its id
+		//Check if this taxonomy is built in and change its id accordingly
 		changeIdentifierIfTaxonomyIsBuiltIn(taxonomy, Taxonomy.SUBJECT_TAXONOMY_NAME);
 
 		String taxonomyName = taxonomy.getName();
@@ -205,7 +231,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 		try {
 
 			//Check if taxonomy is new
-			saveMode = StringUtils.isBlank(taxonomy.getId())? SaveMode.INSERT : SaveMode.UPDATE_ALL;
+			saveMode = StringUtils.isBlank(taxonomy.getId())? SaveMode.INSERT : SaveMode.UPDATE;
 
 			session = getSession();
 
@@ -229,7 +255,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 				cmsRepositoryEntityUtils.createCmsIdentifier(taxonomyJcrNode, taxonomy, false);
 
 				break;
-			case UPDATE_ALL:
+			case UPDATE:
 
 				if (Taxonomy.SUBJECT_TAXONOMY_NAME.equalsIgnoreCase(taxonomyName)){
 					taxonomyJcrNode = taxonomyRootJcrNode.getNode(Taxonomy.SUBJECT_TAXONOMY_NAME);
@@ -314,8 +340,6 @@ public class TaxonomyDao extends JcrDaoSupport{
 			//Update localized labels
 			if (taxonomyJcrNode != null){
 				cmsLocalizationUtils.updateCmsLocalization(taxonomy, taxonomyJcrNode);
-
-				cmsRepositoryEntityUtils.setSystemProperties(taxonomyJcrNode, taxonomy);
 			}
 			
 			//in cases where taxonomy is a new one and contains root topics save them as well
@@ -488,8 +512,13 @@ public class TaxonomyDao extends JcrDaoSupport{
 				String taxonomy = null;
 				
 				os = new ByteArrayOutputStream();
+				
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.taxonomy()
+						.prettyPrint(prettyPrint)
+						.representationType(taxonomyOutput)
+						.build();
 
-				serializationDao.serializeCmsRepositoryEntity(taxonomyNode, os, taxonomyOutput, CmsEntityType.TAXONOMY, null, fetchLevel, true, false,prettyPrint);
+				serializationDao.serializeCmsRepositoryEntity(taxonomyNode, os, CmsEntityType.TAXONOMY, null, fetchLevel, true, serializationConfiguration);
 
 				taxonomy = new String(os.toByteArray(), "UTF-8");
 
@@ -587,9 +616,13 @@ public class TaxonomyDao extends JcrDaoSupport{
 				os = new ByteArrayOutputStream();
 			
 				TaxonomyCriteria taxonomyCriteria = CmsCriteriaFactory.newTaxonomyCriteria();
-				taxonomyCriteria.getRenderProperties().prettyPrint(prettyPrint);
 				
-				serializationDao.serializeSearchResults(session, taxonomyCriteria, os, fetchLevel, taxonomyOutput, false);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.taxonomy()
+						.prettyPrint(prettyPrint)
+						.representationType(taxonomyOutput)
+						.build();
+
+				serializationDao.serializeSearchResults(session, taxonomyCriteria, os, fetchLevel, serializationConfiguration);
 			
 				return (T) new String(os.toByteArray(), "UTF-8");
 			}

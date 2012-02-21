@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -280,7 +280,7 @@ public class PopulateComplexCmsProperty{
 			}
 			
 			//Update aspects jcr property with new values
-			JcrNodeUtils.addMultiValueProperty(complexPropertyNode, CmsBuiltInItem.Aspects, SaveMode.UPDATE_ALL, newAspects, ValueType.String, session.getValueFactory());
+			JcrNodeUtils.addMultiValueProperty(complexPropertyNode, CmsBuiltInItem.Aspects, SaveMode.UPDATE, newAspects, ValueType.String, session.getValueFactory());
 		}
 
 	}

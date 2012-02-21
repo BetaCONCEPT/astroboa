@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -36,14 +36,14 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactoryForActiveClient;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -80,7 +80,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 
 		String topicName = "test-topic-save-using-parent-taxonomy";
 		
@@ -114,7 +114,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		Topic newTopic = JAXBTestUtils.createTopic(topicName+"Child", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),getSystemUser());
@@ -171,7 +171,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 
 		String topicName = "test-topic-update-without-taxonomy";
 		
@@ -216,7 +216,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.setAllowsReferrerContentObjects(true);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		//Save using XML and JSON
 		String xml = topic.xml(false);
@@ -247,7 +247,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.getLocalizedLabels().clear();
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 
 		//Remove name and save again
 		topic.setName(null);
@@ -272,7 +272,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		taxonomy.addLocalizedLabel("en", taxonomy.getName()+"-en");
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		Topic parentTopic = JAXBTestUtils.createTopic("test-search-parent-topic-using-search-expression", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
@@ -295,7 +295,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//Create criteria
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		
 		//value is the expected outcome. true for match one topic, false for no match for this topic (it may contain other topics but not
 		//the provided one
@@ -562,10 +561,9 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.addLocalizedLabel("en", english_label);
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 3);
 		
 		//Search any locale
@@ -585,7 +583,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//Search specific locale
 		topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 1);
 		
 		locLabelCriterion = CriterionFactory.newLocalizationCriterion();
@@ -604,7 +601,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 		//Search wrong locale
 		topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 1);
 		
 		locLabelCriterion = CriterionFactory.newLocalizationCriterion();
@@ -629,7 +625,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				getSystemUser());
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		Topic topicReloaded = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY_AND_CHILDREN, false);
 		
@@ -640,7 +636,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		taxonomy = taxonomyService.save(taxonomy);
 		
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 		
 		topicReloaded.setTaxonomy(taxonomy);
 		topicService.save(topicReloaded);
@@ -660,7 +656,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				getSystemUser());
 
 		parentTopic = topicService.save(parentTopic);
-		addEntityToBeDeletedAfterTestIsFinished(parentTopic);
+		markTopicForRemoval(parentTopic);
 		
 		Topic topic = JAXBTestUtils.createTopic("test-change-topic-taxonomy-using-parent", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
@@ -676,7 +672,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTaxonomy());
 		
 		taxonomy = taxonomyService.save(taxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(taxonomy);
+		markTaxonomyForRemoval(taxonomy);
 
 		Topic secondParentTopic = JAXBTestUtils.createTopic("test-second-parent-change-topic-taxonomy-using-parent", 
 				CmsRepositoryEntityFactoryForActiveClient.INSTANCE.getFactory().newTopic(),
@@ -699,7 +695,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		Taxonomy aTaxonomy = JAXBTestUtils.createTaxonomy("aTaxonomy", cmsRepositoryEntityFactory.newTaxonomy());
 		aTaxonomy = taxonomyService.save(aTaxonomy);
-		addEntityToBeDeletedAfterTestIsFinished(aTaxonomy);
+		markTaxonomyForRemoval(aTaxonomy);
 		
 		
 		// create a topic and delete it by its name
@@ -798,10 +794,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 		topic = topicService.save(topic);
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-delete-mandatory-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-topic-delete-mandatory-reference");
 		((TopicReferenceProperty)contentObject.getCmsProperty("singleComplexNotAspectWithCommonAttributes.testTopic")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		
 		//TODO : Should we throw an exception
@@ -821,10 +817,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 		topic = topicService.save(topic);
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-delete-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-topic-delete-reference");
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		topicService.deleteTopicTree(topic.getId());
 		
@@ -869,10 +865,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		parentTopic = topicService.save(parentTopic);
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-child-topic-delete-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-child-topic-delete-reference");
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 
 		topicService.deleteTopicTree(parentTopic.getId());
 		
@@ -918,12 +914,12 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				getSystemUser());
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
-		ContentObject contentObject = createContentObject(getSystemUser(), "test-topic-save-reference", false);
+		ContentObject contentObject = createContentObject(getSystemUser(),  "test-topic-save-reference");
 		((TopicReferenceProperty)contentObject.getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 		contentObject = contentService.save(contentObject, false, true, null);
-		addEntityToBeDeletedAfterTestIsFinished(contentObject);
+		markObjectForRemoval(contentObject);
 		
 		//Check with Jcr
 		Node topicNode = getSession().getNodeByUUID(topic.getId());
@@ -975,12 +971,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		TopicCriteria rootTopicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		rootTopicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.SUBJECT_TAXONOMY_NAME);
-		rootTopicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		rootTopicCriteria.searchInDirectAncestorOnly();
 
 		
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.searchInDirectAncestorOnly();
 		topicCriteria.setOffsetAndLimit(0, 4);
 		topicCriteria.setAncestorCriteria(rootTopicCriteria);
@@ -1071,7 +1065,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 				systemUser);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Grand child is the same with grand parent
 		Topic neutral = JAXBTestUtils.createTopic("neutral-topic", 
@@ -1198,11 +1192,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.addLocalizedLabel("el", "Όρος ΘΗσαυρού");
 
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Search specific locale, ignore case and use LIKE operator
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 1);
 		
 		LocalizationCriterion locLabelCriterion = CriterionFactory.newLocalizationCriterion();
@@ -1222,7 +1215,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//Search specific locale, ignore case and use EQUALS operator - en locale
 		topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 1);
 		
 		locLabelCriterion = CriterionFactory.newLocalizationCriterion();
@@ -1243,7 +1235,6 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 
 		//Search specific locale, ignore case and use EQUALS operator - el locale
 		topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 		topicCriteria.setOffsetAndLimit(0, 1);
 		
 		locLabelCriterion = CriterionFactory.newLocalizationCriterion();
@@ -1294,7 +1285,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		testUser.getFolksonomy().addRootTopic(topic);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Now retrieve topic
 		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), testUser);
@@ -1333,7 +1324,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		topic.addChild(thirdTopic);
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Now retrieve topic
 		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
@@ -1376,7 +1367,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		thirdTopic.setOwner(testUser); //Change owner to see if this is changed
 		
 		topic = topicService.save(topic);
-		addEntityToBeDeletedAfterTestIsFinished(topic);
+		markTopicForRemoval(topic);
 		
 		//Now retrieve topic
 		checkOwnerIsTheProvidedUser(topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false), getSystemUser());
@@ -1429,7 +1420,10 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		List<ResourceRepresentationType<String>> outputs = Arrays.asList(ResourceRepresentationType.JSON, ResourceRepresentationType.XML);
 		
 		try{
-			
+			ImportConfiguration configuration = ImportConfiguration.topic()
+					.persist(PersistMode.DO_NOT_PERSIST)
+					.build();
+
 			for (ResourceRepresentationType<String> output : outputs){
 				//Reload topic without its children
 				topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
@@ -1444,7 +1438,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.ENTITY, prettyPrint);
 				}
 				
-				Topic topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE);  
+				Topic topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, configuration);  
 
 				repositoryContentValidator.compareTopics(topic, topicFromServiceWithId, false, true);
 
@@ -1459,7 +1453,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 					topicXmlFromServiceUsingId = topicService.getTopic(topic.getId(), ResourceRepresentationType.JSON, FetchLevel.FULL,prettyPrint);
 				}
 
-				topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, ImportMode.DO_NOT_SAVE); 
+				topicFromServiceWithId = importDao.importTopic(topicXmlFromServiceUsingId, configuration); 
 
 				repositoryContentValidator.compareTopics(topic, topicFromServiceWithId, true, true);
 			

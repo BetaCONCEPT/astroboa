@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -25,7 +25,6 @@ import javax.jcr.RepositoryException;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
-import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -46,9 +45,6 @@ public class CmsRepositoryEntityRenderer {
 				cmsRepositoryEntity.setId(cmsRepositoryEntityUtils.getCmsIdentifier(node));
 			}
 			
-			if (node.hasProperty(CmsBuiltInItem.SystemBuiltinEntity.getJcrName())){
-				cmsRepositoryEntity.setSystemBuiltinEntity(node.getProperty(CmsBuiltInItem.SystemBuiltinEntity.getJcrName()).getBoolean());
-			}
 		} catch (
 				Exception e) {
 			throw new CmsException(e);

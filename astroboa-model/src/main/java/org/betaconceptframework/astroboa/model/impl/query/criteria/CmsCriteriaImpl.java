@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -65,7 +65,7 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 	//Default value is NO cache at all
 	private CacheRegion cacheRegion = CacheRegion.NONE;
 
-	private SearchMode searchMode = SearchMode.SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES;
+	private SearchMode searchMode;
 
 	CmsCriteriaImpl() {
 		nodeType = JcrBuiltInItem.NtBase;
@@ -134,11 +134,12 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 		Criterion currentCriterion = generateSystemBuiltinEntityCriterion();
 		if (CollectionUtils.isNotEmpty(getCriteria())) {
 			for (Criterion criterion : getCriteria()) {
-				if (currentCriterion == null)
+				if (currentCriterion == null){
 					currentCriterion = criterion;
-				else
-					currentCriterion = CriterionFactory.and(currentCriterion,
-							criterion);
+				}
+				else {
+					currentCriterion = CriterionFactory.and(currentCriterion, criterion);
+				}
 			}
 		}
 
@@ -172,6 +173,10 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 
 	private Criterion generateSystemBuiltinEntityCriterion() {
 
+		if (searchMode == null){
+			return null;
+		}
+		
 		switch (searchMode) {
 		case SEARCH_ALL_ENTITIES:
 			//Since we want all entities do not create any criterion
@@ -180,10 +185,10 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 			//search for all entities which DO not have property (backwards compatibility)
 			//or those which have the property but its value is false
 			return CriterionFactory.or(
-					CriterionFactory.isNull(CmsBuiltInItem.SystemBuiltinEntity.getJcrName()),
-					CriterionFactory.equals(CmsBuiltInItem.SystemBuiltinEntity.getJcrName(), false));
+					CriterionFactory.isNull("bccms:systemBuiltinEntity"),
+					CriterionFactory.equals("bccms:systemBuiltinEntity", false));
 		case SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES:
-			return CriterionFactory.equals(CmsBuiltInItem.SystemBuiltinEntity.getJcrName(), true);
+			return CriterionFactory.equals("bccms:systemBuiltinEntity", true);
 		default:
 			return null;
 		}
@@ -257,12 +262,7 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 	}
 
 	public void setSearchMode(SearchMode searchMode){
-		if (searchMode == null){
-			this.searchMode = SearchMode.SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES;
-		}
-		else{
-			this.searchMode = searchMode;
-		}
+		this.searchMode = searchMode;
 
 		resetXpathQuery();
 	}

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -141,7 +141,7 @@ public class PageController extends AbstractUIBean {
 		dynamicUIAreaCurrentPageComponentEnum = null;
 	}
 	
-	public void changeRowsPerDataTablePage_UIAction(int rowsPerPage){
+	public void changeRowsPerDataTablePage(int rowsPerPage){
 		
 		if (rowsPerPage <= 0){
 			rowsPerDataTablePage = 20;

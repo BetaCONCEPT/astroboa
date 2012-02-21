@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -230,12 +230,6 @@ public class ImportedEntity{
 		else if (StringUtils.equals(attributeName, CmsBuiltInItem.ContentObjectTypeName.getLocalPart())){
 			if (entity instanceof ContentObject){
 				((ContentObject)entity).setContentObjectType(attributeValue);
-				return true;
-			}
-		}
-		else if (StringUtils.equals(attributeName, CmsBuiltInItem.SystemBuiltinEntity.getLocalPart())){
-			if (entity instanceof CmsRepositoryEntity){
-				((CmsRepositoryEntity)entity).setSystemBuiltinEntity(BooleanUtils.isTrue(Boolean.valueOf(attributeValue)));
 				return true;
 			}
 		}

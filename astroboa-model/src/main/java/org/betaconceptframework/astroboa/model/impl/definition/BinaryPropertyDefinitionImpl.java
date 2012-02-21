@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -49,10 +49,10 @@ public final class BinaryPropertyDefinitionImpl extends SimpleCmsPropertyDefinit
 			boolean mandatory, Integer order, String restrictReadToRoles,
 			String restrictWriteToRoles, CmsDefinition parentDefinition,
 			String repositoryObjectRestriction,
-			boolean binaryChannelUnmanaged) {
+			boolean binaryChannelUnmanaged,boolean representsAnXmlAttribute) {
 		super(qualifiedName, description, displayName, obsolete, multiple, mandatory,order, 
 				restrictReadToRoles, restrictWriteToRoles, parentDefinition,
-				null, repositoryObjectRestriction,null);
+				null, repositoryObjectRestriction,null,representsAnXmlAttribute);
 		
 		this.binaryChannelUnmanaged = binaryChannelUnmanaged;
 	}
@@ -67,7 +67,7 @@ public final class BinaryPropertyDefinitionImpl extends SimpleCmsPropertyDefinit
 		return new BinaryPropertyDefinitionImpl(getQualifiedName(), cloneDescription(), cloneDisplayName(), isObsolete(), isMultiple(), isMandatory(),
 				getOrder(),
 				getRestrictReadToRoles(), getRestrictWriteToRoles(), parentDefinition,
-				getRepositoryObjectRestriction(), binaryChannelUnmanaged);
+				getRepositoryObjectRestriction(), binaryChannelUnmanaged,isRepresentsAnXmlAttribute());
 	}
 
 	@Override

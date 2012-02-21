@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -48,13 +48,13 @@ public interface Taxonomy extends LocalizableEntity {
 	 * Astroboa built-in taxonomy's name. This taxonomy is created by default once
 	 * content repository model is instantiated.
 	 */
-	public final static String SUBJECT_TAXONOMY_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":subjectTaxonomy";
+	public final static String SUBJECT_TAXONOMY_NAME = BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":subjectTaxonomy";
 	/**
 	 * Every repository user in Astroboa content repository model has her own taxonomy,
 	 * called  <code>folksonomy</code>. This taxonomy is 
 	 * automatically created for every new repository user.
 	 */
-	public final static String REPOSITORY_USER_FOLKSONOMY_NAME = BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_PREFIX+":folksonomy";
+	public final static String REPOSITORY_USER_FOLKSONOMY_NAME = BetaConceptNamespaceConstants.ASTROBOA_PREFIX+":folksonomy";
 	
 	/**
 	 * Sets the name of taxonomy. 

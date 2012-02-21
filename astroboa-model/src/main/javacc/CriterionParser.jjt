@@ -1,12 +1,12 @@
 /**
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of BetaCONCEPT Framework (betaconceptframework.org) modules.
  *
  * BetaCONCEPT Framework is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version.  
  *
  * BetaCONCEPT Framework is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,6 +39,7 @@ import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.util.ISO8601;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -113,7 +114,11 @@ import java.util.regex.Pattern;
 
 		
      	//Reserved property paths for content object criteria
+     	// contentTypeName is considered obsolete and will be removed in next major version, i.e. 4.x, use objectType instead
      	if ("contentTypeName".equals(propertyPath) && contentObjectCriteria != null){
+   			return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
+     	}
+     	else if ("objectType".equals(propertyPath) && contentObjectCriteria != null){
    			return contentObjectCriteria.createContentObjectTypeEqualsCriterion(value);
      	}
      	else if ("textSearched".equals(propertyPath) && contentObjectCriteria != null){
@@ -145,7 +150,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 				
@@ -162,7 +166,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 
@@ -176,7 +179,6 @@ import java.util.regex.Pattern;
 				TopicCriteria ancestorCriteria = topicCriteria.getAncestorCriteria();
 				if (ancestorCriteria == null){
 					ancestorCriteria = CmsCriteriaFactory.newTopicCriteria();
-					ancestorCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 					topicCriteria.setAncestorCriteria(ancestorCriteria);
 				}
 
@@ -242,42 +244,7 @@ import java.util.regex.Pattern;
 			Matcher dateTimeMatcher = ISO8601Pattern.matcher(value);
 
 			if (dateTimeMatcher.matches()){
-
-				StringBuilder pattern = new StringBuilder("yyyy-MM-dd'T'HH:mm:ss");
-				String timeZoneId = null;
-				//We must decide which pattern to use
-				//At this point this is the minimum
-
-				//Group 7 corresponds to milli seconds
-				if (dateTimeMatcher.groupCount()>=7 && dateTimeMatcher.group(7) != null){
-					pattern.append(".SSS");
-				}
-				if (dateTimeMatcher.groupCount()>=8 && dateTimeMatcher.group(8) != null){
-					if (!"Z".equals(dateTimeMatcher.group(8))){
-						//Keep UTC info to look for time zone when Calendar object will be created, 
-						//as SimpleDateformat which is used in DateUtils
-						//cannot handle time zone designator
-						timeZoneId = "GMT"+dateTimeMatcher.group(8);
-						value = value.replace(dateTimeMatcher.group(8), "");
-					}
-					else{
-						timeZoneId = "GMT";
-						value = value.replace("Z", "");
-					}
-				}
-
-				date = (Calendar) DateUtils.fromString(value, pattern.toString());
-
-				if (timeZoneId!= null){
-					//Now that date is found we should define its TimeZone
-					TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
-					if (!timeZone.getID().equals(timeZoneId)) {
-						// Time Zone is not valid
-						throw new ParseException("Invalid time zone in date value "+ value);
-					}
-
-					date.setTimeZone(timeZone);
-				}
+				date = ISO8601.parse(value);
 			}
 			else{
 				//check for simple date

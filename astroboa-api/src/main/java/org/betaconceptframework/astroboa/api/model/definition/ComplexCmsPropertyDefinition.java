@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -244,17 +244,6 @@ public interface ComplexCmsPropertyDefinition extends CmsPropertyDefinition {
 	@Deprecated
 	String getPropertyPathWhoseValueCanBeUsedAsALabel();
 	
-	/**
-	 * Checks if this definition represents a system complex type.
-	 * 
-	 * <p>
-	 * System types are used mainly by Astroboa infrastructure. 
-	 * </p>
-	 * 
-	 * @return <code>true</code> if this definition is a system one, <code>false</code> otherwise
-	 */
-	boolean isSystemTypeDefinition();
-
 	/**
 	 * Checks if this definition is a global one, that is can be attached at runtime to any
 	 * content object.

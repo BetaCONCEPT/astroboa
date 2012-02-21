@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -33,18 +33,18 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
-import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
+import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration.PersistMode;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion;
 import org.betaconceptframework.astroboa.engine.database.dao.CmsRepositoryEntityAssociationDao;
-import org.betaconceptframework.astroboa.engine.jcr.io.ImportMode;
 import org.betaconceptframework.astroboa.engine.jcr.io.SerializationBean.CmsEntityType;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryResult;
@@ -55,7 +55,6 @@ import org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.TopicUtils;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
-import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.query.CmsOutcomeImpl;
 import org.betaconceptframework.astroboa.model.impl.query.render.RenderPropertiesImpl;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -97,6 +96,7 @@ public class TopicDao extends JcrDaoSupport {
 	private ImportDao importDao;
 
 	public boolean deleteTopicTree(String topicIdOrName) {
+		
 		if (StringUtils.isBlank(topicIdOrName))
 			throw new CmsException("Blank (empty or null) topic id. Could not delete topic tree. ");
 
@@ -107,8 +107,10 @@ public class TopicDao extends JcrDaoSupport {
 			Session session = getSession(); 
 
 			Node topicNode = getTopicNodeByIdOrName(topicIdOrName);
+			
 			if (topicNode == null){
-				throw new CmsException("Topic "+ topicIdOrName + " does not exist");
+				logger.info("Topic {} does not exist and therefore cannot be deleted", topicIdOrName);
+				return false;
 			}
 
 			context = new Context(cmsRepositoryEntityUtils, cmsQueryHandler, session);
@@ -220,7 +222,11 @@ public class TopicDao extends JcrDaoSupport {
 			//and to save it as well.
 			//What is happened is that importDao will create a Topic
 			//and will pass it here again to save it. 
-			return importDao.importTopic((String)topicSource, ImportMode.SAVE_ENTITY);
+			ImportConfiguration configuration = ImportConfiguration.topic()
+				  .persist(PersistMode.PERSIST_MAIN_ENTITY)
+				  .build();
+
+			return importDao.importTopic((String)topicSource, configuration);
 		}
 
 		if (! (topicSource instanceof Topic)){
@@ -249,7 +255,7 @@ public class TopicDao extends JcrDaoSupport {
 			//Save Topic
 			switch (saveMode) {
 
-			case UPDATE_ALL:
+			case UPDATE:
 				topicNode = topicUtils.updateTopic(session, topic, null, context);
 				break;
 			case INSERT:
@@ -342,21 +348,22 @@ public class TopicDao extends JcrDaoSupport {
 	public  Node insertTopicNode(Session session, Topic topic, Context context) throws RepositoryException {
 
 		//Set Default taxonomy if none exists
-		if (topic.getTaxonomy() == null){
-			
-			if (topic.getParent()!= null && topic.getParent().getTaxonomy()!=null){
-				topic.setTaxonomy(topic.getParent().getTaxonomy());
-			}
-			else{
-				Taxonomy defaultTaxonomy = cmsRepositoryEntityFactoryForActiveClient.newTaxonomy();
-				defaultTaxonomy.setName(CmsBuiltInItem.SubjectTaxonomy.getJcrName());
-				topic.setTaxonomy(defaultTaxonomy);
-			}
-		}
+		setDefaultTaxonomyIfNoneIsProvided(topic);
 		
 		Node parentTopicNode = topicUtils.retrieveParentTopicNode(session, topic, context);
 
 		return topicUtils.addNewTopicJcrNode(parentTopicNode, topic, session, false, context);
+	}
+
+	private void setDefaultTaxonomyIfNoneIsProvided(Topic topic) {
+		if (topic.getTaxonomy() == null){
+			if (topic.getParent()!= null && topic.getParent().getTaxonomy()!=null){
+				topic.setTaxonomy(topic.getParent().getTaxonomy());
+			}
+			else{
+				cmsRepositoryEntityUtils.addDefaultTaxonomyToTopic(topic);
+			}
+		}
 	}
 
 	public void removeTopicTree(Node topicNode, Context context) throws RepositoryException{
@@ -482,7 +489,12 @@ public class TopicDao extends JcrDaoSupport {
 
 				os = new ByteArrayOutputStream();
 
-				serializationDao.serializeCmsRepositoryEntity(topicNode, os, topicOutput, CmsEntityType.TOPIC, null, fetchLevel, true, false, prettyPrint);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.topic()
+						.prettyPrint(prettyPrint)
+						.representationType(topicOutput)
+						.build();
+
+				serializationDao.serializeCmsRepositoryEntity(topicNode, os, CmsEntityType.TOPIC, null, fetchLevel, true, serializationConfiguration);
 
 				topic = new String(os.toByteArray(), "UTF-8");
 
@@ -524,7 +536,6 @@ public class TopicDao extends JcrDaoSupport {
 			else{
 				TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 				topicCriteria.addNameEqualsCriterion(topicIdOrName);
-				topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				topicCriteria.setOffsetAndLimit(0, 1);
 				
 				CmsQueryResult nodes = cmsQueryHandler.getNodesFromXPathQuery(getSession(), topicCriteria);
@@ -651,7 +662,12 @@ public class TopicDao extends JcrDaoSupport {
 				//User requested output to be XML or JSON
 				os = new ByteArrayOutputStream();
 
-				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), topicCriteria, os, FetchLevel.ENTITY, topicOutput, false);
+				SerializationConfiguration serializationConfiguration = SerializationConfiguration.topic()
+						.prettyPrint(topicCriteria.getRenderProperties().isPrettyPrintEnabled())
+						.representationType(topicOutput)
+						.build();
+
+				long numberOfResutls  = serializationDao.serializeSearchResults(getSession(), topicCriteria, os, FetchLevel.ENTITY, serializationConfiguration);
 
 				queryReturnedAtLeastOneResult = numberOfResutls > 0;
 

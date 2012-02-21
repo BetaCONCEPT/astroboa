@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -93,7 +93,6 @@ public class PortalManager {
 			ContentObjectCriteria portalCriteria = CmsCriteriaFactory.newContentObjectCriteria(CmsConstants.PORTAL_CONTENT_OBJECT_TYPE);
 
 			portalCriteria.addSystemNameEqualsCriterion(currentlyConnectedPortalSytemName);
-			portalCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			//portalCriteria.addCriterion(CriterionFactory.equals("portalSystemName", currentlyConnectedPortalSytemName));
 
 			portalCriteria.setCacheable(CacheRegion.TEN_MINUTES);

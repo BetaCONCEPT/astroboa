@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -36,8 +36,6 @@ public class ImportReportImpl implements ImportReport, Serializable{
 	 */
 	private static final long serialVersionUID = 1162328248724092260L;
 
-	private boolean finished;
-	
 	private List<String> errors = new ArrayList<String>();
 	
 	private int contentObjectsImported;
@@ -49,14 +47,6 @@ public class ImportReportImpl implements ImportReport, Serializable{
 	private int spacesImported;
 	
 	private int topicsImported;
-
-	public boolean isImportFinished() {
-		return finished;
-	}
-
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
 
 	@Override
 	public int getNumberOfContentObjectsImported() {

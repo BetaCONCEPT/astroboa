@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -171,7 +171,7 @@ public enum CmsEntitySerialization {
 
 						//Provide schema location 
 						marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,  
-								" "+BetaConceptNamespaceConstants.BETA_CONCEPT_CMS_MODEL_DEFINITION_URI+" "+
+								" "+BetaConceptNamespaceConstants.ASTROBOA_MODEL_DEFINITION_URI+" "+
 								SchemaUtils.buildSchemaLocationForAstroboaModelSchemaAccordingToActiveClient());
 						
 						marshaller.marshal(cmsRepositoryEntity, writer);

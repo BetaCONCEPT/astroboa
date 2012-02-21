@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 BetaCONCEPT LP.
+ * Copyright (C) 2005-2012 BetaCONCEPT Limited
  *
  * This file is part of Astroboa.
  *
@@ -84,7 +84,6 @@ public class LazyLoader  {
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.getRenderProperties().renderValuesForLocale(taxonomy.getCurrentLocale());
 			topicCriteria.searchInDirectAncestorOnly();
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			topicCriteria.addTaxonomyCriterion(taxonomy);
 
@@ -133,8 +132,6 @@ public class LazyLoader  {
 			spaceCriteria.searchInDirectAncestorOnly();
 			spaceCriteria.addAncestorSpaceIdEqualsCriterion(space.getId());
 			spaceCriteria.getRenderProperties().renderValuesForLocale(space.getCurrentLocale());
-			spaceCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-			spaceCriteria.getAncestorCriteria().setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			CmsOutcome<Space> children = spaceService.searchSpaces(spaceCriteria, ResourceRepresentationType.SPACE_LIST);
 
@@ -169,8 +166,6 @@ public class LazyLoader  {
 			topicCriteria.searchInDirectAncestorOnly();
 			topicCriteria.addAncestorTopicIdEqualsCriterion(topic.getId());
 			topicCriteria.getRenderProperties().renderValuesForLocale(topic.getCurrentLocale());
-			topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-			topicCriteria.getAncestorCriteria().setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 
 			CmsOutcome<Topic> children = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
@@ -276,8 +271,6 @@ public class LazyLoader  {
 				topicCriteria.addAllowsReferrerContentObjectsCriterion(true);
 				topicCriteria.addAnyAncestorTopicIdEqualsCriterion(subjectIds);
 				topicCriteria.getRenderProperties().renderParentEntity(false);
-				topicCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
-				topicCriteria.getAncestorCriteria().setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 				
 				if (cacheRegion != null){
 					topicCriteria.setCacheable(cacheRegion);
