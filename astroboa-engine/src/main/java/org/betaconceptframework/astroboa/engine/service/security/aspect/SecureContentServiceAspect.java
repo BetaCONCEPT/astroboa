@@ -52,6 +52,7 @@ import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.query.CmsOutcomeImpl;
 import org.betaconceptframework.astroboa.security.CmsRoleAffiliationFactory;
+import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.betaconceptframework.astroboa.util.CmsConstants.ContentObjectStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,6 +225,14 @@ public class SecureContentServiceAspect{
 							StringUtils.equals(ContentObjectStatus.publishedAndArchived.toString(), profileContentObjectStatus)){
 						logger.debug("User {} has been granted access to content object {} because she has not been granted role ROLE_CMS_INTERNAL_VIEWER but " +
 								" content object status is {}", new Object[]{userId, contentObjectIdOrSystemName, profileContentObjectStatus});
+						
+						//
+						if (! CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches() && methodParameters != null && methodParameters.length > 1 && 
+								contentObjectNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+							//User has provided object system name. replace it with object identifier
+							methodParameters[0] = contentObjectNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString();
+						}
+						
 						return proceedingJoinPoint.proceed(methodParameters);
 					}
 
@@ -258,6 +267,13 @@ public class SecureContentServiceAspect{
 						
 						if (StringUtils.equals(ownerId, ownerIdPrincipal.getName())){
 							logger.debug("User {} has been granted access to content object {} because she owns the content object", userId, contentObjectIdOrSystemName);
+
+							if (! CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches() && methodParameters != null && methodParameters.length > 1 && 
+									contentObjectNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+								//User has provided object system name. replace it with object identifier
+								methodParameters[0] = contentObjectNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString();
+							}
+
 							return proceedingJoinPoint.proceed(methodParameters);
 						}
 					}
@@ -288,6 +304,13 @@ public class SecureContentServiceAspect{
 					if (canBeReadBy.contains(ContentAccessMode.ALL.toString())){
 						logger.debug("User {} has been granted access to content object {} because although she does not own content object, " +
 								" content object property accessibility.canBeReadBy contains value REPOSITORY :{}", new Object[]{userId, contentObjectIdOrSystemName, canBeReadBy.toString()});
+						
+						if (! CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches() && methodParameters != null && methodParameters.length > 1 && 
+								contentObjectNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+							//User has provided object system name. replace it with object identifier
+							methodParameters[0] = contentObjectNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString();
+						}
+
 						return proceedingJoinPoint.proceed(methodParameters);
 					}
 				
@@ -317,6 +340,13 @@ public class SecureContentServiceAspect{
 						{
 							logger.debug("User {} has been granted access to content object {} because although she does not own content object,   " +
 								" content object property accessibility.canBeReadBy contains role {} ", new Object[]{userId, contentObjectIdOrSystemName, prefixedRole});
+							
+							if (! CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches() && methodParameters != null && methodParameters.length > 1 && 
+									contentObjectNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+								//User has provided object system name. replace it with object identifier
+								methodParameters[0] = contentObjectNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString();
+							}
+							
 							return proceedingJoinPoint.proceed(methodParameters);
 						}
 					}
@@ -329,6 +359,13 @@ public class SecureContentServiceAspect{
 				else{
 					logger.debug("User {} has been granted access to content object {} because she has been granted role ROLE_ADMIN ", 
 							new Object[]{userId, contentObjectIdOrSystemName});
+					
+					if (! CmsConstants.UUIDPattern.matcher(contentObjectIdOrSystemName).matches() && methodParameters != null && methodParameters.length > 1 && 
+							contentObjectNode.hasProperty(CmsBuiltInItem.CmsIdentifier.getJcrName())){
+						//User has provided object system name. replace it with object identifier
+						methodParameters[0] = contentObjectNode.getProperty(CmsBuiltInItem.CmsIdentifier.getJcrName()).getString();
+					}
+
 					return proceedingJoinPoint.proceed(methodParameters);
 				}
 			}
