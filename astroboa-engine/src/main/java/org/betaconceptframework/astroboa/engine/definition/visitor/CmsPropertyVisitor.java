@@ -1465,8 +1465,8 @@ public class CmsPropertyVisitor  implements XSVisitor{
 
 			//this is the only place where these values can be set
 			//There is no access to these properties from Element perspective
-			boolean mandatory = particle.getMinOccurs() != null && particle.getMinOccurs().intValue() == 1;
-			boolean multiple = particle.getMaxOccurs() != null && particle.getMaxOccurs().intValue() == XSParticle.UNBOUNDED;
+			boolean mandatory = particle.getMinOccurs() == 1;
+			boolean multiple = particle.getMaxOccurs() == XSParticle.UNBOUNDED;
 
 			final XSElementDecl elementDecl = particle.getTerm().asElementDecl();
 			LocalizableCmsDefinition definitionForCurrentProperty = getDefinition();

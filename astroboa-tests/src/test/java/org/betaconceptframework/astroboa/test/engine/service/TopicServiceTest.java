@@ -967,7 +967,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		parentTopic.addChild(childTopic2);
 		topicService.save(parentTopic);
 		
-		addEntityToBeDeletedAfterTestIsFinished(parentTopic);
+		markTopicForRemoval(parentTopic);
 		
 		TopicCriteria rootTopicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		rootTopicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.SUBJECT_TAXONOMY_NAME);

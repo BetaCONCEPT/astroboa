@@ -48,6 +48,8 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.core.RepositoryImpl;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -98,6 +100,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.extensions.jcr.JcrSessionFactory;
 import org.springframework.extensions.jcr.SessionFactory;
 import org.springframework.extensions.jcr.jackrabbit.RepositoryFactoryBean;
+import org.xml.sax.InputSource;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -263,12 +266,18 @@ public class RepositoryDao implements ApplicationListener{
 
 		if (! jcrRepositories.containsKey(repositoryId)){
 			//create repository first
-			RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
-			repositoryFactory.setHomeDir(new FileSystemResource(repositoryHomeDirectory));
-			repositoryFactory.setConfiguration(new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml"));
-			repositoryFactory.afterPropertiesSet();
+//			RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
+//			repositoryFactory.setHomeDir(new FileSystemResource(repositoryHomeDirectory));
+//			repositoryFactory.setConfiguration(new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml"));
+//			repositoryFactory.afterPropertiesSet();
 			
-			Repository jcrRepository = (Repository)repositoryFactory.getObject();
+			
+			FileSystemResource configuration = new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml");
+			FileSystemResource homeDir = new FileSystemResource(repositoryHomeDirectory);
+			
+			RepositoryConfig repositoryConfig = RepositoryConfig.create(new InputSource(configuration.getInputStream()), homeDir.getFile().getAbsolutePath());
+			
+			Repository jcrRepository = RepositoryImpl.create(repositoryConfig);
 			
 			if (jcrRepository == null){
 				throw new CmsException("Unable to initialize repository "+ repositoryId + " located in "+ repositoryHomeDirectory);

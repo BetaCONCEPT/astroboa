@@ -352,16 +352,19 @@ public class XPathUtils {
 			throws IOException {
 		// Filter textToFind through GreekAnalyzer
 		TokenStream result = greekAnalyzer.tokenStream("", new StringReader(textToFind));
-
+		result.reset();
+		
 		String analyzedTextTofind = "";
 		Token term = null;
-		do {
-			term = result.next();
+		while (result.incrementToken()){
+			term = result.getAttributeImplsIterator();
 			if (term != null)
 				analyzedTextTofind = analyzedTextTofind.concat(" "
 						+ new String(term.termBuffer(), 0, term.termLength()));
 
-		} while (term != null);
+		}
+		result.end();
+		result.close();
 
 		analyzedTextTofind = analyzedTextTofind.trim();
 		

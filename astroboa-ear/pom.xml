@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 
-Copyright (C) 2005-2011 BetaCONCEPT LP.
+Copyright (C) 2005-2012 BetaCONCEPT Limited.
 
 		  This file is part of Astroboa.
 		 
@@ -28,7 +28,7 @@ Authors
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>astroboa-ear</artifactId>
 	<packaging>ear</packaging>
@@ -36,6 +36,12 @@ Authors
 	<description>
 		This modules is responsible to generate Astroboa EAR
 	</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<astroboa.version>4.0.0-SNAPSHOT</astroboa.version>
+	</properties>
 
 	<build>
 		<plugins>
@@ -76,7 +82,7 @@ Authors
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
 						
-						<ejbModule>
+						<!-- <ejbModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-ejb3</artifactId>
 						</ejbModule>
@@ -88,7 +94,7 @@ Authors
 							<contextRoot>/resource-api</contextRoot>
 							<unpack>false</unpack>
 						</webModule>
- 
+ --> 
 						<!-- <webModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-console</artifactId>
@@ -122,34 +128,34 @@ Authors
 			<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 		</dependency>
 	
+<!-- 		
  		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-resource-api</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 			<type>war</type>
 		</dependency>
 
-<!-- 		
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-console</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 			<type>war</type>
 		</dependency>
  -->				
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-engine</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 			<exclusions>
 				<!-- These are Spring dependencies that ship with Snwodrop and therefore there are provided -->
 				<exclusion>
@@ -170,15 +176,15 @@ Authors
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-jaas</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>${astroboa.version}</version>
 		</dependency>
 		
- 		<dependency>
+ 		<!-- <dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-ejb3</artifactId>
 			<type>ejb</type>
-			<version>3.0.0-SNAPSHOT</version>
-		</dependency>
+			<version>${astroboa.version}</version>
+		</dependency> -->
 
 		<!-- 
 			We need to explicitly define xercesImpl dependency so that it is installed

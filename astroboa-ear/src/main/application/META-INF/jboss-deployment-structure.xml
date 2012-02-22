@@ -1,9 +1,11 @@
 <jboss-deployment-structure>
+	
   <!-- Make sub deployments isolated by default, so they cannot see each others classes without a Class-Path entry -->
   <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
   <!-- This corresponds to the top level deployment. For a war this is the war's module, for an ear -->
   <!-- This is the top level ear module, which contains all the classes in the EAR's lib folder     -->
   <deployment>
+  
     <!-- Exclusions allow you to prevent the server from automatically adding some dependencies     
     <exclusions>
         <module name="org.javassist" />
@@ -20,16 +22,32 @@
       <resource-root path="my-library.jar" />
     </resources>
     -->
-    <dependencies>
+<!--     <dependencies>
       	<module name="org.apache.xerces" />
+      	
+      	Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out
+		<module name="org.jboss.snowdrop">
+			<imports>
+				<include path="META-INF**"/>
+			</imports>
+		</module>
+      	
   	</dependencies>
-  </deployment>
+ -->  </deployment>
   <sub-deployment name="astroboa-engine.spring">
   	<dependencies>
       	<module name="org.apache.xerces" />
+      	
+      	<!-- Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out -->
+		<module name="org.jboss.snowdrop">
+			<imports>
+				<include path="META-INF**"/>
+			</imports>
+		</module>
+      	
   	</dependencies>
   </sub-deployment>
-  <sub-deployment name="astroboa-ejb3.jar">
+  <!-- <sub-deployment name="astroboa-ejb3.jar">
   	<dependencies>
       	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
   	</dependencies>
@@ -39,7 +57,7 @@
       	<module name="org.apache.xerces" />
       	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
   	</dependencies>
-  </sub-deployment>
+  </sub-deployment> -->
   <!-- 
   <sub-deployment name="console.war">
   	<dependencies>
