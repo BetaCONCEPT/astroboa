@@ -50,7 +50,7 @@ Authors
 	<transaction:no-transaction />
 	
 	<!-- Change appropriately the default values for your locale and time-zone -->
-	<i18n:locale-selector cookie-enabled="true" locale-string="el" />
+	<i18n:locale-selector cookie-enabled="true" locale-string="en" />
 	<i18n:time-zone-selector cookie-enabled="true" time-zone-id="GMT+02:00"/>
 	
 	<web:ajax4jsf-filter force-parser="false" 

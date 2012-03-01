@@ -1,4 +1,4 @@
-<jboss-deployment-structure>
+	<jboss-deployment-structure>
 	
   <!-- Make sub deployments isolated by default, so they cannot see each others classes without a Class-Path entry -->
   <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
@@ -22,21 +22,29 @@
       <resource-root path="my-library.jar" />
     </resources>
     -->
-<!--     <dependencies>
-      	<module name="org.apache.xerces" />
+    <dependencies>
+        
+        <!-- Use export="true" to make this module available to all sub modules -->
+        
+        <!--
+        	 Inform JBoss that this EAR depends on Spring Module which exists under the 
+        	'snowdrop' slot as the installation of the SnowDrop 2.0.2.Final denotes. 
+        	Normally, for portability reasons, this dependency must be specified in the Manifest.MF file
+        	of the EAR module, but since the Spring module is installed under a Jboss specific slot
+        	we specify the dependency here. 
+        	
+        	If the EAR is to be deployed in another JEE Application Server, then follow
+        	the instructions on the pom.xml in order to properly define the dependency to the 
+        	Spring module.  	
+        	 -->
+      	<module name="org.springframework.spring" slot="snowdrop" export="true"/>
       	
-      	Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out
-		<module name="org.jboss.snowdrop">
-			<imports>
-				<include path="META-INF**"/>
-			</imports>
-		</module>
       	
   	</dependencies>
- -->  </deployment>
+  </deployment>
+  
   <sub-deployment name="astroboa-engine.spring">
   	<dependencies>
-      	<module name="org.apache.xerces" />
       	
       	<!-- Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out -->
 		<module name="org.jboss.snowdrop">
@@ -47,22 +55,34 @@
       	
   	</dependencies>
   </sub-deployment>
-  <!-- <sub-deployment name="astroboa-ejb3.jar">
+ <sub-deployment name="astroboa-ejb3.jar">
   	<dependencies>
       	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
   	</dependencies>
   </sub-deployment>
-  <sub-deployment name="resource-api.war">
-  	<dependencies>
-      	<module name="org.apache.xerces" />
-      	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
-  	</dependencies>
-  </sub-deployment> -->
-  <!-- 
+   
+   <sub-deployment name="resource-api.war">
+  </sub-deployment>
+  
   <sub-deployment name="console.war">
-  	<dependencies>
-  		<module name="org.apache.xerces" />
-      	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
-  	</dependencies>
-  </sub-deployment> -->
+      <exclusions>
+        <module name="javax.faces.api" slot="main" />
+        <module name="com.sun.jsf-impl" slot="main" />
+        <module name="javax.faces.api" slot="1.2" />
+        <module name="com.sun.jsf-impl" slot="1.2" />
+        <module name="org.springframework.spring" slot="snowdrop"/>
+     </exclusions>
+     
+     <dependencies>
+       <module name="javax.el.api"/>
+       
+       <!-- Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out 
+		<module name="org.jboss.snowdrop">
+			<imports>
+				<include path="META-INF**"/>
+			</imports>
+		</module>
+		-->
+     </dependencies>
+  </sub-deployment>
 </jboss-deployment-structure>

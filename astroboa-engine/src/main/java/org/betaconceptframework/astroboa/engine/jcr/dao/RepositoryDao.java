@@ -266,18 +266,20 @@ public class RepositoryDao implements ApplicationListener{
 
 		if (! jcrRepositories.containsKey(repositoryId)){
 			//create repository first
-//			RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
-//			repositoryFactory.setHomeDir(new FileSystemResource(repositoryHomeDirectory));
-//			repositoryFactory.setConfiguration(new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml"));
-//			repositoryFactory.afterPropertiesSet();
+			RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
+			repositoryFactory.setHomeDir(new FileSystemResource(repositoryHomeDirectory));
+			repositoryFactory.setConfiguration(new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml"));
+			repositoryFactory.afterPropertiesSet();
 			
 			
-			FileSystemResource configuration = new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml");
-			FileSystemResource homeDir = new FileSystemResource(repositoryHomeDirectory);
+//			FileSystemResource configuration = new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml");
+//			FileSystemResource homeDir = new FileSystemResource(repositoryHomeDirectory);
+//			
+//			RepositoryConfig repositoryConfig = RepositoryConfig.create(new InputSource(configuration.getInputStream()), homeDir.getFile().getAbsolutePath());
+//			
+//			Repository jcrRepository = RepositoryImpl.create(repositoryConfig);
 			
-			RepositoryConfig repositoryConfig = RepositoryConfig.create(new InputSource(configuration.getInputStream()), homeDir.getFile().getAbsolutePath());
-			
-			Repository jcrRepository = RepositoryImpl.create(repositoryConfig);
+			Repository jcrRepository = repositoryFactory.getObject();
 			
 			if (jcrRepository == null){
 				throw new CmsException("Unable to initialize repository "+ repositoryId + " located in "+ repositoryHomeDirectory);

@@ -42,8 +42,6 @@ public abstract class AbstractSecureAstroboaService{
 	@PostConstruct
 	public void initialize() {
 		
-		System.out.println("Normal "+ System.identityHashCode(springManagedRepositoryServicesContext));
-		
 		initializeOtherRemoteServices();
 		
 		RoleRegistry.INSTANCE.registerRolesAllowedPerMethodForClass(this.getClass());

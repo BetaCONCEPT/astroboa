@@ -93,8 +93,6 @@
 		
 		<richfaces.version>3.3.3.Final</richfaces.version>
 		
-		<resteasy.version>1.2.GA</resteasy.version>
-		
 		<spring.version>3.1.0.RELEASE</spring.version>
 		
 	</properties>
@@ -227,6 +225,12 @@
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -246,6 +250,11 @@
 				<version>${spring.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
 			<!-- Spring dependencies that must be explicitly defined if used-->
 
 			<!-- AspectJ dependencies are marked as optional in Spring-Aop
@@ -327,6 +336,12 @@
 				<groupId>org.jboss.seam</groupId>
 				<artifactId>jboss-seam-remoting</artifactId>
 				<version>${seam.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>dom4j</groupId>
+						<artifactId>dom4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.seam</groupId>
@@ -356,7 +371,7 @@
 				<version>${seam.version}</version>
 			</dependency>
 			
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
@@ -366,7 +381,7 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxb-provider</artifactId>
 				<version>${resteasy.version}</version>
-			</dependency>
+			</dependency> -->
 			
 			<dependency>
 				<groupId>org.jbpm</groupId>
@@ -427,16 +442,16 @@
 			<dependency>
 				<groupId>javax.faces</groupId>
 				<artifactId>jsf-api</artifactId>
-				<version>1.2_08</version>
-				<scope>provided</scope>
+				<version>1.2_15</version>
+				<!-- <scope>provided</scope> -->
 				<optional>true</optional>
 			</dependency>
 
 			<dependency>
 				<groupId>javax.faces</groupId>
 				<artifactId>jsf-impl</artifactId>
-				<version>1.2_07</version>
-				<scope>provided</scope>
+				<version>1.2_15</version>
+				<!-- <scope>provided</scope> -->
 				<optional>true</optional>
 			</dependency>
 
@@ -458,13 +473,6 @@
 				<groupId>com.sun.el</groupId>
 				<artifactId>el-ri</artifactId>
 				<version>1.0</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>javaee</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>5</version>
-				<scope>provided</scope>
 			</dependency>
 			
 			<dependency>

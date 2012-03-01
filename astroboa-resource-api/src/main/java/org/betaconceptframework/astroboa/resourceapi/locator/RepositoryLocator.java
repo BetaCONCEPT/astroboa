@@ -18,16 +18,23 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.locator;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -67,7 +74,7 @@ public class RepositoryLocator extends Application{
 	
 		if (StringUtils.isBlank(repositoryId)) {
 			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
-		}
+		}  
 		
 		try {
 			

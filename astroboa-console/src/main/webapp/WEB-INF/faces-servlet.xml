@@ -29,19 +29,23 @@ Authors
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
               version="1.2">
-	<application>
-<!--  	<variable-resolver>de.mindmatters.faces.spring.support.DelegatingVariableResolver</variable-resolver> */ -->
-		<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
-		<locale-config>
-            <default-locale>en</default-locale>
-            <supported-locale>en</supported-locale>
-            <supported-locale>el</supported-locale>
-		</locale-config>
-		<message-bundle>messages</message-bundle>
-		<!-- <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>  -->
-		<!--<view-handler>org.ajax4jsf.framework.ajax.AjaxViewHandler</view-handler>-->
-		<!--  <default-render-kit-id>org.apache.myfaces.trinidad.core</default-render-kit-id> -->
-	</application>
+              
+         <application>
+		 	<!-- <variable-resolver>de.mindmatters.faces.spring.support.DelegatingVariableResolver</variable-resolver> -->
+			<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
+			<locale-config>
+	            <default-locale>en</default-locale>
+	            <supported-locale>en</supported-locale>
+	            <supported-locale>el</supported-locale>
+			</locale-config>
+			<message-bundle>messages</message-bundle>
+		</application>
+              
+	<!-- 
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler> 
+		<view-handler>org.ajax4jsf.framework.ajax.AjaxViewHandler</view-handler>
+		 <default-render-kit-id>org.apache.myfaces.trinidad.core</default-render-kit-id>
+	 -->
 	
 	<!--  
 	<lifecycle>
@@ -54,10 +58,10 @@ Authors
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		
-		<navigation-case>
+		<!-- <navigation-case>
 			<from-outcome>dialog:selectContentObject</from-outcome>
 			<to-view-id>/selectContentObjectPage.jsf</to-view-id>
-		</navigation-case>
+		</navigation-case> -->
 		
 		<navigation-case>
 			<from-outcome>dialog:selectFile</from-outcome>

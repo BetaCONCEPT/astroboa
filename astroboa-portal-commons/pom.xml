@@ -179,8 +179,8 @@ Authors
 			  <exclusions>
 			  <!-- If running inside JBoss this jar is already available -->
 			  <exclusion>
-					<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-client</artifactId>
+		            <groupId>org.jboss.as</groupId>
+		            <artifactId>jboss-as-ejb-client-bom</artifactId>
 		  		</exclusion>
 			</exclusions>	
 		</dependency>

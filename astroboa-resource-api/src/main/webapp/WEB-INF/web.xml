@@ -78,10 +78,10 @@ Authors
     </context-param> -->
     
     <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
-    <context-param>
+    <!-- <context-param>
         <param-name>resteasy.scan</param-name>
         <param-value>true</param-value>
-    </context-param>
+    </context-param> -->
     
     <!-- 
     	Some clients, like browsers, cannot use the Accept headers to negotiation the representation's media type.
@@ -176,7 +176,7 @@ Authors
 	
 	<!-- RestEasy as a Filter. This way we can server static content 
             org.jboss.resteasy.plugins.server.servlet.FilterDispatcher -->
-<!-- 	 <filter>
+	 <!-- <filter>
         <filter-name>Resteasy</filter-name>
         <filter-class>
         	org.betaconceptframework.astroboa.resourceapi.filter.AstroboaResourceApiDispatcher

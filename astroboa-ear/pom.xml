@@ -50,7 +50,27 @@ Authors
 				<artifactId>maven-ear-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
-				   
+					<archive>
+					   <manifestEntries>
+					   
+					   	  <!-- 
+					   	  		In order to be fully portable, dependency to Spring module must be defined
+					   	  		
+					   	  		org.springframework.spring export 
+					   	  		
+					   	  		In JBoss AS 7 context, Spring module is installed in the context of SnowDrop module
+					   	  		and exists inside the slot 'Snowdrop' and thus the dependency must be specified as
+					   	  		
+					   	  		org.springframework.spring:snowdrop export
+					   	  		
+					   	  		Since this is a JBoss specific issue, we choose to define the dependency to the Spring module 
+					   	  		in the src/main/application/META-INF/jboss-deployment-structure.xml and not here. 
+					   	  		If this EAR is to be deployed in another JEE Application server, this dependency must be defined 
+					   	  		here accordingly.
+					   	  -->	
+					      <Dependencies>org.apache.xerces export,org.javassist export,org.dom4j export</Dependencies>
+					   </manifestEntries>
+					</archive>
 				   <finalName>astroboa</finalName>
 				
 					<fileNameMapping>no-version</fileNameMapping>
@@ -82,11 +102,12 @@ Authors
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
 						
-						<!-- <ejbModule>
+						 <ejbModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-ejb3</artifactId>
 						</ejbModule>
 
+						
 						<webModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-resource-api</artifactId>
@@ -94,14 +115,19 @@ Authors
 							<contextRoot>/resource-api</contextRoot>
 							<unpack>false</unpack>
 						</webModule>
- --> 
-						<!-- <webModule>
+ 
+				 		<ejbModule>
+							<groupId>org.jboss.seam</groupId>
+							<artifactId>jboss-seam</artifactId>
+						</ejbModule>
+				 
+						<webModule>
 							<groupId>org.betaconceptframework.astroboa</groupId>
 							<artifactId>astroboa-console</artifactId>
 							<bundleFileName>console.war</bundleFileName>
 							<contextRoot>/console</contextRoot>
 							<unpack>false</unpack>
-						</webModule> -->
+						</webModule>
 						
 						
 						<!--
@@ -137,21 +163,6 @@ Authors
 			<version>${astroboa.version}</version>
 		</dependency>
 	
-<!-- 		
- 		<dependency>
-			<groupId>org.betaconceptframework.astroboa</groupId>
-			<artifactId>astroboa-resource-api</artifactId>
-			<version>${astroboa.version}</version>
-			<type>war</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.betaconceptframework.astroboa</groupId>
-			<artifactId>astroboa-console</artifactId>
-			<version>${astroboa.version}</version>
-			<type>war</type>
-		</dependency>
- -->				
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-engine</artifactId>
@@ -175,22 +186,40 @@ Authors
 		
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-ejb3</artifactId>
+			<type>ejb</type>
+			<version>${astroboa.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-resource-api</artifactId>
+			<version>${astroboa.version}</version>
+			<type>war</type>
+		</dependency>
+		
+				
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
+			<artifactId>astroboa-console</artifactId>
+			<version>${astroboa.version}</version>
+			<type>war</type>
+		</dependency>
+				
+		
+		<dependency>
+			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-jaas</artifactId>
 			<version>${astroboa.version}</version>
 		</dependency>
 		
- 		<!-- <dependency>
-			<groupId>org.betaconceptframework.astroboa</groupId>
-			<artifactId>astroboa-ejb3</artifactId>
-			<type>ejb</type>
-			<version>${astroboa.version}</version>
-		</dependency> -->
-
+ 		
 		<!-- 
-			We need to explicitly define xercesImpl dependency so that it is installed
-			in the EAR's lib. Also we have to setup a dependency in the jboss-deployment-structure.xml
-			between the astroboa-engine module and the org.apache.xerces module that ships with JBoss AS 7
-			in order for astroboa-engine to load successfully 
+			XercesImpl dependency is considered to be provided by the deployment
+			environment. JBoss AS7 ships with v 2.9.1 but we need v 2.10.0 . Therefore
+			we explicitly define this dependency here in order to be available in EAR's lib folder
+			but at the same time we need to explicitly define module 'org.apache.xerces' in the 
+			jboss-deployment-structure.xml as an EAR's dependency.
 		-->
 		<dependency>
 			<groupId>xerces</groupId>
@@ -214,6 +243,39 @@ Authors
 			<version>9.0-801.jdbc4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-remoting</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.faces</groupId>
+		    <artifactId>jsf-api</artifactId>
+		    <version>1.2_15</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId> 
+			<artifactId>groovy-all</artifactId> 
+			<version>1.8.0</version> 
+		</dependency>
+		
+		<!--
+			Need to explicitly load this JAR inside EAR' lib according to the instructions in 
+			https://docs.jboss.org/author/display/AS7/Seam+2+Booking+EAR+Migration+of+Binaries+-+Step+by+Step
+		 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>3.1.0.GA</version>
+		</dependency>
+            
 	</dependencies>
 
 	<scm>

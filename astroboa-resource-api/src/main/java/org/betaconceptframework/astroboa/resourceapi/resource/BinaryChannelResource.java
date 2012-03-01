@@ -108,11 +108,11 @@ public class BinaryChannelResource extends AstroboaResource{
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}")
 	public Response getBinaryFileInBinaryChannelProperty(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath
 			) {
 
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, ContentDispositionType.INLINE.toString());
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, ContentDispositionType.INLINE.toString());
 	}
 	
 	/*
@@ -136,66 +136,66 @@ public class BinaryChannelResource extends AstroboaResource{
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}")
 	public Response getBinaryFileInBinaryChannelProperty(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType) {
 
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, "-1", "-1");
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, contentDispositionType, "-1", "-1");
 	}
 
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{width}")
 	public Response getBinaryFileInBinaryChannelPropertyWithContentDispositionAndWidth(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("width") String width) {
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, width, "-1");
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, contentDispositionType, width, "-1");
 	}
 
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithContentDispositionAndHeight(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("height") String height) {
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, contentDispositionType, "-1", height);
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, contentDispositionType, "-1", height);
 	}
 
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithHeight(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("height") String height) {
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, "-1", height);
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, null, "-1", height);
 	}
 
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{width}")
 	public Response getBinaryFileInBinaryChannelPropertyWithWidth(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("width") String width) {
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, width, "-1");
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, null, width, "-1");
 	}
 	
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{width}/{height}")
 	public Response getBinaryFileInBinaryChannelPropertyWithWidthAndHeight(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("width") String width,
 			@PathParam("height") String height) {
-		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrSystemName, binaryChannelPropertyValuePath, null, width, height);
+		return getBinaryFileInBinaryChannelProperty(contentObjectIdOrName, binaryChannelPropertyValuePath, null, width, height);
 	}
 
 	
 	@GET
 	@Path("/{contentObjectIdOrName: " + CmsConstants.UUID_OR_SYSTEM_NAME_REG_EXP_FOR_RESTEASY + "}" + "/{propertyPath: " + CmsConstants.PROPERTY_PATH_REG_EXP_FOR_RESTEASY + "}" + "/{contentDispositionType}/{width}/{height}")
 	public Response getBinaryFileInBinaryChannelProperty(
-			@PathParam("contentObjectIdOrSystemName") String contentObjectIdOrSystemName,
+			@PathParam("contentObjectIdOrName") String contentObjectIdOrName,
 			@PathParam("propertyPath") String binaryChannelPropertyValuePath,
 			@PathParam("contentDispositionType") String contentDispositionType,
 			@PathParam("width") String width,
@@ -205,15 +205,15 @@ public class BinaryChannelResource extends AstroboaResource{
 		try {
 			
 
-			if (StringUtils.isBlank(contentObjectIdOrSystemName)){
-				logger.warn("The provided content object id {} is invalid ", contentObjectIdOrSystemName);
+			if (StringUtils.isBlank(contentObjectIdOrName)){
+				logger.warn("The provided content object id {} is invalid ", contentObjectIdOrName);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 			}
 
-			ContentObject contentObject  = astroboaClient.getContentService().getContentObject(contentObjectIdOrSystemName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+			ContentObject contentObject  = astroboaClient.getContentService().getContentObject(contentObjectIdOrName, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 				
 			if (contentObject == null) {
-				logger.warn("The provided content object id {} does not correspond to a content object or you do not have permission to access the requested object", contentObjectIdOrSystemName);
+				logger.warn("The provided content object id {} does not correspond to a content object or you do not have permission to access the requested object", contentObjectIdOrName);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 			}
 			
@@ -236,7 +236,7 @@ public class BinaryChannelResource extends AstroboaResource{
 				binaryChannelProperty = (BinaryProperty) contentObject.getCmsProperty(binaryChannelPropertyPath);
 			}
 			catch(Exception e){
-				logger.warn("Could not load provided property using path "+ binaryChannelPropertyPath+" from contentObject "+contentObjectIdOrSystemName, e);
+				logger.warn("Could not load provided property using path "+ binaryChannelPropertyPath+" from contentObject "+contentObjectIdOrName, e);
 				throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
 			}
 

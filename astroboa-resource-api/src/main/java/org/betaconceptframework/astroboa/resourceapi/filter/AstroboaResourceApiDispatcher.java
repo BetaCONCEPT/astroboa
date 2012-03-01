@@ -46,7 +46,14 @@ public class AstroboaResourceApiDispatcher extends FilterDispatcher {
 			throws IOException, ServletException {
 		
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		String servletPath = request.getServletPath();
+		String servletPath = request.getPathInfo();
+		String servletPath2 = request.getContextPath();
+		String servletPath3 = request.getPathInfo();
+		String servletPath4 = request.getQueryString();
+		String servletPath5 = request.getRequestURI();
+		String servletPath6 = request.getServerName();
+		String servletPath7 = request.getRequestURL().toString();
+		
 		
 		if (servletPath != null && servletPath.startsWith("/astroboa-explorer")){
 			filterChain.doFilter(servletRequest, servletResponse);	

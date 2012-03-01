@@ -65,7 +65,7 @@ public enum AstroboaTestContext{
 			
 			System.setProperty(Context.PROVIDER_URL, "localhost");
 			
-			System.setProperty("jboss.server.config.url", new ClassPathResource("/").getFile().getAbsolutePath());
+			System.setProperty("org.betaconceptframework.astroboa.configuration.dir", new ClassPathResource("/").getFile().getAbsolutePath());
 
 			removeRepositoryResources(TestConstants.TEST_REPOSITORY_ID);
 			removeRepositoryResources(TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID);

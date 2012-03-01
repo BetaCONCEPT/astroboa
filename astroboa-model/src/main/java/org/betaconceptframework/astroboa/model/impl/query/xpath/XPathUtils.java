@@ -32,6 +32,7 @@ import org.apache.jackrabbit.util.ISO9075;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
@@ -351,27 +352,38 @@ public class XPathUtils {
 	private static String analyzeTextToFind(String textToFind)
 			throws IOException {
 		// Filter textToFind through GreekAnalyzer
-		TokenStream result = greekAnalyzer.tokenStream("", new StringReader(textToFind));
-		result.reset();
+		TokenStream stream = greekAnalyzer.tokenStream("", new StringReader(textToFind));
+		stream.reset();
 		
-		String analyzedTextTofind = "";
-		Token term = null;
-		while (result.incrementToken()){
-			term = result.getAttributeImplsIterator();
-			if (term != null)
-				analyzedTextTofind = analyzedTextTofind.concat(" "
-						+ new String(term.termBuffer(), 0, term.termLength()));
+		StringBuilder analyzedTextTofind = new StringBuilder();
+		
+		try {
+            while(stream.incrementToken()) {
+
+            	String term = stream.getAttribute(TermAttribute.class).term();
+             
+            	analyzedTextTofind.append(term);
+            	analyzedTextTofind.append(" ");
+ 						
+            }
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+            
+            analyzedTextTofind.append(textToFind);
+        }
+		finally{
+			stream.end();
+			stream.close();
 
 		}
-		result.end();
-		result.close();
 
-		analyzedTextTofind = analyzedTextTofind.trim();
+		String result = analyzedTextTofind.toString().trim();
 		
-		if (StringUtils.isBlank(analyzedTextTofind))
-			analyzedTextTofind = textToFind;
+		if (StringUtils.isBlank(result))
+			return textToFind;
 		
-		return analyzedTextTofind;
+		return result;
 		
 			
 	}
