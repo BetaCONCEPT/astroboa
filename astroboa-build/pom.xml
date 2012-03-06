@@ -66,6 +66,7 @@
 		<module>../astroboa-tests</module>
 		<module>../astroboa-console</module>
 		<module>../astroboa-portal-commons</module>
+		<module>../astroboa-ear</module>
 	</modules>
 	
 	<build>
