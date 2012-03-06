@@ -166,7 +166,7 @@ Authors
 											<ui:fragment rendered="#{! empty simpleCmsPropertyValueWrapper.binaryChannelValue and
 											 ( ! empty simpleCmsPropertyValueWrapper.binaryChannelValue.id or 
 											  cmsPropertyWrapper.cmsPropertyDefinition.binaryChannelUnmanaged ) 
-											 and simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}">
+											 and simpleCmsPropertyValueWrapper.contentAvailable}">
 											 
 											 <a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?contentDispositionType=attachment"
 											 	title="#{messages['object.edit.action.downloadFile']}">
@@ -183,7 +183,7 @@ Authors
 												title="#{messages['object.edit.action.createObjectPropertyURL']}"
 												rendered="#{cmsPropertyWrapper.writeGranted and
 												! empty simpleCmsPropertyValueWrapper.binaryChannelValue and 
-												 simpleCmsPropertyValueWrapper.binaryChannelValue.relativeFileSystemPath ne null}"
+												 simpleCmsPropertyValueWrapper.contentAvailable ne null}"
 												 oncomplete="openObjectPropertyUrlCreationDialog();">
 						
 												<h:graphicImage value="/images/cms-icons/16/fugue/globe-network.png" />

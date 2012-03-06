@@ -550,8 +550,7 @@ public class IdentityStoreImpl implements IdentityStore{
 	private ContentObject retrieveUniquePersonObjectForUsername(
 			String username) {
 
-		if (StringUtils.isBlank(username))
-		{
+		if (StringUtils.isBlank(username)){
 			throw new CmsNoSuchUserException(username);
 		}
 		

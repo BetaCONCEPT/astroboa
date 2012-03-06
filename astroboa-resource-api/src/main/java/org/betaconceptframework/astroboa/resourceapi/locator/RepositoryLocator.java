@@ -18,14 +18,23 @@
  */
 package org.betaconceptframework.astroboa.resourceapi.locator;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -37,8 +46,6 @@ import org.betaconceptframework.astroboa.resourceapi.utility.AstroboaClientCache
 import org.betaconceptframework.astroboa.resourceapi.utility.RepositoryConfigurationBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.sun.jersey.core.util.Base64;
 
@@ -53,8 +60,9 @@ import com.sun.jersey.core.util.Base64;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
+@ApplicationPath("/")
 @Path("/")
-public class RepositoryLocator {
+public class RepositoryLocator extends Application{
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -66,7 +74,7 @@ public class RepositoryLocator {
 	
 		if (StringUtils.isBlank(repositoryId)) {
 			throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
-		}
+		}  
 		
 		try {
 			
@@ -137,18 +145,7 @@ public class RepositoryLocator {
 	private String retrievePermanentKeyForAnonymousUser(String repositoryId,ServletContext servletContext) {
 		
 		// get the key for permanent connections
-		String anonymousUserPermanentKey = null;
-		
-		ApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		if (springContext != null && springContext.containsBean("repositoryConfigurationBean")) {
-			RepositoryConfigurationBean repositoryConfigurationBean = 
-				(RepositoryConfigurationBean) springContext.getBean("repositoryConfigurationBean");
-				anonymousUserPermanentKey = repositoryConfigurationBean.getAnonymousPermanentKeyPerRepository().get(repositoryId);
-		}
-		else {
-			logger.warn("Could not find the repositoryConfigurationBean is Spring Context. The anonymous user permanent key cannot be retrieved. " +
-					"Login will be performed without a permanent key. This is not a problem. However it results in creating a new user token per connection and consumes more server memory");
-		}
+		String anonymousUserPermanentKey = RepositoryConfigurationBean.INSTANCE.getAnonymousPermanentKeyPerRepository().get(repositoryId);
 		
 		if (anonymousUserPermanentKey != null) {
 			return anonymousUserPermanentKey;

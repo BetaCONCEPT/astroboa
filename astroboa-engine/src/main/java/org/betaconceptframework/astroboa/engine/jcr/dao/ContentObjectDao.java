@@ -58,7 +58,6 @@ import org.betaconceptframework.astroboa.engine.jcr.util.Context;
 import org.betaconceptframework.astroboa.engine.jcr.util.EntityAssociationDeleteHelper;
 import org.betaconceptframework.astroboa.engine.jcr.util.JcrNodeUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.PopulateContentObject;
-import org.betaconceptframework.astroboa.engine.jcr.util.QueryUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.SaveMode;
@@ -86,9 +85,6 @@ public class ContentObjectDao {
 
 	@Autowired
 	private CmsRepositoryEntityUtils cmsRepositoryEntityUtils; 
-
-	@Autowired
-	private QueryUtils queryUtils; 
 
 	@Autowired
 	private ContentObjectRenderer contentObjectRenderer;
@@ -134,7 +130,7 @@ public class ContentObjectDao {
 		contentObjectRemover.removeOrReplaceAllReferences(ContentObject.class);
 
 		//Get a reference to content object's history
-		VersionHistory versionHistory = contentObjectNode.getVersionHistory();
+		VersionHistory versionHistory = session.getWorkspace().getVersionManager().getVersionHistory(contentObjectNode.getPath());
 
 		deleteVersionHistory(versionHistory);
 
@@ -182,7 +178,7 @@ public class ContentObjectDao {
 			statisticNode = contentObjectNode.getNode("statistic");
 		else{
 			statisticNode = JcrNodeUtils.addNodeForComplexCmsProperty(contentObjectNode, "statistic");
-			statisticNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), statisticNode.getUUID());
+			statisticNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), statisticNode.getIdentifier());
 		}
 
 		if (statisticNode == null)
@@ -228,10 +224,7 @@ public class ContentObjectDao {
 
 
 			// Now order row iterator using order properties
-			CmsScoreNodeIterator orderedResults = queryUtils.orderIterator(
-					new CmsScoreNodeIteratorUsingJcrRangeIterator(cmsQueryResult.getRowIterator()), contentObjectCriteria.getOrderProperties(), 
-					contentObjectCriteria.getOffset(),
-					contentObjectCriteria.getLimit());
+			CmsScoreNodeIterator orderedResults = new CmsScoreNodeIteratorUsingJcrRangeIterator(cmsQueryResult.getRowIterator());
 
 			Map<String, ContentObjectTypeDefinition> cachedContentObjectTypeDefinitions = new HashMap<String, ContentObjectTypeDefinition>();
 			Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities = new HashMap<String, CmsRepositoryEntity>();

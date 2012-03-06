@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
@@ -89,7 +88,7 @@ public class BinaryChannelUtils {
 				}
 
 				//Check that binaryChannelNode has the proper parent
-				if (!binaryChannelNode.getParent().getUUID().equals(binaryParentNode.getUUID())){
+				if (!binaryChannelNode.getParent().getIdentifier().equals(binaryParentNode.getIdentifier())){
 					throw new CmsException("Binary channel node "+ binaryChannelNode.getPath() + " does not belong to parent node "+ binaryParentNode.getPath());
 				}
 			}
@@ -188,15 +187,9 @@ public class BinaryChannelUtils {
 	}
 
 	private void populateBinaryData(SaveMode saveMode, BinaryChannel binaryChannel, Node binaryChannelNode,Session session, boolean binaryContentIsNew) throws Exception  {
+
 		ValueFactory valueFactory = session.getValueFactory();
 
-		/*Node binaryDataNode;
-		if (binaryChannelNode.hasNode(CmsBuiltInItem.BinaryData.getJcrName()))
-			binaryDataNode = binaryChannelNode.getNode(CmsBuiltInItem.BinaryData.getJcrName());
-		else
-			binaryDataNode = binaryChannelNode.addNode(CmsBuiltInItem.BinaryData.getJcrName(), JcrBuiltInItem.NtResource.getJcrName());
-		 */
-		
 		JcrNodeUtils.addSimpleProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrEncoding, binaryChannel.getEncoding(), valueFactory, ValueType.String);
 
 		JcrNodeUtils.addSimpleProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrMimeType, binaryChannel.getMimeType(), valueFactory, ValueType.String);
@@ -204,9 +197,6 @@ public class BinaryChannelUtils {
 		//Update binary data only if value is new
 		if (binaryContentIsNew){
 			JcrNodeUtils.addBinaryProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrData, binaryChannel.getContent(), valueFactory);
-
-			//Create new path for binary content file
-			createPathForBinaryContent(binaryChannelNode, binaryChannel, session);
 		}
 
 		JcrNodeUtils.addSimpleProperty(saveMode, binaryChannelNode, JcrBuiltInItem.JcrLastModified, binaryChannel.getModified(), valueFactory,ValueType.Date);
@@ -236,31 +226,6 @@ public class BinaryChannelUtils {
 		}
 
 		return binaryChannelNodes;
-	}
-
-	/**
-	 * Path is created according to Jackrabbit 1.4 DataStore implementation
-	 * If storing blob files is changed this method should be updated accordingly
-	 * @param binaryDataNode
-	 * @param binaryChannel
-	 * @param session
-	 * @throws Exception
-	 * @throws PathNotFoundException
-	 * @throws RepositoryException
-	 */
-	public void createPathForBinaryContent(Node binaryDataNode,
-			BinaryChannel binaryChannel, Session session) throws Exception,
-			PathNotFoundException, RepositoryException {
-
-		try{
-			
-			JackrabbitDependentUtils.createPathForBinaryContent(binaryDataNode, binaryChannel, session);
-			
-		}
-		catch (Exception e){
-			logger.error("Problem during binary value file path calculation ", e);
-		}
-
 	}
 
 	public void addRepositoryIdToBinaryChannel(String binaryChannelNameOrPath,

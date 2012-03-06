@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.1.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>astroboa-resource-api</artifactId>
 	<packaging>war</packaging>
@@ -32,11 +32,13 @@
 	<properties>
 
 		<maven.compiler.source>1.6</maven.compiler.source>
+		
 		<maven.compiler.target>1.6</maven.compiler.target>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<resteasy.version>2.0.1.GA</resteasy.version>
+		<resteasy.version>2.3.1.GA</resteasy.version>
+		
 	</properties>
 	
 	<dependencies>
@@ -87,12 +89,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 		  <groupId>javax.activation</groupId>
 		  <artifactId>activation</artifactId>
 		  <scope>provided</scope>
@@ -103,13 +99,13 @@
 		  <artifactId>jsr311-api</artifactId>
 		  <version>1.1.1</version>
 		</dependency>
-				
+
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+				
 		<dependency>
 			<groupId>org.betaconceptframework</groupId>
 			<artifactId>betaconceptframework-commons</artifactId>
@@ -125,26 +121,26 @@
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-java-client</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<exclusions>
 				<!-- If running inside JBoss this jar is already available -->
 				<exclusion>
-					<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-client</artifactId>
+		            <groupId>org.jboss.as</groupId>
+		            <artifactId>jboss-as-ejb-client-bom</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -153,16 +149,22 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>${resteasy.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
   			<groupId>org.jboss.resteasy</groupId>
   			<artifactId>resteasy-multipart-provider</artifactId>
   			<version>${resteasy.version}</version>
+  			<scope>provided</scope>
   			<exclusions>
   				<exclusion>
   					<groupId>org.jboss.resteasy</groupId>
   					<artifactId>resteasy-jaxb-provider</artifactId>
+  				</exclusion>
+  				<exclusion>
+  					<groupId>org.jboss.resteasy</groupId>
+  					<artifactId>resteasy-jaxrs</artifactId>
   				</exclusion>
   			</exclusions>
 		</dependency>
@@ -171,6 +173,12 @@
 			<groupId>rome</groupId>
 			<artifactId>rome</artifactId>
 			<version>1.0</version>
+			<exclusions>
+				<exclusion>
+          			<groupId>org.jdom</groupId>
+          			<artifactId>jdom</artifactId>
+        		</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -178,6 +186,10 @@
 			<artifactId>rome-fetcher</artifactId>
 			<version>1.0</version>
 			<exclusions>
+				<exclusion>
+          			<groupId>org.jdom</groupId>
+          			<artifactId>jdom</artifactId>
+        		</exclusion>
 				<exclusion>
           			<groupId>xerces</groupId>
           			<artifactId>xercesImpl</artifactId>
@@ -189,6 +201,12 @@
 			<groupId>rome</groupId>
 			<artifactId>modules</artifactId>
 			<version>0.3.2</version>
+			<exclusions>
+				<exclusion>
+          			<groupId>org.jdom</groupId>
+          			<artifactId>jdom</artifactId>
+        		</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -216,7 +234,12 @@
   		  <artifactId>jackson-mapper-lgpl</artifactId>
   		  <scope>provided</scope>
 		</dependency>
-
+	
+		<dependency>
+		  <groupId>org.apache.poi</groupId>
+  		  <artifactId>poi</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<scm>

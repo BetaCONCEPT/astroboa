@@ -28,9 +28,9 @@ Authors
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd">
 
 	<!-- enable the configuration of transactional behavior based on annotations 
 	the jtaTransactionManager bean is not configured in repository module it is reused from the identity module-->
@@ -38,16 +38,29 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 	
 	<!-- JTA Transaction Manager for JBOSS -->
 
-	<jee:jndi-lookup id="userTransaction" jndi-name="UserTransaction"
-	expected-type="org.jboss.tm.usertx.client.ServerVMClientUserTransaction"
-		proxy-interface="javax.transaction.UserTransaction" />
+	<!--	
+			JBOSS-AS-4.2.3.GA and JBOSS-AS-5.1.0.GA 
+		<jee:jndi-lookup id="userTransaction" jndi-name="UserTransaction"
+			expected-type="org.jboss.tm.usertx.client.ServerVMClientUserTransaction"
+			proxy-interface="javax.transaction.UserTransaction" /> 
 
-	<!--  expected-type="org.jboss.tm.TxManager"-->
-
-	<jee:jndi-lookup id="transactionManager"
-		jndi-name="java:/TransactionManager"
+	 	<jee:jndi-lookup id="transactionManager"
+			jndi-name="java:/TransactionManager"
+			proxy-interface="javax.transaction.TransactionManager" />
+ 	-->
+	
+	<!--	
+			JBOSS-AS-7.1.0.CR1 
+			We only need to define the Location of the Transaction Manager
+			as it appears that UserTransaction is not available in the JNDI
+			
+			Spring JtaTransactionManager will handle the rest.
+	-->
+ 
+ 	<jee:jndi-lookup id="transactionManager"
+		jndi-name="java:jboss/TransactionManager"
 		proxy-interface="javax.transaction.TransactionManager" />
-
+  
 	<bean id="repositoryJtaTransactionManager"
 		class="org.springframework.transaction.jta.JtaTransactionManager">
 
@@ -56,8 +69,12 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
-		<property name="userTransaction">
+<!--  
+		JBOSS-AS-4.2.3.GA and JBOSS-AS-5.1.0.GA 
+ 		
+ 		<property name="userTransaction">
 			<ref local="userTransaction" />
 		</property>
-	</bean>
+ -->
+ 	</bean>
 </beans>

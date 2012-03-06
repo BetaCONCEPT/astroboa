@@ -4,3 +4,6 @@
 /.project
 /bin
 /src/main/resources/messages_el.properties
+/src/main/webapp/WEB-INF/.faces-config.xml.jsfdia
+/src/main/webapp/WEB-INF/.faces-servlet.xml.jsfdia
+/build_cp_war.sh

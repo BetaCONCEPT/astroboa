@@ -41,16 +41,6 @@
 			<xs:attribute name="serverURL" type="xs:anyURI" use="required" />
 
 			<!--
-				The name of the default application policy as defined in JAAS
-				configuration file. If not provided, 'astroboa' is the default
-				security domain. This attribute's value is used if attribute
-				'jaasApplicationPolicyName' is not provided in any of the
-				repositories defined.
-			-->
-			<xs:attribute name="jaasApplicationPolicyName" type="xs:string"
-				use="optional" default="astroboa" />
-
-			<!--
 				Authentication Token timeout in minutes. It represents the amount of
 				the idle time that authentication token is considered valid. After
 				that time authentication token is removed. This attribute's value is
@@ -97,20 +87,12 @@
 		<!-- Repository identifier -->
 		<xs:attribute name="id" type="xs:ID" use="required" />
 
-		<!--
-			Jcr Repository Jndi-name. This is where the JCR repository object is
-			loaded in the Naming Context
+		<!-- Full path of the repository home directory. This is the directory where
+			 further repository configuration file is located. 
 		-->
-		<xs:attribute name="jcr-repository-jndi-name" type="xs:string"
+		<xs:attribute name="repository-home-directory" type="xs:string"
 			use="required" />
-
-		<!--
-			DB data source Jndi-name. This is where the data source for
-			the database of a repository is loaded in the Naming Context
-		-->
-		<xs:attribute name="db-jndi-name" type="xs:string"
-			use="required" />
-
+			
 		<!--
 			Server url. This is the url that will be used in any case where
 			astroboa server must serve several files like images or definition xsd
@@ -132,15 +114,6 @@
 			-->
 		<xs:attribute name="restfulApiBasePath" type="xs:string" use="optional" default="/resource-api"/>
 		
-		<!--
-			The name of the application policy for this repository as defined in
-			JAAS configuration file. If value for this attribute is not provided
-			the value of 'jaasApplicationPolicyName' in root element will be used
-			instead.
-		-->
-		<xs:attribute name="jaasApplicationPolicyName" type="xs:string"
-			use="optional" />
-
 		<!--
 			Authentication Token timeout in minutes. If value for this attribute
 			is not provided the value of 'authenticationTokenTimeout' in root

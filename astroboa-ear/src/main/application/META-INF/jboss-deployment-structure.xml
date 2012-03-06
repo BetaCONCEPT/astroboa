@@ -1,0 +1,88 @@
+	<jboss-deployment-structure>
+	
+  <!-- Make sub deployments isolated by default, so they cannot see each others classes without a Class-Path entry -->
+  <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
+  <!-- This corresponds to the top level deployment. For a war this is the war's module, for an ear -->
+  <!-- This is the top level ear module, which contains all the classes in the EAR's lib folder     -->
+  <deployment>
+  
+    <!-- Exclusions allow you to prevent the server from automatically adding some dependencies     
+    <exclusions>
+        <module name="org.javassist" />
+    </exclusions>
+    -->
+    <!-- This allows you to define additional dependencies, it is the same as using the Dependencies: manifest attribute 
+    <dependencies>
+      <module name="deployment.javassist.proxy" />
+      <module name="deployment.myjavassist" />
+    </dependencies>
+    -->
+    <!-- These add additional classes to the module. In this case it is the same as including the jar in the EAR's lib directory 
+    <resources>
+      <resource-root path="my-library.jar" />
+    </resources>
+    -->
+    <dependencies>
+        
+        <!-- Use export="true" to make this module available to all sub modules -->
+        
+        <!--
+        	 Inform JBoss that this EAR depends on Spring Module which exists under the 
+        	'snowdrop' slot as the installation of the SnowDrop 2.0.2.Final denotes. 
+        	Normally, for portability reasons, this dependency must be specified in the Manifest.MF file
+        	of the EAR module, but since the Spring module is installed under a Jboss specific slot
+        	we specify the dependency here. 
+        	
+        	If the EAR is to be deployed in another JEE Application Server, then follow
+        	the instructions on the pom.xml in order to properly define the dependency to the 
+        	Spring module.  	
+        	 -->
+      	<module name="org.springframework.spring" slot="snowdrop" export="true"/>
+      	
+      	
+  	</dependencies>
+  </deployment>
+  
+  <sub-deployment name="astroboa-engine.spring">
+  	<dependencies>
+      	
+      	<!-- Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out -->
+		<module name="org.jboss.snowdrop">
+			<imports>
+				<include path="META-INF**"/>
+			</imports>
+		</module>
+      	
+  	</dependencies>
+  </sub-deployment>
+ <sub-deployment name="astroboa-ejb3.jar">
+  	<dependencies>
+      	<module name="deployment.astroboa.ear.astroboa-engine.spring" />
+  	</dependencies>
+  </sub-deployment>
+   
+   <sub-deployment name="resource-api.war">
+  </sub-deployment>
+  
+  <sub-deployment name="console.war">
+      <exclusions>
+        <module name="javax.faces.api" slot="main" />
+        <module name="com.sun.jsf-impl" slot="main" />
+        <module name="javax.faces.api" slot="1.2" />
+        <module name="com.sun.jsf-impl" slot="1.2" />
+        <module name="org.springframework.spring" slot="snowdrop"/>
+     </exclusions>
+     
+     <dependencies>
+       <module name="javax.el.api"/>
+       
+       <!-- Workaround as described in https://issues.jboss.org/browse/SNOWDROP-47 until SnowDrop 2.0.3.Final is out 
+		<module name="org.jboss.snowdrop">
+			<imports>
+				<include path="META-INF**"/>
+			</imports>
+		</module>
+		-->
+     </dependencies>
+  </sub-deployment>
+</jboss-deployment-structure>

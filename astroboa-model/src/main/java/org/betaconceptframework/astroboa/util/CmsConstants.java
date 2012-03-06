@@ -37,7 +37,9 @@ public final class CmsConstants {
 	public final static String ASTROBOA_VERSION = loadVersion();
 	
 	public final static String ASTROBOA_CONFIGURATION_XSD_FILENAME = "astroboa-conf-"+CmsConstants.ASTROBOA_VERSION+".xsd";
-	
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME = "org.betaconceptframework.astroboa.configuration.dir";
+	public static final String ASTROBOA_CONFIGURATION_HOME_DIRECTORY = System.getProperty(ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME);
+
 	public final static String LOCALE_GREEK = "el";
 	public final static String BETACONCEPT_CONTENT_DEFINITION_SCHEMA_DIR = "astroboa.schemata.home.dir";
 	public final static String TYPE_FOLDER = "TypeFolder";
@@ -268,7 +270,6 @@ public final class CmsConstants {
 	public static final String DEPRECATED_RESOURCE_API_MODELS_COLLECTION_URI_PATH = CmsConstants.FORWARD_SLASH+"model";
 	public static final String RESOURCE_API_ENCRYPTION_UTILITY_URI_PATH = CmsConstants.FORWARD_SLASH+"encrypt";
 
-	public static final String NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT = "value";
 	/**
 	 * Use {@link #RESOURCE_API_CONTENT_URI_PATH} instead
 	 */
@@ -336,5 +337,8 @@ public final class CmsConstants {
 	 *      with possible time zone Z or (-),(+)hh:mm
 	 */
 	public static final String GMONTH_DAY_REG_EXP = "--("+MONTH_REG_EXP+")-("+DAY_REG_EXP+")("+TIME_ZONE_REG_EXP+")?";
+
+	public static final String NAME_OF_PROPERTY_REPRESENTING_SIMPLE_CONTENT = "value";
+
 
 }

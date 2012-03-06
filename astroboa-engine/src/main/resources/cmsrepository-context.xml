@@ -26,7 +26,7 @@ Authors
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
 	<bean id="cmsQueryHandler"
 		class="org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler" />
@@ -152,9 +152,6 @@ Authors
 	<bean id="rendererUtils" autowire="byName"
 		class="org.betaconceptframework.astroboa.engine.jcr.util.RendererUtils"/>
 	
-	<bean id="queryUtils" autowire="byName"
-		class="org.betaconceptframework.astroboa.engine.jcr.util.QueryUtils"/>
-
 	<bean id="spaceUtils" autowire="byName"
 		class="org.betaconceptframework.astroboa.engine.jcr.util.SpaceUtils"/>
 

@@ -97,8 +97,8 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 
 			//Provide values that will be used for lazy rendering in case this is not a new content object
 			if (contentObjectNode != null){
-				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setPropertyContainerNodeUUID(contentObjectNode.getUUID());
-				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setContentObjectNodeUUID(contentObjectNode.getUUID());
+				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setPropertyContainerNodeUUID(contentObjectNode.getIdentifier());
+				((LazyCmsProperty) contentObject.getComplexCmsRootProperty()).setContentObjectNodeUUID(contentObjectNode.getIdentifier());
 			}
 
 			renderAspects(contentObjectNode, contentObject);
@@ -109,7 +109,7 @@ public class LazyContentObjectRenderer extends JcrDaoSupport{
 			
 			if (lazyLoadingHasBeenDisabled){
 				ContentObjectFullRendererVisitor fullRendererVisitor = new ContentObjectFullRendererVisitor(contentObject, 
-						lazyComplexCmsPropertyLoader, contentObjectNode.getUUID(), session,renderProperties, cachedCmsRepositoryEntities);
+						lazyComplexCmsPropertyLoader, contentObjectNode.getIdentifier(), session,renderProperties, cachedCmsRepositoryEntities);
 				
 				contentObject.getTypeDefinition().accept(fullRendererVisitor);
 				

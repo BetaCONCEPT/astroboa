@@ -181,8 +181,7 @@ public class LoginBean {
 			AstroboaClientContext clientContext = AstroboaClientContextHolder.getActiveClientContext();
 			
 			if (clientContext == null || clientContext.getRepositoryContext() == null ||
-					clientContext.getRepositoryContext().getCmsRepository() == null ||
-					StringUtils.isBlank(clientContext.getRepositoryContext().getCmsRepository().getApplicationPolicyName())){
+					clientContext.getRepositoryContext().getCmsRepository() == null ){
 				logout();
 				throw new Exception("No JAAS application policy name is provided for repository "+ currentlyConnectedRepository);
 			}
@@ -191,7 +190,10 @@ public class LoginBean {
 				// loggedInRepositoryUser.reset();
 				
 				//Provide JAAS policy name to seam identity bean
-				String jaasApplicationPolicyName = clientContext.getRepositoryContext().getCmsRepository().getApplicationPolicyName();
+				//String jaasApplicationPolicyName = clientContext.getRepositoryContext().getCmsRepository().getApplicationPolicyName();
+				// Astroboa JAAS module will ve deprecated and thus we need to find antoher way to login to JBoss SEAM
+				String jaasApplicationPolicyName = "astroboa";  
+
 				
 				// Check if logged in repository's identity store is externally managed. If so, record in LoggedInRepositoryUser bean that her id is
 				// externally managed. This is required by certain UI modules in order to enable or disable user provisioning functionality.

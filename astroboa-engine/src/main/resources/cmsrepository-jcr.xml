@@ -25,16 +25,8 @@ Authors
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
-http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
-
-
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
 	<!--  Login Credentials for BetaCONCEPT user of repository -->
 	<bean id="betaConceptCredentials"
@@ -43,62 +35,4 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 		<constructor-arg index="1" value="betaConcept"/>
 	</bean>
 	
-	<!-- JCR Session Factory 
-	<bean id="cmsSessionFactory"
-		class="org.springmodules.jcr.JcrSessionFactory">
-		<property name="repository" ref="cmsRepository" />
-		<property name="credentials" ref="betaConceptCredentials" />
-	</bean>-->
-
-
-	<!-- The following three bean setup access for a remote  jackrabbit repository provided through rmi.
-	This kind of remotely accessed repository is not usable at the moment since astroboa repository uses internal jackrabbit classes not
-	exposed by the rmi object.-->
-	
-	<!-- Remote  Jackrabbit Repository deployed in JBoss
-		and exposed as an RMI Service. It is accesed through JNDI
-	<bean id="remoteRepository"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="jnp://localhost:1099/jcrServer"/>
-		<property name="jndiEnvironment">
-			<props>
-				<prop key="java.naming.factory.initial">org.jnp.interfaces.NamingContextFactory</prop>
-				<prop key="java.naming.factory.url.pkgs">org.jboss.naming:org.jnp.interfaces</prop>
-				<prop key="java.naming.provider.url">jnp://localhost:1099</prop>
-			</props>
-		</property>
-	</bean>
-	-->
-	<!--
-		Configuration for the Client Repository Factory.
-	
-	<bean id="clientFactory"
-		class="org.apache.jackrabbit.rmi.client.ClientAdapterFactory"/>
-	-->
-	
-	<!--
-		The Client Repository.
-	
-	<bean id="repository" factory-bean="clientFactory"
-		factory-method="getRepository">
-		<constructor-arg ref="remoteRepository"/>
-	</bean>
-	-->
-
-	<!-- Jackrabbit Repository provided through JCA and accessed from JNDI 
-		<jee:jndi-lookup id="cmsRepository"
-		jndi-name="java:jcr/repository"
-		proxy-interface="javax.jcr.Repository" />-->
-		
-		<!--  get the local JCR Repository Resource from jndi for tomcat  --><!--
-			<property name="jndiName" value="java:/comp/env/jcr/repository" />
-			
-		--><!--  get the local JCR Repository Resource from jndi for jboss 
-		<property name="jndiName" value="java:jcr/repository" />-->
-		
-	<!-- <bean id="jcrTemplate" class="org.springmodules.jcr.JcrTemplate">
-		<property name="allowCreate" value="false"/>
-		<property name="sessionFactory" ref="cmsSessionFactory"/>
-	</bean> 
-	-->
 </beans>

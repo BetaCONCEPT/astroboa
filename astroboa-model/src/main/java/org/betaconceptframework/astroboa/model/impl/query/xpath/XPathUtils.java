@@ -32,6 +32,7 @@ import org.apache.jackrabbit.util.ISO9075;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
@@ -351,24 +352,38 @@ public class XPathUtils {
 	private static String analyzeTextToFind(String textToFind)
 			throws IOException {
 		// Filter textToFind through GreekAnalyzer
-		TokenStream result = greekAnalyzer.tokenStream("", new StringReader(textToFind));
-
-		String analyzedTextTofind = "";
-		Token term = null;
-		do {
-			term = result.next();
-			if (term != null)
-				analyzedTextTofind = analyzedTextTofind.concat(" "
-						+ new String(term.termBuffer(), 0, term.termLength()));
-
-		} while (term != null);
-
-		analyzedTextTofind = analyzedTextTofind.trim();
+		TokenStream stream = greekAnalyzer.tokenStream("", new StringReader(textToFind));
+		stream.reset();
 		
-		if (StringUtils.isBlank(analyzedTextTofind))
-			analyzedTextTofind = textToFind;
+		StringBuilder analyzedTextTofind = new StringBuilder();
 		
-		return analyzedTextTofind;
+		try {
+            while(stream.incrementToken()) {
+
+            	String term = stream.getAttribute(TermAttribute.class).term();
+             
+            	analyzedTextTofind.append(term);
+            	analyzedTextTofind.append(" ");
+ 						
+            }
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+            
+            analyzedTextTofind.append(textToFind);
+        }
+		finally{
+			stream.end();
+			stream.close();
+
+		}
+
+		String result = analyzedTextTofind.toString().trim();
+		
+		if (StringUtils.isBlank(result))
+			return textToFind;
+		
+		return result;
 		
 			
 	}

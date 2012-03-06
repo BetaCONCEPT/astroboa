@@ -21,7 +21,6 @@ package org.betaconceptframework.astroboa.engine.jcr.renderer;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.BinaryChannel;
@@ -99,53 +98,24 @@ public class BinaryChannelRenderer extends AbstractRenderer  {
 			if (binaryChannelNode.hasProperty(CmsBuiltInItem.SourceFileName.getJcrName()))
 				binaryChannel.setSourceFilename(binaryChannelNode.getProperty(CmsBuiltInItem.SourceFileName.getJcrName()).getString());
 
-			//if (binaryChannelNode.hasNode(CmsBuiltInItem.BinaryData.getJcrName()))
-			//{
-				//Node dataNode = binaryChannelNode.getNode(CmsBuiltInItem.BinaryData.getJcrName());
-				
-				if (binaryChannelNode.hasProperty(JcrBuiltInItem.JcrMimeType.getJcrName()))
-					binaryChannel.setMimeType(binaryChannelNode.getProperty(JcrBuiltInItem.JcrMimeType.getJcrName()).getString());
+			if (binaryChannelNode.hasProperty(JcrBuiltInItem.JcrMimeType.getJcrName()))
+				binaryChannel.setMimeType(binaryChannelNode.getProperty(JcrBuiltInItem.JcrMimeType.getJcrName()).getString());
 
 
-				if (binaryChannelNode.hasProperty(JcrBuiltInItem.JcrEncoding.getJcrName()))
-					binaryChannel.setEncoding(binaryChannelNode.getProperty(JcrBuiltInItem.JcrEncoding.getJcrName()).getString());
+			if (binaryChannelNode.hasProperty(JcrBuiltInItem.JcrEncoding.getJcrName()))
+				binaryChannel.setEncoding(binaryChannelNode.getProperty(JcrBuiltInItem.JcrEncoding.getJcrName()).getString());
 
-				binaryChannel.setModified(DateUtils.addLocaleToCalendar(binaryChannelNode.getProperty(JcrBuiltInItem.JcrLastModified.getJcrName()).getDate(), CmsConstants.LOCALE_GREEK));
+			binaryChannel.setModified(DateUtils.addLocaleToCalendar(binaryChannelNode.getProperty(JcrBuiltInItem.JcrLastModified.getJcrName()).getDate(), CmsConstants.LOCALE_GREEK));
 
-				if (loadData && binaryChannelNode.hasProperty(JcrBuiltInItem.JcrData.getJcrName()))
-					binaryChannel.setContent((byte[])JcrValueUtils.getObjectValue(binaryChannelNode.getProperty(JcrBuiltInItem.JcrData.getJcrName()).getValue()));
+			if (loadData && binaryChannelNode.hasProperty(JcrBuiltInItem.JcrData.getJcrName()))
+				binaryChannel.setContent((byte[])JcrValueUtils.getObjectValue(binaryChannelNode.getProperty(JcrBuiltInItem.JcrData.getJcrName()).getValue()));
 
-				renderFilePathsForBinaryData(binaryChannelNode, binaryChannel);
-				
-				//Also set repository id to be available if file AccessInfo may be created
-				binaryChannelUtils.addRepositoryIdToBinaryChannel(binaryChannelNode.getPath(), binaryChannel);
-
-			//}
+			//Also set repository id to be available if file AccessInfo may be created
+			binaryChannelUtils.addRepositoryIdToBinaryChannel(binaryChannelNode.getPath(), binaryChannel);
 
 			return binaryChannel;
 	}
 	
-	private void renderFilePathsForBinaryData(Node binaryDataNode, BinaryChannel binaryChannel) throws RepositoryException
-	{
-		if (!binaryDataNode.hasProperty(JcrBuiltInItem.JcrData.getJcrName()))
-			return ;
-
-		try{
-			Session session = binaryDataNode.getSession();
-			
-			binaryChannelUtils.createPathForBinaryContent(binaryDataNode, binaryChannel, session);
-		}
-		catch (RepositoryException re)
-		{
-			throw re;
-		}
-		catch(Exception e)
-		{
-			throw new RepositoryException(e);
-		}
-	}
-
-
 	
 
 }

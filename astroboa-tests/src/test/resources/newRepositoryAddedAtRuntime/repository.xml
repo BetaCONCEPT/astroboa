@@ -83,7 +83,6 @@
         <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
             <param name="path" value="${wsp.home}/index"/>
             <param name="directoryManagerClass" value="org.apache.jackrabbit.core.query.lucene.directory.RAMDirectoryManager"/>
-            
             <param name="forceConsistencyCheck" value="false"/>
             <param name="autoRepair" value="true"/>
 	    <param name="analyzer" value="org.betaconceptframework.astroboa.lucene.analyzer.GreekEnglishAnalyzer"/>
@@ -94,7 +93,7 @@
             <param name="extractorBackLogSize" value="200" />
            
  
-            <param name="textFilterClasses" 
+            <!-- <param name="textFilterClasses" 
             value="org.apache.jackrabbit.extractor.MsWordTextExtractor,
             org.apache.jackrabbit.extractor.MsExcelTextExtractor,
             org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,
@@ -102,7 +101,7 @@
             org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,
             org.apache.jackrabbit.extractor.RTFTextExtractor,
             org.apache.jackrabbit.extractor.HTMLTextExtractor,
-            org.apache.jackrabbit.extractor.XMLTextExtractor"/>
+            org.apache.jackrabbit.extractor.XMLTextExtractor"/> -->
 
 
         </SearchIndex>

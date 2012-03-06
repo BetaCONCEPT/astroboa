@@ -24,9 +24,9 @@ Authors
 		 		    
 -->          
 
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 
     <display-name>Astroboa Resource api</display-name>
@@ -63,25 +63,25 @@ Authors
 	</context-param>
  	-->
 
-    <context-param>
+    <!-- <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-        	<!-- we directly load the repository services from the spring context which is available in JNDI. 
-        	The services are used by the BinaryChannel and CmsDefiniton Filters which do not utilize the astroboa client -->
-			classpath:astroboa-engine.xml
+        	we directly load the repository services from the spring context which is available in JNDI. 
+        	The services are used by the BinaryChannel and CmsDefiniton Filters which do not utilize the astroboa client
+			<classpath:astroboa-engine.xml
 			
-			<!-- load spring beans from astroboa-resource-api module -->
+			load spring beans from astroboa-resource-api module
 			classpath:Filters.xml
 			classpath:Singletons.xml
 		
         </param-value>
-    </context-param>
+    </context-param> -->
     
     <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
-    <context-param>
+    <!-- <context-param>
         <param-name>resteasy.scan</param-name>
         <param-value>true</param-value>
-    </context-param>
+    </context-param> -->
     
     <!-- 
     	Some clients, like browsers, cannot use the Accept headers to negotiation the representation's media type.
@@ -105,7 +105,7 @@ Authors
 		relying on the Spring application context to manage the lifecycle of that bean. 
 		Specifying the "targetFilterLifecycle" filter init-param as "true" will enforce invocation of the Filter.init 
 		and Filter.destroy lifecycle methods on the target bean, letting the servlet container manage the filter lifecycle.'
-	-->
+	
 	<filter>
 		<filter-name>binaryChannelLoaderFilter</filter-name>
 		<filter-class>
@@ -117,8 +117,8 @@ Authors
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<!-- BinaryChannel dynamic loader filter mapping  -->
+-->
+	<!-- BinaryChannel dynamic loader filter mapping  
 	<filter-mapping>
 		<filter-name>binaryChannelLoaderFilter</filter-name>
 		<url-pattern>/f/binaryChannel/*</url-pattern>
@@ -135,13 +135,13 @@ Authors
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<!-- BinaryChannel dynamic loader filter mapping  -->
+-->
+	<!-- BinaryChannel dynamic loader filter mapping  
 	<filter-mapping>
 		<filter-name>contentObjectTypeDefinitionSchemaFilter</filter-name>
 		<url-pattern>/f/definitionSchema/*</url-pattern>
 	</filter-mapping>
-	
+	-->
 	
 	<!-- Seam Framework-->
 	<!-- Seam Framework filter and mapping  
@@ -176,7 +176,7 @@ Authors
 	
 	<!-- RestEasy as a Filter. This way we can server static content 
             org.jboss.resteasy.plugins.server.servlet.FilterDispatcher -->
-	 <filter>
+	 <!-- <filter>
         <filter-name>Resteasy</filter-name>
         <filter-class>
         	org.betaconceptframework.astroboa.resourceapi.filter.AstroboaResourceApiDispatcher
@@ -187,21 +187,26 @@ Authors
         <filter-name>Resteasy</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+ -->    
 	<!-- 
    <listener>
       <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
    </listener>
 	 -->
 	 
-	<listener>
+	<!-- <listener>
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener>
+    </listener> 
     
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    </listener>-->
     
+    <!-- <servlet-mapping>
+   		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+   		<url-pattern>/*</url-pattern>
+	</servlet-mapping
+	-->
     <!--  
     <servlet>
 		<servlet-name>faces</servlet-name>

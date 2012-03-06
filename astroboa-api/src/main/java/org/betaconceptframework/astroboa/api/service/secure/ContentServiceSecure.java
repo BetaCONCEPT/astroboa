@@ -764,4 +764,20 @@ public interface ContentServiceSecure {
 	 */
 	List<ContentObject> saveContentObjectResourceCollection(Object contentSource,boolean version, boolean updateLastModificationTime, String lockToken, String authenticationToken );
 
+	/**
+	 * Return the content of a binary channel.
+	 * 
+	 * <p>
+ 	 * Used mainly for lazy loading the content of a {@link BinaryChannel} when calling method {@link BinaryChannel#getContent()} or
+ 	 * {@link BinaryChannel#getContentAsStream()} 
+	 * 
+	 * Users are STRONLGY encouraged to use the aforementioned methods for retrieving the content of a bunary channel.
+	 * </p>
+	 * 
+	 * @param jcrNodeUUIDWhichCorrespondsToTheBinaryChannel UUID of Jcr Node which corresponds to the binary channel
+	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) to a Astroboa repository. 
+	 * 
+	 * @return <code>true</code> if value exists for the provided property, <code>false</code> otherwise
+	 */
+	byte[] getBinaryChannelContent(String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel, String authenticationToken);
 }

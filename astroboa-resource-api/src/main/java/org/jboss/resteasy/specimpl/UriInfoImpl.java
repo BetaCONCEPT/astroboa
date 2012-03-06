@@ -61,7 +61,7 @@ public class UriInfoImpl implements UriInfo
       this.pathSegments = new ArrayList<PathSegment>(encodedPathSegments.size());
       for (PathSegment segment : encodedPathSegments)
       {
-         pathSegments.add(new PathSegmentImpl(Encode.decodePath(((PathSegmentImpl) segment).getOriginal())));
+         pathSegments.add(new PathSegmentImpl(((PathSegmentImpl) segment).getOriginal(), true));
       }
       if (queryString == null)
       {
@@ -86,8 +86,6 @@ public class UriInfoImpl implements UriInfo
 
    public List<PathSegment> getPathSegments()
    {
-      if (pathSegments != null) return pathSegments;
-      pathSegments = PathSegmentImpl.parseSegments(getPath());
       return pathSegments;
    }
 

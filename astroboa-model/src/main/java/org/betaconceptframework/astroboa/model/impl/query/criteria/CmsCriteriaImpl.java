@@ -27,7 +27,9 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
+import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -114,6 +116,13 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 		//Add to xpath select ancestor xpath OR path criterion
 		String ancestorXPathQuery = getAncestorQuery();
 		if (StringUtils.isNotBlank(ancestorXPathQuery)){
+			
+			//Due to the automatic addition of order by clause we have to remove any 
+			//order by clause created
+			if (ancestorXPathQuery.contains(CmsConstants.ORDER_BY)){
+				ancestorXPathQuery = StringUtils.substringBeforeLast(ancestorXPathQuery, CmsConstants.ORDER_BY);
+			}
+			
 			xpathselect = ancestorXPathQuery+xpathselect;
 		}
 		else if (StringUtils.isNotBlank(pathCriterion)){
@@ -136,21 +145,28 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 
 
 		String orderBy = "";
-		String columnProjectionInXPath = "";
-		if (MapUtils.isNotEmpty(getOrderProperties()))
-		{
+		if (MapUtils.isNotEmpty(getOrderProperties())){
 			OrderByClauseHelper orderByClauseHelper = new OrderByClauseHelper(getOrderProperties());
-			orderByClauseHelper.generateOrderBy();
-			orderBy = orderByClauseHelper.getOrderByClause();
-			columnProjectionInXPath = orderByClauseHelper.getColumnProjectionInXPath();
-
+			orderBy = orderByClauseHelper.generateOrderBy();
+		}
+		else{
+			//Special case. Due to the fact that the JCR spec does not provide a method 
+			//for retrieving the total number of hits regardless of the limit, 
+			//we have to use the method provided by Jackrabbit (the JCR reference implementation).
+			//Unfortunately, since version 2.x , this method returns -1 in cases where the size
+			//is unknown even when the queries do not match any object at all. In order to 
+			//force the implementation to return the number of total hits we have to provide
+			//an order by property. Therefore, in criteria where no order by property is provided
+			//we explicitly instruct Jackrabbit to order the results by the jcr:score property.
+			OrderByClauseHelper orderByClauseHelper = new OrderByClauseHelper(JcrBuiltInItem.JcrScore.getJcrName(), Order.descending);
+			orderBy = orderByClauseHelper.generateOrderBy();
 		}
 
 		String criteriaPath = (currentCriterion == null)? "": currentCriterion.getXPath();
 
 		xpathQuery = xpathselect
 		+ ((StringUtils.isBlank(criteriaPath) ? "" : CmsConstants.LEFT_BRACKET_WITH_LEADING_AND_TRAILING_SPACE	+ criteriaPath	+ CmsConstants.RIGHT_BRACKET_WITH_LEADING_AND_TRAILING_SPACE)
-				 +columnProjectionInXPath+ CmsConstants.EMPTY_SPACE + orderBy);
+				 + CmsConstants.EMPTY_SPACE + orderBy);
 
 		return xpathQuery;
 	}

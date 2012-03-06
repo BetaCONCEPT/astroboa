@@ -84,6 +84,7 @@ import org.betaconceptframework.astroboa.model.impl.SaveMode;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.ContentObjectProfileItem;
 import org.betaconceptframework.astroboa.model.impl.item.DefinitionReservedName;
+import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.query.CmsOutcomeImpl;
 import org.betaconceptframework.astroboa.model.impl.query.render.RenderPropertiesImpl;
 import org.betaconceptframework.astroboa.util.CmsConstants;
@@ -204,7 +205,7 @@ public class ContentDao  extends JcrDaoSupport{
 			session = context.getSession();
 
 			if (StringUtils.isNotBlank(lockToken)){
-				session.addLockToken(lockToken);
+				session.getWorkspace().getLockManager().addLockToken(lockToken);
 			}
 
 			primaryCheck(contentObject);
@@ -228,7 +229,7 @@ public class ContentDao  extends JcrDaoSupport{
 				else{
 
 					//If node is locked and no valid lock token is provided then an exception is thrown
-					contentObjectNode.checkout();
+					session.getWorkspace().getVersionManager().checkout(contentObjectNode.getPath());
 
 					modifiedDateBeforeSave = retrieveProfileModifiedFromContentObjectNode(contentObjectNode);
 
@@ -252,12 +253,9 @@ public class ContentDao  extends JcrDaoSupport{
 			session.save();
 
 			if (version){
-				contentObjectNode.checkin();
+				session.getWorkspace().getVersionManager().checkin(contentObjectNode.getPath());
 			}
 			
-			//Clear cache
-			//jcrQueryCacheRegion.removeRegion();
-
 			//This must run after save was successful because these changes cannot not be rolled back
 			((ComplexCmsPropertyImpl)contentObject.getComplexCmsRootProperty()).clearCmsPropertyNameWhichHaveBeenLoadedAndRemovedList();
 
@@ -279,7 +277,11 @@ public class ContentDao  extends JcrDaoSupport{
 				}
 				
 				if (StringUtils.isNotBlank(lockToken)){
-					session.removeLockToken(lockToken);
+					try {
+						session.getWorkspace().getLockManager().removeLockToken(lockToken);
+					}  catch (RepositoryException e) {
+						logger.error("Lock token "+lockToken+" could not be removed", e);
+					}
 				}
 			}
 			
@@ -798,13 +800,13 @@ public class ContentDao  extends JcrDaoSupport{
 
 			//Deep lock and open-scoped
 			if (!contentObjectNode.isLocked())
-				contentObjectNode.lock(true, false);
+				session.getWorkspace().getLockManager().lock(contentObjectNode.getPath(), true, false, Long.MAX_VALUE, "");
 
-			String lockToken =  contentObjectNode.getLock().getLockToken();
+			String lockToken =  session.getWorkspace().getLockManager().getLock(contentObjectNode.getPath()).getLockToken();
 
 			if (lockToken != null)
 			{
-				contentObjectNode.checkout();
+				session.getWorkspace().getVersionManager().checkout(contentObjectNode.getPath());
 				contentObjectNode.setProperty(DefinitionReservedName.Locktoken.getJcrName(), lockToken);
 			}
 			else
@@ -838,14 +840,14 @@ public class ContentDao  extends JcrDaoSupport{
 			if (contentObjectNode != null && contentObjectNode.isLocked())
 			{
 				//Deep lock and open-scoped
-				session.addLockToken(lockToken);
+				session.getWorkspace().getLockManager().addLockToken(lockToken);
 
-				contentObjectNode.unlock();
+				session.getWorkspace().getLockManager().unlock(contentObjectNode.getPath());
 
 				//Unset contentObject equivalent property
 				if (contentObjectNode.hasProperty(DefinitionReservedName.Locktoken.getJcrName()))
 				{
-					contentObjectNode.checkout();
+					session.getWorkspace().getVersionManager().checkout(contentObjectNode.getPath());
 					contentObjectNode.getProperty(DefinitionReservedName.Locktoken.getJcrName()).remove();
 				}
 
@@ -898,7 +900,7 @@ public class ContentDao  extends JcrDaoSupport{
 				logger.warn("Unable to find content object with id "+ contentObjectId+". Property 'viewCounter' is not increased");
 			}
 			else{
-				contentObjectNode.checkout();
+				session.getWorkspace().getVersionManager().checkout(contentObjectNode.getPath());
 
 				contentObjectDao.increaseViewCounter(contentObjectNode, counter);
 
@@ -1372,7 +1374,7 @@ public class ContentDao  extends JcrDaoSupport{
 			session = context.getSession();
 
 			if (StringUtils.isNotBlank(lockToken)){
-				session.addLockToken(lockToken);
+				session.getWorkspace().getLockManager().addLockToken(lockToken);
 			}
 			
 			for (ContentObject contentObject : contentObjects){
@@ -1397,11 +1399,53 @@ public class ContentDao  extends JcrDaoSupport{
 			}
 			
 			if (StringUtils.isNotBlank(lockToken)){
-				session.removeLockToken(lockToken);
+				try {
+					session.getWorkspace().getLockManager().removeLockToken(lockToken);
+				} catch (RepositoryException e) {
+					logger.error("Lock token "+lockToken+" could not be removed", e);
+				}
 			}
 			
       		logger.debug(" Saved ContentObject collection  in {}", DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - start));
 
 		}
+	}
+
+	public byte[] getBinaryChannelContent(
+			String jcrNodeUUIDWhichCorrespondsToTheBinaryChannel) {
+		
+		Session session = null;
+
+		if (StringUtils.isBlank(jcrNodeUUIDWhichCorrespondsToTheBinaryChannel))
+			throw new CmsException("Blank binary channel id");
+
+		try {
+
+			session = getSession();
+
+			Node binaryChannelNode =  cmsRepositoryEntityUtils.retrieveUniqueNodeForBinaryChannel(session, jcrNodeUUIDWhichCorrespondsToTheBinaryChannel);
+
+			if (binaryChannelNode == null){
+				logger.warn("Binary Channel Id {} does not correspond to a valid JCR node");
+				return null;
+			}
+			
+			if (binaryChannelNode.hasProperty(JcrBuiltInItem.JcrData.getJcrName())){
+				return (byte[])JcrValueUtils.getObjectValue(binaryChannelNode.getProperty(JcrBuiltInItem.JcrData.getJcrName()).getValue());
+			}
+			else {
+				return null;
+			}
+
+			
+
+		}catch(RepositoryException ex)
+		{
+			throw new CmsException(ex);
+		}
+		catch (Exception e) {
+			throw new CmsException(e);
+		}
+
 	}
 }

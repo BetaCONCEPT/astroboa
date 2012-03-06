@@ -28,6 +28,7 @@ import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.el.GreekAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.util.Version;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -35,7 +36,7 @@ import org.apache.lucene.analysis.standard.StandardFilter;
  * 
  */
 public class GreekEnglishAnalyzer extends Analyzer{
-	 private GreekAnalyzer greek = new GreekAnalyzer();
+	 private GreekAnalyzer greek = new GreekAnalyzer(Version.LUCENE_30);
 	 
 	 public GreekEnglishAnalyzer(){
 		 
@@ -47,8 +48,8 @@ public class GreekEnglishAnalyzer extends Analyzer{
 
 //	  Filters with standard analyzer
 	 tokens = new StandardFilter(tokens);
-	 tokens = new LowerCaseFilter(tokens);
-	 tokens = new StopFilter(tokens, StopAnalyzer.ENGLISH_STOP_WORDS);
+	 //tokens = new LowerCaseFilter(tokens);
+	 tokens = new StopFilter(false,tokens, StopAnalyzer.ENGLISH_STOP_WORDS_SET,true);
 
 	 return tokens;
 	 

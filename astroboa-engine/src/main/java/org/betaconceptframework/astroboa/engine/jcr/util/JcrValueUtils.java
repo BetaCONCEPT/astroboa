@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.jcr.Binary;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -77,10 +78,20 @@ public class JcrValueUtils {
 		case PropertyType.REFERENCE:
 			return value.getString();
 		case PropertyType.BINARY:
+			Binary binary = null;
 			try {
-				return IOUtils.toByteArray(value.getStream());
+				binary = value.getBinary();
+				if (binary!=null){
+					return IOUtils.toByteArray(binary.getStream());
+				}
+				
 			} catch (Exception e) {
 				throw new CmsException(e);
+			}
+			finally{
+				if (binary!= null){
+					binary.dispose();
+				}
 			}
 		default:
 			throw new CmsException("Unsupported value type "+ PropertyType.nameFromValue(value.getType()));
@@ -187,9 +198,15 @@ public class JcrValueUtils {
 		return valueFactory.createValue(longValue);
 	}
 
-	public static Value getJcrBinary(byte[] stream, ValueFactory valueFactory)
+	/*
+	 * Do not forget to call value.getBinary().dispose() after you have done processing this value
+	 */
+	public static Value getJcrBinary(byte[] content, ValueFactory valueFactory) throws RepositoryException
 	{
-		return valueFactory.createValue(new ByteArrayInputStream(stream));
+		Binary binary = valueFactory.createBinary(new ByteArrayInputStream(content));
+		
+		return  valueFactory.createValue(binary);
+		
 	}
 
 	private static Value getJcrString(String stringValue, ValueFactory valueFactory)

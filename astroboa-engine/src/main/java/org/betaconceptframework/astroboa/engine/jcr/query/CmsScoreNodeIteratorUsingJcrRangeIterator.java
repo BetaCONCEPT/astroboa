@@ -24,11 +24,13 @@ package org.betaconceptframework.astroboa.engine.jcr.query;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RangeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
-import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a wrapper class over RowIterator. 
@@ -46,6 +48,8 @@ import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtil
  */
 public class CmsScoreNodeIteratorUsingJcrRangeIterator  implements CmsScoreNodeIterator{
 
+	private static  final Logger logger = LoggerFactory.getLogger(CmsScoreNodeIteratorUsingJcrRangeIterator.class);
+	
 	private RangeIterator rangeIterator = null;
 
 	public CmsScoreNodeIteratorUsingJcrRangeIterator(RangeIterator rangeIterator) {
@@ -85,9 +89,19 @@ public class CmsScoreNodeIteratorUsingJcrRangeIterator  implements CmsScoreNodeI
 		if (rangeIterator instanceof RowIterator){
 			final Row nextRow = ((RowIterator)rangeIterator).nextRow();
 
-			final Node nextNode = JackrabbitDependentUtils.getNodeFromRow(nextRow);
+			Node nextNode = null;
+			try {
+				nextNode = nextRow.getNode();
+			} catch (RepositoryException e) {
+				logger.error("",e);
+			}
 
-			double scoreFromNodeIterator = JackrabbitDependentUtils.getScoreFromRow(nextRow);
+			double scoreFromNodeIterator = 0;
+			try {
+				scoreFromNodeIterator = nextRow.getScore();
+			} catch (RepositoryException e) {
+				logger.error("",e);
+			}
 
 			return new CmsScoreNode(nextNode, scoreFromNodeIterator);
 		}

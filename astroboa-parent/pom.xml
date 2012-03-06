@@ -29,7 +29,7 @@
 	<groupId>org.betaconceptframework.astroboa</groupId>
 	<artifactId>astroboa-parent</artifactId>
 	<name>Astroboa Parent</name>
-	<version>3.1.0-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>BetaCONCEPT ASTRBOA is an Enterprise Content Management System. Its modular architecture allows to be used both as a full featured Web application for managing content across an organization as well as a component in a SOA architecture for creating content applications</description>
 	
@@ -93,7 +93,8 @@
 		
 		<richfaces.version>3.3.3.Final</richfaces.version>
 		
-		<resteasy.version>1.2.GA</resteasy.version>
+		<spring.version>3.1.0.RELEASE</spring.version>
+		
 	</properties>
 	
 	<organization>
@@ -157,21 +158,24 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.5.3</version>
+				<version>1.6.1</version>
 			</dependency>
 
 			<dependency>
         		<groupId>org.slf4j</groupId>
         		<artifactId>slf4j-log4j12</artifactId>
-				<version>1.5.3</version>
+				<version>1.6.1</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
-				<version>1.5.3</version>
+				<version>1.6.1</version>
 			</dependency>
 			
+			<!-- 1.2.15 depends on some artifacts that are not 
+				available in the central Maven repository due to licensing issues 
+			-->
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
@@ -188,238 +192,98 @@
 			<dependency>
 				<groupId>javax.jcr</groupId>
 				<artifactId>jcr</artifactId>
-				<version>1.0</version>
-				<scope>provided</scope>
-				<optional>true</optional>
-			</dependency>
-		
-			<dependency>
-				<groupId>org.apache.jackrabbit</groupId>
-				<artifactId>jackrabbit-core</artifactId>
-				<version>1.6.4</version> 
-				<scope>provided</scope>
-				<optional>true</optional>
-				<!-- exclude xml-apis and xerces which are now part of java 6 -->
-				<exclusions>
-					<exclusion>
-						<groupId>xml-apis</groupId>
-						<artifactId>xml-apis</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-				
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.jackrabbit</groupId>
-				<artifactId>jackrabbit-api</artifactId>
-				<version>1.6.4</version>
-				<scope>provided</scope>
-				<optional>true</optional>
+				<version>2.0</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>org.apache.jackrabbit</groupId>
 				<artifactId>jackrabbit-jcr-commons</artifactId>
-				<version>1.6.4</version>
-				<scope>provided</scope>
-				<optional>true</optional>
+				<version>2.4.0</version>
 			</dependency>
-
+			
+		
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-core</artifactId>
-				<version>2.4.1</version>
+				<version>3.0.3</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-analyzers</artifactId>
-				<version>2.4.1</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>com.sun.xsom</groupId>
-  				<artifactId>xsom</artifactId>
-  				<version>20110809</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.springmodules</groupId>
-				<artifactId>spring-modules-jcr</artifactId>
-				<version>0.8a</version>
-				<exclusions>
-					<exclusion>
-						<groupId>jsr170</groupId>
-						<artifactId>jsr170</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.jackrabbit</groupId>
-						<artifactId>jackrabbit-jca</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.jackrabbit</groupId>  
-						<artifactId>jackrabbit-jcr-rmi</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>jeceira</groupId>
-						<artifactId>jeceira</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>aparzev</groupId>
-						<artifactId>doka</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>aparzev</groupId>
-						<artifactId>commons</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>jug</groupId>
-						<artifactId>jug-asl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>geronimo-spec</groupId>
-						<artifactId>geronimo-spec-jta</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>geronimo-spec</groupId>
-						<artifactId>
-							geronimo-spec-j2ee-connector
-						</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.servlet</groupId>
-						<artifactId>servlet-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>concurrent</groupId>
-  						<artifactId>concurrent</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xmlParserAPIs</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>cglib</groupId>
-						<artifactId>cglib-nodep</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.lucene</groupId>
-						<artifactId>lucene-core</artifactId>
-					</exclusion>
-				</exclusions>
+				<version>3.0.3</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring</artifactId>
-				<version>2.5.4</version>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- Spring dependencies that must be explicitly defined if used-->
+
+			<!-- AspectJ dependencies are marked as optional in Spring-Aop
+			  and thus must be explicitly defined in cases AspectJ is used 
+				Although there are newer versions of aspectj jars
+				we use the one that ships with Spring-Aop 3.1.0.RELEASE
+			-->
+			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjrt</artifactId>
-				<version>1.5.4</version>
+				<version>1.6.8</version> 
 			</dependency>
 
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjweaver</artifactId>
-				<version>1.5.4</version>
+				<version>1.6.8</version>
 			</dependency>
 
+			<!-- cglib-nodep dependency has a test scope in Spring-Tx
+			  and thus must be explicitly defined in cases where it is actually needed.
+			  Although there are newer versions of cglib-nodep jar
+				we use the one that ships with Spring-Tx 3.0.5.RELEASE
+				which is currently used 
+			-->
 			<dependency>
 				<groupId>cglib</groupId>
 				<artifactId>cglib-nodep</artifactId>
-				<version>2.1_3</version>
-			</dependency>
-
-			<dependency>
-				<groupId>asm</groupId>
-				<artifactId>asm</artifactId>
-				<version>2.2.3</version>
-			</dependency>
-
-			<dependency>
-				<groupId>asm</groupId>
-				<artifactId>asm-commons</artifactId>
-				<version>2.2.3</version>
-			</dependency>
-
-			<dependency>
-				<groupId>asm</groupId>
-				<artifactId>asm-util</artifactId>
-				<version>2.2.3</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<scope>provided</scope>
-				<version>1.0</version>
-			</dependency>
-			
-			<!-- Use same version with the Hibernate modules  shipped with JBoss 5.1.0.GA -->
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>3.3.1.GA</version>
-				<exclusions>
-					<!--  exclude them since we use the cglib_nodep to avoid conflicts with spring -->
-					<exclusion>
-						<groupId>asm</groupId>
-						<artifactId>asm-attrs</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>asm</groupId>
-						<artifactId>asm</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>cglib</groupId>
-						<artifactId>cglib</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.transaction</groupId>
-						<artifactId>jta</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>3.4.0.GA</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-annotations</artifactId>
-				<version>3.4.0.GA</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>3.1.0.GA</version>
+				<version>2.2</version>
 			</dependency>
 
 			<!-- JBoss Cache 3.1.0.GA which ships with JBoss 5.1.0.GA-->
@@ -472,6 +336,12 @@
 				<groupId>org.jboss.seam</groupId>
 				<artifactId>jboss-seam-remoting</artifactId>
 				<version>${seam.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>dom4j</groupId>
+						<artifactId>dom4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.seam</groupId>
@@ -501,7 +371,7 @@
 				<version>${seam.version}</version>
 			</dependency>
 			
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
@@ -511,7 +381,7 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxb-provider</artifactId>
 				<version>${resteasy.version}</version>
-			</dependency>
+			</dependency> -->
 			
 			<dependency>
 				<groupId>org.jbpm</groupId>
@@ -572,16 +442,16 @@
 			<dependency>
 				<groupId>javax.faces</groupId>
 				<artifactId>jsf-api</artifactId>
-				<version>1.2_08</version>
-				<scope>provided</scope>
+				<version>1.2_15</version>
+				<!-- <scope>provided</scope> -->
 				<optional>true</optional>
 			</dependency>
 
 			<dependency>
 				<groupId>javax.faces</groupId>
 				<artifactId>jsf-impl</artifactId>
-				<version>1.2_07</version>
-				<scope>provided</scope>
+				<version>1.2_15</version>
+				<!-- <scope>provided</scope> -->
 				<optional>true</optional>
 			</dependency>
 
@@ -606,9 +476,9 @@
 			</dependency>
 			
 			<dependency>
-				<groupId>javaee</groupId>
+				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
-				<version>5</version>
+				<version>6.0</version>
 				<scope>provided</scope>
 			</dependency>
 			
@@ -651,7 +521,7 @@
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
-				<version>3.5-beta5</version>
+				<version>3.7</version>
 			</dependency>
 
 		<dependency>

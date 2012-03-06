@@ -279,10 +279,10 @@ Authors
     </context-param>
     
     <!-- Set this if you want Resteasy to scan for JAX-RS classes -->
-    <context-param>
+    <!-- <context-param>
         <param-name>resteasy.scan</param-name>
         <param-value>true</param-value>
-    </context-param>
+    </context-param> -->
 	
 	<!-- This filter make sure that Repository Context with the necessary information about connected repository is available to
     	HTTP request -->
@@ -417,9 +417,9 @@ components.xml debugging must be disabled ( <core:init debug=false .../>)
 	</filter-mapping>
 	-->
 	
-	<listener>
+	<!-- <listener>
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener>
+    </listener> -->
 	
 	<!-- Seam Framework
 	!!!!!! SEAM LISTENER SHOULD BE LOADED BEFORE SPRING CONTEXT LOADER LISTENER (possibly this is only required if spring beans are injected through @In)

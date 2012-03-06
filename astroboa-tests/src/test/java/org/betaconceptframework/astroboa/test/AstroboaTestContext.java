@@ -21,11 +21,8 @@ package org.betaconceptframework.astroboa.test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -46,7 +43,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springmodules.jcr.jackrabbit.RepositoryFactoryBean;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -61,26 +57,21 @@ public enum AstroboaTestContext{
 
 	private ApplicationContext applicationContext;
 
-	private List<RepositoryFactoryBean> repositoryFactories = new ArrayList<RepositoryFactoryBean>();
-	
 	private AstroboaTestContext(){
 
 		try {
 			
-			//System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.jackrabbit.core.jndi.provider.DummyInitialContextFactory");
 			System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.cache.transaction.DummyContextFactory");
 			
 			System.setProperty(Context.PROVIDER_URL, "localhost");
 			
-			System.setProperty("jboss.server.config.url", new ClassPathResource("/").getFile().getAbsolutePath());
+			System.setProperty("org.betaconceptframework.astroboa.configuration.dir", new ClassPathResource("/").getFile().getAbsolutePath());
 
-			InitialContext context = new InitialContext();
-
-			configureRepository(TestConstants.TEST_REPOSITORY_ID, context);
-			configureRepository(TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID, context);
-			configureRepository(TestConstants.TEST_CLONE_REPOSITORY_ID, context);
+			removeRepositoryResources(TestConstants.TEST_REPOSITORY_ID);
+			removeRepositoryResources(TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID);
+			removeRepositoryResources(TestConstants.TEST_CLONE_REPOSITORY_ID);
 			
-			//Initialize Spring - Order is SIGNIFICANT. First set all JNDI resources and then initialize Spring context
+			//Initialize Spring - Order is SIGNIFICANT. Spring context must be initialized at the end
 			applicationContext = new ClassPathXmlApplicationContext(getConfigLocations());
 			
 
@@ -90,29 +81,7 @@ public enum AstroboaTestContext{
 		}
 	}
 	
-	public void configureRepository(String repositoryId, InitialContext context) throws Exception
-	{
-		//In case where following directories are not removed
-		//before creation of JCR repository an exception is
-		//thrown.
-		//Note that if this test runs through Maven and clean goal
-		//has been executed then this code finds no directory to delete
-		removeRepositoryResources(repositoryId);
-		
-		RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
-		repositoryFactory.setConfiguration(new ClassPathResource(repositoryId+"/repository-test.xml"));
-		repositoryFactory.setHomeDir(new ClassPathResource(repositoryId));
-		repositoryFactory.afterPropertiesSet();
-		
-		context.bind(repositoryId+"JcrJNDI", repositoryFactory.getObject());
-
-		repositoryFactories.add(repositoryFactory);
-
-	}
-
-
-
-	private void removeRepositoryResources(String repositoryId) throws IOException {
+	public void removeRepositoryResources(String repositoryId) throws IOException {
 		deleteResource("/"+repositoryId+"/version");
 		deleteResource("/"+repositoryId+"/dataStore");
 		deleteResource("/"+repositoryId+"/workspaces");
@@ -123,18 +92,6 @@ public enum AstroboaTestContext{
 	
 	
 	
-	public void shutdownRepository() throws Exception {
-
-		for (RepositoryFactoryBean repositoryFactory : repositoryFactories)
-		{
-			if (repositoryFactory != null)
-			{
-				repositoryFactory.destroy();
-			}
-		}
-	}
-
-
 	private void deleteResource(String resourceRelativePath) throws IOException {
 		Resource versionDirectory = new ClassPathResource(resourceRelativePath);
 		
@@ -148,7 +105,6 @@ public enum AstroboaTestContext{
 				FileUtils.deleteDirectory(file);
 			}
 		}
-		
 	}
 
 

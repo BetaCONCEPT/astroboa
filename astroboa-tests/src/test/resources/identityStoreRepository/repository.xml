@@ -93,7 +93,7 @@
             <param name="extractorBackLogSize" value="200" />
            
  
-            <param name="textFilterClasses" 
+ <!--            <param name="textFilterClasses" 
             value="org.apache.jackrabbit.extractor.MsWordTextExtractor,
             org.apache.jackrabbit.extractor.MsExcelTextExtractor,
             org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,
@@ -101,7 +101,7 @@
             org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,
             org.apache.jackrabbit.extractor.RTFTextExtractor,
             org.apache.jackrabbit.extractor.HTMLTextExtractor,
-            org.apache.jackrabbit.extractor.XMLTextExtractor"/>
+            org.apache.jackrabbit.extractor.XMLTextExtractor"/> -->
 
 
         </SearchIndex>

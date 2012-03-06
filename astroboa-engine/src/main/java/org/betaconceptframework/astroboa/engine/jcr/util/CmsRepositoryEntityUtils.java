@@ -262,7 +262,7 @@ public class CmsRepositoryEntityUtils {
 		//otherwise proceed as usual
 		
 		try{
-			Node cmsRepositoryEntityNode = session.getNodeByUUID(cmsRepositoryEntityId);
+			Node cmsRepositoryEntityNode = session.getNodeByIdentifier(cmsRepositoryEntityId);
 			
 			
 			if (cmsRepositoryEntityNode != null){
@@ -381,7 +381,7 @@ public class CmsRepositoryEntityUtils {
 				logger.warn("Tried to create an Astroboa identitifier on a node which did not have a mixin referenceable. Node Type {}", newCmsRepositoryNode.getPrimaryNodeType().getName());
 			}
 				
-			final String newCmsIdentifier = newCmsRepositoryNode.getUUID();
+			final String newCmsIdentifier = newCmsRepositoryNode.getIdentifier();
 			newCmsRepositoryNode.setProperty(CmsBuiltInItem.CmsIdentifier.getJcrName(), newCmsIdentifier);
 
 			cmsRepositoryEntity.setId(newCmsIdentifier);

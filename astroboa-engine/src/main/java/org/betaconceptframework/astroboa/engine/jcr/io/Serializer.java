@@ -590,7 +590,7 @@ public class Serializer {
 		LocalizableCmsDefinition cmsDefinition = retrieveCmsDefinition(name,false);
 		
 		if (cmsDefinition == null){
-			logger.warn("Could not find definition for property {}. Cannot decide whether this property can have multiple values or not. Serialization will continue and consider this property as a single-value property");
+			logger.warn("Could not find definition for property {}. Cannot decide whether this property can have multiple values or not. Serialization will continue and consider this property as a single-value property", name);
 			return false;
 		}
 		

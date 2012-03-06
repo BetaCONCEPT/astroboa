@@ -261,7 +261,7 @@ public class SpaceUtils {
 		}
 
 		//Change Parent only if current parent is not the same
-		if (!spaceJcrNode.getParent().getUUID().equals(newParentSpaceJcrNode.getUUID()))
+		if (!spaceJcrNode.getParent().getIdentifier().equals(newParentSpaceJcrNode.getIdentifier()))
 			session.move(spaceJcrNode.getPath(), newParentSpaceJcrNode.getPath()+CmsConstants.FORWARD_SLASH+spaceJcrNode.getName());
 	}
 

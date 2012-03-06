@@ -28,7 +28,7 @@ Authors
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>  
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.1.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>astroboa-engine</artifactId>
 	<name>Astroboa Engine</name>
@@ -39,7 +39,7 @@ Authors
 		mangement as Content Object, Taxonomy, Folksonomy, User Space,
 		Repository User. It provides an API with services for searching
 		with criteria (similar to hibrnate), creating content objects,
-		taxonomies, spaces,etc.
+		taxonomies, spaces,etc.  
 	</description>
 
 	<build>
@@ -81,7 +81,7 @@ Authors
           		  	<descriptorRefs>
             			<descriptorRef>jar-with-dependencies</descriptorRef>
           		  	</descriptorRefs>
-        		</configuration>
+	        		</configuration>
         		<executions>
           			<execution>
             			<id>make-assembly</id> <!-- this is used for inheritance merges -->
@@ -152,6 +152,14 @@ Authors
 		
 	</build>
 
+	<repositories>
+		<repository>
+			<id>se-jcr-repo</id>
+			<name>se-jcr-repo</name>
+			<url>https://src.springframework.org/svn/se-jcr/repo</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
 	
 		<dependency>
@@ -180,16 +188,42 @@ Authors
 			<artifactId>commons-codec</artifactId>
 		</dependency>
 		
-
+		
+		<!--  Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
-		<!--  
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+
+		<!-- Spring dependencies that must be explicitly defined -->
+		
+		<!-- Spring-Aop -->
+		
+		<!-- 
 			aspectj/aspectjweaver.jar, aspectj/aspectjrt.jar, (aspectj/aspectjtools.jar)
-			required at runtime when using Spring's AspectJ support
+			required at runtime when using Spring's AspectJ support and since they are marked as
+			optional in Spring-Aop POM, we must explicitly define them as well in order
+			to be available to tests
 		-->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -199,11 +233,14 @@ Authors
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		
+		
+		<!-- Spring-Tx -->
+		
 		<!--  
-			Required by Spring
+			CGLIB-nodep has a test scope in Spring-TX pom and therefore
+			we need to explicitly defined in here.
 		-->
 		<dependency>
 			<groupId>cglib</groupId>
@@ -217,93 +254,179 @@ Authors
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
 		<!-- 
 		
-			This dependency MUST be defined AFTER the above 2 dependencies
-			javax.transaction:jta:1.1 and javax.persistence:persistence-api
+			This dependency MUST be defined AFTER the above dependency
+			javax.transaction:jta:1.1 
 			otherwise an exception is thrown like
 			java.lang.ClassFormatError: Absent Code attribute in method that is not native or abstract in class file javax/transaction/RollbackException
 		 -->
 		<dependency>
-			<groupId>javaee</groupId>
-			<artifactId>javaee-api</artifactId>  
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 
-		<dependency>
-			<groupId>javax.jcr</groupId>
-			<artifactId>jcr</artifactId>
-			<scope>provided</scope>
-		</dependency>
+			<dependency>
+				<groupId>javax.jcr</groupId>
+				<artifactId>jcr</artifactId>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-core</artifactId>
+				<version>2.4.0</version> 
+				<!-- exclude xml-apis and xerces which are now part of java 6 -->
+				<exclusions>
+					<exclusion>
+						<groupId>xml-apis</groupId>
+						<artifactId>xml-apis</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+					<exclusion>
+						<artifactId>derby</artifactId>
+						<groupId>org.apache.derby</groupId>
+					</exclusion>
+				</exclusions>
+				
+			</dependency>
 
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-jcr-commons</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!--
-		<dependency>
+			<dependency>
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-api</artifactId>
+				<version>2.4.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-jcr-commons</artifactId>
+			</dependency>
+			
+		<dependency>   
 			<groupId>org.springframework</groupId>
 			<artifactId>se-jcr</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+					<exclusion>
+					      <groupId>org.apache.geronimo.specs</groupId>
+					      <artifactId>geronimo-jta_1.1_spec</artifactId>
+					</exclusion>
+					<exclusion>
+					      <groupId>org.apache.geronimo.specs</groupId>
+					      <artifactId>geronimo-j2ee-connector_1.6_spec</artifactId>
+					</exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-aop</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-beans</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-context</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-context-support</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-core</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>    
+				      <artifactId>spring-tx</artifactId>
+				    </exclusion>
+				    <exclusion>
+				      <groupId>org.springframework</groupId>
+				      <artifactId>spring-webmvc</artifactId>
+				    </exclusion>
+					<exclusion>
+						<groupId>cglib</groupId>
+						<artifactId>cglib-nodep</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.jackrabbit</groupId>
+						<artifactId>jackrabbit-jca</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.jackrabbit</groupId>  
+						<artifactId>jackrabbit-jcr-rmi</artifactId>  
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.jackrabbit</groupId>  
+						<artifactId>jackrabbit-ocm</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+				</exclusions>			
 		</dependency>
-        -->
         
-		<dependency>
-			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-jcr</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>  
 		
 		<dependency>
 			<groupId>org.betaconceptframework</groupId>
 			<artifactId>betaconceptframework-commons</artifactId>
 			<version>2.3.2.GA</version>
+			<!-- <version>2.4.0-SNAPSHOT</version> -->
+			<exclusions>
+				<exclusion>
+					<artifactId>tm-extractors</artifactId>
+					<groupId>org.textmining</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>pdfbox</artifactId>
+					<groupId>pdfbox</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- JBoss Cache 3.1.0.GA which ships with JBoss 5.1.0.GA and JBoss dependencies -->
 		<dependency>
 			<groupId>org.jboss.cache</groupId>
 			<artifactId>jbosscache-core</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		
-		<dependency>    
+		<!-- Will not change to version 20110809 due to license reasons -->
+		<dependency>
 			<groupId>com.sun.xsom</groupId>
   			<artifactId>xsom</artifactId>
+  			<version>20081112</version>
+  			<exclusions>
+  				<exclusion>
+  					<artifactId>relaxngDatatype</artifactId>
+  					<groupId>relaxngDatatype</groupId>
+  				</exclusion>
+  			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.xml</groupId>
+			<artifactId>relaxngDatatype</artifactId>
 		</dependency>
 		
 		<!-- SLF4J API is an abstraction of various logging systems. This allows the

@@ -35,9 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.jcr.Repository;
-import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
-import javax.naming.InitialContext;
 import javax.security.auth.Subject;
 import javax.security.auth.login.AccountExpiredException;
 import javax.security.auth.login.AccountLockedException;
@@ -45,12 +43,13 @@ import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialExpiredException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.core.RepositoryImpl;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -67,6 +66,7 @@ import org.betaconceptframework.astroboa.api.security.exception.CmsLoginInvalidP
 import org.betaconceptframework.astroboa.api.security.exception.CmsLoginInvalidUsernameException;
 import org.betaconceptframework.astroboa.api.security.exception.CmsLoginPasswordExpiredException;
 import org.betaconceptframework.astroboa.api.security.exception.CmsUnauthorizedRepositoryUseException;
+import org.betaconceptframework.astroboa.api.security.management.IdentityStore;
 import org.betaconceptframework.astroboa.api.security.management.IdentityStoreContextHolder;
 import org.betaconceptframework.astroboa.api.service.RepositoryUserService;
 import org.betaconceptframework.astroboa.cache.region.DefinitionCacheRegion;
@@ -82,6 +82,7 @@ import org.betaconceptframework.astroboa.context.SecurityContext;
 import org.betaconceptframework.astroboa.engine.definition.ContentDefinitionConfiguration;
 import org.betaconceptframework.astroboa.engine.jcr.initialization.CmsRepositoryInitializationManager;
 import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtils;
+import org.betaconceptframework.astroboa.engine.service.security.AstroboaLogin;
 import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.betaconceptframework.astroboa.security.CmsGroup;
 import org.betaconceptframework.astroboa.security.CmsPrincipal;
@@ -95,9 +96,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springmodules.jcr.JcrSessionFactory;
-import org.springmodules.jcr.SessionFactory;
-import org.springmodules.jcr.SessionFactoryUtils;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.extensions.jcr.JcrSessionFactory;
+import org.springframework.extensions.jcr.SessionFactory;
+import org.springframework.extensions.jcr.jackrabbit.RepositoryFactoryBean;
+import org.xml.sax.InputSource;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -127,13 +130,17 @@ public class RepositoryDao implements ApplicationListener{
 	@Autowired
 	private DefinitionCacheRegion definitionCacheRegion;
 	
-	
 	@Autowired
 	private ConsistencyCheckerDao consistencyCheckerDao;
+	
+	@Autowired
+	private IdentityStore identityStore;
 
 	private  final Logger logger = LoggerFactory.getLogger(RepositoryDao.class);
 
-	private Map<String, CmsRepository> repositories = new HashMap<String, CmsRepository>();
+	private Map<String, Repository> jcrRepositories = new HashMap<String, Repository>();
+	
+	private Map<String, CmsRepository> repositoryInfos = new HashMap<String, CmsRepository>();
 
 	private Map<String, SessionFactory> jcrSessionFactoriesPerRepository = new HashMap<String, SessionFactory>();
 
@@ -148,65 +155,19 @@ public class RepositoryDao implements ApplicationListener{
 		try{
 			RepositoryType repositoryConfiguration = RepositoryRegistry.INSTANCE.getRepositoryConfiguration(repositoryId);
 
-			String currentJcrRepositoryJndiName = repositoryConfiguration.getJcrRepositoryJndiName();
-			String serverAliasURL = repositoryConfiguration.getServerAliasURL();
-			String restfulApiBasePath = repositoryConfiguration.getRestfulApiBasePath();
-
-			String repositoryServerURL = StringUtils.isBlank(serverAliasURL) ? RepositoryRegistry.INSTANCE.getDefaultServerURL() : serverAliasURL;
-			String repositoryApplicationPolicyName = StringUtils.isBlank(repositoryConfiguration.getJaasApplicationPolicyName())? 
-					RepositoryRegistry.INSTANCE.getDefaultJaasApplicationPolicyName(): 
-						repositoryConfiguration.getJaasApplicationPolicyName();
-			
-			String externalIdentityStoreJndiName = repositoryConfiguration.getExternalIdentityStoreJndiName();
-
-			String repositoryIdentityStoreId = null;
-
-			if (StringUtils.isBlank(externalIdentityStoreJndiName)){
-						repositoryIdentityStoreId =  (repositoryConfiguration.getIdentityStoreRepositoryId() == null )? 
-								RepositoryRegistry.INSTANCE.getDefaultIdentityStoreId(): 
-									repositoryConfiguration.getIdentityStoreRepositoryId();
-			
-								if (StringUtils.isBlank(repositoryIdentityStoreId)){
-									//Define the repository to be identity store for it self
-									repositoryIdentityStoreId = repositoryId;
-								}
-			}
-
-			//Localized Labels
-			HashMap<String, String> localizedLabels = new HashMap<String, String>();
-			if (repositoryConfiguration.getLocalization() != null){
-				List<Label> localizedLabelList = repositoryConfiguration.getLocalization().getLabel();
-				for (Label localizedLabel : localizedLabelList){
-					localizedLabels.put(localizedLabel.getLang(), localizedLabel.getValue());
-				}
-			}
+			//Create a CmsRepository instance which holds all configuration parameters
+			CmsRepository cmsRepository = loadConfigurationParameters(repositoryId, repositoryConfiguration);
 
 			//Create JcrSessionFactory
-			SessionFactory jcrSessionFactory = createJcrSessionFactory(currentJcrRepositoryJndiName);
-
-			//This is the only wat to retrieve repositoy home dir.
-			//Open a session, create one if none exists and retrieve the Repository object 
-			//related to that session.
-			Session session = SessionFactoryUtils.getSession(jcrSessionFactory, true);
-			Repository repository = session.getRepository();
-			String repositoryHomeDirPath = JackrabbitDependentUtils.getRepositoryHomeDir(repository);
-			session.logout();
-	
-			CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
-					repositoryHomeDirPath, 
-					repositoryServerURL,
-					restfulApiBasePath,
-					repositoryApplicationPolicyName, 
-					repositoryIdentityStoreId, 
-					externalIdentityStoreJndiName, 
-					repositoryConfiguration.getSecurity().getSecretUserKeyList().getAdministratorSecretKey().getUserid());
-
-			//Add values to maps
-			repositories.put(repositoryId, cmsRepository);
+			SessionFactory jcrSessionFactory = createJcrSessionFactory(repositoryId, repositoryConfiguration.getRepositoryHomeDirectory());
 			jcrSessionFactoriesPerRepository.put(repositoryId, jcrSessionFactory);
-			
-			if (fullReloadRepository(repositoryId, repositoryConfiguration, repository)){
+
+			if (fullReloadRepository(repositoryId, repositoryConfiguration)){
 				
+				if (! repositoryInfos.containsKey(repositoryId)){
+					repositoryInfos.put(repositoryId, cmsRepository);
+				}
+
 				//Initialize repository and load definition to cache
 				SecurityContext securityContext = new SecurityContext(repositoryId, null, 30, null);
 				RepositoryContext repositoryContext = new RepositoryContext(cmsRepository, securityContext);
@@ -222,7 +183,7 @@ public class RepositoryDao implements ApplicationListener{
 					}
 				}
 				catch(CmsException e){
-					repositories.remove(repositoryId);
+					repositoryInfos.remove(repositoryId);
 					jcrSessionFactoriesPerRepository.remove(repositoryId);
 					AstroboaClientContextHolder.clearContext();
 					throw e;
@@ -258,16 +219,79 @@ public class RepositoryDao implements ApplicationListener{
 	}
 
 
-	private SessionFactory createJcrSessionFactory(String jcrRepositoryJndiName) throws Exception {
+	private CmsRepository loadConfigurationParameters(String repositoryId,
+			RepositoryType repositoryConfiguration) {
+		String serverAliasURL = repositoryConfiguration.getServerAliasURL();
+		String restfulApiBasePath = repositoryConfiguration.getRestfulApiBasePath();
 
-		InitialContext context = new InitialContext();
+		String repositoryServerURL = StringUtils.isBlank(serverAliasURL) ? RepositoryRegistry.INSTANCE.getDefaultServerURL() : serverAliasURL;
+		
+		String externalIdentityStoreJndiName = repositoryConfiguration.getExternalIdentityStoreJndiName();
 
-		Repository jcrRepository = (Repository)context.lookup(jcrRepositoryJndiName);
+		String repositoryIdentityStoreId = null;
+
+		if (StringUtils.isBlank(externalIdentityStoreJndiName)){
+					repositoryIdentityStoreId =  (repositoryConfiguration.getIdentityStoreRepositoryId() == null )? 
+							RepositoryRegistry.INSTANCE.getDefaultIdentityStoreId(): 
+								repositoryConfiguration.getIdentityStoreRepositoryId();
+		
+							if (StringUtils.isBlank(repositoryIdentityStoreId)){
+								//Define the repository to be identity store for it self
+								repositoryIdentityStoreId = repositoryId;
+							}
+		}
+
+		//Localized Labels
+		HashMap<String, String> localizedLabels = new HashMap<String, String>();
+		if (repositoryConfiguration.getLocalization() != null){
+			List<Label> localizedLabelList = repositoryConfiguration.getLocalization().getLabel();
+			for (Label localizedLabel : localizedLabelList){
+				localizedLabels.put(localizedLabel.getLang(), localizedLabel.getValue());
+			}
+		}
+
+		
+		CmsRepository cmsRepository = new CmsRepositoryImpl(repositoryId, localizedLabels,
+				repositoryConfiguration.getRepositoryHomeDirectory(), 
+				repositoryServerURL,
+				restfulApiBasePath,
+				repositoryIdentityStoreId, 
+				externalIdentityStoreJndiName, 
+				repositoryConfiguration.getSecurity().getSecretUserKeyList().getAdministratorSecretKey().getUserid());
+		return cmsRepository;
+	}
+
+
+	private SessionFactory createJcrSessionFactory(String repositoryId, String repositoryHomeDirectory) throws Exception {
+
+		if (! jcrRepositories.containsKey(repositoryId)){
+			//create repository first
+			RepositoryFactoryBean repositoryFactory = new RepositoryFactoryBean();
+			repositoryFactory.setHomeDir(new FileSystemResource(repositoryHomeDirectory));
+			repositoryFactory.setConfiguration(new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml"));
+			repositoryFactory.afterPropertiesSet();
+			
+			
+//			FileSystemResource configuration = new FileSystemResource(repositoryHomeDirectory+File.separator+"repository.xml");
+//			FileSystemResource homeDir = new FileSystemResource(repositoryHomeDirectory);
+//			
+//			RepositoryConfig repositoryConfig = RepositoryConfig.create(new InputSource(configuration.getInputStream()), homeDir.getFile().getAbsolutePath());
+//			
+//			Repository jcrRepository = RepositoryImpl.create(repositoryConfig);
+			
+			Repository jcrRepository = repositoryFactory.getObject();
+			
+			if (jcrRepository == null){
+				throw new CmsException("Unable to initialize repository "+ repositoryId + " located in "+ repositoryHomeDirectory);
+			}
+			
+			jcrRepositories.put(repositoryId, jcrRepository);
+		}
 
 		//Create JcrSessionFactory For default workspace
 		JcrSessionFactory jcrSessionFactory = new JcrSessionFactory();
 		jcrSessionFactory.setCredentials(betaConceptCredentials);
-		jcrSessionFactory.setRepository((Repository)jcrRepository);
+		jcrSessionFactory.setRepository((Repository)jcrRepositories.get(repositoryId));
 		//Call this method to force further initialization process
 		jcrSessionFactory.afterPropertiesSet();
 
@@ -279,23 +303,19 @@ public class RepositoryDao implements ApplicationListener{
 
 		deployRepositoriesFoundInTheRepositoryRegistry();
 
-		return new ArrayList<CmsRepository>(repositories.values());
+		return new ArrayList<CmsRepository>(repositoryInfos.values());
 	}
 
 
 	private void deployRepositoriesFoundInTheRepositoryRegistry() {
 
-		if (RepositoryRegistry.INSTANCE.configurationHasChanged() || repositories.isEmpty()){
+		if (RepositoryRegistry.INSTANCE.configurationHasChanged() || repositoryInfos.isEmpty()){
 
 			RepositoryRegistry.INSTANCE.loadRepositoryConfigurations();
 			/*
-			 * Key is the the JNDI name for the JCR Repository, value is the repository id
+			 * Key is the the repository home directory for the JCR Repository, value is the repository id
 			 */
-			Map<String,String> jcrRepositoryJndiNamesPerRepository = new HashMap<String, String>();
-			/*
-			 * Key is the the JNDI name for the Database, value is the repository id
-			 */
-			Map<String,String> databaseJndiNamesPerRepository = new HashMap<String,String>();
+			Map<String,String> jcrRepositoryHomeDirectoryPerRepository = new HashMap<String, String>();
 
 			Set<String> repositoryIdsToBeUndeployed = new HashSet<String>();
 
@@ -304,27 +324,18 @@ public class RepositoryDao implements ApplicationListener{
 				String repositoryId = repositoryConfigurationEntry.getKey();
 				RepositoryType repositoryConfiguration = repositoryConfigurationEntry.getValue();
 
-				String currentJcrRepositoryJndiName = repositoryConfiguration.getJcrRepositoryJndiName();
-				String currentDBJndiName = repositoryConfiguration.getDbJndiName();
+				String currentJcrRepositoryHomeDirectory = repositoryConfiguration.getRepositoryHomeDirectory();
 
 				boolean initializeRepository = true;
 
-				//Check that repository corresponds to 
-				if (jcrRepositoryJndiNamesPerRepository.containsKey(currentJcrRepositoryJndiName)){
-					logger.warn("Jcr Repository JNDI name '{}' already defined for repository '{}'. Repository {} will not be loaded.", 
-							new Object[]{currentJcrRepositoryJndiName, jcrRepositoryJndiNamesPerRepository.get(currentJcrRepositoryJndiName), repositoryId});
+				//Check for duplicate repository home directory 
+				if (jcrRepositoryHomeDirectoryPerRepository.containsKey(currentJcrRepositoryHomeDirectory)){
+					logger.warn("Repository Home Directory '{}' already defined for repository '{}'. Repository {} will not be loaded.", 
+							new Object[]{currentJcrRepositoryHomeDirectory, jcrRepositoryHomeDirectoryPerRepository.get(currentJcrRepositoryHomeDirectory), repositoryId});
 					repositoryIdsToBeUndeployed.add(repositoryId);
 					initializeRepository = false;
 				}
 
-				if (databaseJndiNamesPerRepository.containsKey(currentDBJndiName)){
-					logger.warn("Astroboa Database JNDI name '{}' already defined for repository '{}'. Repository {} will not be loaded.", 
-							new Object[]{currentDBJndiName, databaseJndiNamesPerRepository.get(currentDBJndiName), repositoryId});
-					repositoryIdsToBeUndeployed.add(repositoryId);
-					initializeRepository = false;
-				}
-
-				//For the moment initialize only the repositories which have not yet been initialized
 				if (initializeRepository){
 					loadRepositoryFromConfiguration(repositoryId);
 				}
@@ -332,7 +343,7 @@ public class RepositoryDao implements ApplicationListener{
 
 			//Mark any repository which does not exist in the configuration as to be undeployed
 			//This step is meaningful only when the configuration file is updated
-			for (String deployedRepositoryId : repositories.keySet()){
+			for (String deployedRepositoryId : repositoryInfos.keySet()){
 				if (!RepositoryRegistry.INSTANCE.isRepositoryRegistered(deployedRepositoryId)){
 					logger.warn("Repository {} does not belong to the configuration and therefore will be undeployed", deployedRepositoryId);
 					repositoryIdsToBeUndeployed.add(deployedRepositoryId);
@@ -341,8 +352,9 @@ public class RepositoryDao implements ApplicationListener{
 
 			//Undeploy any repository whose configuration is invalid
 			for (String repositoyIdToBeUndeployed : repositoryIdsToBeUndeployed){
-				repositories.remove(repositoyIdToBeUndeployed);
+				repositoryInfos.remove(repositoyIdToBeUndeployed);
 				jcrSessionFactoriesPerRepository.remove(repositoyIdToBeUndeployed);
+				jcrRepositories.remove(repositoyIdToBeUndeployed);
 				
 				//Clear caches
 				definitionCacheRegion.clearCacheForRepository(repositoyIdToBeUndeployed);
@@ -350,30 +362,28 @@ public class RepositoryDao implements ApplicationListener{
 				logger.warn("Successfully undeployed repository {}", repositoryIdsToBeUndeployed);
 			}
 
-			//Detect any obvious cycles between repository and identity store repositories
+			//Detect any obvious cycles between repository and identity store repositoryInfos
 			detectCycleBetweenRepositoryAndIdentityStoreRepositories();
 
 			//Second pass to initialize any repository which is an identity store for another repository
-			for (CmsRepository cmsRepository : repositories.values()){
+			for (CmsRepository cmsRepository : repositoryInfos.values()){
 					initializeIdentityStoreForRepository(cmsRepository);
 			}
 		}
 	}
 
 
-	private boolean fullReloadRepository(String repositoryId,	RepositoryType repositoryConfiguration, Repository repository) {
+	private boolean fullReloadRepository(String repositoryId,	RepositoryType repositoryConfiguration) {
 		
 		//Reload repository if repository has not been loaded
-		if (! repositories.containsKey(repositoryId)){
+		if (! repositoryInfos.containsKey(repositoryId)){
 			return true;
 		}
 		
 		//Check if cache manager settings have changed
-		if (JackrabbitDependentUtils.cacheManagerSettingsHaveChanged(repositoryConfiguration, repository)){
-			return true;
-		}
-		
-		return false;
+		Repository repository = jcrRepositories.get(repositoryId);
+
+		return JackrabbitDependentUtils.cacheManagerSettingsHaveChanged(repositoryConfiguration, repository);
 	}
 
 
@@ -387,11 +397,11 @@ public class RepositoryDao implements ApplicationListener{
 				throw new CmsException("No external IdentityStore JNDI has been provided nor an identity store repository id for repository "+ cmsRepository.getId());
 			}
 
-			if (!repositories.containsKey(identityStoreRepositoryId)){
+			if (!repositoryInfos.containsKey(identityStoreRepositoryId)){
 				throw new CmsException("Found no repository with id "+identityStoreRepositoryId+".Cannot initialize identity store for repository "+ cmsRepository.getId());
 			}
 
-			CmsRepository cmsRepositoryIdentityStore = repositories.get(identityStoreRepositoryId);
+			CmsRepository cmsRepositoryIdentityStore = repositoryInfos.get(identityStoreRepositoryId);
 			Subject subject = new Subject();
 			subject.getPrincipals().add(new IdentityPrincipal(IdentityPrincipal.SYSTEM));
 
@@ -427,10 +437,10 @@ public class RepositoryDao implements ApplicationListener{
 
 		List<String> repositoryIdsToBeRemoved = new ArrayList<String>();
 
-		for (CmsRepository cmsRepository : repositories.values()){
+		for (CmsRepository cmsRepository : repositoryInfos.values()){
 
 			if (StringUtils.isNotBlank(cmsRepository.getExternalIdentityStoreJNDIName())){
-				//We are only interested in repositories which refer to 
+				//We are only interested in repositoryInfos which refer to 
 				//another repository as identity store
 				continue;
 			}
@@ -445,7 +455,7 @@ public class RepositoryDao implements ApplicationListener{
 
 						//Repository refers to another repository for identity store.
 						//Check that this repository refers to itself as identity store
-						CmsRepository identityStoreRepository = repositories.get(cmsRepository.getIdentityStoreRepositoryId());
+						CmsRepository identityStoreRepository = repositoryInfos.get(cmsRepository.getIdentityStoreRepositoryId());
 
 						if (StringUtils.isNotBlank(identityStoreRepository.getExternalIdentityStoreJNDIName())){
 							logger.warn("Repository "+ cmsRepository.getId() + " refers to repository "+ 
@@ -476,8 +486,9 @@ public class RepositoryDao implements ApplicationListener{
 
 
 		for (String repositoyToBeRemoved : repositoryIdsToBeRemoved){
-				repositories.remove(repositoyToBeRemoved);
+				repositoryInfos.remove(repositoyToBeRemoved);
 				jcrSessionFactoriesPerRepository.remove(repositoyToBeRemoved);
+				jcrRepositories.remove(repositoyToBeRemoved);
 		}
 		
 	}
@@ -522,27 +533,24 @@ public class RepositoryDao implements ApplicationListener{
 	}
 
 
-	private SecurityContext authenticate(AstroboaCredentials credentials, String jaasApplicationPolicyName, String repositoryId, int currentAuthenticationTokenTimeout, String permanentKey	) {
+	private SecurityContext authenticate(AstroboaCredentials credentials, String repositoryId, int currentAuthenticationTokenTimeout, String permanentKey	) {
 
 		SecurityContext securityContext = null;
 
 		Subject subject = null;
 		try {
 
-
 			CredentialsCallbackHandler callbackHandler = null;
+
 			if (credentials != null){
 				callbackHandler = new CredentialsCallbackHandler(credentials);
 			}
 
 			IdentityStoreContextHolder.setActiveRepositoryId(repositoryId);
 
-			LoginContext loginContext = new LoginContext(jaasApplicationPolicyName, callbackHandler);
+			AstroboaLogin astroboaLogin = new AstroboaLogin(callbackHandler, identityStore, this);
 
-			loginContext.login();
-
-			subject = loginContext.getSubject();
-
+			subject = astroboaLogin.login();
 
 		}
 		catch(AccountNotFoundException e){
@@ -579,7 +587,7 @@ public class RepositoryDao implements ApplicationListener{
 		authorizeSubject(subject, repositoryId);
 
 		try{
-			String authenticationToken = createAuthenticationToken(subject,	jaasApplicationPolicyName, repositoryId, permanentKey);
+			String authenticationToken = createAuthenticationToken(subject,	repositoryId, permanentKey);
 
 			securityContext = new SecurityContext(authenticationToken, subject, currentAuthenticationTokenTimeout, 
 					getAvailableRepositoryIds());
@@ -603,8 +611,7 @@ public class RepositoryDao implements ApplicationListener{
 	}
 
 
-	private String createAuthenticationToken(Subject subject,
-			String jaasApplicationPolicyName, String repositoryId, String permanentKey)
+	private String createAuthenticationToken(Subject subject, String repositoryId, String permanentKey)
 	throws NoSuchAlgorithmException {
 
 		//create authentication token
@@ -622,7 +629,6 @@ public class RepositoryDao implements ApplicationListener{
 
 		if (StringUtils.isBlank(permanentKey)){
 			stringToDigest.append(DateUtils.format(Calendar.getInstance()))
-			.append(jaasApplicationPolicyName)
 			.append(UUID.randomUUID());
 		}
 		else{
@@ -672,7 +678,7 @@ public class RepositoryDao implements ApplicationListener{
 		String associatedRepositoryId = getAssociatedRepositoryId();
 
 		if (! jcrSessionFactoriesPerRepository.containsKey(associatedRepositoryId)){
-			if (!repositories.containsKey(associatedRepositoryId)){
+			if (!repositoryInfos.containsKey(associatedRepositoryId)){
 				loadRepositoryFromConfiguration(associatedRepositoryId);
 
 				if (! jcrSessionFactoriesPerRepository.containsKey(associatedRepositoryId)){
@@ -703,7 +709,7 @@ public class RepositoryDao implements ApplicationListener{
 
 		deployRepositoriesFoundInTheRepositoryRegistry();
 
-		return StringUtils.isNotBlank(repositoryId) && repositories.containsKey(repositoryId);
+		return StringUtils.isNotBlank(repositoryId) && repositoryInfos.containsKey(repositoryId);
 	}
 
 
@@ -719,17 +725,17 @@ public class RepositoryDao implements ApplicationListener{
 			return null;
 		}
 
-		if (!repositories.containsKey(repositoryId)){
+		if (!repositoryInfos.containsKey(repositoryId)){
 			deployRepositoriesFoundInTheRepositoryRegistry();
 		}
 
-		return repositories.get(repositoryId);
+		return repositoryInfos.get(repositoryId);
 	}
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 
-		//Need to initialize all repositories defined in configuration xml
+		//Need to initialize all repositoryInfos defined in configuration xml
 		//after Spring Context has been instantiated
 		if (event instanceof ContextRefreshedEvent) {
 			deployRepositoriesFoundInTheRepositoryRegistry();
@@ -757,9 +763,9 @@ public class RepositoryDao implements ApplicationListener{
 	 *	Subject authorization at this level is restricted only to authorize user
 	 *	whether she can or cannot login to the specified repository.
 	 *	Our default policy is a PERMIT REPOSITORY policy, meaning that an authenticated user
-	 *	has access to REPOSITORY available repositories defined within a Astroboa Server.
+	 *	has access to REPOSITORY available repositoryInfos defined within a Astroboa Server.
 	 *
-	 *	In cases where an authenticated user has access to a subset of available repositories
+	 *	In cases where an authenticated user has access to a subset of available repositoryInfos
 	 *	then a {@link Group} named after "AuthorizedRepositories" must exist 
 	 *  among {@link Subject} principals. 
 	 *  
@@ -782,7 +788,7 @@ public class RepositoryDao implements ApplicationListener{
 				if (principal instanceof Group && 
 						AstroboaPrincipalName.AuthorizedRepositories.toString().equals(principal.getName()) ){
 
-					//Found authorized repositories
+					//Found authorized repositoryInfos
 					boolean userIsAuthorizedToAccessRepository = false;
 
 					for (Enumeration<? extends Principal> authorizedRepositories = ((Group)principal).members(); authorizedRepositories.hasMoreElements();){
@@ -814,7 +820,7 @@ public class RepositoryDao implements ApplicationListener{
 		//In case configuration has changed, load any changes prior to login
 		deployRepositoriesFoundInTheRepositoryRegistry();
 		
-		CmsRepository cmsRepositoryToBeConnected = repositories.get(repositoryId);
+		CmsRepository cmsRepositoryToBeConnected = repositoryInfos.get(repositoryId);
 
 		if (cmsRepositoryToBeConnected == null){	
 			throw new CmsException("Repository with id "+ repositoryId+ " was not deployed.");
@@ -847,8 +853,7 @@ public class RepositoryDao implements ApplicationListener{
 		//and create security context
 		int currentAuthenticationTokenTimeout = retrieveAuthenticationTokenTimeoutForRepository(repositoryId);
 
-		SecurityContext securityContext = authenticate(credentialsToSendToJAAS,	 
-				cmsRepositoryToBeConnected.getApplicationPolicyName(),repositoryId, currentAuthenticationTokenTimeout, permanentKey);
+		SecurityContext securityContext = authenticate(credentialsToSendToJAAS,repositoryId, currentAuthenticationTokenTimeout, permanentKey);
 
 		//Create a new AstroboaClientContext
 		RepositoryContext repositoryContext = new RepositoryContext(cmsRepositoryToBeConnected, securityContext);
@@ -904,19 +909,19 @@ public class RepositoryDao implements ApplicationListener{
 		//In case configuration has changed, load any changes prior to login
 		deployRepositoriesFoundInTheRepositoryRegistry();
 
-		if (!repositories.containsKey(repositoryId)){
+		if (!repositoryInfos.containsKey(repositoryId)){
 			throw new CmsException("Repository id '"+repositoryId + "' found in configuration but could not be loaded");
 		}
 
 		authorizeSubject(subject, repositoryId);
 
-		CmsRepository cmsRepositoryToBeConnected = repositories.get(repositoryId);
+		CmsRepository cmsRepositoryToBeConnected = repositoryInfos.get(repositoryId);
 
 		int currentAuthenticationTokenTimeout = retrieveAuthenticationTokenTimeoutForRepository(repositoryId);
 
 		String authenticationToken;
 		try {
-			authenticationToken = createAuthenticationToken(subject,cmsRepositoryToBeConnected.getApplicationPolicyName(), repositoryId, permanentKey);
+			authenticationToken = createAuthenticationToken(subject, repositoryId, permanentKey);
 		} catch (NoSuchAlgorithmException e) {
 			throw new CmsException(e);
 		}
@@ -940,5 +945,5 @@ public class RepositoryDao implements ApplicationListener{
 
 		return securityContext.getAuthenticationToken();
 	}
-
+	
 }

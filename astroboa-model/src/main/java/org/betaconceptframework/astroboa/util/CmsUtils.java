@@ -20,7 +20,6 @@
 package org.betaconceptframework.astroboa.util;
 
 
-import org.apache.lucene.analysis.el.GreekCharsets;
 
 
 /**
@@ -58,10 +57,87 @@ public class CmsUtils {
 	 char[] chArray = greekLocalizedLabel.toCharArray();
      for (int i = 0; i < chArray.length; i++)
      {
-         chArray[i] = GreekCharsets.toLowerCase(chArray[i], GreekCharsets.UnicodeGreek);
+         chArray[i] = toLowerCase(chArray[i]);
      }
      
      	return new String(chArray);
 	}    
+	
+	
+	public static char toLowerCase(char letter){
+      	// First deal with lower case, not accented letters
+      if (letter >= '\u03B1' && letter <= '\u03C9'){
+    	// Special case 'small final sigma', where we return 'small sigma'
+        if (letter == '\u03C2') {
+        	return '\u03C3';
+        } else {
+        	return letter;
+        }
+      }
+        if (letter == '\u03AC') {
+        	return '\u03B1';
+        }
+        // epsilon with acute
+        if (letter == '\u03AD') {
+        	return '\u03B5';
+        }
+        // eta with acute
+        if (letter == '\u03AE') {
+        	return '\u03B7';
+        }
+        // iota with acute, iota with diaeresis, iota with acute and diaeresis
+        if (letter == '\u03AF' || letter == '\u03CA' || letter == '\u0390') {
+        	return '\u03B9';
+        }
+        // upsilon with acute, upsilon with diaeresis, upsilon with acute and diaeresis
+        if (letter == '\u03CD' || letter == '\u03CB' || letter == '\u03B0') {
+        	return '\u03C5';
+        }
+        // omicron with acute
+        if (letter == '\u03CC') {
+        	return '\u03BF';
+        }
+        // omega with acute
+        if (letter == '\u03CE') {
+        	return '\u03C9';
+        }
+        // After that, deal with upper case, not accented letters
+        if (letter >= '\u0391' && letter <= '\u03A9')
+        {
+            return (char) (letter + 32);
+        }
+        // Finally deal with upper case, accented letters
+        // alpha with acute
+        if (letter == '\u0386') {
+        	return '\u03B1';
+        }
+        // epsilon with acute
+        if (letter == '\u0388') {
+        	return '\u03B5';
+        }
+        // eta with acute
+        if (letter == '\u0389') {
+        	return '\u03B7';
+        }
+        // iota with acute, iota with diaeresis
+        if (letter == '\u038A' || letter == '\u03AA') {
+        	return '\u03B9';
+        }
+        // upsilon with acute, upsilon with diaeresis
+        if (letter == '\u038E' || letter == '\u03AB') {
+        	return '\u03C5';
+        }
+        // omicron with acute
+        if (letter == '\u038C') {
+        	return '\u03BF';
+        }
+        // omega with acute
+        if (letter == '\u038F') {
+        	return '\u03C9';
+        }
+        
+        
+        return Character.toLowerCase(letter);
+    } 
 	
 }

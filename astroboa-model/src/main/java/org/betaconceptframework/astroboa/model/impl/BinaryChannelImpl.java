@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
 
@@ -39,7 +38,10 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.RepositoryContext;
 import org.betaconceptframework.astroboa.model.jaxb.adapter.BinaryChannelAdapter;
+import org.betaconceptframework.astroboa.model.lazy.LazyLoader;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Repository's resource content 
@@ -79,8 +81,13 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 	 */
 	private byte[] newContent;
 
+	/**
+	 * Used when binary content is not managed by the 
+	 * JCR implementation but rather is managed by the 
+	 * Astroboa engine.
+	 * 
+	 */
 	private String relativeFileSystemPath;
-
 	private String absoluteBinaryChannelContentPath;
 
 	private String repositoryId;
@@ -243,6 +250,7 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		//Reset paths since a new content has been defined
 		absoluteBinaryChannelContentPath = null;
 		relativeFileSystemPath = null;
+		
 	}
 
 
@@ -340,37 +348,36 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 
 			//Look for file content only if id exists
 			//or binary channel is unmanaged
-			if (StringUtils.isNotBlank(getId()) || unmanaged ){
-				//Return content from file system
-				try{
+			try{
+				if (unmanaged){
 					if (StringUtils.isNotBlank(absoluteBinaryChannelContentPath)){
-						
-						//Used for testing 
-						if (absoluteBinaryChannelContentPath.contains("datastore/fs/Re/so/fsResource:")){
-							//Assuming default workspace is used
-							return new FileInputStream(absoluteBinaryChannelContentPath.replace("datastore/fs/Re/so/fsResource:", "workspaces/default/blobs"));
-						}
-						
 						return new FileInputStream(absoluteBinaryChannelContentPath);
 					}
-
-					//Throw exception to try to load content from binary's url
-					throw new Exception();
 				}
-				catch(Exception e){
+				else if (StringUtils.isNotBlank(getId())){
+					//Use binary channel id to load binary value from the content repository
+					LazyLoader lazyLoader = getLazyLoader();
 
-					//File which contains content of binary channel does not exist
-					//Try its url
-
-					String binaryChannelContentURL = getDirectURL();
-
-					URL contentUrl = new URL(binaryChannelContentURL);
-
-					return contentUrl.openStream();
-
+					if (lazyLoader != null){
+						byte[] binaryValue = lazyLoader.lazyLoadBinaryValue(getId(), authenticationToken);
+						return new ByteArrayInputStream(binaryValue);
+					}
+					else{
+						final Logger logger = LoggerFactory.getLogger(getClass());
+						logger.warn("Could not activate lazy loader for token {}", authenticationToken);
+					}
 				}
+				
+				return null;
 			}
-			return null;
+			catch(Exception e){
+
+				final Logger logger = LoggerFactory.getLogger(getClass());
+				logger.error("",e);
+				return null;
+
+			}
+				
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -491,11 +498,14 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 			return true;
 		}
 
-		if (StringUtils.isNotBlank(absoluteBinaryChannelContentPath)){
+		if (unmanaged && StringUtils.isNotBlank(absoluteBinaryChannelContentPath)){
 			return new File(absoluteBinaryChannelContentPath).exists();
 		}
+		
+		//TODO: Change this code so that binary content should not be loaded
+		getContent();
 
-		return false;
+		return newContent != null;
 	}
 
 	public void setUnmanaged(boolean unmanaged){
@@ -792,6 +802,9 @@ public class BinaryChannelImpl extends CmsRepositoryEntityImpl implements Binary
 		return externalLocationOfTheContent;
 	}
 	
+	private LazyLoader getLazyLoader() {
+		return AstroboaClientContextHolder.getLazyLoaderForClient(authenticationToken);
+	}
 
 	
 }

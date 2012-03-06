@@ -56,7 +56,7 @@ public class AstroboaSecurityAuthenticationInterceptor {
 
 	private  final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Resource(name="SecurityService", mappedName="SecurityService/local")
+	@Resource(name="SecurityService", mappedName="java:module/SecurityService!org.betaconceptframework.astroboa.service.secure.security.SecurityService")
 	private SecurityService securityService;
 	
 	

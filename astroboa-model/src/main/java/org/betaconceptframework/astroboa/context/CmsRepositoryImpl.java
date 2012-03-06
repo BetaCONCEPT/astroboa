@@ -53,8 +53,6 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 	
 	private final String restfulApiBasePath;
 	
-	private final String applicationPolicyName;
-
 	private final String identityStoreId;
 
 	private final String externalIdentityStoreJNDIName;
@@ -64,7 +62,7 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 
 	
 	public CmsRepositoryImpl(String id, HashMap<String, String> localizedLabels, String repositoryHomeDir, 
-			String serverURL, String restfulApiBasePath, String applicationPolicyName, String identityStoreId, 
+			String serverURL, String restfulApiBasePath, String identityStoreId, 
 			String externalIdentityStoreJNDIName, 
 			String administratorUserId){
 		this.id = id;
@@ -72,7 +70,6 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 		this.repositoryHomeDir = repositoryHomeDir;
 		this.serverURL = serverURL;
 		this.restfulApiBasePath = restfulApiBasePath;
-		this.applicationPolicyName = applicationPolicyName;
 		this.identityStoreId = identityStoreId;
 		this.externalIdentityStoreJNDIName = externalIdentityStoreJNDIName;
 		this.administratorUserId = administratorUserId;
@@ -136,7 +133,7 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 	}
 	
 	public String toString(){
-		return "CmsRepository id: "+ id+ " jaasAppName: "+ applicationPolicyName;
+		return "CmsRepository id: "+ id;
 	}
 
 	/**
@@ -170,17 +167,6 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 	 */
 	public String getRestfulApiBasePath() {
 		return restfulApiBasePath;
-	}
-
-
-	/**
-	 * Return the application policy name which contains all necessary 
-	 * JAAS configuration parameters
-	 * 
-	 * @return Application Policy Name as defined in astroboa-conf.xml
-	 */
-	public String getApplicationPolicyName() {
-		return applicationPolicyName;
 	}
 
 

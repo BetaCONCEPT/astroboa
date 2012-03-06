@@ -155,8 +155,6 @@ public abstract class AbstractRepositoryTest extends AbstractAstroboaTest{
 	
 	protected void preSetup() throws Exception{
 		
-		System.setProperty("java.security.auth.login.config",new ClassPathResource("astroboa-test-jaas.config").getURL().toString());
-		
 		astroboaVersion = System.getProperty("astroboaVersion");
 		
 		TestLogPolicy.setLevelForLogger(Level.ERROR, ContentDefinitionConfiguration.class.getName());

@@ -28,7 +28,7 @@ Authors
 	<parent>
 		<groupId>org.betaconceptframework.astroboa</groupId>  
 		<artifactId>astroboa-parent</artifactId>
-		<version>3.1.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>astroboa-tests</artifactId>    
 	<name>Astroboa Tests</name>
@@ -199,45 +199,30 @@ Authors
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-api</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-model</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.betaconceptframework.astroboa</groupId>
 			<artifactId>astroboa-engine</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.betaconceptframework.astroboa</groupId>
-			<artifactId>astroboa-jaas</artifactId>
-			<version>3.1.0-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
+ 		<dependency>
 			<groupId>javax.jcr</groupId>
 			<artifactId>jcr</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-
+ 		
 		<!-- SLF4J API is an abstraction of various logging systems. This allows the
 		use of any logging framework at the time of deployment -->
 		<dependency>
@@ -263,10 +248,22 @@ Authors
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- It is not used directly but through SPRING JOTM Factory Bean -->
 		<dependency>
 	 		<groupId>jotm</groupId>
@@ -282,21 +279,11 @@ Authors
 		</dependency>
   			
 		<dependency>
-			<groupId>javaee</groupId>
+			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
-			<version>5</version>
-			<!-- Since in betaconcept-parent has provided scope we must
-			explicitly specify here the runtime scope in order to be available
-			to any module that depends on this one -->
 			<scope>test</scope>
 		</dependency>
-  			
-		<dependency>
-			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-jcr</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
+  					
 	</dependencies>
 
 	<scm>

@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * It loads the configuration for all repositories managed by the Astroboa server.
  * 
  * It expects to find configuration file astroboa-conf.xml in the path
- * specified in the system property with key 'jboss.server.config.url'
+ * specified in the system property with key {@link CmsConstants#ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME}
  * 
  * It also expects to find Xml Schema astroboa-conf-{version}.xsd in 
  * the classpath inside the META-INF directory.
@@ -83,8 +83,6 @@ public enum RepositoryRegistry{
 	private File configuration = null;
 
 	private long lastModified;
-	
-	private String configurationHomeDir = System.getProperty("jboss.server.config.url");
 	
 	private RepositoryRegistry() {
 
@@ -334,7 +332,7 @@ public enum RepositoryRegistry{
 		URL configurationSchemaURL = this.getClass().getResource(ASTROBOA_CONFIGURATION_XSD_FILEPATH);
 		
 		if (configurationSchemaURL ==null){
-			throw new Exception("Could not find "+ASTROBOA_CONFIGURATION_XSD_FILEPATH+ " nor in "+configurationHomeDir+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME+ " in classpath");
+			throw new Exception("Could not find "+ASTROBOA_CONFIGURATION_XSD_FILEPATH+ " in classpath");
 		}
 
 		
@@ -350,17 +348,22 @@ public enum RepositoryRegistry{
 	private void loadConfigurationXml() throws MalformedURLException,
 			IOException, Exception {
 		
-		if (configurationHomeDir != null){
-			//We expect to find xml in JBOSS-HOME/server/default/conf directory
-			if (configurationHomeDir.startsWith("file:")){
+		if (StringUtils.isNotBlank(CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY)){
+			
+			String configurationHomeDir = new String(CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY);
+			
+			if (CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY.startsWith("file:")){
 				configurationHomeDir = StringUtils.removeStart(configurationHomeDir, "file:");
 			}
 			
 			configuration = new File(configurationHomeDir+File.separator+ASTROBOA_CONFIGURATION_FILE);
+			
+			if (! configuration.exists()) {
+				throw new Exception("Astroboa Configuration "+ASTROBOA_CONFIGURATION_FILE+ " could not be located in  path "+ configurationHomeDir+File.separator+ASTROBOA_CONFIGURATION_FILE); 
+			}
 		}
-	
-		if (configuration ==null || ! configuration.exists()){
-			throw new Exception("Could not find "+ASTROBOA_CONFIGURATION_FILE+ " in path "+configuration.getAbsolutePath());
+		else {
+			throw new Exception("Astroboa Configuration Home Directory is null. System property '"+CmsConstants.ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME+"' does not exist or has no value ");
 		}
 		
 		lastModified = configuration.lastModified();
@@ -378,15 +381,6 @@ public enum RepositoryRegistry{
 		
 		if (repositories != null){
 			return repositories.getServerURL();
-		}
-		
-		return null;
-	}
-
-
-	public String getDefaultJaasApplicationPolicyName() {
-		if (repositories != null){
-			return repositories.getJaasApplicationPolicyName();
 		}
 		
 		return null;

@@ -61,7 +61,6 @@ import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.BinaryChannelRenderer;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.CmsRepositoryEntityRenderer;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.ContentObjectRenderer;
-import org.betaconceptframework.astroboa.engine.jcr.renderer.RepositoryUserRenderer;
 import org.betaconceptframework.astroboa.engine.jcr.renderer.TopicRenderer;
 import org.betaconceptframework.astroboa.engine.jcr.util.CmsRepositoryEntityUtils;
 import org.betaconceptframework.astroboa.engine.jcr.util.JcrValueUtils;
@@ -108,8 +107,6 @@ public class LazyComplexCmsPropertyLoader {
 	@Autowired
 	private TopicRenderer topicRenderer;
 	@Autowired
-	private RepositoryUserRenderer repositoryUserRenderer;
-	@Autowired
 	private ContentObjectRenderer contentObjectRenderer;
 
 	private String getLocale(RenderProperties contentObjectRenderProperties) throws RepositoryException {
@@ -143,7 +140,7 @@ public class LazyComplexCmsPropertyLoader {
 			//Otherwise a blank template for this child property will be created
 			Node propertyContainerNode = null;
 			if (StringUtils.isNotBlank(jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty)){
-				propertyContainerNode = session.getNodeByUUID(jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty);
+				propertyContainerNode = session.getNodeByIdentifier(jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty);
 			}
 
 			if (cachedCmsRepositoryEntities == null){
@@ -276,7 +273,7 @@ public class LazyComplexCmsPropertyLoader {
 			try{
 				//This is meaningful only if contentObject UUID is provided
 				if (StringUtils.isNotBlank(contentObjectNodeUUID)){
-					contentObjectNode = session.getNodeByUUID(contentObjectNodeUUID);
+					contentObjectNode = session.getNodeByIdentifier(contentObjectNodeUUID);
 
 					if (contentObjectNode != null){
 						renderVersionNames(simpleContentObjectProperty, contentObjectNode, session);
@@ -424,7 +421,7 @@ public class LazyComplexCmsPropertyLoader {
 				CmsProperty<?,?> newCmsProperty = createNewCmsProperty(currentChildPropertyDefinition, childPropertyName, locale); 
 
 				if (newCmsProperty instanceof LazyCmsProperty){
-					((LazyCmsProperty)newCmsProperty).setPropertyContainerNodeUUID(nodeOfComplexProperty.getUUID());
+					((LazyCmsProperty)newCmsProperty).setPropertyContainerNodeUUID(nodeOfComplexProperty.getIdentifier());
 				}
 
 				//Render Complex Property Id
@@ -484,7 +481,7 @@ public class LazyComplexCmsPropertyLoader {
 		if (contentObjectNode.hasProperty(JcrBuiltInItem.JcrFrozenUUID.getJcrName()))
 			versioningHistory = versionUtils.getVersionHistoryForNode(session, cmsRepositoryEntityUtils.getCmsIdentifier(contentObjectNode));
 		else
-			versioningHistory = contentObjectNode.getVersionHistory();
+			versioningHistory = session.getWorkspace().getVersionManager().getVersionHistory(contentObjectNode.getPath());
 
 		if (versioningHistory != null)
 		{
@@ -753,7 +750,7 @@ public class LazyComplexCmsPropertyLoader {
 			//Load property container node if a UUID is provided
 			//Otherwise a blank template for this child property will be created
 			try{
-				Node propertyContainerNode = session.getNodeByUUID(jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty);
+				Node propertyContainerNode = session.getNodeByIdentifier(jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty);
 				
 				return propertyPathContainsValue(propertyPath,	propertyContainerNode);
 				

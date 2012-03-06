@@ -929,7 +929,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		CmsOutcome<ContentObject> outcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		for (ContentObject co: outcome.getResults()){
-			Assert.assertEquals(outcome.getRanking(co), 1.0, "Invalid ranking in search results for object "+co.getSystemName());
+			Assert.assertTrue(outcome.getRanking(co) > 1.0, "Invalid ranking in search results for object "+co.getSystemName());
 		}
 
 		

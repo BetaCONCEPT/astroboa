@@ -28,6 +28,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -64,6 +65,7 @@ import org.slf4j.LoggerFactory;
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
+@ApplicationPath("/")
 @Path("/")
 public class ResourceApiProxy {
 

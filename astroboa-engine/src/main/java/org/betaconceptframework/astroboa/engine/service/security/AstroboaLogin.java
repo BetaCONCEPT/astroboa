@@ -4,25 +4,24 @@
  * This file is part of Astroboa.
  *
  * Astroboa is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * Astroboa is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with Astroboa.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.betaconceptframework.astroboa.test;
+package org.betaconceptframework.astroboa.engine.service.security;
 
 import java.io.IOException;
 import java.security.acl.Group;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,9 +34,9 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
-import javax.security.auth.spi.LoginModule;
 
 import org.apache.commons.lang.StringUtils;
+import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.security.AstroboaPrincipalName;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.DisplayNamePrincipal;
@@ -46,6 +45,8 @@ import org.betaconceptframework.astroboa.api.security.PersonUserIdPrincipal;
 import org.betaconceptframework.astroboa.api.security.management.IdentityStore;
 import org.betaconceptframework.astroboa.api.security.management.Person;
 import org.betaconceptframework.astroboa.configuration.RepositoryRegistry;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
+import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryDao;
 import org.betaconceptframework.astroboa.security.AstroboaAuthenticationCallback;
 import org.betaconceptframework.astroboa.security.CmsGroup;
 import org.betaconceptframework.astroboa.security.CmsPrincipal;
@@ -54,16 +55,17 @@ import org.betaconceptframework.astroboa.security.management.CmsPerson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 /**
- * Wrapper class for AstroboaLoginModule located in JAAS.
+ * This class is responsible for the authentication of a user who wants
+ * to connect to an Astroboa repository.
  * 
- * This class contains the same code with the Login Module provided 
- * in astroboa-jaas with the difference that it uses an IdentityStoreTest 
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class TestLoginModule implements LoginModule{
+public class AstroboaLogin {
 
 	private  final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -77,48 +79,61 @@ public class TestLoginModule implements LoginModule{
 
 	private CallbackHandler callbackHandler;
 
-	//private Map sharedState;
-
-	//private Map options;
-
 	private IdentityPrincipal identity;
 
+	private String repositoryId;
+
+	private RepositoryDao repositoryDao;
+
+	private String authenticationTokenForSYSTEMofInternalIdentityStore;
+
+	
+	public AstroboaLogin(CallbackHandler callbackHandler, IdentityStore internalIdentityStore, RepositoryDao repositoryDao) {
+
+		this.subject = new Subject();
+		this.callbackHandler = callbackHandler;
+		this.identity = null;
+		this.identityStore = internalIdentityStore;
+		this.loggedInPerson = null;
+		this.useExternalIdentity = false;
+		this.repositoryId = null;
+		this.repositoryDao = repositoryDao;
+		
+	}
 	
 	/**
 	 * Override login to provide extra checks in case user credentials are
 	 * correct
+	 * @return 
 	 */
-	public boolean login() throws LoginException {
+	public Subject login() throws LoginException {
 
 		boolean loginIsSuccessful =  internalLogin();
 
 		if ( loginIsSuccessful == true ){
 
-			//Load Person and execute some extra checks
-			//Normally loggedInPerson must have already been initialized
-
-			/*if (BooleanUtils.isFalse(loggedInPerson.getUserData().getAccountNonLocked())) {
-				throw new AccountLockedException(getUsername());
-			}*/
-
 			if (!loggedInPerson.isEnabled()) {
 				throw new AccountNotFoundException(getUsername());
 			}
 
-			/*if (BooleanUtils.isFalse(loggedInPerson.getUserData().getAccountNonExpired())) {
-				throw new AccountExpiredException(getUsername());
-			}
+			//Add identity 
+			addIdentityPrincipalToSubject();
 
-			if (BooleanUtils.isFalse(loggedInPerson.getUserData().getCredentialsNonExpired())) {
-				throw new CredentialExpiredException(getUsername());
-			}*/
+			//Add PersonUserIdPrincipal to subject
+			addPersonUserIdPrincipalToSubject();
 
-			return true;
+			//Add display name principal
+			addDisplayNamePrincipalToSubject();
+
+			//Add roles to subject
+			addRolesToSubject();
+			
+			return subject;
 		}
 		else{
 			throw new LoginException(getUsername());
 		}
-
+	
 	}
 
 	private String getUsername() {
@@ -139,7 +154,7 @@ public class TestLoginModule implements LoginModule{
 		String password = credentialsInfo[1];
 		String secretKey = credentialsInfo[2];
 		String identityStoreLocation = credentialsInfo[3];
-		String repositoryId = credentialsInfo[4];
+		repositoryId = credentialsInfo[4];
 
 
 		/*
@@ -157,12 +172,8 @@ public class TestLoginModule implements LoginModule{
 		/*
 		 * User is not ANONYMOUS
 		 */
-		
-		if (StringUtils.isBlank(identityStoreLocation)){
-			throw new FailedLoginException("No identity store location is provided");
-		}
-
 		initializeIdentityStore(identityStoreLocation);
+		
 
 		//All went well
 		//Authenticate using IdentityStore
@@ -171,7 +182,7 @@ public class TestLoginModule implements LoginModule{
 		if (password == null)
 		{
 			//User must exist
-			if (! identityStore.userExists(username))
+			if (! getIdentityStore().userExists(username))
 			{
 				throw new FailedLoginException(username);
 			}
@@ -183,14 +194,25 @@ public class TestLoginModule implements LoginModule{
 			}
 			
 		}
-		else if (!identityStore.authenticate(username, password))
+		else if (!getIdentityStore().authenticate(username, password))
 		{
 			throw new FailedLoginException(username);	
 		}
 
-		identity = new IdentityPrincipal(username);
-
 		loadPersonByUserName(username);
+		
+		//Identity is username as returned by Identity Store
+		//Since username may be case insensitive we do not keep value entered by
+		//user but rather we keep value returned from IdentityStore
+		//which is responsible to provide username entered during user
+		//registration   
+		//identity = new IdentityPrincipal(username);
+		if (loggedInPerson == null || StringUtils.isBlank(loggedInPerson.getUsername()))
+		{
+			throw new FailedLoginException("No username returned from IdentityStore during login of user "+username);
+		}
+		
+		identity = new IdentityPrincipal(loggedInPerson.getUsername());
 
 		return true;
 	}
@@ -198,17 +220,18 @@ public class TestLoginModule implements LoginModule{
 	private void initializeIdentityStore(String identityStoreLocation)
 			throws FailedLoginException {
 		
-		if (useExternalIdentity)
-		{
-			initializeExternalIdentityStore(identityStoreLocation);
-		}
-		else
-		{
-			initializeAstroboaClientForIdentityStore(identityStoreLocation);
+		if (StringUtils.isBlank(identityStoreLocation)){
+			throw new FailedLoginException("No identity store location is provided");
 		}
 		
-		if (identityStore == null)
-		{
+		if (useExternalIdentity){
+			initializeExternalIdentityStore(identityStoreLocation);
+		}
+		else{
+			setupContextForInternalIdentityStore(identityStoreLocation);
+		}
+		
+		if (identityStore == null){
 			throw new FailedLoginException("Could not initialize identity store in location (either a JNDI name or a repository id)"+ identityStoreLocation);
 		}
 	}
@@ -241,7 +264,23 @@ public class TestLoginModule implements LoginModule{
 
 					if (StringUtils.isNotBlank(initialContextFactoryName)){
 
-						identityStore = (IdentityStore) context.lookup(identityStoreLocation);
+						Object serviceReference = context.lookup(identityStoreLocation);
+						
+						if (! (serviceReference instanceof IdentityStore)){
+							if (! identityStoreLocation.endsWith("/local")){
+								//JNDIName is provided by the user and the object it references is not an instance of IdentityStore.
+								//It is probably an instance of NamingContext which is on top of a local or remote service
+								//Since JNDIName does not end with "/local" , try to locate the local service under the returned NamingContext
+								identityStore = (IdentityStore) context.lookup(identityStoreLocation+"/local");
+							}
+							else{
+								throw new Exception("JNDI Name "+identityStoreLocation+ " refers to an object whose type is not IdentityStore. Unable to locate. External Identity Store ");
+							}
+						}
+						else{
+							identityStore = (IdentityStore) serviceReference;
+						}
+						//TODO: It may also be the case another login to the identity store must be done
 
 					}
 					else{
@@ -256,25 +295,28 @@ public class TestLoginModule implements LoginModule{
 
 	}
 
-	private void initializeAstroboaClientForIdentityStore(
-			String identityStoreRepositoryId) {
+	private void setupContextForInternalIdentityStore(String identityStoreRepositoryId) {
 
+		//Since we are using the internal identity store, we must setup the security context
+		//for the user who will be used to connect to the repository which represents the
+		//identity store. This user is the SYSTEM user by default and thus we perform
+		//an internal login without the need of the SYSTEM's password
 		Subject subject = new Subject();
 
 		//System identity
 		subject.getPrincipals().add(new IdentityPrincipal(IdentityPrincipal.SYSTEM));
 
+		//Grant SYSTEM all roles
 		Group rolesPrincipal = new CmsGroup(AstroboaPrincipalName.Roles.toString());
 
 		for (CmsRole cmsRole : CmsRole.values()){
 			rolesPrincipal.addMember(new CmsPrincipal(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(cmsRole, identityStoreRepositoryId)));
 		}
-		
 		subject.getPrincipals().add(rolesPrincipal);
+		
+		//Login using the Subject, the provided roles and SYSTEM's permanent key and get the authentication token
+		authenticationTokenForSYSTEMofInternalIdentityStore = repositoryDao.login(identityStoreRepositoryId, subject, RepositoryRegistry.INSTANCE.getPermanentKeyForUser(identityStoreRepositoryId, IdentityPrincipal.SYSTEM));
 
-		AstroboaTestContext.INSTANCE.getRepositoryService().login(identityStoreRepositoryId, subject, null); 
-				
-		identityStore = AstroboaTestContext.INSTANCE.getIdentityStore();
 	}
 
 	private void loadPersonByUserName(String username) throws LoginException {
@@ -282,7 +324,7 @@ public class TestLoginModule implements LoginModule{
 		if (loggedInPerson == null){
 			try{
 
-				loggedInPerson = identityStore.retrieveUser(username); 
+				loggedInPerson = getIdentityStore().retrieveUser(username); 
 
 			}
 			catch(Exception e){
@@ -297,39 +339,12 @@ public class TestLoginModule implements LoginModule{
 		}
 	}
 
-
-
-	/* (non-Javadoc)
-	 * @see org.jboss.security.auth.spi.AbstractServerLoginModule#commit()
-	 */
-	@Override
-	public boolean commit() throws LoginException {
-
-		//Add identity 
-		addIdentityPrincipalToSubject();
-
-		//Add PersonUserIdPrincipal to subject
-		addPersonUserIdPrincipalToSubject();
-
-		//Add display name principal
-		addDisplayNamePrincipalToSubject();
-
-		//Add roles to subject
-		addRolesToSubject();
-		
-		return true;
-	}
-
-
-
 	private void addDisplayNamePrincipalToSubject() {
 
 		if (StringUtils.isNotBlank(loggedInPerson.getDisplayName())){
 			subject.getPrincipals().add(new DisplayNamePrincipal(loggedInPerson.getDisplayName()));
 		}
 	}
-
-
 
 
 	private void addPersonUserIdPrincipalToSubject() {
@@ -340,8 +355,6 @@ public class TestLoginModule implements LoginModule{
 			subject.getPrincipals().add(new PersonUserIdPrincipal(personUserId));
 		}
 	}
-
-
 
 
 	private void addIdentityPrincipalToSubject() {
@@ -355,13 +368,14 @@ public class TestLoginModule implements LoginModule{
 		//Must return at list one group named "Roles" in order to be 
 		final Group groupContainingAllRoles = new CmsGroup(AstroboaPrincipalName.Roles.toString());
 
-		if (userIsAnonymous(identity.getName()))
-		{
-			groupContainingAllRoles.addMember(new CmsPrincipal(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForActiveRepository(CmsRole.ROLE_CMS_EXTERNAL_VIEWER)));
+		if (userIsAnonymous(getUsername())){
+
+			//User ANONYMOUS is a virtual user which must have specific role
+			//regardless of whether the identity store is external or internal
+			groupContainingAllRoles.addMember(new CmsPrincipal(CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_EXTERNAL_VIEWER, repositoryId)));
 		}
-		else
-		{
-			List<String> impliedRoles = identityStore.getImpliedRoles(getUsername());
+		else{
+			List<String> impliedRoles = getIdentityStore().getImpliedRoles(getUsername());
 
 			//Load all roles in a tree
 			if (impliedRoles != null){
@@ -374,19 +388,6 @@ public class TestLoginModule implements LoginModule{
 
 		subject.getPrincipals().add(groupContainingAllRoles);
 	}
-
-
-	public void initialize(Subject subject, CallbackHandler callbackHandler,
-			Map sharedState, Map options) {
-
-		this.subject = subject;
-		this.callbackHandler = callbackHandler;
-		
-		// this.sharedState = sharedState;
-		//	this.options = options;
-
-	}
-
 
 
 	/**
@@ -422,8 +423,7 @@ public class TestLoginModule implements LoginModule{
 		String userSecretKey = null;
 		String repositoryId = null;
 
-		try
-		{
+		try{
 			callbackHandler.handle(callbacks);
 			username = nc.getName();
 			char[] tmpPassword = pc.getPassword();
@@ -443,14 +443,12 @@ public class TestLoginModule implements LoginModule{
 			
 			repositoryId = authenticationCallback.getRepositoryId();
 		}
-		catch(IOException e)
-		{
+		catch(IOException e){
 			LoginException le = new LoginException("Failed to get username/password");
 			le.initCause(e);
 			throw le;
 		}
-		catch(UnsupportedCallbackException e)
-		{
+		catch(UnsupportedCallbackException e){
 			LoginException le = new LoginException("CallbackHandler does not support: " + e.getCallback());
 			le.initCause(e);
 			throw le;
@@ -463,17 +461,16 @@ public class TestLoginModule implements LoginModule{
 		
 		return info;
 	}
-
-
-
-
-	@Override
-	public boolean abort() throws LoginException {
-		return true;
+	
+	private IdentityStore getIdentityStore(){
+		if (!useExternalIdentity){
+			if (StringUtils.isBlank(authenticationTokenForSYSTEMofInternalIdentityStore)){
+				throw new CmsException("Internal Identity Store must be used but there is no authentication token for the SYSTEM user");
+			}
+			
+			AstroboaClientContextHolder.activateClientContextForAuthenticationToken(authenticationTokenForSYSTEMofInternalIdentityStore);
+		}
+		
+		return identityStore;
 	}
-	@Override
-	public boolean logout() throws LoginException {
-		return true;
-	}
-
 }

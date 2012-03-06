@@ -416,7 +416,7 @@ public class TopicUtils {
 				}
 
 				//Since topic is a root topic then its parent must be a taxonomy node
-				if (!topicJcrNode.getParent().getUUID().equals(taxonomyNode.getUUID())){
+				if (!topicJcrNode.getParent().getIdentifier().equals(taxonomyNode.getIdentifier())){
 					checkThatReferrerContentObjectsAcceptNewTaxonomy(currentTaxonomyName, topic, session ,topic.getTaxonomy().getName());
 					session.move(topicJcrNode.getPath(), taxonomyNode.getPath()+CmsConstants.FORWARD_SLASH+topicJcrNode.getName());
 				}
@@ -545,7 +545,7 @@ public class TopicUtils {
 		}
 
 		//Change Parent only if current parent is not the same
-		if (!topicJcrNode.getParent().getUUID().equals(newParentTopicJcrNode.getUUID())){
+		if (!topicJcrNode.getParent().getIdentifier().equals(newParentTopicJcrNode.getIdentifier())){
 			Node parentTaxonomyNode = JcrNodeUtils.getTaxonomyJcrNode(newParentTopicJcrNode, true);
 			
 			String parentTaxonomyName = parentTaxonomyNode.getName();

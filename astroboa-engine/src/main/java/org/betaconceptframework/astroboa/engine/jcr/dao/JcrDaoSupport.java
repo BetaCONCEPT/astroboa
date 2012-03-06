@@ -25,8 +25,8 @@ import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springmodules.jcr.SessionFactory;
-import org.springmodules.jcr.SessionFactoryUtils;
+import org.springframework.extensions.jcr.SessionFactory;
+import org.springframework.extensions.jcr.SessionFactoryUtils;
 
 /**
  * Provides jcrDaoSupport from RepositoryContextImpl

@@ -19,6 +19,7 @@
                             "http://jackrabbit.apache.org/dtd/repository-1.6.dtd">
 <!-- Example Repository Configuration File -->
 <Repository>
+
 	<DataStore class="org.apache.jackrabbit.core.data.FileDataStore">
         <param name="path" value="${rep.home}/datastore"/>
         <param name="minRecordLength" value="1"/>
@@ -83,6 +84,7 @@
         <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
             <param name="path" value="${wsp.home}/index"/>
             <param name="directoryManagerClass" value="org.apache.jackrabbit.core.query.lucene.directory.RAMDirectoryManager"/>
+            
             <param name="forceConsistencyCheck" value="false"/>
             <param name="autoRepair" value="true"/>
 	    <param name="analyzer" value="org.betaconceptframework.astroboa.lucene.analyzer.GreekEnglishAnalyzer"/>
@@ -91,24 +93,12 @@
             <param name="extractorPoolSize" value="10" />
             <param name="extractorTimeout" value="300000" />
             <param name="extractorBackLogSize" value="200" />
-           
- 
-            <param name="textFilterClasses" 
-            value="org.apache.jackrabbit.extractor.MsWordTextExtractor,
-            org.apache.jackrabbit.extractor.MsExcelTextExtractor,
-            org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,
-            org.apache.jackrabbit.extractor.PdfTextExtractor,
-            org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,
-            org.apache.jackrabbit.extractor.RTFTextExtractor,
-            org.apache.jackrabbit.extractor.HTMLTextExtractor,
-            org.apache.jackrabbit.extractor.XMLTextExtractor"/>
-
 
         </SearchIndex>
     </Workspace>
 
     <!--
-        Configures the versioning
+        Configures the versionning
     -->
     <Versioning rootPath="${rep.home}/version">
         <!--
