@@ -6,11 +6,22 @@
   <!-- This is the top level ear module, which contains all the classes in the EAR's lib folder     -->
   <deployment>
   
-    <!-- Exclusions allow you to prevent the server from automatically adding some dependencies     
+    <!-- Exclusions allow you to prevent the server from automatically adding some dependencies -->     
     <exclusions>
-        <module name="org.javassist" />
+    
+    	<!-- 
+    		Use this exclusion only when deployed in TorqueBox in order to resolve a dependency conflict.
+    		TorqueBox Cache uses Lucene 3.5 where as Jackrabbit uses Lucene 3.0.3 . For some reason, although
+    		Lucene 3.0.3 is provided in ear's lib directory, Lucene 3.5 is used. 
+    		
+    		Therefore we need to explicitly define that TorqueBox Cache is not a dependency of Astroboa EAR.
+    		
+    		Note however that if you need to deploy Astroboa in another Application Server or a clean Jboss AS
+    		then this exclusion is not needed.
+    	 -->
+      	<module name="org.torquebox.cache" />
     </exclusions>
-    -->
+    
     <!-- This allows you to define additional dependencies, it is the same as using the Dependencies: manifest attribute 
     <dependencies>
       <module name="deployment.javassist.proxy" />
@@ -39,7 +50,11 @@
         	 -->
       	<module name="org.springframework.spring" slot="snowdrop" export="true"/>
       	
-      	
+      	<!--
+      		Inform JBoss that this EAR depends on PostgreSQL Module that must be installed. 
+   		-->
+      	<module name="org.postgresql"  export="true"/>
+      	<module name="org.apache.derby"  export="true"/>
   	</dependencies>
   </deployment>
   
