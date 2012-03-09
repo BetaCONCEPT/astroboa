@@ -197,7 +197,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 	// Integer values. This map contains four entries
 	//one for each access list. Since JSF and EL parser does not handle map paremters whose key is an
 	//enum, map's key is an enum but take values from the AccessRight enum
-	private Map<String, Integer> radioButtonSelectionMap = new HashMap<String, Integer>();
+	private Map<String, String> radioButtonSelectionMap = new HashMap<String, String>();
 
 	/* If the user selects the security setting: ONLY_THE_SPECIFIED_GROUPS_AND_USERS(3), then
 	 * for the 4 types of access rights we use the following 4 lists of HashMaps to hold for each type of access rights 
@@ -540,10 +540,10 @@ public class ContentObjectEdit extends AbstractUIBean {
 
 		clearUIAccessRightLists();
 		
-		radioButtonSelectionMap.put(AccessRight.canBeReadBy.toString(), 1);// READ BY ALL
-		radioButtonSelectionMap.put(AccessRight.canBeUpdatedBy.toString(), 2); // UPDATED BY NONE (only owner is allowed)
-		radioButtonSelectionMap.put(AccessRight.canBeDeletedBy.toString(), 2); // DELETED BY NONE (only owner is allowed)
-		radioButtonSelectionMap.put(AccessRight.canBeTaggedBy.toString(), 1); // TAGGED BY ALL
+		radioButtonSelectionMap.put(AccessRight.canBeReadBy.toString(), "1");// READ BY ALL
+		radioButtonSelectionMap.put(AccessRight.canBeUpdatedBy.toString(), "2"); // UPDATED BY NONE (only owner is allowed)
+		radioButtonSelectionMap.put(AccessRight.canBeDeletedBy.toString(), "2"); // DELETED BY NONE (only owner is allowed)
+		radioButtonSelectionMap.put(AccessRight.canBeTaggedBy.toString(), "1"); // TAGGED BY ALL
 		 
 
 		contentObjectTitle = null;
@@ -1224,7 +1224,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		
 		if (radioButtonSelectionMap.containsKey(accessRight.toString())) {
 			
-			switch (radioButtonSelectionMap.get(accessRight.toString())) {
+			switch (Integer.parseInt(radioButtonSelectionMap.get(accessRight.toString()))) {
 			case 1:
 				
 				if (accessibilityProperty.hasValues()){
@@ -1256,9 +1256,9 @@ public class ContentObjectEdit extends AbstractUIBean {
 			default:
 				// we do not support any other value. reset radio button to default, generate an error message and return
 				JSFUtilities.addMessage(null, "object.edit.invalid.accessibility.value", 
-						new String[] {String.valueOf(radioButtonSelectionMap.get(accessRight.toString()))}, FacesMessage.SEVERITY_WARN); 
+						new String[] {radioButtonSelectionMap.get(accessRight.toString())}, FacesMessage.SEVERITY_WARN); 
 			
-				radioButtonSelectionMap.put(accessRight.toString(), 1);
+				radioButtonSelectionMap.put(accessRight.toString(), "1");
 			
 				return "error";
 				
@@ -1345,13 +1345,13 @@ public class ContentObjectEdit extends AbstractUIBean {
 		if (CollectionUtils.isNotEmpty(accessValuesList)) {
 
 			if(accessValuesList.get(0).equals(ContentAccessMode.ALL.toString())) {
-				radioButtonSelectionMap.put(accessRight.toString(), 1);
+				radioButtonSelectionMap.put(accessRight.toString(), "1");
 			}
 			else if (accessValuesList.get(0).equals(ContentAccessMode.NONE.toString())) {
-				radioButtonSelectionMap.put(accessRight.toString(), 2);
+				radioButtonSelectionMap.put(accessRight.toString(), "2");
 			}
 			else {
-				radioButtonSelectionMap.put(accessRight.toString(), 3);
+				radioButtonSelectionMap.put(accessRight.toString(), "3");
 				copyContentObjectAccessRightListToUIAccessRightList(accessValuesList, userListByAccessRight.get(accessRight.toString()));
 			}
 		}
@@ -1359,15 +1359,15 @@ public class ContentObjectEdit extends AbstractUIBean {
 			if (StringUtils.isBlank(defaultAccessRightValue))
 			{
 				//Default value for access right
-				radioButtonSelectionMap.put(accessRight.toString(), 1);
+				radioButtonSelectionMap.put(accessRight.toString(), "1");
 			}
 			else
 			{
 				if(StringUtils.equals(ContentAccessMode.ALL.toString(), defaultAccessRightValue)) {
-					radioButtonSelectionMap.put(accessRight.toString(), 1);
+					radioButtonSelectionMap.put(accessRight.toString(), "1");
 				}
 				else if (StringUtils.equals(ContentAccessMode.NONE.toString(), defaultAccessRightValue)) {
-					radioButtonSelectionMap.put(accessRight.toString(), 2);
+					radioButtonSelectionMap.put(accessRight.toString(), "2");
 				}
 			}
 		}
@@ -1397,7 +1397,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 	private void clearUIAccessRightLists() {
 		
 		if (radioButtonSelectionMap == null){
-			radioButtonSelectionMap = new HashMap<String, Integer>();
+			radioButtonSelectionMap = new HashMap<String, String>();
 		}
 		else{
 			radioButtonSelectionMap.clear();
@@ -2086,7 +2086,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 	/**
 	 * @return the radioButtonSelectionMap
 	 */
-	public Map<String, Integer> getRadioButtonSelectionMap() {
+	public Map<String, String> getRadioButtonSelectionMap() {
 		return radioButtonSelectionMap;
 	}
 
