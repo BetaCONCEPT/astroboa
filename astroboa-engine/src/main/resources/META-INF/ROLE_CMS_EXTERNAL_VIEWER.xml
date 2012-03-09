@@ -16,8 +16,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <accessibility>
         <canBeReadBy>ALL</canBeReadBy>
         <canBeTaggedBy>ALL</canBeTaggedBy>
-   		<canBeUpdatedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeUpdatedBy>
-        <canBeDeletedBy>ROLE_CMS_IDENTITY_STORE_EDITOR</canBeDeletedBy>
+   		<canBeUpdatedBy>ROLE_CMS_IDENTITY_STORE_EDITOR@IDENTITY_STORE_REPOSITORY_ID</canBeUpdatedBy>
+        <canBeDeletedBy>ROLE_CMS_IDENTITY_STORE_EDITOR@IDENTITY_STORE_REPOSITORY_ID</canBeDeletedBy>
     </accessibility>
     <name>ROLE_CMS_EXTERNAL_VIEWER</name>
 </roleObject:roleObject>

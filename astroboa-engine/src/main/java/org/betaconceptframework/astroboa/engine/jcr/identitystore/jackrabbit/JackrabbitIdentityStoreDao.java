@@ -44,6 +44,7 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectC
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.IdentityPrincipal;
 import org.betaconceptframework.astroboa.api.service.ContentService;
+import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.dao.ImportDao;
 import org.betaconceptframework.astroboa.engine.jcr.dao.JcrDaoSupport;
 import org.betaconceptframework.astroboa.engine.jcr.dao.RepositoryUserDao;
@@ -64,6 +65,8 @@ import org.springframework.core.io.Resource;
 public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 	private static final String SYSTEM_USER_ID = "SYSTEM_USER_ID";
+	private static final String IDENTITY_STORE_REPOSITORY_ID = "IDENTITY_STORE_REPOSITORY_ID";
+	
 
 	private final Logger  logger = LoggerFactory.getLogger(getClass());
 
@@ -149,7 +152,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 				for (String repositoryId : repIds){
 					for(Resource roleXmlResource : roleXmlResources){
-						ContentObject roleObject = importRole(roleXmlResource, systemUserId, repositoryId);
+						ContentObject roleObject = importRole(roleXmlResource, systemUserId, repositoryId,identityStoreRepository.getId());
 
 						if (roleObject != null)
 						{
@@ -317,7 +320,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 		return roleOutcome.getResults().get(0);
 	}
 
-	public void createSystemPerson(String cmsRepositoryId, String identityStoreId)  {
+	public void createSystemPerson(String cmsRepositoryId, String idOfTheRepositoryWhichRepresentsTheIdentityStore)  {
 
 		InputStream inputStream = null;
 		try{
@@ -365,6 +368,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 					//Replace ids
 					systemPersonXml = StringUtils.replace(systemPersonXml, SYSTEM_USER_ID, systemUserId);
+					systemPersonXml = StringUtils.replace(systemPersonXml, IDENTITY_STORE_REPOSITORY_ID, idOfTheRepositoryWhichRepresentsTheIdentityStore);
 
 
 					//Obtain content object
@@ -386,8 +390,8 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 
 			systemUpdated = fixRolesForSystemIfBroken(systemRoleProperty, cmsRepositoryId) || systemUpdated;
 
-			if (!StringUtils.equals(cmsRepositoryId, identityStoreId)){
-				systemUpdated = fixRolesForSystemIfBroken(systemRoleProperty, identityStoreId) || systemUpdated;
+			if (!StringUtils.equals(cmsRepositoryId, idOfTheRepositoryWhichRepresentsTheIdentityStore)){
+				systemUpdated = fixRolesForSystemIfBroken(systemRoleProperty, idOfTheRepositoryWhichRepresentsTheIdentityStore) || systemUpdated;
 			}
 
 			//Save ContentObject
@@ -515,7 +519,7 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 		return false;
 	}
 
-	private ContentObject importRole(Resource roleXmlResource, String systemUserId, String cmsRepositoryId) throws Exception {
+	private ContentObject importRole(Resource roleXmlResource, String systemUserId, String cmsRepositoryId, String idOfTheRepositoryWhichRepresentsTheIdentityStore) throws Exception {
 
 		if (roleXmlResource ==null || ! roleXmlResource.exists()){
 			throw new CmsException("No roles xml file found");
@@ -550,7 +554,37 @@ public class JackrabbitIdentityStoreDao extends JcrDaoSupport{
 				//Replace ids
 				roleXml = StringUtils.replace(roleXml, SYSTEM_USER_ID, systemUserId);
 				roleXml = StringUtils.replace(roleXml, roleName, roleAffilitation);
+				roleXml = StringUtils.replace(roleXml, IDENTITY_STORE_REPOSITORY_ID, idOfTheRepositoryWhichRepresentsTheIdentityStore);
 
+				/*
+				 * Currently, the identifier of the repository which represents the identity store
+				 * is used in accessibility.canBeUpdated / accessibility.canBeDeleted properties
+				 * whose value follows the pattern ROLE_CMS_IDENTITY_STORE_EDITOR@IDENTITY_STORE_REPOSITORY_ID. 
+				 * In the case of the ROLE_CMS_IDENTITY_STORE_EDITOR.xml template, 
+				 * the replacements above will generate the outcome 
+				 * ROLE_CMS_IDENTITY_STORE_EDITOR@<cmsRepositoryId>@<idOfTheRepositoryWhichRepresentsTheIdentityStore>
+				 * 
+				 * That is happening because the role name ROLE_CMS_IDENTITY_STORE_EDITOR is replaced once
+				 * by the roleAffiliation (roleName + repositoryId)   
+				 * 
+				 * 	roleXml = StringUtils.replace(roleXml, roleName, roleAffilitation);
+				 * 
+				 * 	 ROLE_CMS_IDENTITY_STORE_EDITOR@IDENTITY_STORE_REPOSITORY_ID becomes
+				 * 
+				 * ROLE_CMS_IDENTITY_STORE_EDITOR@<cmsRepositoryId>@IDENTITY_STORE_REPOSITORY_ID
+				 * 
+				 * and then the following replacement is executed
+				 * 
+				 * roleXml = StringUtils.replace(roleXml, IDENTITY_STORE_REPOSITORY_ID, idOfTheRepositoryWhichRepresentsTheIdentityStore);
+				 * 
+				 * to produce the following result 
+				 * 
+				 * ROLE_CMS_IDENTITY_STORE_EDITOR@<cmsRepositoryId>@<idOfTheRepositoryWhichRepresentsTheIdentityStore>
+				 */
+				
+				if (StringUtils.contains(roleXml, "@"+cmsRepositoryId+"@"+idOfTheRepositoryWhichRepresentsTheIdentityStore)){
+					roleXml = StringUtils.replace(roleXml, "@"+cmsRepositoryId+"@"+idOfTheRepositoryWhichRepresentsTheIdentityStore, "@"+idOfTheRepositoryWhichRepresentsTheIdentityStore);
+				}
 				
 				//Obtain content object
 				ImportConfiguration configuration = ImportConfiguration.object()

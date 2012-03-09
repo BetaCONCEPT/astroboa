@@ -37,7 +37,6 @@ import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.security.AstroboaPrincipalName;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
@@ -119,6 +118,11 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 				Assert.assertEquals(((StringProperty)roleContentObject.getCmsProperty("name")).getSimpleTypeValue(), roleAffiliation, "Invalid property name for role object "+ cmsRole.toString());
 				Assert.assertEquals(roleContentObject.getSystemName(), cmsRepositoryEntityUtils.fixSystemName(roleAffiliation), "Invalid system name for role object "+ cmsRole.toString());
 
+				assertSimplePropertyHasValue(roleContentObject, "accessibility.canBeReadBy", "ALL");
+				assertSimplePropertyHasValue(roleContentObject, "accessibility.canBeTaggedBy", "ALL");
+				assertSimplePropertyHasValue(roleContentObject, "accessibility.canBeUpdatedBy", CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_IDENTITY_STORE_EDITOR, TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID));
+				assertSimplePropertyHasValue(roleContentObject, "accessibility.canBeDeletedBy", CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_IDENTITY_STORE_EDITOR, TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID));
+
 				if (cmsRole == CmsRole.ROLE_ADMIN){
 					ObjectReferenceProperty memberOfProperty = (ObjectReferenceProperty)roleContentObject.getCmsProperty("isMemberOf");
 					
@@ -183,8 +187,8 @@ public class IdentityStoreTest extends AbstractRepositoryTest{
 
 		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeReadBy", "ALL");
 		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeTaggedBy", "ALL");
-		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeUpdatedBy", "ROLE_CMS_IDENTITY_STORE_EDITOR");
-		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeDeletedBy", "ROLE_CMS_IDENTITY_STORE_EDITOR");
+		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeUpdatedBy", CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_IDENTITY_STORE_EDITOR, TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID));
+		assertSimplePropertyHasValue(systemPerson, "accessibility.canBeDeletedBy", CmsRoleAffiliationFactory.INSTANCE.getCmsRoleAffiliationForRepository(CmsRole.ROLE_CMS_IDENTITY_STORE_EDITOR, TestConstants.TEST_IDENTITY_STORE_REPOSITORY_ID));
 
 		assertSimplePropertyHasValue(systemPerson, "name.familyName", "ACCOUNT");
 		assertSimplePropertyHasValue(systemPerson, "name.givenName", IdentityPrincipal.SYSTEM);
