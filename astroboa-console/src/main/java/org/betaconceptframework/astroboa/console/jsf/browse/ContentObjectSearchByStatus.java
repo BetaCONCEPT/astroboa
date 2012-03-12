@@ -45,9 +45,7 @@ import javax.faces.event.ActionEvent;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
@@ -141,7 +139,6 @@ public class ContentObjectSearchByStatus extends AbstractUIBean {
 			//It should be 99 as it is zero based
 			contentObjectCriteria.setOffsetAndLimit(0,99);
 			contentObjectCriteria.doNotCacheResults();
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 //			 set required ordering
 			//if (searchResultsFilterAndOrdering.getSelectedResultsOrder() != null) {

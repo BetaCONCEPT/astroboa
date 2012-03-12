@@ -42,7 +42,6 @@ import javax.faces.application.FacesMessage;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
 import org.betaconceptframework.astroboa.console.jsf.ContentObjectList;
@@ -131,7 +130,6 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 			
 			contentObjectCriteria.setOffsetAndLimit(0, pageController.getRowsPerDataTablePage());
 			contentObjectCriteria.doNotCacheResults();
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			
 			// set required ordering
 			// set required ordering

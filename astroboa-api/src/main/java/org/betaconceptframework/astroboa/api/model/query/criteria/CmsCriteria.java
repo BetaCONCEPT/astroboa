@@ -52,25 +52,6 @@ public interface CmsCriteria extends CmsQueryContext {
 	public final static CacheRegion DEFAULT_CACHE_REGION = CacheRegion.TEN_MINUTES;
 	
 	/**
-	 * System Built in Entity functionality has been removed.
-	 *
-	 */
-	@Deprecated
-	public enum SearchMode{
-		/**
-		 * Search all entities
-		 */
-		SEARCH_ALL_ENTITIES,
-		/**
-		 * Search only system built in entities
-		 */
-		SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES, 
-		/**
-		 * Search only non system built in properties
-		 */
-		SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES,
-	}
-	/**
 	 * Returns list of criteria which will participate in the query.
 	 * 
 	 * {@link Condition#AND And} condition will be used to 
@@ -170,29 +151,4 @@ public interface CmsCriteria extends CmsQueryContext {
 	 */
 	void doNotCacheResults();
 
-	/**
-	 * Specify which sub set of entities will participate in the query.
-	 * 
-	 * Default value is {@link SearchMode#SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES}.
-	 * 
-	 * @deprecated This functionality has been marked as deprecated since system builtin 
-	 * entity feature has been removed. You may continue to use this method, in order to
-	 * be able to retrieve entities which have been marked as system until the next major release
-	 * where this method will be removed.
-	 * 
-	 * @param searchMode Search all entities, or system built in entities or all others.
-	 */
-	void setSearchMode(SearchMode searchMode);
-	
-	/**
-	 * Get search mode
-	 * 
-	 * Default value is {@link SearchMode#SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES}.
-	 * 
-	 * @deprecated This functionality has been marked as deprecated since system builtin 
-	 * entity feature has been removed.
-	 *   
-	 * @return Search mode
-	 */
-	SearchMode getSearchMode();
 }

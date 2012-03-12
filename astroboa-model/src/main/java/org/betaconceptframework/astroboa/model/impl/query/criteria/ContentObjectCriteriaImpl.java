@@ -232,10 +232,6 @@ public class ContentObjectCriteriaImpl extends CmsCriteriaImpl implements Conten
 			}
 
 			
-			targetContentObjectCriteria.setSearchMode(getSearchMode());
-
-			
-			
 			//Always copy xpath query last
 			if (xpathQuery != null){
 				targetContentObjectCriteria.setXPathQuery(xpathQuery);

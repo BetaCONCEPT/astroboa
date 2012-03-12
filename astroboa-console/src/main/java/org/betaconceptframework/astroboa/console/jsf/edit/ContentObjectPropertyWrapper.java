@@ -37,7 +37,6 @@ import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
@@ -178,7 +177,6 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			//ContentObject Types criterion
 			if (CollectionUtils.isNotEmpty(acceptedContentTypes)){
 				contentObjectCriteria.addContentObjectTypesEqualsAnyCriterion(acceptedContentTypes);
-				this.contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			}
 
 

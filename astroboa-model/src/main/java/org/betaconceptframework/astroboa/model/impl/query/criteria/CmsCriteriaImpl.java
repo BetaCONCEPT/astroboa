@@ -64,8 +64,6 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 	//Default value is NO cache at all
 	private CacheRegion cacheRegion = CacheRegion.NONE;
 
-	private SearchMode searchMode;
-
 	CmsCriteriaImpl() {
 		nodeType = JcrBuiltInItem.NtBase;
 	}
@@ -130,7 +128,7 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 
 		// Connect each criterion with AND condition
 		//Add default criterion for system built in entity
-		Criterion currentCriterion = generateSystemBuiltinEntityCriterion();
+		Criterion currentCriterion = null;
 		if (CollectionUtils.isNotEmpty(getCriteria())) {
 			for (Criterion criterion : getCriteria()) {
 				if (currentCriterion == null){
@@ -170,28 +168,6 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 		return xpathQuery;
 	}
 
-	private Criterion generateSystemBuiltinEntityCriterion() {
-
-		if (searchMode == null){
-			return null;
-		}
-		
-		switch (searchMode) {
-		case SEARCH_ALL_ENTITIES:
-			//Since we want all entities do not create any criterion
-			return null;
-		case SEARCH_ALL_NON_SYSTEM_BUILTIN_ENTITIES:
-			//search for all entities which DO not have property (backwards compatibility)
-			//or those which have the property but its value is false
-			return CriterionFactory.or(
-					CriterionFactory.isNull("bccms:systemBuiltinEntity"),
-					CriterionFactory.equals("bccms:systemBuiltinEntity", false));
-		case SEARCH_ONLY_SYSTEM_BUILTIN_ENTITIES:
-			return CriterionFactory.equals("bccms:systemBuiltinEntity", true);
-		default:
-			return null;
-		}
-	}
 
 	abstract String getAncestorQuery();
 
@@ -259,17 +235,6 @@ abstract class CmsCriteriaImpl  extends CmsQueryContextImpl implements CmsCriter
 	public void doNotCacheResults() {
 		this.cacheRegion = CacheRegion.NONE;
 	}
-
-	public void setSearchMode(SearchMode searchMode){
-		this.searchMode = searchMode;
-
-		resetXpathQuery();
-	}
-
-	public SearchMode getSearchMode() {
-		return searchMode;
-	}
-
 
 
 }

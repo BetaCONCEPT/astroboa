@@ -28,8 +28,6 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.portal.PortalTree.PortalTreeNodeType;
@@ -61,7 +59,6 @@ public class LazyLoadingPortalTreeRootNode  extends LazyLoadingTreeNodeRichFaces
 
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			contentObjectCriteria.addContentObjectTypeEqualsCriterion(CmsConstants.PORTAL_CONTENT_OBJECT_TYPE);
-			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			contentObjectCriteria.doNotCacheResults();
 
 			CmsOutcome<ContentObject> portalOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
