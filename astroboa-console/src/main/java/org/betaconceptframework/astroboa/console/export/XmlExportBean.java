@@ -234,7 +234,7 @@ public class XmlExportBean {
 					String folderPath = DateUtils.format(created, "yyyy/MM/dd");
 					
 					long nowXml = System.currentTimeMillis();
-					String xml = contentObject.toXml();
+					String xml = contentObject.xml(false);
 					
 					//Build filename
 					String finalName = buildFilename(folderPath, created, contentObject, filenameList);

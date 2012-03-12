@@ -113,10 +113,4 @@ public abstract class CmsRepositoryEntityImpl  implements CmsRepositoryEntity , 
 		return ResourceApiURLUtils.generateUrlForEntity(this, urlProperties);
 	}
 	
-	@Deprecated
-	public String toXml() {
-		return xml(false);
-	}
-
-	
 }

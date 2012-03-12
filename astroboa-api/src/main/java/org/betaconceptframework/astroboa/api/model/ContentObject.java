@@ -202,19 +202,6 @@ public interface ContentObject extends CmsRepositoryEntity {
 	void setSystemName(String systemName);
 	
 	/**
-	 * Provides an xml representation of specified <code>contentObject</code>
-	 * following content object type's xml schema as defined by 
-	 * organization XML schemas.
-	 * 
-	 * <p>
-	 * Note that all properties of content object are exported.
-	 * </p>
-	 * @deprecated Use {@link #xml()} instead
-	 * @return XML instance for this <code>contentObject</code>.
-	 */
-	String toXml();
-	
-	/**
 	 * 
 	 * This method adds a new {@link ComplexCmsProperty} to the provided path.
 	 * 
