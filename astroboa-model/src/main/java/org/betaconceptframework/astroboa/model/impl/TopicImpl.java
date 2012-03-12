@@ -344,15 +344,6 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 	}
 
 
-
-	public int getNumberOfReferrerContentObjects() {
-		return getNumberOfContentObjectsWhichReferToThisTopic();
-	}
-
-	public List<String> getReferrerContentObjects() {
-		return getContentObjectIdsWhichReferToThisTopic();
-	}
-
 	public void setNumberOfContentObjectIdsWhichReferToThisTopic(int numberOfContentObjectIdsWhichReferToThisTopic) {
 		this.numberOfContentObjectIdsWhichReferToThisTopic = numberOfContentObjectIdsWhichReferToThisTopic;
 
@@ -376,14 +367,6 @@ public class TopicImpl  extends LocalizableEntityImpl implements Topic, Serializ
 
 	public boolean isChildrenLoaded() {
 		return children != null;
-	}
-
-	public boolean isNumberOfReferrerContentObjectsLoaded() {
-		return isNumberOfContentObjectsWhichReferToThisTopicLoaded();
-	}
-
-	public boolean isReferrerContentObjectsLoaded() {
-		return areContenObjectIdsWhichReferToThisTopicLoaded();
 	}
 
 	private LazyLoader getLazyLoader() {

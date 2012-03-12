@@ -139,7 +139,7 @@ public class LazyLoadingTopicTreeNode extends LazyLoadingTreeNodeRichFaces{
 	}
 
 	public void contentObjectDeletedUpdateNoOfContentObjectReferrersEventRaised() {
-		if (topic != null && topic.isNumberOfReferrerContentObjectsLoaded()){
+		if (topic != null && topic.isNumberOfContentObjectsWhichReferToThisTopicLoaded()){
 			updateNoOfContentObjectReferrers();
 		}
 		

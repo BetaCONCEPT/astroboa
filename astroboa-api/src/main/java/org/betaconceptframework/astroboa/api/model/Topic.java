@@ -202,10 +202,8 @@ public interface Topic extends LocalizableEntity{
 	/**
 	 * Returns a list of ids of all {@link ContentObject content objects} which refer to this
 	 * topic.
-	 * @deprecated Use {@link #getContentObjectIdsWhichReferToThisTopic()} instead
 	 * @return A {@link List list} {@link ContentObject content object} ids.
 	 */
-	List<String> getReferrerContentObjects();
 	List<String> getContentObjectIdsWhichReferToThisTopic();
 
 	/**
@@ -219,22 +217,16 @@ public interface Topic extends LocalizableEntity{
 	 * mechanism.
 	 * </p>
 	 * 
-	 * @deprecated Use {@link #areContenObjectIdsWhichReferToThisTopicLoaded()} instead
-	 * 
 	 * @return <code>true</code> if {@link ContentObject content object} ids are loaded,
 	 *         <code>false</code> otherwise.
 	 */
-	boolean isReferrerContentObjectsLoaded();
 	boolean areContenObjectIdsWhichReferToThisTopicLoaded();
 
 	/**
 	 * Returns the number of {@link ContentObject content object} which refer to topic.
 	 * 
-	 * @deprecated Use {@link #getNumberOfContentObjectsWhichReferToThisTopic()} instead
-	 * 
 	 * @return Number of referrer {@link ContentObject content objects}.
 	 */
-	int getNumberOfReferrerContentObjects();
 	int getNumberOfContentObjectsWhichReferToThisTopic();
 
 	/**
@@ -248,11 +240,9 @@ public interface Topic extends LocalizableEntity{
 	 * triggering the lazy loading mechanism.
 	 * </p>
 	 * 
-	 * @deprecated Use {@link #isNumberOfContentObjectsWhichReferToThisTopicLoaded()} instead
 	 * @return <code>true</code> if number of referrer {@link ContentObject content objects}
 	 *         is loaded, <code>false</code> otherwise.
 	 */
-	boolean isNumberOfReferrerContentObjectsLoaded();
 	boolean isNumberOfContentObjectsWhichReferToThisTopicLoaded();
 
 }
