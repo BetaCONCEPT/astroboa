@@ -136,11 +136,6 @@ public final class StringPropertyDefinitionImpl extends SimpleCmsPropertyDefinit
 
 	}
 
-	@Deprecated
-	public Integer getMaxStringLength() {
-		return getMaxLength();
-	}
-
 	public StringFormat getStringFormat() {
 		return stringFormat;
 	}

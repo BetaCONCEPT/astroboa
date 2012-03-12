@@ -82,21 +82,6 @@ public interface StringPropertyDefinition extends
 	StringFormat getStringFormat();
 
 	/**
-	 * Returns maximum length of property's value(s).
-	 * 
-	 * <p>
-	 * Astroboa implementation uses attribute
-	 * 	<a href="http://www.betaconceptframework.org/schema/astroboa/astroboa-model-{version}.xsd">maxStringLength</a> 
-	 * to provide value for this attribute.
-	 * </p>
-
-	 * @deprecated Use {@link #getMaxLength()}
-	 * @return Maximum length of property's value(s).
-	 */
-	@Deprecated
-	Integer getMaxStringLength();
-	
-	/**
 	 * In cases where property is of password type, 
 	 * 
 	 * a {@link CmsPasswordEncryptor} is always available in order to encrypt values.
