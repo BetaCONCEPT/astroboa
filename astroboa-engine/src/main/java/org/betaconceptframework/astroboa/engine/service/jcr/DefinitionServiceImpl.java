@@ -98,27 +98,6 @@ class DefinitionServiceImpl implements DefinitionService {
 		} 
 	}
 
-	@Deprecated
-	public byte[] getXMLSchemaForDefinition(String definitionFullPath) {
-		
-		try{
-			String definition = contentDefinitionDao.getCmsDefinition(definitionFullPath, ResourceRepresentationType.XSD,true);
-		
-			if (definition != null){
-				return definition.getBytes("UTF-8");
-			}
-		
-			return null;
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		} 
-
-	}
-
 	@Override
 	public Map<String, List<String>> getTopicPropertyPathsPerTaxonomies() {
 		return contentDefinitionDao.getTopicPropertyPathsPerTaxonomies();
