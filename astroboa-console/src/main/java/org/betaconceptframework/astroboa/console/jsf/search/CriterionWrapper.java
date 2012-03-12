@@ -331,7 +331,6 @@ public class CriterionWrapper {
 			LocalizationCriterion localizationCriterion = CriterionFactory.newLocalizationCriterion();
 			localizationCriterion.setLocale(JSFUtilities.getLocaleAsString());
 			localizationCriterion.addLocalizedLabel(selectedTopicLabel+ CmsConstants.ANY_NAME);
-			//localizationCriterion.enableContainsQueryOperator();
 			localizationCriterion.setQueryOperator(QueryOperator.CONTAINS);
 
 

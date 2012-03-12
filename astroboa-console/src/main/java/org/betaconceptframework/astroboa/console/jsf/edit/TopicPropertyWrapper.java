@@ -197,7 +197,6 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 			//Localized Label criterion
 			LocalizationCriterion localizationCriterion = CriterionFactory.newLocalizationCriterion();
 			localizationCriterion.addLocalizedLabel(selectedTopicLabel+"*");
-			//localizationCriterion.enableContainsQueryOperator();
 			localizationCriterion.setQueryOperator(QueryOperator.CONTAINS);
 
 			

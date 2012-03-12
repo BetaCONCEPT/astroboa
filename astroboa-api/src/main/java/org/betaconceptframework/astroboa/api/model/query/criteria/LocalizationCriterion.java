@@ -166,14 +166,6 @@ public interface LocalizationCriterion extends Criterion {
 	void setLocalizedLabels(List<String> localizedLabels);
 	
 	/**
-	 * Enables {@link QueryOperator#CONTAINS contains} query operator.
-	 * 
-	 * @deprecated use {@link #setQueryOperator(QueryOperator) instead} <code>setQueryOperator(QueryOperator.CONTAINS)</code>
-	 */
-	@Deprecated
-	void enableContainsQueryOperator();
-	
-	/**
 	 * Specify the query operator to be used in this criterion.
 	 * 
 	 * Default query operator is {@link QueryOperator#LIKE like}.

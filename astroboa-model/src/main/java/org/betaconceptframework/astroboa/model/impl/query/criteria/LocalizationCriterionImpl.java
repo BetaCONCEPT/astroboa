@@ -141,10 +141,6 @@ public class LocalizationCriterionImpl implements LocalizationCriterion, Seriali
 	}
 
 
-	public void enableContainsQueryOperator() {
-		setQueryOperator(QueryOperator.CONTAINS);
-	}
-
 	@Override
 	public void ignoreCaseInLabels() {
 		ignoreCase = true;

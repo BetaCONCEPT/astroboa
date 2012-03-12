@@ -406,7 +406,6 @@ public class CmsUtils {
 
 			if (! caseSensitive)
 			{
-				//localizationCriterion.enableContainsQueryOperator();
 				localizationCriterion.setQueryOperator(QueryOperator.CONTAINS);
 			}
 			

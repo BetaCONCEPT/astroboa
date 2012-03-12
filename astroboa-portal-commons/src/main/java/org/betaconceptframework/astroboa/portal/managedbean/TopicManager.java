@@ -270,7 +270,6 @@ public class TopicManager extends AbstractUIBean {
 			LocalizationCriterion localizationCriterion = CriterionFactory.newLocalizationCriterion();
 			localizationCriterion.setLocale(JSFUtilities.getLocaleAsString());
 			localizationCriterion.addLocalizedLabel(textContainedInLabel+CmsConstants.ANY_NAME);
-			//localizationCriterion.enableContainsQueryOperator();
 			localizationCriterion.setQueryOperator(QueryOperator.CONTAINS);
 
 			//localizationCriterion.addLocalizedLabel(CmsConstants.LIKE + textContainedInLabel + CmsConstants.LIKE);  
@@ -309,7 +308,6 @@ public class TopicManager extends AbstractUIBean {
 			LocalizationCriterion localizationCriterion = CriterionFactory.newLocalizationCriterion();
 			localizationCriterion.setLocale(JSFUtilities.getLocaleAsString());
 			localizationCriterion.addLocalizedLabel(selectedTopicLabel + CmsConstants.ANY_NAME);
-			//localizationCriterion.enableContainsQueryOperator();
 			localizationCriterion.setQueryOperator(QueryOperator.CONTAINS);
 
 			topicCriteria.addCriterion(localizationCriterion);
