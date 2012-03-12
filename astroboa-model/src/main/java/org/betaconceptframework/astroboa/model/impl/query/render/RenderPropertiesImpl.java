@@ -52,11 +52,6 @@ public class RenderPropertiesImpl implements RenderProperties, Serializable{
 		return renderInstructions;
 	}
 
-	public Object getValueForRenderInstruction(
-			RenderInstruction renderInstruction) {
-		return renderInstructions.get(renderInstruction);
-	}
-
 	public void resetRenderInstructions() {
 		renderInstructions.clear();
 	}
