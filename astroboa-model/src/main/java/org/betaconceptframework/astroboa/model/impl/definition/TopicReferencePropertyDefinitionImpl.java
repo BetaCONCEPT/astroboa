@@ -29,7 +29,6 @@ import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
-import org.betaconceptframework.astroboa.api.model.definition.TopicPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
 
 
@@ -40,7 +39,7 @@ import org.betaconceptframework.astroboa.api.model.definition.TopicReferenceProp
  */
 public final class TopicReferencePropertyDefinitionImpl extends
 		SimpleCmsPropertyDefinitionImpl<Topic> implements
-		TopicPropertyDefinition, Serializable {
+		TopicReferencePropertyDefinition, Serializable {
 
 	/**
 	 * 
