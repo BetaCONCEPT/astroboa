@@ -305,16 +305,4 @@ public interface Space extends LocalizableEntity {
 	 */
 	boolean isContentObjectReferencesLoaded();
 
-	/**
-	 * Provides an xml representation of specified <code>space</code>
-	 * following space's xml schema as described in
-	 * <code>astroboa-engine</code> module in 
-	 * <code>META-INF/astroboa-model-{version}.xsd</code>
-	 * file.
-	 *
-	 * @deprecated Use {@link #xml()} instead
-	 * @return XML instance for this <code>space</code>.
-	 */
-	String toXml();
-
 }

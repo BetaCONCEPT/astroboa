@@ -255,15 +255,4 @@ public interface Topic extends LocalizableEntity{
 	boolean isNumberOfReferrerContentObjectsLoaded();
 	boolean isNumberOfContentObjectsWhichReferToThisTopicLoaded();
 
-	/**
-	 * Provides an xml representation of specified <code>topic</code>
-	 * following topic's xml schema as described in
-	 * <code>astroboa-engine</code> module in 
-	 * <code>META-INF/astroboa-model-{version}.xsd</code>
-	 * file.
-	 * 
-	 * @deprecated Use {@link #xml()} instead
-	 * @return XML instance for this <code>topic</code>.
-	 */
-	String toXml();
 }

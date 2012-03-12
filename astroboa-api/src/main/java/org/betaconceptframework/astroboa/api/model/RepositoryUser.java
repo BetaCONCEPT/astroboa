@@ -138,27 +138,4 @@ public interface RepositoryUser extends CmsRepositoryEntity {
 	 */
 	void addPreference(String prefereceName, Object preferenceValue);  
 	
-	/**
-	 * Provides an xml representation of specified <code>repositoryUser</code>
-	 * following repository user's xml schema as described in
-	 * <code>astroboa-engine</code> module in 
-	 * <code>META-INF/builtin-definition-schemas/astroboa-model-{version}.xsd</code>
-	 * file.
-	 * 
-	 * <p>
-	 * XML contains all basic properties of <code>repositoryUser</code>
-	 * as well as basic properties of its {@link RepositoryUser#getFolksonomy() folksonomy} and not 
-	 * its root topics. To generate XML for <code>folksonomy</code> use method
-	 * {@link Taxonomy#toXml()}.
-	 * </p>
-	 * 
-	 * <p>
-	 * Also XML will contain basic properties of {@link RepositoryUser#getSpace() space}
-	 * without its children if any. 
-	 * </p>
-	 *
-	 * @deprecated Use {@link #xml()} instead
-	 * @return XML instance for this <code>repositoryUser</code>.
-	 */
-	String toXml();
 }

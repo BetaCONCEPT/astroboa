@@ -130,16 +130,5 @@ public interface Taxonomy extends LocalizableEntity {
 	 */
 	int getNumberOfRootTopics();
 
-	/**
-	 * Provides an xml representation of specified <code>taxonomy</code>
-	 * following taxonomy's xml schema as described in
-	 * <code>astroboa-engine</code> module in 
-	 * <code>META-INF/astroboa-model-{version}.xsd</code>
-	 * file.
-	 * 
-	 * @deprecated Use {@link #xml()} instead
-	 * @return XML instance for this <code>taxonomy</code>.
-	 */
-	String toXml();
 	
 }
