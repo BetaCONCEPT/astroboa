@@ -32,7 +32,6 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
-import org.betaconceptframework.astroboa.api.model.definition.ContentObjectPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
 
@@ -41,7 +40,7 @@ import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePro
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public final class ObjectReferencePropertyDefinitionImpl extends SimpleCmsPropertyDefinitionImpl<ContentObject> implements ContentObjectPropertyDefinition, Serializable{
+public final class ObjectReferencePropertyDefinitionImpl extends SimpleCmsPropertyDefinitionImpl<ContentObject> implements ObjectReferencePropertyDefinition, Serializable{
 
 
 	/**
