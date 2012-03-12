@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ContentObjectProperty;
+import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePropertyDefinition;
@@ -33,7 +33,7 @@ import org.betaconceptframework.astroboa.api.model.definition.ObjectReferencePro
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class ObjectReferencePropertyImpl  extends SimpleCmsPropertyImpl<ContentObject, ObjectReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements ContentObjectProperty, Serializable {
+public class ObjectReferencePropertyImpl  extends SimpleCmsPropertyImpl<ContentObject, ObjectReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements ObjectReferenceProperty, Serializable {
 
 	/**
 	 * 

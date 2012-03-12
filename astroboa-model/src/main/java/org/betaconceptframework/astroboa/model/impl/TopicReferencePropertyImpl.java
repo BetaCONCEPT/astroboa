@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.TopicReferencePropertyDefinition;
@@ -34,7 +34,7 @@ import org.betaconceptframework.astroboa.api.model.definition.TopicReferenceProp
  * @author Savvas Triantafyllou (striantafyllou@betaconcept.com)
  * 
  */
-public class TopicReferencePropertyImpl extends SimpleCmsPropertyImpl<Topic, TopicReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements TopicProperty, Serializable {
+public class TopicReferencePropertyImpl extends SimpleCmsPropertyImpl<Topic, TopicReferencePropertyDefinition,ComplexCmsProperty<? extends ComplexCmsPropertyDefinition, ? extends ComplexCmsProperty<?,?>>> implements TopicReferenceProperty, Serializable {
 
 	/**
 	 * 
