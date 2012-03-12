@@ -22,9 +22,7 @@ package org.betaconceptframework.astroboa.api.service.secure;
 
 import java.util.List;
 
-import org.betaconceptframework.astroboa.api.model.LocalizableEntity;
 import org.betaconceptframework.astroboa.api.model.Space;
-import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -49,24 +47,6 @@ import org.betaconceptframework.astroboa.api.service.SpaceService;
  * 
  */
 public interface SpaceServiceSecure  {
-	/**
-	 * Same semantics with {@link SpaceService#saveSpace(Space)}
-	 * augmented with the requirement of providing an authentication token.
-	 * 
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EDITOR} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param space Space to be saved.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * 
-	 * 	@return Newly created or updated Space.
-	 */
-	Space saveSpace(Space space, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link SpaceService#deleteSpace(String)}
@@ -88,34 +68,6 @@ public interface SpaceServiceSecure  {
 	boolean deleteSpace(String spaceId, String authenticationToken);
 
 	/**
-	 * Same semantics with {@link SpaceService#getSpace(String, String)}
-	 * augmented with the requirement of providing an authentication token
-	 * 
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param spaceId
-	 *            {@link Space#getId() Space's id}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned space.
-	 *            
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getSpace(String, ResourceRepresentationType, FetchLevel)} instead
-	 * 
-	 * @return A space corresponding to <code>spaceId</code> 
-	 */
-	@Deprecated
-	Space getSpace(String spaceId, String locale, String authenticationToken);
-
-
-	/**
 	 * Same semantics with {@link SpaceService#getOrganizationSpace()}
 	 * augmented with the requirement of providing an authentication token.
 	 * 
@@ -132,28 +84,6 @@ public interface SpaceServiceSecure  {
 	 * @return Α {@link Space} instance representing organization's space.
 	 */
 	Space getOrganizationSpace(String authenticationToken);
-
-	/**
-	 * Same semantics with {@link SpaceService#searchSpaces(SpaceCriteria)}
-	 * augmented with the requirement of providing an authentication token
-	 * 
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param spaceCriteria
-	 *            Space search criteria.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * 
-	 * @deprecated Use {@link #searchSpaces(SpaceCriteria, ResourceRepresentationType, String)}
-	 * @return Spaces satisfying specified criteria.
-	 */
-	@Deprecated
-	CmsOutcome<Space> searchSpaces(SpaceCriteria spaceCriteria, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link SpaceService#getContentObjectIdsWhichReferToSpace(String)}

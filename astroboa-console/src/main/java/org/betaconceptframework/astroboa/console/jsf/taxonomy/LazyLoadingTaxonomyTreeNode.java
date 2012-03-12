@@ -29,6 +29,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.commons.comparator.TopicLocalizedLabelComparator;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingTreeNodeRichFaces;
@@ -107,7 +109,7 @@ public class LazyLoadingTaxonomyTreeNode  extends LazyLoadingTreeNodeRichFaces{
 	public void reloadTaxonomy() {
 		this.children.clear();
 		
-		this.taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), taxonomy.getCurrentLocale());
+		this.taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		
 	}
 

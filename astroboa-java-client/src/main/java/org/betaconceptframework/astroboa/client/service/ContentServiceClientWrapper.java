@@ -28,8 +28,6 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
-import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
@@ -109,53 +107,8 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 	}
 
 
-	public ContentObject getContentObject(String contentObjectId,
-			RenderProperties contentObjectRenderProperties,
-			CacheRegion cacheRegion) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.getContentObject(contentObjectId, contentObjectRenderProperties, cacheRegion,getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
 
 
-	public ContentObject getContentObjectById(String contentObjectId,
-			CacheRegion cacheRegion) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.getContentObjectById(contentObjectId, cacheRegion,getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-
-	}
-
-
-	public ContentObject getContentObjectByIdAndLocale(String contentObjectId,
-			String locale,
-			CacheRegion cacheRegion) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.getContentObjectByIdAndLocale(contentObjectId, locale, cacheRegion, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-
-	}
 
 
 	public ContentObject getContentObjectByVersionName(String contentObjectId,
@@ -282,81 +235,6 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 	}
 
 
-	public ContentObject saveAndVersionContentObject(ContentObject contentObject) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.saveAndVersionContentObject(contentObject, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-	public ContentObject saveAndVersionLockedContentObject(ContentObject contentObject,
-			String lockToken) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.saveAndVersionLockedContentObject(contentObject, lockToken, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-
-	public ContentObject saveContentObject(ContentObject contentObject, boolean version) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.saveContentObject(contentObject, version, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-
-	public ContentObject saveLockedContentObject(ContentObject contentObject,
-			boolean version, String lockToken) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.saveLockedContentObject(contentObject, version, lockToken, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-
-	public CmsOutcome<CmsRankedOutcome<ContentObject>> searchContentObjects(
-			ContentObjectCriteria contentObjectCriteria) {
-
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			
-			disableLazyLoadingIfClientsConnectsToARemoteRepository(contentObjectCriteria);
-			
-			return contentServiceSecure.searchContentObjects(contentObjectCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-
-	}
-
 	private void disableLazyLoadingIfClientsConnectsToARemoteRepository(
 			ContentObjectCriteria contentObjectCriteria) {
 		
@@ -386,51 +264,6 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 		
 	}
 
-	public String searchContentObjectsAndExportToXml(
-			ContentObjectCriteria contentObjectCriteria) {
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-
-			disableLazyLoadingIfClientsConnectsToARemoteRepository(contentObjectCriteria);
-
-			return contentServiceSecure.searchContentObjectsAndExportToXml(contentObjectCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-	public ContentObject saveContentObject(ContentObject contentObject,
-			boolean version, boolean updateLastModificationDate) {
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return contentServiceSecure.saveContentObject(contentObject, version, updateLastModificationDate, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
-
-	@Override
-	public String searchContentObjectsAndExportToJson(
-			ContentObjectCriteria contentObjectCriteria) {
-		if (contentServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-
-			disableLazyLoadingIfClientsConnectsToARemoteRepository(contentObjectCriteria);
-			
-			return contentServiceSecure.searchContentObjectsAndExportToJson(contentObjectCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("ContentService reference was not found");
-		}
-	}
 
 	@Override
 	public <T> T getContentObject(String contentObjectIdOrSystemName,

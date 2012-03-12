@@ -826,7 +826,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//Check with Jcr
 		try{
-			Node topicNode = getSession().getNodeByUUID(topic.getId());
+			Node topicNode = getSession().getNodeByIdentifier(topic.getId());
 			Assert.assertNull(topicNode, "Topic "+topic.getName() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -874,7 +874,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		
 		//Check with Jcr
 		try{
-			Node parentTopicNode = getSession().getNodeByUUID(parentTopic.getId());
+			Node parentTopicNode = getSession().getNodeByIdentifier(parentTopic.getId());
 			Assert.assertNull(parentTopicNode, "Parent Topic "+parentTopic.getName() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -882,7 +882,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		}
 		
 		try{
-			Node topicNode = getSession().getNodeByUUID(topic.getId());
+			Node topicNode = getSession().getNodeByIdentifier(topic.getId());
 			Assert.assertNull(topicNode, "Child Topic "+topic.getName() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -922,7 +922,7 @@ public class TopicServiceTest extends AbstractRepositoryTest {
 		markObjectForRemoval(contentObject);
 		
 		//Check with Jcr
-		Node topicNode = getSession().getNodeByUUID(topic.getId());
+		Node topicNode = getSession().getNodeByIdentifier(topic.getId());
 		
 		Assert.assertNotNull(topicNode, "Topic "+topic.getName() + " was not saved");
 		

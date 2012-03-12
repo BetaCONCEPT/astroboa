@@ -57,12 +57,6 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 		topicService = (TopicService) springManagedRepositoryServicesContext.getBean("topicService");
 	}
 	
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public CmsOutcome<Topic> searchTopics(TopicCriteria topicCriteria, String authenticationToken) {
-		return topicService.searchTopics(topicCriteria);
-	}
-
-
 	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
 	public boolean deleteTopicTree(String topicIdOrName, String authenticationToken) {
 		return topicService.deleteTopicTree(topicIdOrName);
@@ -72,17 +66,6 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomyName,
 			String locale, int offset, int limit, String authenticationToken) {
 		return topicService.getMostlyUsedTopics(taxonomyName, locale, offset, limit);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	@Deprecated
-	public Topic getTopic(String topicId, String locale, String authenticationToken) {
-		return topicService.getTopic(topicId, locale);
-	}
-
-	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
-	public Topic saveTopic(Topic topic, String authenticationToken) {
-		return topicService.saveTopic(topic);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
@@ -101,12 +84,6 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 		return topicService.getTopic(topicIdOrName, output, fetchLevel, prettyPrint);
 	}
 
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public String searchTopicsAndExportToXml(TopicCriteria topicCriteria,
-			String authenticationToken) {
-		return topicService.searchTopicsAndExportToXml(topicCriteria);
-	}
-
 	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
 	public Topic save(Object topic, String authenticationToken) {
 		return topicService.save(topic);
@@ -118,10 +95,5 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 		return topicService.searchTopics(topicCriteria, output);
 	}
 
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public String searchTopicsAndExportToJson(TopicCriteria topicCriteria,
-			String authenticationToken) {
-		return topicService.searchTopicsAndExportToJson(topicCriteria);
-	}
 
 }

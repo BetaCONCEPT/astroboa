@@ -38,7 +38,6 @@ import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;

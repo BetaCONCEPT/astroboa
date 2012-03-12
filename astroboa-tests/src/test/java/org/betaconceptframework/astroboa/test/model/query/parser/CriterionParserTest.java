@@ -29,7 +29,6 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;

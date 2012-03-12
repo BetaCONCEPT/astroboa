@@ -74,29 +74,6 @@ public interface DefinitionServiceSecure {
 	boolean hasContentObjectTypeDefinition(String contentObjectTypeDefinitionName, String authenticationToken);
 
 	/**
-	 * Same semantics with {@link DefinitionService#getContentObjectTypeDefinition(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param contentObjectTypeDefinitionName
-	 *            Content object type definition name.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * 
-	 * @return Definition for content object type,
-	 *         if found , <code>null</code> otherwise.
-	 */
-	@Deprecated
-	ContentObjectTypeDefinition getContentObjectTypeDefinition(String contentObjectTypeDefinitionName, String authenticationToken);
-
-	/**
 	 * Same semantics with {@link DefinitionService#getContentObjectTypes()}
 	 * augmented with the requirement of providing an authentication token
 	 *
@@ -113,78 +90,6 @@ public interface DefinitionServiceSecure {
 	 * @return A list of content object type definition names.
 	 */
 	List<String> getContentObjectTypes(String authenticationToken);
-
-	/**
-	 * Same semantics with {@link DefinitionService#getCmsPropertyDefinition(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param fullPropertyDefinitionPath
-	 * 			A period-delimited string defined in 
-	 *            ({@link CmsPropertyDefinition#getPath()}).
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * @return
-	 * 		{@link CmsPropertyDefinition definition} for a property
-	 * 		specified in the provided path. 
-	 */
-	@Deprecated
-	CmsPropertyDefinition getCmsPropertyDefinition(String fullPropertyDefinitionPath, String authenticationToken);
-
-	/**
-	 * Same semantics with {@link DefinitionService#getCmsPropertyDefinition(String, String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param relativePropertyPath
-	 *            A period-delimited string defined in 
-	 *            ({@link CmsPropertyDefinition#getPath()}).
-	 *            relative to <code>contentObjectTypeDefinitionName</code>.
-	 * @param contentObjectTypeDefinitionName
-	 *            Content object type  definition name.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * @return Definition for a property of a content object type,
-	 *         if found , <code>null</code> otherwise.
-	 */
-	@Deprecated
-	CmsPropertyDefinition getCmsPropertyDefinition(String relativePropertyPath,String contentObjectTypeDefinitionName, String authenticationToken);
-
-	/**
-	 * Same semantics with {@link DefinitionService#getAspectDefinition(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param complexCmsPropertyName
-	 *            Complex property definition name.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * @return Complex content object property definition if found,
-	 *         <code>null</code> otherwise.
-	 */
-	@Deprecated
-	ComplexCmsPropertyDefinition getAspectDefinition(String complexCmsPropertyName, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link DefinitionService#getAspectDefinitionsSortedByLocale(List, String)}
@@ -231,27 +136,6 @@ public interface DefinitionServiceSecure {
 	 * @return A list of complex content object property definitions.
 	 */
 	List<ComplexCmsPropertyDefinition> getAvailableAspectDefinitionsSortedByLocale(String locale, String authenticationToken);
-
-	/**
-	 * 
-	 * Same semantics with {@link DefinitionService#getXMLSchemaForDefinition(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param definitionFullPath As described in @{link {@link CmsPropertyDefinition#getFullPath()}.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * @return A byte array containing definition schema contents.
-	 */
-	@Deprecated
-	byte[] getXMLSchemaForDefinition(String definitionFullPath, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link DefinitionService#getTopicPropertyPathsPerTaxonomies()}

@@ -179,7 +179,7 @@ public class RepositoryNavigation extends AbstractUIBean{
 		
 		try {
 			space.addContentObjectReference(selectedContentObjectId);
-			spaceService.saveSpace(space);
+			spaceService.save(space);
 
 			JSFUtilities.addMessage(null, "Το Αντικείμενο Προστέθηκε στον Χώρο" , FacesMessage.SEVERITY_INFO);
 				
@@ -234,7 +234,7 @@ public class RepositoryNavigation extends AbstractUIBean{
 			((TopicReferenceProperty)contentObjectUIWrapper.getContentObject().getCmsProperty("profile.subject")).addSimpleTypeValue(topic);
 			
 			try {
-				contentService.saveAndVersionContentObject(contentObjectUIWrapper.getContentObject());
+				contentService.save(contentObjectUIWrapper.getContentObject(), true,true,null);
 				JSFUtilities.addMessage(null, "Η Θεματική Κατηγορία Προστέθηκε στο Αντικείμενο" , FacesMessage.SEVERITY_INFO);
 				
 				List<String> topicIds = new ArrayList<String>();

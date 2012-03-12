@@ -97,45 +97,6 @@ public class TaxonomyServiceClientWrapper extends AbstractClientServiceWrapper i
 	}
 
 
-	public List<Taxonomy> getTaxonomies(String locale) {
-
-		if (taxonomyServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return taxonomyServiceSecure.getTaxonomies(locale, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("TaxonomyService reference was not found");
-		}
-	}
-
-	public Taxonomy getTaxonomy(String taxonomyName, String locale) {
-
-		if (taxonomyServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return taxonomyServiceSecure.getTaxonomy(taxonomyName, locale, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("TaxonomyService reference was not found");
-		}
-	}
-
-	public Taxonomy saveTaxonomy(Taxonomy taxonomy) {
-
-		if (taxonomyServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return taxonomyServiceSecure.saveTaxonomy(taxonomy, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("TaxonomyService reference was not found");
-		}
-	}
-
 	@Override
 	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint) {
 		if (taxonomyServiceSecure != null){
@@ -176,17 +137,5 @@ public class TaxonomyServiceClientWrapper extends AbstractClientServiceWrapper i
 		}
 	}
 
-	@Override
-	public Taxonomy getTaxonomyById(String taxonomyId) {
-		if (taxonomyServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return taxonomyServiceSecure.getTaxonomyById(taxonomyId, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("TaxonomyService reference was not found");
-		}
-	}
 
 }

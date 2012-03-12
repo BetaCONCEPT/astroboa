@@ -89,23 +89,6 @@ public class SpaceServiceSecureImpl  extends AbstractSecureAstroboaService imple
 
 	
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public Space getSpace(String spaceId, String locale, String authenticationToken) {
-		return spaceService.getSpace(spaceId, locale);
-	}
-
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public Space saveSpace(Space space, String authenticationToken) {
-		return spaceService.saveSpace(space);
-		
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public CmsOutcome<Space> searchSpaces(SpaceCriteria spaceCriteria, String authenticationToken) {
-
-		return spaceService.searchSpaces(spaceCriteria);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public <T> T getSpace(String spaceIdOrName, ResourceRepresentationType<T> output,
 			FetchLevel fetchLevel, String authenticationToken) {
 		return spaceService.getSpace(spaceIdOrName, output, fetchLevel);

@@ -1,6 +1,10 @@
 package org.jboss.resteasy.plugins.providers;
 
-import org.jboss.resteasy.util.HttpHeaderNames;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -9,11 +13,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+
+import org.jboss.resteasy.util.HttpHeaderNames;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">BillBurke</a>

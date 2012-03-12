@@ -33,7 +33,6 @@ import javax.jcr.Session;
 
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
-import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.io.SerializationReport;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;

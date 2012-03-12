@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsDefinitionTreeNodeRichFaces;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsDefinitionTreeNodeRichFaces.Type;
@@ -77,7 +78,7 @@ public class CmsDefinitionTreeForContentObjectSearch extends AbstractUIBean{
 		ContentObjectTypeDefinition contentObjectTypeDefinition = null;
 		if (StringUtils.isNotBlank(contentObjectType)){
 		
-			contentObjectTypeDefinition = definitionService.getContentObjectTypeDefinition(contentObjectType);
+			contentObjectTypeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(contentObjectType, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 			
 			if (contentObjectTypeDefinition == null)
 				logger.warn("Content Object Type Definition with name "+ contentObjectType + " was not found. CmsDefinitionTree will not be rendered");

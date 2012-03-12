@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.faces.model.SelectItem;
 
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
@@ -108,7 +110,7 @@ public class LanguageSelector {
 
 	private List<Topic> retrieveAllLanguageTopics() {
 
-		if (taxonomyService.getTaxonomy("language", "en")==null){
+		if (taxonomyService.getTaxonomy("language", ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false)==null){
 			return null;
 		}
 		
@@ -116,7 +118,7 @@ public class LanguageSelector {
 		topicCriteria.addTaxonomyNameEqualsCriterion("language");
 		topicCriteria.setCacheable(CacheRegion.TEN_MINUTES);
 
-		CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
+		CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 		return outcome != null ? outcome.getResults() : null;
 	}

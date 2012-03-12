@@ -27,7 +27,6 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.security.RepositoryUserIdPrincipal;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.context.SecurityContext;

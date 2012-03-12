@@ -30,6 +30,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingTreeNodeRichFaces;
 import org.betaconceptframework.astroboa.console.jsf.taxonomy.TaxonomyTree.TaxonomyTreeNodeType;
@@ -74,7 +76,7 @@ public class LazyLoadingTaxonomyTreeRootNode  extends LazyLoadingTreeNodeRichFac
 			List<Taxonomy> allTaxonomies = new ArrayList<Taxonomy>();
 			
 			//Load all taxonomies
-			allTaxonomies = taxonomyService.getTaxonomies(localeSelector.getLocaleString());
+			allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false).getResults();
 			
 			if (CollectionUtils.isNotEmpty(acceptedTaxonomies)) { 
 				for (Taxonomy taxonomy : allTaxonomies) {

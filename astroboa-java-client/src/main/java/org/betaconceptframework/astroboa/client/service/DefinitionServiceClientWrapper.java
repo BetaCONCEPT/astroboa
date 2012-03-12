@@ -87,43 +87,6 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 		return definitionServiceSecure != null;
 	}
 
-	public ComplexCmsPropertyDefinition getAspectDefinition(
-			String complexCmsPropertyName) {
-
-		if (definitionServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			//Check remote definition dao
-			ComplexCmsPropertyDefinition aspectDefinition = null;
-
-			try {
-				if (cachedDefinitionServiceDao != null){
-					aspectDefinition = cachedDefinitionServiceDao.getAspectDefinition(complexCmsPropertyName);
-				}
-
-				//Aspect definition was not found in cache. Perform remote call
-				if (aspectDefinition == null){
-					aspectDefinition = definitionServiceSecure.getAspectDefinition(complexCmsPropertyName, getAuthenticationToken());
-
-					if (aspectDefinition != null && cachedDefinitionServiceDao != null){
-						cachedDefinitionServiceDao.addAspectDefinitionToCache(aspectDefinition);
-					}
-				}
-			} catch (Exception e) {
-				throw new CmsException(e);
-			}
-
-
-			return aspectDefinition;
-		}
-		else{
-			throw new CmsException("DefinitionService reference was not found");
-		}
-
-	}
-
-
 
 	public List<ComplexCmsPropertyDefinition> getAspectDefinitionsSortedByLocale(
 			List<String> complexCmsPropertyNames, String locale) {
@@ -198,83 +161,7 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 
 
 
-	public CmsPropertyDefinition getCmsPropertyDefinition(
-			String relativePropertyPath, String contentObjectTypeDefinitionName) {
-
-
-		if (definitionServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			CmsPropertyDefinition cmsPropertyDefinition = null;
-			try {
-
-				if (cachedDefinitionServiceDao != null){
-					cmsPropertyDefinition = cachedDefinitionServiceDao.getCmsPropertyDefinition(relativePropertyPath, contentObjectTypeDefinitionName);
-				}
-
-				if (cmsPropertyDefinition == null){
-					cmsPropertyDefinition = definitionServiceSecure.getCmsPropertyDefinition(relativePropertyPath, contentObjectTypeDefinitionName, getAuthenticationToken());
-
-					if (cmsPropertyDefinition != null && cachedDefinitionServiceDao != null){
-						//Get ContentObjectTypeDefinion and put in cache
-						//so that other property definitions for this type will be available
-						ContentObjectTypeDefinition contentTypeDefinition = getContentObjectTypeDefinition(contentObjectTypeDefinitionName);
-
-						cachedDefinitionServiceDao.addContentTypeDefinitionToCache(contentTypeDefinition);
-					}
-				}
-			} catch (Exception e) {
-				throw new CmsException(e);
-			}
-
-
-
-			return cmsPropertyDefinition;
-		}
-		else{
-			throw new CmsException("DefinitionService reference was not found");
-		}
-
-	}
-
-
-
-	public ContentObjectTypeDefinition getContentObjectTypeDefinition(
-			String contentObjectTypeDefinitionName) {
-
-		if (definitionServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			ContentObjectTypeDefinition contentObjectTypeDefinition = null;
-			try {
-
-				if (cachedDefinitionServiceDao != null){
-					contentObjectTypeDefinition = cachedDefinitionServiceDao.getContentObjectTypeDefinition(contentObjectTypeDefinitionName);
-				}
-
-				if (contentObjectTypeDefinition ==null){
-					contentObjectTypeDefinition = definitionServiceSecure.getContentObjectTypeDefinition(contentObjectTypeDefinitionName, getAuthenticationToken());
-
-					if (contentObjectTypeDefinition != null && cachedDefinitionServiceDao != null){
-						cachedDefinitionServiceDao.addContentTypeDefinitionToCache(contentObjectTypeDefinition);
-					}
-				}
-			} catch (Exception e) {
-				throw new CmsException(e);
-			}
-
-
-			return contentObjectTypeDefinition;
-		}
-		else{
-			throw new CmsException("DefinitionService reference was not found");
-		}
-	}
-
-
-
+	
 	public List<String> getContentObjectTypes() {
 
 		if (definitionServiceSecure != null){
@@ -291,7 +178,6 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 	}
 
 
-
 	public Map<String, List<String>> getTopicPropertyPathsPerTaxonomies() {
 
 		if (definitionServiceSecure != null){
@@ -300,23 +186,6 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 			}
 			//This method does not require caching since only a map will be serialized
 			return definitionServiceSecure.getTopicPropertyPathsPerTaxonomies(getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("DefinitionService reference was not found");
-		}
-
-	}
-
-
-
-	public byte[] getXMLSchemaForDefinition(String definitionFullPath) {
-
-		if (definitionServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			//This method does not require caching since the actual file resides in the remote server
-			return definitionServiceSecure.getXMLSchemaForDefinition(definitionFullPath, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException("DefinitionService reference was not found");
@@ -338,41 +207,6 @@ public class DefinitionServiceClientWrapper extends AbstractClientServiceWrapper
 			throw new CmsException("DefinitionService reference was not found");
 		}
 
-	}
-
-	public CmsPropertyDefinition getCmsPropertyDefinition(
-			String fullPropertyDefinitionPath) {
-
-		if (definitionServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			CmsPropertyDefinition cmsPropertyDefinition = null;
-			try {
-
-				if (cachedDefinitionServiceDao != null){
-					cmsPropertyDefinition = cachedDefinitionServiceDao.getCmsPropertyDefinition(fullPropertyDefinitionPath);
-				}
-
-				if (cmsPropertyDefinition == null){
-					cmsPropertyDefinition = definitionServiceSecure.getCmsPropertyDefinition(fullPropertyDefinitionPath, getAuthenticationToken());
-
-					if (cmsPropertyDefinition != null && cachedDefinitionServiceDao != null){
-						//Cache its parent which is either a complex cms property definition or a content typ definition
-						cachedDefinitionServiceDao.cacheParentDefinition(fullPropertyDefinitionPath, cmsPropertyDefinition);
-					}
-				}
-
-			} catch (Exception e) {
-				throw new CmsException(e);
-			}
-
-
-			return cmsPropertyDefinition;
-		}
-		else{
-			throw new CmsException("DefinitionService reference was not found");
-		}
 	}
 
 	@Override

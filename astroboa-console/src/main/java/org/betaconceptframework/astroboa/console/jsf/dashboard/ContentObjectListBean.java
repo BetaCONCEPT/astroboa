@@ -26,6 +26,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -72,7 +73,7 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 		
 		contentObjectCriteria.setXPathQuery(query);
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		processContentObjectQueryOutcome(cmsOutcome);
 	}
@@ -80,12 +81,12 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 	//Executes content object criteria set by subclass and creates appropriate data model
 	protected void searchForContentObjectWithPagedResults(){
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		processContentObjectQueryOutcome(cmsOutcome);
 	}
 	
-	private void processContentObjectQueryOutcome(CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome){
+	private void processContentObjectQueryOutcome(CmsOutcome<ContentObject> cmsOutcome){
 		if (cmsOutcome.getCount() > 0) { // create the Lazy loading Data
 			// Model only if there are results
 
@@ -98,12 +99,12 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 			searchResultSetSize = (int) cmsOutcome.getCount();
 
 
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = orderResults(cmsOutcome.getResults());
+			List<ContentObject> cmsOutcomeRowList = orderResults(cmsOutcome.getResults());
 
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
 			
-			for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+			for (ContentObject cmsOutcomeRow : cmsOutcomeRowList) {
+				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow));
 			}
 
 			DataPage<ContentObjectUIWrapper> dataPage = new DataPage<ContentObjectUIWrapper>(getSearchResultSetSize(), 0, wrappedContentObjects);
@@ -117,7 +118,7 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 	}
 	
 	
-	protected abstract List<CmsRankedOutcome<ContentObject>> orderResults(List<CmsRankedOutcome<ContentObject>> results) ;
+	protected abstract List<ContentObject> orderResults(List<ContentObject> results) ;
 
 
 	//Deletes content object and refreshes list
@@ -182,25 +183,22 @@ public abstract class ContentObjectListBean  extends AbstractUIBean{
 				contentObjectCriteria.setOffsetAndLimit(startRow, pageSize);
 
 				long startTime = System.currentTimeMillis();
-				CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService
-						.searchContentObjects(contentObjectCriteria);
+				CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 				long endTime = System.currentTimeMillis();
 				getLogger().debug(
 						"Content Object Results Pager fetched the next 100 objects in: "
 								+ (endTime - startTime) + "ms");
 
 				if (cmsOutcome.getCount() > 0) {
-					List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome
-							.getResults();
+					List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 					// List<ContentObject> contentObjects =
 					// getContentManager().getContentObjectByTopicUUID(selectedTopics,
 					// getResultsOrder(), new RowRange(startRow, startRow +
 					// pageSize -1), false, getOwnerUUIDsFilterList(),
 					// Condition.OR, getLocaleAsString()).getResults();
 					wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-					for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-						wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(
-								cmsOutcomeRow.getCmsRepositoryEntity()));
+					for (ContentObject cmsOutcomeRow : cmsOutcomeRowList) {
+						wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow));
 					}
 					DataPage<ContentObjectUIWrapper> dataPage = new DataPage<ContentObjectUIWrapper>(
 							getSearchResultSetSize(), startRow,

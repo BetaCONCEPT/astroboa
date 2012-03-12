@@ -45,54 +45,6 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	@Autowired
 	private TaxonomyDao taxonomyDao; 
 
-	@Deprecated
-	public List<Taxonomy> getTaxonomies(String locale) {
-		try{
-			CmsOutcome<Taxonomy> outcome = taxonomyDao.serializeAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false);
-			
-			if (outcome.getResults() != null){
-				return outcome.getResults();
-			}
-			else{
-				return new ArrayList<Taxonomy>();
-			}
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Deprecated
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public Taxonomy saveTaxonomy(Taxonomy taxonomy)  {
-		try{
-			return taxonomyDao.saveTaxonomy(taxonomy);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-
-	}
-
-	@Deprecated
-	public Taxonomy getTaxonomy(String taxonomyName, String locale) {
-		try{
-			return taxonomyDao.getTaxonomy(taxonomyName, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
 	public boolean deleteTaxonomyTree(String taxonomyId) {
 		try{
@@ -152,20 +104,6 @@ class TaxonomyServiceImpl  implements TaxonomyService {
 	public Taxonomy save(Object taxonomySource) {
 		try{
 			return taxonomyDao.saveTaxonomy(taxonomySource);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Override
-	@Deprecated
-	public Taxonomy getTaxonomyById(String taxonomyId) {
-		try{
-			return taxonomyDao.getTaxonomy(taxonomyId, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch(CmsException e){
 			throw e;

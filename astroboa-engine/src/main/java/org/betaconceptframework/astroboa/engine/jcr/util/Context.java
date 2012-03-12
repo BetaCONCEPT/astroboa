@@ -29,7 +29,6 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ImportConfiguration;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.engine.jcr.query.CmsQueryHandler;

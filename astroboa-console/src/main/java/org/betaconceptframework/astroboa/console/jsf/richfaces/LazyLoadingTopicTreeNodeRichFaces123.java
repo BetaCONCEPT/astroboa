@@ -46,6 +46,8 @@ import javax.faces.context.FacesContext;
 
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.model.impl.TopicImpl;
@@ -171,7 +173,7 @@ public class LazyLoadingTopicTreeNodeRichFaces123 extends LazyLoadingTreeNodeRic
 	private void reloadTopic() {
 		if (topic != null){
 			TopicService topicService = (TopicService) JSFUtilities.getBeanFromSpringContext("taxonomyService");
-			topic = topicService.getTopic(topic.getId(), topic.getCurrentLocale());
+			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 			this.children.clear();
 			this.leaf = topic.getNumberOfChildren() == 0;
 			this.description = topic.getLocalizedLabelForCurrentLocale();

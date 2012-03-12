@@ -24,9 +24,7 @@ import java.util.List;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.LocalizableEntity;
 import org.betaconceptframework.astroboa.api.model.Space;
-import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
@@ -41,56 +39,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.SpaceCriteria;
  */
 public interface SpaceService {
 	
-	/**
-	 * Save or update a {@link Space space} in content repository.
-	 * 
-	 * <p>
-	 * Whether save or update process is followed depends on whether <code>space</code>
-	 *  is a new space or not. <code>space</code> is considered new if there is no 
-	 * {@link CmsRepositoryEntity#getId() id} or <code>id</code> is provided but there is
-	 * no {@link Space space} in repository for the provided <code>id</code>. In this case
-	 * <code>space</code> will be saved with the provided <code>id</code>.
-	 * </p>
-	 * 
-	 * <p>
-	 * The following steps take place in the save process (<code>space</code> is considered new)
-	 * 
-	 * <ul>
-	 * <li> Create a new {@link CmsRepositoryEntity#getId() id} or use the provided <code>id</code>.
-	 * <li> Relate <code>space</code> with the provided {@link Space#getOwner() owner}.
-	 * 		Space's owner MUST already exist. If not, an exception is thrown.
-	 * <li> Locate <code>space</code>'s parent space using its identifier. If no parent is found an exception is thrown.
-	 * <li> Save localized labels for <code>space</code>.
-	 * <li> Save {@link Space#getOrder() order}.
-	 * <li> Save {@link Space#getName() name}.
-	 * <li> Save or update all of its {@link Space#getChildren() child spaces}.
-	 * </ul>
-	 * </p>
-	 * 
-	 * <p>
-	 * The following steps take place in the update process (<code>space</code> already exists in repository)
-	 * 
-	 * <ul>
-	 * <li> Relate <code>space</code> with the provided {@link Space#getOwner() owner} only 
-	 * 		if the provided owner is different from already existed owner.
-	 * 		Space's owner MUST already exist. If not, an exception is thrown.
-	 * <li> Update <code>space</code>'s parent ONLY if provided parent identifier is different than one existed.
-	 * <li> Update localized labels for <code>space</code>.
-	 * <li> Update {@link Space#getOrder() order}.
-	 * <li> Update {@link Space#getName() name}.
-	 * <li> Update {@link Space#getParent() parent}, in case it has been changed. This corresponds
-	 * 		to moving <code>space</code>.In this case new <code>space</code>'s parent
-	 * 		must exist otherwise an exception is thrown.
-	 * </ul>
-	 * </p>
-	 * @param space Space to be saved.
-	 * 
-	 * @deprecated Use method {@link #save(Object)} instead
-	 * 
-	 * @return Newly created or updated Space
-	 */
-	@Deprecated
-	Space saveSpace(Space space);
 	
 	/**
 	 * Remove a space from content repository. 
@@ -103,23 +51,6 @@ public interface SpaceService {
 	boolean deleteSpace(String spaceId);
 	
 	/**
-	 * Returns a space for the specified <code>spaceId</code>.
-	 * 
-	 * @param spaceId
-	 *            {@link Space#getId() Space's id}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned space.
-	 * @deprecated use {@link #getSpace(String, ResourceRepresentationType#SPACE_INSTANCE, FetchLevel)} instead. Locale does not play any role
-	 * since all localized labels are provided and method 
-	 * @return A space corresponding to <code>spaceId</code> 
-	 */
-	@Deprecated
-	Space getSpace(String spaceId, String locale);
-	
-	
-	/**
 	 * Retrieves organization space, a
 	 * built-in space accessible from any user of Astroboa.
 	 *  
@@ -127,18 +58,6 @@ public interface SpaceService {
 	 */
 	Space getOrganizationSpace();
 
-	/**
-	 * Search all spaces satisfying specified criteria.
-	 * 
-	 * @param spaceCriteria
-	 *            Space search criteria.
-	 *            
-	 * @deprecated Use {@link #searchSpaces(SpaceCriteria, ResourceRepresentationType)}           
-	 * @return Spaces satisfying specified criteria.
-	 */
-	@Deprecated
-	CmsOutcome<Space> searchSpaces(SpaceCriteria spaceCriteria);
-	
 	/**
 	 * Returns a list of {@link ContentObject contentObject} identifiers which
 	 * contain one or more {@link SpaceProperty property} whose value(s) is a 

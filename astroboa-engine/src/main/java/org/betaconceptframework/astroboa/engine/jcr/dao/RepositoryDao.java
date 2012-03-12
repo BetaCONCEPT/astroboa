@@ -48,8 +48,6 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
@@ -100,7 +98,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.extensions.jcr.JcrSessionFactory;
 import org.springframework.extensions.jcr.SessionFactory;
 import org.springframework.extensions.jcr.jackrabbit.RepositoryFactoryBean;
-import org.xml.sax.InputSource;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)

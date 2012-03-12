@@ -73,13 +73,6 @@ public class RepositoryUserServiceSecureImpl extends AbstractSecureAstroboaServi
 		return repositoryUserService.getRepositoryUser(externalId);
 	}
 
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public RepositoryUser saveRepositoryUser(RepositoryUser repositoryUser,String authenticationToken) {
-		
-		return repositoryUserService.saveRepositoryUser(repositoryUser);
-		
-	}
-
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public List<RepositoryUser> searchRepositoryUsers(
 			RepositoryUserCriteria repositoryUserCriteria,String authenticationToken) {

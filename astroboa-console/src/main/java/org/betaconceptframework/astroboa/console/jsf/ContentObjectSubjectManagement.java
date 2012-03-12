@@ -47,6 +47,9 @@ import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectStatefulSearchService;
@@ -206,10 +209,17 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 		
 		try {
 			//getContentService().replaceContentObjectSubject(getSelectedContentObjectIdToTag(), ((TopicProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues());
-			getContentService().saveContentObject(selectedContentObjectToTag, false);
+			getContentService().save(selectedContentObjectToTag, false, true, null);
 			
 			// reload the tags and versions of the newly tagged content object into the existing content object list (returnedContentObjects) in order to refresh changes (i.e. get topic ids and new version information)
-			ContentObject reloadedContentObject = getContentService().getContentObjectByIdAndLocale(getSelectedContentObjectIdToTag(), JSFUtilities.getLocaleAsString(), null);
+			ContentObject reloadedContentObject = contentService.getContentObject(
+					getSelectedContentObjectIdToTag(), 
+					ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
+					FetchLevel.ENTITY, 
+					CacheRegion.NONE, 
+					null,
+					false);
+
 			((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).setSimpleTypeValues(((TopicReferenceProperty)reloadedContentObject.getCmsProperty("profile.subject")).getSimpleTypeValues());
 			((StringProperty)selectedContentObjectToTag.getCmsProperty("profile.versions")).setSimpleTypeValues(((StringProperty)reloadedContentObject.getCmsProperty("profile.versions")).getSimpleTypeValues());
 			((StringProperty)selectedContentObjectToTag.getCmsProperty("profile.hasVersion")).setSimpleTypeValue(((StringProperty)reloadedContentObject.getCmsProperty("profile.hasVersion")).getSimpleTypeValue());

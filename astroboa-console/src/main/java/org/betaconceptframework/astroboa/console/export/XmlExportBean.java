@@ -45,7 +45,6 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectSelectionBean;
@@ -124,7 +123,8 @@ public class XmlExportBean {
 		
 		Taxonomy taxonomy;
 		try {
-			taxonomy = astroboaClient.getTaxonomyService().getTaxonomyById(selectedTaxonomyId);
+			taxonomy = astroboaClient.getTaxonomyService().getTaxonomy(selectedTaxonomyId, ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.ENTITY, false);
+					
 			exportTaxonomy(taxonomy);
 		}
 		catch (Exception e) {

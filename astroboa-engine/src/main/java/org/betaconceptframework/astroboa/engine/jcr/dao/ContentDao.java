@@ -59,7 +59,6 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.api.model.io.SerializationConfiguration;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
@@ -747,44 +746,6 @@ public class ContentDao  extends JcrDaoSupport{
 		}
 	}
 	
-	public CmsOutcome<CmsRankedOutcome<ContentObject>> searchContentObjects(ContentObjectCriteria contentObjectCriteria)   {
-
-
-		try {
-			if (contentObjectCriteria == null)
-				throw new CmsException("Null content object criteria");
-
-			//Search in cache
-			CmsOutcome<CmsRankedOutcome<ContentObject>> contentObjectQueryOutcome = null; 
-
-			if (contentObjectCriteria.isCacheable()){
-
-				//if (contentObjectCriteria instanceof ContentObjectCriteriaImpl){
-					//ContentObjectCriteria need a further processing as some criteria like textSearch
-					//need to be converted to Criterion and to do this we need interaction with the
-					//repository. But we need the full XPath before visiting the cache
-					//((ContentObjectCriteriaImpl) contentObjectCriteria).appendXPathQuery();
-
-				//}
-
-				contentObjectQueryOutcome = (CmsOutcome<CmsRankedOutcome<ContentObject>>)jcrQueryCacheRegion.getJcrQueryResults(contentObjectCriteria);
-			}
-
-			if (contentObjectQueryOutcome != null)
-				return contentObjectQueryOutcome;
-			else
-				return (CmsOutcome<CmsRankedOutcome<ContentObject>>) contentObjectDao.searchContentObjects(contentObjectCriteria, getSession(), CmsRankedOutcome.class);
-
-		}catch(RepositoryException ex)
-		{
-			throw new CmsException(ex);
-		}
-		catch (Exception e) {
-			throw new CmsException(e);
-		}
-	}
-
-
 
 	public String lockContentObject(String contentObjectId)   {
 		Session session = null;

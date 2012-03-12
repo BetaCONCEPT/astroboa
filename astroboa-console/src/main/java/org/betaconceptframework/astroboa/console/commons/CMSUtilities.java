@@ -31,6 +31,7 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.LocalizableCmsDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -102,7 +103,7 @@ public class CMSUtilities {
 			}
 			
 			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
-			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria);
+			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
 				Topic firstTopic = topicsFound.getResults().get(0); 
 				// if more than one topics correspond to the same name then we choose the first one but we generate a warning
@@ -157,7 +158,7 @@ public class CMSUtilities {
 				topicCriteria.doNotCacheResults();
 			}
 			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
-			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria);
+			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
 				Topic firstTopic = topicsFound.getResults().get(0); 
 				// if more than one topics correspond to the same id then we choose the first one but we generate a warning
@@ -215,7 +216,7 @@ public class CMSUtilities {
 				topicCriteria.addOrderByLocale(locale, Order.ascending);
 			}
 			
-			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
+			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			childTopics = outcome.getResults();
 			
 			if (CollectionUtils.isNotEmpty(childTopics) && orderByPosition) {
@@ -266,7 +267,7 @@ public class CMSUtilities {
 			if (!orderByPosition) {
 				topicCriteria.addOrderByLocale(locale, Order.ascending);
 			}
-			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria);
+			CmsOutcome<Topic> outcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			childTopics = outcome.getResults();
 			
 			if (CollectionUtils.isNotEmpty(childTopics) && orderByPosition) {
@@ -309,8 +310,7 @@ public class CMSUtilities {
 			//topicCriteria.getResultRowRange().setRange(0, 30);
 
 
-			CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(
-					topicCriteria);
+			CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			return cmsOutcome.getResults();
 		}
 		catch (Exception e) {
@@ -328,8 +328,7 @@ public class CMSUtilities {
 		
 		topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
 		
-		CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(
-				topicCriteria);
+		CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		List<Topic> allTags = cmsOutcome.getResults();
 		List<Topic> currentUserTags = new ArrayList<Topic>();
 		if (allTags != null && (!allTags.isEmpty())) {

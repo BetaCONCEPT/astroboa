@@ -46,6 +46,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
@@ -126,7 +127,7 @@ public class TagEdit extends LocalizationEdit {
 			topicCriteria.addIdNotEqualsCriterion(editedTag.getId());
 		}
 
-		CmsOutcome<Topic> otherTopics = topicService.searchTopics(topicCriteria);
+		CmsOutcome<Topic> otherTopics = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		if (otherTopics != null && otherTopics.getCount() > 0){
 			Topic topicWithSameSystemName = otherTopics.getResults().get(0);
 			String topicPath = topicWithSameSystemName.getAvailableLocalizedLabel(localeSelector.getLocaleString());
@@ -168,7 +169,7 @@ public class TagEdit extends LocalizationEdit {
 				}
 
 				//Save topic/tag
-				topicService.saveTopic(editedTag);
+				topicService.save(editedTag);
 				
 
 				//Inform UI only if topic is a tag and a new one

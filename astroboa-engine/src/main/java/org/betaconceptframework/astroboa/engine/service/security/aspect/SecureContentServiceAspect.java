@@ -40,7 +40,6 @@ import org.betaconceptframework.astroboa.api.model.query.Condition;
 import org.betaconceptframework.astroboa.api.model.query.ContentAccessMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.RepositoryUserIdPrincipal;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
@@ -76,19 +75,6 @@ public class SecureContentServiceAspect{
 	
 	private final static Logger logger = LoggerFactory.getLogger(SecureContentServiceAspect.class);
 	
-	/**
-	 * This Pointcut is triggered when the getContentObjectByIdAndLocale() method is used
-	 * 
-	 */
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.getContentObjectByIdAndLocale(..))")
-	private void getContentObjectByIdAndLocale(){}
-	
-	/**
-	 * This Pointcut is triggered when the getContentObjectById() method is used
-	 * 
-	 */
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.getContentObjectById(..))")
-	private void getContentObjectById(){}
 	
 	/**
 	 * This Pointcut is triggered when the getContentObject() method is used
@@ -112,36 +98,14 @@ public class SecureContentServiceAspect{
 	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.searchContentObjects(..))")
 	private void searchContentObjects(){}
 	
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.searchContentObjectsAndExportToXml(..))")
-	private void searchContentObjectsAndExportToXml(){}
-	
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.searchContentObjectsAndExportToJson(..))")
-	private void searchContentObjectsAndExportToJson(){}
-	
 	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.copyContentObject(..))")
 	private void copyContentObject(){}
 	
-	@Around("getContentObjectByIdAndLocale() &&  args(contentObjectId,locale, cacheRegion)")
-	public Object checkGetContentObjectByIdAndLocale(ProceedingJoinPoint proceedingJoinPoint, String contentObjectId, String locale,CacheRegion cacheRegion){
-		return grantOrDenyAccessToContentObject(proceedingJoinPoint, contentObjectId, new Object[]{contentObjectId, locale, cacheRegion}, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE);
-	}
-	
-	@Around("getContentObjectById() &&  args(contentObjectId, cacheRegion)")
-	public Object checkGetContentObjectById(ProceedingJoinPoint proceedingJoinPoint, String contentObjectId,CacheRegion cacheRegion){
-		return grantOrDenyAccessToContentObject(proceedingJoinPoint, contentObjectId, new Object[]{contentObjectId, cacheRegion}, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE);
-	}
-	
-	@Around("getContentObject() &&  args(contentObjectId, renderProperties, cacheRegion)")
-	public Object checkGetContentObject(ProceedingJoinPoint proceedingJoinPoint, String contentObjectId, RenderProperties renderProperties,CacheRegion cacheRegion){
-		return grantOrDenyAccessToContentObject(proceedingJoinPoint, contentObjectId, new Object[]{contentObjectId, renderProperties, cacheRegion}, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE);
-	}
-
 	@Around("getContentObject() &&  args(contentObjectId, output, fetchLevel, cacheRegion, propertyPathsToInclude, serializeBinaryContent)")
 	public <T> T checkGetContentObject(ProceedingJoinPoint proceedingJoinPoint, String contentObjectId, ResourceRepresentationType<T> output, FetchLevel fetchLevel, CacheRegion cacheRegion, List<String> propertyPathsToInclude,boolean serializeBinaryContent){
 		return (T) grantOrDenyAccessToContentObject(proceedingJoinPoint, contentObjectId, new Object[]{contentObjectId, output, fetchLevel, cacheRegion, propertyPathsToInclude, serializeBinaryContent}, output);
 	}
 
-	
 	@Around("getContentObjectByVersionName() &&  args(contentObjectId, versionName, locale, cacheRegion)")
 	public Object checkGetContentObjectByVersionName(ProceedingJoinPoint proceedingJoinPoint, String contentObjectId, String versionName, String locale,CacheRegion cacheRegion){
 		return grantOrDenyAccessToContentObject(proceedingJoinPoint, contentObjectId, new Object[]{contentObjectId, versionName, locale, cacheRegion}, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE);
@@ -395,12 +359,6 @@ public class SecureContentServiceAspect{
 		return addSecurityCriteria(proceedingJoinPoint, contentObjectCriteria, output);
 	}
 		
-	@Around("( searchContentObjectsAndExportToJson() || searchContentObjectsAndExportToXml() || searchContentObjects() ) &&  args(contentObjectCriteria)")
-	public Object addSecurityCriteriaToContentObjectCriteria(ProceedingJoinPoint proceedingJoinPoint, ContentObjectCriteria contentObjectCriteria) {
-		return addSecurityCriteria(proceedingJoinPoint, contentObjectCriteria, null);
-	}
-	
-	
 	private Object addSecurityCriteria(ProceedingJoinPoint proceedingJoinPoint, ContentObjectCriteria contentObjectCriteria, 
 			ResourceRepresentationType output) {
 		

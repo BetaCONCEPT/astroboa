@@ -50,28 +50,6 @@ import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 public interface TaxonomyServiceSecure {
 
 	/**
-	 * Same semantics with {@link TaxonomyService#saveTaxonomy(Taxonomy)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_TAXONOMY_EDITOR} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param taxonomy
-	 *            {@link Taxonomy Taxonomy} to be saved.  
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use method {@link #save(Object)} instead
-	 * 
-	 * @return Newly created or updated Taxonomy
-	 */
-	@Deprecated
-	Taxonomy saveTaxonomy(Taxonomy taxonomy, String authenticationToken);
-
-	/**
 	 * Same semantics with {@link TaxonomyService#deleteTaxonomyTree(String)}
 	 * augmented with the requirement of providing an authentication token
 	 *
@@ -89,56 +67,6 @@ public interface TaxonomyServiceSecure {
 	 */
 	boolean deleteTaxonomyTree(String taxonomyIdOrName, String authenticationToken);
 
-	/**
-	 * Same semantics with {@link TaxonomyService#getTaxonomy(String, String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param taxonomyName
-	 *            {@link Taxonomy#getName() Taxonomy name}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization}. In case
-	 *            where <code>locale</code> is blank (empty or null), all
-	 *            localized labels will be rendered.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * 
-	 * @deprecated User {@link #getTaxonomy(String, ResourceRepresentationType, FetchLevel)}
-	 * @return {@link Taxonomy} with the specified name or null if not found.
-	 */
-	@Deprecated
-	Taxonomy getTaxonomy(String taxonomyName, String locale, String authenticationToken);
-
-	/**
-	 * Same semantics with {@link TaxonomyService#getTaxonomies(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param locale
-	 *            Locale value as defined in {@link Localization}. In case
-	 *            where <code>locale</code> is blank (empty or null), all
-	 *            localized labels will be rendered.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 *  
-	 * @deprecated Use {@link #getAllTaxonomies(ResourceRepresentationType, FetchLevel, boolean)} instead
-	 * 
-	 * @return A list of all taxonomies in content repository model.
-	 */
-	@Deprecated
-	List<Taxonomy> getTaxonomies(String locale, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link TaxonomyService#getBuiltInSubjectTaxonomy(String)}
@@ -231,24 +159,5 @@ public interface TaxonomyServiceSecure {
 	 * @return Newly created or updated Taxonomy
 	 */
 	Taxonomy save(Object taxonomySource, String authenticationToken);
-	/**
-	 * Same semantics with {@link TaxonomyService#getTaxonomyById(String)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param taxonomyId
-	 *            {@link Taxonomy#getId() Taxonomy id}.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * 
-	 * @return {@link Taxonomy} with the specified identifier or null if not found.
-	 */
-	Taxonomy getTaxonomyById(String taxonomyId, String authenticationToken);
 
 }

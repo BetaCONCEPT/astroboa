@@ -589,9 +589,6 @@ public class ContentObjectSecurityTest extends AbstractRepositoryTest{
 		if (contentServiceMethodDeclarations == null){
 			contentServiceMethodDeclarations = new ArrayList<ContentObjectMethodDeclaration>();
 
-			contentServiceMethodDeclarations.add(new ContentObjectMethodDeclaration("getContentObjectByIdAndLocale", new Object[]{"en", null}, String.class, String.class, CacheRegion.class));
-			contentServiceMethodDeclarations.add(new ContentObjectMethodDeclaration("getContentObjectById", new Object[]{null}, String.class, CacheRegion.class));
-			contentServiceMethodDeclarations.add(new ContentObjectMethodDeclaration("getContentObject", new Object[]{new RenderPropertiesImpl(), null}, String.class, RenderProperties.class,CacheRegion.class));
 			contentServiceMethodDeclarations.add(new ContentObjectMethodDeclaration("getContentObject", new Object[]{ResourceRepresentationType.XML, FetchLevel.FULL, null, null, false}, String.class, ResourceRepresentationType.class, 
 					FetchLevel.class, CacheRegion.class, List.class, boolean.class));
 			contentServiceMethodDeclarations.add(new ContentObjectMethodDeclaration("getContentObject", new Object[]{ResourceRepresentationType.CONTENT_OBJECT_LIST, FetchLevel.FULL, null, null, false}, String.class, ResourceRepresentationType.class, 

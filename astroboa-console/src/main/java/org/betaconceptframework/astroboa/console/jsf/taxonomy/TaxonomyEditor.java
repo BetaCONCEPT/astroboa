@@ -44,6 +44,8 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TaxonomyService;
 import org.betaconceptframework.astroboa.console.jsf.LocalizationEdit;
 import org.betaconceptframework.astroboa.console.seam.SeamEventNames;
@@ -86,7 +88,7 @@ public class TaxonomyEditor extends LocalizationEdit {
 			if ("success".equals(saveResult)) {
 
 				//Save taxonomy
-				taxonomyService.saveTaxonomy(editedTaxonomy);
+				taxonomyService.save(editedTaxonomy);
 
 				JSFUtilities.addMessage(null, "taxonomy.save.successful", null, FacesMessage.SEVERITY_INFO);
 
@@ -120,7 +122,7 @@ public class TaxonomyEditor extends LocalizationEdit {
 		//Finally check is there is another taxonomy with the same name.
 		//Taxonomy name is case sensitive thus load all taxonomy names
 		//and make sure that none resembles the provided taxonomy name
-		List<Taxonomy> allTaxonomies = taxonomyService.getTaxonomies(JSFUtilities.getLocaleAsString());
+		List<Taxonomy> allTaxonomies = taxonomyService.getAllTaxonomies(ResourceRepresentationType.TAXONOMY_LIST, FetchLevel.ENTITY, false).getResults();
 		if (CollectionUtils.isNotEmpty(allTaxonomies)){
 			for (Taxonomy taxonomy : allTaxonomies){
 				if (taxonomy.getName() == null){

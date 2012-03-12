@@ -128,46 +128,6 @@ public class TopicServiceClientWrapper extends AbstractClientServiceWrapper impl
 
 
 	@Override
-	@Deprecated
-	public Topic getTopic(String topicId, String locale) {
-		if (topicServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return topicServiceSecure.getTopic(topicId, locale, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException(" TopicService reference was not found");
-		}
-	}
-
-	public Topic saveTopic(Topic topic) {
-
-		if (topicServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return topicServiceSecure.saveTopic(topic, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException(" TopicService reference was not found");
-		}
-	}
-
-
-	public CmsOutcome<Topic> searchTopics(TopicCriteria topicCriteria) {
-		if (topicServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return topicServiceSecure.searchTopics(topicCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException(" TopicService reference was not found");
-		}
-	}
-
-	@Override
 	public <T> T getTopic(String topicIdOrName, ResourceRepresentationType<T> output,
 			FetchLevel fetchLevel, boolean prettyPrint) {
 		if (topicServiceSecure != null){
@@ -208,30 +168,5 @@ public class TopicServiceClientWrapper extends AbstractClientServiceWrapper impl
 		}
 	}
 
-	@Override
-	public String searchTopicsAndExportToXml(TopicCriteria topicCriteria) {
-		if (topicServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return topicServiceSecure.searchTopicsAndExportToXml(topicCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException(" TopicService reference was not found");
-		}
-	}
-
-	@Override
-	public String searchTopicsAndExportToJson(TopicCriteria topicCriteria) {
-		if (topicServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return topicServiceSecure.searchTopicsAndExportToJson(topicCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException(" TopicService reference was not found");
-		}
-	}
 
 }

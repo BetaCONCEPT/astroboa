@@ -53,20 +53,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = false, rollbackFor = CmsException.class)
 public class SecureContentObjectSaveAspect extends AbstractSecureContentObjectAspect{
 
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveAndVersionLockedContentObject(..))")
-	private void saveAndVersionLockedContentObject(){}
-
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveLockedContentObject(..))")
-	private void saveLockedContentObject(){}
-
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveContentObject(..))")
-	private void saveContentObject(){}
-
 	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.save(..))")
 	private void saveContentObjectOrXmlOrJSON(){}
-
-	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveAndVersionContentObject(..))")
-	private void saveAndVersionContentObject(){}
 
 	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveContentObjectInBatchMode(..))")
 	private void saveContentObjectInBatchMode(){}
@@ -74,86 +62,8 @@ public class SecureContentObjectSaveAspect extends AbstractSecureContentObjectAs
 	@Pointcut("execution(public * org.betaconceptframework.astroboa.engine.service.jcr.ContentServiceImpl.saveContentObjectResourceCollection(..))")
 	private void saveContentObjectResourceCollection(){};
 	
-	@Around("saveAndVersionLockedContentObject() &&  args(contentObject,lockToken)")
-	public Object checkSaveAndVersionLockedContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,String lockToken){
-		grantOrDenyContentObjectSave(contentObject);
 
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject,lockToken});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
-
-	@Around("saveLockedContentObject() &&  args(contentObject,version,lockToken)")
-	public Object checkSaveLockedContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,boolean version,	String lockToken){
-		grantOrDenyContentObjectSave(contentObject);
-
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject,version,lockToken});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
-
-	@Around("saveContentObject() &&  args(contentObject,version)")
-	public Object checkSaveContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,boolean version){
-		grantOrDenyContentObjectSave(contentObject);
-
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject,version});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
 	
-	@Around("saveContentObject() &&  args(contentObject,version,updateLastModificationTime)")
-	public Object checkSaveContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,boolean version, boolean updateLastModificationTime){
-		grantOrDenyContentObjectSave(contentObject);
-
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject,version, updateLastModificationTime});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
-	
-	@Around("saveContentObject() &&  args(contentObject,version,updateLastModificationTime, createNewLastModificationTime)")
-	public Object checkSaveContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,boolean version, boolean updateLastModificationTime, boolean createNewLastModificationTime){
-		grantOrDenyContentObjectSave(contentObject);
-
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject,version, updateLastModificationTime, createNewLastModificationTime});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
 
 	@Around("saveContentObjectOrXmlOrJSON() &&  args(contentObject, version, updateLastModificationTime, lockToken)")
 	public Object checkSaveContentObjectWithUpdateLastModificationTime(ProceedingJoinPoint proceedingJoinPoint, 
@@ -179,21 +89,6 @@ public class SecureContentObjectSaveAspect extends AbstractSecureContentObjectAs
 		}
 	}
 
-	@Around("saveAndVersionContentObject() &&  args(contentObject)")
-	public Object checkSaveAndVersionContentObject(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject){
-		grantOrDenyContentObjectSave(contentObject);
-
-		try{
-			return proceedingJoinPoint.proceed(new Object[]{contentObject});
-		}
-		catch(CmsException e)
-		{
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new CmsException(e);
-		}
-	}
 	
 	@Around("saveContentObjectInBatchMode() &&  args(contentObject,version,updateLastModificationTime, context)")
 	public Object checkSaveContentObjectInBatchMode(ProceedingJoinPoint proceedingJoinPoint, ContentObject contentObject,boolean version, 

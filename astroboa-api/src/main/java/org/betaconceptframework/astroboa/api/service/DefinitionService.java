@@ -28,7 +28,7 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.LocalizableEntity;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
 import org.betaconceptframework.astroboa.api.model.definition.CmsDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
@@ -61,85 +61,12 @@ public interface DefinitionService {
 	boolean hasContentObjectTypeDefinition(String contentObjectTypeDefinitionName);
 
 	/**
-	 * Returns
-	 * {@link ContentObjectTypeDefinition content object type definition} for
-	 * specified type.
-	 * 
-	 * @param contentObjectTypeDefinitionName
-	 *            Content object type definition name.
-	 *            
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * 
-	 * @return Definition for content object type,
-	 *         if found , <code>null</code> otherwise.
-	 */
-	@Deprecated
-	ContentObjectTypeDefinition getContentObjectTypeDefinition(String contentObjectTypeDefinitionName);
-
-	/**
 	 * Returns all  {@link ContentObjectTypeDefinition content object type definition} names defined in content
 	 * repository model.
 	 * 
 	 * @return A list of content object type definition names.
 	 */
 	List<String> getContentObjectTypes();
-
-	
-	/**
-	 * Retrieve {@link CmsPropertyDefinition definition} for a property
-	 * specified in the provided path. 
-	 * 
-	 * This method will search property under content object type definitions and if no definition is found
-	 * it will search under aspect definitions. The first part in the path is either a content object type definition's
-	 * name or an aspect definition's name
-	 * 
-	 * @param fullPropertyDefinitionPath
-	 * 			A period-delimited string defined in 
-	 *            ({@link CmsPropertyDefinition#getPath()}).
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * 
-	 * @return
-	 * 		{@link CmsPropertyDefinition definition} for a property
-	 * 		specified in the provided path. 
-	 */
-	@Deprecated
-	CmsPropertyDefinition getCmsPropertyDefinition(String fullPropertyDefinitionPath);
-	
-	/**
-	 * Retrieve {@link CmsPropertyDefinition definition} for a property  
-	 * defined in a {@link ContentObjectTypeDefinition content object type definition}
-	 * without the need to retrieve content object type definition instance first and then
-	 * calling method {@link ContentObjectTypeDefinition#getCmsPropertyDefinition(String)}.
-	 * 
-	 * @param relativePropertyPath
-	 *            A period-delimited string defined in 
-	 *            ({@link CmsPropertyDefinition#getPath()}).
-	 *            relative to <code>contentObjectTypeDefinitionName</code>.
-	 * @param contentObjectTypeDefinitionName
-	 *            Content object type  definition name.
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * 
-	 * @return Definition for a property of a content object type,
-	 *         if found , <code>null</code> otherwise.
-	 */
-	@Deprecated
-	CmsPropertyDefinition getCmsPropertyDefinition(String relativePropertyPath,String contentObjectTypeDefinitionName);
-
-	/**
-	 * Returns a {@link ComplexCmsPropertyDefinition definition } about a
-	 * global complex property.  
-	 * 
-	 * @param complexCmsPropertyName
-	 *            Complex property definition name.
-
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 *            
-	 * @return Complex content object property definition if found,
-	 *         <code>null</code> otherwise.
-	 * @see ComplexCmsPropertyDefinition for more on term <code>aspect</code>
-	 */
-	@Deprecated
-	ComplexCmsPropertyDefinition getAspectDefinition(String complexCmsPropertyName);
 
 	/**
 	 * Returns global {@link ComplexCmsPropertyDefinition complex property definitions} 
@@ -170,25 +97,6 @@ public interface DefinitionService {
 	 * @see ComplexCmsPropertyDefinition for more on term <code>aspect</code>
 	 */
 	List<ComplexCmsPropertyDefinition> getAvailableAspectDefinitionsSortedByLocale(String locale);
-
-	/**
-	 * Returns the XML Schema that defines the provided <code>definitionName</code>
-	 * 
-	 * <p>
-	 * <code>definitionName<code> could represent a {@link ContentObjectTypeDefinition type definition}
-	 * or a @{link CmsPropertyDefinition property definition}.
-	 * </p>
-	 * 
-	 * <p>
-	 * If no xml schema is found, <code>null</code> is returned.
-	 * </p>
-	 * @param definitionFullPath As described in @{link {@link CmsPropertyDefinition#getFullPath()}.
-	 * 
-	 * @deprecated Use {@link #getCmsDefinition(String, ResourceRepresentationType)}
-	 * @return A byte array containing definition schema contents.
-	 */
-	@Deprecated
-	byte[] getXMLSchemaForDefinition(String definitionFullPath);
 
 	/**
 	 * Retrieve all {@link TopicReferenceProperty topic property} paths per taxonomy

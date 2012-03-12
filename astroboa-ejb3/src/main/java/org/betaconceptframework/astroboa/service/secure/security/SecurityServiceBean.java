@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;

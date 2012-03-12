@@ -28,6 +28,8 @@ import java.util.Map.Entry;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Topic;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.commons.comparator.TopicLocalizedLabelComparator;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingTreeNodeRichFaces;
@@ -113,7 +115,7 @@ public class LazyLoadingTopicTreeNode extends LazyLoadingTreeNodeRichFaces{
 	}
 
 	public void reloadTopic() {
-		topic = topicService.getTopic(topic.getId(), topic.getCurrentLocale());
+		topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 		this.children.clear();
 		this.leaf = topic.getNumberOfChildren() == 0;
 	}

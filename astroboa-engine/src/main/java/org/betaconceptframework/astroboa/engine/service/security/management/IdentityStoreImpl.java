@@ -35,7 +35,6 @@ import org.betaconceptframework.astroboa.api.model.definition.StringPropertyDefi
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.security.AstroboaPrincipalName;
 import org.betaconceptframework.astroboa.api.security.CmsRole;

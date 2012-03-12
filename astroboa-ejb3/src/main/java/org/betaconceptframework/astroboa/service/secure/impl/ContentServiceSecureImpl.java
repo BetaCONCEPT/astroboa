@@ -36,8 +36,6 @@ import org.betaconceptframework.astroboa.api.model.ContentObjectFolder;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
-import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.api.service.ContentService;
@@ -87,28 +85,6 @@ public class ContentServiceSecureImpl extends AbstractSecureAstroboaService impl
 		return contentService.getBinaryChannelById(binaryChannelId);
 	}
 
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public ContentObject getContentObject(String contentObjectId,
-			RenderProperties contentObjectRenderProperties,
-			CacheRegion cacheRegion,String authenticationToken) {
-		
-		return contentService.getContentObject(contentObjectId, contentObjectRenderProperties, cacheRegion);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public ContentObject getContentObjectById(String contentObjectId,
-			CacheRegion cacheRegion,String authenticationToken) {
-		
-		return contentService.getContentObjectById(contentObjectId,cacheRegion);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public ContentObject getContentObjectByIdAndLocale(String contentObjectId,
-			String locale,
-			CacheRegion cacheRegion,String authenticationToken) {
-		
-		return contentService.getContentObjectByIdAndLocale(contentObjectId, locale, cacheRegion);
-	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public ContentObject getContentObjectByVersionName(String contentObjectId,
@@ -158,42 +134,6 @@ public class ContentServiceSecureImpl extends AbstractSecureAstroboaService impl
 		contentService.removeLockFromContentObject(contentObjectId, lockToken);
 	}
 
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public ContentObject saveAndVersionContentObject(ContentObject contentObject,String authenticationToken) {
-		
-		return contentService.saveAndVersionContentObject(contentObject);
-	}
-
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public ContentObject saveAndVersionLockedContentObject(
-			ContentObject contentObject, String lockToken,String authenticationToken) {
-		
-		return contentService.saveAndVersionLockedContentObject(contentObject, lockToken);
-	}
-
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public ContentObject saveContentObject(ContentObject contentObject, boolean version,String authenticationToken) {
-		
-		return contentService.saveContentObject(contentObject, version);
-	}
-
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public ContentObject saveLockedContentObject(ContentObject contentObject,
-			boolean version, String lockToken,String authenticationToken) {
-		
-		return contentService.saveLockedContentObject(contentObject, version, lockToken);
-	}
-
-	//This annotation will create some interceptors if this module runs inside Jboss
-	//but according to Jboss unless @SecutiryDomain is provided
-	//these interceptors will not run.Therefore AstroboaSecurityAuthenticationInterceptor
-	//performs role base authorization independent of Jboss interceptors
-	@RolesAllowed({"ROLE_CMS_EXTERNAL_VIEWER"})
-	public CmsOutcome<CmsRankedOutcome<ContentObject>> searchContentObjects(
-			ContentObjectCriteria contentObjectCriteria,String authenticationToken) {
-		
-		return contentService.searchContentObjects(contentObjectCriteria);
-	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public List<CmsProperty<?, ?>> loadChildCmsProperty(
@@ -213,27 +153,6 @@ public class ContentServiceSecureImpl extends AbstractSecureAstroboaService impl
 			String authenticationToken) {
 		contentService.moveAspectToNativePropertyForAllContentObjectsOFContentType(aspect, newPropertyName, contentType);
 		
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public String searchContentObjectsAndExportToXml(
-			ContentObjectCriteria contentObjectCriteria,
-			String authenticationToken) {
-		return contentService.searchContentObjectsAndExportToXml(contentObjectCriteria);
-	}
-
-	@RolesAllowed("ROLE_CMS_EDITOR")
-	public ContentObject saveContentObject(ContentObject contentObject,
-			boolean version, boolean updateLastModificationDate,
-			String authenticationToken) {
-		return contentService.saveContentObject(contentObject, version, updateLastModificationDate);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public String searchContentObjectsAndExportToJson(
-			ContentObjectCriteria contentObjectCriteria,
-			String authenticationToken) {
-		return contentService.searchContentObjectsAndExportToJson(contentObjectCriteria);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")

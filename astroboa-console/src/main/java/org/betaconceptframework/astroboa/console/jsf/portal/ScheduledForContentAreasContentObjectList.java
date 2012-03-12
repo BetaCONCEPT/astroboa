@@ -57,8 +57,7 @@ public class ScheduledForContentAreasContentObjectList extends ContentObjectList
 	private Topic selectedContentArea;
 	
 	@Override
-	protected List<CmsRankedOutcome<ContentObject>> orderResults(
-			List<CmsRankedOutcome<ContentObject>> results) {
+	protected List<ContentObject> orderResults(List<ContentObject> results) {
 		return results;
 	}
 	
@@ -103,7 +102,7 @@ public class ScheduledForContentAreasContentObjectList extends ContentObjectList
 		try{
 			contentObject.removeCmsProperty(scheduledContentAreaPath);
 			
-			contentService.saveContentObject(contentObject, false);
+			contentService.save(contentObject, false, true, null);
 			
 			JSFUtilities.addMessage(null, "Η προγραμματισμένη περιοχή από το αντικείμενο διαγράφηκε με επιτυχία",  FacesMessage.SEVERITY_INFO);
 			

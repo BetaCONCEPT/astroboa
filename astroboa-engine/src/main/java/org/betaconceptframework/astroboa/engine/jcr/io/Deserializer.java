@@ -26,7 +26,6 @@ import javax.jcr.Session;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.sax.SAXSource;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;

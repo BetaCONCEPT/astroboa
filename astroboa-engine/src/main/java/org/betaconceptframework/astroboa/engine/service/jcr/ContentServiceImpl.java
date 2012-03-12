@@ -32,8 +32,6 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
-import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.api.service.ContentService;
@@ -54,98 +52,6 @@ public class ContentServiceImpl  implements ContentService {
 	@Autowired
 	private ContentDao contentDao;
 	
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public ContentObject saveLockedContentObject(ContentObject contentObject, boolean version, String lockToken)   {
-
-		try { 
-			return contentDao.saveContentObject(contentObject, version, lockToken, true,  null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public ContentObject saveContentObject(ContentObject contentObject, boolean version)   {
-		try{ 
-			return contentDao.saveContentObject(contentObject, version, null, true,  null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-	
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public ContentObject saveAndVersionLockedContentObject(ContentObject contentObject, String lockToken)   {
-		try{ 
-			return contentDao.saveContentObject(contentObject, true, lockToken, true,  null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public ContentObject saveAndVersionContentObject(ContentObject contentObject)   {
-		try{ 
-			return contentDao.saveContentObject(contentObject, true, null, true, null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}	}
-
-	@Deprecated
-	public ContentObject getContentObjectById(String contentObjectId, CacheRegion cacheRegion)   {
-		try{ 
-			return contentDao.serializeContentObject(contentObjectId, cacheRegion, 
-					ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
-					null, 
-					FetchLevel.ENTITY, 
-					false,
-					false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Deprecated
-	public ContentObject getContentObjectByIdAndLocale(String contentObjectId, String locale, CacheRegion cacheRegion){
-		try{
-			return contentDao.serializeContentObject(contentObjectId, cacheRegion, 
-					ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
-					null, 
-					FetchLevel.ENTITY, 
-					false,
-					false);
-
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
 
 	public BinaryChannel getBinaryChannelById(String binaryChannelId)   {
 		try{ 
@@ -184,31 +90,6 @@ public class ContentServiceImpl  implements ContentService {
 		}
 	}
 
-	@Deprecated
-	public ContentObject getContentObject(String contentObjectIdOrSystemName, RenderProperties renderProperties, CacheRegion cacheRegion)   {
-		try{
-			
-			FetchLevel fetchLevel = FetchLevel.ENTITY;
-			
-			if (renderProperties != null &&	renderProperties.allContentObjectPropertiesAreRendered()){
-				fetchLevel = FetchLevel.FULL;
-			}
-			
-			return contentDao.serializeContentObject(contentObjectIdOrSystemName, cacheRegion, 
-					ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
-					null, 
-					fetchLevel, 
-					false,
-					false);
-
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
 	public boolean deleteContentObject(String objectIdOrSystemName)   {
@@ -227,21 +108,6 @@ public class ContentServiceImpl  implements ContentService {
 
 		try{ 
 			return contentDao.getContentObjectByVersionName(contentObjectId, versionName, locale, cacheRegion);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	//TODO : Must change CmsRankedOutcome so that it extends CmsRepositoryEntity
-	@Deprecated
-	public CmsOutcome<CmsRankedOutcome<ContentObject>> searchContentObjects(ContentObjectCriteria contentObjectCriteria)   {
-
-		try{ 
-			return contentDao.searchContentObjects(contentObjectCriteria);
 		}
 		catch(CmsException e){
 			throw e;
@@ -328,52 +194,6 @@ public class ContentServiceImpl  implements ContentService {
 		contentDao.moveAspectToNativePropertyForAllContentObjectsOFContentType(
 				aspect, newPropertyName, contentType);
 		
-	}
-
-	@Override
-	@Deprecated
-	public String searchContentObjectsAndExportToXml(
-			ContentObjectCriteria contentObjectCriteria) {
-		try{ 
-			return contentDao.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.XML);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		} 
-	}
-
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public ContentObject saveContentObject(ContentObject contentObject,
-			boolean version, boolean updateLastModificationDate) {
-		try{ 
-			return contentDao.saveContentObject(contentObject, version, null, updateLastModificationDate, null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Override
-	@Deprecated
-	public String searchContentObjectsAndExportToJson(
-			ContentObjectCriteria contentObjectCriteria) {
-		try{ 
-			return contentDao.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.JSON);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		} 
-
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)

@@ -29,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.edit.SimpleCmsPropertyWrapper;
@@ -187,7 +189,7 @@ public class Clipboard {
 				return;
 			}
 			
-			ContentObject contentObject = contentService.getContentObjectById(selectedObjectId, CacheRegion.NONE);
+			ContentObject contentObject = contentService.getContentObject(selectedObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 			
 			if (contentObject != null) {
 				ContentObjectItem contentObjectItem = new ContentObjectItem();

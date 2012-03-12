@@ -1,17 +1,18 @@
 package org.jboss.resteasy.specimpl;
 
-import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.util.Encode;
-
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.PathSegment;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
+import org.apache.commons.lang.StringUtils;
+import org.jboss.resteasy.util.Encode;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>

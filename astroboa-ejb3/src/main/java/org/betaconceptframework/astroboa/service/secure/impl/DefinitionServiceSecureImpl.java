@@ -59,13 +59,6 @@ public class DefinitionServiceSecureImpl extends AbstractSecureAstroboaService i
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public ComplexCmsPropertyDefinition getAspectDefinition(
-			String complexCmsPropertyName,String authenticationToken) {
-		
-		return definitionService.getAspectDefinition(complexCmsPropertyName);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public List<ComplexCmsPropertyDefinition> getAspectDefinitionsSortedByLocale(
 			List<String> complexCmsPropertyNames, String locale,String authenticationToken) {
 		
@@ -77,20 +70,6 @@ public class DefinitionServiceSecureImpl extends AbstractSecureAstroboaService i
 			String locale,String authenticationToken) {
 		
 		return definitionService.getAvailableAspectDefinitionsSortedByLocale(locale);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public CmsPropertyDefinition getCmsPropertyDefinition(
-			String relativePropertyPath, String contentObjectTypeDefinitionName,String authenticationToken) {
-		
-		return definitionService.getCmsPropertyDefinition(relativePropertyPath, contentObjectTypeDefinitionName);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public ContentObjectTypeDefinition getContentObjectTypeDefinition(
-			String contentObjectTypeDefinitionName,String authenticationToken) {
-		
-		return definitionService.getContentObjectTypeDefinition(contentObjectTypeDefinitionName);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
@@ -106,25 +85,12 @@ public class DefinitionServiceSecureImpl extends AbstractSecureAstroboaService i
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public byte[] getXMLSchemaForDefinition(String definitionFullPath,String authenticationToken) {
-		
-		return definitionService.getXMLSchemaForDefinition(definitionFullPath);
-	}
-
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public boolean hasContentObjectTypeDefinition(
 			String contentObjectTypeDefinitionName,String authenticationToken) {
 		
 		return definitionService.hasContentObjectTypeDefinition(contentObjectTypeDefinitionName);
 	}
 	
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public CmsPropertyDefinition getCmsPropertyDefinition(
-			String fullPropertyDefinitionPath,String authenticationToken) {
-		
-		return definitionService.getCmsPropertyDefinition(fullPropertyDefinitionPath);
-	}
-
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public List<String> getMultivalueProperties(String authenticationToken) {
 		return definitionService.getMultivalueProperties();

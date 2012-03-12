@@ -118,20 +118,6 @@ public class RepositoryUserServiceClientWrapper extends AbstractClientServiceWra
 		}
 	}
 
-	public RepositoryUser saveRepositoryUser(RepositoryUser repositoryUser) {
-
-		if (repositoryUserServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return repositoryUserServiceSecure.saveRepositoryUser(repositoryUser, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("RepositoryUserService reference was not found");
-		}
-
-	}
-
 
 
 	public List<RepositoryUser> searchRepositoryUsers(

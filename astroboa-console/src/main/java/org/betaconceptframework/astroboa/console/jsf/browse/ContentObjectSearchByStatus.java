@@ -43,6 +43,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -155,7 +156,7 @@ public class ContentObjectSearchByStatus extends AbstractUIBean {
 			// now we are ready to run the query
 			long startTime = System.currentTimeMillis();
 			//int resultSetSize = contentObjectStatefulSearchService.searchForContentWithPagedResults(contentObjectCriteria, true, JSFUtilities.getLocaleAsString(), 100);
-			CmsOutcome<CmsRankedOutcome<ContentObject>> contentObjectResutls = contentService.searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> contentObjectResutls = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			long endTime = System.currentTimeMillis();
 			getLogger().debug("Find Content Objects by Status:FIRST EXECUTION to get object count took: " + (endTime - startTime) + "ms");
 			
@@ -168,11 +169,10 @@ public class ContentObjectSearchByStatus extends AbstractUIBean {
 							//	new String[] {contentObjectStatus, String.valueOf(resultSetSize)}));
 				
 				List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
-				List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = contentObjectResutls.getResults();
+				List<ContentObject> cmsOutcomeRowList = contentObjectResutls.getResults();
 				
-				for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(
-							cmsOutcomeRow.getCmsRepositoryEntity()));
+				for (ContentObject cmsOutcomeRow : cmsOutcomeRowList) {
+					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow));
 				}
 				
 				// JSFUtilities.addMessage(null,JSFUtilities.getParameterisedStringI18n("contentSearch.contentObjectListHeaderMessageForSearchByStatus",

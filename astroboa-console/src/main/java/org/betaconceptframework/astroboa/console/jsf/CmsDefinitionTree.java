@@ -25,6 +25,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsPropertyDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.jsf.edit.ComplexCmsPropertyEdit;
 import org.betaconceptframework.astroboa.console.jsf.richfaces.LazyLoadingCmsDefinitionTreeNodeRichFaces;
@@ -132,7 +133,7 @@ public class CmsDefinitionTree extends AbstractUIBean{
 	}
 
 	private void addAspect(String aspect) {
-		ComplexCmsPropertyDefinition aspectDefinition = definitionService.getAspectDefinition(aspect);
+		ComplexCmsPropertyDefinition aspectDefinition = (ComplexCmsPropertyDefinition) definitionService.getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		if (aspectDefinition == null)
 			logger.warn("Could not find aspect definition with name "+ aspect);
 		else{

@@ -43,51 +43,6 @@ import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 public interface TaxonomyService {
 
 	/**
-	 * Save or update a {@link Taxonomy taxonomy} in content repository model.
-	 * 
-	 * <p>
-	 * This method saves or updates taxonomy's name and localized labels and NOT its root topics.
-	 * In order to save its root topics, a call to {@link TopicService#saveTopic(Topic)}
-	 * for each root topic must be made.
-	 * </p>
-	 * 
-	 * <p>
-	 * In case of insert or update full Taxonomy tree, one could export taxonomy to an xml ({@link Taxonomy#toXml()})
-	 * and then call {@link #importTaxonomyFromXml(String)}.
-	 * </p>
-	 * 
-	 * <p>
-	 * Taxonomy {@link Taxonomy#getName() name} must be unique across the repository and a valid XML name
-	 * according to XML Namespaces recommendation [4] (http://www.w3.org/TR/REC-xml-names) .
-	 * </p>
-	 * 
-	 * <p>
-	 * Names {@link Taxonomy#REPOSITORY_USER_FOLKSONOMY_NAME} and {@link Taxonomy#SUBJECT_TAXONOMY_NAME}
-	 * are reserved names and 
-	 * an {@link CmsException exception} is thrown in case user tries to save an new taxonomy
-	 * with either of these names.
-	 * </p>
-	 * 
-	 * <p>
-	 * Use of this method for  
-	 * built in subject taxonomy (Taxonomy with name {@link Taxonomy#SUBJECT_TAXONOMY_NAME}) or 
-	 * a {@link RepositoryUser#getFolksonomy() repository user's taxonomy}
-	 * updates only localized labels for this taxonomy. 
-	 * </p>
-	 * 
-	 * 
-	 * @param taxonomy
-	 *            {@link Taxonomy Taxonomy} to be saved.
-	 *            
-	 * @deprecated Use method {@link #save(Object)} instead
-	 *              
-	 *              
-	 * @return Newly created or updated Taxonomy            
-	 */
-	@Deprecated
-	Taxonomy saveTaxonomy(Taxonomy taxonomy);
-
-	/**
 	 * Deletes a taxonomy and all topics that belong to this taxonomy.
 	 * All references from {@link ContentObject content objects} to these topics will be deleted as well.
 	 *  
@@ -99,36 +54,6 @@ public interface TaxonomyService {
 	 */
 	boolean deleteTaxonomyTree(String taxonomyIdOrName);
 	
-	/**
-	 * Return  taxonomy with specified name.
-	 * 
-	 * @param taxonomyName
-	 *            {@link Taxonomy#getName() Taxonomy name}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization}. In case
-	 *            where <code>locale</code> is blank (empty or null), all
-	 *            localized labels will be rendered.
-	 *            
-	 * @deprecated Use {@link #getTaxonomy(String, ResourceRepresentationType, FetchLevel)}
-	 * @return {@link Taxonomy} with the specified name or null if not found.
-	 */
-	@Deprecated
-	Taxonomy getTaxonomy(String taxonomyName, String locale);
-
-	/**
-	 * Return all taxonomies in content repository model.
-	 * 
-	 * @param locale
-	 *            Locale value as defined in {@link Localization}. In case
-	 *            where <code>locale</code> is blank (empty or null), all
-	 *            localized labels will be rendered.
-	 *            
-	 * @deprecated Use {@link #getAllTaxonomies(ResourceRepresentationType, FetchLevel, boolean)} instead
-	 * @return A list of all taxonomies in content repository model.
-	 */
-	@Deprecated
-	List<Taxonomy> getTaxonomies(String locale);
-
 	/**
 	 * Return  Astroboa system {@link Taxonomy#SUBJECT_TAXONOMY_NAME taxonomy}.
 	 * 
@@ -270,7 +195,7 @@ public interface TaxonomyService {
 	 * 
 	 * <p>
 	 * This method saves or updates taxonomy's name and localized labels and NOT its root topics.
-	 * In order to save its root topics, a call to {@link TopicService#saveTopic(Topic)}
+	 * In order to save its root topics, a call to {@link TopicService#save(Object)}
 	 * for each root topic must be made.
 	 * </p>
 	 * 
@@ -305,15 +230,4 @@ public interface TaxonomyService {
 	 */
 	Taxonomy save(Object taxonomySource);
 	
-	/**
-	 * Retrieve a taxonomy using its identifier .
-	 * 
-	 * @deprecated Use {@link #getTaxonomy(String, ResourceRepresentationType, FetchLevel)} instead
-	 * 
-	 * @param taxonomyId
-	 *            {@link Taxonomy#getId() Taxonomy id}.
-	 * @return {@link Taxonomy} with the specified identifier or null if not found.
-	 */
-	@Deprecated
-	Taxonomy getTaxonomyById(String taxonomyId);
 }

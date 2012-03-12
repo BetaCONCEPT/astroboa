@@ -42,9 +42,6 @@ import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.security.DisplayNamePrincipal;
 import org.betaconceptframework.astroboa.api.security.PersonUserIdPrincipal;
-import org.betaconceptframework.astroboa.api.service.ContentService;
-import org.betaconceptframework.astroboa.api.service.RepositoryService;
-import org.betaconceptframework.astroboa.api.service.RepositoryUserService;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
 import org.betaconceptframework.astroboa.console.commons.TopicComparator;

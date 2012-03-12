@@ -281,7 +281,7 @@ public class CmsCriteriaTest extends AbstractRepositoryTest{
 			}
 
 			//Now dump jcr node for content object
-			Node contentObjectNode = getSession().getNodeByUUID(testContentObject.getId());
+			Node contentObjectNode = getSession().getNodeByIdentifier(testContentObject.getId());
 
 			logger.error(JcrUtils.dumpNode(contentObjectNode, 0));
 

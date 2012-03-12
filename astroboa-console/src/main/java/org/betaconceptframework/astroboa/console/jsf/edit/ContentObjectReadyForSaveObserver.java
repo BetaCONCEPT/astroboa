@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -57,9 +58,9 @@ public class ContentObjectReadyForSaveObserver {
 			RepositoryUser systemUser = astroboaClient.getRepositoryUserService().getSystemRepositoryUser();
 			contentObjectCriteria.addOwnerIdEqualsCriterion(systemUser.getId());
 
-			CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 			if (cmsOutcome.getCount() > 0) {
-				scriptObject = cmsOutcome.getResults().get(0).getCmsRepositoryEntity();
+				scriptObject = cmsOutcome.getResults().get(0);
 			}
 			else {
 				logger.info("Nothing to run in content object pre-save phase. " +

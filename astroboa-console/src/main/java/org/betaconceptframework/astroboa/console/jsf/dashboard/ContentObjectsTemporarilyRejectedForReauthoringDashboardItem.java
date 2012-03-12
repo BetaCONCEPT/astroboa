@@ -47,8 +47,7 @@ public class ContentObjectsTemporarilyRejectedForReauthoringDashboardItem extend
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected List<CmsRankedOutcome<ContentObject>> orderResults(
-			List<CmsRankedOutcome<ContentObject>> results) {
+	protected List<ContentObject> orderResults(List<ContentObject> results) {
 		return results;
 	}
 

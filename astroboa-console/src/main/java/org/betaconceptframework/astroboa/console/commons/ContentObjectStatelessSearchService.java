@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
@@ -63,17 +64,16 @@ public class ContentObjectStatelessSearchService {
 			contentObjectCriteria.doNotCacheResults();
 		}
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService
-				.searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		
 		List<ContentObjectUIWrapper> wrappedContentObjects;
 		
 		if (cmsOutcome.getCount() > 0) {
-			List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+			List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 			wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
 			
-			for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+			for (ContentObject cmsOutcomeRow : cmsOutcomeRowList) {
+				wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow));
 			}
 			return wrappedContentObjects;
 		} else

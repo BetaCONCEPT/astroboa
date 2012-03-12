@@ -33,6 +33,9 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
@@ -347,7 +350,7 @@ public class CriterionWrapper {
 					topicCriteria.addCriterion(localizationCriterion);
 					topicCriteria.addTaxonomyNameEqualsCriterion(acceptedTaxonomies.get(0));
 					
-					CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+					CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 					results = cmsOutcome.getResults();
 				}
@@ -365,7 +368,7 @@ public class CriterionWrapper {
 						topicCriteria.addCriterion(localizationCriterion);
 						topicCriteria.addTaxonomyNameEqualsCriterion(acceptedTaxonomy);
 						
-						CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+						CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 						
 						if (cmsOutcome != null && cmsOutcome.getCount() > 0){
 							results.addAll(cmsOutcome.getResults());
@@ -384,7 +387,7 @@ public class CriterionWrapper {
 				topicCriteria.addCriterion(localizationCriterion);
 				
 				//No taxonomy criterion proceed normally
-				CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria);
+				CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 
 				results = cmsOutcome.getResults();
 			}
@@ -425,15 +428,15 @@ public class CriterionWrapper {
 			Criterion profileTitleCriterion = CriterionFactory.like("profile.title", "%"+selectedContentObjectTitle+"%");
 			contentObjectCriteria.addCriterion(profileTitleCriterion);
 			
-			CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> cmsOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 
 			List<ContentObjectUIWrapper> wrappedContentObjects = new ArrayList<ContentObjectUIWrapper>();
 
 			if (cmsOutcome.getCount() > 0) {
-				List<CmsRankedOutcome<ContentObject>> cmsOutcomeRowList = cmsOutcome.getResults();
+				List<ContentObject> cmsOutcomeRowList = cmsOutcome.getResults();
 				
-				for (CmsRankedOutcome<ContentObject> cmsOutcomeRow : cmsOutcomeRowList) {
-					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow.getCmsRepositoryEntity()));
+				for (ContentObject cmsOutcomeRow : cmsOutcomeRowList) {
+					wrappedContentObjects.add(contentObjectUIWrapperFactory.getInstance(cmsOutcomeRow));
 				}
 			}
 			
@@ -458,7 +461,13 @@ public class CriterionWrapper {
 
 			//A Content Object has been dragged
 			//Load Content object from repository
-			ContentObject contentObject = contentService.getContentObjectByIdAndLocale(contentObjectItem.getId(), JSFUtilities.getLocaleAsString(), null);
+			ContentObject contentObject = contentService.getContentObject(
+					contentObjectItem.getId(), 
+					ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
+					FetchLevel.ENTITY, 
+					CacheRegion.NONE, 
+					null,
+					false);
 
 			if (contentObject == null)
 				JSFUtilities.addMessage(null, "Δεν υπάρχει Αντικείμενο με αναγνωριστικό "+ contentObjectItem.getId() , FacesMessage.SEVERITY_WARN);

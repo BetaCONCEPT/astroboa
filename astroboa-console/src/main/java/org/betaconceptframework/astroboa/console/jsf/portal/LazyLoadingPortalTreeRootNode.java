@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
@@ -63,17 +64,17 @@ public class LazyLoadingPortalTreeRootNode  extends LazyLoadingTreeNodeRichFaces
 			contentObjectCriteria.setSearchMode(SearchMode.SEARCH_ALL_ENTITIES);
 			contentObjectCriteria.doNotCacheResults();
 
-			CmsOutcome<CmsRankedOutcome<ContentObject>> portalOutcome = contentService.searchContentObjects(contentObjectCriteria);
+			CmsOutcome<ContentObject> portalOutcome = contentService.searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 
 			if (portalOutcome != null && portalOutcome.getCount() > 0){
 
-				List<CmsRankedOutcome<ContentObject>> portals = portalOutcome.getResults();
+				List<ContentObject> portals = portalOutcome.getResults();
 
 				//TODO Sort results according to localized label
 				//Collections.sort(portals, new PortalContentObjectLocalizedLabelComparator());
-				for (CmsRankedOutcome<ContentObject> portal: portals){
+				for (ContentObject portal: portals){
 
-					LazyLoadingPortalTreeNode portalNode = new LazyLoadingPortalTreeNode(portal.getCmsRepositoryEntity().getId(), portal.getCmsRepositoryEntity().getId(), this, contentService);
+					LazyLoadingPortalTreeNode portalNode = new LazyLoadingPortalTreeNode(portal.getId(), portal.getId(), this, contentService);
 
 					children.put(portalNode.getIdentifier(), portalNode);
 				}

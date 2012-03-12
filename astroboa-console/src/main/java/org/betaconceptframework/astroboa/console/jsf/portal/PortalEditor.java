@@ -25,6 +25,9 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.PageController;
 import org.betaconceptframework.astroboa.console.jsf.edit.ObjectEditInit;
@@ -154,24 +157,26 @@ public class PortalEditor {
 	public void addPortalSectionToPortal(String contentObjectType, String contentObjectId, Calendar dayToBeRefreshed) {
 
 		if (CmsConstants.PORTAL_SECTION_CONTENT_OBJECT_TYPE.equals(contentObjectType)){
-			ContentObject portalSectionContentObject = contentService.getContentObjectById(contentObjectId, null);
+			ContentObject portalSectionContentObject = contentService.getContentObject(contentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
 
 			ObjectReferenceProperty portalSectionProperty = null;
 
 			if (StringUtils.isNotBlank(parentPortalSectionContentObjectId)){
 				
-				ContentObject parentPortalSectionContentObject = contentService.getContentObjectById(parentPortalSectionContentObjectId, null);
+				ContentObject parentPortalSectionContentObject = contentService.getContentObject(parentPortalSectionContentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+
 				portalSectionProperty = (ObjectReferenceProperty)parentPortalSectionContentObject.getCmsProperty("subPortalSection");
 				portalSectionProperty.addSimpleTypeValue(portalSectionContentObject);
-				contentService.saveContentObject(parentPortalSectionContentObject, false);
+				contentService.save(parentPortalSectionContentObject, false, true, null);
 
 				Events.instance().raiseEvent(SeamEventNames.NEW_PORTAL_SECTION_ADDED, portalSectionProperty.getParentProperty().getId());
 			}
 			else if (StringUtils.isNotBlank(portalContentObjectId)){
-				ContentObject portalContentObject = contentService.getContentObjectById(portalContentObjectId, null);
+				ContentObject portalContentObject = contentService.getContentObject(portalContentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+
 				portalSectionProperty = (ObjectReferenceProperty)portalContentObject.getCmsProperty("portalSection");
 				portalSectionProperty.addSimpleTypeValue(portalSectionContentObject);
-				contentService.saveContentObject(portalContentObject, false);
+				contentService.save(portalContentObject, false, true, null);
 
 				Events.instance().raiseEvent(SeamEventNames.NEW_PORTAL_SECTION_ADDED, portalSectionProperty.getParentProperty().getId());
 			}

@@ -31,6 +31,7 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.commons.CMSUtilities;
@@ -82,7 +83,8 @@ public class UIMenu extends AbstractUIBean {
 				}
 				
 				for (String contentObjectTypeName : contentObjectTypeNames) {
-					ContentObjectTypeDefinition contentObjectTypeDefinition = definitionService.getContentObjectTypeDefinition(contentObjectTypeName);
+					ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(contentObjectTypeName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
+
 					if (shouldCreateSelectItem(contentObjectTypeDefinition)){
 						String contentObjectTypeLocalisedLabel = cmsUtilities.getLocalizedNameOfContentObjectType(contentObjectTypeDefinition, locale);
 						SelectItem selectItem = new SelectItem(contentObjectTypeDefinition.getName(), 

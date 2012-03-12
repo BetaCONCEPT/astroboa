@@ -28,6 +28,7 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.security.CmsRole;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.jsf.DynamicUIAreaPageComponent;
@@ -83,7 +84,7 @@ public class ContentTypeEditor {
 		}
 		
 		Object contentDefinition = retrieveFileForDefinition(contentType);
-		boolean contentTypeIsBuiltIn =  contentDefinition != null && contentDefinition instanceof byte[];
+		boolean contentTypeIsBuiltIn =  contentDefinition != null && contentDefinition instanceof String;
 		
 		if (contentTypeIsBuiltIn){
 			return false;
@@ -123,6 +124,9 @@ public class ContentTypeEditor {
 				else if (contentTypeFile instanceof byte[]){
 					String schema = new String((byte[])contentTypeFile,"UTF-8");
 					schemaContainer.setSchema(schema);
+				}
+				else if (contentTypeFile instanceof String){
+					schemaContainer.setSchema((String) contentTypeFile);
 				}
 				
 				xsdSchemasPerContentType.put(contentType, schemaContainer);
@@ -221,7 +225,7 @@ public class ContentTypeEditor {
 		ContentObjectTypeDefinition typeDefinition = null;
 		
 		if (searchDefinition){
-			typeDefinition = definitionService.getContentObjectTypeDefinition(contentType);
+			typeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		}
 		
 		String label = null;
@@ -276,14 +280,14 @@ public class ContentTypeEditor {
 			}
 			else{
 				
-				ContentObjectTypeDefinition typeDefinition = definitionService.getContentObjectTypeDefinition(contentType);
+				ContentObjectTypeDefinition typeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(contentType, ResourceRepresentationType.DEFINITION_INSTANCE,false);
 
 				URI contentTypeFileURI = ((ContentObjectTypeDefinitionImpl)typeDefinition).getDefinitionFileURI();
 
 				if (contentTypeFileURI.getScheme() == null || ! contentTypeFileURI.getScheme().startsWith("file")){
 					
 					//Probably a built in content type. Load XSD in byte array
-					return definitionService.getXMLSchemaForDefinition(contentType);
+					return definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XSD,true);
 					
 					/*if (contentTypeFileURI.getScheme().startsWith("jar")){
 						return definitionService.getXMLSchemaForDefinition(contentType);
@@ -299,7 +303,7 @@ public class ContentTypeEditor {
 						contentTypeFile.getParentFile().getAbsolutePath() == null){
 					
 					//File not found. Return XSD byte array
-					return definitionService.getXMLSchemaForDefinition(contentType);
+					return definitionService.getCmsDefinition(contentType, ResourceRepresentationType.XSD,true);
 				}
 
 

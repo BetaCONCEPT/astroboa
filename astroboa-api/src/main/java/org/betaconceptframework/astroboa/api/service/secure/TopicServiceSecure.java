@@ -53,26 +53,6 @@ import org.betaconceptframework.astroboa.api.service.TopicService;
  * 
  */
 public interface TopicServiceSecure {
-	/**
-	 * Same semantics with {@link TopicService#saveTopic(Topic)}
-	 * augmented with the requirement of providing an authentication token.
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_TAXONOMY_EDITOR} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param topic
-	 *            Topic to be saved or updated.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
-	 *  to an Astroboa repository.
-	 * @deprecated Use method {@link #save(Object,String)} instead
-	 * @return Newly created or updated Topic
-	 */
-	@Deprecated
-	Topic saveTopic(Topic topic, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link TopicService#deleteTopicTree(String)}
@@ -92,54 +72,6 @@ public interface TopicServiceSecure {
 	 * @return <code>true</code> if topic has been successfully deleted, <code>false</code> otherwise
 	 */
 	boolean deleteTopicTree(String topicIdOrName, String authenticationToken);
-
-	/**
-	 * Same semantics with {@link TopicService#getTopic(String, String)}
-	 * augmented with the requirement of providing an authentication token.
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param topicId
-	 *            {@link Topic#getId() Topic's id}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned topic.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
-	 *  to an Astroboa repository.
-	 * 
-	 * @deprecated Use {@link #getTopic(String, ResourceRepresentationType, FetchLevel)} instead
-	 * @return A topic corresponding to <code>topicId</code> 
-	 */
-	@Deprecated
-	Topic getTopic(String topicId, String locale, String authenticationToken);
-
-	/**
-	 * Same semantics with {@link TopicService#searchTopics(TopicCriteria)}
-	 * augmented with the requirement of providing an authentication token.
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param topicCriteria
-	 *            Topic search criteria.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
-	 *  to an Astroboa repository.
-	 * 
-	 * @deprecated Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType, String)}
-	 * @return Topics satisfying specified criteria.
-	 */
-	@Deprecated
-	CmsOutcome<Topic> searchTopics(TopicCriteria topicCriteria, String authenticationToken);
 
 	/**
 	 * Same semantics with {@link TopicService#getMostlyUsedTopics(String, String, int, int)}
@@ -278,55 +210,5 @@ public interface TopicServiceSecure {
 	 */
 	<T> T  searchTopics(TopicCriteria topicCriteria, ResourceRepresentationType<T> output, String authenticationToken);
 
-	/**
-	 * Same semantics with {@link TopicService#searchTopicsAndExportToXml(TopicCriteria)}
-	 * augmented with the requirement of providing an authentication token.
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 * 
-	 * @param topicCriteria
-	 *            Restrictions for topic and render instructions for
-	 *            query results.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
-	 *  to an Astroboa repository.
-	 *  
-	 * @deprecated Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType, String)} instead
-	 * 
-	 * @return XML representation of query results following XML element <code>resourceRepresentation</code>
-	 *   defined in astroboa-api-{version}.xsd
-	 */
-	@Deprecated
-	String searchTopicsAndExportToXml(TopicCriteria topicCriteria, String authenticationToken);
-	
-
-	/**
-	 * Same semantics with {@link TopicService#searchTopicsAndExportToJson(TopicCriteria)}
-	 * augmented with the requirement of providing an authentication token.
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EXTERNAL_VIEWER} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-     * 
-	 * @param topicCriteria
-	 *            Restrictions for topic and render instructions for
-	 *            query results.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)}) 
-	 *  to an Astroboa repository.
-	 *  
-	 * @deprecated Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType, String)} instead
-	 * 
-	 * @return JSON representation of query results according to XML element <code>resourceRepresentation</code>
-	 *   defined in astroboa-api-{version}.xsd  following Mapped convention
-	 */
-	@Deprecated
-	String searchTopicsAndExportToJson(TopicCriteria topicCriteria, String authenticationToken);
 
 }

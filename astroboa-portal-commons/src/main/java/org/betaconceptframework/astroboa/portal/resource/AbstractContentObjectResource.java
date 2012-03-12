@@ -1176,28 +1176,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			contentObject = astroboaClient.getContentService().getContentObject(contentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY,
 					PortalCacheConstants.CONTENT_OBJECT_DEFAULT_CACHE_REGION, null, false);
 			
-			/*ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-			contentObjectCriteria.addIdEqualsCriterion(contentObjectId);
 			
-			contentObjectCriteria.getRenderProperties().addRenderInstruction(
-					RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE,
-					JSFUtilities.getLocaleAsString());
-			
-			contentObjectCriteria.setCacheable(PortalCacheConstants.CONTENT_OBJECT_DEFAULT_CACHE_REGION);
-			
-			CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = astroboaClient.getContentService()
-					.searchContentObjects(contentObjectCriteria);
-			if (cmsOutcome.getCount() == 1) {
-				contentObject = 
-				(ContentObject) cmsOutcome.getResults().get(0)
-						.getCmsRepositoryEntity();
-			}
-
-			if (cmsOutcome.getCount() > 1) {
-				logger
-						.error("More than one content objects with the same id found. No content object will be returned");
-			}
-			*/
 		} catch (Exception e) {
 			logger.error("An error occured while retrievig the content object. A null content object will be returned.", e);
 		}

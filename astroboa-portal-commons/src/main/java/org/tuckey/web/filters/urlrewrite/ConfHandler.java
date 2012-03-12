@@ -38,9 +38,7 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.apache.commons.configuration.ConfigurationUtils;
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.portal.utility.PortalStringConstants;
 import org.tuckey.web.filters.urlrewrite.utils.Log;
 import org.xml.sax.InputSource;

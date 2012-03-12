@@ -163,46 +163,6 @@ public class SpaceServiceClientWrapper extends AbstractClientServiceWrapper impl
 
 
 
-	public Space getSpace(String spaceId, String locale) {
-
-		if (spaceServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return spaceServiceSecure.getSpace(spaceId, locale, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("SpaceService reference was not found");
-		}
-	}
-
-
-	public Space saveSpace(Space space) {
-		if (spaceServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return spaceServiceSecure.saveSpace(space, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("SpaceService reference was not found");
-		}
-	}
-
-
-
-	public CmsOutcome<Space> searchSpaces(SpaceCriteria spaceCriteria) {
-		if (spaceServiceSecure != null){
-			if (successfullyConnectedToRemoteService){  
-				client.activateClientContext();
-			}
-			return spaceServiceSecure.searchSpaces(spaceCriteria, getAuthenticationToken());
-		}
-		else{
-			throw new CmsException("SpaceService reference was not found");
-		}
-	}
-
 	@Override
 	public <T> T getSpace(String spaceIdOrName, ResourceRepresentationType<T> output,
 			FetchLevel fetchLevel) {

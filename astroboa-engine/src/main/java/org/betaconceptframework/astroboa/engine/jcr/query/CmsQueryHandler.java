@@ -26,13 +26,11 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 import org.betaconceptframework.astroboa.context.AstroboaClientContextHolder;
 import org.betaconceptframework.astroboa.engine.jcr.util.JackrabbitDependentUtils;
-import org.betaconceptframework.astroboa.util.CmsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

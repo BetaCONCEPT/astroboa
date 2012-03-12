@@ -26,6 +26,8 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.portal.PortalTree.PortalTreeNodeType;
@@ -62,7 +64,8 @@ public class LazyLoadingPortalTreeNode  extends LazyLoadingTreeNodeRichFaces{
 			return JSFUtilities.getLocalizedMessage("no.localized.label.for.description", null);
 		}
 		
-		ContentObject portalContentObject = contentService.getContentObjectById(portalContentObjectId, CacheRegion.NONE);
+		ContentObject portalContentObject = contentService.getContentObject(portalContentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+
 		
 		if (portalContentObject == null)
 		{

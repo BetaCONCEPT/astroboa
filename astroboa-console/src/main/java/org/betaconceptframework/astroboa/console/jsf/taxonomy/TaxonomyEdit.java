@@ -124,7 +124,7 @@ public class TaxonomyEdit extends AbstractUIBean {
 		}
 	
 		try {
-			return topicService.getTopic(selectedTopicId, null);
+			return topicService.getTopic(selectedTopicId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 		}
 		catch (Exception e) {
 			JSFUtilities.addMessage(null, "topic.isNull", null, FacesMessage.SEVERITY_WARN);

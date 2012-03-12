@@ -60,20 +60,6 @@ class DefinitionServiceImpl implements DefinitionService {
 		}
 	}
 
-	@Deprecated
-	public ContentObjectTypeDefinition getContentObjectTypeDefinition(String contentObjectTypeDefinitionName) 
-	{
-		try {
-			return (ContentObjectTypeDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeDefinitionName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
 	public List<String> getContentObjectTypes()  {
 		try {
 			return contentDefinitionDao.getContentObjectTypes();
@@ -100,18 +86,6 @@ class DefinitionServiceImpl implements DefinitionService {
 	}
 
 
-	@Deprecated
-	public ComplexCmsPropertyDefinition getAspectDefinition(String aspect) {
-		try {
-			return (ComplexCmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(aspect, ResourceRepresentationType.DEFINITION_INSTANCE,false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
 
 	public List<ComplexCmsPropertyDefinition> getAspectDefinitionsSortedByLocale(
 			List<String> aspects, String locale) {
@@ -163,20 +137,6 @@ class DefinitionServiceImpl implements DefinitionService {
 	@Override
 	public Map<String, List<String>> getTopicPropertyPathsPerTaxonomies() {
 		return contentDefinitionDao.getTopicPropertyPathsPerTaxonomies();
-	}
-
-	@Override
-	@Deprecated
-	public CmsPropertyDefinition getCmsPropertyDefinition(String fullPropertyDefinitionPath) {
-		try{
-			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(fullPropertyDefinitionPath, ResourceRepresentationType.DEFINITION_INSTANCE,false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
 	}
 
 	@Override

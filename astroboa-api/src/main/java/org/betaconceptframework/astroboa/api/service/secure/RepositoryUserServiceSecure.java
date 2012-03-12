@@ -66,27 +66,6 @@ public interface RepositoryUserServiceSecure {
 	List<RepositoryUser> searchRepositoryUsers(RepositoryUserCriteria repositoryUserCriteria, String authenticationToken);
 
 	/**
-	 * Same semantics with {@link RepositoryUserService#saveRepositoryUser(RepositoryUser)}
-	 * augmented with the requirement of providing an authentication token
-	 *
-	 *<p>
-	 * This method is executed only if user has role
-	 * {@link CmsRole#ROLE_CMS_EDITOR} upon connected Astroboa repository.
-	 * Information about user's roles is available through provided authentication 
-	 * token.
-	 *</p>
-	 *
-	 * @param repositoryUser
-	 *            Repository user to save or update.
-	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
-	 *  to an Astroboa repository.
-	 * @deprecated Use method {@link #save(Object, String)}
-	 * @return Newly created or updated RepositoryUser
-	 */
-	@Deprecated
-	RepositoryUser saveRepositoryUser(RepositoryUser repositoryUser, String authenticationToken);
-
-	/**
 	 * Same semantics with {@link RepositoryUserService#deleteRepositoryUserAndOwnedObjects(String)}
 	 * augmented with the requirement of providing an authentication token
 	 *

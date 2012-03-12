@@ -86,7 +86,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		
 		//Check for user, topic, space and contentObject existence in either jcr or Astroboa level
 		try{
-			Node userNode = getSession().getNodeByUUID(user.getId());
+			Node userNode = getSession().getNodeByIdentifier(user.getId());
 			Assert.assertNull(userNode, "Repository User "+user.getExternalId() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -94,17 +94,17 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		}
 		
 		//Topic is not deleted because its owner is ALWAYS SYSTEM USER
-		Node topicNode = getSession().getNodeByUUID(topic.getId());
+		Node topicNode = getSession().getNodeByIdentifier(topic.getId());
 		Assert.assertNotNull(topicNode, "Topic "+topic.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 		Assert.assertEquals(topicNode.getProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()).getString(), getSystemUser().getId(), 
 				"Topic "+topic.getName() + " owner is not SYSTEM user when user "+user.getExternalId() + " was deleted");
 
-		Node spaceNode = getSession().getNodeByUUID(space.getId());
+		Node spaceNode = getSession().getNodeByIdentifier(space.getId());
 		Assert.assertNotNull(spaceNode, "Space "+space.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 		Assert.assertEquals(spaceNode.getProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()).getString(), getSystemUser().getId(), 
 					"Space "+space.getName() + " owner is not SYSTEM user when user "+user.getExternalId() + " was deleted");
 
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 		Assert.assertNotNull(contentObjectNode, "ContentObject "+contentObject.getSystemName() + " was deleted when user "+user.getExternalId() + " was deleted");
 		Assert.assertEquals(contentObjectNode.getProperty(CmsBuiltInItem.OwnerCmsIdentifier.getJcrName()).getString(), getSystemUser().getId(), 
 				"ContentObject "+contentObject.getSystemName() + " owner is not SYSTEM user when user "+user.getExternalId() + " was deleted");
@@ -197,7 +197,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		 * is returned by Astroboa Services
 		 */
 		try{
-			Node userNode = getSession().getNodeByUUID(user.getId());
+			Node userNode = getSession().getNodeByIdentifier(user.getId());
 			Assert.assertNull(userNode, "Repository User "+user.getExternalId() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -213,7 +213,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		 */
 		//Space in Organization Space should be deleted
 		try{
-			Node jcrNodeOfSpaceInOrganizationSpace = getSession().getNodeByUUID(spaceInOrganizationSpace.getId());
+			Node jcrNodeOfSpaceInOrganizationSpace = getSession().getNodeByIdentifier(spaceInOrganizationSpace.getId());
 			Assert.assertNotNull(jcrNodeOfSpaceInOrganizationSpace, "Space "+spaceInOrganizationSpace.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -222,7 +222,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 
 		//Space in User Space should be deleted
 		try{
-			Node jcrNodeOfSpaceInUserSpace = getSession().getNodeByUUID(spaceInUserSpace.getId());
+			Node jcrNodeOfSpaceInUserSpace = getSession().getNodeByIdentifier(spaceInUserSpace.getId());
 			Assert.assertNotNull(jcrNodeOfSpaceInUserSpace, "Space "+spaceInUserSpace.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -293,12 +293,12 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		 * However Topic created in Subject Taxonomy should exist.
 		 */
 		//Topic in Subject Taxonomy is not deleted because its owner is ALWAYS SYSTEM USER
-		Node jcrNodeOfTopicInSubjectTaxonomy = getSession().getNodeByUUID(topicInSubjectTaxonomy.getId());
+		Node jcrNodeOfTopicInSubjectTaxonomy = getSession().getNodeByIdentifier(topicInSubjectTaxonomy.getId());
 		Assert.assertNotNull(jcrNodeOfTopicInSubjectTaxonomy, "Topic "+topicInSubjectTaxonomy.getName() + " was deleted when user "+user.getExternalId() + " was deleted");
 
 		//Topic in User Folksonomy should be deleted
 		try{
-			Node jcrNodeOfTopicInUserFolksonomy = getSession().getNodeByUUID(topicInFolksonomy.getId());
+			Node jcrNodeOfTopicInUserFolksonomy = getSession().getNodeByIdentifier(topicInFolksonomy.getId());
 			Assert.assertNotNull(jcrNodeOfTopicInUserFolksonomy, "Space "+topicInFolksonomy.getName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -340,7 +340,7 @@ public class RepositoryUserServiceTest extends AbstractRepositoryTest{
 		 * 
 		 */
 		try{
-			Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+			Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 			Assert.assertNull(contentObjectNode, "ContentObject "+contentObject.getSystemName() + " was not deleted when user "+user.getExternalId() + " was deleted");
 		}
 		catch(ItemNotFoundException infe){

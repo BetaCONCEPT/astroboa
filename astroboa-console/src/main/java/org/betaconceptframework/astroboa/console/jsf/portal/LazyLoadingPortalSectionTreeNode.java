@@ -26,6 +26,8 @@ import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.console.jsf.portal.PortalTree.PortalTreeNodeType;
@@ -60,8 +62,8 @@ public class LazyLoadingPortalSectionTreeNode extends LazyLoadingTreeNodeRichFac
 		if (!isLeaf() && children.size() == 0) {
 			logger.debug("retrieve portal sub sections: " + this.getIdentifier());
 			
-			ContentObject portalSection = contentService.getContentObjectById(portalSectionObjectId, CacheRegion.NONE);
-			
+			ContentObject portalSection = contentService.getContentObject(portalContentObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+
 			if (portalSection != null)
 			{
 				//Retrieve Sub Portal Sections
@@ -85,8 +87,8 @@ public class LazyLoadingPortalSectionTreeNode extends LazyLoadingTreeNodeRichFac
 	
 	private static String retrieveSectionTitle(String portalSectionObjectId, ContentService contentService){
 		
-		ContentObject portalSection = contentService.getContentObjectById(portalSectionObjectId, CacheRegion.NONE);
-		
+		ContentObject portalSection = contentService.getContentObject(portalSectionObjectId, ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, FetchLevel.ENTITY, CacheRegion.NONE, null, false);
+
 		return ((StringProperty)portalSection.getCmsProperty("profile.title")).getSimpleTypeValue();
 	}
 	

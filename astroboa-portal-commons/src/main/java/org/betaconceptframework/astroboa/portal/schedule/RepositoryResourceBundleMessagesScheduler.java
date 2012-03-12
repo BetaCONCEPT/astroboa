@@ -31,7 +31,6 @@ import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 import org.betaconceptframework.astroboa.client.AstroboaClient;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;

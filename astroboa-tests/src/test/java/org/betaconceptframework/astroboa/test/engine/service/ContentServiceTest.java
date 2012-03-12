@@ -639,7 +639,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 
 				//Now test in jcr to see if the proper node is created
-				Node binaryChannelNode = getSession().getNodeByUUID(imageBinaryChannel.getId()); 
+				Node binaryChannelNode = getSession().getNodeByIdentifier(imageBinaryChannel.getId()); 
 
 				//If node is not found then exception has already been thrown
 				Assert.assertEquals(binaryChannelNode.getName(), imageBinaryChannel.getName(), " Invalid name for binary data jcr node "+ binaryChannelNode.getPath());
@@ -856,7 +856,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		contentObject = contentService.save(contentObject, false, true, null);
 		markObjectForRemoval(contentObject);
 
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 		
 		assertContainsInSearch(contentObject, contentObjectNode, "firs");
 
@@ -1097,7 +1097,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		
 		//Check with Jcr
 		try{
-			Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+			Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 			Assert.assertNull(contentObjectNode, "ContentObject "+contentObject.getSystemName() + " was not deleted");
 		}
 		catch(ItemNotFoundException infe){
@@ -1124,7 +1124,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		//Check with space entity
 		//Check with Jcr
-		Node spaceNode = getSession().getNodeByUUID(space.getId());
+		Node spaceNode = getSession().getNodeByIdentifier(space.getId());
 		
 		Assert.assertNotNull(spaceNode, "Space "+space.getName() + " was not saved at all");
 		
@@ -1825,7 +1825,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 			//Now test in jcr to see if the proper node is created
 			//Unmanaged Binary property do not have an ID as they represent a jcr property
-			Node contentObjectNode = getSession().getNodeByUUID(contentObjectReloaded.getId()); 
+			Node contentObjectNode = getSession().getNodeByIdentifier(contentObjectReloaded.getId()); 
 
 			Property unmanagedImageJcrProperty = contentObjectNode.getProperty("unmanagedImage");
 			
@@ -1904,7 +1904,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 
 			//Now test in jcr to see if the proper node is created
-			Node binaryChannelNode = getSession().getNodeByUUID(imageBinaryChannel.getId()); 
+			Node binaryChannelNode = getSession().getNodeByIdentifier(imageBinaryChannel.getId()); 
 
 			//If node is not found then exception has already been thrown
 			Assert.assertEquals(binaryChannelNode.getName(), imageBinaryChannel.getName(), " Invalid name for binary data jcr node "+ binaryChannelNode.getPath());
@@ -1932,7 +1932,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		markObjectForRemoval(contentObject);
 		
 		//Retrieve content object node
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 		
 		Calendar creationDate = ((CalendarProperty)contentObject.getCmsProperty("profile.created")).getSimpleTypeValue();
 	
@@ -1961,7 +1961,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 				null, false);
 		
 		//Retrieve content object node
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 		
 		Calendar creationDate = ((CalendarProperty)contentObject.getCmsProperty("profile.created")).getSimpleTypeValue();
 	
@@ -2013,7 +2013,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		
 		//Retrieve content object node
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 		String creationDatePath = DateFormatUtils.format(validCreationDate, "yyyy/M/d/H/m/s");
 		
 		Assert.assertTrue(contentObjectNode.getParent().getPath().endsWith(creationDatePath), "Invalid content object creation path "+contentObjectNode.getParent().getPath()+ ". It should end with "+ creationDatePath);
@@ -2353,7 +2353,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 		markObjectForRemoval(contentObject);
 
 
-		Node contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		Node contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 
 
 		Assert.assertFalse(contentObjectNode.hasProperty("simpleString"), "Property simpleString has been saved to JCr even though it is an empty string");
@@ -2365,7 +2365,7 @@ public class ContentServiceTest extends AbstractRepositoryTest {
 
 		contentObject = contentService.save(contentObject, false, true, null);
 
-		contentObjectNode = getSession().getNodeByUUID(contentObject.getId());
+		contentObjectNode = getSession().getNodeByIdentifier(contentObject.getId());
 
 		Assert.assertFalse(contentObjectNode.hasProperty("simpleStringMultiple"), "Property simpleStringMultiple " +
 		"has been saved to JCr even though its values is a list of blank strings");

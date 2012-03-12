@@ -69,7 +69,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		
 		//Check with Jcr
 		try{
-			Node spaceNode = getSession().getNodeByUUID(space.getId());
+			Node spaceNode = getSession().getNodeByIdentifier(space.getId());
 			
 			Assert.assertNull(spaceNode, "Space "+space.getName() + " was not deleted");
 		}
@@ -113,7 +113,7 @@ public class SpaceServiceTest extends AbstractRepositoryTest {
 		
 		
 		//Check with Jcr
-		Node spaceNode = getSession().getNodeByUUID(space.getId());
+		Node spaceNode = getSession().getNodeByIdentifier(space.getId());
 		
 		Assert.assertNotNull(spaceNode, "Space "+space.getName() + " was not saved at all");
 		

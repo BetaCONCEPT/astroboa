@@ -28,7 +28,7 @@ import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.LocalizableEntity;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.TopicProperty;
+import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.definition.Localization;
 import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
@@ -46,69 +46,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
 public interface TopicService {
 
 	/**
-	 * Save or update a {@link Topic topic}.
-	 * 
-	 * <p>
-	 * If no {@link Topic#getTaxonomy() taxonomy} is provided
-	 * {@link Taxonomy#SUBJECT_TAXONOMY_NAME subject taxonomy} will be
-	 * used.
-	 * </p>
-	 * 
-	 * <p>
-	 * Whether save or update process is followed depends on whether <code>topic</code>
-	 *  is a new topic or not. <code>topic</code> is considered new if there is no 
-	 * {@link Topic#getId() id} or <code>id</code> is provided but there is
-	 * no {@link Topic topic} in repository for the provided <code>id</code>. In this case
-	 * <code>topic</code> will be saved with the provided <code>id</code>.
-	 * </p>
-	 * 
-	 * <p>
-	 * The following steps take place in the save process (<code>topic</code> is considered new)
-	 * 
-	 * <ul>
-	 * <li> Create a new {@link CmsRepositoryEntity#getId() id} or use the provided <code>id</code>.
-	 * <li> Relate <code>topic</code> with the provided {@link Topic#getOwner() owner}.
-	 * 		Topic's owner MUST already exist. If not, an exception is thrown.
-	 * <li> Locate <code>topic</code>'s parent topic using its identifier. If no parent is found an exception is thrown.
-	 *      If no parent identifier is provided then topic will be placed under its taxonomy.
-	 * <li> Save localized labels for <code>topic</code>.
-	 * <li> Save {@link Topic#getOrder() order}.
-	 * <li> Save {@link Topic#getName() name}.
-	 * <li> Save {@link Topic#isAllowsReferrerContentObjects() allowsContentObjectReferences}.
-	 * <li> Save or update all of its {@link Topic#getChildren() child topics}.
-	 * </ul>
-	 * </p>
-	 * 
-	 * <p>
-	 * The following steps take place in the update process (<code>topic</code> already exists in repository)
-	 * 
-	 * <ul>
-	 * <li> Relate <code>topic</code> with the provided {@link Topic#getOwner() owner} only 
-	 * 		if the provided owner is different from already existed owner.
-	 * 		Topic's owner MUST already exist. If not, an exception is thrown.
-	 * <li> Update <code>topic</code>'s parent ONLY if provided parent identifier is different than one existed.
-	 * <li> Update localized labels for <code>topic</code>.
-	 * <li> Update {@link Topic#getOrder() order}.
-	 * <li> Update {@link Topic#getName() name}.
-	 * <li> Update {@link Topic#isAllowsReferrerContentObjects() allowsContentObjectReferences}.
-	 * <li> Update {@link Topic#getParent() parent}, in case it has been changed. This corresponds
-	 * 		to moving <code>topic</code>.In this case new <code>topic</code>'s parent
-	 * 		must exist and must belong to the same {@link Taxonomy taxonomy} with
-	 * 		<code>topic</code>.
-	 * </ul>
-	 * </p>
-	 * 
-	 * @param topic
-	 *            Topic to be saved or updated.
-	 *            
-	 * @deprecated Use method {@link #save(Object)} instead
-	 *             
-	 * @return Newly created or updated Topic
-	 */
-	@Deprecated
-	Topic saveTopic(Topic topic);
-
-	/**
 	 * Delete all {@link Topic topics} recursively starting from specified <code>topicIdOrName</code>.
 	 * 
 	 * Deletes also all {@link ContentObject content object} references
@@ -119,37 +56,6 @@ public interface TopicService {
 	 * @return <code>true</code> if topic has been successfully deleted, <code>false</code> if or no topic with the provided id or name is found.
 	 */
 	boolean deleteTopicTree(String topicIdOrName);
-
-	/**
-	 * Returns a topic for the specified <code>topicId</code>.
-	 * 
-	 * @param topicId
-	 *            {@link CmsRepositoryEntity#getId() Topic's id}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned topic.
-	 * 
-	 * @deprecated use {@link #getTopic(String, ResourceRepresentationType#TOPIC_INSTANCE, FetchLevel)} instead. Locale does not play any role
-	 * since all localized labels are provided and method 
-	 * {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()} will be deprecated in future releases 
-	 * 
-	 * @return A topic corresponding to <code>topicId</code> 
-	 */
-	@Deprecated
-	Topic getTopic(String topicId, String locale);
-
-	/**
-	 * Search all topics satisfying specified criteria.
-	 * 
-	 * @param topicCriteria
-	 *           Topic search criteria.
-	 * @deprecate Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType)}
-	 * 
-	 * @return Topics satisfying specified criteria.
-	 */
-	@Deprecated
-	CmsOutcome<Topic> searchTopics(TopicCriteria topicCriteria);
 
 	/**
 	 * Returns mostly used topics of a specific taxonomy.
@@ -430,40 +336,5 @@ public interface TopicService {
 	 * @return Topics as XML, JSON or {@link CmsOutcome<Topic>}
 	 */
 	<T> T  searchTopics(TopicCriteria topicCriteria, ResourceRepresentationType<T> output);
-
-
-	/**
-	 * Returns all topics matching specified criteria in XML.
-	 * 
-	 * @param topicCriteria
-	 *            Restrictions for topic and render instructions for
-	 *            query results.
-	 * @deprecated Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType)} instead
-	 * @return XML representation of query results following XML element <code>resourceRepresentation</code>
-	 *   defined in astroboa-api-{version}.xsd
-	 */
-	@Deprecated
-	String searchTopicsAndExportToXml(TopicCriteria topicCriteria);
-	
-
-	/**
-	 * Returns all topics matching specified criteria in JSON
-	 * following Mapped convention.
-	 * 
-     * The natural JSON notation, leveraging closely-coupled JAXB RI integration.
-     * <p>Example JSON expression:<pre>
-     * {"columns":[{"id":"userid","label":"UserID"},{"id":"name","label":"User Name"}],"rows":[{"userid":1621,"name":"Grotefend"}]}
-     * </pre>
-     * </p>
-     * 
-	 * @param topicCriteria
-	 *            Restrictions for topic and render instructions for
-	 *            query results.
-	 * @deprecated Use {@link #searchTopics(TopicCriteria, ResourceRepresentationType)} instead
-	 * @return JSON representation of query results according to XML element <code>resourceRepresentation</code>
-	 *   defined in astroboa-api-{version}.xsd  following Mapped convention
-	 */
-	@Deprecated
-	String searchTopicsAndExportToJson(TopicCriteria topicCriteria);
 
 }

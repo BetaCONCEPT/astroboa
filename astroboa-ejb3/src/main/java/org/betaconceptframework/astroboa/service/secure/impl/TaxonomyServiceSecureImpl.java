@@ -67,23 +67,6 @@ public class TaxonomyServiceSecureImpl extends AbstractSecureAstroboaService imp
 		return taxonomyService.getBuiltInSubjectTaxonomy(locale);
 	}
 
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public List<Taxonomy> getTaxonomies(String locale,String authenticationToken) {
-
-		return taxonomyService.getTaxonomies(locale);
-	}
-	
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public Taxonomy getTaxonomy(String taxonomyName, String locale, String authenticationToken) {
-		
-		return taxonomyService.getTaxonomy(taxonomyName, locale);
-	}
-
-	@RolesAllowed("ROLE_CMS_TAXONOMY_EDITOR")
-	public Taxonomy saveTaxonomy(Taxonomy taxonomy, String authenticationToken) {
-		
-		return  taxonomyService.saveTaxonomy(taxonomy);
-	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public <T> T getAllTaxonomies(ResourceRepresentationType<T> output, FetchLevel fetchLevel, boolean prettyPrint,
@@ -102,9 +85,4 @@ public class TaxonomyServiceSecureImpl extends AbstractSecureAstroboaService imp
 		return taxonomyService.save(taxonomySource);
 	}
 
-	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
-	public Taxonomy getTaxonomyById(String taxonomyId,
-			String authenticationToken) {
-		return taxonomyService.getTaxonomyById(taxonomyId);
-	}
 }

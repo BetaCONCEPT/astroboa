@@ -49,6 +49,9 @@ import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
+import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
+import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.console.commons.ContentObjectUIWrapper;
@@ -102,7 +105,14 @@ public class ContentObjectViewAsTree extends AbstractUIBean {
 	private ContentObjectUIWrapper selectedContentObjectForView;
 	
 	public void presentContentObject_UIAction(String selectedContentObjectIdentifier) {
-		ContentObject selectedContentObject = (ContentObject) contentService.getContentObjectByIdAndLocale(selectedContentObjectIdentifier, JSFUtilities.getLocaleAsString(), null);
+		ContentObject selectedContentObject = contentService.getContentObject(
+				selectedContentObjectIdentifier, 
+				ResourceRepresentationType.CONTENT_OBJECT_INSTANCE, 
+				FetchLevel.ENTITY, 
+				CacheRegion.NONE, 
+				null,
+				false);
+
 		selectedContentObjectForView = contentObjectUIWrapperFactory.getInstance(selectedContentObject);
 		
 		contentObjectTitle = ((StringProperty) selectedContentObjectForView.getContentObject().getCmsProperty("profile.title")).getSimpleTypeValue();
@@ -113,7 +123,7 @@ public class ContentObjectViewAsTree extends AbstractUIBean {
 		// get root content object property which contains all properties
 		ComplexCmsRootProperty rootProperty = selectedContentObjectForView.getContentObject().getComplexCmsRootProperty();
 		
-		ContentObjectTypeDefinition contentObjectTypeDefinition = definitionService.getContentObjectTypeDefinition(selectedContentObjectForView.getContentObject().getContentObjectType());
+		ContentObjectTypeDefinition contentObjectTypeDefinition = (ContentObjectTypeDefinition) definitionService.getCmsDefinition(selectedContentObjectForView.getContentObject().getContentObjectType(), ResourceRepresentationType.DEFINITION_INSTANCE,false);
 		
 		String locale = JSFUtilities.getLocaleAsString();
 		

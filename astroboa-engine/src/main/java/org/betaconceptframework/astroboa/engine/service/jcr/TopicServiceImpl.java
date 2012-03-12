@@ -44,43 +44,6 @@ class TopicServiceImpl  implements TopicService {
 	@Autowired
 	private TopicDao topicDao;
 
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	public Topic saveTopic(Topic topic)   {
-		try{
-			return topicDao.saveTopic(topic, null);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	public Topic getTopic(String topicId, String locale) {
-		try{
-			return topicDao.getTopic(topicId, ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	public CmsOutcome<Topic> searchTopics(TopicCriteria topicCriteria) throws CmsException  {
-		try{
-			return topicDao.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
 	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomy, String locale, int offset, int limit) throws CmsException  {
 		try{
 			return topicDao.getMostlyUsedTopics(taxonomy, locale, offset, limit);
@@ -168,35 +131,6 @@ class TopicServiceImpl  implements TopicService {
 		catch (Exception e) { 
 			throw new CmsException(e); 		
 		} 
-	}
-
-	@Override
-	public String searchTopicsAndExportToJson(TopicCriteria topicCriteria) {
-		try{ 
-			return topicDao.searchTopics(topicCriteria, ResourceRepresentationType.JSON);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		} 
-
-	}
-
-	@Override
-	public String searchTopicsAndExportToXml(TopicCriteria topicCriteria) {
-		
-		try{
-			return topicDao.searchTopics(topicCriteria, ResourceRepresentationType.XML);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		} 
-		
 	}
 
 }

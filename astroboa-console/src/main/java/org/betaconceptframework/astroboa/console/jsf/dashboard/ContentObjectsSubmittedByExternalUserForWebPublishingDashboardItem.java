@@ -94,8 +94,7 @@ public class ContentObjectsSubmittedByExternalUserForWebPublishingDashboardItem 
 	}
 
 	@Override
-	protected List<CmsRankedOutcome<ContentObject>> orderResults(
-			List<CmsRankedOutcome<ContentObject>> results) {
+	protected List<ContentObject> orderResults(List<ContentObject> results) {
 		return results;
 	}
 

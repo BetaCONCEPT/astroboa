@@ -48,6 +48,7 @@ import javax.naming.InitialContext;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.StringProperty;
+import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
 import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -329,9 +330,9 @@ public class ScriptEngine {
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("scriptObject");
 		contentObjectCriteria.addSystemNameEqualsCriterion(scriptObjectName);
 		
-		CmsOutcome<CmsRankedOutcome<ContentObject>> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria);
+		CmsOutcome<ContentObject> cmsOutcome = astroboaClient.getContentService().searchContentObjects(contentObjectCriteria, ResourceRepresentationType.CONTENT_OBJECT_LIST);
 		if (cmsOutcome.getCount() > 0) {
-			scriptObject = cmsOutcome.getResults().get(0).getCmsRepositoryEntity();
+			scriptObject = cmsOutcome.getResults().get(0);
 		}
 		else {
 			logger.warn("No Script Object exists with systen name: " + scriptObjectName);

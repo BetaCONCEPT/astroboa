@@ -46,7 +46,6 @@ import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria.SearchMode;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.impl.ComplexCmsPropertyImpl;
@@ -1243,9 +1242,9 @@ public class ContentObjectTest extends AbstractRepositoryTest {
 		
 		Assert.assertFalse(contentObject.getComplexCmsRootProperty().hasAspect("containerOfAllPossiblePropertiesType"));
 		
-		Assert.assertFalse(getSession().getNodeByUUID(contentObject.getId()).hasNode("containerOfAllPossiblePropertiesType"));
+		Assert.assertFalse(getSession().getNodeByIdentifier(contentObject.getId()).hasNode("containerOfAllPossiblePropertiesType"));
 		
-		Assert.assertFalse(getSession().getNodeByUUID(contentObject.getId()).hasProperty(CmsBuiltInItem.Aspects.getJcrName()));
+		Assert.assertFalse(getSession().getNodeByIdentifier(contentObject.getId()).hasProperty(CmsBuiltInItem.Aspects.getJcrName()));
 		
 		Assert.assertFalse(contentObject.getComplexCmsRootProperty().swapChildPropertyValues("containerOfAllPossiblePropertiesType", 0, 10), "Method swap child property values retuned true for aspect containerOfAllPossiblePropertiesType");
 
