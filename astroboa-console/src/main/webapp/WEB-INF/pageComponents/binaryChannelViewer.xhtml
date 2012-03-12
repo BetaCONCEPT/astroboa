@@ -39,7 +39,7 @@ Authors
 			
 			<a4j:outputPanel rendered="#{! empty contentObjectViewAsTree.selectedBinaryChannel and 
 					contentObjectUtilities.isImageMimeTypeWhichCanBeRenderedByBrowser(contentObjectViewAsTree.selectedBinaryChannel.mimeType)}">
-				<img src="#{contentObjectViewAsTree.selectedBinaryChannel.directURL}"/>
+				<img src="#{contentObjectViewAsTree.selectedBinaryChannel.buildResourceApiURL(null,null,nul,null,'INLINE',fasle, false)}"/>
 			</a4j:outputPanel>
 			
 			<ui:remove>

@@ -64,7 +64,7 @@ Authors
 							rendered="#{!contentObjectViewAsTree.selectedContentObjectForView.thumbnailAvailable}" />
 	
 						<a4j:outputPanel rendered="#{contentObjectViewAsTree.selectedContentObjectForView.thumbnailAvailable}">
-							<img src="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['thumbnail'].simpleTypeValue.directURL}"
+							<img src="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['thumbnail'].simpleTypeValue.buildResourceApiURL(null,null,nul,null,'INLINE',fasle, false)}"
 									width="32" height="32"/>
 						</a4j:outputPanel>
 				
@@ -319,7 +319,7 @@ Authors
 	
 										<ui:fragment>
 							 
-							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 				<a href="#{node.binaryChannel.buildResourceApiURL(null,null,nul,null,'ATTACHMENT',fasle, false)}"
 							 						title="Πατείστε για να κατεβάσετε το αρχείο">
 												<h:graphicImage value="/images/cms-icons/16/download.png" />
 											</a>
@@ -327,7 +327,7 @@ Authors
 							
 										<ui:fragment>
 							 
-							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'INLINE')}"
+							 				<a href="#{node.binaryChannel.buildResourceApiURL(null,null,nul,null,'INLINE',fasle, false)}"
 							 				target="_blank"
 											title="Πατείστε για δείτε το αρχείο">
 	
@@ -406,7 +406,7 @@ Authors
 									<h:panelGrid columns="2" cellspacing="10">
 										<ui:fragment>
 							 
-							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'ATTACHMENT')}"
+							 				<a href="#{node.binaryChannel.buildResourceApiURL(null,null,nul,null,'ATTACHMENT',fasle, false)}"
 							 						title="Πατείστε για να κατεβάσετε το αρχείο">
 												<h:graphicImage value="/images/cms-icons/16/download.png" />
 											</a>
@@ -414,7 +414,7 @@ Authors
 							
 										<ui:fragment>
 							 
-							 				<a href="#{node.binaryChannel.getCustomizedDirectURL(null, null, 'INLINE')}"
+							 				<a href="#{node.binaryChannel.buildResourceApiURL(null,null,nul,null,'INLINE',fasle, false)}"
 							 				target="_blank"
 											title="Πατείστε για δείτε το αρχείο">
 	
