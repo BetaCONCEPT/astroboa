@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.ObjectReferenceProperty;
 import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
@@ -156,125 +155,6 @@ public class CriterionFactory  {
 	public static Criterion between(String propertyPath, Object lowerLimit,
 			Object upperLimit) {
 		return createRangeCriterion(propertyPath, lowerLimit, upperLimit);
-	}
-
-	/**
-	 * Contains criterion enables the use of full-text search. 
-	 * 
-	 * <p>
-	 * All types
-	 * of properties are searched including binary types. The following rules
-	 * apply :
-	 * </p>
-	 * 
-	 * <p>
-	 * <ul>
-	 * <li>Search expression can contain one or more terms separated by whitespace.A
-	 * term can be a single word or a phrase delimited by double quotes (").
-	 * <li>Search expression for all terms should contain whitespace (implicit AND) between 
-	 * terms and for either of terms should contain OR.
-	 * <li>Search expression can contain both AND-ed and OR-ed terms with AND having higher
-	 * precedence.
-	 * <li>Any term prefixed with - (minus sign) will not be included in the
-	 * results.
-	 * <li>Any term containing '*' character will result in matching values
-	 * containing any string of zero or more characters in place of '*'. Note
-	 * this behavior is disabled if term is a phrase.
-	 * </ul>
-	 * </p>
-	 * 
-	 * <p>
-	 * Search expression examples :
-	 * 
-	 * <ul>
-	 * <li><code>contains('title', 'java jdk')</code>
-	 * <p>
-	 * Matches all values containing <code>java</code> AND <code>jdk</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', '\"java jdk\"')</code>
-	 * <p>
-	 * Matches all values containing the phrase <code>java jdk</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', 'java OR jdk')</code>
-	 * <p>
-	 * Matches all values containing <code>java</code> OR <code>jdk</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', '\"java jdk\" OR 1.5')</code>
-	 * <p>
-	 * Matches all values which contain phrase <code>java jdk</code> OR
-	 * <code>1.5</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', '-\"java jdk\" 1.5')</code>
-	 * <p>
-	 * Matches all values which DO NOT contain phrase <code>java jdk</code>
-	 * and contain <code>1.5</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', 'java* 1.5')</code>
-	 * <p>
-	 * Matches all values which contain strings that start with
-	 * <code>java</code> and also contain string <code>1.5</code>.
-	 * </p>
-	 * 
-	 * <li><code>contains('title', '*java* 1.5')</code>
-	 * <p>
-	 * Matches all values which contain string <code>java</code> and also
-	 * contain string <code>1.5</code>.
-	 * </p>
-	 * 
-	 * </ul>
-	 * </p>
-	 * 
-	 * @deprecated Use {@link #contains(String, String)} instead.
-	 * 
-	 * @param propertyPath
-	 *            Same semantics as {@link SimpleCriterion#setProperty(String)} 
-	 *            but it is restricted to {@link SimpleCmsProperty simple cms properties}.
-	 * @param searchExpression
-	 *            Search value.
-	 * @return A <code>contains</code> constraint.
-	 */
-	public static Criterion simpleCmsPropertycontains(String propertyPath, String searchExpression) {
-		return createSimpleCriterion(propertyPath, searchExpression, QueryOperator.CONTAINS);
-	}
-
-	/**
-	 *  Same semantics with {@link #simpleCmsPropertycontains(String, String)} as
-	 *  far as search expression concerns  but it is applies to {@link ComplexCmsProperty complex cms properties}.
-	 *  
-	 *  <p>
-	 *  This method searches all child properties of provided complex property, 
-	 *  whereas {@link #simpleCmsPropertycontains(String, String)} searches only specified
-	 *  property path. For example, if a complex property <code>profile</code> has two 
-	 *  child properties <code>title</code> and <code>description</code> then
-	 *  a call to method 
-	 *  <pre>
-	 *   contains("profile", "*bar*")
-	 *  </pre>
-	 *  
-	 *  will match all <code>profile</code> properties which contain at least one child
-	 *  property whose value(s) contains word "bar".
-	 *  </p>
-	 *  
-	 *  @deprecated Use {@link #contains(String, String)} instead.
-	 *  
-	 * @param propertyPath
-	 *            Same semantics as {@link SimpleCriterion#setProperty(String)} 
-	 *            but it is restricted to {@link ComplexCmsProperty complex cms properties}.
-	 *            
-	 * @param searchExpression
-	 *            Search value. Same semantics with {@link #simpleCmsPropertycontains(String, String)}
-	 * @return A <code>contains</code> constraint.
-	 */
-	public static Criterion complexCmsPropertycontains(String propertyPath, String 	searchExpression) {
-		SimpleCriterionImpl criterion = (SimpleCriterionImpl) createSimpleCriterion(propertyPath, searchExpression, QueryOperator.CONTAINS);
-		criterion.propertyIsComplex();
-		
-		return criterion;
 	}
 
 	/**
@@ -921,51 +801,6 @@ public class CriterionFactory  {
 		finally{
 			IOUtils.closeQuietly(expressionStream);
 		}
-	}
-	
-	/**
-	 *
-	 * @deprecated Use {@link #newTopicReferenceCriterion(String, Object, QueryOperator, boolean)} instead
-	 *  
-	 *  
-	 * @param propertyPath
-	 *            Same semantics as {@link SimpleCriterion#setProperty(String)} 
-	 *            but it is restricted to {@link SimpleCmsProperty simple cms properties}.
-	 * @param topicId
-	 * 			Topic Id to match
-	 * @param operator
-	 * 			{@link QueryOperator}. Mainly, {@link QueryOperator#equals(Object)}
-	 * @param includeSubTopics
-	 * 			Whether to look for content objects which refers to any of topic children as well as topic itself
-	 * 
-	 * @return Criterion object ready to be used inside and ORed or ANDed criterion or to be added directly to
-	 * 		{@link ContentObjectCriteria}
-	 */
-	public static Criterion newTopicPropertyCriterion(String propertyPath, Object topicId, QueryOperator operator, boolean includeSubTopics){
-		return newTopicReferenceCriterion(propertyPath, (String)topicId, operator, includeSubTopics);
-	}
-	
-	/**
-	 * @deprecated Use {@link #newTopicReferenceCriterion(String, List, Condition, QueryOperator, boolean)} instead.
-	 * 
-	 * @param propertyPath
-	 *            Same semantics as {@link SimpleCriterion#setProperty(String)} 
-	 *            but it is restricted to {@link SimpleCmsProperty simple cms properties}.
-	 * @param topicIds
-	 * 			List of topic Ids to match
-	 * @param internalCondition
-	 * 			Whether to look for properties which contain ALL provided <code>topicIds</code> {@link Condition#AND} or
-	 * 			they contain either of the provided <code>topicIds<code>
-	 * @param operator
-	 * 			{@link QueryOperator}. Mainly, {@link QueryOperator#equals(Object)}
-	 * @param includeSubTopics
-	 * 			Whether to look for content objects which refers to any of topic children as well as topic itself
-	 * 
-	 * @return Criterion object ready to be used inside and ORed or ANDed criterion or to be added directly to
-	 * 		{@link ContentObjectCriteria}
-	 */
-	public static Criterion newTopicPropertyCriterion(String propertyPath, List topicIds, Condition internalCondition, QueryOperator operator, boolean includeSubTopics){
-		return newTopicReferenceCriterion(propertyPath, topicIds, internalCondition, operator, includeSubTopics);
 	}
 	
 	/**
