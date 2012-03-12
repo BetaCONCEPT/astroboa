@@ -51,17 +51,6 @@ public interface RenderProperties {
 	Map<RenderInstruction, Object> getRenderInstructions();
 	
 	/**
-	 * Returns value provided for specified render instruction.
-	 * 
-	 * @param renderInstruction Render instruction.
-	 * @return Value for render instruction of null if no render 
-	 * instruction is provided.
-	 * 
-	 * @deprecated Use specific methods for each render instruction
-	 */
-	Object getValueForRenderInstruction(RenderInstruction renderInstruction);
-	
-	/**
 	 * Control lazy loading mechanism when query results contain {@link ContentObject}s.
 	 * 
 	 * @param renderAllContentObjectProperties <code>true</code> will load all
