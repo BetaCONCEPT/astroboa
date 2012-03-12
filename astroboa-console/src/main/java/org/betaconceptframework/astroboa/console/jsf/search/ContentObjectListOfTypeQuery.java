@@ -24,7 +24,6 @@ import javax.faces.application.FacesMessage;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.query.Order;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.console.jsf.dashboard.ContentObjectListBean;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
@@ -51,7 +50,7 @@ public class ContentObjectListOfTypeQuery extends ContentObjectListBean{
 		// reset search criteria to begin a new search
 		contentObjectCriteria = null;
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("queryObject");
-		contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+		contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		
 		try {
 			

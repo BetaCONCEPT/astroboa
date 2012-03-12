@@ -26,10 +26,8 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.console.security.LoggedInRepositoryUser;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
@@ -67,7 +65,7 @@ public class LoggedInUserRecentlyAddedOrModifiedContentObjectsDashboardItem exte
 			// reset search criteria to begin a new search
 			contentObjectCriteria = null;
 			contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-			contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+			contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 
 
 			try {

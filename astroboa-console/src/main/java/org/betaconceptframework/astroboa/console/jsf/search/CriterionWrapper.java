@@ -37,7 +37,6 @@ import org.betaconceptframework.astroboa.api.model.io.FetchLevel;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.Order;
 import org.betaconceptframework.astroboa.api.model.query.QueryOperator;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
@@ -45,7 +44,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.SimpleCriterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 import org.betaconceptframework.astroboa.api.service.DefinitionService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
@@ -341,7 +339,7 @@ public class CriterionWrapper {
 			if (CollectionUtils.isNotEmpty(acceptedTaxonomies)){
 				//Only one taxonomy
 				if (acceptedTaxonomies.size() == 1){
-					topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+					topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 					topicCriteria.setOffsetAndLimit(0,30);
 					topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 
@@ -359,7 +357,7 @@ public class CriterionWrapper {
 					for (String acceptedTaxonomy : acceptedTaxonomies){
 						
 						topicCriteria.reset();
-						topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+						topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 						topicCriteria.setOffsetAndLimit(0,30);
 						topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 
@@ -410,7 +408,7 @@ public class CriterionWrapper {
 				return null;
 
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-			contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+			contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 			contentObjectCriteria.setOffsetAndLimit(0,15);
 			contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 			

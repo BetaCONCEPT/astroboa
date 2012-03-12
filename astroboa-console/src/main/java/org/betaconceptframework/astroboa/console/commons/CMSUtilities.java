@@ -40,7 +40,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.Criterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.LocalizationCriterion;
 import org.betaconceptframework.astroboa.api.model.query.criteria.RepositoryUserCriteria;
 import org.betaconceptframework.astroboa.api.model.query.criteria.TopicCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.RepositoryUserService;
 import org.betaconceptframework.astroboa.api.service.TopicService;
 import org.betaconceptframework.astroboa.console.commons.TopicComparator.OrderByProperty;
@@ -102,7 +101,8 @@ public class CMSUtilities {
 				topicCriteria.doNotCacheResults();
 			}
 			
-			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			
 			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
 				Topic firstTopic = topicsFound.getResults().get(0); 
@@ -157,7 +157,7 @@ public class CMSUtilities {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
 				Topic firstTopic = topicsFound.getResults().get(0); 
@@ -204,7 +204,7 @@ public class CMSUtilities {
 			TopicCriteria parentCriteria = CmsCriteriaFactory.newTopicCriteria();
 			parentCriteria.addNameEqualsCriterion(parentTopicName);
 			topicCriteria.setAncestorCriteria(parentCriteria);
-			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			topicCriteria.searchInDirectAncestorOnly();
 			if (cacheable){
 				topicCriteria.setCacheable(CacheRegion.TEN_MINUTES);
@@ -263,7 +263,7 @@ public class CMSUtilities {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			if (!orderByPosition) {
 				topicCriteria.addOrderByLocale(locale, Order.ascending);
 			}
@@ -305,7 +305,7 @@ public class CMSUtilities {
 
 			topicCriteria.addCriterion(localizationCriterion);
 
-			// topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+			// topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			topicCriteria.setOffsetAndLimit(0, 30);
 			//topicCriteria.getResultRowRange().setRange(0, 30);
 
@@ -326,7 +326,7 @@ public class CMSUtilities {
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		topicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME);
 		
-		topicCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+		topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		List<Topic> allTags = cmsOutcome.getResults();

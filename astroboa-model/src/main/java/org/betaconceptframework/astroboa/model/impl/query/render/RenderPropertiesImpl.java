@@ -48,12 +48,6 @@ public class RenderPropertiesImpl implements RenderProperties, Serializable{
 	;
 	private Map<RenderInstruction, Object> renderInstructions= new HashMap<RenderInstruction, Object>();
 	
-	public void addRenderInstruction(RenderInstruction renderInstruction,
-			Object value) {
-		if (renderInstruction != null && value != null)
-			renderInstructions.put(renderInstruction, value);
-	}
-
 	public Map<RenderInstruction, Object> getRenderInstructions() {
 		return renderInstructions;
 	}

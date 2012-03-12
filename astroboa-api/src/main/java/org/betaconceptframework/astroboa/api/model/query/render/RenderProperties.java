@@ -44,16 +44,6 @@ public interface RenderProperties {
 	void resetRenderInstructions();
 	
 	/**
-	 * Adds a render instruction.
-	 * @param renderInstruction A render instruction.
-	 * @param value Render instruction value.
-	 * 
-	 * @deprecated Use specific methods for each render instruction
-	 */
-	void addRenderInstruction(RenderInstruction renderInstruction, 
-			Object value);
-	
-	/**
 	 * Returns all render instructions.
 	 * 
 	 * @return Render instructions.

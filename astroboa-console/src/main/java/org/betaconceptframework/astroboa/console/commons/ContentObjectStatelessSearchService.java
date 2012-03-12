@@ -26,9 +26,7 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.io.ResourceRepresentationType;
 import org.betaconceptframework.astroboa.api.model.query.CacheRegion;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.api.service.ContentService;
 
 /**
@@ -87,7 +85,7 @@ public class ContentObjectStatelessSearchService {
 		 * the localized labels are retrieved according to the provided locale
 		 */
 		contentObjectCriteria.getRenderProperties().resetRenderInstructions();
-		contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locale);
+		contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
 	}
 
 	

@@ -30,8 +30,6 @@ import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Topic;
 import org.betaconceptframework.astroboa.api.model.TopicReferenceProperty;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
-import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
 import org.betaconceptframework.astroboa.console.jsf.dashboard.ContentObjectListBean;
 import org.betaconceptframework.astroboa.console.seam.SeamEventNames;
 import org.betaconceptframework.astroboa.model.factory.CmsCriteriaFactory;
@@ -131,7 +129,7 @@ public class ScheduledForContentAreasContentObjectList extends ContentObjectList
 		// reset search criteria to begin a new search
 		contentObjectCriteria = null;
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-		contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, JSFUtilities.getLocaleAsString());
+		contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		
 		
 		try {

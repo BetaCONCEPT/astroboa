@@ -245,7 +245,7 @@ public class ContentServiceClientWrapper extends AbstractClientServiceWrapper im
 	
 			//Disable lazy loading only if user has not set it and limit is less than 500
 			if (lazyLoadingHasNotBeenSet &&  contentObjectCriteria.getLimit() > 0 && contentObjectCriteria.getLimit() < 500){
-				contentObjectCriteria.getRenderProperties().addRenderInstruction(RenderInstruction.DISABLE_LAZY_LOADING_OF_CONTENT_OBJECT_PROPERTIES, true);
+				contentObjectCriteria.getRenderProperties().renderAllContentObjectProperties(true);
 			}
 		}
 	}
