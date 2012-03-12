@@ -644,7 +644,7 @@ public class ContentDao  extends JcrDaoSupport{
 			if (ResourceRepresentationType.CONTENT_OBJECT_INSTANCE.equals(contentObjectOutput)|| 
 					ResourceRepresentationType.CONTENT_OBJECT_LIST.equals(contentObjectOutput)){
 				
-				CmsOutcome<ContentObject> outcome = contentObjectDao.searchContentObjects(contentObjectCriteria, getSession(), ContentObject.class);
+				CmsOutcome<ContentObject> outcome = contentObjectDao.searchContentObjects(contentObjectCriteria, getSession());
 
 				//User requested one ContentObject. Throw an exception if more than
 				//one returned

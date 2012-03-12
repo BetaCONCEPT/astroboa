@@ -34,14 +34,11 @@ import org.betaconceptframework.astroboa.api.model.SimpleCmsProperty;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.engine.jcr.dao.ContentDefinitionDao;
-import org.betaconceptframework.astroboa.engine.jcr.query.CmsScoreNode;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.model.impl.item.ContentObjectProfileItem;
 import org.betaconceptframework.astroboa.model.impl.item.JcrBuiltInItem;
-import org.betaconceptframework.astroboa.model.impl.query.CmsRankedOutcomeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -71,17 +68,6 @@ public class ContentObjectRenderer {
 			((SimpleCmsProperty)hasVersionProperty).addSimpleTypeValue(contentObjectVersion.getName());
 		}
 		
-		
-	}
-
-	public  CmsRankedOutcome<ContentObject> renderScoreNode(Session session,CmsScoreNode cmsScoreNode,  RenderProperties contentObjectRenderProperties, 
-			Map<String, ContentObjectTypeDefinition> cachedContentObjectTypeDefinitions, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities) throws  RepositoryException  {
-		
-		ContentObject conObject = render(session, cmsScoreNode.getJcrNode(), contentObjectRenderProperties, cachedContentObjectTypeDefinitions, cachedCmsRepositoryEntities);
-		 
-		CmsRankedOutcome<ContentObject> newCmsRankedOutcome = new CmsRankedOutcomeImpl<ContentObject>(cmsScoreNode.getScore(), conObject);
-		
-		return newCmsRankedOutcome;
 		
 	}
 

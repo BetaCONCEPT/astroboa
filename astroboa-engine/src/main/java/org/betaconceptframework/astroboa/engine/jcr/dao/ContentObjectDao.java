@@ -41,7 +41,6 @@ import org.betaconceptframework.astroboa.api.model.definition.ComplexCmsProperty
 import org.betaconceptframework.astroboa.api.model.definition.ContentObjectTypeDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
 import org.betaconceptframework.astroboa.api.model.query.CmsOutcome;
-import org.betaconceptframework.astroboa.api.model.query.CmsRankedOutcome;
 import org.betaconceptframework.astroboa.api.model.query.criteria.ContentObjectCriteria;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderProperties;
 import org.betaconceptframework.astroboa.engine.cache.regions.JcrQueryCacheRegion;
@@ -195,8 +194,7 @@ public class ContentObjectDao {
 	}
 	
 	
-	private <T> CmsOutcome<T> createCmsOutcome(Session session, ContentObjectCriteria contentObjectCriteria, 
-			Class<T> outcomeType) throws  Exception {
+	private <T> CmsOutcome<T> createCmsOutcome(Session session, ContentObjectCriteria contentObjectCriteria) throws  Exception {
 
 		//Keep render properties before rendering since during render they may change
 		RenderProperties renderPropertiesFromCriteria = contentObjectCriteria.getRenderProperties();
@@ -235,20 +233,7 @@ public class ContentObjectDao {
 			while (orderedResults.hasNext()){
 				CmsScoreNode nextScoreNode = orderedResults.nextCmsScoreNode();
 
-				T contentObject = null;
-				if (outcomeType == CmsRankedOutcome.class){
-					contentObject = (T) contentObjectRenderer.renderScoreNode(session, nextScoreNode, renderPropertiesFromCriteria,
-							cachedContentObjectTypeDefinitions,cachedCmsRepositoryEntities);
-					
-					//Preload properties
-					if (CollectionUtils.isNotEmpty(projections)){
-						loadProjectedPaths(projections, ((CmsRankedOutcome<ContentObject>)contentObject).getCmsRepositoryEntity());
-					}
-					
-					outcome.getResults().add(contentObject);
-				}
-				else{
-					contentObject = (T) contentObjectRenderer.render(session, nextScoreNode.getJcrNode(), 
+				T contentObject = (T) contentObjectRenderer.render(session, nextScoreNode.getJcrNode(), 
 							renderPropertiesFromCriteria, cachedContentObjectTypeDefinitions, cachedCmsRepositoryEntities);
 					
 					//Preload properties
@@ -257,8 +242,6 @@ public class ContentObjectDao {
 					}
 					
 					((CmsOutcomeImpl)outcome).addResult(contentObject, nextScoreNode.getScore());
-				}
-				
 			}
 
 		}
@@ -319,11 +302,11 @@ public class ContentObjectDao {
 		}
 	}
 
-	public CmsOutcome searchContentObjects(ContentObjectCriteria contentObjectCriteria, Session session, Class<?> outcomeType) throws Exception  {
+	public CmsOutcome searchContentObjects(ContentObjectCriteria contentObjectCriteria, Session session) throws Exception  {
 
 		ContentObjectCriteria newContentObjectCriteria = copyContentObjectCriteria(session, contentObjectCriteria);
 
-		return createCmsOutcome(session, newContentObjectCriteria, outcomeType);
+		return createCmsOutcome(session, newContentObjectCriteria);
 
 	}
 
