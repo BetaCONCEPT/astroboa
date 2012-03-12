@@ -32,7 +32,6 @@ import org.betaconceptframework.astroboa.api.model.CmsProperty;
 import org.betaconceptframework.astroboa.api.model.CmsRepository;
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.LocalizableEntity;
 import org.betaconceptframework.astroboa.api.model.RepositoryUser;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
@@ -159,23 +158,6 @@ public abstract class CmsRepositoryEntityFactory {
 
 	
 	/**
-	 * Create a new {@link ContentObject object}.
-	 * 
-	 * <p>
-	 * This is the entry point for creating new object instances and users
-	 * are strongly advised to use ONLY this method when they want to create new objects.
-	 * </p>
-	 * 
-	 * @param contentType
-	 *            Object type name.
-	 * 
-	 * @return An {@link ContentObject object} instance of specified content type.
-	 */
-	public ContentObject newObjectForType(String contentType){
-		return newContentObjectForType(contentType, null);
-	}
-	
-	/**
 	 * Create a new {@link ContentObject content object}.
 	 * 
 	 * <p>
@@ -192,19 +174,10 @@ public abstract class CmsRepositoryEntityFactory {
 	 * 
 	 * @param contentType
 	 *            Content object type name.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for content 
-	 *            {@link CmsRepositoryEntity entities}.
 	 * 
-	 * @deprecated Use {@link #newObjectForType(String)} instead
-	 * 
-	 * @return A {@link ContentObject content object} instance of content object
-	 *         type.
-	 */
-	public ContentObject newContentObjectForType(String contentType,	String locale){
-		
+	 * @return An {@link ContentObject instance } of content type.
+	 */ 
+	public ContentObject newObjectForType(String contentType){
 		try{	
 			LazyLoader lazyLoader = AstroboaClientContextHolder.getLazyLoaderForClient(getAuthenticationToken());
 			
@@ -229,13 +202,9 @@ public abstract class CmsRepositoryEntityFactory {
 			((ContentObjectImpl)contentObject).setComplexCmsRootProperty(complexCmsRootPropertyImpl);
 			((ContentObjectImpl)contentObject).setAuthenticationToken(getAuthenticationToken());
 			
+			String locale = Locale.ENGLISH.toString();
+
 			RenderProperties renderProperties = new RenderPropertiesImpl();
-			
-			if (StringUtils.isBlank(locale)){
-				//Default value
-				locale = Locale.ENGLISH.toString();
-			}
-			
 			renderProperties.renderValuesForLocale(locale);
 
 			//	Type
@@ -267,8 +236,8 @@ public abstract class CmsRepositoryEntityFactory {
 		} catch (Exception e) {
 			throw new CmsException(e);
 		}
-		
 	}
+	
 
 	/**
 	 * Creates a new unmanaged {@link BinaryChannel} from the provided path, 
