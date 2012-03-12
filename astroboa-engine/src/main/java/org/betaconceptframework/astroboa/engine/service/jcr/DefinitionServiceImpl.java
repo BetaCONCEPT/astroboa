@@ -72,21 +72,6 @@ class DefinitionServiceImpl implements DefinitionService {
 		}
 	}
 
-	@Deprecated
-	public CmsPropertyDefinition getCmsPropertyDefinition(String propertyName, String contentObjectTypeName)  {
-		try {
-			return (CmsPropertyDefinition) contentDefinitionDao.getCmsDefinition(contentObjectTypeName+"."+propertyName, ResourceRepresentationType.DEFINITION_INSTANCE,false);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-
-
 	public List<ComplexCmsPropertyDefinition> getAspectDefinitionsSortedByLocale(
 			List<String> aspects, String locale) {
 		try {

@@ -54,20 +54,6 @@ class RepositoryUserServiceImpl implements RepositoryUserService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public RepositoryUser saveRepositoryUser(RepositoryUser repositoryUser)  {
-		try{
-			return repositoryUserDao.saveRepositoryUser(repositoryUser);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
 	public void deleteRepositoryUserAndOwnedObjects(String repositoryUserId)   {
 		try{
 			repositoryUserDao.removeRepositoryUserAndOwnedObjects(repositoryUserId);
