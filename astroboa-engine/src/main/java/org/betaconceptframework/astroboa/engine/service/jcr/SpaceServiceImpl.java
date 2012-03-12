@@ -58,21 +58,6 @@ class SpaceServiceImpl  implements SpaceService{
 		
 	}
 
-	@Transactional(readOnly = false, rollbackFor = CmsException.class)
-	@Deprecated
-	public Space saveSpace(Space space) {
-		try{
-		return spaceDao.saveSpace(space);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-		
-	}
-
 	public Space getOrganizationSpace() {
 		try{
 		return spaceDao.getOrganizationSpace();   
@@ -85,32 +70,6 @@ class SpaceServiceImpl  implements SpaceService{
 		}
 	}
 	
-	@Deprecated
-	public Space getSpace(String spaceId, String locale) {
-		try{
-		return spaceDao.getSpace(spaceId, ResourceRepresentationType.SPACE_INSTANCE, FetchLevel.ENTITY);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
-	@Deprecated
-	public CmsOutcome<Space> searchSpaces(SpaceCriteria spaceCriteria) {
-		try{
-		return spaceDao.searchSpaces(spaceCriteria, ResourceRepresentationType.SPACE_LIST);
-		}
-		catch(CmsException e){
-			throw e;
-		}
-		catch (Exception e) { 
-			throw new CmsException(e); 		
-		}
-	}
-
 	public List<String> getContentObjectIdsWhichReferToSpace(String spaceId) {
 		try{
 		return spaceDao.getContentObjectIdsWhichReferToSpace(spaceId);
