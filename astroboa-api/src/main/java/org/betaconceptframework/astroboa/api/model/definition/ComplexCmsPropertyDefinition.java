@@ -241,9 +241,6 @@ public interface ComplexCmsPropertyDefinition extends CmsPropertyDefinition {
 	 */
 	String getPropertyPathsWhoseValuesCanBeUsedAsALabel();
 
-	@Deprecated
-	String getPropertyPathWhoseValueCanBeUsedAsALabel();
-	
 	/**
 	 * Checks if this definition is a global one, that is can be attached at runtime to any
 	 * content object.

@@ -111,11 +111,6 @@ public final  class ComplexCmsPropertyDefinitionImpl extends AbstractComplexCmsP
 		return propertyPathsWhoseValuesCanBeUsedAsALabel;
 	}
 	
-	@Override
-	public String getPropertyPathWhoseValueCanBeUsedAsALabel() {
-		return getPropertyPathsWhoseValuesCanBeUsedAsALabel();
-	}
-
 	public boolean isGlobal() {
 		return global;
 	}
