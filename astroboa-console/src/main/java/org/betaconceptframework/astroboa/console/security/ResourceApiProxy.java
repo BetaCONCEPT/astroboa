@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -141,7 +142,11 @@ public class ResourceApiProxy {
 		    
 		    // add query parameters
 		    for (Map.Entry queryParamEntry : queryParameters.entrySet()) {
-		    	request.queryParameter((String)queryParamEntry.getKey(), ((List<String>)queryParamEntry.getValue()).get(0));
+		    	String parameterValue = ((List<String>)queryParamEntry.getValue()).get(0);
+		    	
+		    	//ClientRequest (request) encodes the values before the execution of the request.
+		    	//Therefore we need to decode the values before we feed them to the ClientRequest instance
+				request.queryParameter((String)queryParamEntry.getKey(), URLDecoder.decode(parameterValue, "UTF-8"));
 		    }
 			
 		    String uri = request.getUri();
