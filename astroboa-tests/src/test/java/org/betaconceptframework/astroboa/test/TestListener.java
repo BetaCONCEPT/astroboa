@@ -38,6 +38,12 @@ public class TestListener extends TestListenerAdapter {
 		logger.debug("Test " +tr.getTestClass().getRealClass().getSimpleName()+"."+tr.getName()+" needed  "+ timeToComplete +" ms to complete successfully ");
 		super.onTestSuccess(tr);
 	}
+	
+	@Override
+	public void onTestStart(ITestResult tr) {
+		logger.debug("Starting Test " +tr.getTestClass().getRealClass().getSimpleName()+"."+tr.getName());
+		super.onTestStart(tr);
+	}
 
 } 
 
