@@ -69,7 +69,7 @@ Authors
 						</ui:remove>
 						
 						<c:set var="numberOfContentObjectsReferencedByTopicForInput"
-							value="#{topicTreeNodeForInput.topic.numberOfReferrerContentObjects}" />
+							value="#{topicTreeNodeForInput.topic.numberOfContentObjectsWhichReferToThisTopic}" />
 						
 						<a4j:commandLink value="#{topicTreeNodeForInput.description}" 
 							onsubmit="destroyTextEditor();"

@@ -113,13 +113,13 @@ public class TopicServiceClientWrapper extends AbstractClientServiceWrapper impl
 
 
 	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomyName,
-			String locale, int offset, int limit) {
+			int offset, int limit) {
 
 		if (topicServiceSecure != null){
 			if (successfullyConnectedToRemoteService){  
 				client.activateClientContext();
 			}
-			return topicServiceSecure.getMostlyUsedTopics(taxonomyName, locale, offset, limit, getAuthenticationToken());
+			return topicServiceSecure.getMostlyUsedTopics(taxonomyName, offset, limit, getAuthenticationToken());
 		}
 		else{
 			throw new CmsException(" TopicService reference was not found");

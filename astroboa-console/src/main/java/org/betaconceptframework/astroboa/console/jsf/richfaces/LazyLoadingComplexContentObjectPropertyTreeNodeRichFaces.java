@@ -106,14 +106,12 @@ public class LazyLoadingComplexContentObjectPropertyTreeNodeRichFaces extends La
 								List<CmsProperty> childProperties = complexCmsProperty.getChildPropertyList(childPropertyDefinition.getName());
 								int index = 0;
 								for (CmsProperty childProperty : childProperties) {
-									childProperty.setCurrentLocale(JSFUtilities.getLocaleAsString());
 									addComplexTypeMultipleOccurrencesPropertyNode((ComplexCmsProperty)childProperty, (ComplexCmsPropertyDefinition)childPropertyDefinition, index);
 									index++;
 								}
 							}
 							else { // single occurrence 
 								CmsProperty childProperty = complexCmsProperty.getChildProperty(childPropertyDefinition.getName());
-								childProperty.setCurrentLocale(JSFUtilities.getLocaleAsString());
 								addComplexTypeSingleOccurrencePropertyNode((ComplexCmsProperty)childProperty, (ComplexCmsPropertyDefinition)childPropertyDefinition);
 							}
 							break;

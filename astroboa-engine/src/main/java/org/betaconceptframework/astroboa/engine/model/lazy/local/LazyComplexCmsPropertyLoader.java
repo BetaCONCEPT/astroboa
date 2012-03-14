@@ -109,16 +109,6 @@ public class LazyComplexCmsPropertyLoader {
 	@Autowired
 	private ContentObjectRenderer contentObjectRenderer;
 
-	private String getLocale(RenderProperties contentObjectRenderProperties) throws RepositoryException {
-
-		if (contentObjectRenderProperties == null){
-			return null;
-		}
-		else{
-			return (String) contentObjectRenderProperties.getFirstLocaleUsedForRender();
-		}
-	}
-
 	public List<CmsProperty<?, ?>> renderChildProperty(CmsPropertyDefinition currentChildPropertyDefinition, 
 			String jcrNodeUUIDWhichCorrespondsToParentComplexCmsProperty, String jcrNodeUUIDWhichCorrespondsToContentObejct, 
 			RenderProperties renderProperties, Session session, 
@@ -147,16 +137,13 @@ public class LazyComplexCmsPropertyLoader {
 				cachedCmsRepositoryEntities = new HashMap<String, CmsRepositoryEntity>();
 			}
 
-			String locale = getLocale(renderProperties);
-
-			
 			if (currentChildPropertyDefinition instanceof ComplexCmsPropertyDefinition)
-				return renderComplexProperty(currentChildPropertyDefinition.getName(), propertyContainerNode, currentChildPropertyDefinition, locale);
+				return renderComplexProperty(currentChildPropertyDefinition.getName(), propertyContainerNode, currentChildPropertyDefinition);
 			else{
 				CmsProperty<?, ?> simpleCmsProperty = renderSimpleProperty(currentChildPropertyDefinition.getName(),
 						currentChildPropertyDefinition, propertyContainerNode, 
 						session, jcrNodeUUIDWhichCorrespondsToContentObejct, 
-						cachedCmsRepositoryEntities, locale, renderProperties);
+						cachedCmsRepositoryEntities, renderProperties);
 
 				List<CmsProperty<?,?>> childCmsProperties = new ArrayList<CmsProperty<?,?>>();
 
@@ -178,7 +165,7 @@ public class LazyComplexCmsPropertyLoader {
 		}
 	}
 
-	private CmsProperty createNewCmsProperty(CmsPropertyDefinition propertyDefinition,String propertyName, String locale) {
+	private CmsProperty createNewCmsProperty(CmsPropertyDefinition propertyDefinition,String propertyName) {
 		CmsProperty newProperty = newCmsProperty(propertyDefinition.getValueType());
 
 		if (newProperty instanceof SimpleCmsProperty)
@@ -189,8 +176,6 @@ public class LazyComplexCmsPropertyLoader {
 			((ComplexCmsPropertyDefinitionImpl)propertyDefinition).checkIfRecursiveAndCloneParentChildDefinitions();
 			((ComplexCmsProperty)newProperty).setPropertyDefinition((ComplexCmsPropertyDefinition)propertyDefinition);
 		}
-
-		newProperty.setCurrentLocale(locale);
 
 		return newProperty;
 	}
@@ -241,18 +226,18 @@ public class LazyComplexCmsPropertyLoader {
 		return newProperty;
 	}
 
-	private CmsProperty<?,?> renderSimpleProperty(String childPropertyName, CmsPropertyDefinition currentChildPropertyDefinition, Node propertyContainerNode, Session session, String contentObjectNodeUUID, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, String locale, RenderProperties renderProperties) throws RepositoryException {
+	private CmsProperty<?,?> renderSimpleProperty(String childPropertyName, CmsPropertyDefinition currentChildPropertyDefinition, Node propertyContainerNode, Session session, String contentObjectNodeUUID, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties) throws RepositoryException {
 
-		CmsProperty<?,?> simpleProperty = createNewCmsProperty(currentChildPropertyDefinition, childPropertyName, locale);
+		CmsProperty<?,?> simpleProperty = createNewCmsProperty(currentChildPropertyDefinition, childPropertyName);
 
 		//Render values
 		if (simpleProperty != null){
 			if (currentChildPropertyDefinition instanceof BinaryPropertyDefinition) {
 				renderBinaryChannels((BinaryProperty)simpleProperty,propertyContainerNode, 
-						cachedCmsRepositoryEntities, session,locale,renderProperties);
+						cachedCmsRepositoryEntities, session,renderProperties);
 			}
 			else{
-				renderValueForSimpleProperty((SimpleCmsProperty<?,?,?>)simpleProperty,session, contentObjectNodeUUID, propertyContainerNode, cachedCmsRepositoryEntities, locale, renderProperties);
+				renderValueForSimpleProperty((SimpleCmsProperty<?,?,?>)simpleProperty,session, contentObjectNodeUUID, propertyContainerNode, cachedCmsRepositoryEntities, renderProperties);
 			}
 		}
 
@@ -260,7 +245,7 @@ public class LazyComplexCmsPropertyLoader {
 	}
 
 	private void renderValueForSimpleProperty(SimpleCmsProperty<?,?,?> simpleContentObjectProperty, Session session, String contentObjectNodeUUID, 
-			Node propertyContainerNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, String locale, RenderProperties renderProperties) throws RepositoryException {
+			Node propertyContainerNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties) throws RepositoryException {
 
 		final String propertyName = simpleContentObjectProperty.getName();
 
@@ -318,12 +303,12 @@ public class LazyComplexCmsPropertyLoader {
 
 		}
 		else{
-			renderSimpleCmsProperty(simpleContentObjectProperty, propertyContainerNode.getProperty(propertyName),cachedCmsRepositoryEntities,session, locale, renderProperties);
+			renderSimpleCmsProperty(simpleContentObjectProperty, propertyContainerNode.getProperty(propertyName),cachedCmsRepositoryEntities,session, renderProperties);
 		}
 	}
 
 
-	private void renderBinaryChannels(BinaryProperty binaryProperty, Node propertyContainerNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, String locale, RenderProperties renderProperties) throws  RepositoryException   {
+	private void renderBinaryChannels(BinaryProperty binaryProperty, Node propertyContainerNode, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws  RepositoryException   {
 
 		String propertyName = binaryProperty.getName();
 
@@ -354,7 +339,7 @@ public class LazyComplexCmsPropertyLoader {
 				else{
 					
 					renderSimpleCmsProperty(binaryProperty, propertyContainerNode.getProperty(propertyName), 
-							cachedCmsRepositoryEntities, session, locale, renderProperties);
+							cachedCmsRepositoryEntities, session, renderProperties);
 				}
 			}
 			else{
@@ -380,8 +365,7 @@ public class LazyComplexCmsPropertyLoader {
 	}
 
 
-	private List<CmsProperty<?,?>> renderComplexProperty(String childPropertyName, Node propertyContainerNode, CmsPropertyDefinition currentChildPropertyDefinition, 
-			String locale) throws RepositoryException {
+	private List<CmsProperty<?,?>> renderComplexProperty(String childPropertyName, Node propertyContainerNode, CmsPropertyDefinition currentChildPropertyDefinition) throws RepositoryException {
 
 		List<CmsProperty<?,?>> childCmsProperties = new ArrayList<CmsProperty<?,?>>();
 
@@ -396,7 +380,7 @@ public class LazyComplexCmsPropertyLoader {
 			}
 
 			//Create an empty property
-			childCmsProperties.add(createNewCmsProperty(currentChildPropertyDefinition, childPropertyName, locale));
+			childCmsProperties.add(createNewCmsProperty(currentChildPropertyDefinition, childPropertyName));
 
 		}
 		else
@@ -418,7 +402,7 @@ public class LazyComplexCmsPropertyLoader {
 				Node nodeOfComplexProperty  = complexNodes.nextNode();
 
 				//Create new CmsProperty
-				CmsProperty<?,?> newCmsProperty = createNewCmsProperty(currentChildPropertyDefinition, childPropertyName, locale); 
+				CmsProperty<?,?> newCmsProperty = createNewCmsProperty(currentChildPropertyDefinition, childPropertyName); 
 
 				if (newCmsProperty instanceof LazyCmsProperty){
 					((LazyCmsProperty)newCmsProperty).setPropertyContainerNodeUUID(nodeOfComplexProperty.getIdentifier());
@@ -501,21 +485,21 @@ public class LazyComplexCmsPropertyLoader {
 					if (ArrayUtils.isEmpty(successors))
 					{
 						if (CmsReadOnlyItem.HasVersion.getJcrName().equals(simpleProperty.getName()))
-							renderSimpleValue(simpleProperty, versionName,session, null, null, null);
+							renderSimpleValue(simpleProperty, versionName,session, null, null);
 
 					}
 
 					//Render versionName
 					if (CmsReadOnlyItem.Versions.getJcrName().equals(simpleProperty.getName()))
 					{
-						renderSimpleValue(simpleProperty, versionName,session, null, null, null);
+						renderSimpleValue(simpleProperty, versionName,session, null, null);
 					}
 				}
 			}
 		}
 	}
 
-	private  void renderSimpleCmsProperty(SimpleCmsProperty<?,?,?> simpleProperty , Property property, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, String locale, RenderProperties renderProperties) throws  RepositoryException   {
+	private  void renderSimpleCmsProperty(SimpleCmsProperty<?,?,?> simpleProperty , Property property, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws  RepositoryException   {
 
 		SimpleCmsPropertyDefinition<?> propertyDefinition = (SimpleCmsPropertyDefinition<?>) simpleProperty.getPropertyDefinition();
 
@@ -537,12 +521,12 @@ public class LazyComplexCmsPropertyLoader {
 		else
 			values.add(property.getValue());
 
-		setValuesToSimpleProperty(simpleProperty, propertyDefinition.getValueType(), values, cachedCmsRepositoryEntities, session, locale, renderProperties);
+		setValuesToSimpleProperty(simpleProperty, propertyDefinition.getValueType(), values, cachedCmsRepositoryEntities, session, renderProperties);
 	}
 
 
 	private void setValuesToSimpleProperty(SimpleCmsProperty simpleProperty, ValueType definitionValueType, List<Value> values, 
-			Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, String locale, RenderProperties renderProperties) throws RepositoryException {
+			Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, Session session, RenderProperties renderProperties) throws RepositoryException {
 		switch (definitionValueType) {
 		case Boolean:
 			for (Value value : values){
@@ -706,14 +690,14 @@ public class LazyComplexCmsPropertyLoader {
 		}
 	}
 
-	private void renderSimpleValue(SimpleCmsProperty simpleProperty, Object value, Session session, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, String locale, RenderProperties renderProperties) throws RepositoryException  {
+	private void renderSimpleValue(SimpleCmsProperty simpleProperty, Object value, Session session, Map<String, CmsRepositoryEntity> cachedCmsRepositoryEntities, RenderProperties renderProperties) throws RepositoryException  {
 		if (value == null)
 			simpleProperty.addSimpleTypeValue(null);
 		else
 		{
 			final Value jcrValue = JcrValueUtils.getJcrValue(value, simpleProperty.getValueType(), session.getValueFactory());
 
-			setValuesToSimpleProperty(simpleProperty, simpleProperty.getValueType(), Arrays.asList(jcrValue), cachedCmsRepositoryEntities, session, locale, renderProperties);
+			setValuesToSimpleProperty(simpleProperty, simpleProperty.getValueType(), Arrays.asList(jcrValue), cachedCmsRepositoryEntities, session, renderProperties);
 
 		}
 	}

@@ -48,6 +48,7 @@ import org.betaconceptframework.astroboa.model.factory.CmsRepositoryEntityFactor
 import org.betaconceptframework.astroboa.model.factory.CriterionFactory;
 import org.betaconceptframework.astroboa.model.impl.item.CmsBuiltInItem;
 import org.betaconceptframework.astroboa.util.CmsConstants;
+import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 import org.jboss.seam.security.Identity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +102,7 @@ public class CMSUtilities {
 				topicCriteria.doNotCacheResults();
 			}
 			
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			
 			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
@@ -157,7 +158,7 @@ public class CMSUtilities {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			CmsOutcome<Topic> topicsFound = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
 				Topic firstTopic = topicsFound.getResults().get(0); 
@@ -204,7 +205,7 @@ public class CMSUtilities {
 			TopicCriteria parentCriteria = CmsCriteriaFactory.newTopicCriteria();
 			parentCriteria.addNameEqualsCriterion(parentTopicName);
 			topicCriteria.setAncestorCriteria(parentCriteria);
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			topicCriteria.searchInDirectAncestorOnly();
 			if (cacheable){
 				topicCriteria.setCacheable(CacheRegion.TEN_MINUTES);
@@ -263,7 +264,7 @@ public class CMSUtilities {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			if (!orderByPosition) {
 				topicCriteria.addOrderByLocale(locale, Order.ascending);
 			}
@@ -326,7 +327,7 @@ public class CMSUtilities {
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 		topicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME);
 		
-		topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		CmsOutcome<Topic> cmsOutcome = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 		List<Topic> allTags = cmsOutcome.getResults();
@@ -345,9 +346,9 @@ public class CMSUtilities {
 	}
 	
 	
-	public List<Topic> findMostPopularTags(String locale) throws Exception {
+	public List<Topic> findMostPopularTags() throws Exception {
 		try{
-			return topicService.getMostlyUsedTopics(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME, locale, 0,100).getResults();
+			return topicService.getMostlyUsedTopics(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME, 0,100).getResults();
 		}
 		catch (Exception e) {
 			throw e;
@@ -361,7 +362,6 @@ public class CMSUtilities {
 			
 			userTag.setTaxonomy(userTagOwner.getFolksonomy());
 			userTag.addLocalizedLabel(locale, userTagLabel);
-			userTag.setCurrentLocale(locale);
 			userTag.setOwner(userTagOwner);
 			
 			return userTag;
@@ -386,9 +386,9 @@ public class CMSUtilities {
 		if (topicList != null && localizedName != null)
 		{
 			for (Topic topic : topicList) {
-				if (localizedName.equals(topic.getLocalizedLabelForCurrentLocale()))
+				if (localizedName.equals(topic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString())))
 					return topic;
-				}
+			}
 		}	
 		return null;
 	}
@@ -424,8 +424,8 @@ public class CMSUtilities {
 		
 		repositoryUserCriteria.doNotCacheResults();
 		
-		if (locale != null)
-			repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//if (locale != null)
+		//	repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		return repositoryUserService.searchRepositoryUsers(repositoryUserCriteria);
 		
@@ -436,8 +436,8 @@ public class CMSUtilities {
 		List<RepositoryUser> resultRepositoryUsers;
 		repositoryUserCriteria.addExternalIdEqualsCriterion(userId);
 		
-		if (locale != null)
-			repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//if (locale != null)
+		//	repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		resultRepositoryUsers = repositoryUserService.searchRepositoryUsers(repositoryUserCriteria);
 		

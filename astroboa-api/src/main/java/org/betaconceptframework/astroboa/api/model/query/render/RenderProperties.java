@@ -19,14 +19,12 @@
 
 package org.betaconceptframework.astroboa.api.model.query.render;
 
-import java.util.List;
 import java.util.Map;
 
 import org.betaconceptframework.astroboa.api.model.CmsRepositoryEntity;
 import org.betaconceptframework.astroboa.api.model.ContentObject;
 import org.betaconceptframework.astroboa.api.model.Space;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.api.model.definition.Localization;
 
 /**
  * Represents instructions on how to render {@link CmsRepositoryEntity entities}
@@ -111,43 +109,6 @@ public interface RenderProperties {
 	 * @return <code>true</code> if parent entity is rendered, <code>false</code> otherwise
 	 */
 	boolean isParentEntityRendered();
-	
-	/**
-	 * In a multilingual environment, a property may have
-	 * more than one values. Use this method to instruct Astroboa
-	 * to render values for the specified list of languages.
-	 * 
-	 * A blank list (<code>null</code> or empty) indicates that
-	 * all values should be rendered.
-	 * 
-	 * @param locales Locale value as defined in {@link Localization}.
-	 */
-	void renderValuesForLocales(List<String> locales);
-	
-	/**
-	 * Convenient method when only one language is needed.
-	 * 
-	 * It replaces any existing locale.
-	 * 
-	 * @param locale Locale value as defined in {@link Localization}.
-	 */
-	void renderValuesForLocale(String locale);
-	
-	/**
-	 * Get the locales used when rendering multingual properties
-	 * 
-	 * @return Always a not null list.
-	 */
-	List<String> getLocalesUsedForRender();
-
-	/**
-	 * Convenient method to retrieve the specified locale.
-	 * 
-	 * Must be used when only one locale is provided.
-	 * 
-	 * @return The first locale found in locale list
-	 */
-	String getFirstLocaleUsedForRender();
 	
 	/**
 	 * Instruct renderer to serialize content objects with the same element name

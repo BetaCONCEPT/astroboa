@@ -137,14 +137,14 @@ public class TopicDao extends JcrDaoSupport {
 
 	}
 
-	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomy, String locale, int offset, int limit)  {
+	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomy, int offset, int limit)  {
 
 		try{
 			List<String> mostlyUsedTopicIds = cmsRepositoryEntityAssociationDao.getReferrerCmsRepositoryEntityIdsOfAllAssociationsOfReferencedTaxonomyNodeOfTaxonomy(taxonomy);
 
 			Session session = getSession();
 
-			RenderProperties topicRenderProperties = newRenderProperties(locale);
+			RenderProperties topicRenderProperties = newRenderProperties(null);
 
 			CmsOutcome<Topic> outcome = new CmsOutcomeImpl<Topic>(mostlyUsedTopicIds.size(), offset, limit);
 
@@ -181,7 +181,7 @@ public class TopicDao extends JcrDaoSupport {
 
 	private RenderProperties newRenderProperties(String locale) {
 		RenderProperties topicRenderProperties = new RenderPropertiesImpl();
-		topicRenderProperties.renderValuesForLocale(locale);
+		//topicRenderProperties.renderValuesForLocale(locale);
 		return topicRenderProperties;
 	}
 

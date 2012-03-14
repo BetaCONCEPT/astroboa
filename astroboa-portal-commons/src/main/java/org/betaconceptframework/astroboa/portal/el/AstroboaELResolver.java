@@ -101,17 +101,9 @@ public class AstroboaELResolver extends SeamELResolver{
 			context.setPropertyResolved(true);
 			return complexCmsProperty.getId();
 		}
-		else if (keywordIsNotDefinedAsAProperty("currentLocale", property, complexCmsProperty)){
-			context.setPropertyResolved(true);
-			return complexCmsProperty.getCurrentLocale();
-		}
 		else if (keywordIsNotDefinedAsAProperty("fullPath", property, complexCmsProperty)){
 			context.setPropertyResolved(true);
 			return complexCmsProperty.getFullPath();
-		}
-		else if (keywordIsNotDefinedAsAProperty("localizedLabelForCurrentLocale", property, complexCmsProperty)){
-			context.setPropertyResolved(true);
-			return complexCmsProperty.getLocalizedLabelForCurrentLocale();
 		}
 		else if (keywordIsNotDefinedAsAProperty("name", property, complexCmsProperty)){
 			context.setPropertyResolved(true);

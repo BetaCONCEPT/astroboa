@@ -98,7 +98,6 @@ public class SpaceTree extends AbstractUIBean{
 			
 			//Add organization space
 			Space organizationSpace = spaceService.getOrganizationSpace();
-			organizationSpace.setCurrentLocale(localeSelector.getLocaleString());
 			
 			LazyLoadingSpaceTreeNodeRichFaces organizationSpaceTreeNode = new LazyLoadingSpaceTreeNodeRichFaces(
 					organizationSpace.getId(),

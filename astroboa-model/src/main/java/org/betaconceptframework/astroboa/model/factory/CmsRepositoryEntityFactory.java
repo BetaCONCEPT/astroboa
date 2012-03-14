@@ -202,18 +202,13 @@ public abstract class CmsRepositoryEntityFactory {
 			((ContentObjectImpl)contentObject).setComplexCmsRootProperty(complexCmsRootPropertyImpl);
 			((ContentObjectImpl)contentObject).setAuthenticationToken(getAuthenticationToken());
 			
-			String locale = Locale.ENGLISH.toString();
-
 			RenderProperties renderProperties = new RenderPropertiesImpl();
-			renderProperties.renderValuesForLocale(locale);
 
 			//	Type
 			contentObject.setContentObjectType(contentObjectTypeDefinition.getName());
 
 			//Render Type Definition
 			((ContentObjectImpl)contentObject).setTypeDefinition(contentObjectTypeDefinition);
-
-			contentObject.getComplexCmsRootProperty().setCurrentLocale(locale);
 
 			Localization displayName = ((LocalizableCmsDefinitionImpl)contentObjectTypeDefinition).cloneDisplayName();
 			

@@ -45,7 +45,7 @@ Authors
 
 					<a4j:actionparam name="mostUsedTagId" value="#{topic.id}"
 						assignTo="#{contentObjectSearchByTopic.selectedTopicId}" />
-					<a4j:actionparam name="mostUsedTagLabel" value="#{topic.localizedLabelForCurrentLocale}"
+					<a4j:actionparam name="mostUsedTagLabel" value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}"
 						assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}" />
 
 				</a4j:commandLink>

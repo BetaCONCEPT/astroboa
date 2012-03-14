@@ -110,8 +110,8 @@ public class LazyLoadingTopicTreeNode extends LazyLoadingTreeNodeRichFaces{
 		return (LazyLoadingTopicTreeNode) topicTreeNode;
 	}
 
-	public void changeDescription(String localizedLabelForCurrentLocale) {
-		this.description = localizedLabelForCurrentLocale;
+	public void changeDescription(String newDescription) {
+		this.description = newDescription;
 	}
 
 	public void reloadTopic() {

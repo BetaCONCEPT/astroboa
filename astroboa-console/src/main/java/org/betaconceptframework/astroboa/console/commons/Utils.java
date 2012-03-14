@@ -49,7 +49,7 @@ public class Utils {
 			return JSFUtilities.getLocalizedMessage("no.localized.label.for.description", null);
 		}
 		
-		String locale = getLabelForCurrentDefaultOrEnglishLocale(topic, topic.getCurrentLocale());
+		String locale = getLabelForCurrentDefaultOrEnglishLocale(topic, JSFUtilities.getLocaleAsString());
 		
 		if (StringUtils.isBlank(locale)){
 			return topic.getName();
@@ -66,7 +66,7 @@ public class Utils {
 			return JSFUtilities.getLocalizedMessage("no.localized.label.for.description", null);
 		}
 		
-		String locale = getLabelForCurrentDefaultOrEnglishLocale(taxonomy, taxonomy.getCurrentLocale());
+		String locale = getLabelForCurrentDefaultOrEnglishLocale(taxonomy, JSFUtilities.getLocaleAsString());
 		
 		if (StringUtils.isBlank(locale)){
 			return taxonomy.getName();

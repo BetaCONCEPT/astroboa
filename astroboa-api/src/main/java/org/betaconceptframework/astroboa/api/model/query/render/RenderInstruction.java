@@ -39,13 +39,6 @@ import org.betaconceptframework.astroboa.api.model.query.criteria.CmsCriteria;
 public enum RenderInstruction {  
 	
 	/**
-	 * Render localized label for a specified locale. 
-	 * Accepted values is any {@link String} 
-	 * representing locale.
-	 */
-	RENDER_LOCALIZED_LABEL_FOR_LOCALE,
-	
-	/**
 	 * Indicates which version of {@link ContentObject}
 	 * will be rendered. Accepted values are any {@link String}.  
 	 */

@@ -78,8 +78,6 @@ public class TopicRenderer extends AbstractRenderer {
 			//Default values
 			renderProperties = getDefaultRenderProperties();
 
-		String locale = (String) renderProperties.getFirstLocaleUsedForRender();
-
 		//Render Id
 		cmsRepositoryEntityRenderer.renderCmsRepositoryEntityBasicAttributes(topicJcrNode, topic);
 
@@ -114,14 +112,14 @@ public class TopicRenderer extends AbstractRenderer {
 		renderOwner(topicJcrNode, session, topic, cachedCmsRepositoryEntities, renderProperties, parentIsRendered);
 
 		//Locale
-		renderLocalizedLabels(topicJcrNode, topic, locale);
+		renderLocalizedLabels(topicJcrNode, topic);
 
 		//Taxonomy
 		if (parentIsRendered && topic.getParent() != null && topic.getParent().getTaxonomy() != null){
 			topic.setTaxonomy(topic.getParent().getTaxonomy());
 		}
 		else{
-			taxonomyRenderer.renderTaxonomyToTopic(topicJcrNode, topic,	locale);
+			taxonomyRenderer.renderTaxonomyToTopic(topicJcrNode, topic);
 		}
 
 //		Number of Children
@@ -189,11 +187,10 @@ public class TopicRenderer extends AbstractRenderer {
 	}
 
 
-	private  void renderLocalizedLabels(Node topicJcrNode, Topic topic, String locale) throws RepositoryException {
+	private  void renderLocalizedLabels(Node topicJcrNode, Topic topic) throws RepositoryException {
 
 		cmsLocalizationRenderer.renderCmsLocalization(topicJcrNode, topic);
 
-		topic.setCurrentLocale(locale);
 
 	}
 

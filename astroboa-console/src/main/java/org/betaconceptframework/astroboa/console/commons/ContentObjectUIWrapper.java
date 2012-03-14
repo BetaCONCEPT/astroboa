@@ -490,7 +490,7 @@ public class ContentObjectUIWrapper extends AbstractBean{
 			int indexOfTopicInContentObjSubject = 0;
 			for (Topic existingTopic : profileSubjectProperty.getSimpleTypeValues()) {
 				if (existingTopic.getId() == null) // it is a new user Tag. We will use the topic label in order to locate it
-					topicIdOrLabel = existingTopic.getLocalizedLabelForCurrentLocale();
+					topicIdOrLabel = existingTopic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString());
 				else topicIdOrLabel = existingTopic.getId();
 				if (!topicIdOrLabel.equals(topicId)) 
 					++indexOfTopicInContentObjSubject;

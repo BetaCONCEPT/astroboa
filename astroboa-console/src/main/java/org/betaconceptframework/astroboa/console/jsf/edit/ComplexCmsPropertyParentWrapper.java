@@ -86,7 +86,8 @@ public class ComplexCmsPropertyParentWrapper extends CmsPropertyWrapper<ComplexC
 
 	@Override
 	public String getLocalizedLabelForCurrentLocale() {
-		return childComplexCmsPropertyDefinition == null ? null : childComplexCmsPropertyDefinition.getDisplayName().getLocalizedLabelForLocale(cmsProperty.getCurrentLocale());
+		return childComplexCmsPropertyDefinition == null ? null : 
+			childComplexCmsPropertyDefinition.getDisplayName().getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString());
 	}
 
 	@Override

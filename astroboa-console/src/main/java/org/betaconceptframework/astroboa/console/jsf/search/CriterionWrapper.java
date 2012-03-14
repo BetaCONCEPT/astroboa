@@ -339,7 +339,7 @@ public class CriterionWrapper {
 			if (CollectionUtils.isNotEmpty(acceptedTaxonomies)){
 				//Only one taxonomy
 				if (acceptedTaxonomies.size() == 1){
-					topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+					//topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 					topicCriteria.setOffsetAndLimit(0,30);
 					topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 
@@ -357,7 +357,7 @@ public class CriterionWrapper {
 					for (String acceptedTaxonomy : acceptedTaxonomies){
 						
 						topicCriteria.reset();
-						topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+						//topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 						topicCriteria.setOffsetAndLimit(0,30);
 						topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 
@@ -408,7 +408,7 @@ public class CriterionWrapper {
 				return null;
 
 			ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-			contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+			//contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 			contentObjectCriteria.setOffsetAndLimit(0,15);
 			contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 			

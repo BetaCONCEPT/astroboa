@@ -30,37 +30,5 @@ import org.betaconceptframework.astroboa.api.model.definition.Localization;
  */
 public interface LocalizableEntity extends CmsRepositoryEntity, Localization {
 
-	/**
-	 * Sets the locale value that will be used by 
-	 * {@link #getLocalizedLabelForCurrentLocale()} method to return the proper localized label.
-	 * 
-	 * @param currentLocale 
-	 * 			Locale value as defined in {@link Localization}. 
-	 */
-	 void setCurrentLocale(String currentLocale);
-	 
-	/**
-	 * Returns the currently selected locale value that will be used by
-	 * {@link #getLocalizedLabelForCurrentLocale()} method to return the proper localized label.
-	 * 
-	 * @return A {@link String} representing 
-	 * 		   locale value as specified in {@link Localization}.
-	 */
-	String getCurrentLocale();
-	
-	/**
-	 * Returns a localized label for this entity which corresponds to the 
-	 * currently selected locale. The current locale is  specified calling method {@link #setCurrentLocale(String)}.
-	 * 
-	 * <p>
-	 * Equivalent to calling {@link Localization#getLocalizedLabelForLocale(String)} and 
-	 * setting parameter to be the outcome of {@link #getCurrentLocale()}.
-	 * </p>
-	 * 
-	 * @return Returns a label for this entity, corresponding to current locale.
-	 * 
-	 * @see Localization#getLocalizedLabelForLocale(String)
-	 */
-	 String getLocalizedLabelForCurrentLocale();
 	 
 }

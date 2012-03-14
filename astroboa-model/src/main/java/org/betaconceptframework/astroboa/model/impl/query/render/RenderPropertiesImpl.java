@@ -20,13 +20,9 @@
 package org.betaconceptframework.astroboa.model.impl.query.render;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.query.render.RenderInstruction;
@@ -62,26 +58,6 @@ public class RenderPropertiesImpl implements RenderProperties, Serializable{
 	}
 
 	@Override
-	public List<String> getLocalesUsedForRender() {
-		Object locales = renderInstructions.get(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE);
-		
-		List<String> localeList = new ArrayList<String>();
-			
-		if (locales != null){
-			//Backwards compatibility
-			//TODO must be removed when method addRenderInstruction is removed
-			if (locales instanceof String){
-				localeList.add((String)locales);
-			}
-			else if (locales instanceof List){
-				localeList.addAll((List)locales);
-			}
-		}
-		
-		return localeList;
-	}
-
-	@Override
 	public String getVersionUsedToRender() {
 		return (String) renderInstructions.get(RenderInstruction.CONTENT_OBJECT_VERSION);
 	}
@@ -103,44 +79,11 @@ public class RenderPropertiesImpl implements RenderProperties, Serializable{
 	}
 
 	@Override
-	public void renderValuesForLocales(List<String> locales) {
-		if (CollectionUtils.isNotEmpty(locales)){
-			renderInstructions.put(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, locales);
-		}
-		
-	}
-
-	@Override
 	public void renderVersionForContentObject(String versionName) {
 		if (StringUtils.isNotBlank(versionName)){
 			renderInstructions.put(RenderInstruction.CONTENT_OBJECT_VERSION, versionName);
 		}
 		
-	}
-
-	@Override
-	public void renderValuesForLocale(String locale) {
-		if (StringUtils.isNotBlank(locale)){
-			renderInstructions.put(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE, Arrays.asList(locale));
-		}
-	}
-
-	@Override
-	public String getFirstLocaleUsedForRender() {
-		Object locales = renderInstructions.get(RenderInstruction.RENDER_LOCALIZED_LABEL_FOR_LOCALE);
-		
-		if (locales != null){
-			//Backwards compatibility
-			//TODO must be removed when method addRenderInstruction is removed
-			if (locales instanceof String){
-				return (String)locales;
-			}
-			else if (locales instanceof List && ! ((List)locales).isEmpty()){
-				return ((List<String>)locales).get(0);
-			}
-		}
-		
-		return null;
 	}
 
 	@Override

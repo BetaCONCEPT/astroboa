@@ -474,7 +474,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 					ResourceRepresentationType.TAXONOMY_LIST.equals(taxonomyOutput)){
 				
 
-				Taxonomy taxonomy = taxonomyRenderer.renderTaxonomy(taxonomyNode, null, cmsRepositoryEntityFactoryForActiveClient.newTaxonomy());
+				Taxonomy taxonomy = taxonomyRenderer.renderTaxonomy(taxonomyNode, cmsRepositoryEntityFactoryForActiveClient.newTaxonomy());
 
 				//Pre fetch children or tree
 				if (fetchLevel != null){
@@ -589,7 +589,7 @@ public class TaxonomyDao extends JcrDaoSupport{
 					
 					Node taxonomyNode = taxonomyNodes.nextNode();
 					
-					Taxonomy taxonomy = taxonomyRenderer.renderTaxonomy(taxonomyNode, null, cmsRepositoryEntityFactoryForActiveClient.newTaxonomy());
+					Taxonomy taxonomy = taxonomyRenderer.renderTaxonomy(taxonomyNode, cmsRepositoryEntityFactoryForActiveClient.newTaxonomy());
 					
 					if (fetchLevel != null){
 						switch (fetchLevel) {

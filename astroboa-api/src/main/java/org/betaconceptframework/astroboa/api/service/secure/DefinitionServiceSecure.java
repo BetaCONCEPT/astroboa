@@ -105,9 +105,7 @@ public interface DefinitionServiceSecure {
 	 * @param complexCmsPropertyNames
 	 *            List of complex property definition names.
 	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned definitions.
+	 *            Locale value as defined in {@link Localization}
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
 	 * 
@@ -127,9 +125,7 @@ public interface DefinitionServiceSecure {
 	 *</p>
 	 *
 	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned definitions.
+	 *            Locale value as defined in {@link Localization}.
 	 * @param authenticationToken A token provided during client login ({@link RepositoryServiceSecure#login(String, AstroboaCredentials, String)})
 	 *  to an Astroboa repository.
 	 * 

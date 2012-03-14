@@ -75,7 +75,7 @@ Authors
 							</rich:dragSupport>
 							
 							<c:set var="numberOfContentObjectsReferencedByTopic"
-								value="#{topicTreeNode.topic.numberOfReferrerContentObjects}" />
+								value="#{topicTreeNode.topic.numberOfContentObjectsWhichReferToThisTopic}" />
 	
 							<a4j:commandLink id="topicTreeNodeLink"
 								reRender="searchResultsAjaxPanel"
@@ -91,7 +91,7 @@ Authors
 										value="#{topicTreeNode.topic.id}"
 										assignTo="#{contentObjectSearchByTopic.selectedTopicId}" />
 									<a4j:actionparam name="topicLabel"
-										value="#{topicTreeNode.topic.localizedLabelForCurrentLocale}"
+										value="#{topicTreeNode.topic.getAvailableLocalizedLabel(localeSelector.localeString)}"
 										assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}" />
 									<a4j:actionparam name="topicTaxonomyName"
 										value="#{topicTreeNode.topic.taxonomy.name}"

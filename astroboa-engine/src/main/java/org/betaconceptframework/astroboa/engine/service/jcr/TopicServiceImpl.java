@@ -44,9 +44,9 @@ class TopicServiceImpl  implements TopicService {
 	@Autowired
 	private TopicDao topicDao;
 
-	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomy, String locale, int offset, int limit) throws CmsException  {
+	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomy, int offset, int limit) throws CmsException  {
 		try{
-			return topicDao.getMostlyUsedTopics(taxonomy, locale, offset, limit);
+			return topicDao.getMostlyUsedTopics(taxonomy, offset, limit);
 		}
 		catch(CmsException e){
 			throw e;

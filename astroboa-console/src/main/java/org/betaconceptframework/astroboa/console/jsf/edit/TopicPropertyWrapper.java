@@ -98,8 +98,8 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 						localizedLabels.add(acceptedTaxonomyName);
 					}
 					else{
-						if (StringUtils.isNotBlank(acceptedTaxonomy.getLocalizedLabelForCurrentLocale())){
-							localizedLabels.add(acceptedTaxonomy.getLocalizedLabelForCurrentLocale()); 
+						if (StringUtils.isNotBlank(acceptedTaxonomy.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()))){
+							localizedLabels.add(acceptedTaxonomy.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString())); 
 						}
 						else{
 							localizedLabels.add(acceptedTaxonomyName);
@@ -113,7 +113,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 			}
 		}
 		
-		this.topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+		//this.topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		//this.topicCriteria.getResultRowRange().setRange(0, 30);
 		this.topicCriteria.setOffsetAndLimit(0,30);
 		this.topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
@@ -280,7 +280,7 @@ public class TopicPropertyWrapper extends MultipleSimpleCmsPropertyWrapper<Topic
 					! acceptedTaxonomies.contains(selectedTopic.getTaxonomy().getName())
 					) {
 						JSFUtilities.addMessage(null, "object.edit.topic.taxonomyOfTopicNotInAllowedTaxonomies", 
-								new String[]{selectedTopic.getTaxonomy().getLocalizedLabelForCurrentLocale(), localizedLabelsForAcceptedTaxonomies}, 
+								new String[]{selectedTopic.getTaxonomy().getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()), localizedLabelsForAcceptedTaxonomies}, 
 								FacesMessage.SEVERITY_WARN);
 						return;
 			}

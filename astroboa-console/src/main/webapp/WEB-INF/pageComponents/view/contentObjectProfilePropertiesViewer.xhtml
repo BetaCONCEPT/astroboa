@@ -43,7 +43,7 @@ Authors
 					value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObject.id}" />
 				
 				<c:set var="hasVersion" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.hasVersion']}"/>
-				<h:outputText value="#{hasVersion.localizedLabelForCurrentLocale}: "/>
+				<h:outputText value="#{hasVersion.getAvailableLocalizedLabel(localeSelector.localeString)}: "/>
 				<h:outputText
 					value="#{hasVersion.simpleTypeValue}" />
 
@@ -52,14 +52,14 @@ Authors
 					value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectTypeForCurrentLocale}" />
 					
 				<c:set var="contentObjectStatus" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.contentObjectStatus']}"/>
-				<h:outputText value="#{contentObjectStatus.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{contentObjectStatus.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText 
 					rendered="#{!empty contentObjectStatus.simpleTypeValue}"
 					value="#{messages[contentObjectStatus.simpleTypeValue]}" />
 				<h:panelGroup rendered="#{empty contentObjectStatus.simpleTypeValue}"/>
 				
 				<c:set var="created" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.created']}" />
-				<h:outputText value="#{created.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{created.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText 
 					value="#{created.simpleTypeValue.time}">
 					<f:convertDateTime type="both" dateStyle="short" timeStyle="medium"
@@ -67,7 +67,7 @@ Authors
 				</h:outputText>
 
 				<c:set var="modified" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.modified']}" />
-				<h:outputText value="#{modified.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{modified.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText 
 					value="#{modified.simpleTypeValue.time}">
 					<f:convertDateTime type="both" dateStyle="short" timeStyle="medium"
@@ -79,27 +79,27 @@ Authors
 					value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectOwnerName}" />
 				
 				<c:set var="title" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.title']}" />
-				<h:outputText value="#{title.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{title.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText style="font-size: 95%;" 
 					value="#{title.simpleTypeValue}"/>
 				
 				<c:set var="description" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.description']}" />
-				<h:outputText value="#{description.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{description.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText style="font-size: 95%;" 
 					value="#{description.simpleTypeValue}" />
 				
 				<c:set var="language" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.language']}" />
-				<h:outputText value="#{language.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{language.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText style="font-size: 95%;"
 					value="#{contentObjectViewAsTree.getLocalizedLabelForLocale(language.getSimpleTypeValues()[0])}"/>
 				
 				<c:set var="publisher" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.publisher']}" />
-				<h:outputText value="#{publisher.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{publisher.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:outputText style="font-size: 95%;"
 					value="#{publisher.simpleTypeValue}"/>
 
 				<c:set var="creator" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.creator']}" />
-				<h:outputText value="#{creator.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{creator.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 				<h:panelGroup >
 				    
 					<rich:dataTable
@@ -113,7 +113,7 @@ Authors
 				</h:panelGroup>
 
 				<c:set var="subject" value="#{contentObjectViewAsTree.selectedContentObjectForView.contentObjectProperty['profile.subject']}" />
-				<h:outputText value="#{subject.localizedLabelForCurrentLocale}: " />
+				<h:outputText value="#{subject.getAvailableLocalizedLabel(localeSelector.localeString)}: " />
 					<rich:dataTable
 						value="#{subject.simpleTypeValues}"
 						var="topic">
@@ -121,15 +121,15 @@ Authors
 						<rich:column>
 						
 							<h:outputText style="font-size: 95%;"
-								value="#{topic.localizedLabelForCurrentLocale}"
+								value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}"
 								rendered="#{topic.taxonomy.name eq 'bccms:subjectTaxonomy'}" />
 							<h:outputText style="font-size: 95%; text-decoration: underline;"
-								value="#{topic.localizedLabelForCurrentLocale}"
+								value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}"
 								rendered="#{! (topic.taxonomy.name eq 'bccms:subjectTaxonomy')}" />
 						</rich:column>
 						<rich:column>
 							<h:outputText style="font-size: 95%;"
-								value="#{topic.taxonomy.localizedLabelForCurrentLocale}" />
+								value="#{topic.taxonomy.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 						</rich:column>
 						<rich:column>
 							<h:outputText style="font-size: 95%;"

@@ -89,7 +89,7 @@ Authors
 									<rich:dataList id="loggedInUserTagsTableInContentObjectList"
 										value="#{contentObjectSubjectManagement.loggedInUserTags}" var="topic" >
 										<a4j:commandLink id="loggedInUserTagInContentObjectListCommandLink" 
-											value=" [#{topic.localizedLabelForCurrentLocale}]"
+											value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
 											action="#{contentObjectSubjectManagement.addExistingUserTagToContentObjectSubject_UIAction}"
 											styleClass="contentObjectSubjectInContentObjectList"
 											title="Πατήστε για να προσθέσετε την Ετικέτα στη λίστα"
@@ -121,7 +121,7 @@ Authors
 								width="100%">
 									<rich:column>
 										<h:outputText styleClass="userTagInSubjectOutputArea" 
-											value="#{topic.localizedLabelForCurrentLocale}" />
+											value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 									</rich:column>
 								
 									<rich:column>
@@ -132,7 +132,7 @@ Authors
 											<a4j:actionparam
 												name="selectedTopicIdForRemovalFromContentObjectSubject"
 												assignTo="#{contentObjectSubjectManagement.selectedTopicIdForRemovalFromContentObjectSubject}"
-												value="#{(empty topic.id)? topic.localizedLabelForCurrentLocale : topic.id}" />
+												value="#{(empty topic.id)? topic.getAvailableLocalizedLabel(localeSelector.localeString) : topic.id}" />
 											<a4j:actionparam
 												name="selectedContentObjectIdToTag"
 												assignTo="#{contentObjectSubjectManagement.selectedContentObjectIdToTag}"

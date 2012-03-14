@@ -108,7 +108,7 @@ public class TagEdit extends LocalizationEdit {
 
 		//Finally check is there is another topic with the same name
 		TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-		topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+		//topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 
 		//Create all possible names with lower and upper case
 		//Nevertheless if topic name is 'TesT' and there is already a Topic named
@@ -258,7 +258,6 @@ public class TagEdit extends LocalizationEdit {
 		reset();
 		Topic tag = cmsRepositoryEntityFactory.newTopic();
 		tag.setTaxonomy(taxonomy);
-		tag.setCurrentLocale(localeSelector.getLocaleString());
 		tag.setOwner(loggedInRepositoryUser.getRepositoryUser());
 		tag.setAllowsReferrerContentObjects(true);
 		tag.setParent(parent);

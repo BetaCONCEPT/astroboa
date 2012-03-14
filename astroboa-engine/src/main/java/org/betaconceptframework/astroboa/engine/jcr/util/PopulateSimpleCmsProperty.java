@@ -511,7 +511,7 @@ public class PopulateSimpleCmsProperty {
 				
 				if (StringUtils.isBlank( ((ContentObject) contentObject).getId() )){
 					if (StringUtils.isBlank( ((ContentObject) contentObject).getSystemName())){
-						throw new CmsException("Object reference does not have an id nor a system name and therefore cannot be saved as a value for property "+simpleCmsPropertyToBeSaved.getLocalizedLabelForCurrentLocale()+". Save object reference first");
+						throw new CmsException("Object reference does not have an id nor a system name and therefore cannot be saved as a value for property "+simpleCmsPropertyToBeSaved.getAvailableLocalizedLabel("en")+". Save object reference first");
 					}
 					else{
 						//Try to load object reference using its system name

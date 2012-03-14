@@ -116,7 +116,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 			// check if the new tag exists in user tags
 			Topic newUserTag = getCmsUtilities().createNewUserTag(getNewTagLabel(), JSFUtilities.getLocaleAsString(), getLoggedInRepositoryUser().getRepositoryUser());
 			if (getCmsUtilities().findTopicInTopicListByLocalizedTopicLabel(getLoggedInUserTags(), 
-					newUserTag.getLocalizedLabelForCurrentLocale()) != null) {
+					newUserTag.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString())) != null) {
 				logger.warn("The user tag is not a new tag since it is already in user tags");
 				JSFUtilities.addMessage(null, "Η ετικέτα που δώσατε υπάρχει ήδη στις ετικέτες σας. Μπορείτε να την επιλέξετε από τις διαθέσιμες ετικέτες σας", FacesMessage.SEVERITY_WARN);
 				return null;
@@ -162,7 +162,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 		}
 		// check if the selected tag is already in contentObject subject 
 		if (getCmsUtilities().findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectToTag.getCmsProperty("profile.subject")).getSimpleTypeValues(), 
-				selectedLoggedInUserTag.getLocalizedLabelForCurrentLocale()) != null) {
+				selectedLoggedInUserTag.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString())) != null) {
 			logger.warn("The selected tag is already in content object subject.");
 			JSFUtilities.addMessage(null, "Η ετικέτα που επιλέξατε υπάρχει ήδη στις επιλεγμένες ετικέτες για αυτό το αντικείμενο.", FacesMessage.SEVERITY_WARN);
 			return null;
@@ -281,7 +281,7 @@ public class ContentObjectSubjectManagement extends AbstractUIBean {
 	public List<Topic> getMostUsedTags() {
 		if (this.mostUsedTags == null) {
 			try {
-				List<Topic> loadedMostUsedTags = getCmsUtilities().findMostPopularTags(JSFUtilities.getLocaleAsString());
+				List<Topic> loadedMostUsedTags = getCmsUtilities().findMostPopularTags();
 				this.mostUsedTags = loadedMostUsedTags;
 			} catch (Exception e) {
 				logger.error("Most Used Tags could not be retreived the error was: ", e);

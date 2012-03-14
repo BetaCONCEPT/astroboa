@@ -299,7 +299,7 @@ Authors
 											value="#{contentObjectUIWrapper.systemTags}" var="topic">
 											<a4j:commandLink
 												reRender="ajaxDynamicAreaPanel"
-												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
 												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
 												styleClass="contentObjectSubjectInContentObjectList">
 												<a4j:actionparam
@@ -314,7 +314,7 @@ Authors
 												<a4j:actionparam
 													name="selectedTopicLabel"
 													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
-													value="#{topic.localizedLabelForCurrentLocale}" />
+													value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 											</a4j:commandLink>
 										</rich:dataList>
 									</div>
@@ -333,7 +333,7 @@ Authors
 											value="#{contentObjectUIWrapper.userTagsAddedByOwner}"
 											var="topic">
 											<h:commandLink
-												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
 												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
 												styleClass="contentObjectSubjectInContentObjectList">
 												<a4j:actionparam
@@ -343,7 +343,7 @@ Authors
 												<a4j:actionparam
 													name="selectedTopicLabel"
 													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
-													value="#{topic.localizedLabelForCurrentLocale}" />
+													value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 											</h:commandLink>
 										</rich:dataList>
 									</div>
@@ -354,7 +354,7 @@ Authors
 											value="#{contentObjectUIWrapper.tagsAddedByLoggedInUser}"
 											var="topic">
 											<h:commandLink
-												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
 												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
 												styleClass="contentObjectSubjectInContentObjectList">
 												<a4j:actionparam
@@ -364,7 +364,7 @@ Authors
 											<a4j:actionparam
 													name="selectedTopicLabel"
 													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
-													value="#{topic.localizedLabelForCurrentLocale}" />
+													value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 											</h:commandLink>
 										</rich:dataList>
 									</div>
@@ -383,7 +383,7 @@ Authors
 											value="#{contentObjectUIWrapper.userTagsAddedByOthers}"
 											var="topic">
 											<a4j:commandLink
-												value=" [#{topic.localizedLabelForCurrentLocale}]"
+												value=" [#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}]"
 												action="#{contentObjectSearchByTopic.findContentObjectsByTopicIdAndPresent_UIAction}"
 												styleClass="contentObjectSubjectInContentObjectList">
 												<a4j:actionparam
@@ -393,7 +393,7 @@ Authors
 												<a4j:actionparam
 													name="selectedTopicLabel"
 													assignTo="#{contentObjectSearchByTopic.selectedTopicLabel}"
-													value="#{topic.localizedLabelForCurrentLocale}" />
+													value="#{topic.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 											</a4j:commandLink>
 										</rich:dataList>
 

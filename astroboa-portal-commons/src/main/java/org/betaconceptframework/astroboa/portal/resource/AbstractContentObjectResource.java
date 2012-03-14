@@ -779,7 +779,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			locale = JSFUtilities.getLocaleAsString();
 			// locale = PortalStringConstants.DEFAULT_LOCALE.getValue();
 		}
-		contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
 
 		// cache the query
 		contentObjectCriteria.setCacheable(PortalCacheConstants.CONTENT_OBJECT_LIST_DEFAULT_CACHE_REGION);
@@ -1222,7 +1222,7 @@ public abstract class AbstractContentObjectResource<T extends ContentObjectResou
 			
 			contentObjectCriteria.addSystemNameEqualsCriterion(contentObjectSystemName);
 			
-			contentObjectCriteria.getRenderProperties().renderValuesForLocales(Arrays.asList(JSFUtilities.getLocaleAsString()));
+			//contentObjectCriteria.getRenderProperties().renderValuesForLocales(Arrays.asList(JSFUtilities.getLocaleAsString()));
 			
 			contentObjectCriteria.setCacheable(PortalCacheConstants.CONTENT_OBJECT_DEFAULT_CACHE_REGION);
 			

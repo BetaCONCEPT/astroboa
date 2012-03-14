@@ -74,7 +74,7 @@ public interface TopicServiceSecure {
 	boolean deleteTopicTree(String topicIdOrName, String authenticationToken);
 
 	/**
-	 * Same semantics with {@link TopicService#getMostlyUsedTopics(String, String, int, int)}
+	 * Same semantics with {@link TopicService#getMostlyUsedTopics(String, int, int)}
 	 * augmented with the requirement of providing an authentication token.
 	 *
 	 *<p>
@@ -86,10 +86,6 @@ public interface TopicServiceSecure {
 	 *
 	 * @param taxonomyName
 	 *            {@link Taxonomy#getName() Taxonomy name}.
-	 * @param locale
-	 *            Locale value as defined in {@link Localization} to be
-	 *            used when user calls method {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()}
-	 *            to retrieve localized label for returned topics.
 	 * @param offset
 	 *            Index of first result row
 	 *            {@link CmsQueryContext#setOffset}
@@ -101,7 +97,7 @@ public interface TopicServiceSecure {
 	 * 
 	 * @return Mostly used topics of a specific taxonomy.
 	 */
-	CmsOutcome<Topic> getMostlyUsedTopics(String taxonomyName, String locale,
+	CmsOutcome<Topic> getMostlyUsedTopics(String taxonomyName,
 			int offset, int limit, String authenticationToken);
 
 	/**

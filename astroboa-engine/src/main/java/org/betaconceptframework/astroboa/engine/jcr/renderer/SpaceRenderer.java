@@ -75,8 +75,6 @@ public class SpaceRenderer extends AbstractRenderer{
 			//Default values
 			renderProperties = getDefaultRenderProperties();
 
-		String locale = (String) renderProperties.getFirstLocaleUsedForRender();
-
 		//Render Id
 		cmsRepositoryEntityRenderer.renderCmsRepositoryEntityBasicAttributes(spaceJcrNode, space);
 
@@ -97,7 +95,7 @@ public class SpaceRenderer extends AbstractRenderer{
 		renderOwner(spaceJcrNode, session, space, cachedCmsRepositoryEntities, renderProperties);
 
 		//Locale
-		renderLocalizedLabels(spaceJcrNode, space, locale);
+		renderLocalizedLabels(spaceJcrNode, space);
 
 		//Content Object References only for space
 		renderContentObjectReferences(spaceJcrNode, space);
@@ -166,11 +164,9 @@ public class SpaceRenderer extends AbstractRenderer{
 	}
 
 
-	private  void renderLocalizedLabels(Node spaceJcrNode, Space space, String locale) throws RepositoryException {
+	private  void renderLocalizedLabels(Node spaceJcrNode, Space space) throws RepositoryException {
 
 		cmsLocalizationRenderer.renderCmsLocalization(spaceJcrNode, space);
-
-		space.setCurrentLocale(locale);
 
 	}
 

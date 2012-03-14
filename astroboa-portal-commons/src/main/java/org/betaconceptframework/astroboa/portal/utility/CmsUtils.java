@@ -108,7 +108,7 @@ public class CmsUtils {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 
 			CmsOutcome<Topic> topicsFound = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
@@ -162,7 +162,7 @@ public class CmsUtils {
 			else{
 				topicCriteria.doNotCacheResults();
 			}
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			
 			CmsOutcome<Topic> topicsFound = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
@@ -221,7 +221,7 @@ public class CmsUtils {
 				topicCriteria.doNotCacheResults();
 			}
 			
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			
 			CmsOutcome<Topic> topicsFound = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			if (CollectionUtils.isNotEmpty(topicsFound.getResults())) {
@@ -276,7 +276,7 @@ public class CmsUtils {
 			TopicCriteria parentCriteria = CmsCriteriaFactory.newTopicCriteria();
 			parentCriteria.addNameEqualsCriterion(parentTopicName);
 			topicCriteria.setAncestorCriteria(parentCriteria);
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			topicCriteria.searchInDirectAncestorOnly();
 			
 			if (cacheRegion != null){
@@ -346,7 +346,7 @@ public class CmsUtils {
 				topicCriteria.doNotCacheResults();
 			}
 
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 
 			if (!orderByPosition) {
 				topicCriteria.addOrderByLocale(locale, Order.ascending);
@@ -418,7 +418,7 @@ public class CmsUtils {
 				topicCriteria.doNotCacheResults();
 			}
 
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 			
 			CmsOutcome<Topic> cmsOutcome = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			return cmsOutcome.getResults();
@@ -573,7 +573,7 @@ public class CmsUtils {
 				topicCriteria.doNotCacheResults();
 			}
 
-			topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 
 			CmsOutcome<Topic> cmsOutcome = astroboaClient.getTopicService().searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 			List<Topic> allTags = cmsOutcome.getResults();
@@ -597,14 +597,9 @@ public class CmsUtils {
 	}
 	
 	
-	public List<Topic> findMostPopularTags(String locale) {
-		if (StringUtils.isBlank(locale)) {
-			logger.info("The provided locale is blank. An empty topic list has been returned");
-			return new ArrayList<Topic>();
-		}
-		
+	public List<Topic> findMostPopularTags() {
 		try{
-			return astroboaClient.getTopicService().getMostlyUsedTopics(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME, locale, 0,100).getResults();
+			return astroboaClient.getTopicService().getMostlyUsedTopics(Taxonomy.REPOSITORY_USER_FOLKSONOMY_NAME,  0,100).getResults();
 		}
 		catch (Exception e) {
 			logger.error("There was an error while retreiving the most popular tags. The error was: ", e);
@@ -629,7 +624,6 @@ public class CmsUtils {
 			
 			userTag.setTaxonomy(userTagOwner.getFolksonomy());
 			userTag.addLocalizedLabel(locale, userTagLabel);
-			userTag.setCurrentLocale(locale);
 			userTag.setOwner(userTagOwner);
 			
 			return userTag;
@@ -698,7 +692,7 @@ public class CmsUtils {
 		List<RepositoryUser> resultRepositoryUsers;
 		repositoryUserCriteria.addExternalIdEqualsCriterion(repositoryUserId);
 		
-		repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//repositoryUserCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		resultRepositoryUsers = astroboaClient.getRepositoryUserService().searchRepositoryUsers(repositoryUserCriteria);
 		
@@ -959,7 +953,7 @@ public class CmsUtils {
 
 		topicCriteria.setAncestorCriteria(parentCriteria);
 		*/
-		topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		if (cacheRegion != null){
 			topicCriteria.setCacheable(cacheRegion);
@@ -1028,7 +1022,7 @@ public class CmsUtils {
 			else{
 				contentObjectCriteria.doNotCacheResults();
 			}
-			contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
+			//contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
 			
 			//We expect only one. But in case there are more than one there is no need to retrieve all of them. Two 
 			//are sufficient
@@ -1091,7 +1085,7 @@ public class CmsUtils {
 			}
 		}
 
-		topicCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//topicCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 		if (cacheRegion != null){
 			topicCriteria.setCacheable(cacheRegion);

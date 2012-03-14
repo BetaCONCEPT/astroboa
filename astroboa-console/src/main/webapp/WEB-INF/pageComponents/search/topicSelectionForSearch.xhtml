@@ -77,7 +77,7 @@ Authors
 			<h:panelGroup rendered="#{ ! empty criterionWrapper.value and criterionWrapper.propertyValueType eq 'TopicReference'}">
 			<center>
 			<h:outputText style="font-size: 0.9em;" 
-					value="#{criterionWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString)} - (#{criterionWrapper.value.taxonomy.localizedLabelForCurrentLocale})"/>
+					value="#{criterionWrapper.value.getLocalizedLabelForLocale(localeSelector.localeString)} - (#{criterionWrapper.value.taxonomy.getAvailableLocalizedLabel(localeSelector.localeString)})"/>
 					</center>
 					</h:panelGroup>
 			</h:panelGrid>

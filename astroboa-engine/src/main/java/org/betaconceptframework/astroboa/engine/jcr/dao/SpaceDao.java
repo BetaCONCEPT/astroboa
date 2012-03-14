@@ -301,7 +301,7 @@ public class SpaceDao extends JcrDaoSupport {
 
 	private RenderProperties newRenderProperties(String locale) {
 		RenderProperties topicRenderProperties = new RenderPropertiesImpl();
-		topicRenderProperties.renderValuesForLocale(locale);
+		//topicRenderProperties.renderValuesForLocale(locale);
 		return topicRenderProperties;
 	}
 

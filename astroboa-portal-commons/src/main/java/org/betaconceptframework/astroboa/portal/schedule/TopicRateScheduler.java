@@ -84,7 +84,7 @@ public class TopicRateScheduler {
 		
 		ContentObjectCriteria contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
 			
-		contentObjectCriteria.getRenderProperties().renderValuesForLocale(PortalStringConstants.DEFAULT_LOCALE);
+		//contentObjectCriteria.getRenderProperties().renderValuesForLocale(PortalStringConstants.DEFAULT_LOCALE);
 
 		// cache the query
 		contentObjectCriteria.setCacheable(PortalCacheConstants.CONTENT_OBJECT_LIST_DEFAULT_CACHE_REGION);

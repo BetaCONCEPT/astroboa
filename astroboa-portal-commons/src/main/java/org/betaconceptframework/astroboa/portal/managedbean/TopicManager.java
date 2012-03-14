@@ -263,7 +263,7 @@ public class TopicManager extends AbstractUIBean {
 				topicCriteria.addTaxonomyNameEqualsCriterion(Taxonomy.SUBJECT_TAXONOMY_NAME);
 			}
 
-			topicCriteria.getRenderProperties().renderValuesForLocales(Arrays.asList(JSFUtilities.getLocaleAsString()));
+			//topicCriteria.getRenderProperties().renderValuesForLocales(Arrays.asList(JSFUtilities.getLocaleAsString()));
 			topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 
 			//Localized Label criterion
@@ -299,7 +299,7 @@ public class TopicManager extends AbstractUIBean {
 			
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			
-			topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+			//topicCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 			topicCriteria.setOffsetAndLimit(0, 30);
 			topicCriteria.addOrderByLocale(JSFUtilities.getLocaleAsString(), Order.ascending);
 			

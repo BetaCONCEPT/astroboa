@@ -207,16 +207,6 @@ public abstract class CmsPropertyImpl<D extends CmsPropertyDefinition, P extends
 	@Override
 	/**
 	 * Since localized labels are defined in definition's level, 
-	 * {@link LocalizableEntity#getLocalizedLabelForCurrentLocale()} must
-	 * be overridden.
-	 */
-	public String getLocalizedLabelForCurrentLocale() {
-		return getPropertyDefinition().getDisplayName().getLocalizedLabelForLocale(getCurrentLocale());
-	}
-
-	@Override
-	/**
-	 * Since localized labels are defined in definition's level, 
 	 * {@link LocalizableEntity#getLocalizedLabelForLocale(String locale)} must
 	 * be overridden.
 	 */

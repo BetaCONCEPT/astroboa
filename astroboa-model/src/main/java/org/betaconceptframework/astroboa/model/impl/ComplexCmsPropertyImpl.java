@@ -295,9 +295,6 @@ extends CmsPropertyImpl<D,P> implements ComplexCmsProperty<D,P>, LazyCmsProperty
 			((ComplexCmsProperty)newProperty).setPropertyDefinition((ComplexCmsPropertyDefinition)propertyDefinition);
 		}
 
-		newProperty.setCurrentLocale(getCurrentLocale());
-
-
 		return newProperty;
 	}
 

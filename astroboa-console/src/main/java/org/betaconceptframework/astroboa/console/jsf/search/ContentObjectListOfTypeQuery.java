@@ -50,7 +50,7 @@ public class ContentObjectListOfTypeQuery extends ContentObjectListBean{
 		// reset search criteria to begin a new search
 		contentObjectCriteria = null;
 		contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria("queryObject");
-		contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+		//contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		
 		try {
 			

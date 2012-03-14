@@ -100,7 +100,7 @@ public class ContentObjectPropertyWrapper extends MultipleSimpleCmsPropertyWrapp
 			}
 		}
 
-		this.contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+		//this.contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 		this.contentObjectCriteria.setOffsetAndLimit(0,15);
 		this.contentObjectCriteria.addOrderProperty("profile.title", Order.ascending);
 

@@ -109,10 +109,10 @@ public class LazyLoadingTopicTreeNodeRichFaces123 extends LazyLoadingTreeNodeRic
 
 						// check if container or containerAndTopic
 						if (!childTopic.isAllowsReferrerContentObjects()) {
-							childTopicTreeNode = new LazyLoadingTopicTreeNodeRichFaces123(identifier + ":" + String.valueOf(nodeIndex), childTopic.getLocalizedLabelForCurrentLocale(), this, childTopic, "containerOnlyTopic", false);
+							childTopicTreeNode = new LazyLoadingTopicTreeNodeRichFaces123(identifier + ":" + String.valueOf(nodeIndex), childTopic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()), this, childTopic, "containerOnlyTopic", false);
 						}
 						else {
-							childTopicTreeNode = new LazyLoadingTopicTreeNodeRichFaces123(identifier + ":" + String.valueOf(nodeIndex), childTopic.getLocalizedLabelForCurrentLocale(), this, childTopic, "containerAndTopic", false);
+							childTopicTreeNode = new LazyLoadingTopicTreeNodeRichFaces123(identifier + ":" + String.valueOf(nodeIndex), childTopic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()), this, childTopic, "containerAndTopic", false);
 						}
 
 						//	check if childTopic is leaf
@@ -176,7 +176,7 @@ public class LazyLoadingTopicTreeNodeRichFaces123 extends LazyLoadingTreeNodeRic
 			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.ENTITY, false);
 			this.children.clear();
 			this.leaf = topic.getNumberOfChildren() == 0;
-			this.description = topic.getLocalizedLabelForCurrentLocale();
+			this.description = topic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString());
 			this.type = topic.isAllowsReferrerContentObjects()? "containerAndTopic" : "containerOnlyTopic"; 
 		}
 	}

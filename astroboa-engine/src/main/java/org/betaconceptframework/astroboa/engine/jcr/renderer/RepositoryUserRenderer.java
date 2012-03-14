@@ -88,7 +88,7 @@ public class RepositoryUserRenderer extends AbstractRenderer{
 			renderSpace(repositoryUserNode, repositoryUser, renderProperties, session, cachedRepositoryEntities);
 			
 			//Folksonomy
-			renderFolksonomy(repositoryUserNode, repositoryUser, renderProperties);
+			renderFolksonomy(repositoryUserNode, repositoryUser);
 			
 			// TODO Preferences
 			renderPreferences(repositoryUserNode, repositoryUser, renderProperties);
@@ -102,17 +102,14 @@ public class RepositoryUserRenderer extends AbstractRenderer{
 		
 	}
 	
-	private void renderFolksonomy(Node repositoryUserNode, RepositoryUser repositoryUser, RenderProperties renderProperties) throws RepositoryException {
-		if (repositoryUserNode.hasNode(CmsBuiltInItem.Folksonomy.getJcrName()))
-		{
+	private void renderFolksonomy(Node repositoryUserNode, RepositoryUser repositoryUser) throws RepositoryException {
+		if (repositoryUserNode.hasNode(CmsBuiltInItem.Folksonomy.getJcrName())){
 			Node folksonomyNode = repositoryUserNode.getNode(CmsBuiltInItem.Folksonomy.getJcrName());
 		
 			Map<String, CmsRepositoryEntity> cachedRepositoryUser = new HashMap<String, CmsRepositoryEntity>();
 			cachedRepositoryUser.put(repositoryUser.getId(), repositoryUser);
 
-			final String localeTouserInRender = renderProperties == null ? null : (String)renderProperties.getFirstLocaleUsedForRender();
-			
-			Taxonomy folskonomy = taxonomyRenderer.renderTaxonomy(folksonomyNode,	localeTouserInRender, repositoryUser.getFolksonomy());
+			Taxonomy folskonomy = taxonomyRenderer.renderTaxonomy(folksonomyNode,	repositoryUser.getFolksonomy());
 			
 			((RepositoryUserImpl)repositoryUser).setFolksonomy(folskonomy);
 		}

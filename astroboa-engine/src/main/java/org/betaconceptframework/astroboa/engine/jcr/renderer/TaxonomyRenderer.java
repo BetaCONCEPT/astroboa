@@ -45,7 +45,7 @@ public class TaxonomyRenderer extends AbstractRenderer{
 	@Autowired
 	private CmsRepositoryEntityRenderer cmsRepositoryEntityRenderer;
 
-	public void renderTaxonomyToTopic(Node topicJcrNode, Topic topic, String locale) throws  AccessDeniedException, RepositoryException {
+	public void renderTaxonomyToTopic(Node topicJcrNode, Topic topic) throws  AccessDeniedException, RepositoryException {
 
 		//  Search for Topic
 		Node parentTopicJcrNode = topicJcrNode.getParent();
@@ -55,7 +55,7 @@ public class TaxonomyRenderer extends AbstractRenderer{
 				!parentTopicJcrNode.getName().equals(CmsBuiltInItem.RepositoryUserRoot.getJcrName())){
 			if (parentTopicJcrNode.isNodeType(CmsBuiltInItem.Taxonomy.getJcrName()))
 			{
-				Taxonomy taxonomy = renderTaxonomy(parentTopicJcrNode, locale, null);
+				Taxonomy taxonomy = renderTaxonomy(parentTopicJcrNode, null);
 				
 				topic.setTaxonomy(taxonomy);
 				break;
@@ -74,7 +74,7 @@ public class TaxonomyRenderer extends AbstractRenderer{
 	}
 
 		
-	public Taxonomy renderTaxonomy(Node taxonomyNode,  String locale, Taxonomy taxonomy)	throws RepositoryException {
+	public Taxonomy renderTaxonomy(Node taxonomyNode,  Taxonomy taxonomy)	throws RepositoryException {
 		if (taxonomy == null)
 			taxonomy = cmsRepositoryEntityFactoryForActiveClient.newTaxonomy();
 		
@@ -87,8 +87,6 @@ public class TaxonomyRenderer extends AbstractRenderer{
 		//Render locale
 		cmsLocalizationRenderer.renderCmsLocalization(taxonomyNode, taxonomy);
 
-		taxonomy.setCurrentLocale(locale);
-		
 		//Render number of children topics
 		if (taxonomyNode.hasNode(CmsBuiltInItem.Topic.getJcrName()))
 			taxonomy.setNumberOfRootTopics((int)taxonomyNode.getNodes(CmsBuiltInItem.Topic.getJcrName()).getSize());

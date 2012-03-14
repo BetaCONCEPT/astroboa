@@ -81,7 +81,6 @@ public class LazyLoader  {
 			activateClientContextForAuthenticationToken(authenticationToken);
 			
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
-			topicCriteria.getRenderProperties().renderValuesForLocale(taxonomy.getCurrentLocale());
 			topicCriteria.searchInDirectAncestorOnly();
 
 			topicCriteria.addTaxonomyCriterion(taxonomy);
@@ -130,7 +129,6 @@ public class LazyLoader  {
 			SpaceCriteria spaceCriteria = CmsCriteriaFactory.newSpaceCriteria();
 			spaceCriteria.searchInDirectAncestorOnly();
 			spaceCriteria.addAncestorSpaceIdEqualsCriterion(space.getId());
-			spaceCriteria.getRenderProperties().renderValuesForLocale(space.getCurrentLocale());
 
 			CmsOutcome<Space> children = spaceService.searchSpaces(spaceCriteria, ResourceRepresentationType.SPACE_LIST);
 
@@ -164,7 +162,6 @@ public class LazyLoader  {
 			TopicCriteria topicCriteria = CmsCriteriaFactory.newTopicCriteria();
 			topicCriteria.searchInDirectAncestorOnly();
 			topicCriteria.addAncestorTopicIdEqualsCriterion(topic.getId());
-			topicCriteria.getRenderProperties().renderValuesForLocale(topic.getCurrentLocale());
 
 			CmsOutcome<Topic> children = topicService.searchTopics(topicCriteria, ResourceRepresentationType.TOPIC_LIST);
 

@@ -51,7 +51,7 @@ public class LazyLoadingTopicTreeNode extends LazyLoadingTreeNodeRichFaces{
 	public LazyLoadingTopicTreeNode(String identifier, Topic topic,
 			TreeNode parent, OrderByProperty orderByProperty) {
 		super(identifier,
-				topic.getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()) == null ? JSFUtilities.getLocalizedMessage("no.localized.label.for.description", null) : topic.getLocalizedLabelForCurrentLocale(),
+				topic.getLocalizedLabelForLocale(JSFUtilities.getLocaleAsString()) == null ? JSFUtilities.getLocalizedMessage("no.localized.label.for.description", null) : topic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()),
 						parent, 
 						"TOPIC_NODE" ,
 						(topic.getNumberOfChildren() == 0? true: false));

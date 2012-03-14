@@ -182,7 +182,7 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 	private void addNewSpaceItemForSpace(Space childSpace) {
 		SpaceItem spaceItem = new SpaceItem();
 		spaceItem.setType(SpaceItemType.SPACE);
-		spaceItem.setLocalizedLabel(childSpace.getLocalizedLabelForCurrentLocale());
+		spaceItem.setLocalizedLabel(childSpace.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()));
 		spaceItem.setSpaceItemObject(childSpace);
 		spaceItem.setSpaceService(spaceService);
 		sharedSpaceItems.add(spaceItem);
@@ -268,7 +268,6 @@ public class SharedSpaceNavigation extends AbstractUIBean {
 				currentSpace = spaceService.getOrganizationSpace();
 
 			Space newSpace = cmsRepositoryEntityFactory.newSpace();
-			newSpace.setCurrentLocale(localeSelector.getLocaleString());
 			newSpace.setOwner(loggedInRepositoryUser.getRepositoryUser());
 			newSpace.addLocalizedLabel(localeSelector.getLocaleString(), JSFUtilities.getLocalizedMessage("space.administration.new.space.default.localized.label", null));
 

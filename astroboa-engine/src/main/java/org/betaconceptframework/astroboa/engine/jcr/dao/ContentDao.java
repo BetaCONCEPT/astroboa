@@ -596,7 +596,7 @@ public class ContentDao  extends JcrDaoSupport{
 			}
 
 			RenderProperties renderProperties = new RenderPropertiesImpl();
-			renderProperties.renderValuesForLocale(locale);
+			//renderProperties.renderValuesForLocale(locale);
 			renderProperties.renderVersionForContentObject(versionName);
 
 			return contentObjectRenderer.render(session, contentObjectVersionHistory, renderProperties, new HashMap<String, ContentObjectTypeDefinition>(),

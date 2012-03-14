@@ -64,8 +64,8 @@ public class TopicServiceSecureImpl extends AbstractSecureAstroboaService implem
 	
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")
 	public CmsOutcome<Topic> getMostlyUsedTopics(String taxonomyName,
-			String locale, int offset, int limit, String authenticationToken) {
-		return topicService.getMostlyUsedTopics(taxonomyName, locale, offset, limit);
+			int offset, int limit, String authenticationToken) {
+		return topicService.getMostlyUsedTopics(taxonomyName, offset, limit);
 	}
 
 	@RolesAllowed("ROLE_CMS_EXTERNAL_VIEWER")

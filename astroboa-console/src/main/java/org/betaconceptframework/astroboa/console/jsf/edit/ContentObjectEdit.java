@@ -1475,7 +1475,7 @@ public class ContentObjectEdit extends AbstractUIBean {
 		if (selectedLoggedInUserTag != null) {
 			//	check if the selected tag is already in contentObject subject 
 			if (cmsUtilities.findTopicInTopicListByLocalizedTopicLabel(((TopicReferenceProperty)selectedContentObjectForEdit.getContentObject().getCmsProperty("profile.subject")).getSimpleTypeValues(),  
-					selectedLoggedInUserTag.getLocalizedLabelForCurrentLocale()) != null) {
+					selectedLoggedInUserTag.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString())) != null) {
 				logger.warn("The selected tag is already in content object subject."); 
 				JSFUtilities.addMessage(null, "object.edit.tag.already.selected", null, FacesMessage.SEVERITY_WARN); 
 				return;

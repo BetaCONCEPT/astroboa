@@ -98,7 +98,7 @@ public class ContentObjectSearchByTopic extends AbstractUIBean {
 	
 	public void findContentObjectsByTopicAndPresent_UIAction(Topic topic) {	
 		selectedTopicId = topic.getId();
-		selectedTopicLabel = topic.getLocalizedLabelForCurrentLocale();
+		selectedTopicLabel = topic.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString());
 		
 		if (topic.getTaxonomy() != null){
 			selectedTopicTaxonomy = topic.getTaxonomy().getName();

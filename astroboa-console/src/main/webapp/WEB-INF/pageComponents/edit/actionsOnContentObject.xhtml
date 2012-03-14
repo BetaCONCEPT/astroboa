@@ -55,7 +55,7 @@ Authors
 						<f:selectItem itemValue="2"
 							itemLabel="#{messages['object.edit.actions.attach.to.root.space']}" />
 						<f:selectItem itemValue="3"
-							itemLabel="#{messages['object.edit.actions.attach.to.selected.space']} : #{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}">
+							itemLabel="#{messages['object.edit.actions.attach.to.selected.space']} : #{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.getAvailableLocalizedLabel(localeSelector.localeString)}">
 						</f:selectItem>
 
 						<a4j:support event="onchange" />
@@ -71,7 +71,7 @@ Authors
 							<div align="center"
 								style="font-size: 1.3em; color: red;">
 								<h:outputText
-									value="#{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.localizedLabelForCurrentLocale}" />
+									value="#{contentObjectEdit.selectedSpaceToBeAttachedToContentObject.getAvailableLocalizedLabel(localeSelector.localeString)}" />
 							</div>
 							<h:outputText style="font-weight: 600; font-size: 1.1em;"
 								value="#{messages['object.edit.actions.drag.and.drop.panel.label']}" />

@@ -21,6 +21,7 @@ package org.betaconceptframework.astroboa.console.jsf.taxonomy;
 
 import org.betaconceptframework.astroboa.api.model.Taxonomy;
 import org.betaconceptframework.ui.jsf.comparator.LocalizedStringComparator;
+import org.betaconceptframework.ui.jsf.utility.JSFUtilities;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -32,7 +33,7 @@ public class TaxonomyLocalizedLabelComparator  extends LocalizedStringComparator
 	@Override
 	protected int compareLabels(Taxonomy taxonomy1,
 			Taxonomy taxonomy2) {
-		return compareLocalizedNames(taxonomy1.getLocalizedLabelForCurrentLocale(), taxonomy2.getLocalizedLabelForCurrentLocale());
+		return compareLocalizedNames(taxonomy1.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()), taxonomy2.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()));
 	}
 
 }

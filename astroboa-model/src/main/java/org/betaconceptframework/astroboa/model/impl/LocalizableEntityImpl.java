@@ -55,26 +55,9 @@ public abstract class LocalizableEntityImpl extends CmsRepositoryEntityImpl  imp
 	@XmlJavaTypeAdapter(value=LocalizationAdapter.class)
 	private Localization localization;
 	
-	@XmlTransient
-	private String currentLocale;
-	
-	
 	public LocalizableEntityImpl() {
 		super();
 		localization = new LocalizationImpl();
-	}
-
-	public String getCurrentLocale() {
-		return currentLocale;
-	}
-
-	public void setCurrentLocale(String currentLocale) {
-		this.currentLocale = currentLocale;
-	}
-
-	public String getLocalizedLabelForCurrentLocale() {
-		return getLocalizedLabelForLocale(currentLocale);
-		
 	}
 
 	public void addLocalizedLabel(String locale, String localizedName) {

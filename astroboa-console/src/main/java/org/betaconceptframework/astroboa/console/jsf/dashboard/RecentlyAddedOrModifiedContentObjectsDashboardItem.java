@@ -61,7 +61,7 @@ public class RecentlyAddedOrModifiedContentObjectsDashboardItem extends ContentO
 			// reset search criteria to begin a new search
 			contentObjectCriteria = null;
 			contentObjectCriteria = CmsCriteriaFactory.newContentObjectCriteria();
-			contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
+			//contentObjectCriteria.getRenderProperties().renderValuesForLocale(JSFUtilities.getLocaleAsString());
 
 
 			try {

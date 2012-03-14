@@ -290,7 +290,7 @@ public class ContentObjectStatefulSearchService extends AbstractUIBean {
 		 * the localized labels are retrieved according to the provided locale
 		 */
 		contentObjectCriteria.getRenderProperties().resetRenderInstructions();
-		contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
+		//contentObjectCriteria.getRenderProperties().renderValuesForLocale(locale);
 		
 	}
 

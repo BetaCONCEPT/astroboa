@@ -137,7 +137,7 @@ public class TopicReview extends AbstractUIBean {
 					ArrayList topicGroup = (ArrayList) topicGroupHashMap.get("topicGroup");   
 					// a topic in the topicGroup list is again a HashMap which contains the label of the topic and the related content objects. So we create a new HashMap in order to insert the new topic
 					HashMap topic = new HashMap<String, Object>();
-					topic.put("topicLabel", rootTopicTree.getLocalizedLabelForCurrentLocale());
+					topic.put("topicLabel", rootTopicTree.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()));
 					topic.put("topicId", rootTopicTree.getId());
 					topic.put("contentObjectsInTopic", contentObjectsInTopic);
 					topicGroup.add(topic);
@@ -150,7 +150,7 @@ public class TopicReview extends AbstractUIBean {
 		if (rootTopicTree.getNumberOfChildren() >0) { // if the topic has subtopics we will further traverse them
 			HashMap<String,Object> subTopicGroupHashMap = new HashMap<String,Object>();
 			List<HashMap<String, Object>> subTopicGroup = new ArrayList();
-			subTopicGroupHashMap.put("parentTopicLabel", rootTopicTree.getLocalizedLabelForCurrentLocale());
+			subTopicGroupHashMap.put("parentTopicLabel", rootTopicTree.getAvailableLocalizedLabel(JSFUtilities.getLocaleAsString()));
 			subTopicGroupHashMap.put("topicGroup", subTopicGroup);
 			listOfTopicGroups.add(subTopicGroupHashMap);
 			for (Topic subTopic : rootTopicTree.getChildren())
