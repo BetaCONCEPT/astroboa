@@ -90,7 +90,7 @@ public interface CmsRepository extends Serializable {
 	/**
 	 * Return the id of the repository which represents the identity store of this repository
 	 * 
-	 * @return IdentityStore reposiotry id as defined in astroboa-conf.xml 
+	 * @return IdentityStore reposiotry id as defined in repositories-conf.xml 
 	 */
 	String getIdentityStoreRepositoryId();
 	
@@ -102,7 +102,7 @@ public interface CmsRepository extends Serializable {
 	String getExternalIdentityStoreJNDIName();
 	
 	/**
-	 * Return administrator's user id as defined in astroboa-conf.xml
+	 * Return administrator's user id as defined in repositories-conf.xml
 	 * 
 	 * @return Administrator User Id
 	 */

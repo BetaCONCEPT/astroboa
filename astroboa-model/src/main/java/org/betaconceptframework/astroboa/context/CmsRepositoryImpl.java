@@ -57,7 +57,7 @@ public final class CmsRepositoryImpl implements CmsRepository, Serializable{
 
 	private final String externalIdentityStoreJNDIName;
 	
-	//Administrator's user id as defined in astroboa-conf.xml
+	//Administrator's user id as defined in repositories-conf.xml
 	private final String administratorUserId;
 
 	

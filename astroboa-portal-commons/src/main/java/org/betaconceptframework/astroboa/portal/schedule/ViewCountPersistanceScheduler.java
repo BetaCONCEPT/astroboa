@@ -77,7 +77,7 @@ public class ViewCountPersistanceScheduler {
 
 				//Login with subject does not work with remote api
 				//astroboaClient.login(currentlyConnectedRepository, portalUtils.createSubjectForSystemUserAndItsRoles(currentlyConnectedRepository), clientPermanentKey);
-				//This will work if Administrator has been provided with a secret key in astroboa-conf.xml
+				//This will work if Administrator has been provided with a secret key in repositories-conf.xml
 				astroboaClient.loginAsAdministrator(currentlyConnectedRepository, systemSecretKey, clientPermanentKey);
 				
 			}

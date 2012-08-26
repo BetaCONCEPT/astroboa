@@ -27,7 +27,7 @@ package org.betaconceptframework.astroboa.test;
 public  final class TestConstants {
 
 	/**
-	 * This value must exist in astroboa-conf.xml as well
+	 * This value must exist in repositories-conf.xml as well
 	 */
 	public final static String TEST_REPOSITORY_ID="repository";
 	public final static String TEST_IDENTITY_STORE_REPOSITORY_ID="identityStoreRepository";

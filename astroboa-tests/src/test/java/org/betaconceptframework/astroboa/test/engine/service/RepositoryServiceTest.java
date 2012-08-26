@@ -99,7 +99,7 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 			configurationHomeDir = StringUtils.removeStart(configurationHomeDir, "file:");
 		}
 		
-		File configuration = new File(configurationHomeDir+File.separator+"astroboa-conf.xml");
+		File configuration = new File(configurationHomeDir+File.separator+"repositories-conf.xml");
 		return configuration;
 	}
 	
@@ -107,7 +107,7 @@ public class RepositoryServiceTest extends AbstractRepositoryTest{
 	public void testCreateNewRepository() throws NamingException, Exception{
 		
 		final String repositoryId = "newRepositoryAddedAtRuntime";
-		File newRepositoryConfigurationFile = new ClassPathResource("new-astroboa-conf.xml").getFile();
+		File newRepositoryConfigurationFile = new ClassPathResource("new-repositories-conf.xml").getFile();
 		
 		File configuration = retrieveConfigurationFile();
 		

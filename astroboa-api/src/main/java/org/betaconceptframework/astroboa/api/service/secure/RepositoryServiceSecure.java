@@ -43,7 +43,7 @@ public interface RepositoryServiceSecure extends RemoteRepositoryServiceSecure {
 	 * 
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param subject Subject instance containing all necessary roles.
 	 *  

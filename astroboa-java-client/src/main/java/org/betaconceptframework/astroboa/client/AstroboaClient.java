@@ -162,7 +162,7 @@ public class AstroboaClient {
 	 * @see RepositoryService#login(String, AstroboaCredentials)
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param credentials Credentials used to authenticate user that wants to connect to repository.
 	 */
@@ -175,7 +175,7 @@ public class AstroboaClient {
 	 * @see RepositoryService#login(String, AstroboaCredentials, String)
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param credentials Credentials used to authenticate user that wants to connect to repository.
      *
@@ -214,7 +214,7 @@ public class AstroboaClient {
 	 * user. This method runs only within Local context for security reasons.
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param subject Subject created during authentication by another system. 
 	 */
@@ -227,7 +227,7 @@ public class AstroboaClient {
 	 * user. This method runs only within Local context for security reasons.
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param subject Subject created during authentication by another system.
 	 * 
@@ -274,9 +274,9 @@ public class AstroboaClient {
 	 * admin user name and password.
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
-	 * @param key Predefined secret key provided in astroboa-conf.xml 
+	 * @param key Predefined secret key provided in repositories-conf.xml 
 	 * 
 	 */
 	public  void loginAsAdministrator(String repositoryId, String key) {
@@ -288,9 +288,9 @@ public class AstroboaClient {
 	 * admin user name and password.
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
-	 * @param key Predefined secret key provided in astroboa-conf.xml 
+	 * @param key Predefined secret key provided in repositories-conf.xml 
 	 * 
 	 * @param permanentKey  representing a trusted client whose token is never expired
 	 */
@@ -322,7 +322,7 @@ public class AstroboaClient {
 	 * Allows client to login to an Astroboa repository as Anonymous user. 
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 */
 	public  void loginAsAnonymous(String repositoryId) {
@@ -333,7 +333,7 @@ public class AstroboaClient {
 	 * Allows client to login to an Astroboa repository as Anonymous user.  
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param permanentKey  representing a trusted client whose token is never expired
 	 */

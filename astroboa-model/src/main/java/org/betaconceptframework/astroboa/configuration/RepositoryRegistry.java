@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  * 
  * It loads the configuration for all repositories managed by the Astroboa server.
  * 
- * It expects to find configuration file astroboa-conf.xml in the path
+ * It expects to find configuration file repositories-conf.xml in the path
  * specified in the system property with key {@link CmsConstants#ASTROBOA_CONFIGURATION_HOME_DIRECTORY_SYSTEM_PROPERTY_NAME}
  * 
  * It also expects to find Xml Schema astroboa-conf-{version}.xsd in 
@@ -67,7 +67,7 @@ public enum RepositoryRegistry{
 	
 	private  final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	private String ASTROBOA_CONFIGURATION_FILE = "astroboa-conf.xml";
+	private String ASTROBOA_CONFIGURATION_FILE = "repositories-conf.xml";
 	private String ASTROBOA_CONFIGURATION_XSD_FILEPATH = CmsConstants.FORWARD_SLASH+"META-INF"+CmsConstants.FORWARD_SLASH+CmsConstants.ASTROBOA_CONFIGURATION_XSD_FILENAME;
 
 	private Unmarshaller configurationUnmarshaller;

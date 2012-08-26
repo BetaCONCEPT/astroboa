@@ -49,7 +49,7 @@ public interface RepositoryService {
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param credentials Credentials used to authenticate user that wants to connect to repository.
 	 * 
@@ -74,7 +74,7 @@ public interface RepositoryService {
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param credentials Credentials used to authenticate user that wants to connect to repository.
      *
@@ -103,7 +103,7 @@ public interface RepositoryService {
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param subject Subject created during authentication by another system.
 	 * 
@@ -132,7 +132,7 @@ public interface RepositoryService {
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @return Authentication Token created upon successful login to Astroboa repository
 	 */
@@ -154,7 +154,7 @@ public interface RepositoryService {
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param permanentKey  Represents a trusted client whose token is never expired
 	 * 
@@ -166,15 +166,15 @@ public interface RepositoryService {
 	 * Login method which allows a user to login without providing its password. 
 	 * 
 	 * <p>
-	 * Instead she must provide a key which is predefined in astroboa-conf.xml.
+	 * Instead she must provide a key which is predefined in repositories-conf.xml.
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param username Name of user who wants to login. 
 	 * 
-	 * @param key A predefined value located in astroboa-conf.xml
+	 * @param key A predefined value located in repositories-conf.xml
 	 * 
 	 * @return Authentication Token created upon successful login to Astroboa repository
 	 */
@@ -184,15 +184,15 @@ public interface RepositoryService {
 	 * Login method which allows a user to login without providing its password. 
 	 * 
 	 * <p>
-	 * Instead she must provide a key which is predefined in astroboa-conf.xml.
+	 * Instead she must provide a key which is predefined in repositories-conf.xml.
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @param username Name of user who wants to login. 
 	 * 
-	 * @param key A predefined value located in astroboa-conf.xml
+	 * @param key A predefined value located in repositories-conf.xml
 	 * 
 	 * @param permanentKey  Represents a trusted client whose token is never expired
 	 * 
@@ -204,14 +204,14 @@ public interface RepositoryService {
 	 * Login method which allows a user to login as an administrator. 
 	 * 
 	 * <p>
-	 * User must provide a key which is predefined in astroboa-conf.xml.
-	 * Administrator username is automatically obtained from astroboa-conf.xml
+	 * User must provide a key which is predefined in repositories-conf.xml.
+	 * Administrator username is automatically obtained from repositories-conf.xml
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
-	 * @param key A predefined value located in astroboa-conf.xml
+	 * @param key A predefined value located in repositories-conf.xml
 	 * 
 	 * @return Authentication Token created upon successful login to Astroboa repository
 	 */
@@ -221,14 +221,14 @@ public interface RepositoryService {
 	 * Login method which allows a user to login as an administrator. 
 	 * 
 	 * <p>
-	 * User must provide a key which is predefined in astroboa-conf.xml.
-	 * Administrator username is automatically obtained from astroboa-conf.xml
+	 * User must provide a key which is predefined in repositories-conf.xml.
+	 * Administrator username is automatically obtained from repositories-conf.xml
 	 * </p>
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
-	 * @param key A predefined value located in astroboa-conf.xml
+	 * @param key A predefined value located in repositories-conf.xml
 	 * 
 	 * @param permanentKey  Represents a trusted client whose token is never expired
 	 * 
@@ -240,7 +240,7 @@ public interface RepositoryService {
 	 * Check if cms repository is available.
 	 * 
 	 * @param repositoryId Repository identifier as provided
-	 * in astroboa-conf.xml
+	 * in repositories-conf.xml
 	 * 
 	 * @return <code>true</code> if cms repository is available , <code>false</code> otherwise.
 	 */
