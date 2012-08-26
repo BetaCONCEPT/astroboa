@@ -91,7 +91,7 @@ Authors
 	</bean>
 	
 	<!--  IdentityStore -->
-	<bean id="idnetityStore"
+	<bean id="identityStore"
 		factory-bean="astroboa.engine.context"
 		factory-method="getBean">
 		<constructor-arg value="identityStore"/>
