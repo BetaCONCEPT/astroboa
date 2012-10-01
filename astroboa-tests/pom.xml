@@ -284,6 +284,36 @@ Authors
 			<artifactId>javaee-api</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- The following jackon dependencies are declared as provided in astroa modules
+		since are provided by JBoss but since tests run outside jboss we need to declare them again here -->
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-core-asl</artifactId>
+  		  <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.2</version>
+			<scope>test</scope>
+		 </dependency>
+		 
+		 <dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-xc</artifactId>
+			<version>1.9.2</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-mapper-asl</artifactId>
+  		  <scope>test</scope>
+		</dependency>
+		
+		
   					
 	</dependencies>
 

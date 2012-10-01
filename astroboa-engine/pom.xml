@@ -460,12 +460,22 @@ Authors
 		<dependency>
 		 <groupId>com.sun.jersey</groupId>
 		 <artifactId>jersey-json</artifactId>
-		 <version>1.6</version>
+		 <version>1.12</version>
 		 <exclusions>
 		 	<exclusion>
 		 	  <groupId>org.codehaus.jackson</groupId>
   			  <artifactId>jackson-core-asl</artifactId>
 		 	</exclusion>
+		 	  
+		 	<exclusion>
+		 	  <groupId>org.codehaus.jackson</groupId>
+  			  <artifactId>jackson-jaxrs</artifactId>
+		 	</exclusion>
+		 	<exclusion>
+		 	  <groupId>org.codehaus.jackson</groupId>
+  			  <artifactId>jackson-xc</artifactId>
+		 	</exclusion>
+		 	
 		 	<exclusion>
 		 	  <groupId>org.codehaus.jackson</groupId>
   			  <artifactId>jackson-mapper-asl</artifactId>
@@ -492,7 +502,7 @@ Authors
 
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
-  		  <artifactId>jackson-core-lgpl</artifactId>
+  		  <artifactId>jackson-core-asl</artifactId>
 		  <scope>provided</scope>
 		</dependency>
 		
@@ -501,6 +511,7 @@ Authors
 			<groupId>com.sun.xml.bind</groupId>
   			<artifactId>jaxb-impl</artifactId>
   			<version>2.1.12</version>
+  		<!-- 	<scope>provided</scope> -->
   			<exclusions>
   				<exclusion>
   					<groupId>javax.xml.stream</groupId>

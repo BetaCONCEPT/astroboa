@@ -339,7 +339,8 @@ Authors
 		
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
-  		  <artifactId>jackson-core-lgpl</artifactId>
+  		  <artifactId>jackson-core-asl</artifactId>
+  		  <scope>provided</scope>
 		</dependency>
 		
 		<dependency>

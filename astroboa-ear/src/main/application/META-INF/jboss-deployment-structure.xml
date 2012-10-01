@@ -20,6 +20,11 @@
     		then this exclusion is not needed.
     	 -->
       	<module name="org.torquebox.cache" />
+      	
+        <module name="org.codehaus.jackson.jackson-core-asl" />
+        <module name="org.codehaus.jackson.jackson-mapper-asl" />
+        <module name="org.codehaus.jackson.jackson-xc" />
+        <module name="org.codehaus.jackson.jackson-jaxrs" />
     </exclusions>
     
     <!-- This allows you to define additional dependencies, it is the same as using the Dependencies: manifest attribute 

@@ -227,16 +227,24 @@ Authors
 			<version>2.10.0</version>
 		</dependency>
 		
-		<!-- 
+		<!--
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+  		  <artifactId>jackson-core-lgpl</artifactId>
+  		  <scope>provided</scope>
+		</dependency>
+		
+		 
 			This dependency is marked as provided in astroboa-resource-api
 			and thus we need to specify it here in order to be placed in the
 			lib directory
-		 -->		
+				
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
   		  <artifactId>jackson-mapper-lgpl</artifactId>
 		</dependency>
-		
+		 -->
+		 
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
