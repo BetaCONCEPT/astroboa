@@ -121,14 +121,14 @@ public class TopicJAXBTest extends AbstractRepositoryTest{
 		
 		try{
 			
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}"),
 					"Invalid JSON export of a topic with 2 localized labels "+json);
 			
 			//Retrieve topic from repository
 			topic = topicService.getTopic(topic.getId(), ResourceRepresentationType.TOPIC_INSTANCE, FetchLevel.FULL, false);
 			json  = topic.json(prettyPrint);
 
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}"),
 					"Invalid JSON export of a topic with 2 localized labels "+json);
 
 		}

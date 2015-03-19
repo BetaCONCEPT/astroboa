@@ -119,14 +119,14 @@ public class TaxonomyJAXBTest extends AbstractRepositoryTest{
 		
 		try{
 			
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}}"),
 					"Invalid JSON export of a taxonomy with 2 localized labels "+json);
 			
 			//Retrieve taxonomy from repository
 			taxonomy = taxonomyService.getTaxonomy(taxonomy.getName(), ResourceRepresentationType.TAXONOMY_INSTANCE, FetchLevel.FULL, false);
 			json  = taxonomy.json(prettyPrint);
 
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}}"),
 					"Invalid JSON export of a taxonomy with 2 localized labels "+json);
 
 		}

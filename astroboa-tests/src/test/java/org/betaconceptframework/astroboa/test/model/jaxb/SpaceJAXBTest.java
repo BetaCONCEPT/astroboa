@@ -188,14 +188,14 @@ public class SpaceJAXBTest extends AbstractRepositoryTest{
 		
 		try{
 			
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}"),
 					"Invalid JSON export of a space with 2 localized labels "+json);
 			
 			//Retrieve topic from repository
 			space = spaceService.getSpace(space.getId(), ResourceRepresentationType.SPACE_INSTANCE, FetchLevel.FULL);
 			json  = space.json(prettyPrint);
 
-			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"fr\":\"test-localized-label-json-export\",\"en\":\"test-localized-label-json-export\"}}"), 
+			Assert.assertTrue(removeWhitespacesIfNecessary(json).contains("\"localization\":{\"label\":{\"en\":\"test-localized-label-json-export\",\"fr\":\"test-localized-label-json-export\"}}"),
 					"Invalid JSON export of a space with 2 localized labels "+json);
 
 		}

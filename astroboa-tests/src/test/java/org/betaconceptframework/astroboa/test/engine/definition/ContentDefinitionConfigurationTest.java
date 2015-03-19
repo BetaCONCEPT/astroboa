@@ -718,8 +718,8 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 		ObjectReferencePropertyDefinition multipleAllPropertyContainerMultipleReferenceOfAnyContentObjectOfTypeTestAndExtendedTestDefinition = (ObjectReferencePropertyDefinition) definitionService.getCmsDefinition(TEST_CONTENT_TYPE+".allPropertyTypeContainerMultiple.multipleReferenceOfAnyContentObjectOfTypeTestAndExtendedTest", ResourceRepresentationType.DEFINITION_INSTANCE,prettyPrint);
 		
 		List<String> acceptedContentTypes = Arrays.asList("testType");
-		List<String> expandedContentTypes = Arrays.asList(TEST_CONTENT_TYPE,DIRECT_EXTENDED_TEST_CONTENT_TYPE,EXTENDED_TEST_CONTENT_TYPE);
-		
+		List<String> expandedContentTypes = Arrays.asList(DIRECT_EXTENDED_TEST_CONTENT_TYPE, TEST_CONTENT_TYPE, EXTENDED_TEST_CONTENT_TYPE);
+
 		checkAcceptedAndExpandedContentTypes(referenceOfAnyContentObjectOfTypeTestTypeDefinition,acceptedContentTypes,expandedContentTypes);
 		checkAcceptedAndExpandedContentTypes(multipleReferenceOfAnyContentObjectOfTypeTestTypeDefinition,acceptedContentTypes,expandedContentTypes);
 		checkAcceptedAndExpandedContentTypes(allPropertyContainerReferenceOfAnyContentObjectOfTypeTestTypeDefinition,acceptedContentTypes,expandedContentTypes);
@@ -757,8 +757,7 @@ public class ContentDefinitionConfigurationTest  extends AbstractRepositoryTest{
 
 	}
 	
-	private void checkAcceptedAndExpandedContentTypes(ObjectReferencePropertyDefinition contentObjectPropertyDefinition, List<String> acceptedContentTypes, List<String> expandedContentTypes){
-		
+	private void checkAcceptedAndExpandedContentTypes(ObjectReferencePropertyDefinition contentObjectPropertyDefinition, List<String> acceptedContentTypes, List<String> expandedContentTypes) {
 		Assert.assertEquals(contentObjectPropertyDefinition.getAcceptedContentTypes(), acceptedContentTypes, contentObjectPropertyDefinition.getFullPath());
 		
 		Assert.assertEquals(contentObjectPropertyDefinition.getExpandedAcceptedContentTypes(), expandedContentTypes,contentObjectPropertyDefinition.getFullPath());
