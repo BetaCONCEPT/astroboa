@@ -110,10 +110,10 @@ function getObjectCollection(repository, cmsQuery, projectionPaths, orderBy, off
 						else {
 							var idxOfRepoToRemove = repositories.indexOf(repository);
 							if (idxOfRepoToRemove != -1) {repositories.splice(idxOfRepoToRemove, 1);}
-							bcmslib.jQuery.pnotify({
-   								pnotify_text: 'No more results from repository "' + repository + '"',
-   								pnotify_type: 'ok'
-   							});
+							//bcmslib.jQuery.pnotify({
+   							//	pnotify_text: 'No more results from repository "' + repository + '"',
+   							//	pnotify_type: 'ok'
+   							//});
 						}
 					}
 	});
