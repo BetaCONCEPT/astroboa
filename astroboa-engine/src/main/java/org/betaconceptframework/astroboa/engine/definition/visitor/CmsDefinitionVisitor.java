@@ -82,7 +82,7 @@ import com.sun.xml.xsom.visitor.XSVisitor;
  */
 public class CmsDefinitionVisitor implements XSVisitor{
 
-	private  final Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private DefinitionCacheRegion definitionCacheRegion;

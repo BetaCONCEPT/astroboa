@@ -18,16 +18,14 @@
  */
 package org.betaconceptframework.astroboa.util;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
-import org.betaconceptframework.astroboa.api.model.CmsProperty;
-import org.betaconceptframework.astroboa.api.model.ComplexCmsProperty;
-import org.betaconceptframework.astroboa.api.model.ComplexCmsRootProperty;
-import org.betaconceptframework.astroboa.api.model.ContentObject;
-import org.betaconceptframework.astroboa.api.model.ValueType;
+import org.betaconceptframework.astroboa.api.model.*;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
 import org.betaconceptframework.astroboa.api.model.exception.CmsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Class responsible to return a property of an object using the 
@@ -48,6 +46,8 @@ import org.betaconceptframework.astroboa.api.model.exception.CmsException;
  * 
  */
 public class PropertyExtractor {
+
+  private static final Logger logger = LoggerFactory.getLogger(PropertyExtractor.class);
 
 	private String identifierOfTheValueOfTheProperty = null;
 	private int indexOfTheValueOfTheProperty = 0;
@@ -98,7 +98,7 @@ public class PropertyExtractor {
 					boolean childPropertyIsDefined = ((ComplexCmsProperty)property).isChildPropertyDefined(childPropertyName);
 					
 					if (! childPropertyIsDefined){
-						throw new Exception("Could not locate definition  for property "+ childPropertyName);
+						throw new Exception("Could not locate definition for property " + childPropertyName);
 					}
 					
 					//Retrieve definition
@@ -112,7 +112,7 @@ public class PropertyExtractor {
 					}
 					
 					if (childPropertyDefinition == null){
-						throw new Exception("Could not locate definition  for property "+ childPropertyName);
+						throw new Exception("Could not locate definition  for property " + childPropertyName);
 					}
 					
 					
@@ -133,7 +133,7 @@ public class PropertyExtractor {
 									property = childProperty;
 								}
 								else{
-									throw new Exception("Property "+childPropertyName + " has been retrieved from parent proeprty "+ parentPropertyPermanentPath + " but its identifier "+
+									throw new Exception("Property " + childPropertyName + " has been retrieved from parent property "+ parentPropertyPermanentPath + " but its identifier "+
 											childProperty.getId() + " does not match with the one provided "+ identifierOfTheChildProperty);
 								}
 							}
@@ -158,21 +158,28 @@ public class PropertyExtractor {
 			throws Exception {
 		
 		List<CmsProperty<?,?>> childProperties = ((ComplexCmsProperty)property).getChildPropertyList(childPropertyName);
+
+    logger.info("Checking if child property {}[{}] is in property list", childPropertyName, identifierOfChildProperty, childProperties);
 		
-		if (childProperties == null || childProperties.isEmpty()){
-			throw new Exception("Empty proprty list returned");
+		if (childProperties == null || childProperties.isEmpty()) {
+			throw new Exception("Empty property list returned");
 		}
 		
 		//No identifier is provided. Return the first from the list
-		if (identifierOfChildProperty == null){
+		if (identifierOfChildProperty == null) {
 			return childProperties.get(0);
 		}
 		else{
-			for (CmsProperty childProperty : childProperties){
-				if (StringUtils.equals(identifierOfChildProperty, childProperty.getId())){
-					return childProperty;
-				}
-			}
+      Integer childPropertyIndex = getIndex(identifierOfChildProperty);
+      if (childPropertyIndex == -1) { // it is an identifier
+        for (CmsProperty childProperty : childProperties) {
+          if (StringUtils.equals(identifierOfChildProperty, childProperty.getId())) {
+            return childProperty;
+          }
+        }
+      } else {
+        return childProperties.get(childPropertyIndex);
+      }
 		}
 		
 		throw new Exception("Could not locate child property "+childPropertyName + " with identifier "+identifierOfChildProperty + " in parent property "+property.getFullPath());
@@ -198,6 +205,12 @@ public class PropertyExtractor {
 		return property;
 	}
 
-	
+	private Integer getIndex(String identifierOrIndex) {
+    try {
+      return Integer.parseInt(identifierOrIndex);
+    } catch (NumberFormatException e) {
+      return -1;
+    }
+  }
 	
 }
