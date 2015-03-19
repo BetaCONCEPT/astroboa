@@ -44,9 +44,9 @@ Authors
 					cmsPropertyWrapper.valueType eq 'Complex'}"
 				action="#{cmsPropertyWrapper.addBlankValue_UIAction}"
 				reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
-				oncomplete="addHelpMessageToProperties();"
 				title="Add a new complex property">
 				<img src="images/cms-icons/16/fugue/table--plus.png" alt="Add a new complex property"/>
+                <!-- removed oncomplete="addHelpMessageToProperties();" -->
 			</a4j:commandLink>
 		</ui:composition>
 	</body>

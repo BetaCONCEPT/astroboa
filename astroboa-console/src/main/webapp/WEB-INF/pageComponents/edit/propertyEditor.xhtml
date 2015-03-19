@@ -70,8 +70,8 @@ Authors
 											rendered="#{childPropertyWrapper.valueType eq 'Complex' 
 												and ! childPropertyWrapper.multiple}"
 											action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(childPropertyWrapper.path, childPropertyWrapper.complexCmsPropertyEdit)}"
-											reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
-											oncomplete="addHelpMessageToProperties();">
+											reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+                                            <!-- removed oncomplete="addHelpMessageToProperties();" -->
 									
 											<h:outputText
 												value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
@@ -235,9 +235,9 @@ Authors
 								rendered="#{cmsPropertyWrapper.valueType eq 'Complex' 
 									and ! cmsPropertyWrapper.multiple}"
 								action="#{contentObjectEdit.showSelectedComplexPropertyForPath_UIAction(cmsPropertyWrapper.path, cmsPropertyWrapper.complexCmsPropertyEdit)}"
-								reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}"
-								oncomplete="addHelpMessageToProperties();">
-						
+								reRender="#{(cmsPropertyWrapper.complexCmsPropertyEdit.editorTab eq 'FIXED_PROPERTIES')? 'complexCmsPropertyChildPropertiesTable,fixedPropertyBreadCrumbs' : 'extraPropertiesPanel,extraPropertyBreadCrumbs'}">
+                                <!-- removed oncomplete="addHelpMessageToProperties();" -->
+
 								<h:outputText
 									value="#{(cmsPropertyWrapper.mandatory)?'*' : ''}" />
 								
