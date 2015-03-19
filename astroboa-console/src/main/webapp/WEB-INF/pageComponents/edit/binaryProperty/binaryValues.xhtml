@@ -79,7 +79,8 @@ Authors
 												
 													<a href="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?t=#{sf:currentTimeInSeconds()}"
 											 			class="objectPhotosSlideshow" rel="defaultGallery"
-											 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}">
+											 			title="#{cmsPropertyWrapper.contentObject.getCmsProperty('profile.title').simpleTypeValue} - #{simpleCmsPropertyValueWrapper.binaryChannelValue.sourceFilename}"
+                                                        target="_blank">
 														
 														<img class="binaryChannelThumbnail" 
 															src="#{facesContext.externalContext.requestContextPath}/contentObject/#{cmsPropertyWrapper.contentObject.id}/#{cmsPropertyWrapper.path}[#{simpleCmsPropertyValueWrapper.binaryChannelValue.id}]?width=#{(cmsPropertyWrapper.cmsProperty.name ne 'thumbnail')?'150' : '128'}&amp;t=#{sf:currentTimeInSeconds()}"/>
