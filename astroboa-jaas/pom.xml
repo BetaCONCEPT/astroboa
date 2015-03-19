@@ -24,6 +24,7 @@
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
+		<relativePath>../astroboa-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>astroboa-jaas</artifactId>  
 
@@ -31,6 +32,25 @@
 
 	<name>Astroboa JAAS</name>
 	<description>This module contains all necessary classes and configuration files needed for Astroboa to support JAAS. It also contains Application security domain configuration file specific to Jboss AS needs needed for Jackrabbit Security. It is packaged as a SAR module</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <fork>true</fork>
+                    <compilerVersion>1.8</compilerVersion>
+                    <verbose>true</verbose>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 	<dependencies>
 

@@ -29,6 +29,7 @@
 		<groupId>org.betaconceptframework.astroboa</groupId>
 		<artifactId>astroboa-parent</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
+		<relativePath>../astroboa-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>astroboa-java-client</artifactId>
 	<packaging>jar</packaging>
@@ -38,6 +39,25 @@
 		and configuration files for accessing a Astroboa repository
 		server and its services through Astroboa API
 	</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <fork>true</fork>
+                    <compilerVersion>1.8</compilerVersion>
+                    <verbose>true</verbose>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 	<dependencies>
 

@@ -29,6 +29,7 @@ Authors
 		<groupId>org.betaconceptframework.astroboa</groupId>  
 		<artifactId>astroboa-parent</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
+		<relativePath>../astroboa-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>astroboa-tests</artifactId>    
 	<name>Astroboa Tests</name>
@@ -73,6 +74,20 @@ Authors
 			  </plugins>
 		</pluginManagement>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <fork>true</fork>
+                    <compilerVersion>1.8</compilerVersion>
+                    <verbose>true</verbose>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

@@ -23,342 +23,359 @@ Authors
 		  Savvas Triantafyllou (striantafyllou@betaconcept.com)
 		 		    
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.betaconceptframework.astroboa</groupId>
-		<artifactId>astroboa-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>astroboa-model</artifactId>
-	<packaging>jar</packaging>
-	<name>Astroboa Model</name>
-	<description>
-		This is the implementation of astroboa-api, mainly of package
-		org.betaconceptframework.astroboa.model
-	</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.betaconceptframework.astroboa</groupId>
+        <artifactId>astroboa-parent</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+        <relativePath>../astroboa-parent/pom.xml</relativePath>
+    </parent>
+    <artifactId>astroboa-model</artifactId>
+    <packaging>jar</packaging>
+    <name>Astroboa Model</name>
+    <description>
+        This is the implementation of astroboa-api, mainly of package
+        org.betaconceptframework.astroboa.model
+    </description>
 
-	<build>
-	
-		<resources>
-    	  	<resource>
-        		<directory>src/main/resources</directory>
-        		<filtering>true</filtering>
-    	  	</resource>
-    	</resources>
-    	
-    	<pluginManagement>
-			<plugins>
-			    <plugin>
-			      <groupId>org.eclipse.m2e</groupId>
-			      <artifactId>lifecycle-mapping</artifactId>
-			      <version>1.0.0</version>
-			      <configuration>
-			        <lifecycleMappingMetadata>
-			          <pluginExecutions>
-			          	<pluginExecution>
-			              <pluginExecutionFilter>
-			                <groupId>org.codehaus.mojo</groupId>
-			                <artifactId>javacc-maven-plugin</artifactId>
-			                <versionRange>[2.5.0,)</versionRange>
-			                <goals>
-			                  <goal>jjtree-javacc</goal>
-			                </goals>
-			              </pluginExecutionFilter>
-			              <action>
-			                <execute>
-			                  <runOnIncremental>false</runOnIncremental>
-			                </execute>
-			              </action>
-			            </pluginExecution>
-			            <pluginExecution>
-			              <pluginExecutionFilter>
-			                <groupId>org.apache.maven.plugins</groupId>
-			                <artifactId>maven-antrun-plugin</artifactId>
-			                <versionRange>[1.0.0,)</versionRange>
-			                <goals>
-			                  <goal>run</goal>
-			                </goals>
-			              </pluginExecutionFilter>
-			              <action>
-			                <execute>
-			                  <runOnIncremental>false</runOnIncremental>
-			                </execute>
-			              </action>
-			            </pluginExecution>
-			          </pluginExecutions>
-			        </lifecycleMappingMetadata>
-			      </configuration>
-			    </plugin>
-			  </plugins>
-		</pluginManagement>
-    	
-	
-		<plugins>
-	
-		<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.8.0</version>
+    <build>
 
-				<configuration>
-					<specVersion>2.1</specVersion>                                                                                         
-					<strict>true</strict>
-					<verbose>true</verbose>
-					<generateDirectory>src/main/java</generateDirectory>
-					<!--
-						This plugin is executed once by running 
-							mvn org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:generate
-						
-						 Automatic
-						execution is disabled as it does not takes into consideration the
-						forceRegenerate value and it is creating java code every time
-						module is compiled, which is annoying. <executions> <execution>
-						<goals> <goal>generate</goal> </goals> </execution> </executions>
-					-->
-					<forceRegenerate>true</forceRegenerate> 
-					<bindings>
-						<binding>
-							<fileset>                                                                       
-								<directory>${basedir}/src/main/resources/META-INF</directory>                                 
-								<includes>                                                              
-									<include>*.xjb</include>                                          
-								</includes>                                                             
-							</fileset>
-						</binding>
-					</bindings>
-					<schemas>                                                                                       
-						<schema>                                                                                
-							<fileset>                                                                       
-								<!-- Defaults to schemaDirectory -->                                    
-								<directory>${basedir}/src/main/resources/META-INF</directory>                                 
-								<!-- Defaults to schemaIncludes -->                                     
-								<includes>                                                              
-									<include>astroboa-conf.xsd</include>
-								</includes>                                                             
-							</fileset>
-						</schema>                                                                               
-					</schemas>      
-				</configuration>
-			</plugin>
-			
-			<!-- Use this plugin to rename all built in definition schemas -->
-			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-antrun-plugin</artifactId>
-        		<!-- 
-        			Although plugin version is  provided in pluginManagement in
-        			betaconceptframework-parent.pom, plugin's info
-        			http://maven.apache.org/plugins/maven-antrun-plugin/plugin-info.html
-        			states that it should also be provided in project's pom as well 
-        		-->
-        		<version>1.7</version>
-        		<executions>
-          			<execution>
-          			    <id>rename-builtin-schemata</id>
-            			<phase>compile</phase>
-            			<configuration>
-              				<tasks>
-              				 	<move todir="${project.build.outputDirectory}/META-INF" includeemptydirs="false">
-    								<fileset dir="${project.build.outputDirectory}/META-INF">
-      									<include name="**/*.xsd" />
-      									<exclude name="**/xml.xsd" />
-      									<exclude name="**/*-${project.version}.xsd" />
-    								</fileset>
-    								<mapper type="glob" from="*.xsd" to="*-${project.version}.xsd" />
-  								</move>
-		            		</tasks>
-        			    </configuration>
-            			<goals>
-              				<goal>run</goal>
-            			</goals>
-          			</execution>
-        		</executions>
-      		</plugin>
-	 <plugin>
-	        <groupId>org.codehaus.mojo</groupId>
-	        <artifactId>javacc-maven-plugin</artifactId>
-	        <version>2.5</version>
-	        <executions>
-	          <execution>
-	            <configuration>
-	              <sourceDirectory>${basedir}/src/main/javacc</sourceDirectory>
-	              <packageName>org.betaconceptframework.astroboa.model.impl.query.parser</packageName>
-	              <outputDirectory>${basedir}/src/main/java</outputDirectory>
-	              <interimDirectory>${basedir}/src/main/java</interimDirectory>
-	            </configuration>
-	            <goals>
-	              <goal>jjtree-javacc</goal>
-	            </goals>
-	          </execution>
-	        </executions>
-	      </plugin>
-	      
-			
-    </plugins>
-  </build>
-	<dependencies>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
-<!-- SLF4J API is an abstraction of various logging systems. This allows the
-			use of any logging framework at the time of deployment -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-
-		<!-- These dependencies must be declared in the project that utilizes this module
-			in order to define that the actual logging framework that SLF4J will be using
-			in order for Logging to work properly is Log4j
-		-->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		
-		<!-- Used for Utilities classes ISO9075 and ISO8601-->
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-jcr-commons</artifactId>
-		</dependency>
-		  		
-		<dependency>
-			<groupId>org.betaconceptframework.astroboa</groupId>
-			<artifactId>astroboa-api</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers</artifactId>
-		</dependency>
-		
-		
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.1</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-				 <groupId>javax.xml.stream</groupId>
-				 <artifactId>stax-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.jasypt</groupId>
-			<artifactId>jasypt</artifactId>
-			<version>1.5</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-lang</groupId>
-					<artifactId>commons-lang</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.security</groupId>
-					<artifactId>spring-security-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.acegisecurity</groupId>
-					<artifactId>acegi-security</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.wicket</groupId>
-					<artifactId>wicket</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>  
-				</exclusion>
-				<exclusion>
-					<groupId>com.ibm.icu</groupId>
-					<artifactId>icu4j</artifactId>
-				</exclusion>
-
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-		  	<groupId>commons-codec</groupId>
-  			<artifactId>commons-codec</artifactId>
-		</dependency>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>javacc-maven-plugin</artifactId>
+                                        <versionRange>[2.5.0,)</versionRange>
+                                        <goals>
+                                            <goal>jjtree-javacc</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>false</runOnIncremental>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-antrun-plugin</artifactId>
+                                        <versionRange>[1.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>false</runOnIncremental>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
 
-		<dependency>
-			<groupId>bouncycastle</groupId>
-			<artifactId>bcprov-jdk16</artifactId>
-			<version>140</version>
-		</dependency>  		
+        <plugins>
 
-		<dependency>
-			<groupId>javax.jcr</groupId>
-			<artifactId>jcr</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.codehaus.jackson</groupId>
-  		  <artifactId>jackson-core-asl</artifactId>
-  		  <scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-		</dependency>
-		
-	</dependencies>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <fork>true</fork>
+                    <compilerVersion>1.8</compilerVersion>
+                    <verbose>true</verbose>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 
-	<scm>
-		<connection>
-			scm:git:git@github.com:BetaCONCEPT/astroboa.git
-		</connection>
-		<developerConnection>
-			scm:git:git@github.com:BetaCONCEPT/astroboa.git
-		</developerConnection>
-		<url>
-			scm:git:git@github.com:BetaCONCEPT/astroboa.git
-		</url>
-	</scm>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.8.0</version>
+
+                <configuration>
+                    <specVersion>2.1</specVersion>
+                    <strict>true</strict>
+                    <verbose>true</verbose>
+                    <generateDirectory>src/main/java</generateDirectory>
+                    <!--
+                        This plugin is executed once by running
+                            mvn org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:generate
+
+                         Automatic
+                        execution is disabled as it does not takes into consideration the
+                        forceRegenerate value and it is creating java code every time
+                        module is compiled, which is annoying. <executions> <execution>
+                        <goals> <goal>generate</goal> </goals> </execution> </executions>
+                    -->
+                    <forceRegenerate>true</forceRegenerate>
+                    <bindings>
+                        <binding>
+                            <fileset>
+                                <directory>${basedir}/src/main/resources/META-INF</directory>
+                                <includes>
+                                    <include>*.xjb</include>
+                                </includes>
+                            </fileset>
+                        </binding>
+                    </bindings>
+                    <schemas>
+                        <schema>
+                            <fileset>
+                                <!-- Defaults to schemaDirectory -->
+                                <directory>${basedir}/src/main/resources/META-INF</directory>
+                                <!-- Defaults to schemaIncludes -->
+                                <includes>
+                                    <include>astroboa-conf.xsd</include>
+                                </includes>
+                            </fileset>
+                        </schema>
+                    </schemas>
+                </configuration>
+            </plugin>
+
+            <!-- Use this plugin to rename all built in definition schemas -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <!--
+                    Although plugin version is  provided in pluginManagement in
+                    betaconceptframework-parent.pom, plugin's info
+                    http://maven.apache.org/plugins/maven-antrun-plugin/plugin-info.html
+                    states that it should also be provided in project's pom as well
+                -->
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>rename-builtin-schemata</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <move todir="${project.build.outputDirectory}/META-INF" includeemptydirs="false">
+                                    <fileset dir="${project.build.outputDirectory}/META-INF">
+                                        <include name="**/*.xsd"/>
+                                        <exclude name="**/xml.xsd"/>
+                                        <exclude name="**/*-${project.version}.xsd"/>
+                                    </fileset>
+                                    <mapper type="glob" from="*.xsd" to="*-${project.version}.xsd"/>
+                                </move>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javacc-maven-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <sourceDirectory>${basedir}/src/main/javacc</sourceDirectory>
+                            <packageName>org.betaconceptframework.astroboa.model.impl.query.parser</packageName>
+                            <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                            <interimDirectory>${basedir}/src/main/java</interimDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>jjtree-javacc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+    </build>
+    <dependencies>
+
+        <!-- SLF4J API is an abstraction of various logging systems. This allows the
+                    use of any logging framework at the time of deployment -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- These dependencies must be declared in the project that utilizes this module
+            in order to define that the actual logging framework that SLF4J will be using
+            in order for Logging to work properly is Log4j
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <!-- Used for Utilities classes ISO9075 and ISO8601-->
+        <dependency>
+            <groupId>org.apache.jackrabbit</groupId>
+            <artifactId>jackrabbit-jcr-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.betaconceptframework.astroboa</groupId>
+            <artifactId>astroboa-api</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.stream</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>commons-lang</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.acegisecurity</groupId>
+                    <artifactId>acegi-security</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.ibm.icu</groupId>
+                    <artifactId>icu4j</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>140</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <scm>
+        <connection>
+            scm:git:git@github.com:BetaCONCEPT/astroboa.git
+        </connection>
+        <developerConnection>
+            scm:git:git@github.com:BetaCONCEPT/astroboa.git
+        </developerConnection>
+        <url>
+            scm:git:git@github.com:BetaCONCEPT/astroboa.git
+        </url>
+    </scm>
 </project>
