@@ -20,15 +20,15 @@
 package org.betaconceptframework.astroboa.commons.comparator;
 
 
-import java.util.Comparator;
-import java.util.Locale;
-
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.ContentObjectFolder;
 import org.betaconceptframework.astroboa.api.model.ContentObjectFolder.Type;
-import org.betaconceptframework.astroboa.util.CmsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -99,10 +99,13 @@ public class ContentObjectFolderComparator implements Comparator<ContentObjectFo
 				if ("el".equalsIgnoreCase(locale))
 				{
 					//Filter string to lower case and transforming accented characters to simple ones
-					String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(folderLabel1);
-					String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(folderLabel2);
+					//String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(folderLabel1);
+					//String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(folderLabel2);
 					
-					return lowerCaseGreekFilteredLocalizedLabel0.compareTo(lowerCaseGreekFilteredLocalizedLabel1);
+					//return lowerCaseGreekFilteredLocalizedLabel0.compareTo(lowerCaseGreekFilteredLocalizedLabel1);
+
+          Collator greekCollator = Collator.getInstance(new Locale("el", "GR"));
+          return greekCollator.compare(folderLabel1, folderLabel2);
 				}
 				else
 					return folderLabel1.compareTo(folderLabel2);

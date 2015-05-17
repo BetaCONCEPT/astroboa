@@ -20,13 +20,13 @@
 package org.betaconceptframework.astroboa.commons.comparator;
 
 
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Locale;
-
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.Topic;
-import org.betaconceptframework.astroboa.util.CmsUtils;
+
+import java.io.Serializable;
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * @author Gregory Chomatas (gchomatas@betaconcept.com)
@@ -91,11 +91,13 @@ public class TopicLocalizedLabelComparator implements Comparator<Topic>,Serializ
 		//We need ascending order
 		if ("el".equalsIgnoreCase(locale))
 		{
-			//Filter string to lower case and transforming accented characters to simple ones
-			String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(localizedLabel0);
-			String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(localizedLabel1);
-			
-			return lowerCaseGreekFilteredLocalizedLabel0.compareTo(lowerCaseGreekFilteredLocalizedLabel1);
+			// Filter string to lower case and transforming accented characters to simple ones
+		  //	String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(localizedLabel0);
+		  //	String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(localizedLabel1);
+			// return lowerCaseGreekFilteredLocalizedLabel0.compareTo(lowerCaseGreekFilteredLocalizedLabel1);
+
+      Collator greekCollator = Collator.getInstance(new Locale("el", "GR"));
+      return greekCollator.compare(localizedLabel0, localizedLabel1);
 		}
 		else
 			return localizedLabel0.compareTo(localizedLabel1);

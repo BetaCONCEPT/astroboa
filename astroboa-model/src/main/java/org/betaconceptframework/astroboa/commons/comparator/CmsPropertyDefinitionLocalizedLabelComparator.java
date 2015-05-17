@@ -21,13 +21,13 @@
 package org.betaconceptframework.astroboa.commons.comparator;
 
 
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Locale;
-
 import org.apache.commons.lang.StringUtils;
 import org.betaconceptframework.astroboa.api.model.definition.CmsPropertyDefinition;
-import org.betaconceptframework.astroboa.util.CmsUtils;
+
+import java.io.Serializable;
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * Compare Property Definitions by their localized label.
@@ -86,11 +86,13 @@ public class CmsPropertyDefinitionLocalizedLabelComparator implements Comparator
 		if ("el".equalsIgnoreCase(locale))
 		{
 			//Filter string to lower case and transforming accented characters to simple ones
-			String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(localizedLabel0);
-			String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(localizedLabel1);
+			//String lowerCaseGreekFilteredLocalizedLabel0= CmsUtils.filterGreekCharacters(localizedLabel0);
+			//String lowerCaseGreekFilteredLocalizedLabel1= CmsUtils.filterGreekCharacters(localizedLabel1);
 			
-			return compareStrings(lowerCaseGreekFilteredLocalizedLabel0,
-					lowerCaseGreekFilteredLocalizedLabel1);
+			//return compareStrings(lowerCaseGreekFilteredLocalizedLabel0, lowerCaseGreekFilteredLocalizedLabel1);
+
+      Collator greekCollator = Collator.getInstance(new Locale("el", "GR"));
+      return greekCollator.compare(localizedLabel0, localizedLabel1);
 		}
 		else
 			return compareStrings(localizedLabel0, localizedLabel1);
