@@ -15,6 +15,4 @@ It offers strong Internationalization support through multilingual Taxonomies (h
 
 And if you require strong typing and enterprise features like Transactions then the Java API can be used to access your repositories localy or remotely.
 
-If you want to learn more about Astroboa, to find extensive documentation and download available packages please visit the community site at http://www.astroboa.org
-   
-
+If you want to try Astroboa check the [installation guide](installation_guide.md)
