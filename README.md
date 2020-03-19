@@ -16,3 +16,5 @@ It offers strong Internationalization support through multilingual Taxonomies (h
 And if you require strong typing and enterprise features like Transactions then the Java API can be used to access your repositories localy or remotely.
 
 If you want to try Astroboa check the [installation guide](installation-guide.md)
+
+Check [Open Content Model](open-content-model.md) to learn how Astroboa supports the full lifecycle of content modelling, management, creation and retrieval.
