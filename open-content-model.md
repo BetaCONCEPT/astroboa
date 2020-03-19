@@ -20,18 +20,18 @@ The "**open content model**" combined with **standardized** methods and tools fo
 
 _Being the "owner" of your content_ and _Building an Evolving Content Infrastructure / Knowledge Base_ are the major goals behind the way Astroboa treats content and approaches content modeling. Astroboa seats transparently between standards for defining and storing content and eases the creation, retrieval, sharing, storing and publishing of content.
 
-## Full Content lifecycle support: Modelling, Creation and Retrieval
+## Full Content lifecycle support: Modelling, Creation / Persistence, Retrieval
 
 ![Content Access Paths](content-access-paths.png)
 
-### Information Architect / Data modeller
+### Information Architects / Data modellers
 For defining the information model Astroboa uses **XML Schema** (XSD), a standard, straightforward, technology neutral, high level and powerful way to express the hierarchical structure of Semi-Structured information.
 
 From the business / information architect point of view, the content is a set of interconnected information nodes (we call them objects in Astroboa). 
 The nodes may model an abstract or real world entity (e. g. news item, blog entry, person, product). Each node has properties. 
 The node type determines the available properties and interconnections for each node. The node type is defined through an XML schema. The XML Schema abstracts the low level details of how the information node is stored and allows the Astroboa engine to provide different node representations and use different low level data stores. 
 
-### Content Creator
+### Content Creators
 Content creators view the information nodes as web forms that allow them to input the values of the node properties (e. g. person name, birthday, blog post title, order value, event description, etc.). 
 
 ### App / Web Site Developers
