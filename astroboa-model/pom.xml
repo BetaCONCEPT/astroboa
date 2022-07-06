@@ -298,7 +298,7 @@ Authors
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
-            <version>1.5</version>
+            <version>1.9.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-lang</groupId>
